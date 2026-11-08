@@ -1,0 +1,384 @@
+{
+  "scope": "Standalone implementation of draft optional admission interfaces; controlled host/file model only",
+  "runtime": "10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "atomicEvidenceProperties": [
+    {
+      "name": "DeclaredType",
+      "nullability": "NotNull"
+    },
+    {
+      "name": "ActualType",
+      "nullability": "NotNull"
+    },
+    {
+      "name": "OriginalAssessment",
+      "nullability": "Nullable"
+    }
+  ],
+  "nodeOriginNullability": "NotNull",
+  "scenarios": 12,
+  "checkCount": 46,
+  "checks": [
+    {
+      "id": "L01-enter-active",
+      "passed": true
+    },
+    {
+      "id": "L01-release-does-not-close-file",
+      "passed": true
+    },
+    {
+      "id": "L01-drained-still-borrowed",
+      "passed": true
+    },
+    {
+      "id": "L01-explicit-caller-close",
+      "passed": true
+    },
+    {
+      "id": "L02-exactly-once-release",
+      "passed": true
+    },
+    {
+      "id": "L02-first-reason",
+      "passed": true
+    },
+    {
+      "id": "L02-closed-admission",
+      "passed": true
+    },
+    {
+      "id": "L03-cancel-only-wait",
+      "passed": true
+    },
+    {
+      "id": "L03-raw-still-owned",
+      "passed": true
+    },
+    {
+      "id": "L03-drain-incomplete",
+      "passed": true
+    },
+    {
+      "id": "L03-private-completion",
+      "passed": true
+    },
+    {
+      "id": "L03-no-stale-publication",
+      "passed": true
+    },
+    {
+      "id": "L03-file-still-caller-owned",
+      "passed": true
+    },
+    {
+      "id": "L03-caller-can-release",
+      "passed": true
+    },
+    {
+      "id": "L04-pre-cancel",
+      "passed": true
+    },
+    {
+      "id": "L04-no-admission",
+      "passed": true
+    },
+    {
+      "id": "L05-live-nested-read",
+      "passed": true
+    },
+    {
+      "id": "L05-new-deferred-work-refused",
+      "passed": true
+    },
+    {
+      "id": "L05-scalar-survives-resource-held",
+      "passed": true
+    },
+    {
+      "id": "L05-disposed-lease-refused",
+      "passed": true
+    },
+    {
+      "id": "L05-explicit-graph-owner-close",
+      "passed": true
+    },
+    {
+      "id": "L06-reference-not-live-lease",
+      "passed": true
+    },
+    {
+      "id": "L06-no-hidden-reopen",
+      "passed": true
+    },
+    {
+      "id": "L07-fault-observed",
+      "passed": true
+    },
+    {
+      "id": "L07-admission-finally-released",
+      "passed": true
+    },
+    {
+      "id": "L07-fault-does-not-close-caller-file",
+      "passed": true
+    },
+    {
+      "id": "L08-reentry-busy",
+      "passed": true
+    },
+    {
+      "id": "L08-callback-close-refuses-new-work",
+      "passed": true
+    },
+    {
+      "id": "L08-callback-drain-after-exit",
+      "passed": true
+    },
+    {
+      "id": "L09-cancel-drain-wait",
+      "passed": true
+    },
+    {
+      "id": "L09-drain-wait-retains-ownership",
+      "passed": true
+    },
+    {
+      "id": "L10-unsafe-count-zero-while-raw-blocked",
+      "passed": true
+    },
+    {
+      "id": "L10-unsafe-premature-physical-close",
+      "passed": true
+    },
+    {
+      "id": "L10-unsafe-raw-use-fails",
+      "passed": true
+    },
+    {
+      "id": "L11-abandonment-does-not-drain",
+      "passed": true
+    },
+    {
+      "id": "L11-explicit-release-only",
+      "passed": true
+    },
+    {
+      "id": "L12-drain-before-close-refused",
+      "passed": true
+    },
+    {
+      "id": "L12-owner-stays-active",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-0",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-1",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-2",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-3",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-4",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-5",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-6",
+      "passed": true
+    },
+    {
+      "id": "fixture-bytes-7",
+      "passed": true
+    }
+  ],
+  "owners": [
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "host",
+      "events": [
+        "enter",
+        "exit",
+        "begin-close",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "first",
+      "events": [
+        "enter",
+        "exit",
+        "begin-close",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "owner-close",
+      "events": [
+        "enter",
+        "begin-close",
+        "exit",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 0,
+      "releaseRequests": 0,
+      "reason": null,
+      "events": []
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "close",
+      "events": [
+        "enter",
+        "begin-close",
+        "exit",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 0,
+      "reason": null,
+      "events": [
+        "enter",
+        "exit"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 0,
+      "reason": null,
+      "events": [
+        "enter",
+        "exit"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "callback-close",
+      "events": [
+        "enter",
+        "begin-close",
+        "exit",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "close",
+      "events": [
+        "enter",
+        "begin-close",
+        "exit",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "close",
+      "events": [
+        "enter",
+        "exit",
+        "begin-close",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 1,
+      "releaseRequests": 1,
+      "reason": "abandoned-graph",
+      "events": [
+        "enter",
+        "begin-close",
+        "exit",
+        "operation-release-requested"
+      ]
+    },
+    {
+      "active": 0,
+      "exits": 0,
+      "releaseRequests": 0,
+      "reason": null,
+      "events": []
+    }
+  ],
+  "ownedFileFixtures": [
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    },
+    {
+      "expected": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "actual": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "closeCount": 1
+    }
+  ],
+  "negativeWaiterPatternDemonstrated": true
+}

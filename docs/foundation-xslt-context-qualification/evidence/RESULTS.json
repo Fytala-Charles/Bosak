@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-01",
+  "qualifiedCandidateSha256": "b13e8f4c95d8197bc7dc6d996a777b91bc5f5069b94b3da6f98a07d270af0d98",
+  "originalCandidateQualified": false,
+  "projectMetadataRestored": true,
+  "productionPromoted": false,
+  "unitTests": {
+    "passed": 24267,
+    "failed": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Parser.Tests": 202,
+      "Bosak.XPath.Runtime.Tests": 281,
+      "Bosak.XPath.Api.Tests": 489,
+      "Bosak.XPath.Standard.Tests": 13797,
+      "Bosak.XPath.Compiler.Tests": 66,
+      "Bosak.Xslt.Tests": 8196,
+      "Bosak.XQuery.Tests": 804,
+      "Bosak.XPath.Providers.Tests": 223,
+      "Bosak.XPath.Providers.Database.Tests": 47
+    },
+    "retainedAssemblies": true,
+    "solutionRebuilt": false
+  },
+  "fnTransformControls": [
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_Basic_Transform",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Stylesheet_Params",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_MissingSource_RaisesFOXT0002",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_ResultDocumentTextContent_IsCaptured",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Initial_Template",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_InheritsPolicy_AcquisitionsAuthorized",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Limits.SliceDExecutionControlTests.D_NestedTransformInheritsSharedOperationBudget",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_DenyAll_RefusesStylesheetAcquisitionWithoutFallback",
+      "outcome": "Passed"
+    }
+  ],
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchanged": true,
+  "explicitBridgeCases": 22,
+  "publicTypes": 157,
+  "publicDeclarationRows": 2961,
+  "publicDeclarationsUnchanged": true,
+  "ownerAcceptance": "Pending",
+  "apiFreeze": false
+}

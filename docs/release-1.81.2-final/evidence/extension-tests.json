@@ -1,0 +1,8 @@
+{
+  "command": [
+    "npm.cmd",
+    "test"
+  ],
+  "exitCode": 0,
+  "logSha256": "11b7b05c36a058be00f0c511eb888ce69f41b19de5ea1b44e16cb1c3771a7d6b"
+}

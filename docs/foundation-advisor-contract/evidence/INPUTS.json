@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-31",
+  "draftSourceSha256": "fd698b82cf1dcc92fa1388f788e7b9f8cbbdf9313fb3b3eab4f2f2acf602f76e",
+  "parentDraftPath": "docs/foundation-provenance-lifetime/SIGNATURES-V2.cs.txt",
+  "parentDraftSha256": "ce7452058e52e704374c8dba1beae42c0605dd6b110715680ee109a01572ec9d",
+  "feedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "coreSha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "project": "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><GenerateDocumentationFile>true</GenerateDocumentationFile><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup><Reference Include=\"Bosak.XPath.Core\"><HintPath>Bosak.XPath.Core.dll</HintPath><Private>true</Private></Reference></ItemGroup></Project>",
+  "scope": "Synthetic V3 protocol controls; no actual validator, compiler capture or compatibility algorithm",
+  "productionModified": false
+}

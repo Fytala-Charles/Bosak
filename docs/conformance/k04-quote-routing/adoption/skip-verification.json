@@ -1,0 +1,27 @@
+{
+  "removed": {
+    "base-URI-12": "Unsupported dependency",
+    "Constr-attr-syntax-5": "Unsupported dependency",
+    "DirectConElemAttr-1": "Unsupported dependency",
+    "DirectConElemNamespace-3": "Unsupported dependency",
+    "K2-DirectConElem-47": "Unsupported dependency",
+    "K2-DirectConElemAttr-29": "Unsupported dependency",
+    "K2-DirectConElemAttr-40": "Unsupported dependency",
+    "K2-DirectConElemAttr-8": "Unsupported dependency",
+    "K2-DirectConElemContent-28": "Unsupported dependency",
+    "K2-DirectConElemWhitespace-9": "Unsupported dependency",
+    "K2-DirectConOther-1": "Unsupported dependency",
+    "Literals069": "Unsupported dependency",
+    "Serialization-adaptive-32": "Unsupported dependency",
+    "Serialization-adaptive-33": "Unsupported dependency",
+    "Serialization-json-41": "Unsupported dependency",
+    "string-constructor-021": "Unsupported dependency"
+  },
+  "retainedNamesAndReasons": 660,
+  "added": {},
+  "normalQt3": [
+    31161,
+    0,
+    660
+  ]
+}

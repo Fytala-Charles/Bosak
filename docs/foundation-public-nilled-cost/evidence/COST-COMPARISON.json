@@ -1,0 +1,38 @@
+{
+  "baseline": {
+    "warmBytesPerQuery": 31848,
+    "providerCallbacksPerQuery": 15257,
+    "metadataReadsPerQuery": 5,
+    "coldOperationBytesPerQuery": 36129
+  },
+  "candidate": {
+    "warmBytesPerQuery": 1448,
+    "providerCallbacksPerQuery": 8607,
+    "metadataReadsPerQuery": 5,
+    "coldOperationBytesPerQuery": 5728
+  },
+  "baselineStages": {
+    "endpoint": 2157,
+    "environment": 2157,
+    "authority": 2157,
+    "owns-origin": 106,
+    "owns-facts": 26,
+    "owns-tuple": 26,
+    "availability": 8628
+  },
+  "candidateStages": {
+    "endpoint": 1207,
+    "environment": 1207,
+    "authority": 1207,
+    "owns-origin": 106,
+    "owns-facts": 26,
+    "owns-tuple": 26,
+    "availability": 4828
+  },
+  "baselineEngineVersion": "1.63.0",
+  "candidateEngineVersion": "1.63.1",
+  "baselineSameEngineAsTA14": true,
+  "warmAllocationReductionPercent": 95.45340366742025,
+  "callbackReductionPercent": 43.586550435865504,
+  "scope": "Synthetic allocation/provider callbacks only; no native latency, retained-memory or owner budget acceptance."
+}

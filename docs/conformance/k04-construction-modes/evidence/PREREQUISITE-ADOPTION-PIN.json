@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-28",
+  "sourceBase": "11bb1c1e",
+  "kind": "Pre-implementation prerequisite adoption exposed by original construction cases",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.6 Construction Declaration",
+      "3.9.1 Direct Element Constructors: copied-node type/name/nilled/typed-value properties",
+      "Construction-preserve namespace-sensitive values: XQTY0086"
+    ]
+  },
+  "additionalRules": [
+    "XQuery 3.1 grammar ValueExpr includes ValidateExpr; PrimaryExpr does not. Bare validate cannot be a path/postfix operand; parenthesized validate remains valid.",
+    "Every non-nilled element annotation derives from xs:anyType, including xs:untyped.",
+    "New xml:id attributes normalize ID whitespace and reject invalid NCNames with XQDY0091."
+  ],
+  "sourceLinks": [
+    "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#prod-xquery31-ValueExpr",
+    "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#prod-xquery31-PrimaryExpr",
+    "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#id-attributes"
+  ],
+  "intentionalDeviations": []
+}

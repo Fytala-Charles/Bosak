@@ -1,0 +1,17 @@
+{
+  "changedFiles": [
+    "Bosak.XPath.Api.dll",
+    "Bosak.XPath.Compiler.dll",
+    "Bosak.XPath.Core.dll",
+    "Bosak.XPath.Parser.dll",
+    "Bosak.XPath.Providers.dll",
+    "Bosak.XPath.Runtime.dll",
+    "Bosak.XPath.Standard.dll",
+    "Bosak.XQuery.dll",
+    "Bosak.Xslt.dll"
+  ],
+  "unchangedTestAssemblySha256": "4d586e29202a8e119ffa7fe7ea6ec806e5731d0933b651004f4cf1ca53121527",
+  "consumerRebuilt": false,
+  "allNonEngineFilesUnchanged": true,
+  "baselineControlPassed": 451
+}

@@ -1,0 +1,18 @@
+{
+  "checks": 31,
+  "carrierBytes": 48,
+  "productBytes": 48,
+  "loadedCoreSha256": "1e24fea9f386f83dfb956e80cd07c520a498eefb5041a3012ec59568ccf60f4a",
+  "iterations": 10000,
+  "bytesPerOperation": {
+    "inline-create": 0,
+    "inline-create-evidence": 0,
+    "big-create": 168,
+    "big-create-evidence": 168,
+    "big-read": 0,
+    "big-read-evidence": 0,
+    "decimal-create": 72,
+    "decimal-create-evidence": 72
+  },
+  "scope": "Isolated model only; evidence is an ordinary token, not authenticated production evidence."
+}

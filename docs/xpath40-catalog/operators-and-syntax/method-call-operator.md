@@ -5,6 +5,10 @@
   <p>Catalog entry — Operators &amp; syntax · Deferred</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 2 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified deferred decision and alternative**. No method dictionary or nominal/union dispatch implementation or future tier commitment follows. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
+**C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
+
 <!-- Catalog entry: method-call operator. Template: see ../README.md §1.1. -->
 
 ## 1. Name and Classification
@@ -55,15 +59,15 @@ None in Bosak. Implementation seam when the time comes: parser operator table, `
 
 ## 10. Collaborations
 
-Would interact with: choice item types and union matching (Deferred entries elsewhere), the function-lookup machinery (method dictionaries would need `fn:function-lookup` visibility decisions), and nominative record types (also deferred).
+Any future design would interact with delivered choice types, existing function lookup and bounded XSLT-defined nominative records. Their delivery does not implement method dispatch; full nominal declaration/model contracts remain separately limited.
 
 ## 11. Consequences
 
-Deferral consequences: zero engine surface, zero test debt, zero risk to the frozen gate. Cost: consumers must keep using per-type functions (`map:*`, `array:*`), which are stable and gated green today.
+Deferral leaves the operator unavailable. Consumers can use the supplied direct `map:*`/`array:*` alternatives; refusal and alternative checks remain necessary. Their passing results do not implement method dispatch or certify every possible replacement.
 
 ## 12. Implementation
 
-None. Gate posture if attempted later: it would land at `XPath40Experimental` first (post-churn-line feature), with static XPST0003 at 3.1, until the WG Review Draft stabilizes its semantics.
+No implementation is adopted. The C07 probes verify `XPST0003` in XPath30, XPath31, XPath40 and XPath40Experimental. Any future implementation or tier decision requires a separately scoped review; this disposition makes no promotion commitment.
 
 ## 13. Sample Code
 
@@ -90,6 +94,6 @@ promote or implement method-call syntax.
 ## 16. Related Features
 
 - [mapping-arrow-gtgt.md](../rejected/mapping-arrow-gtgt.md) — the `=`-family rename history (`=>>` → `=!>`); if `=?>` ever ships, its name is the one stable thing about it so far.
-- `fn:scan` ([experimental/fn-scan.md](../experimental/fn-scan.md)) — an example of a post-June-2026 feature that *did* ship, behind the experimental level; `=?>` differs only in that its semantics, not its age, are the churn source.
+- `fn:scan` ([experimental/fn-scan.md](../experimental/fn-scan.md)) — an example of a separately adopted Experimental feature. Its adoption does not supersede the recorded method-call deferral or determine a future implementation tier.
 
 *Entry created 2026-10-10 (REQ-126 scaffold). Re-validate against the WG Review Draft before implementing.*

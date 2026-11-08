@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-30",
+  "purpose": "S009-02 compatibility/lifetime fixture input pinning: the F-01..F-06 fixture realizations are inline documents in the native 0.9/v5 assessment test bodies; this file pins the exact source inputs by commit and sha256. Execution against a core candidate still follows C139-02; pinning is not execution evidence.",
+  "repository": "Fytala-Charles/Bosak.Schema",
+  "branch": "feature/bounded-document-assessment",
+  "commit": "31f6661939e29d54b4d828db5232d3a32459ba72",
+  "suiteEvidence": "451 passed / 0 failed / 0 skipped (Release, -p:BosakSourceRoot=D:/Development/Bosak), matching the recorded 0.9/v5 qualification",
+  "fixtures": [
+    {
+      "id": "F-01",
+      "name": "Supported-component round trip",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+      "expectedOutcomes": "Valid assessment; Copy() preserves original PSVI, component references and AssessmentIdentity; independent SnapshotIdentity; no revalidation side effects."
+    },
+    {
+      "id": "F-02",
+      "name": "Foreign/unsupported components",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+      "expectedOutcomes": "Constructs outside the profile refuse explicitly as Unsupported; no BCL XSD 1.0 reassessment is invoked; no silent pass."
+    },
+    {
+      "id": "F-03",
+      "name": "Original-source identity",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+      "expectedOutcomes": "Original schema/instance, declaration/type objects and assertion plans are not mutated by assessment, copies, exports or concurrent assessments of other documents."
+    },
+    {
+      "id": "F-04",
+      "name": "Preserve/strip copies",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/WholeDocumentBridgeTests.cs",
+      "expectedOutcomes": "CreateDocumentCopy(true) retains state through XQuery/XSLT preserve; false removes it; stale-value use after export edits refuses."
+    },
+    {
+      "id": "F-05",
+      "name": "Cancellation and disposal",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+      "expectedOutcomes": "Cancellation throws, leaves no partial successful result, retains caller ownership of resources."
+    },
+    {
+      "id": "F-06",
+      "name": "No-downgrade witness",
+      "primaryRealization": "tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs, RepeatedDecimalAssessmentTests.cs, CountAssertionAssessmentTests.cs, PresenceAssertionAssessmentTests.cs",
+      "expectedOutcomes": "Out-of-profile shapes produce explicit Unsupported end-to-end; no 1.0 fallback path exists."
+    }
+  ],
+  "files": [
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/DocumentAssessmentTests.cs",
+      "sha256": "d7fb9593703918215d9d95f80a72cff02a12de7f93c619961f95b3660d194258"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs",
+      "sha256": "fc839d2fc38b720261811022aed812e0ebc6257f07ad603b7c3dc10a87fc91cf"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/RepeatedDecimalAssessmentTests.cs",
+      "sha256": "2aaaf672884236b60755e837dee4b5a4b9f28a09a61b49162c6d57253ddd7b27"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/CountAssertionAssessmentTests.cs",
+      "sha256": "a3cd51fac36d2b012c92067358707edc7c0b7f3e922d4782b48b3ce7b554459d"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/PresenceAssertionAssessmentTests.cs",
+      "sha256": "4d0eb66d7fab6706c746990c62a401ed822cfcb310ff94958ace0ccbd2e841a9"
+    },
+    {
+      "path": "tests/Bosak.Schema.Tests/Xsd11/WholeDocumentBridgeTests.cs",
+      "sha256": "d63eff2d39939f742c1e16325aa033f07978226d25f2280f136cbd1bc24f2bd3"
+    },
+    {
+      "path": "tests/TestData/Schemas/orders.xsd",
+      "sha256": "fb4172a5ae8ed7866dc1c2b2d00c7d21e6884d99339c5df00518b323a049cef1"
+    },
+    {
+      "path": "tests/TestData/Schemas/sku.xsd",
+      "sha256": "844890c5f1c695bdd70670df095ff6f81a7e08479bf76246aeaadaf6da87f95d"
+    }
+  ],
+  "notes": [
+    "orders.xsd / sku.xsd are legacy XSD 1.0 import-schema fixtures; they are identity-pinned inputs, not native-assessment profile fixtures.",
+    "Fixture documents are inline constants in the pinned test sources; the commit + file sha256 pins them as exercised by the 451-case suite.",
+    "No fixture execution against a core candidate has occurred; that evidence lands with C139-02 qualification."
+  ]
+}

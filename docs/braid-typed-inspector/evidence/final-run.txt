@@ -1,0 +1,6 @@
+{
+  "kind": "target-diagnosis",
+  "Failure": null,
+  "localName": "child"
+}
+41 typed-inspector controls passed; four encodings match direct baseline; raw-port lifetime escape documented.

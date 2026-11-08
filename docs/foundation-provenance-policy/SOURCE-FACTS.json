@@ -1,0 +1,67 @@
+{
+  "sourceVersion": "1.76.0",
+  "facts": [
+    {
+      "id": "F01",
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+      "sha256": "4869627a5454d76f60da2378e77cb2f71a4ed655815c9f636aba9f653652b23e",
+      "requiredText": [
+        "internal static object? SchemaTransportMarker",
+        "internal static XdmValue SchemaTransportAttach"
+      ],
+      "observation": "Evidence is private transport; no public SchemaAtomics exists."
+    },
+    {
+      "id": "F02",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs",
+      "sha256": "f3a71b08fb6d5a05b557563fd993de3669149cd58df81f7982991247843a7242",
+      "requiredText": [
+        "_issuer=_operationBound?null:issuer",
+        "ScopeIdentity",
+        "Current operation-bound issuer is required"
+      ],
+      "observation": "Stable compatible cache does not retain its old raw issuer."
+    },
+    {
+      "id": "F03",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs",
+      "sha256": "f3a71b08fb6d5a05b557563fd993de3669149cd58df81f7982991247843a7242",
+      "requiredText": [
+        "if(_group.List||_group.Cells.Length!=1||_group.Origin is null)return false;",
+        "if(_group.Cells.Length!=1)return false;"
+      ],
+      "observation": "Compatible singleton selection is stricter than ordinary one-cell selection."
+    },
+    {
+      "id": "F04",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs",
+      "sha256": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+      "requiredText": [
+        "ISchemaComponentHandle Declared,ISchemaComponentHandle Actual,ISchemaAssessmentOrigin? Origin",
+        "internal bool IsList"
+      ],
+      "observation": "Reader retains list shape and each cell type/origin separately."
+    },
+    {
+      "id": "F05",
+      "path": "src/Bosak.XPath.Api/Schema/ConstructedAtomicPlan.cs",
+      "sha256": "ad2ee12f53cae3c7663b3aa1668dfe86513f9c6a83640979a75a7ad1c7ff5022",
+      "requiredText": [
+        "private sealed record Receipt",
+        "operation.Check();var value=context.CaptureConstructedScalar()",
+        "Value was not constructed by this raw operation."
+      ],
+      "observation": "Constructed transport is tied to its exact raw owner."
+    },
+    {
+      "id": "F06",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs",
+      "sha256": "f3a71b08fb6d5a05b557563fd993de3669149cd58df81f7982991247843a7242",
+      "requiredText": [
+        "Origin,int Ordinal",
+        "_entries.Clear();"
+      ],
+      "observation": "Registry identity uses exact container/origin/ordinal and closes by clearing registrations."
+    }
+  ]
+}

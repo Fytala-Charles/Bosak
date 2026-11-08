@@ -1,0 +1,81 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/c13-accepted-render/README.md.html",
+      "sha256": "f243599e19cb27465524dafabe503ef112f588453e96123831c166494e1848f9"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_ARCHITECTURE.md.html",
+      "sha256": "b4a5c8c39f2fc65c8b5b2d5e4d0bba4b8b5f1f1bb76492c1dd0dbe91f815d774"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "71ca5d6604225a0282b342be2331263e5b13ba4f8f147bd4309975d5722f1bfe"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_INTEGRATION.md.html",
+      "sha256": "3c30e4b59b58008fb502cf457a1efc7923d784c20515c79f4b890657465436e4"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "1342becaf6e50ca2431af3c71bac68e3f95c4a3c530e5156d2f03b9b685cc0d2"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "57835551cb87c7fdd87c603928e0d2d8d3db5439e3232565b324b8943625b668"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "5914d42b15953704dbf6c7aa599aaec10439826ce226413565988e6c3aa9387f"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "6957cd1fff70ddfa05160260d08a513e26293b8796fcef89d7fe74d381fe54f8"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "9ebabeec7a0f81270006062792e324301f713ede2348ddd6faa4dc6f07dc20c1"
+    },
+    {
+      "source": "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_SUPPLEMENTARY-COVERAGE-AUDIT.md.html",
+      "sha256": "e98b233846308f4547d93cdb6b76625344a4df10b68fd36631d2282d502a84b0"
+    },
+    {
+      "source": "docs/xpath40-catalog/COMPLETENESS-AUDIT.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_COMPLETENESS-AUDIT.md.html",
+      "sha256": "f491048d778a1368b84093ee1ea89a10b0411dd4079e4a2949715e51383dc041"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSEOUT-REVIEW.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_CLOSEOUT-REVIEW.md.html",
+      "sha256": "be6ec801c979078a60423276d6458b9ee98205a430092ad6674d1847713f5e92"
+    },
+    {
+      "source": "docs/xpath40-catalog/examples/README.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_examples_README.md.html",
+      "sha256": "38a18594f68b49d31d214104b8aa63de22644e19fd1b39a3ac5b58082f160b87"
+    },
+    {
+      "source": "docs/xpath40-catalog/worked-examples/README.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_worked-examples_README.md.html",
+      "sha256": "0c4514fa4ac0abbedd813136d63a78cf3f8d04916120e21cc4090bbdc8fe510a"
+    },
+    {
+      "source": "docs/xpath40-catalog/CATALOG-ACCEPTANCE.md",
+      "html": ".guard-tmp/c13-accepted-render/docs_xpath40-catalog_CATALOG-ACCEPTANCE.md.html",
+      "sha256": "c5ea35d8f030eebabd22513d48cada774cb22687b3727d8955cf92f4a95fbc24"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+
+> vscode-bosak@0.2.6 compile
+> tsc -p ./
+

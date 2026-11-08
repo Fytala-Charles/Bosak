@@ -1,0 +1,25 @@
+27bc663b71b948318f69ee1f23173ac63046a525
+2026-10-08T03:57:08+02:00
+2026-10-08T03:57:08+02:00
+docs(req-118): XPath/XSLT 4.0 adoption plan — WG Review Draft inventory + slices 4.0-S1…S8 (#77)
+
+* docs(req-118): XPath/XSLT 4.0 adoption plan — WG Review Draft inventory, stability tiers, slices 4.0-S1..S8
+
+The QT4CG drafts are now a WG Review Draft (W3C Editor's Draft 15 Sept 2026), so
+REQ-118 planning activates: verified feature inventory from the live qt4cg.org specs
+(section numbers + change-history blocks, not memory), stability-tiered
+(stable >=1.5yr vs post-June-2026 churn), ranked candidates, version-gating design
+(owner decision pending), slices, deferrals (XDM 4.0 JNode model, fn:parse-html,
+nominative records, =?>, fn:scan). No slice before the paired v1.0.0 tags.
+
+- new docs/REQ-118-xpath-xslt-40.md (dossier per the large-request rule)
+- FEATURE_REQUESTS: REQ-118 row + section -> planning-activated w/ dossier link,
+  acceptance criterion 'first sub-feature REQ drafted' checked
+- ROADMAP: 0.13.0 soak row checked (tag v0.13.0 pushed, PR #76)
+- AGENT_HANDOVER: fifty-second session block
+
+* docs(handover): record v0.13.0 publish confirmation (workflow 37682060968, 10 packages Created)
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

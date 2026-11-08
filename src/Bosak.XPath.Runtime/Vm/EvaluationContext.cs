@@ -126,6 +126,22 @@
 //                      | Charles Korthout | 2.48  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.49  | 28-10-2026     | Add internal semantic-focus resolution and per-variable lazy-cache invalidation for XQuery. |
+//                      | Charles Korthout | 2.50  | 01-11-2026     | Add nonreflective bounded private input capture. |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.51  | 03-11-2026     | Share ordered standard tables for isolated contexts with copy-on-write (1.44.1).       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.52   | 05-11-2026     | Activate bounded public typed identity with exact ownership (1.58.0).                       |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.63   | 05-11-2026     | Capture the closed original-node variable profile (1.63.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.64   | 05-11-2026     | Share closed original-node capture diagnostics with data profile (1.64.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.53 | 05-11-2026     | Guard source-free construction and operation-local capture (1.66.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.54 | 05-11-2026     | Capture closed compatible identity context (1.70.0). |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.55 | 06-11-2026     | Permit inherited engine gate only for selected host capture (1.76.0). |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -248,7 +264,31 @@ public sealed class EvaluationContext
     private readonly Dictionary<string, string> _namespaces;
 
     // Function libraries, indexed by (namespace, localName, arity)
-    private Dictionary<(string, string, int), FunctionSignature> _functions;
+    // Existing registry slot is tagged: public contexts own a Dictionary; isolated contexts
+    // may use a private read-only standard snapshot until their first mutation.
+    private object _functions;
+    private int FunctionCount => _functions is SharedStandardFunctionTable shared ? shared.Count : ((Dictionary<(string, string, int), FunctionSignature>)_functions).Count;
+    private FunctionEntries Functions => new(_functions);
+    private readonly struct FunctionEntries(object registry)
+    {
+        /// <summary>Enumerates the effective ordered table without boxing.</summary>
+        /// <returns>A dictionary struct enumerator over the selected mapping.</returns>
+        public Dictionary<(string, string, int), FunctionSignature>.Enumerator GetEnumerator() =>
+            registry is SharedStandardFunctionTable shared ? shared.GetEnumerator() : ((Dictionary<(string, string, int), FunctionSignature>)registry).GetEnumerator();
+    }
+    private Dictionary<(string, string, int), FunctionSignature> MutableFunctions()
+    {
+        if (_functions is SharedStandardFunctionTable shared)
+        {
+            _functions = shared.CopyFunctions(); shared.CopyVariadicTo(_variadicMinArity);
+        }
+        return (Dictionary<(string, string, int), FunctionSignature>)_functions;
+    }
+    internal static EvaluationContext CreateIsolated() => new() { _functions = SharedStandardFunctionTable.Empty };
+    private bool TryGetFunction((string, string, int) key, out FunctionSignature signature) =>
+        _functions is SharedStandardFunctionTable shared ? shared.TryGetFunction(key, out signature!) : ((Dictionary<(string, string, int), FunctionSignature>)_functions).TryGetValue(key, out signature!);
+    private bool TryGetVariadic((string, string) key, out int arity) =>
+        _functions is SharedStandardFunctionTable shared ? shared.TryGetVariadic(key, out arity) : _variadicMinArity.TryGetValue(key, out arity);
 
     // Variadic function index: (namespace, localName) -> minimum declared arity, so an
     // exact-arity lookup miss resolves variadic candidates without a full table scan.
@@ -340,6 +380,83 @@ public sealed class EvaluationContext
         _functions = new Dictionary<(string, string, int), FunctionSignature>();
         _documentCache = new Dictionary<(string Uri, object? LoadPolicy, object? ControlledPolicy, ControlledResourceRoute Route), DocumentCacheEntry>();
         _namedDecimalFormats = new Dictionary<(string, string), DecimalFormat>();
+    }
+
+    /// <summary>Captures the bounded data-only profile; services and populated execution state refuse.</summary>
+    internal SchemaOperationInputs CaptureSchemaInputs(Func<IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, SchemaEvidenceKernel.Snapshot? snapshot = null,bool allowExecutionGate=false)
+        =>CaptureSchemaInputsCore(ownsNode,maxBindings,maxNamespaces,snapshot,false,allowExecutionGate:allowExecutionGate);
+    internal XdmValue CaptureTypedIdentityScalar()
+    {
+        if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=1||!_variables.ContainsKey(("value","")))
+            throw new NotSupportedException("Typed identity requires only an unprefixed value variable and no focus.");
+        var inputs=CaptureSchemaInputsCore(static _=>false,1,Math.Max(1,_namespaces.Count),null,true);
+        return inputs.VariableBindings[0].Value;
+    }
+    internal XdmValue CaptureCompatibleScalar()=>CaptureClosedScalar("compatible",true);
+    internal XdmValue CaptureOriginalNode()=>CaptureClosedScalar("node",false);
+    internal XdmValue CaptureConstructedScalar()=>CaptureClosedScalar("constructed",true);
+    private XdmValue CaptureClosedScalar(string variable,bool typed)
+    {
+        if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=1||!_variables.ContainsKey((variable,""))
+            ||_namespaces.Count!=9||_namespaces.Any(pair=>pair.Value!=(pair.Key switch {
+                "xml"=>"http://www.w3.org/XML/1998/namespace","xs"=>"http://www.w3.org/2001/XMLSchema",
+                "xsi"=>"http://www.w3.org/2001/XMLSchema-instance","fn"=>"http://www.w3.org/2005/xpath-functions",
+                "math"=>"http://www.w3.org/2005/xpath-functions/math","map"=>"http://www.w3.org/2005/xpath-functions/map",
+                "array"=>"http://www.w3.org/2005/xpath-functions/array","local"=>"http://www.w3.org/2005/xquery-local-functions",
+                "err"=>"http://www.w3.org/2005/xqt-errors",_=>null})))
+            throw new NotSupportedException("The selected scalar profile requires its single unprefixed variable, absent focus and default runtime namespaces.");
+        return CaptureSchemaInputsCore(_=>!typed,1,9,null,typed,!typed).VariableBindings[0].Value;
+    }
+    private SchemaOperationInputs CaptureSchemaInputsCore(Func<IXdmNode,bool> ownsNode,int maxBindings,int maxNamespaces,SchemaEvidenceKernel.Snapshot? snapshot,bool typedIdentity,bool originalNode=false,bool allowExecutionGate=false)
+    {
+        ArgumentNullException.ThrowIfNull(ownsNode);
+        if (maxBindings <= 0) throw new ArgumentOutOfRangeException(nameof(maxBindings));
+        if (maxNamespaces <= 0) throw new ArgumentOutOfRangeException(nameof(maxNamespaces));
+        if (LazyVariableResolver is not null || SuppressLazyGlobalCaching || SkipLazyGlobalCacheOnce
+            || SuppressLazySequenceConstructorGlobals || SkipStandardFunctionPopulation || UnsuppliedExternalVariables.Count != 0
+            || CollationComparer is not null || ElementConstructorHook is not null || ContentNodeConstructorHook is not null
+            || AttributeConstructorHook is not null || DocumentConstructorHook is not null || StaticOutputParameters is not null
+            || _evaluatedLazyGlobals.Count != 0 || FunctionCount != 0 || _variadicMinArity.Count != 0 || _documentCache.Count != 0
+            || _schemaSet is not null || SchemaResolver is not null || _currentDateTimeSnapshot is not null
+            || _implicitTimezoneOffsetSet || _implicitTimezoneOffsetMinutes != 0 || _namedDecimalFormats.Count != 0
+            || CurrentOutputUri is not null || IsStaticEvaluation || IsXPath40 || IsXPath40Experimental || IsXsltMode
+            || NamedRecordCoercion is not null || !EmptyOrdinal(NamedRecordTypes) || !EmptyOrdinal(BindingItemTypes)
+            || InStreamingMapContext || InStreamedPipeline || Xml11Mode || RegexGroups is not null || ResourcePolicy is not null
+            || ExecutionGate is not null&&!allowExecutionGate || DocumentLoader is not null || StreamingDocumentLoader is not null || ResourceUriMapper is not null
+            || CollectionLoader is not null || Collections.Count != 0 || CollectionValues.Count != 0 || XQueryModuleSources.Count != 0
+            || XQueryModuleLoader is not null || DocumentPostProcessor is not null || ConstructedElementProcessor is not null
+            || ConstructedDocumentProcessor is not null || DocumentLoadPolicy is not null || BackwardsCompatible || XsltVersion is not null
+            || InitialTemplateCallParameters is not null || InitialTemplateTunnelParameters is not null || DocumentLoaded is not null
+            || AccumulatorValueCopier is not null || InitialFocusResolver is not null || !_currentItem.IsUndefined
+            || _constructorLocalNamespaces.Count != 0 || FunctionLookupInterceptor is not null || !DefaultFormat(_defaultDecimalFormat))
+            throw new NotSupportedException("Context services or nondefault execution state require a separate capture profile.");
+        if (_variables.Count > maxBindings || _namespaces.Count > maxNamespaces)
+            throw new NotSupportedException("Input binding or namespace limit reached.");
+        if (_contextItem.IsUndefined ? _contextPosition != 0 || _contextSize != 0
+            : !_contextItem.IsNode || _contextPosition < 1 || _contextSize < _contextPosition)
+            throw new NotSupportedException("Invalid bounded node focus.");
+        if (_contextItem.IsNode && !ownsNode(_contextItem.NodeValue!))
+            throw new NotSupportedException("Unadmitted focus node.");
+        foreach (var value in _variables.Values)
+        {
+            if (value.IsNode)
+            {
+                if (!ownsNode(value.NodeValue!)) throw new NotSupportedException("Unadmitted variable node.");
+            }
+            else if (originalNode ? !value.IsUndefined : typedIdentity ? value.Kind is < XdmValueKind.String or > XdmValueKind.Binary
+                : value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double
+                or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))
+                throw new NotSupportedException("Only direct scalar or admitted node bindings are supported.");
+        }
+        return new SchemaOperationInputs(_contextItem, _contextPosition, _contextSize, _variables.ToArray(), _namespaces.ToArray(),
+            BaseUri, DefaultElementNamespace, DefiningElementDefaultNamespace, DefaultCollation, snapshot,allowExecutionGate?ExecutionGate:null);
+
+        static bool EmptyOrdinal<T>(IReadOnlyDictionary<string, T> values)
+            => values is Dictionary<string, T> dictionary && values.GetType() == typeof(Dictionary<string, T>) && dictionary.Count == 0
+                && (ReferenceEquals(dictionary.Comparer, StringComparer.Ordinal) || ReferenceEquals(dictionary.Comparer, EqualityComparer<string>.Default));
+        static bool DefaultFormat(DecimalFormat? value) => value is not null && value.DecimalSeparator == "." && value.GroupingSeparator == ","
+            && value.Digit == "#" && value.ZeroDigit == "0" && value.PatternSeparator == ";" && value.MinusSign == "-"
+            && value.Percent == "%" && value.PerMille == "\u2030" && value.Infinity == "Infinity" && value.NaN == "NaN" && value.ExponentSeparator == "e";
     }
 
     /// <summary>
@@ -886,6 +1003,23 @@ public sealed class EvaluationContext
     // Focus
     // ------------------------------------------------------------------
 
+    /// <summary>Resolves an initial focus when a semantic read finds it absent.</summary>
+    internal Action? InitialFocusResolver { get; set; }
+
+    /// <summary>Reads the context item, resolving a pending initial focus if necessary.</summary>
+    /// <returns>The resolved context item, or undefined when focus remains absent.</returns>
+    internal XdmValue ResolveContextItem()
+    {
+        if (_contextItem.IsUndefined) InitialFocusResolver?.Invoke();
+        return _contextItem;
+    }
+
+    /// <summary>Invalidates one cached global before a new explicit-context query evaluation.</summary>
+    /// <param name="localName">The variable local name.</param>
+    /// <param name="namespaceUri">The variable namespace.</param>
+    internal void InvalidateLazyGlobal(string localName, string namespaceUri)
+        => _evaluatedLazyGlobals.Remove((localName, namespaceUri));
+
     /// <summary>The context item (the value of the <c>.</c> expression); undefined when there is no focus.</summary>
     public XdmValue ContextItem => _contextItem;
 
@@ -1233,7 +1367,7 @@ public sealed class EvaluationContext
     public EvaluationContext RegisterFunction(FunctionSignature signature)
     {
         var key = (signature.NamespaceUri, signature.LocalName, signature.Arity);
-        _functions[key] = signature;
+        MutableFunctions()[key] = signature;
         if (signature.IsVariadic)
         {
             var variadicKey = (signature.NamespaceUri, signature.LocalName);
@@ -1253,14 +1387,26 @@ public sealed class EvaluationContext
     /// <param name="template">The shared standard function table to install (never mutated).</param>
     internal void InstallStandardFunctionTable(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> template)
     {
-        if (_functions.Count == 0)
+        if (_functions is SharedStandardFunctionTable shared)
+        {
+            if (ReferenceEquals(shared.Source, template)) return;
+            if (shared.Source is null)
+            {
+                _functions = SharedStandardFunctionTable.Get(template);
+                return;
+            }
+            // Changing profiles must preserve previous non-overwritten entries, as legacy Populate does.
+            MutableFunctions();
+        }
+        var functions = (Dictionary<(string, string, int), FunctionSignature>)_functions;
+        if (functions.Count == 0)
         {
             _functions = new Dictionary<(string, string, int), FunctionSignature>(template);
             RebuildVariadicIndex();
             return;
         }
         foreach (var kvp in template)
-            _functions[kvp.Key] = kvp.Value;
+            functions[kvp.Key] = kvp.Value;
         foreach (var ((ns, name, arity), sig) in template)
         {
             if (!sig.IsVariadic) continue;
@@ -1292,22 +1438,22 @@ public sealed class EvaluationContext
     /// <returns><c>true</c> when a matching function is registered.</returns>
     public bool TryResolveFunction(string namespaceUri, string localName, int arity, out FunctionSignature signature)
     {
-        if (_functions.TryGetValue((namespaceUri, localName, arity), out signature!))
+        if (TryGetFunction((namespaceUri, localName, arity), out signature!))
             return (!signature.IsXPath40Only || IsXPath40)
                 && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental);
         // Variadic fallback via the (namespace, localName) index: a variadic signature
         // accepts any arity >= its minimum declared arity (e.g. fn:concat#99 resolves
         // against the variadic fn:concat registration).
-        if (_variadicMinArity.TryGetValue((namespaceUri, localName), out var minVariadicArity))
+        if (TryGetVariadic((namespaceUri, localName), out var minVariadicArity))
         {
             if (arity >= minVariadicArity
-                && _functions.TryGetValue((namespaceUri, localName, minVariadicArity), out signature!)
+                && TryGetFunction((namespaceUri, localName, minVariadicArity), out signature!)
                 && (!signature.IsXPath40Only || IsXPath40)
                 && (!signature.IsXPath40ExperimentalOnly || IsXPath40Experimental))
                 return true;
             // Rare: the minimum-arity variadic slot was explicitly unregistered — rescan
             // for another variadic registration of the same name.
-            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            foreach (var ((ns, name, candidateArity), sig) in Functions)
             {
                 if (ns == namespaceUri && name == localName && sig.IsVariadic && arity >= candidateArity
                     && (!sig.IsXPath40Only || IsXPath40)
@@ -1331,12 +1477,12 @@ public sealed class EvaluationContext
     /// <returns><c>true</c> when a registration was removed.</returns>
     public bool UnregisterFunction(string namespaceUri, string localName, int arity)
     {
-        bool removed = _functions.Remove((namespaceUri, localName, arity));
+        bool removed = MutableFunctions().Remove((namespaceUri, localName, arity));
         if (removed && _variadicMinArity.TryGetValue((namespaceUri, localName), out var min) && min == arity)
         {
             // Recompute the minimum from the remaining variadic registrations (removals are rare).
             int? newMin = null;
-            foreach (var ((ns, name, candidateArity), sig) in _functions)
+            foreach (var ((ns, name, candidateArity), sig) in Functions)
             {
                 if (ns == namespaceUri && name == localName && sig.IsVariadic)
                     newMin = newMin is null ? candidateArity : Math.Min(newMin.Value, candidateArity);
@@ -1354,7 +1500,7 @@ public sealed class EvaluationContext
     internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? SnapshotBoundFunctionAliases()
     {
         Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? snapshot = null;
-        foreach (var (key, signature) in _functions)
+        foreach (var (key, signature) in Functions)
             if (signature.IsHiddenFromFunctionLookup && signature.FunctionItemTarget is { IsBoundFunctionItem: true })
                 (snapshot ??= new())[key] = signature;
         return snapshot;
@@ -1377,7 +1523,7 @@ public sealed class EvaluationContext
     /// </summary>
     /// <returns>A copy of the function registry, keyed by (namespace URI, local name, arity).</returns>
     internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> SnapshotFunctions()
-        => new Dictionary<(string, string, int), FunctionSignature>(_functions);
+        => _functions is SharedStandardFunctionTable shared ? shared.CopyFunctions() : new Dictionary<(string, string, int), FunctionSignature>((Dictionary<(string, string, int), FunctionSignature>)_functions);
 
     /// <summary>
     /// Replaces the current function library with the supplied snapshot.
@@ -1385,10 +1531,11 @@ public sealed class EvaluationContext
     /// <param name="snapshot">A snapshot previously produced by <see cref="SnapshotFunctions"/>.</param>
     internal void RestoreFunctions(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature> snapshot)
     {
-        _functions.Clear();
+        if (_functions is SharedStandardFunctionTable) _functions = new Dictionary<(string, string, int), FunctionSignature>();
+        else ((Dictionary<(string, string, int), FunctionSignature>)_functions).Clear();
         _variadicMinArity.Clear();
         foreach (var (key, value) in snapshot)
-            _functions[key] = value;
+            ((Dictionary<(string, string, int), FunctionSignature>)_functions)[key] = value;
         RebuildVariadicIndex();
     }
 
@@ -1397,13 +1544,14 @@ public sealed class EvaluationContext
     /// </summary>
     public void ClearFunctions()
     {
-        _functions.Clear();
+        if (_functions is SharedStandardFunctionTable) _functions = new Dictionary<(string, string, int), FunctionSignature>();
+        else ((Dictionary<(string, string, int), FunctionSignature>)_functions).Clear();
         _variadicMinArity.Clear();
     }
 
     private void RebuildVariadicIndex()
     {
-        foreach (var ((ns, name, arity), sig) in _functions)
+        foreach (var ((ns, name, arity), sig) in Functions)
         {
             if (!sig.IsVariadic) continue;
             var variadicKey = (ns, name);

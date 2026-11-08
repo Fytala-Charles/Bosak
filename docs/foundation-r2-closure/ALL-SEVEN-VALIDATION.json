@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-03",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "roles": [
+    {
+      "returnId": "BCAP-O1-Schema",
+      "owner": "Schema",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O1-Schema.v2.response.json",
+      "sha256": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+      "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "authorship": "Codex - Schema design reviewer acting on explicit repository-owner direction in this session; no independently authenticated human signature claimed",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O2-Schema",
+      "owner": "Schema",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O2-Schema.v2.response.json",
+      "sha256": "e2737d309279ab23e192cc6c0de94ea75391d809bec60546067e867a9d9e4593",
+      "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "authorship": "Codex - Schema design reviewer acting on explicit repository-owner direction in this session; no independently authenticated human signature claimed",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O1-XmlDb",
+      "owner": "XmlDb",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O1-XmlDb.response.json",
+      "sha256": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+      "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+      "authorship": "Codex - XmlDb exact-manifest source/design review requested by repository owner; not a human acceptance signature",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O2-Core",
+      "owner": "Core",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O2-Core.response.json",
+      "sha256": "68833ceb38c024045197169d049ac03cc3d9caad23106140eac19852e1606017",
+      "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+      "authorship": "Codex - Core engineering scoped design review requested by repository owner; not an independently authenticated human signature",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O3-Braid",
+      "owner": "Braid",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O3-Braid.response.json",
+      "sha256": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+      "sourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "authorship": "Codex - Braid consumer design reviewer acting on repository owner's explicit review/notification request; not an independent human signature",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O4-Core",
+      "owner": "Core",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O4-Core.response.json",
+      "sha256": "b6ea838ca81537b2c586089d4ddc7abbc4acdd7f853d06b81cee045d935a0f42",
+      "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+      "authorship": "Codex - Core engineering scoped design review requested by repository owner; not an independently authenticated human signature",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    },
+    {
+      "returnId": "BCAP-O4-XmlDb",
+      "owner": "XmlDb",
+      "decision": "AcceptWithScope",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O4-XmlDb.response.json",
+      "sha256": "f4e9b9cc9d2771b2853bd0412e205c37abab24fdfa8cfa86cdc12ee629c21b04",
+      "sourceRevision": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+      "authorship": "Codex - XmlDb fix-pin source/design review authorized by repository owner; not a human acceptance signature",
+      "bindingAndCompletenessValid": true,
+      "runtimeQualification": false
+    }
+  ],
+  "required": 7,
+  "submitted": 7,
+  "scopedDesignAccepts": 7,
+  "revise": 0,
+  "missing": [],
+  "validatorSha256": "de28f26473ea298d371a6c2bb70b52d9ea0d466725abbf3162a1fa2eb3eeae1a",
+  "baseValidatorSha256": "0a121c5de966e331e0bda9ef8681c5d3e8f1310ea31295ae9f9dd4c3bfbc3763",
+  "roleMatrixSha256": "eef87542d30ea7055394a3fee0fa526da84c8639de4c81f8175bde0d930895a1",
+  "packetsSha256": "c80b4ed5a48eaa10d3e443befe8632fb3c7983132f44008d19dfe8aa4928ace3",
+  "schemaInboxFilesVerified": 22,
+  "proposalDeclarationInputsVerified": 9,
+  "schemaReportedRegressionLogsHashVerified": true,
+  "independentlyAuthenticatedHumanSignatures": false,
+  "runtimeQualification": false,
+  "performanceBudgetsAccepted": false
+}

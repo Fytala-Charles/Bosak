@@ -1,0 +1,11 @@
+// Generated K02 exact original-query/public-schema-resolver diagnostic.
+using System.Text.Json;
+using Bosak.XQuery.Api;
+var fixture=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;
+var phase="compile"; string? result=null,error=null;
+try {
+ var executable=new XQueryCompiler().Compile(fixture.GetProperty("expression").GetString()!);
+ var context=new XQueryContext().WithSchemaResolver((ns,hints)=>File.OpenRead(fixture.GetProperty("schemaFile").GetString()!));
+ phase="evaluate";result=executable.Evaluate(context).ToString();phase="success";
+}catch(Exception ex){error=ex.GetType().FullName+": "+ex.Message;}
+File.WriteAllText(args[1],JsonSerializer.Serialize(new{phase,result,error}));

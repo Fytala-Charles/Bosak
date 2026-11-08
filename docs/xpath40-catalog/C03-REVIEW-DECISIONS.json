@@ -1,0 +1,138 @@
+{
+  "entries": {
+    "operators-and-syntax/focus-functions.md": {
+      "contracts": [
+        "All 49 registered zero-arity names with representative lexical conversion, type/error and context checks",
+        "Direct/reference/lookup/node paths, explicit one-argument comparison, empty iteration and missing focus",
+        "QName static namespace and captured-focus boundaries"
+      ],
+      "boundary": "A zero-arity constructor requires suitable focus; empty simple-map input invokes nothing. xs:error has no nonempty successful value, and its empty/type fixture is not proof of a constructed value. Representative inputs do not certify all facets, namespaces, schema types or arbitrary casts.",
+      "groups": [
+        "T03",
+        "T05"
+      ]
+    },
+    "operators-and-syntax/numeric-literals.md": {
+      "contracts": [
+        "4.0 radix/separator syntax and lower-profile refusal",
+        "Above-Int64 integer literals versus generic constructors/casts",
+        "Delivered floating thresholds, unsigned truncation and preserved integer identity"
+      ],
+      "boundary": "A decimal-backed wide literal does not establish arbitrary precision or a matching generic constructor range. Generic wide xs:integer casts still narrow; .NET decimal precision remains bounded.",
+      "groups": [
+        "T01",
+        "T02"
+      ]
+    },
+    "type-system/choice-types.md": {
+      "contracts": [
+        "Membership is distinct from coercion",
+        "Already-matching alternatives and ordered coercion of unmatched untyped values",
+        "3.1 choice grammar refusal"
+      ],
+      "boundary": "The tested integer/string alternatives do not certify every schema union, function/record alternative or error-precedence combination. Schema union/list context has separate named evidence.",
+      "groups": [
+        "T03",
+        "T05"
+      ]
+    },
+    "type-system/enum-types.md": {
+      "contracts": [
+        "Case-sensitive string membership",
+        "Untyped input coercion to a matching enum and invalid binding refusal",
+        "3.1 enumeration grammar refusal"
+      ],
+      "boundary": "Enum membership validates one value, not a business record. Broader derived/string unions and all inline/host positions remain outside these bounded checks.",
+      "groups": [
+        "T03",
+        "T05"
+      ]
+    },
+    "type-system/nominative-records.md": {
+      "contracts": [
+        "Host-defined nominal identity differs from plain map shape",
+        "Constructor and typed-map coercion paths",
+        "Tested select/body/trailing defaults and static constructor/coercion values in Legacy and Xslt40Draft version-4 stylesheets"
+      ],
+      "boundary": "Bounded defaults/static fields are verified in both named hosts; no blanket claim of missing support remains for those forms. Import/package identity, visibility, recursion, global-initializer timing and all static override/cast/update combinations still require separate evidence.",
+      "groups": [
+        "T04"
+      ]
+    },
+    "type-system/record-updates.md": {
+      "contracts": [
+        "Annotation-preserving reconstruction retains the original value",
+        "Unknown fields, plain-map left operand and invalid replacement values refuse",
+        "Optional empty values retain key presence; nested promotion and field order are bounded"
+      ],
+      "boundary": "Update uses coercion, not lexical import casting. Structural examples do not establish every nominal static/default-field update, method or package context.",
+      "groups": [
+        "T04",
+        "T05"
+      ]
+    },
+    "type-system/structural-records.md": {
+      "contracts": [
+        "Cast constructs an annotated record and discards surplus fields",
+        "Coercion rejects surplus fields and recursively coerces declared fields",
+        "Required/optional emptiness, declaration order, record(*) and undeclared lookup/map:get distinctions"
+      ],
+      "boundary": "A plain map is not an annotated record. Structural matches do not require annotation identity with the tested target, while named identity remains host-defined. Complete record/nominal/schema conversion combinations are not inferred.",
+      "groups": [
+        "T04",
+        "T05"
+      ]
+    },
+    "type-system/typed-let-coercion.md": {
+      "contracts": [
+        "Typed binding/coercion differs from instance-of and cast",
+        "Record and numeric promotion with surplus/invalid value refusal",
+        "Inline function parameter/result conversion and modern versus paired static/runtime BC controls"
+      ],
+      "boundary": "The probe runner explicitly sets both compile-time and runtime BC flags. These controls do not certify all XSLT 1.0/3.0 host propagation, schema-aware constructors or arbitrary function subtyping. C02 atomic-type-annotation empty-input defect remains open.",
+      "groups": [
+        "T03",
+        "T05",
+        "F08-atomic-annotation-empty"
+      ]
+    }
+  },
+  "boundaries": {
+    "T01": {
+      "subject": "Generic integer representation and range/error policy",
+      "owner": "Bosak core/runtime maintainer; C13 owner disposition",
+      "status": "Explicit implementation limit, not a blanket malformed-input claim",
+      "boundary": "Valid decimal-backed wide literals can still fail xs:integer string/numeric constructor/cast narrowing with FORG0001; castable is false. Distinguish storage limits, invalid lexical input, numeric overflow and derived facets. Do not globally replace error codes."
+    },
+    "T02": {
+      "subject": "Decimal precision and numeric consumers",
+      "owner": "Bosak numeric maintainer; C13 owner disposition",
+      "status": "Documented storage boundary",
+      "boundary": "Fixed .NET decimal precision can round away fractional/significant digits. Delivered rounding/arithmetic/unsigned fixes do not implement arbitrary-precision decimals or all extended-year consumers."
+    },
+    "T03": {
+      "subject": "Schema list/union/namespace contexts",
+      "owner": "C03 retained schema evidence; C06 host/context review",
+      "status": "Supported named cases with explicit remaining scope",
+      "boundary": "List constructors return sequences of item types; list names are not valid ordinary item-test targets. Imported types require the supplied schema/type/namespace context. No global schema availability, full XSD loader, generic list typing or skip removal follows."
+    },
+    "T04": {
+      "subject": "Nominal/structural/default/static record context",
+      "owner": "C05/C06 and final C09-C12 per-entry review",
+      "status": "Bounded supported forms and unclaimed remainder",
+      "boundary": "Defaults and static field initialization are verified in specific constructors/bindings. Package/visibility/recursive/global-initializer/override/update/cast combinations remain unaccepted, rather than labeled universally unsupported."
+    },
+    "T05": {
+      "subject": "Function signatures, focus capture and BC propagation",
+      "owner": "C04/C06 and C09-C12",
+      "status": "Bounded controls, not generic conversion certification",
+      "boundary": "Direct/ref/lookup focus constructors, scalar cardinality and selected typed functions pass. Paired compile/runtime BC flags are explicit. Arbitrary schema callbacks, function variance, dynamic host propagation and all error-eagerness combinations require their own applicable evidence."
+    },
+    "F08-atomic-annotation-empty": {
+      "subject": "C02 independently reproduced required-argument defect",
+      "owner": "Existing C02 F08 bounded correction ticket",
+      "status": "Still open; not fixed or accepted by C03",
+      "boundary": "atomic-type-annotation(()) returns a record in both 4.0 profiles although the argument is required. C03 does not overwrite its independent XPTY0004 expectations or count it as supported coercion."
+    }
+  }
+}

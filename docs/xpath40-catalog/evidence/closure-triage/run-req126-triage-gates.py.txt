@@ -1,0 +1,13 @@
+from pathlib import Path
+import subprocess,os,json,concurrent.futures,time
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/closure-triage';e.mkdir(parents=True,exist_ok=True);s=r/'.guard-tmp/release1263-source'
+def run(label,assembly,suite,env):
+ command=['dotnet',str(s/'tests'/assembly/'bin/Release/net10.0'/(assembly+'.dll')),str(r/'tests'/suite)]
+ start=time.monotonic()
+ with (e/(label+'.log')).open('wb') as f:result=subprocess.run(command,cwd=r,env=env,stdout=f,stderr=subprocess.STDOUT)
+ return dict(label=label,command=command,exitCode=result.returncode,wallSeconds=time.monotonic()-start)
+q3=os.environ.copy();q3['BOSAK_QT3_DUMP_SKIPS']=str(e/'qt3-skips.txt')
+q4=os.environ.copy();q4['BOSAK_QT4_GATE_ONLY']='1';q4['BOSAK_QT4_DUMP_SKIPS']=str(e/'qt4-skips.txt')
+with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:rows=list(pool.map(lambda x:run(*x),[('qt3','Bosak.XPath.Conformance','qt3tests',q3),('qt4','Bosak.XPath.Conformance40','qt4tests',q4)]))
+(e/'gate-receipts.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8');assert all(x['exitCode']==0 for x in rows)
+print('Fresh frozen gates and per-test skip dumps retained.')

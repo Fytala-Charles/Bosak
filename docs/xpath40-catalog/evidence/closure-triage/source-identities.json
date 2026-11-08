@@ -1,0 +1,63 @@
+{
+  "documentationBase": "927d7a458dd90a8b506840c045808f4f27e3c8d1",
+  "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "sources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "gitBlob": "6b58f67c84174552e1af9278d348970c2e19658b",
+      "sha256": "4d50610d2d554a1610902959e8a86fed17b1aa5e0501edfd16508149158121ed"
+    },
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": {
+      "gitBlob": "85383daf06921a46ff81656cce8174ad66a7ae01",
+      "sha256": "8444d8e3bb5e9098d209e9f7f5b030dd590d34ec8a89bdbd8c77bf0404955793"
+    },
+    "src/Directory.Build.props": {
+      "gitBlob": "4bbd3394519d40282be0d97700cd9416bde8a400",
+      "sha256": "bc8ae9c1baf0a9919257c42a388dc7c0bc44fb7d2b9bafdb860c3c712192aea3"
+    },
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": {
+      "gitBlob": "807c85b6a6724beafa3495135fd20260185f4fac",
+      "sha256": "867021dc94729dffc3ae50b76ce77f18bd638ada3907139b74c896c118344334"
+    },
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": {
+      "gitBlob": "4f7681cd78f72d43406ccac47df82d16750bcec1",
+      "sha256": "f2c18305e4a68f27ab351891186e660152658db5661d579e2470e483b3886da8"
+    },
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": {
+      "gitBlob": "67f10a3a4252ec89e8f7389da94b5006b14fed7b",
+      "sha256": "054f856d1fafa746aeec6f49084c6efff9cd8ee65927c344550b4b01e70c6c0a"
+    },
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": {
+      "gitBlob": "f97a0faf5c5b6ab0b286163dbc7eeb018c8de95c",
+      "sha256": "9ca7be53ca27fd5c69999eea196190fb02f72db974e6a7f32acd4b7744c95f0a"
+    },
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": {
+      "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+      "sha256": "5f828c179ac39747437b938da3da1ae627a2b4cf6925b743ee68f577b4f47641"
+    },
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": {
+      "gitBlob": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+      "sha256": "90debba4a6102cbc4718bed2a774a0ba22d03e83529b951bfe4539bf15f0dd4a"
+    },
+    "AGENTS.md": {
+      "gitBlob": "f2362c6510a24b928d330b61aa2fc3d3ce034748",
+      "sha256": "f95209d4c1b70208853bb97d7140dce265a46cd7d3a7a8960895f9090930f116"
+    }
+  },
+  "localHarnessBinaries": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "sha256": "41beedc51efc17d6fe1bf0c1764c605b6ae143e5453a411da72da77b42e202a3",
+      "source": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "sha256": "f484aaa61578551b2b7563a5ef786f82d53f1cd31a79858c43ba244a01c53a51",
+      "source": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    }
+  ],
+  "generatedDiagnosticBinary": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+    "sha256": "27e3fc1aa832ac926c4ef862da26e4dd9da1ee1f194165b7b2ad1121df61dc5e"
+  },
+  "pipeline": "Local Release harnesses compiled from approved source; actual filters and bounded executor probes via generated read-only reflection utility. Not signed public conformance packages."
+}

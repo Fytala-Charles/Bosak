@@ -1,0 +1,178 @@
+[
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-cardinal-basic",
+    "expected": "Zwanzig",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-cardinal-basic",
+    "expected": "Zwanzig",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-cardinal-named",
+    "expected": "Zwanzig",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-cardinal-named",
+    "expected": "Zwanzig",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-basic",
+    "expected": "Erste",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-basic",
+    "expected": "Erste",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-s",
+    "expected": "Erstes",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-s",
+    "expected": "Erstes",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-es",
+    "expected": "Erstes",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-es",
+    "expected": "Erstes",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-r",
+    "expected": "Erster",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-r",
+    "expected": "Erster",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-er",
+    "expected": "Erster",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-er",
+    "expected": "Erster",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-n",
+    "expected": "Ersten",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-named-n",
+    "expected": "Ersten",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-en",
+    "expected": "Ersten",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-ordinal-explicit-en",
+    "expected": "Ersten",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-malformed-cardinal",
+    "expected": "FODF1310",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-malformed-cardinal",
+    "expected": "FODF1310",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-malformed-ordinal",
+    "expected": "FODF1310",
+    "diagnostic": true
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml",
+    "Name": "control-malformed-ordinal",
+    "expected": "FODF1310",
+    "diagnostic": true
+  }
+]

@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,hashlib,xml.etree.ElementTree as ET,shutil
+E=Path('docs/conformance/k02-schema-duration/evidence');P=Path('.guard-tmp/k02-probe');P.mkdir(exist_ok=True)
+f=Path('tests/qt3tests/prod/ValidateExpr.xml');ns='{http://www.w3.org/2010/09/qt-fots-catalog}';root=ET.parse(f).getroot();case=next(x for x in root.iter(ns+'test-case') if x.get('name')=='validateexpr-28');schema=Path('tests/qt3tests/prod/ValidateExpr/xq-e18.xsd')
+record=dict(case=ET.tostring(case,encoding='unicode'),expression=case.findtext(ns+'test').strip(),setFile=f.as_posix(),setSha256=hashlib.sha256(f.read_bytes()).hexdigest(),schemaFile=schema.as_posix(),schemaSha256=hashlib.sha256(schema.read_bytes()).hexdigest());(E/'fixture.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+project='''<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup>'''
+for name in ['Bosak.XQuery','Bosak.XPath.Core','Bosak.XPath.Runtime']:
+ project+=f'<Reference Include="{name}"><HintPath>../../tests/Bosak.XQuery.Tests/bin/Release/net10.0/{name}.dll</HintPath></Reference>'
+project+='</ItemGroup></Project>';(P/'Probe.csproj').write_text(project,encoding='utf-8')
+(P/'Program.cs').write_text('''// Generated K02 exact original-query/public-schema-resolver diagnostic.
+using System.Text.Json;
+using Bosak.XQuery.Api;
+var fixture=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement;
+var phase="compile"; string? result=null,error=null;
+try {
+ var executable=new XQueryCompiler().Compile(fixture.GetProperty("expression").GetString()!);
+ var context=new XQueryContext().WithSchemaResolver((ns,hints)=>File.OpenRead(fixture.GetProperty("schemaFile").GetString()!));
+ phase="evaluate";result=executable.Evaluate(context).ToString();phase="success";
+}catch(Exception ex){error=ex.GetType().FullName+": "+ex.Message;}
+File.WriteAllText(args[1],JsonSerializer.Serialize(new{phase,result,error}));
+''',encoding='utf-8')
+for n in ['Program.cs','Probe.csproj']:shutil.copyfile(P/n,E/(n+'.txt'))
+request=dict(Suite='qt3',SuiteRoot=str(Path('tests/qt3tests').resolve()),SetFile=str(f.resolve()),Name='validateexpr-28');(E/'executor-request.json').write_text(json.dumps(request,indent=2)+'\n',encoding='utf-8')

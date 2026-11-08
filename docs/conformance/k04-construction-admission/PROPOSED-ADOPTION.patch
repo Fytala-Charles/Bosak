@@ -1,0 +1,49 @@
+--- a/tests/Bosak.XPath.Conformance/TestExecutor.cs
++++ b/tests/Bosak.XPath.Conformance/TestExecutor.cs
+@@ -58,6 +58,7 @@
+ //                      | Charles Korthout | 0.28  | 27-10-2026     | Apply owner-approved quote-aware XQuery routing without broadening other guards.       |
+ //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
+ //                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
++//                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -297,12 +298,6 @@
+         if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
+             return false;
+ 
+-        // The prolog gate matches a comment-tolerant form in which comments collapse to a
+-        // single space, so keyword phrases stay detectable ('declare(::)default(::)order'
+-        // must stay gated even though the supported prolog forms handle comments inline).
+-        if (UnsupportedPrologRegex.IsMatch(StripLiteralsNormalizeComments(expr)))
+-            return false;
+-
+         return true;
+     }
+ 
+@@ -386,14 +381,6 @@
+         @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
+         RegexOptions.Compiled);
+ 
+-    // Prolog forms the XQuery parser does NOT support (namespace, default element/function
+-    // namespace, default collation, default order empty, ordering, boundary-space,
+-    // decimal-format, base-uri, option, variable, function, module import, schema import,
+-    // and version declarations are supported).
+-    private static readonly Regex UnsupportedPrologRegex = new(
+-        @"\bdeclare\s+(construction)\b",
+-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+-
+     /// <summary>
+     /// Removes string literals (with doubled-quote escapes) like
+     /// <see cref="StripLiteralsAndComments"/>, but replaces every XQuery comment with a
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@
+ 
+ Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
+ 
+-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,257/0/564** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons.
++- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,340/0/481** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions.
+ - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
+ 
+ ## Architecture Overview

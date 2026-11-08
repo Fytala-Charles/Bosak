@@ -1,0 +1,28 @@
+// Generated component allocation fixture, not provider acquisition or host execution.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Bosak.XPath.Runtime.Vm;
+
+var owner = new object();
+Action check = static () => { };
+Func<IDisposable> enter = static () => NoopLease.Instance;
+var rows = new List<object>();
+foreach (int count in new[] { 0, 1, 2, 8 })
+{
+    var members = Enumerable.Range(0, count).Select(_ => new SchemaOperationLeaseSet.Member(owner, check, enter)).ToImmutableArray();
+    void Run() { var set = SchemaOperationLeaseSet.Acquire(owner, members, 8, check); set.Check(); set.Complete(); }
+    for (int n = 0; n < 100; n++) Run();
+    long start = GC.GetAllocatedBytesForCurrentThread();
+    for (int n = 0; n < 1000; n++) Run();
+    rows.Add(new { members = count, bytesPerOperation = (GC.GetAllocatedBytesForCurrentThread() - start) / 1000 });
+}
+var engine = typeof(EvaluationContext).Assembly;
+Console.WriteLine(JsonSerializer.Serialize(new { rows, iterations = 1000, runtimeSha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(engine.Location))).ToLowerInvariant(), scope = "Lease-set bookkeeping with prebuilt members and singleton no-op leases; excludes provider allocation, full host execution and concurrency throughput." }, new JsonSerializerOptions { WriteIndented = true }));
+sealed class NoopLease : IDisposable
+{
+    internal static readonly NoopLease Instance = new();
+    public void Dispose() { }
+}

@@ -1,0 +1,24 @@
+{
+  "kind": "Read-only paraphrased contract review; no semantic implementation adoption",
+  "sources": [
+    {
+      "source": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/#id-schema-element-test",
+      "revision": "REC-xpath-31-20170321",
+      "sections": [
+        "2.5.5.4",
+        "2.5.6"
+      ],
+      "paraphrase": "Schema-element matching uses actual substitution membership, excludes abstract declarations and observes blocking constraints, candidate typing and nillability. Schema-element subtyping is based on actual member-set containment; function parameter types are contravariant."
+    },
+    {
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "revision": "REC-xmlschema11-1-20120405",
+      "section": "3.3 Element Declarations",
+      "paraphrase": "The substitutionGroup attribute can contain a list of QNames in XSD 1.1, requiring affiliation-list component and substitution semantics."
+    },
+    {
+      "source": "https://learn.microsoft.com/dotnet/api/system.xml.schema.xmlschemaelement.substitutiongroup",
+      "paraphrase": "The .NET property is a single XmlQualifiedName; the framework probe independently records its runtime type and failure during addition of the unchanged multi-affiliation schema."
+    }
+  ]
+}

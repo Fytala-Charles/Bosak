@@ -1,0 +1,77 @@
+[
+  {
+    "mode": "none",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-prototype\\bin\\Release\\net10.0\\Prototype.dll",
+      "none"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.3312815999961458,
+    "log": "prototype-none.log",
+    "passed": 97,
+    "failed": 0
+  },
+  {
+    "mode": "fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-prototype\\bin\\Release\\net10.0\\Prototype.dll",
+      "fallback"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.33071060001384467,
+    "log": "prototype-fallback.log",
+    "passed": 92,
+    "failed": 5
+  },
+  {
+    "mode": "qname",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-prototype\\bin\\Release\\net10.0\\Prototype.dll",
+      "qname"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.33049490000121295,
+    "log": "prototype-qname.log",
+    "passed": 94,
+    "failed": 3
+  },
+  {
+    "mode": "partial",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-prototype\\bin\\Release\\net10.0\\Prototype.dll",
+      "partial"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.2756080999970436,
+    "log": "prototype-partial.log",
+    "passed": 94,
+    "failed": 3
+  },
+  {
+    "mode": "unwrap",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-prototype\\bin\\Release\\net10.0\\Prototype.dll",
+      "unwrap"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.27549039997393265,
+    "log": "prototype-unwrap.log",
+    "passed": 94,
+    "failed": 3
+  }
+]

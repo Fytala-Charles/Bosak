@@ -1,0 +1,209 @@
+[
+  {
+    "id": "validateexpr-28",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20631029998185113,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\validateexpr-28-actual-request.json"
+    ],
+    "log": "validateexpr-28-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validateexpr-28",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type."
+    }
+  },
+  {
+    "id": "validateexpr-1",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32828820002032444,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\validateexpr-1-actual-request.json"
+    ],
+    "log": "validateexpr-1-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validateexpr-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "id": "validateexpr-2",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3275138000026345,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\validateexpr-2-actual-request.json"
+    ],
+    "log": "validateexpr-2-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validateexpr-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "id": "validateexpr-3",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32758059998741373,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\validateexpr-3-actual-request.json"
+    ],
+    "log": "validateexpr-3-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validateexpr-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "id": "substitution-020",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20099079998908564,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-020-actual-request.json"
+    ],
+    "log": "substitution-020-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-020",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "id": "substitution-021",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1905722999945283,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-021-actual-request.json"
+    ],
+    "log": "substitution-021-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-021",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "id": "substitution-022",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1925106999988202,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-022-actual-request.json"
+    ],
+    "log": "substitution-022-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-022",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "id": "substitution-023",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18799679999938235,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-023-actual-request.json"
+    ],
+    "log": "substitution-023-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-023",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "id": "substitution-024",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19395849999273196,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-024-actual-request.json"
+    ],
+    "log": "substitution-024-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-024",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  },
+  {
+    "id": "substitution-025",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1936930000083521,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k02-schema-loader\\evidence\\substitution-025-actual-request.json"
+    ],
+    "log": "substitution-025-actual.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-025",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    }
+  }
+]

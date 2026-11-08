@@ -1,0 +1,2 @@
+# Preserve exact local qualification evidence bytes.
+* -text whitespace=cr-at-eol

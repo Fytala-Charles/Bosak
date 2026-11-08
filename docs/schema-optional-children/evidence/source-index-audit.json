@@ -1,0 +1,92 @@
+[
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sha256": "7226d8e4e8b88e0b4e8a9c87e93afdcec7d146f1c2b3059145f951076d910d6b",
+    "sourcePattern": "!ExactlyOne(declaration)",
+    "lines": [
+      88
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sha256": "7226d8e4e8b88e0b4e8a9c87e93afdcec7d146f1c2b3059145f951076d910d6b",
+    "sourcePattern": "children.Add(new(",
+    "lines": [
+      90
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sha256": "bfd2b8b96f18f8e2c69422799b8aa2f887d291701348efa9a15bbb3c01d89ee0",
+    "sourcePattern": "children.Length != ChildDeclarations.Count",
+    "lines": [
+      84
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sha256": "bfd2b8b96f18f8e2c69422799b8aa2f887d291701348efa9a15bbb3c01d89ee0",
+    "sourcePattern": "states.Add(new(ChildDeclarations[index]",
+    "lines": [
+      97
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sha256": "bfd2b8b96f18f8e2c69422799b8aa2f887d291701348efa9a15bbb3c01d89ee0",
+    "sourcePattern": "index < ChildDeclarations.Count",
+    "lines": [
+      103
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sha256": "bfd2b8b96f18f8e2c69422799b8aa2f887d291701348efa9a15bbb3c01d89ee0",
+    "sourcePattern": "assertion.Evaluate(context).BooleanValue",
+    "lines": [
+      112
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+    "sha256": "b52496f200e2d87520e15384b5b0b9b18b7b81437ac8151339debcb160411f7a",
+    "sourcePattern": "Elements[i + 1]",
+    "lines": [
+      63
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessedDocument.cs",
+    "sha256": "b52496f200e2d87520e15384b5b0b9b18b7b81437ac8151339debcb160411f7a",
+    "sourcePattern": "ElementAt(index - 1)",
+    "lines": [
+      82
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+    "sha256": "4ece4387c908b73cd5da79c00f8ba5c7fc03fbf53c8dd94171afcad430926336",
+    "sourcePattern": "class AssessedElementDeclaration",
+    "lines": [
+      49
+    ]
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs",
+    "sha256": "4ece4387c908b73cd5da79c00f8ba5c7fc03fbf53c8dd94171afcad430926336",
+    "sourcePattern": "class AssessedElement",
+    "lines": [
+      49,
+      62
+    ]
+  },
+  {
+    "path": "src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs",
+    "repository": "core",
+    "sha256": "c20738d7f73f5c27d4e8f361051c6d91dbaeca81445d41787a4a253eb1c7d1aa",
+    "sourcePattern": "Where(e => e.HasElements)",
+    "lines": [
+      109
+    ]
+  }
+]

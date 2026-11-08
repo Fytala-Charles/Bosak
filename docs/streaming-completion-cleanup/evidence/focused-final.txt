@@ -1,0 +1,5 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\streaming-completion-final\final.trx
+
+Passed!  - Failed:     0, Passed:    11, Skipped:     0, Total:    11, Duration: 179 ms - Bosak.XPath.Providers.Tests.dll (net10.0)

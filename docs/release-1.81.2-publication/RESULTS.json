@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-08",
+  "sourceCommit": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+  "nugetVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "nugetPublishRun": 42510683197,
+  "vscodePublishRun": 42510685414,
+  "nugetPublishedAndListed": 10,
+  "nugetPayloadsMatchApprovedArtifacts": 10,
+  "nugetOnlyAddedEntry": ".signature.p7s",
+  "marketplaceListed": true,
+  "marketplaceVsixByteIdentical": true,
+  "freshPublicConsumerControlsPassed": 7,
+  "freshPublicConsumerLibraries": 10,
+  "tags": [
+    "v1.81.2",
+    "vscode-v0.2.6"
+  ],
+  "workloadBudgets": "explicitly deferred by user for this release",
+  "performanceGuaranteesClaimed": false,
+  "independentOwnerSignaturesClaimed": false,
+  "certificateTrustAssessmentClaimed": false
+}

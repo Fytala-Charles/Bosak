@@ -1,0 +1,67 @@
+{
+  "status": "SelectedForImplementation",
+  "activated": false,
+  "behaviorProfile": "bosak-original-node-data-v1",
+  "descriptorFormat": "bosak-original-node-data-descriptor-v1",
+  "acceptedTrimmedSource": [
+    "data($node)",
+    "fn:data($node)"
+  ],
+  "compileEntry": "SchemaQuerySession.CompileXPath with explicit supported assessor",
+  "acceptedDirectInputKinds": [
+    "Undefined",
+    "Node"
+  ],
+  "acceptedNodeKinds": [
+    "Element",
+    "Attribute"
+  ],
+  "otherKnownNodeKinds": "NotSupportedBeforeFacts",
+  "invalidNodeKind": "ArgumentException",
+  "capture": "Same closed original-node variable/focus/services/runtime namespaces policy as nilled",
+  "output": {
+    "zero": "Undefined",
+    "one": "DirectRegisteredAtomic",
+    "many": "PrivateMaterializedOrderedTransportSequence",
+    "lazyProviderCallbacks": false,
+    "orderAndDuplicatesPreserved": true
+  },
+  "provenance": {
+    "preserveDeclaredActualAndOriginalAssessment": true,
+    "perpetualExtractionNodeIdentity": false,
+    "laterAuthorization": "Resident container/input/origin/components under exactly current original admission",
+    "crossSessionImport": false
+  },
+  "cache": {
+    "key": [
+      "containerReference",
+      "originReference",
+      "ordinal"
+    ],
+    "scope": [
+      "environment",
+      "issuer",
+      "snapshot",
+      "originalInput",
+      "authority"
+    ],
+    "unit": "ResidentAtomicScalarEntries",
+    "emptySlots": 0,
+    "persistentEmptyIndex": false,
+    "nodeFactsCache": false,
+    "payloadReuse": "Current validated immutable resident container; no iterator replay",
+    "allOrNothingCommit": true,
+    "providerCallbacksUnderLock": false
+  },
+  "errors": {
+    "absentElement": "InvalidOperationException/FOTY0012 prefix",
+    "malformedFacts": "ArgumentException",
+    "unsupportedCapability": "NotSupportedException",
+    "cancellationDisposal": "Existing exceptions preserved",
+    "attributeAbsent": "Malformed"
+  },
+  "publicSignaturesAdded": false,
+  "allHostOrImplicitAtomizationActivated": false,
+  "requiresPrivateStagedNodeContainerBridge": true,
+  "requiresMaterializedSequenceOutput": true
+}

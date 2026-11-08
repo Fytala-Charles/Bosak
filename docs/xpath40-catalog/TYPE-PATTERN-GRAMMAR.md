@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-types, S8-patterns. Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule. K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations. Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms. No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 **Compound-pattern follow-up supplied — 21 October 2026:** [New bounded mapping](COMPOUND-PATTERN-GRAMMAR.md) now covers set/union grouping, priority and rule identity, with a separately labelled current-draft union-priority gap. Original counts/queues below describe their earlier checkpoint.
 
 

@@ -1,0 +1,176 @@
+{
+  "date": "2026-10-28",
+  "kind": "Pre-implementation semantic adoption:4.0 optional date-formatting arguments",
+  "sourceBase": "ace5f2bf1884a23b38a2e9dbd5005064f46acf27",
+  "specification": {
+    "date": "2026-10-28",
+    "kind": "Review only; no semantic adoption",
+    "sourceBase": "e88e5ba5e792bbfcd219c8623ac967f5a1092c67",
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+    "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+    "sections": [
+      "fn:format-date",
+      "fn:format-dateTime",
+      "fn:format-time",
+      "rules-for-datetime-formatting"
+    ],
+    "signatures": [
+      {
+        "name": "format-dateTime",
+        "returnType": "xs:string?",
+        "arguments": [
+          {
+            "name": "value",
+            "type": "xs:dateTime?"
+          },
+          {
+            "name": "picture",
+            "type": "xs:string"
+          },
+          {
+            "name": "language",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "calendar",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "place",
+            "type": "xs:string?",
+            "default": "()"
+          }
+        ],
+        "changes": [
+          {
+            "issue": "895",
+            "PR": "901",
+            "date": "2023-12-16"
+          }
+        ]
+      },
+      {
+        "name": "format-date",
+        "returnType": "xs:string?",
+        "arguments": [
+          {
+            "name": "value",
+            "type": "xs:date?"
+          },
+          {
+            "name": "picture",
+            "type": "xs:string"
+          },
+          {
+            "name": "language",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "calendar",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "place",
+            "type": "xs:string?",
+            "default": "()"
+          }
+        ],
+        "changes": [
+          {
+            "issue": "895",
+            "PR": "901",
+            "date": "2023-12-16"
+          }
+        ]
+      },
+      {
+        "name": "format-time",
+        "returnType": "xs:string?",
+        "arguments": [
+          {
+            "name": "value",
+            "type": "xs:time?"
+          },
+          {
+            "name": "picture",
+            "type": "xs:string"
+          },
+          {
+            "name": "language",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "calendar",
+            "type": "xs:string?",
+            "default": "()"
+          },
+          {
+            "name": "place",
+            "type": "xs:string?",
+            "default": "()"
+          }
+        ],
+        "changes": [
+          {
+            "issue": "895",
+            "PR": "901",
+            "date": "2023-12-16"
+          }
+        ]
+      }
+    ],
+    "mainSource": {
+      "path": "specifications/xpath-functions-40/src/xpath-functions.xml",
+      "sha256": "029dad6fca522956ae9c19fc3c7a890a3285dcb3fc5681081b797c5be6d4d675"
+    },
+    "fixtureRevision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+    "commonRulesSha256": "d5b08e811c0d6877c6f03264ac5b745fd420e548dcfedb2826145061568a0f2e",
+    "reviewedEmptyResult": "Empty value returns empty sequence, distinct from an empty string.",
+    "xpath31Review": {
+      "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "revision": "REC-xpath-functions-31-20170321",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "sections": [
+        "rules-for-datetime-formatting",
+        "func-format-date",
+        "func-format-dateTime",
+        "func-format-time"
+      ],
+      "scope": "Existing two/five argument signatures and shared empty-result requirement"
+    }
+  },
+  "scope": "Arity3/4 and keyword metadata for format-date,format-dateTime,format-time; preserve3.1 arities2/5",
+  "policy": {
+    "parameterNames": [
+      "value",
+      "picture",
+      "language",
+      "calendar",
+      "place"
+    ],
+    "defaults": [
+      null,
+      null,
+      "()",
+      "()",
+      "()"
+    ],
+    "newArityProfile": "IsXPath40Only=true; includes Experimental",
+    "returnType": "xs:string?",
+    "argumentConversion": "Reuse existing typed parameter names and OptionalStringArg conversion",
+    "emptyResult": "Inherit corrected C18 true empty result",
+    "promotion": "Only after complete normal affected sets have zero failures; retain all legitimate dependency skips",
+    "limits": [
+      "No catalog fixture/assertion or dependency filter change",
+      "No general keyword/conversion rewrite",
+      "No QT3 baseline change",
+      "No release or schema capability change"
+    ]
+  }
+}

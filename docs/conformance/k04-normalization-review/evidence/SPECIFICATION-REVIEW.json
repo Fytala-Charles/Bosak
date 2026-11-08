@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-28",
+  "kind": "Review only; not semantic adoption",
+  "sourceBase": "ab2a3d0d40ad131148b6ca17d8b6a46a9273e1aa",
+  "xpath31": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+    "sections": [
+      "func-normalize-unicode"
+    ],
+    "scope": "fn:normalize-unicode conversion, composing-character definition and effective form-name rules"
+  },
+  "xpath40": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+    "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+    "section": "fn:normalize-unicode"
+  },
+  "unicodeData": [
+    {
+      "source": "https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt",
+      "version": "17.0.0",
+      "sha256": "2e1efc1dcb59c575eedf5ccae60f95229f706ee6d031835247d843c11d96470c"
+    },
+    {
+      "source": "https://www.unicode.org/Public/17.0.0/ucd/CompositionExclusions.txt",
+      "version": "17.0.0",
+      "sha256": "2f239196ef3b5b61db5cc476e9bd80f534d15aa1b74e1be1dea5d042a344c85f"
+    }
+  ],
+  "unicodeAnnex": "https://www.unicode.org/reports/tr15/tr15-57.html",
+  "unicodeScope": "Codepoint metadata witnesses only; not runtime Unicode17 normalization certification. A future classifier/backend version policy remains to be adopted.",
+  "normalizationSection": "F&O3.1 5.4.6/F&O4 fn:normalize-unicode; composing character and conversion rules",
+  "signature40": {
+    "returnType": "xs:string",
+    "arguments": [
+      {
+        "name": "value",
+        "type": "xs:string?"
+      },
+      {
+        "name": "form",
+        "type": "xs:string?",
+        "default": "\"NFC\"",
+        "note": "default-on-empty"
+      }
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "catalogueHashes": {
+    "tests/qt3tests/catalog.xml": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+    "tests/qt4tests/catalog.xml": "eb5978513539ec0c5416994c0de2cd5239734cd13018508a6d2d463f4aeca7e8"
+  }
+}

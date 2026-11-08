@@ -1,0 +1,166 @@
+// Generated isolated atomic qualification host; not a public schema provider.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+try {
+ var mode=args.Single();var checks=new List<object>();var observations=new List<object>();var costs=new List<object>();
+ void Check(string id,bool passed){checks.Add(new{id,passed});}
+ var date=new DateTimeOffset(2026,10,31,1,2,3,TimeSpan.FromHours(1));
+ var fixtures=new (string id,XdmValue value)[]{
+  ("true",XdmValue.FromBoolean(true)),("false",XdmValue.FromBoolean(false)),("integer",XdmValue.FromInteger(42)),("int",XdmValue.FromInteger(42,"int")),("user-int",XdmValue.FromInteger(42,"int","Q{urn:t}a")),
+  ("decimal",XdmValue.FromDecimal(12.5m)),("decimal-scale",XdmValue.FromDecimal(12.50m)),("nan",XdmValue.FromDouble(double.NaN)),("infinity",XdmValue.FromDouble(double.PositiveInfinity)),("zero",XdmValue.FromDouble(0d)),("negative-zero",XdmValue.FromDouble(-0d)),("float",XdmValue.FromFloat(2.5f)),
+  ("string",XdmValue.FromString("alpha")),("string-copy",XdmValue.FromString(new string(new[]{'a','l','p','h','a'}))),("token",XdmValue.FromString("alpha","token")),("hexBinary-annotation",XdmValue.FromString("4142","hexBinary")),("base64Binary-annotation",XdmValue.FromString("QUI=","base64Binary")),("anyURI-annotation",XdmValue.FromString("urn:value","anyURI")),
+  ("duration",XdmValue.FromDuration("P1D")),("qname",XdmValue.FromQName(new XsQName("name","urn:t","p"))),("dateTime",XdmValue.FromDateTime(date)),("date",XdmValue.FromDate(date)),("time",XdmValue.FromTime(date)),
+  ("float-nan",XdmValue.FromFloat(float.NaN)),("float-infinity",XdmValue.FromFloat(float.PositiveInfinity)),("float-negative-zero",XdmValue.FromFloat(-0f)),("negative-infinity",XdmValue.FromDouble(double.NegativeInfinity)),
+  ("no-timezone-dateTime",XdmValue.FromDateTime(date,false)),("no-timezone-date",XdmValue.FromDate(date,false)),("no-timezone-time",XdmValue.FromTime(date,false)),
+  ("year-zero",XdmValue.FromDateTime(new XPathDateTime(0,1,1,0,0,0,0,0,true),true)),("year-10000",XdmValue.FromDateTime(new XPathDateTime(10000,1,1,0,0,0,0,0,true),true)),
+  ("yearMonthDuration",XdmValue.FromDuration("P2M","yearMonthDuration")),("dayTimeDuration",XdmValue.FromDuration("PT24H","dayTimeDuration")),("empty-string",XdmValue.FromString("")),("min-integer",XdmValue.FromInteger(long.MinValue)),("max-integer",XdmValue.FromInteger(long.MaxValue)),("max-decimal",XdmValue.FromDecimal(decimal.MaxValue)),("user-string",XdmValue.FromString("alpha","token","Q{urn:t}label"))
+ };
+ foreach(var f in fixtures){
+  var issuer=new Issuer();var scalar=issuer.Issue(f.value,true);var target=issuer.Issue(f.value,false);
+  using var session=issuer.Compile("($v, [$v](1), map{'v':$v}?v)");using var snapshot=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{});
+  XdmValue value=default;SchemaEvidenceKernel.Evidence? evidence=null;
+  session.Run(session.Environment,snapshot,op=>{
+   evidence=op.Read(scalar);value=Transport.Read(op,scalar);
+   Check(f.id+"-payload",Payload(value)==Payload(f.value));
+   Check(f.id+"-legacy-types",value.SchemaTypeName==f.value.SchemaTypeName&&value.UserSchemaTypeName==f.value.UserSchemaTypeName);
+   Check(f.id+"-clr-equality",value.Equals(f.value)&&f.value.Equals(value));
+   Check(f.id+"-clr-hash",value.GetHashCode()==f.value.GetHashCode());
+   var admitted=Transport.Evidence(session,value,evidence);
+   Check(f.id+"-evidence",ReferenceEquals(admitted,evidence)&&ReferenceEquals(admitted.ActualType,issuer.Type)&&ReferenceEquals(admitted.OriginalAssessment,issuer.Origin));
+   var result=op.Evaluate(new EvaluationContext().WithVariable("v",value));var items=Items(result);
+   Check(f.id+"-vm-values",items.Length==3&&items.All(v=>Payload(v)==Payload(f.value)));
+   Check(f.id+"-vm-metadata",items.All(v=>Transport.HasEvidence(session,v)==Transport.Enabled));
+   var noop=Transport.Convert(op,value,evidence,target);
+   Check(f.id+"-exact-noop",Payload(noop)==Payload(f.value)&&ReferenceEquals(Transport.Evidence(session,noop,evidence),evidence));
+   observations.Add(new{f.id,kind=value.Kind.ToString(),payload=Payload(value),items=items.Select(v=>new{payload=Payload(v),origin=Transport.HasEvidence(session,v)}).ToArray()});return 0;
+  });
+  snapshot.Dispose();bool closed=false;try{Transport.Evidence(session,value,evidence!);}catch(ObjectDisposedException){closed=true;}Check(f.id+"-snapshot-close",closed);
+ }
+ var changes=new (string id,XdmValue source,XdmValue target)[]{
+  ("double-zero-sign",XdmValue.FromDouble(0d),XdmValue.FromDouble(-0d)),("float-zero-sign",XdmValue.FromFloat(0f),XdmValue.FromFloat(-0f)),
+  ("nan-bits",XdmValue.FromDouble(double.NaN),XdmValue.FromDouble(BitConverter.Int64BitsToDouble(0x7ff8000000000001))),
+  ("duration-lexical",XdmValue.FromDuration("P1D"),XdmValue.FromDuration("PT24H")),
+  ("qname-prefix",XdmValue.FromQName(new XsQName("name","urn:t","p")),XdmValue.FromQName(new XsQName("name","urn:t","q"))),
+  ("dateTime-offset",XdmValue.FromDateTime(date),XdmValue.FromDateTime(date.ToOffset(TimeSpan.Zero)))
+ };
+ var changesObserved=new List<object>();
+ foreach(var f in changes){
+  var issuer=new Issuer();var scalar=issuer.Issue(f.source,true);var target=issuer.Issue(f.target,false);
+  using var session=issuer.Compile("$v");using var snapshot=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{});
+  session.Run(session.Environment,snapshot,op=>{
+   var evidence=op.Read(scalar);var input=Transport.Read(op,scalar);
+   bool refused=Transport.ReboundRefused(session,input,f.target);
+   Check(f.id+"-rebind",!Transport.Enabled||refused);
+   var converted=Transport.Convert(op,input,evidence,target);
+   var admitted=Transport.Evidence(session,converted,op.AdmitConversion(evidence,target));
+   bool detached=admitted.OriginalAssessment is null;bool exact=Payload(converted)==Payload(f.target);
+   Check(f.id+"-conversion",Transport.Enabled?(detached&&exact):(!detached&&Payload(converted)==Payload(f.source)));
+   changesObserved.Add(new{f.id,refused,detached,exact,payload=Payload(converted)});return 0;
+  });
+ }
+ foreach(var f in new (string id,XdmValue source,XdmValue target)[]{("fresh-string",XdmValue.FromString("alpha"),XdmValue.FromString(new string(new[]{'a','l','p','h','a'}))),("fresh-decimal",XdmValue.FromDecimal(12.5m),XdmValue.FromDecimal(12.5m)),("fresh-qname",XdmValue.FromQName(new XsQName("name","urn:t","p")),XdmValue.FromQName(new XsQName("name","urn:t","p"))),("fresh-dateTime",XdmValue.FromDateTime(date),XdmValue.FromDateTime(date))}){
+  var issuer=new Issuer();var scalar=issuer.Issue(f.source,true);var target=issuer.Issue(f.target,false);
+  using var session=issuer.Compile("$v");using var snapshot=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{});
+  session.Run(session.Environment,snapshot,op=>{var evidence=op.Read(scalar);var value=Transport.Read(op,scalar);var converted=Transport.Convert(op,value,evidence,target);Check(f.id+"-equivalent-noop",ReferenceEquals(Transport.Evidence(session,converted,evidence),evidence)&&Payload(converted)==Payload(f.source));return 0;});
+ }
+ {
+  var issuer=new Issuer();var scalar=issuer.Issue(XdmValue.FromInteger(42),true);var environment=new object();var kernel=new SchemaEvidenceKernel(environment,issuer,2,128);int releases=0;
+  using var snapshot=kernel.Open(environment,new object(),issuer.Origin,()=>releases++,default);
+  var first=kernel.Read(snapshot,scalar,default);int getters=issuer.GetterReads;
+  Check("cache-repeat-same-evidence",ReferenceEquals(first,kernel.Read(snapshot,scalar,default)));
+  Check("cache-repeat-no-getters",issuer.GetterReads==getters);
+  using var cancel=new CancellationTokenSource();cancel.Cancel();bool canceled=false;try{kernel.Read(snapshot,scalar,cancel.Token);}catch(OperationCanceledException){canceled=true;}Check("cache-canceled-read",canceled&&issuer.GetterReads==getters);
+  issuer.OnOwnsValue=()=>snapshot.Dispose();bool closed=false;try{kernel.Read(snapshot,scalar,default);}catch(ObjectDisposedException){closed=true;}Check("cache-close-during-membership",closed&&issuer.GetterReads==getters);Check("cache-close-release-once",releases==1);kernel.Close();Check("cache-session-close-release-once",releases==1);
+ }
+ foreach(var f in new[]{("integer",XdmValue.FromInteger(42)),("string",XdmValue.FromString("alpha")),("decimal",XdmValue.FromDecimal(42m))}){
+  var issuer=new Issuer();var scalar=issuer.Issue(f.Item2,true);var target=issuer.Issue(f.Item2,false);
+  using var session=issuer.Compile("$v");using var snapshot=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{});
+  session.Run(session.Environment,snapshot,op=>{
+   var evidence=op.Read(scalar);var value=Transport.Read(op,scalar);
+   foreach(var count in new[]{1000,20000})foreach(var operation in new[]{"payload-access","cached-kernel-read","issued-value-read","evidence-read","exact-noop"}){
+    long Run(){long sum=0;for(int k=0;k<count;k++)sum+=operation switch{
+     "payload-access"=>Consume(value),"cached-kernel-read"=>Consume(op.Read(scalar).Value),"issued-value-read"=>Consume(Transport.Read(op,scalar)),
+     "evidence-read"=>Consume(Transport.Evidence(session,value,evidence).Value),"exact-noop"=>Consume(Transport.Convert(op,value,evidence,target)),_=>throw new Exception("Unknown operation")};return sum;}
+    for(int k=0;k<3;k++)_=Run();var samples=new List<object>();
+    for(int k=0;k<7;k++){
+     int g0=GC.CollectionCount(0),g1=GC.CollectionCount(1),g2=GC.CollectionCount(2);long before=GC.GetAllocatedBytesForCurrentThread(),start=Stopwatch.GetTimestamp();long checksum=Run();long ticks=Stopwatch.GetTimestamp()-start,bytes=GC.GetAllocatedBytesForCurrentThread()-before;
+     samples.Add(new{checksum,allocatedBytes=bytes,nanoseconds=ticks*1_000_000_000d/Stopwatch.Frequency,gen0=GC.CollectionCount(0)-g0,gen1=GC.CollectionCount(1)-g1,gen2=GC.CollectionCount(2)-g2});
+    }
+    costs.Add(new{kind=f.Item1,operation,count,samples});
+   }return 0;
+  });
+ }
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.XPath.")==true&&a.GetName().Name!="Bosak.XPath.Runtime.Tests").OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant(),context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{mode,fixtureCount=fixtures.Length,kindCount=fixtures.Select(f=>f.value.Kind).Distinct().Count(),checkCount=checks.Count,checks,observations,changesObserved,costs,runtime=Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,cpu=Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER"),processorCount=Environment.ProcessorCount,serverGC=System.Runtime.GCSettings.IsServerGC,totalAvailableMemoryBytes=GC.GetGCMemoryInfo().TotalAvailableMemoryBytes,xdmValueSize=Unsafe.SizeOf<XdmValue>(),bindings},new JsonSerializerOptions{WriteIndented=true}));
+}catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+static XdmValue[] Items(XdmValue v){if(!v.IsSequence)return new[]{v};var list=new List<XdmValue>();foreach(var item in XdmSequence.FromSource(v.SequenceValue!))list.Add(item);return list.ToArray();}
+static string Payload(XdmValue v)=>v.Kind switch{
+ XdmValueKind.Double or XdmValueKind.Float=>BitConverter.DoubleToInt64Bits(v.DoubleValue).ToString("X16"),
+ XdmValueKind.QName=>v.QNameValue.Prefix+"|"+v.QNameValue.NamespaceUri+"|"+v.QNameValue.LocalName,
+ XdmValueKind.DateTime=>Fields(v.DateTimeXPathValue),
+ XdmValueKind.Date=>Fields(v.DateXPathValue),
+ XdmValueKind.Time=>Fields(v.TimeXPathValue),
+ _=>v.ToString()};
+static string Fields(XPathDateTime v)=>string.Join("|",v.Year,v.Month,v.Day,v.Hour,v.Minute,v.Second,v.Millisecond,v.TimezoneOffsetMinutes,v.HasTimezone);
+[MethodImpl(MethodImplOptions.NoInlining)]
+static long Consume(XdmValue v)=>v.Kind switch{XdmValueKind.Integer=>v.IntegerValue,XdmValueKind.Decimal=>(long)v.DecimalValue,XdmValueKind.String=>v.StringValue.Length,_=>(int)v.Kind};
+sealed class Issuer:ISchemaEvidenceIssuer{
+ internal object Type{get;}=new();internal object Origin{get;}=new();internal int GetterReads;internal Action? OnOwnsValue;readonly HashSet<ISchemaIssuedScalar> issued=new(ReferenceEqualityComparer.Instance);
+ internal ISchemaIssuedScalar Issue(XdmValue value,bool assessed){var scalar=new Scalar(this,value,assessed?Origin:null);issued.Add(scalar);return scalar;}
+ internal SchemaQuerySession Compile(string query){if(!SchemaSessionCompilation.TryCompile(query,new CompileOptions(),this,2,128,out var session,out var reason))throw new Exception(reason);return session!;}
+ public bool OwnsValue(ISchemaIssuedScalar value){OnOwnsValue?.Invoke();return issued.Contains(value);}public bool OwnsType(object type)=>ReferenceEquals(type,Type);public bool OwnsAssessment(object origin)=>ReferenceEquals(origin,Origin);public bool IsSameType(object a,object b)=>ReferenceEquals(a,b);
+ sealed class Scalar(Issuer owner,XdmValue value,object? origin):ISchemaIssuedScalar{public XdmValue Value{get{owner.GetterReads++;return value;}}public object DeclaredType{get{owner.GetterReads++;return owner.Type;}}public object ActualType{get{owner.GetterReads++;return owner.Type;}}public object? OriginalAssessment{get{owner.GetterReads++;return origin;}}}
+}
+static class Transport{
+ internal static bool Enabled{
+ get{
+#if CARRIER
+ return true;
+#else
+ return false;
+#endif
+ }}
+ internal static XdmValue Read(SchemaQuerySession.Operation op,ISchemaIssuedScalar scalar){
+#if CARRIER
+ return op.ReadValue(scalar);
+#else
+ return op.Read(scalar).Value;
+#endif
+ }
+ internal static SchemaEvidenceKernel.Evidence Evidence(SchemaQuerySession session,XdmValue value,SchemaEvidenceKernel.Evidence fallback){
+#if CARRIER
+ return session.ReadEvidence(value)??throw new Exception("Missing evidence");
+#else
+ session.ValidateEvidenceForCarrier(fallback);return fallback;
+#endif
+ }
+ internal static bool HasEvidence(SchemaQuerySession session,XdmValue value){
+#if CARRIER
+ return session.ReadEvidence(value) is not null;
+#else
+ return false;
+#endif
+ }
+ internal static XdmValue Convert(SchemaQuerySession.Operation op,XdmValue value,SchemaEvidenceKernel.Evidence evidence,ISchemaIssuedScalar target){
+#if CARRIER
+ return op.AdmitConversionValue(value,target);
+#else
+ return op.AdmitConversion(evidence,target).Value;
+#endif
+ }
+ internal static bool ReboundRefused(SchemaQuerySession session,XdmValue value,XdmValue changed){
+#if CARRIER
+ try{session.ReadEvidence(XdmValue.SchemaTransportAttach(changed,XdmValue.SchemaTransportMarker(value)!));return false;}catch(ArgumentException){return true;}
+#else
+ return false;
+#endif
+ }
+}

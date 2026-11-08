@@ -1,0 +1,41 @@
+{
+  "sourceRevision": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+  "scope": "Committed historical source for the existing R2 return, not current implementation acceptance. Prior raw working hashes remain observations; mixed line endings are not silently reconstructed.",
+  "files": {
+    "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": {
+      "gitBlob": "dd1716a91aa571d4bd810355d5685a8b67f5ebb3",
+      "committedSha256": "fba3bfcba4303505784cd433d527001c173f2350013beeb2be8e5f2871ba60de",
+      "previousObservedWorkingSha256": "ade4e0c6255d89442d02c4b1a5b2ed756983ab38c5829763dd60b29418f9e590"
+    },
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": {
+      "gitBlob": "38ed0aaa872adba583e8666f244f5a33045adfd7",
+      "committedSha256": "cef1dd1a0bcbdfcdcb3c3841337a8a310d327851ef9cbfca86a803bd6e4a83fa",
+      "previousObservedWorkingSha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b"
+    },
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": {
+      "gitBlob": "8c131fba96cf53aa43f3d5253090968db8e52f60",
+      "committedSha256": "a4bbc9cbf6af7061e442a06b6f39a47446de99912af65f36f32278f2ffee4357",
+      "previousObservedWorkingSha256": "6ec0491a69eab73312268bfd428faaa425fb95b35ec131797ddcaf1484f08d11"
+    },
+    "src/Bosak.XmlDb.Storage/GenerationLease.cs": {
+      "gitBlob": "7711cfa500c440e0c2886aca93405a0b49734e97",
+      "committedSha256": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d",
+      "previousObservedWorkingSha256": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d"
+    },
+    "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": {
+      "gitBlob": "375974413fc16bc7991ab850e7fd943c04786b53",
+      "committedSha256": "6911a4d22202b319e01103b91214222fc3ac268a8c6b56d4a5ae4c28b46a663f",
+      "previousObservedWorkingSha256": "357bff44834dd357c2d0dd090120df73dd686d329d74b24fba2b58cd3f08cc5c"
+    },
+    "tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs": {
+      "gitBlob": "b3ded8a38ee2655aba3ce77577bcf9954fb46a67",
+      "committedSha256": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687",
+      "previousObservedWorkingSha256": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687"
+    },
+    "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs": {
+      "gitBlob": "7755847b10e19ef682fedf72af4170dd66f6d576",
+      "committedSha256": "50add1d355ccee9102f7cc4512ee01002c7476025b16297d5bcdb0e4e0b81d1a",
+      "previousObservedWorkingSha256": "12ee62a5a8f4837177910032f6c7e56c2c648c7f1ea114095a6bcfc850b0aba2"
+    }
+  }
+}

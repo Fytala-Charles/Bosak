@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-07",
+  "sourceVersion": "1.81.1",
+  "candidateCommit": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "files": {
+    "docs/foundation-captured-identity-production/evidence/SOURCE-AND-BINARY-PINS.json": "609eb62abab39f9676d22a4dfde29b93537f4d13cf7eda166181819aa584b4e1",
+    "docs/foundation-captured-identity-production/evidence/public-api-complete.json": "1efd086c9871c069af385299ce5194a5ec7332774159639e9755ee09d84c1af5",
+    "docs/foundation-owner-gap-review/MANIFEST.json": "e261abc41de1859f3a6c831d3ef5a9c9381fdff310bf806421372e2e8d51ab2f",
+    "docs/foundation-workload-1811/MANIFEST.json": "3dc49fc5071fb850c777b99ecadf191cc316eec16eff28eaeb1822d255095ac6",
+    "docs/foundation-provider-qualification/tools/receipt_preflight.py": "32edd77b95eab5f21480324dd514fe9b777a0c021b5575fd075e1edbcdf032cf",
+    "docs/foundation-provider-qualification/tools/test_receipt_preflight.py": "2cd3f062f3d35acd827b7d2fe59fdf807a7e075a07a8783709c7eaf57f67473c",
+    "docs/foundation-provider-qualification/evidence/OWNER-RETURN-REVIEW.json": "3fc7fd486d1323efbf47ae7c7e7db12220984072a44031be1af86b52aef8ddc7",
+    "docs/foundation-native-immutable-guard/provider/NativeContainerAdapter.cs": "94da1aaff0b3cf0d65c8fb65bbda67cae165db56df76150c2ab4c2b5baeeb666",
+    "docs/foundation-native-immutable-guard/provider/NativeNodeProjection.cs": "d5800eb85af1e285867e05dabea771047cbc23ab94aca1ba92f728330e09401e",
+    "docs/foundation-native-immutable-guard/provider/NativeProviderSession.cs": "a0f42600061e912c4b155393bd65025627bef9ba692fbb36cf6f99cca335b5ea",
+    "docs/foundation-native-immutable-guard/provider/NativeStrictAssessment.cs": "bd48fc115ce84d140824824e8bbd0d395752dc2a379b0aedd754bf3f46802d19"
+  },
+  "schemaProject": {
+    "path": "D:\\Development\\Bosak.Schema.Public\\src\\Bosak.Schema\\Bosak.Schema.csproj",
+    "sha256": "383583f689935346a2c3d6d1e9e342ddbd3478b858738ebbb308719bd7eec384"
+  },
+  "ownerAccepted": false,
+  "productionAdopted": false,
+  "requirementsWaived": 0
+}

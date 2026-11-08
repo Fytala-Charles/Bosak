@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-03",
+  "beforeSourceEdits": true,
+  "baseCommit": "5ab942c18ad31d8bcf865ecccf53681337848ea1",
+  "files": {
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "9dcd861bc4159fbeb6e079f4d07e28e7de1f5da155468d28a3f9ee0e6764b16c",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationInputs.cs": "89e74bcecf9a0192c4db5c0088371215677eb4de1d2495dda14f14d0bd4c0791",
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "4af2760bf9d69c8552ad4a808ed746120b28e3a95eb2f5ce091ba4107cf10ee0",
+    "docs/foundation-w1-schema-association/STATUS.json": "76c15a21d91d40123caf21c287986d4e27fcbaa76bf05dca11eb4c3ced4daeae",
+    "docs/foundation-w1-schema-association/evidence/SOURCE-AND-BINARY-PINS.json": "a4629aa1a1346d2e59752c0ae19bce4a0d8b87902750acc4148ea3ae92e15346",
+    "docs/foundation-r2-closure/CLOSURE.json": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2"
+  }
+}

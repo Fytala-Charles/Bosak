@@ -1,0 +1,13 @@
+from pathlib import Path
+import subprocess,json,time
+E=Path('docs/conformance/k01-schema-list/evidence');receipts=[]
+for label,program in [('released','.guard-tmp/closure-reflection/bin/Release/net10.0/Probe.dll'),('candidate','.guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll')]:
+ for name in ['CastAs-ListType-20','CastAs-ListType-28']:
+  request=E/(name+'-request.json');log=E/(label+'-'+name+'.log');command=['dotnet',program,'probe',str(request)];start=time.monotonic()
+  with log.open('wb') as output:
+   try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+   except subprocess.TimeoutExpired:code=None;timeout=True
+  lines=log.read_text(encoding='utf-8-sig').splitlines();result=json.loads(lines[-1]) if code==0 else None
+  receipts.append(dict(binary=label,name=name,command=command,exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,result=result,policy='Direct executor invocation bypasses normal known-skip admission solely for this bounded diagnostic; not included in gate accounting.'))
+  print(label,name,result)
+(E/'executor-results.json').write_text(json.dumps(receipts,indent=2)+'\n',encoding='utf-8')

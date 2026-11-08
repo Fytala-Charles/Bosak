@@ -4,22 +4,23 @@
   <p>One XML engine, optional schema awareness and a visual-authoring application</p>
 </div>
 
-Bosak brings XPath, XSLT and XQuery into .NET applications. Bosak.Schema extends the engine with licensed complex-type schema awareness. Bosak.Braid uses the engine's source-preserving APIs to build a visual/source XSLT authoring workflow.
+Bosak brings XPath, XSLT and XQuery into .NET applications. Bosak.Schema provides optional Apache-2.0 schema integration and staged XSD 1.1 services without activation. Bosak.Braid uses the engine's source-preserving APIs to build a visual/source XSLT authoring workflow.
 
 | Component | Role | Availability and next step |
 |---|---|---|
 | Bosak | Apache-2.0 XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine; documented opt-in 4.0 draft features | Public .NET 10 packages. Start with the [README](../README.md#quick-start). |
-| Bosak.Schema | Optional commercial XSD complex-type schema-awareness add-on | Public [integration/licensing guide](https://fytala-charles.github.io/Bosak.Docs/) and [trial request](https://licensing.fytala.com/api/trial); contact Fytala for package access and compatible engine versions. |
+| Bosak.Schema | Optional Apache-2.0 schema integration and staged XSD 1.1 services | Public [source](https://github.com/Fytala-Charles/Bosak.Schema) and [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md); no activation, trial or subscription. |
 | Bosak.Braid | Separate visual/source XSLT application, with reviewed authoring and execution workflows | Active development in a private repository. [Contact Fytala](mailto:charles.korthout@fytala.com) for access and delivery information. |
+| Bosak.Folio | XSL-FO-to-PDF formatter in development | Remains proprietary with separate product terms. |
 | VS Code extension | Editing assistance and evaluate/run commands | Public [Marketplace extension](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak); its bundled engine follows a separate release cycle. |
 
 ## Why schema awareness helps
 
 A schema can describe more than the presence of a field: complex types express attributes, child structure and content relationships. Using those types in a transformation helps detect invalid document structure at a validation boundary and makes type expectations explicit in the transformation rules.
 
-The Schema add-on's documented implemented profile includes `xsl:import-schema`, named complex-type checks through `instance of` / `treat as`, and schema-validated construction through supported validation/type attributes. It uses the core's extension interfaces rather than a separate engine fork. The free core retains its own simple-type support.
+Schema's documented implemented profile includes `xsl:import-schema`, named complex-type checks through `instance of` / `treat as`, and schema-validated construction through supported validation/type attributes. Its staged XSD 1.1 services cover selected compilation/assertion capabilities; complete structural validation and full component/PSVI integration remain incomplete. The core retains its own simple-type support.
 
-The add-on is separately licensed and activated. Its documented schema profile, package distribution and compatibility lifecycle are independent of the core's version number; verify the supported combination before adoption. The customer guide explains activation and licensing. No Schema version is implied by a Bosak core release.
+Both core and Schema are Apache-2.0. Schema remains a separate module with its own supported profile and compatibility lifecycle; no Schema version is implied by a core release. The Apache transition published source without a new Schema NuGet release. See the [verified publication record](SCHEMA-APACHE-PUBLICATION-2026-10-29.md). Billing/key-generation infrastructure and private history remain outside the public schema repository.
 
 ## Braid's bidirectional builder direction
 
@@ -39,4 +40,4 @@ See the [source-preserving authoring roadmap](STRUCTURAL-AUTHORING-ROADMAP.md) f
 
 ## Learn more
 
-[Core quick start](../README.md#quick-start), [worked examples](xpath40-catalog/worked-examples/README.md), [architecture](ARCHITECTURE.md), [Schema customer guide](https://fytala-charles.github.io/Bosak.Docs/) and [Fytala contact](mailto:charles.korthout@fytala.com).
+[Core quick start](../README.md#quick-start), [worked examples](xpath40-catalog/worked-examples/README.md), [architecture](ARCHITECTURE.md), [implementation status](IMPLEMENTATION_STATUS.md), [Schema integration](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md) and [Fytala contact](mailto:charles.korthout@fytala.com).

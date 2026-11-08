@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\advisor-contract\Probe.csproj (in 51 ms).
+D:\Development\Bosak\.guard-tmp\advisor-contract\Program.cs(109,246): error CS1061: 'XdmValue' does not contain a definition for 'IsString' and no accessible extension method 'IsString' accepting a first argument of type 'XdmValue' could be found (are you missing a using directive or an assembly reference?) [D:\Development\Bosak\.guard-tmp\advisor-contract\Probe.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\advisor-contract\Program.cs(109,246): error CS1061: 'XdmValue' does not contain a definition for 'IsString' and no accessible extension method 'IsString' accepting a first argument of type 'XdmValue' could be found (are you missing a using directive or an assembly reference?) [D:\Development\Bosak\.guard-tmp\advisor-contract\Probe.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.94

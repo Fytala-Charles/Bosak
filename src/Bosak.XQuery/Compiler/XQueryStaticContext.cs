@@ -29,6 +29,9 @@
 //                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 28-10-2026     | Represent main-module context item declarations and preserve them in clones (1.30.0).    |
+//                      | Charles Korthout | 0.12  | 28-10-2026     | Carry immutable copy-namespaces modes through static-context cloning (1.31.0). |
+//                      | Charles Korthout | 0.13  | 28-10-2026     | Retain immutable construction declarations across context cloning (1.32.0). |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -59,6 +62,12 @@ internal sealed record UserVariableDeclaration(
     bool IsExternal,
     int Position,
     bool IsPrivate = false);
+
+/// <summary>A main-module initial context item declaration.</summary>
+/// <param name="TypeName">The declared ItemType, defaulting to item().</param>
+/// <param name="Initializer">The initial or external-default expression, when present.</param>
+/// <param name="IsExternal">Whether the host may supply the initial item.</param>
+internal sealed record ContextItemDeclaration(string TypeName, XPathAstNode? Initializer, bool IsExternal);
 
 /// <summary>A module import declaration (<c>import module namespace p = "uri" at "loc", ...;</c>).</summary>
 public sealed record ModuleImport(
@@ -139,7 +148,9 @@ internal sealed class XQueryStaticContext
         string? contextItemTypeName,
         Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> decimalFormats,
         DecimalFormat? declaredDefaultDecimalFormat,
-        bool? boundarySpaceStrip)
+        bool? boundarySpaceStrip,
+        ContextItemDeclaration? contextDeclaration,
+        bool? preserveNamespaces, bool? inheritNamespaces, XdmConstructionMode? constructionMode)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -160,6 +171,10 @@ internal sealed class XQueryStaticContext
         ContextItemTypeName = contextItemTypeName;
         DeclaredDefaultDecimalFormat = declaredDefaultDecimalFormat;
         BoundarySpaceStrip = boundarySpaceStrip;
+        ContextDeclaration = contextDeclaration;
+        PreserveNamespaces = preserveNamespaces;
+        InheritNamespaces = inheritNamespaces;
+        ConstructionMode = constructionMode;
     }
 
     /// <summary>
@@ -202,6 +217,15 @@ internal sealed class XQueryStaticContext
     /// </summary>
     public string? ContextItemTypeName { get; private init; }
 
+    /// <summary>The main-module initial context item declaration, if explicitly present.</summary>
+    internal ContextItemDeclaration? ContextDeclaration { get; private init; }
+
+    /// <summary>Creates a context carrying a main-module context declaration.</summary>
+    /// <param name="declaration">The parsed declaration.</param>
+    /// <returns>The updated immutable static context.</returns>
+    internal XQueryStaticContext WithContextDeclaration(ContextItemDeclaration declaration)
+        => CloneWith(contextDeclaration: declaration);
+
     /// <summary>Creates a new context with the declared context item type set.</summary>
     public XQueryStaticContext WithContextItemType(string? typeName)
         => CloneWith(contextItemTypeName: typeName);
@@ -224,6 +248,28 @@ internal sealed class XQueryStaticContext
     /// null = not declared (spec default is strip).
     /// </summary>
     public bool? BoundarySpaceStrip { get; private init; }
+
+    /// <summary>The declared construction mode; null selects the documented preserve default.</summary>
+    public XdmConstructionMode? ConstructionMode { get; private init; }
+
+    /// <summary>Creates a static context with the construction policy set.</summary>
+    /// <param name="mode">The declared schema annotation policy.</param>
+    /// <returns>The new immutable context.</returns>
+    public XQueryStaticContext WithConstructionMode(XdmConstructionMode mode)
+        => CloneWith(constructionMode: mode);
+
+    /// <summary>The declared preserve/no-preserve mode; null means the default preserve.</summary>
+    public bool? PreserveNamespaces { get; private init; }
+
+    /// <summary>The declared inherit/no-inherit mode; null means the default inherit.</summary>
+    public bool? InheritNamespaces { get; private init; }
+
+    /// <summary>Creates a context with the copy-namespaces declaration set.</summary>
+    /// <param name="preserve">Whether copied elements retain unused source namespace bindings.</param>
+    /// <param name="inherit">Whether copied elements inherit constructor namespace bindings.</param>
+    /// <returns>The new immutable static context.</returns>
+    public XQueryStaticContext WithCopyNamespaces(bool preserve, bool inherit)
+        => CloneWith(preserveNamespaces: preserve, inheritNamespaces: inherit);
 
     /// <summary>Creates a new context with a named decimal format declaration added.</summary>
     public XQueryStaticContext WithDecimalFormat(string localName, string namespaceUri, DecimalFormat format)
@@ -408,7 +454,9 @@ internal sealed class XQueryStaticContext
         string? contextItemTypeName = null,
         Dictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
         DecimalFormat? declaredDefaultDecimalFormat = null,
-        bool? boundarySpaceStrip = null)
+        bool? boundarySpaceStrip = null,
+        ContextItemDeclaration? contextDeclaration = null,
+        bool? preserveNamespaces = null, bool? inheritNamespaces = null, XdmConstructionMode? constructionMode = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -429,6 +477,8 @@ internal sealed class XQueryStaticContext
             contextItemTypeName ?? ContextItemTypeName,
             decimalFormats ?? _decimalFormats,
             declaredDefaultDecimalFormat ?? DeclaredDefaultDecimalFormat,
-            boundarySpaceStrip ?? BoundarySpaceStrip);
+            boundarySpaceStrip ?? BoundarySpaceStrip,
+            contextDeclaration ?? ContextDeclaration,
+            preserveNamespaces ?? PreserveNamespaces, inheritNamespaces ?? InheritNamespaces, constructionMode ?? ConstructionMode);
     }
 }

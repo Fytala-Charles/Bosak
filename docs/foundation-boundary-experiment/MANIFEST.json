@@ -1,0 +1,13 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  "CORE-CANDIDATE-V5.cs.txt": "3fbfeea5a88d93cf24ec137850c5f3358d0b6028577b133d9ff259c7b6beb940",
+  "evidence/build.txt": "435a9eaac2c3a6d4fe151538b1af918e03e4c9c4b8b4b9f84a9ba41f54dfc2bc",
+  "evidence/INPUTS.json": "2bce566e1328fb7ca5018b6cb2ea5a504d3aa6b8cf3650269991affe4a166d06",
+  "evidence/run.json": "4b34bdf798b834288b5f6218c46642813df077233e2ee6182b516ed22cc1c5bf",
+  "evidence/run.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "README.md": "4973fd78b51afc59dfc688fc77f59eb0c43f0ac6c70f3e4057d36e2e1b3f22c4",
+  "SPEC-BASIS.md": "aef5adb24b83cce0b8a97256c7d313d207616e6b3a47392297420d11dfb633cb",
+  "tools/Probe.cs.txt": "ca778328721e16935b919f4bc7488484547aea918287ffc62c586ba9c7a91e6a",
+  "tools/run.py": "e646193b9205dce724897e3384e2353cf840018274f39b6b54ba1560943bdccc",
+  "tools/verify.py": "7a5850f71856592258742c61a3279f4d454135ff3eba2ca08ab2dcd7160e306e"
+}

@@ -1,0 +1,270 @@
+{
+  "previewVersion": "1.81.2",
+  "candidateCommit": "f0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Api.1.81.2.nupkg",
+      "sha256": "95cdb7904139a8938f2351afa9bb576d5e7f8d1f7bdc39d400e4d50df41dfeb5",
+      "nugetSha512": "5yYtOIrOEV67yUgf6TgYkqubDI4FwgZ/mXKyUdYFVZ+kxCQ5jYhLHG6I8wj3uXQwdyDMEuB8ivfClmCJgO64YA==",
+      "dependencies": {
+        "Bosak.XPath.Compiler": "1.81.2",
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Parser": "1.81.2",
+        "Bosak.XPath.Runtime": "1.81.2",
+        "Bosak.XPath.Standard": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Api.dll": "87caaffdda37b4a1fc9b19113ce09912fb000082560fc5c175a60e4c00eba140",
+        "lib/net10.0/Bosak.XPath.Api.xml": "88b0dd6a0c17a38f7f873380d1a426d84218a34c653c6e340426b88107f01623"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Compiler.1.81.2.nupkg",
+      "sha256": "0a12eef1322e3c8261de1398dd0c196b0be8b4730a273e62eb4a483f87497bec",
+      "nugetSha512": "nGiN36AQREH1bhCURYcmMlekd+4TbJkc4lskzf/Smj664n6MHwwA4Ww/nykUP/teZwvOZy2EXaofpQmO68vHvg==",
+      "dependencies": {
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Parser": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Compiler.dll": "8b6617897df5c69457042dbe797a9096dcb64b739e5837d94578ce73761a91b1",
+        "lib/net10.0/Bosak.XPath.Compiler.xml": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Core.1.81.2.nupkg",
+      "sha256": "c506ca2312825a8c53a536b389935428be90aa487be4b5ec29b0c4ae110a1679",
+      "nugetSha512": "VN/z60u5DbwOgMfjhYlQ6TaN6sG1IVQ7+YmnVJFEber5NJwPXnv/BGnpwv/D1Q+k8yYnV6Wveq5Cp4uNdaoS4w==",
+      "dependencies": {},
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Core.dll": "2718ada5351a5203a728bf865f3d1b2bd2513b5ed7283e67e386e3f08faaa944",
+        "lib/net10.0/Bosak.XPath.Core.xml": "7dca1d9a2d19facebd85c2f63c74c7d0d2662c277585db4d0b2dc2bb0c399aaf"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Parser.1.81.2.nupkg",
+      "sha256": "487309dc7f16a4702bd03b8a63d78b3ac182881c1b805517a15ab3cdb6c4b40d",
+      "nugetSha512": "OFmDJ7TYodF4xcVbKgZx4hQTbrS2YdEIbeW5gNFZ0am55IrO8av3B9jhwTCZpVV+Z+FaKoPv/JasjOm0zZatoA==",
+      "dependencies": {
+        "Bosak.XPath.Core": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Parser.dll": "77a1dfcddf0b09440a1f8b5544931136cc14f61a102e2d085514f93686ca31bf",
+        "lib/net10.0/Bosak.XPath.Parser.xml": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Providers.1.81.2.nupkg",
+      "sha256": "32a16026ed335f99c13834d7a22b927862b39384b43f409d4be53bc93d97e435",
+      "nugetSha512": "pLtprtn0bSTuX33pEbUjhYrpgLVc3GSiesENg+/Utcs59se6/e5B21q73PWV4Io2NIh0aEHUbg1NrStQ4xREmQ==",
+      "dependencies": {
+        "Bosak.XPath.Core": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Providers.dll": "2e4bd9b77876afe2fab35f5f311d8dfd49f409e7a0300d5917a1c4419d6a25b1",
+        "lib/net10.0/Bosak.XPath.Providers.xml": "7c30c33c77a283c6532aca89cf8f65dc4afc2fa3d838ec94c6fd6a1f333f3529"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Runtime.1.81.2.nupkg",
+      "sha256": "9ce175ba792191c405c3aadd052f9c223e476320e573693b4bf09c9dabc1bc89",
+      "nugetSha512": "pk3RzDJXvIIImD90eiReSdw94gX3WVoo/NH+rSKjAtZWiUnsI4m/PI0qdTB40e282RljEWZd9G+OrRtSbPhr+g==",
+      "dependencies": {
+        "Bosak.XPath.Compiler": "1.81.2",
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Providers": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Runtime.dll": "6d6b9e40cb19944c5016fc61a24a810ab61ec9b3e45af02af90e24c68d4d3ca7",
+        "lib/net10.0/Bosak.XPath.Runtime.xml": "571dc63b12792f6ca32f177f6fa52c1d473163cb87da68eccd293435b7f66f67"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Standard.1.81.2.nupkg",
+      "sha256": "bff2d809fe3bf458e1cdf17afef37a78ab2d2f3b778a1061c2512267307e6fea",
+      "nugetSha512": "5Ma8r2hXjElDh63K/DNjzAp+Ue7ZFkPsxejaDUQIpMsQ+Le3TukvC5bdY8ZIgt8RjB0Qbg9eC2YEbDlzQJySjw==",
+      "dependencies": {
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Providers": "1.81.2",
+        "Bosak.XPath.Runtime": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "licenses/Unicode17-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "lib/net10.0/Bosak.XPath.Standard.dll": "5cfe884209fb8f4f5a5ef313a996a503c9421964d89b9becb566943a09c606a6",
+        "lib/net10.0/Bosak.XPath.Standard.xml": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa"
+      }
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XQuery.1.81.2.nupkg",
+      "sha256": "2ee922acdfb9662dcbe1c3faf5f674acf6906e09a87c75f94cd365a48d809a70",
+      "nugetSha512": "LSjafS5dUeZ8lJzuiHCxfOhOwvPf07rhlL35E9CPSMH08JQHtZCc4/wFQtp7WER8/xcG4mRh1sHWR7IG6xaDLw==",
+      "dependencies": {
+        "Bosak.XPath.Api": "1.81.2",
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Providers": "1.81.2",
+        "Bosak.XPath.Runtime": "1.81.2",
+        "Bosak.XPath.Standard": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XQuery.dll": "79069b51c8c5173449185d048b7728fd82782f0c9f1fcdefdbe270cf980982db",
+        "lib/net10.0/Bosak.XQuery.xml": "e178474252bc2b3e2d3ef578643870d89357e7a640831b83a5fb28955ebafbf9"
+      }
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.Xslt.1.81.2.nupkg",
+      "sha256": "0d1d484a12546faa7d3e0ed1cab0ca4a931e5b4aca37625f69aecbe0a3e6798c",
+      "nugetSha512": "dggXvhJRSKqK1qN4CgeRbNlj+LFrFFcj/5Yk8qnW9fXS3ixDFbQ4wd+W7P6oFlTy4N0ZJQuBGLP1EDZyTB6z0A==",
+      "dependencies": {
+        "Bosak.XPath.Api": "1.81.2",
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Parser": "1.81.2",
+        "Bosak.XPath.Providers": "1.81.2",
+        "Bosak.XPath.Runtime": "1.81.2",
+        "Bosak.XPath.Standard": "1.81.2",
+        "Bosak.XQuery": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.Xslt.dll": "e51a5d05ff5cac7b312fb11b95755b034d2d1767f7ce0d3b463bf60f5aa470d6",
+        "lib/net10.0/Bosak.Xslt.xml": "01a865d0aa64ed9bb7f527f20b882a2eae3c033b43ac1546083680219ab69e1c"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "version": "1.81.2",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\feed\\Bosak.XPath.Providers.Database.1.81.2.nupkg",
+      "sha256": "d50498e7c0d467e84bcedef96a205934c06f4bff65ab1bbd9c921aee99ec1b32",
+      "nugetSha512": "06kB0pTSlyYx0ubEgEaBCYaGAsTs1fk7nBcrz/9E42+n5c0Tdm/Gk/Ze/XU4tPi8ZI7rKKy86/KLmzs9c4N5Tw==",
+      "dependencies": {
+        "Bosak.XPath.Core": "1.81.2",
+        "Bosak.XPath.Providers": "1.81.2"
+      },
+      "verifiedContents": {
+        "NOTICE": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d",
+        "README.md": "941838750ebc596acee59f41f09d002f4ba01ca3a0bbcbd5f77cafa93db479b5",
+        "assets/brand/fytala-avatar-circle.png": "cceb3dfe217275d92287aa2348f1d290209a82bf89ee012d01c2ea6d43169b59",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "assets/logos/fytala-logo-color-dark.svg": "bf4e98458e254058de62f90df6dc5c3476af94fd70dff805889c51b771e69699",
+        "assets/logos/fytala-logo-color-light.svg": "999ec0e818a9e8117aa4291f36ea6c26b6fc34109b42ee8b60467bea938262d1",
+        "assets/logos/fytala-logo-mono-black.svg": "1216445b40a6ef8173e65b1a486ee1f22b44f0522d1f67a79a9d3b353a80c793",
+        "assets/logos/fytala-logo-mono-white.svg": "508e171bdeed8793618ab6dfc4162d676a057d436936e7b53f22213821a833b7",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "lib/net10.0/Bosak.XPath.Providers.Database.dll": "cc97c646b354cd6bc51dc0c41b4bf843b66c5836fcf34588d7c65a880f43e2c8",
+        "lib/net10.0/Bosak.XPath.Providers.Database.xml": "10f7c239d618c2dd44e31b6296da04da407f8f3a61c2d7b3a8ca5e3b43edb230"
+      }
+    }
+  ],
+  "loadedEngines": {
+    "Bosak.XPath.Api": "87caaffdda37b4a1fc9b19113ce09912fb000082560fc5c175a60e4c00eba140",
+    "Bosak.XPath.Compiler": "8b6617897df5c69457042dbe797a9096dcb64b739e5837d94578ce73761a91b1",
+    "Bosak.XPath.Core": "2718ada5351a5203a728bf865f3d1b2bd2513b5ed7283e67e386e3f08faaa944",
+    "Bosak.XPath.Parser": "77a1dfcddf0b09440a1f8b5544931136cc14f61a102e2d085514f93686ca31bf",
+    "Bosak.XPath.Providers": "2e4bd9b77876afe2fab35f5f311d8dfd49f409e7a0300d5917a1c4419d6a25b1",
+    "Bosak.XPath.Providers.Database": "cc97c646b354cd6bc51dc0c41b4bf843b66c5836fcf34588d7c65a880f43e2c8",
+    "Bosak.XPath.Runtime": "6d6b9e40cb19944c5016fc61a24a810ab61ec9b3e45af02af90e24c68d4d3ca7",
+    "Bosak.XPath.Standard": "5cfe884209fb8f4f5a5ef313a996a503c9421964d89b9becb566943a09c606a6",
+    "Bosak.XQuery": "79069b51c8c5173449185d048b7728fd82782f0c9f1fcdefdbe270cf980982db",
+    "Bosak.Xslt": "e51a5d05ff5cac7b312fb11b95755b034d2d1767f7ce0d3b463bf60f5aa470d6"
+  },
+  "packageOnlyConsumer": true,
+  "freshPrivateCache": true,
+  "publicationAuthorized": false
+}

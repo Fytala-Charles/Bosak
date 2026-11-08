@@ -1,0 +1,12 @@
+{
+  "observation": {
+    "coldCallerBytes": 1376,
+    "coldTicks": 217187,
+    "warmReads": 8,
+    "warmCallerBytes": 3840,
+    "warmTicks": 1573130,
+    "frequency": 10000000
+  },
+  "ownerBudgetAccepted": false,
+  "scope": "Three-cell tracing fixture, caller allocations only; no native or retained-output aggregate budget acceptance."
+}

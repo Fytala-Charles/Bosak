@@ -1,0 +1,1435 @@
+[
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-031",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "9c533d1b86fea12fb716c8273ef3ae159d5a6ce3bf8e7258c7e4ccc3373d944b",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare copy-namespaces preserve, inherit;\n        let $nested := \n            element outer { \n              namespace out { \"http://out.zorba-xquery.com/\" },\n              element inner {\n                namespace in { \"http://in.zorba-xquery.com/\" }\n              } \n            },\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:new=\"http://new.zorba-xquery.com/\" xmlns:out=\"http://out.zorba-xquery.com/\" xmlns:in=\"http://in.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-032",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "b87605f3a5289cb8edbbffd1a9806962238338e9143e2eee35e823cb0d1541a3",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare copy-namespaces preserve, no-inherit;\n        let $nested := \n            element outer { \n              namespace out { \"http://out.zorba-xquery.com/\" },\n              element inner { namespace in { \"http://in.zorba-xquery.com/\" } } \n            },\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:in=\"http://in.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-033",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "df64c287665192cc3c60b1c421b8a50a31c3e256aa4ca996d504abd63dbf8602",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare copy-namespaces no-preserve, inherit;\n        let $nested := \n            element outer { \n              namespace out { \"http://out.zorba-xquery.com/\" },\n              element inner { namespace in { \"http://in.zorba-xquery.com/\" } } \n            },\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:new=\"http://new.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-034",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "86983ebad02abbdc3962be852f74fdb3bef5b7746df1105d9e6260253a1b3644",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare copy-namespaces no-preserve, no-inherit;\n        let $nested := \n            element outer { \n              namespace out { \"http://out.zorba-xquery.com/\" },\n              element inner { namespace in { \"http://in.zorba-xquery.com/\" } } \n            },\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner/>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-035",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "2109985e4d6a4985554b2c59f684defeebdcf09d37d490b72c81e672bd075751",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        import module namespace mod1=\"http://www.w3.org/TestModules/cnc-module\";\n        declare copy-namespaces preserve, inherit;\n        let $nested := mod1:nested(),\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:new=\"http://new.zorba-xquery.com/\" xmlns:out=\"http://out.zorba-xquery.com/\" xmlns:in=\"http://in.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [
+      {
+        "Uri": "http://www.w3.org/TestModules/cnc-module",
+        "Location": null,
+        "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+      }
+    ],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-036",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "ef75c4f895afe0a8cf346ef24fc24293f41e143ee2995d1b5ec7ae1efc7925d6",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        import module namespace mod1=\"http://www.w3.org/TestModules/cnc-module\";\n        declare copy-namespaces preserve, no-inherit;\n        let $nested := mod1:nested(),\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:in=\"http://in.zorba-xquery.com/\" xmlns:out=\"http://out.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [
+      {
+        "Uri": "http://www.w3.org/TestModules/cnc-module",
+        "Location": null,
+        "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+      }
+    ],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-037",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "fec1bd204dac8b86cfb5d671125c04f18dffba810473a0c5bc756d42e05813ed",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        import module namespace mod1=\"http://www.w3.org/TestModules/cnc-module\";\n        declare copy-namespaces no-preserve, inherit;\n        let $nested := mod1:nested(),\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner xmlns:new=\"http://new.zorba-xquery.com/\" />]]></assert-xml>\r\n</result>",
+    "Modules": [
+      {
+        "Uri": "http://www.w3.org/TestModules/cnc-module",
+        "Location": null,
+        "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+      }
+    ],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-038",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "979bf8ddcbb505ad2ccad8266a151152812f70b1974b5d7fdcc1b5eccf92127d",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        import module namespace mod1=\"http://www.w3.org/TestModules/cnc-module\";\n        declare copy-namespaces no-preserve, no-inherit;\n        let $nested := mod1:nested(),\n            $elem := element e { namespace new { \"http://new.zorba-xquery.com/\" }, $nested }\n        return\n          $elem/outer/inner\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<inner/>]]></assert-xml>\r\n</result>",
+    "Modules": [
+      {
+        "Uri": "http://www.w3.org/TestModules/cnc-module",
+        "Location": null,
+        "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+      }
+    ],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CompNamespaceConstructor",
+      "Name": "nscons-039",
+      "File": "prod/CompNamespaceConstructor.xml",
+      "ExpressionSha256": "f10e6d37eae0dc1d2850f8b359fbb460547bba8cb03d8d44088c591602f3a6b6",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare copy-namespaces preserve, inherit;\n        \n        declare function local:rec-add($level as xs:integer) as element() {\n          if ($level > 0) then\n            element { concat(\"e\", $level) } { \n              namespace { concat(\"pre\", $level) } { concat(\"uri\", $level) },\n              local:rec-add($level - 1)\n            }\n          else\n            element e0 {}       \n        };\n\n        local:rec-add(2)/e1/e0\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<e0 xmlns:pre2=\"uri2\" xmlns:pre1=\"uri1\" />]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-1",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "63f04e0d600b032ee4d331ed517e76b991a85a66e9956d4b76ba271de891fa00",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, no-inherit; declare copy-namespaces no-preserve, no-inherit; declare variable $input-context1 external; \"aaa\"",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0055\" />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-2",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "ae6c33eb1f51750ea4e2cf608e5622a0a021ec8cba68a2a5042390fccfaeee77",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,no-inherit; \n      \tdeclare default element namespace \"http://example.org/names\";\n      \tlet $new := <newElement xmlns = \"http://www.example.com/mynamespace\">{element original {\"Original Content\"}}</newElement> \n      \treturn $new//*\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<original xmlns=\"http://www.example.com/mynamespace\">Original Content</original>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-3",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "0304f86cd8bcfe0b8ef8f3fc5f6f974007d9c8fac65f40f7768870e87e3ecd7f",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n        declare namespace foo = \"http://example.org\"; \n        declare copy-namespaces preserve,no-inherit; \n        let $existingElement := <existingElement xmlns=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement> \n        let $new := <foo:newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</foo:newElement> \n        return in-scope-prefixes(exactly-one($new/child::node()))\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-permutation>\"\", \"xml\"</assert-permutation>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-4",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "b81850fefbbc5ae2ea7e530e52ceec8c8578d1093adf593a27c49cc9eacaaf0f",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare namespace foo = \"http://example.org\"; \n      \tdeclare copy-namespaces preserve,inherit; \n      \tlet $existingElement := <existingElement xmlns=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement> \n      \tlet $new := <foo:newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</foo:newElement> \n      \tfor $var in (in-scope-prefixes($new//child::*)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value> foo xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-5",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "0f0af3abc946badfe0bf3b6264cb5e1f9e7d738b00914cfb20b703f0f5cc9d54",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare namespace foo = \"http://example.org\"; \n      \tdeclare copy-namespaces preserve,no-inherit; \n      \tlet $existingElement := <foo:existingElement xmlns=\"http://www.existingnamespace.com\">{\"Existing Content\"}</foo:existingElement> \n      \tlet $new := <foo:newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</foo:newElement> \n      \tfor $var in (in-scope-prefixes($new//child::*)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value> foo xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-6",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "a9f186a5b7c6f0190025248a6ae917c70f7e6257be2c62baa3aa80352331546d",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare namespace foo = \"http://example.org\"; \n      \tdeclare copy-namespaces preserve,inherit; \n      \tlet $existingElement := <foo:existingElement xmlns=\"http://www.existingnamespace.com\">{\"Existing Content\"}</foo:existingElement> \n      \tlet $new := <foo:newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</foo:newElement> \n      \tfor $var in (in-scope-prefixes($new//child::*)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value> foo xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-7",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "a8a1233a4d83c8031e73a2c110a6924a0965032170a7467e5b48e423a131a7ae",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,no-inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var )ascending \n      \treturn $var",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-8",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "c4f3313d9c1599066a3d2eb69d1e4c36d517681d9fda37702884f1e5fd5b4f5e",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,no-inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns = \"http://www.mynamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>existingNamespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-9",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "ccba93764e8231c8352e544a161fa8aaf1747a1440e2bc724b9eee6c0b87c0f3",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns:newNamespace = \"http://www.mynamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>newNamespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-10",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "460a8b8a3585571cfdd7c493ae5b84873818b3c435f853d35b22f4453ce82732",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns:newNamespace = \"http://www.mynamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>existingNamespace newNamespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-11",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "82f37b674e0ca796e2df9ef5c6d43170ee26ebcd2b6887fa4931965dbcc497b3",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns:existingNamespace = \"http://www.mynamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>existingNamespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-12",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "52e85ec82784a1cf2305fd12e96dafa001a833e39b7ba3e8cc9ed88400d1ab43",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:existingNamespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns:newNamespace = \"http://www.existingnamespace.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>existingNamespace newNamespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-13",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "f51ef162d1e52f5f9d7a6220b21a216be7a8fd7d9af7dfd3d97f1c934407b9f6",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement>{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement>{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes(exactly-one($new/existingElement))) \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-14",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "2225aaa5901195263ce46e68acceb443fc73cbd45a5e7d3e34fced8d67ce10f0",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $existingElement := <existingElement xmlns:somespace=\"http://www.existingnamespace.com\">{\"Existing Content\"}</existingElement>; \n      \tdeclare variable $new := <newElement xmlns:SOMESPACE=\"http://www.another.com\">{$existingElement}</newElement>; \n      \tfor $var in (in-scope-prefixes($new/existingElement)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>SOMESPACE somespace xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-15",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "acda4fff8dd939f69777b4af4e316a884d67cd5e45d33ed3c050a47e78e0ca14",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2/element1)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace1 namespace2 namespace3 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-16",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "53c27eb52326c58012ab7745974365e742b3c101acb1a8d1c9ef87276288f514",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2/element1)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace3 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-17",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "5acedc92a6b4a2df0b9f6de2b8bcea0c01270634f51455496eb07f0c62ddf74a",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,no-inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2/element1)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-18",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "31c450151fcae25f675b99cfdbd250e38f058fae98ffb7d8127a4e1c1ea55170",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,no-inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2/element1)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace1 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-19",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "f708e7ff9833c47fa4d872842b1011c07dd5f225e48c56d7033ebb6c5bd17874",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace2 namespace3 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-20",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "58c27971ccadafa30889ef3866b1b963752ab2d2eed6bff5ac97804f2d34ca1f",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace3 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-21",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "e49b569cacfc59243a125e23c03e2f6ed8c12836e4cbb4b4b3375362a5abe712",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces no-preserve,no-inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "copynamespace-22",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "19f625cbf9e319ab8819d2ed70247bd4ff0bf11e6c263bf7fcdcb8b988147833",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n      \tdeclare copy-namespaces preserve,no-inherit; \n      \tdeclare variable $element1 := <element1 xmlns:namespace1=\"http://www.namespace1.com\"></element1>; \n      \tdeclare variable $element2 := <element2 xmlns:namespace2=\"http://www.namespace2.com\">{$element1}</element2>; \n      \tdeclare variable $element3 := <element3 xmlns:namespace3=\"http://www.namespace3.com\">{$element2}</element3>; \n      \tfor $var in (in-scope-prefixes($element3/element2)) \n      \torder by exactly-one($var) ascending \n      \treturn $var\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace2 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K-CopyNamespacesProlog-1",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "b66174329ebbd01efff233bc8c0eaf65c432c215a31eada06682b75cee243dc4",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, no-inherit; declare copy-namespaces no-preserve, no-inherit; 1 eq 1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0055\" />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K-CopyNamespacesProlog-2",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "ffbed5467842f04096587fd535dd97046217588550097183190f4c99270db30e",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; 1 eq 1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K-CopyNamespacesProlog-3",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "4df922cf3cecab07e436157af2702e52769b3776fb0fedec74bfd1f21c38c7fe",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, inherit; 1 eq 1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K-CopyNamespacesProlog-4",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "b82dac1e50b47d233301d5f20b9adf640120b019470f7dd456237016cf24c7f9",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-inherit, no-preserve; 1 eq 1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K-CopyNamespacesProlog-5",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "cde96b482c91791d0624b374bb33dd827d98b3efd325c9da6178f831ee49ef48",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces inherit, preserve; 1 eq 1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "669f3dce27a0ae308078f1c9b83ff4e6a355b57e8e42e5f5a894a64483817a3e",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, inherit; <doc> <a>{<b xmlns:p=\"http://example.com/\"/>}</a> <a><b xmlns:p=\"http://example.com/\"/></a> </doc>",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<doc><a><b/></a><a><b xmlns:p=\"http://example.com/\"/></a></doc>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "698697ae42391cc58561483312f512c6ea987d0823694d67f70e4174ae2e2a8b",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, no-inherit; <e xmlns=\"http://example.com/\"> { <b/> } </e>",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<e xmlns=\"http://example.com/\"><b/></e>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "4933e69d51bdd9a80763693c79dd721b8c54d8b1bfae0c497d1fac81e3c73176",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; <e xmlns:appearsUnused=\"http://example.com/\"> { <b> <appearsUnused:c/> </b> } </e>",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<e xmlns:appearsUnused=\"http://example.com/\"><b><appearsUnused:c xmlns:appearsUnused=\"http://example.com/\"/></b></e>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "4bb1d93eb615b16c8c313d39d026a423efec67896452974ede18f1315a6231f3",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; <e> { <b> <c xmlns:unused=\"http://example.com\"/> </b> } </e>",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<e><b><c/></b></e>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "3ae2e9851c079b798658a8f6d3d16f0ec638c3c602291607e47f5b8a70416523",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve,inherit; <a> { <b>{()}</b> } </a>",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<a><b/></a>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-CopyNamespacesDecl",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "File": "prod/CopyNamespacesDecl.xml",
+      "ExpressionSha256": "098bd7eb2fe6886f3889a1782d41ade728e77655e1b3dbc0c2f9e66bafd42e99",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\n         declare copy-namespaces preserve, no-inherit; \n         declare variable $e1 := <e1 xmlns:namespace1=\"http://www.namespace1.com\"/>; \n         declare variable $e2 := <e2 xmlns:namespace2=\"http://www.namespace2.com\">{$e1}</e2>; \n         for $n in <e3 xmlns:namespace3=\"http://www.namespace3.com\">{$e2}</e3>/e2/e1, \n             $ps in in-scope-prefixes($n) \n         order by $ps \n         return $ps, '|', \n         for $n in <e3 xmlns:namespace3=\"http://www.namespace3.com\">{<e2 xmlns:namespace2=\"http://www.namespace2.com\">{<e1 xmlns:namespace1=\"http://www.namespace1.com\"/>}</e2>}</e3>/e2/e1, \n             $ps in in-scope-prefixes($n) \n         order by $ps \n         return $ps\n      ",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>namespace1 xml | namespace1 namespace2 namespace3 xml</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemConstructor",
+      "Name": "cbcl-directconelem-001",
+      "File": "prod/DirElemConstructor.xml",
+      "ExpressionSha256": "8a95cfd5a7c9a91a0718eeac9de56792d204127d305be24934e76d0d2280a150",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\ndeclare default element namespace \"http://example.com/0\"; \ndeclare namespace a = \"http://example.com/1\"; \ndeclare namespace b = \"http://example.com/2\"; \ndeclare copy-namespaces preserve,no-inherit;\n\ndeclare function local:in-scope-namespace-bindings($arg)\n{\n  for $i in in-scope-prefixes($arg) \n  order by $i \n  return \n  concat(\"xmlns\",\n         if (string-length($i) = 0)\n         then \"\"\n         else \":\",\n         $i,\n         '=\"', namespace-uri-for-prefix($i, $arg), '\"')\n};\n\n<a:outer b:outer=\"attr\" xmlns:c=\"http://example.com/3\" c:outer=\"attr\">\n  <inner a=\"a:attr\" b=\"b:attr\" />\n</a:outer>/(local:in-scope-namespace-bindings(.),\n            '|', \n            local:in-scope-namespace-bindings((./*)[1]))\n",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xmlns:a=\"http://example.com/1\" xmlns:b=\"http://example.com/2\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" | xmlns=\"http://example.com/0\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemConstructor",
+      "Name": "cbcl-directconelem-002",
+      "File": "prod/DirElemConstructor.xml",
+      "ExpressionSha256": "ac6c0c168ef375df9ae3ef58f31e280d8ce2a84349df7bfda4142ea7f31cc5a5",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "\ndeclare default element namespace \"http://example.com/0\"; \ndeclare namespace a = \"http://example.com/1\"; \ndeclare namespace b = \"http://example.com/2\"; \ndeclare copy-namespaces preserve,inherit;\n\ndeclare function local:in-scope-namespace-bindings($arg)\n{\n  for $i in in-scope-prefixes($arg) \n  order by $i \n  return \n  concat(\"xmlns\",\n         if (string-length($i) = 0)\n         then \"\"\n         else \":\",\n         $i,\n         '=\"', namespace-uri-for-prefix($i, $arg), '\"')\n};\n\n<a:outer b:outer=\"attr\" xmlns:c=\"http://example.com/3\" c:outer=\"attr\">\n  <inner a=\"a:attr\" b=\"b:attr\" />\n</a:outer>/(local:in-scope-namespace-bindings(.),\n            '|', \n            local:in-scope-namespace-bindings((./*)[1]))\n",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-string-value>xmlns:a=\"http://example.com/1\" xmlns:b=\"http://example.com/2\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" | xmlns=\"http://example.com/0\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"</assert-string-value>\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemContent",
+      "Name": "Constr-cont-nsmode-1",
+      "File": "prod/DirElemContent.xml",
+      "ExpressionSha256": "fe30ec047cc261bc71bdc887bcc93d9c71c4c75d1da214ab3fd9b0c1dc024a83",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, inherit; <y xmlns:inherit=\"http://www.example.com/inherit\">{(/)}</y>/x/z",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<z xmlns:preserve=\"http://www.example.com/preserve\" xmlns:inherit=\"http://www.example.com/inherit\"/>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": "<environment ref=\"nsmode\" xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\" />",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemContent",
+      "Name": "Constr-cont-nsmode-2",
+      "File": "prod/DirElemContent.xml",
+      "ExpressionSha256": "7a42f29e7bb76163a73581a4379a204027b56dd6a917dc74d237d757621a0540",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, inherit; <y xmlns:inherit=\"http://www.example.com/inherit\">{(/)}</y>/x/z",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<z xmlns:inherit=\"http://www.example.com/inherit\"/>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": "<environment ref=\"nsmode\" xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\" />",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemContent",
+      "Name": "Constr-cont-nsmode-3",
+      "File": "prod/DirElemContent.xml",
+      "ExpressionSha256": "dafec219698c26085547b094014e47dd7077fe99869fb51392f09ce8e8b87cab",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve, no-inherit; <y xmlns:inherit=\"http://www.example.com/inherit\">{(/)}</y>/x/z",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<z xmlns:preserve=\"http://www.example.com/preserve\"/>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": "<environment ref=\"nsmode\" xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\" />",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "prod-DirElemContent",
+      "Name": "Constr-cont-nsmode-4",
+      "File": "prod/DirElemContent.xml",
+      "ExpressionSha256": "3ef5084cffcd96799c53e4ba14072c63fd4ebe1a9e340bda44083d741387e4fc",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; <y xmlns:inherit=\"http://www.example.com/inherit\">{(/)}</y>/x/z",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-xml><![CDATA[<z/>]]></assert-xml>\r\n</result>",
+    "Modules": [],
+    "Environment": "<environment ref=\"nsmode\" xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\" />",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  },
+  {
+    "row": {
+      "Set": "misc-CombinedErrorCodes",
+      "Name": "XQST0055",
+      "File": "misc/CombinedErrorCodes.xml",
+      "ExpressionSha256": "0256a0ad451488e6661b4fa5b8e5eb65d2cbb58a9ca781497bfb02ae8309c092",
+      "before": false,
+      "after": true,
+      "actual": false,
+      "xpathSupported": false,
+      "xquerySupported": true
+    },
+    "Construction": false,
+    "CopyNamespaces": true,
+    "Expression": "declare copy-namespaces preserve,inherit; declare copy-namespaces preserve,no-inherit;\n         1",
+    "Assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0055\" />\r\n</result>",
+    "Modules": [],
+    "Environment": null,
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,1901 @@
+{
+  "date": "2026-10-26",
+  "requirement": "REQ-126",
+  "status": "Complete",
+  "scope": "Owner-accepted bounded documentation catalog; not full current-draft conformance",
+  "proposalId": "REQ-126-C13-bounded-catalog-acceptance-v1",
+  "ownerApproval": "evidence/c13-owner-acceptance/owner-approval.json",
+  "approvedProposalCommit": "1d13230b6e3d7c3eb88eac2fb5b1a2d413406deb",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "reviewSpec": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "summary": {
+    "entries": 76,
+    "numberedFieldsPerEntry": 16,
+    "contractGroups": 235,
+    "batchEntries": [
+      19,
+      19,
+      19,
+      19
+    ],
+    "uniqueLinkedBatchCases": 2505,
+    "functionNames": 316,
+    "registered40OnlyNames": 119,
+    "nonConstructorNames": 70,
+    "focusConstructors": 49,
+    "existingFunctionNames": 197,
+    "grammarRows": 18,
+    "lifecycleGroups": 19,
+    "retainedFindingRecords": 37,
+    "proposedDispositionRecords": 38,
+    "unmetBatchObservations": 48,
+    "currentDraftUnmetBatchObservations": 46,
+    "disputedSourceExampleObservations": 2,
+    "distinctBatchProbeIds": 24,
+    "knownUsesPlacementCorrections": 6,
+    "freshTests": {
+      "catalog": 3148,
+      "chapters": 24,
+      "total": 3172,
+      "failed": 0,
+      "skipped": 0
+    },
+    "exactCompiledAssets": 3048,
+    "openWorkpackages": 0
+  },
+  "criteria": {
+    "AC-01": {
+      "status": "Accepted bounded catalog",
+      "approvedScope": "Accept landed-slice/name/grammar traceability for the exact bounded catalog and the already-approved C08 historical policy; retain every unsupported/current-draft mismatch as an explicit technical follow-up.",
+      "evidence": [
+        "CURRENT-FUNCTION-INVENTORY.json",
+        "GRAMMAR-COVERAGE-MATRIX.json",
+        "ADOPTION-DISPOSITIONS.json"
+      ]
+    },
+    "AC-02": {
+      "status": "Accepted bounded catalog",
+      "approvedScope": "Accept the 76 current lifecycle classifications and 19 original/wider disposition groups, preserving historical URLs, refusals, alternatives, non-equivalence and exact legacy history limits.",
+      "evidence": [
+        "LIFECYCLE-RECONCILIATION.json",
+        "ADOPTION-HISTORY-RESEARCH.md"
+      ]
+    },
+    "AC-03": {
+      "status": "Accepted bounded catalog",
+      "approvedScope": "Accept applicable evidence for 235 bounded contract groups across 76 entries and the four worked chapters. Gates apply only where assigned; XSLT/deferred/refused forms use their named tests, exact examples or alternatives. The 48 retained batch unmet observations remain unmet, including two disputed-source observations.",
+      "evidence": [
+        "SEMANTIC-REVIEW-BATCH-1.json",
+        "SEMANTIC-REVIEW-BATCH-2.json",
+        "SEMANTIC-REVIEW-BATCH-3.json",
+        "SEMANTIC-REVIEW-BATCH-4.json"
+      ]
+    },
+    "AC-04": {
+      "status": "Accepted bounded catalog",
+      "approvedScope": "Accept the 16-field structure, retained paths, synchronized index and feature-specific language-alignment warnings for the reviewed scope. No universal current-draft parity follows.",
+      "evidence": [
+        "README.md",
+        "evidence/c13-final-review/entry-sources.json"
+      ]
+    },
+    "AC-05": {
+      "status": "Met; maintained",
+      "approvedScope": "Maintain the previously met discoverability criterion and synchronized registry/canonical links.",
+      "evidence": [
+        "../../README.md",
+        "../INTEGRATION.md",
+        "../REQ-118-xpath-xslt-40.md"
+      ]
+    }
+  },
+  "dispositions": [
+    {
+      "id": "C02-F01",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F02",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F03",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F04",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F05",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F06",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F07",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F08",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F09",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F10",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F11",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F12",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F13",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C02-F14",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Open follow-up; not implemented by C02",
+      "originalOwner": "Bosak engine/catalog maintainer",
+      "originalSource": "FUNCTION-OPTIONS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-T01",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Explicit implementation limit, not a blanket malformed-input claim",
+      "originalOwner": "Bosak core/runtime maintainer; C13 owner disposition",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-T02",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Documented storage boundary",
+      "originalOwner": "Bosak numeric maintainer; C13 owner disposition",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-T03",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Supported named cases with explicit remaining scope",
+      "originalOwner": "C03 retained schema evidence; C06 host/context review",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-T04",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Bounded supported forms and unclaimed remainder",
+      "originalOwner": "C05/C06 and final C09-C12 per-entry review",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-T05",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Bounded controls, not generic conversion certification",
+      "originalOwner": "C04/C06 and C09-C12",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C03-F08-atomic-annotation-empty",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Still open; not fixed or accepted by C03",
+      "originalOwner": "Existing C02 F08 bounded correction ticket",
+      "originalSource": "CONSTRUCTOR-TYPE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C04-G01-otherwise-spelling",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Unsupported current-draft spelling; explicit adoption decision remains",
+      "originalOwner": "Bosak parser/catalog maintainer and C13 owner disposition",
+      "originalSource": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C04-G02-mapping-containing-focus",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Reproduced contextual semantics defect; not fixed",
+      "originalOwner": "Bosak parser/compiler maintainer",
+      "originalSource": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C04-G03-keyword-placeholders",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Reproduced unsupported current-draft argument production; not fixed",
+      "originalOwner": "Bosak parser/compiler maintainer",
+      "originalSource": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C04-G04-late-binding-boundary",
+      "category": "Reviewed host distinction; remaining complete-mode boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Use C06-H01: open API late binding and a permitted lazy XSLT mode are distinct from the mandatory complete static-detection mode, which remains unproved. Preserve that boundary without classifying every lazy result as an engine defect.",
+      "originalTechnicalStatus": "Host/static-context review, not a proved closed-context defect",
+      "originalOwner": "C06 host review and C13 owner disposition",
+      "originalSource": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C04-G05-remaining-combinations",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Explicit unaccepted remainder",
+      "originalOwner": "C05/C06 and C09-C12 final applicable-evidence review",
+      "originalSource": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C05-K01-generic-jnode-model",
+      "category": "Documented implementation or context boundary",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "originalTechnicalStatus": "Known unsupported model boundary; no promotion",
+      "originalOwner": "Bosak XDM/model maintainer and C13 owner disposition",
+      "originalSource": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C05-K02-choice-matching-alternative",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Reproduced current-draft coercion mismatch; not fixed",
+      "originalOwner": "Bosak runtime/type maintainer",
+      "originalSource": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C05-K03-record-destructuring-lookup",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Reproduced current-draft lookup mismatch; not fixed",
+      "originalOwner": "Bosak parser/compiler/runtime maintainer",
+      "originalSource": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C05-K04-host-context",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Bounded supported forms and explicit remaining ownership",
+      "originalOwner": "C06 and C09-C12 final evidence review",
+      "originalSource": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C05-K05-remaining-combinations",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Unaccepted combinations retained explicitly",
+      "originalOwner": "C09-C12/C13 and relevant engine maintainer if corrected",
+      "originalSource": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C06-H01",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Evidence gap, not an automatic conformance defect",
+      "originalOwner": "C09-C13 host acceptance / separate compiler investigation",
+      "originalSource": "HOST-PROFILE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C06-H02",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Reproduced current-draft mismatch",
+      "originalOwner": "Separate bounded runtime correction; C09-C13 acceptance",
+      "originalSource": "HOST-PROFILE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C06-H03",
+      "category": "Open technical follow-up",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "originalTechnicalStatus": "Explicit versioned policy/evidence boundary",
+      "originalOwner": "C09-C13 function/host acceptance",
+      "originalSource": "HOST-PROFILE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C06-H04",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Bounded review limit",
+      "originalOwner": "C09-C13 exact entry batches/final review",
+      "originalSource": "HOST-PROFILE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C07-L01",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Retain original receipt",
+      "originalOwner": "C09-C13",
+      "originalSource": "LIFECYCLE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C07-L02",
+      "category": "Previously approved historical policy",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Already disposed by the exact C08 owner approval: 26 legacy exceptions and two non-adoptions. Retain all 28 original nulls; no new exception or recovered adoption revision is proposed.",
+      "originalTechnicalStatus": "Retain original receipt",
+      "originalOwner": "C08/C13",
+      "originalSource": "LIFECYCLE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C07-L03",
+      "category": "Bounded review and final acceptance obligation",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "originalTechnicalStatus": "Retain original receipt",
+      "originalOwner": "C09-C13",
+      "originalSource": "LIFECYCLE-RECONCILIATION.json",
+      "technicalExitCriteriaWaived": false
+    },
+    {
+      "id": "C10-highest-source-consistency",
+      "category": "Unresolved specification-source inconsistency",
+      "catalogDisposition": "Accepted by explicit owner approval",
+      "acceptedScope": "Retain both pinned algorithm/contextual-comparison text and the conflicting highest example with independent expectations. Accept the documented uncertainty as a catalog boundary, request source clarification before a semantic correction, and do not label the result an unqualified engine defect.",
+      "originalTechnicalStatus": "Open source-consistency review; no upstream submission",
+      "originalOwner": "Bosak function maintainer and specification reviewer",
+      "originalSource": "SEMANTIC-REVIEW-BATCH-2.json",
+      "technicalExitCriteriaWaived": false
+    }
+  ],
+  "unmetBatchControls": [
+    {
+      "batch": "C09",
+      "dispositionRecord": "C05-K01-generic-jnode-model",
+      "request": {
+        "id": "jnode-generic-required",
+        "expression": "jtree(map{'a':1}) instance of node()",
+        "entry": "data-model/jnode-template-boundary.md",
+        "expected": "true",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C05-K01"
+      },
+      "originalObservation": {
+        "id": "jnode-generic-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C05-K01"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C05-K01-generic-jnode-model",
+      "request": {
+        "id": "jnode-generic-required",
+        "expression": "jtree(map{'a':1}) instance of node()",
+        "entry": "data-model/jnode-template-boundary.md",
+        "expected": "true",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C05-K01"
+      },
+      "originalObservation": {
+        "id": "jnode-generic-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C05-K01"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "extrema-required-mixed",
+        "expression": "compare(min((3.1,3.1e0)),3.1)",
+        "entry": "functions/batch-extrema.md",
+        "expected": "0",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "extrema-required-mixed",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "1",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "extrema-required-mixed",
+        "expression": "compare(min((3.1,3.1e0)),3.1)",
+        "entry": "functions/batch-extrema.md",
+        "expected": "0",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "extrema-required-mixed",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "1",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "extrema-identity-required",
+        "expression": "min((xs:integer(1),xs:decimal(2))) instance of xs:integer",
+        "entry": "functions/batch-extrema.md",
+        "expected": "true",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "extrema-identity-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "extrema-identity-required",
+        "expression": "min((xs:integer(1),xs:decimal(2))) instance of xs:integer",
+        "entry": "functions/batch-extrema.md",
+        "expected": "true",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "extrema-identity-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F02",
+      "request": {
+        "id": "partial-nonpositive-draft",
+        "expression": "function-arity(partial-apply(concat#2,map{0:'ignored'}))",
+        "entry": "functions/configured-label-callbacks.md",
+        "expected": "2",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F02"
+      },
+      "originalObservation": {
+        "id": "partial-nonpositive-draft",
+        "profile": "XPath40",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F02"
+      }
+    },
+    {
+      "batch": "C09",
+      "dispositionRecord": "C02-F02",
+      "request": {
+        "id": "partial-nonpositive-draft",
+        "expression": "function-arity(partial-apply(concat#2,map{0:'ignored'}))",
+        "entry": "functions/configured-label-callbacks.md",
+        "expected": "2",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F02"
+      },
+      "originalObservation": {
+        "id": "partial-nonpositive-draft",
+        "profile": "XPath40Experimental",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004: fn:partial-apply: $arguments keys must be positive integers.",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F02"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F13",
+      "request": {
+        "id": "cleanup-grapheme-required",
+        "expression": "count(graphemes(codepoints-to-string((4352,4449))))",
+        "entry": "functions/customer-text-cleanup.md",
+        "expected": "1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F13"
+      },
+      "originalObservation": {
+        "id": "cleanup-grapheme-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "2",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F13"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F13",
+      "request": {
+        "id": "cleanup-grapheme-required",
+        "expression": "count(graphemes(codepoints-to-string((4352,4449))))",
+        "entry": "functions/customer-text-cleanup.md",
+        "expected": "1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F13"
+      },
+      "originalObservation": {
+        "id": "cleanup-grapheme-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "2",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F13"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F01",
+      "request": {
+        "id": "compare-draft-keywords",
+        "expression": "compare(value1:=1,value2:=2)",
+        "entry": "functions/measurement-comparison.md",
+        "expected": "-1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F01"
+      },
+      "originalObservation": {
+        "id": "compare-draft-keywords",
+        "profile": "XPath40",
+        "phase": "compile",
+        "result": null,
+        "error": "XPST0017: Unknown keyword argument 'value1' in call of compare.",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F01"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F01",
+      "request": {
+        "id": "compare-draft-keywords",
+        "expression": "compare(value1:=1,value2:=2)",
+        "entry": "functions/measurement-comparison.md",
+        "expected": "-1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F01"
+      },
+      "originalObservation": {
+        "id": "compare-draft-keywords",
+        "profile": "XPath40Experimental",
+        "phase": "compile",
+        "result": null,
+        "error": "XPST0017: Unknown keyword argument 'value1' in call of compare.",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F01"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F10",
+      "request": {
+        "id": "calendar-fraction-required",
+        "expression": "seconds-from-time(build-dateTime(map{'hours':12,'minutes':34,'seconds':4.2678}))",
+        "entry": "functions/month-end-cutoffs.md",
+        "expected": "4.2678",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F10"
+      },
+      "originalObservation": {
+        "id": "calendar-fraction-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "4.267",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F10"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F10",
+      "request": {
+        "id": "calendar-fraction-required",
+        "expression": "seconds-from-time(build-dateTime(map{'hours':12,'minutes':34,'seconds':4.2678}))",
+        "entry": "functions/month-end-cutoffs.md",
+        "expected": "4.2678",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F10"
+      },
+      "originalObservation": {
+        "id": "calendar-fraction-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "4.267",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F10"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F08",
+      "request": {
+        "id": "numeric-annotation-empty-required",
+        "expression": "atomic-type-annotation(())",
+        "entry": "functions/numeric-import-diagnostics.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F08-atomic-annotation-empty"
+      },
+      "originalObservation": {
+        "id": "numeric-annotation-empty-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "(map)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F08-atomic-annotation-empty"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F08",
+      "request": {
+        "id": "numeric-annotation-empty-required",
+        "expression": "atomic-type-annotation(())",
+        "entry": "functions/numeric-import-diagnostics.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F08-atomic-annotation-empty"
+      },
+      "originalObservation": {
+        "id": "numeric-annotation-empty-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "(map)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F08-atomic-annotation-empty"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F08",
+      "request": {
+        "id": "map-filter-required-boolean",
+        "expression": "map:filter(map{'A':1},fn($k,$v){'yes'})",
+        "entry": "functions/product-map-index.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F07/F08"
+      },
+      "originalObservation": {
+        "id": "map-filter-required-boolean",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "(map)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F07/F08"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C02-F08",
+      "request": {
+        "id": "map-filter-required-boolean",
+        "expression": "map:filter(map{'A':1},fn($k,$v){'yes'})",
+        "entry": "functions/product-map-index.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F07/F08"
+      },
+      "originalObservation": {
+        "id": "map-filter-required-boolean",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "(map)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F07/F08"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C10-highest-source-consistency",
+      "request": {
+        "id": "ranking-published-example",
+        "expression": "highest(1 to 25,(),fn{. idiv 10})",
+        "entry": "functions/supplier-offer-ranking.md",
+        "expected": "20,21,22,23,24,25",
+        "error": null,
+        "projection": "string-join($value,',')",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "spec-example-control",
+        "ticket": "C02-F05-spec-consistency"
+      },
+      "originalObservation": {
+        "id": "ranking-published-example",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "25",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "spec-example-control",
+        "ticket": "C02-F05-spec-consistency"
+      }
+    },
+    {
+      "batch": "C10",
+      "dispositionRecord": "C10-highest-source-consistency",
+      "request": {
+        "id": "ranking-published-example",
+        "expression": "highest(1 to 25,(),fn{. idiv 10})",
+        "entry": "functions/supplier-offer-ranking.md",
+        "expected": "20,21,22,23,24,25",
+        "error": null,
+        "projection": "string-join($value,',')",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "spec-example-control",
+        "ticket": "C02-F05-spec-consistency"
+      },
+      "originalObservation": {
+        "id": "ranking-published-example",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "25",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "spec-example-control",
+        "ticket": "C02-F05-spec-consistency"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F04",
+      "request": {
+        "id": "uri-empty-query-required",
+        "expression": "build-uri(map{'scheme':'https','host':'example.test','query':'old=1','query-parameters':map{}})",
+        "entry": "functions/uri-option-policy.md",
+        "expected": "https://example.test",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F04"
+      },
+      "originalObservation": {
+        "id": "uri-empty-query-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "https://example.test?old=1",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F04"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F04",
+      "request": {
+        "id": "uri-empty-query-required",
+        "expression": "build-uri(map{'scheme':'https','host':'example.test','query':'old=1','query-parameters':map{}})",
+        "entry": "functions/uri-option-policy.md",
+        "expected": "https://example.test",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F04"
+      },
+      "originalObservation": {
+        "id": "uri-empty-query-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "https://example.test?old=1",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F04"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "sort-empty-key",
+        "expression": "string-join(sort((3,1,2),(),()),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "1,2,3",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "sort-empty-key",
+        "profile": "XPath40",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "sort-empty-key",
+        "expression": "string-join(sort((3,1,2),(),()),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "1,2,3",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "sort-empty-key",
+        "profile": "XPath40Experimental",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "array-sort-empty-key",
+        "expression": "string-join(array:sort([3,1,2],(),())?*,',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "1,2,3",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "array-sort-empty-key",
+        "profile": "XPath40",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "array-sort-empty-key",
+        "expression": "string-join(array:sort([3,1,2],(),())?*,',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "1,2,3",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "array-sort-empty-key",
+        "profile": "XPath40Experimental",
+        "phase": "evaluate",
+        "result": null,
+        "error": "XPTY0004",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "sort-unknown-collation",
+        "expression": "sort(('B','A'),'urn:bosak:no-such-collation')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": null,
+        "error": "FOCH0002",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "sort-unknown-collation",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "(sequence)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F05",
+      "request": {
+        "id": "sort-unknown-collation",
+        "expression": "sort(('B','A'),'urn:bosak:no-such-collation')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": null,
+        "error": "FOCH0002",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      },
+      "originalObservation": {
+        "id": "sort-unknown-collation",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "(sequence)",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F05"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "sort-exact",
+        "expression": "string-join(sort((3.1e0,3.1)) ! (if (. instance of xs:decimal) then 'decimal' else 'double'),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "decimal,double",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "sort-exact",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "double,decimal",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "sort-exact",
+        "expression": "string-join(sort((3.1e0,3.1)) ! (if (. instance of xs:decimal) then 'decimal' else 'double'),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "decimal,double",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "sort-exact",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "double,decimal",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C05-K03-record-destructuring-lookup",
+      "request": {
+        "id": "destructure-record-required",
+        "expression": "let ${$missing}:=(map{'a':1} cast as record(a)) return $missing",
+        "entry": "operators-and-syntax/destructuring-let.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C05-K03"
+      },
+      "originalObservation": {
+        "id": "destructure-record-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "()",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C05-K03"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C05-K03-record-destructuring-lookup",
+      "request": {
+        "id": "destructure-record-required",
+        "expression": "let ${$missing}:=(map{'a':1} cast as record(a)) return $missing",
+        "entry": "operators-and-syntax/destructuring-let.md",
+        "expected": null,
+        "error": "XPTY0004",
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C05-K03"
+      },
+      "originalObservation": {
+        "id": "destructure-record-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "()",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C05-K03"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G03-keyword-placeholders",
+      "request": {
+        "id": "keyword-placeholder-required",
+        "expression": "let $f:=substring(value:=?,start:=2,length:=2) return $f('ABCD')",
+        "entry": "operators-and-syntax/keyword-arguments.md",
+        "expected": "BC",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G03"
+      },
+      "originalObservation": {
+        "id": "keyword-placeholder-required",
+        "profile": "XPath40",
+        "phase": "compile",
+        "result": null,
+        "error": "Parse error at position 26: XPST0003: Expected lookup key",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G03"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G03-keyword-placeholders",
+      "request": {
+        "id": "keyword-placeholder-required",
+        "expression": "let $f:=substring(value:=?,start:=2,length:=2) return $f('ABCD')",
+        "entry": "operators-and-syntax/keyword-arguments.md",
+        "expected": "BC",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G03"
+      },
+      "originalObservation": {
+        "id": "keyword-placeholder-required",
+        "profile": "XPath40Experimental",
+        "phase": "compile",
+        "result": null,
+        "error": "Parse error at position 26: XPST0003: Expected lookup key",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G03"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G02-mapping-containing-focus",
+      "request": {
+        "id": "mapping-containing-required",
+        "expression": "string-join((100 ! string-join((1,2) =!> concat(':',string(.)),'|')),'|')",
+        "entry": "operators-and-syntax/mapping-arrow.md",
+        "expected": "1:100|2:100",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G02"
+      },
+      "originalObservation": {
+        "id": "mapping-containing-required",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "1:1|2:2",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G02"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G02-mapping-containing-focus",
+      "request": {
+        "id": "mapping-containing-required",
+        "expression": "string-join((100 ! string-join((1,2) =!> concat(':',string(.)),'|')),'|')",
+        "entry": "operators-and-syntax/mapping-arrow.md",
+        "expected": "1:100|2:100",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G02"
+      },
+      "originalObservation": {
+        "id": "mapping-containing-required",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "1:1|2:2",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G02"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G01-otherwise-spelling",
+      "request": {
+        "id": "otherwise-word-required",
+        "expression": "() otherwise 4",
+        "entry": "operators-and-syntax/otherwise-operator.md",
+        "expected": "4",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G01"
+      },
+      "originalObservation": {
+        "id": "otherwise-word-required",
+        "profile": "XPath40",
+        "phase": "compile",
+        "result": null,
+        "error": "Parse error at position 3: XPST0003: Unexpected token Name",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G01"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C04-G01-otherwise-spelling",
+      "request": {
+        "id": "otherwise-word-required",
+        "expression": "() otherwise 4",
+        "entry": "operators-and-syntax/otherwise-operator.md",
+        "expected": "4",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C04-G01"
+      },
+      "originalObservation": {
+        "id": "otherwise-word-required",
+        "profile": "XPath40Experimental",
+        "phase": "compile",
+        "result": null,
+        "error": "Parse error at position 3: XPST0003: Unexpected token Name",
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C04-G01"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "sort-nan-left",
+        "expression": "string-join(sort((xs:double('NaN'),1)) ! string(.),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "NaN,1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "sort-nan-left",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "1,NaN",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C11",
+      "dispositionRecord": "C02-F06",
+      "request": {
+        "id": "sort-nan-left",
+        "expression": "string-join(sort((xs:double('NaN'),1)) ! string(.),',')",
+        "entry": "functions/warehouse-pick-sorting.md",
+        "expected": "NaN,1",
+        "error": null,
+        "projection": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      },
+      "originalObservation": {
+        "id": "sort-nan-left",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "1,NaN",
+        "error": null,
+        "errorCode": null,
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "C02-F06"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "id": "choice-coerce-matches-first",
+        "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+        "expected": "true",
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-coerce-matches-first",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "id": "choice-coerce-matches-first",
+        "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+        "expected": "true",
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-coerce-matches-first",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "expected": "true",
+        "id": "choice-argument-matches-first",
+        "expression": "function($v as (xs:integer|xs:string)) {$v instance of xs:string}('12')",
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-argument-matches-first",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "expected": "true",
+        "id": "choice-argument-matches-first",
+        "expression": "function($v as (xs:integer|xs:string)) {$v instance of xs:string}('12')",
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-argument-matches-first",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "expected": "true",
+        "id": "choice-return-matches-first",
+        "expression": "function() as (xs:integer|xs:string) {'12'}() instance of xs:string",
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-return-matches-first",
+        "profile": "XPath40",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C05-K02-choice-matching-alternative",
+      "request": {
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null,
+        "expected": "true",
+        "id": "choice-return-matches-first",
+        "expression": "function() as (xs:integer|xs:string) {'12'}() instance of xs:string",
+        "projection": null,
+        "entry": "type-system/choice-types.md"
+      },
+      "originalObservation": {
+        "id": "choice-return-matches-first",
+        "profile": "XPath40Experimental",
+        "phase": "success",
+        "result": "false",
+        "error": null,
+        "errorCode": null,
+        "family": "probe",
+        "entry": "type-system/choice-types.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C06-H02",
+      "request": {
+        "id": "switch-not-boolean-guard",
+        "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch select=\"2\"><xsl:when test=\"true()\" select=\"7\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+        "source": "<r><i>A</i><i>B</i></r>",
+        "expected": null,
+        "error": "XPTY0004",
+        "row": "S8-dispatch",
+        "profiles": [
+          "Legacy",
+          "Xslt40Draft"
+        ],
+        "requiredPhase": null,
+        "ticket": "H02",
+        "entry": "xslt-instructions/xsl-switch.md",
+        "kind": "current-draft-control"
+      },
+      "originalObservation": {
+        "id": "switch-not-boolean-guard",
+        "host": "Legacy",
+        "phase": "success",
+        "result": "",
+        "error": null,
+        "family": "host",
+        "entry": "xslt-instructions/xsl-switch.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "H02"
+      }
+    },
+    {
+      "batch": "C12",
+      "dispositionRecord": "C06-H02",
+      "request": {
+        "id": "switch-not-boolean-guard",
+        "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch select=\"2\"><xsl:when test=\"true()\" select=\"7\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+        "source": "<r><i>A</i><i>B</i></r>",
+        "expected": null,
+        "error": "XPTY0004",
+        "row": "S8-dispatch",
+        "profiles": [
+          "Legacy",
+          "Xslt40Draft"
+        ],
+        "requiredPhase": null,
+        "ticket": "H02",
+        "entry": "xslt-instructions/xsl-switch.md",
+        "kind": "current-draft-control"
+      },
+      "originalObservation": {
+        "id": "switch-not-boolean-guard",
+        "host": "Xslt40Draft",
+        "phase": "success",
+        "result": "",
+        "error": null,
+        "family": "host",
+        "entry": "xslt-instructions/xsl-switch.md",
+        "passed": false,
+        "kind": "current-draft-control",
+        "ticket": "H02"
+      }
+    }
+  ],
+  "technicalFindingsResolved": 0,
+  "adoptionPinsRecovered": 0,
+  "policy": "All thirteen REQ-126 workpackages are complete for the explicitly accepted bounded catalog. Earlier proposals/reviews remain immutable historical checkpoints. All technical statuses, expectations and independent correction requirements remain in force; this is not an implementation or conformance promotion."
+}

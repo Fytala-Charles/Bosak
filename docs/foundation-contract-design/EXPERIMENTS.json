@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-31",
+  "status": "Planned; not executed",
+  "experiments": [
+    {
+      "id": "E-01",
+      "question": "Can annotated values preserve ABI and avoid default-path/per-item overhead?",
+      "alternatives": [
+        "Existing XdmValue reference-slot annotated payload, with reference-backed accessors audited",
+        "Separate payload/provenance transport wrapper"
+      ],
+      "controls": [
+        "Same unannotated baseline values",
+        "Boolean/integer/double/string/decimal/QName/date representations",
+        "Positive and foreign provenance; array/map retention",
+        "Old public accessors and exact unchanged default-path behavior"
+      ],
+      "measure": [
+        "Current/candidate layout and public surface",
+        "Allocation, boxing, accessor throughput and retained metadata",
+        "Small and large collections; precomputed data outside timed loops"
+      ],
+      "decision": "Choose neither until layout/default-path equivalence and required type access succeed; compare real workload budgets",
+      "status": "NotRun",
+      "results": null,
+      "workloadBudget": null
+    },
+    {
+      "id": "E-02",
+      "question": "Where do provenance and list/union distinctions survive or disappear?",
+      "alternatives": [
+        "Internal carrier propagation across ordinary VM values",
+        "Explicit boundary wrapper with audited conversions"
+      ],
+      "controls": [
+        "Atomic/list/union including empty and singleton list",
+        "Atomization, casts, numeric operations, comparisons/hash and map keys",
+        "Arrays/maps/functions and original-assessment preserve/strip/copy",
+        "No typed value, nilled empty value, foreign components and serializer refusal"
+      ],
+      "measure": [
+        "Expected origin/type/list-boundary observations at every transition",
+        "Conversion/allocation counts; no fabricated provenance"
+      ],
+      "decision": "Record explicit preservation/strip/refusal laws against immutable adoption before semantic implementation; a lost required boundary rejects the design",
+      "status": "NotRun",
+      "results": null,
+      "workloadBudget": null
+    },
+    {
+      "id": "E-03",
+      "question": "Does authority API granularity impose repeated lookup or eager closure costs?",
+      "alternatives": [
+        "Scalar authority operations plus immutable-array bulk closure",
+        "Provider-batched or bounded cursor capability"
+      ],
+      "controls": [
+        "Small/large component graphs, cycles and repeated queries",
+        "Foreign handle and unsupported closure must refuse completely",
+        "No name/digest authority cache; warm/cold cache separated"
+      ],
+      "measure": [
+        "Dispatch/provider crossings, allocations, closure memory and latency",
+        "Complete-result validation and cancellation checks"
+      ],
+      "decision": "Select batch/cursor additions only if actual owner workloads justify them; never truncate to fit budgets",
+      "status": "NotRun",
+      "results": null,
+      "workloadBudget": null
+    },
+    {
+      "id": "E-04",
+      "question": "Can host operation admission retain actual resources through deferred work and worker failure?",
+      "alternatives": [
+        "Explicit host-owned lifetime and optional admission lease",
+        "Chosen Braid worker-owned reopen or approved broker; separate controlled in-process profile"
+      ],
+      "controls": [
+        "Entry/closing race, reentry/callback close and blocked work",
+        "Nested/deferred access, cached Current and copied scalar after close",
+        "Caller cancellation versus raw completion, fault, timeout/child kill",
+        "Actual owned snapshot/generation/reader leases, no live-authority serialization"
+      ],
+      "measure": [
+        "Dispatch/release event order and exactly-once accounting",
+        "Latency to first item/cancellation/drain and actual resource observations",
+        "Unchanged source/store bytes and retained artifact identity"
+      ],
+      "decision": "No release on canceled wait alone; no universal disposal or concurrency claim. Scope lifecycle/protocol signatures from actual supported schedules",
+      "status": "NotRun",
+      "results": null,
+      "workloadBudget": null
+    }
+  ],
+  "productionImplementationAuthorized": false,
+  "carrierSelected": null,
+  "acceptedSignatures": [],
+  "apiFrozen": false
+}

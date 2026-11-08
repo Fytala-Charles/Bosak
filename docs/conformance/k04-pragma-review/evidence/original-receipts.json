@@ -1,0 +1,4476 @@
+[
+  {
+    "name": "eqname-006-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\eqname-006-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5147859000135213,
+    "log": "eqname-006-normal-resources.log",
+    "case": "eqname-006",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "eqname-006",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/EQName.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.512892400030978,
+    "log": "extexpr-1-normal-resources.log",
+    "case": "extexpr-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-1",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5091328000416979,
+    "log": "extexpr-2-normal-resources.log",
+    "case": "extexpr-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-2",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10510300000896677,
+    "log": "extexpr-3-normal-resources.log",
+    "case": "extexpr-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-3",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09923310001613572,
+    "log": "extexpr-4-normal-resources.log",
+    "case": "extexpr-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10275530000217259,
+    "log": "extexpr-5-normal-resources.log",
+    "case": "extexpr-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-5",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-6-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-6-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10759669996332377,
+    "log": "extexpr-6-normal-resources.log",
+    "case": "extexpr-6",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-6",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-7-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-7-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1107839000178501,
+    "log": "extexpr-7-normal-resources.log",
+    "case": "extexpr-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-8-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-8-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10717050003586337,
+    "log": "extexpr-8-normal-resources.log",
+    "case": "extexpr-8",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-8",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-9-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-9-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10710300004575402,
+    "log": "extexpr-9-normal-resources.log",
+    "case": "extexpr-9",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-9",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-10-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-10-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10230579995550215,
+    "log": "extexpr-10-normal-resources.log",
+    "case": "extexpr-10",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-10",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-11-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-11-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10030539997387677,
+    "log": "extexpr-11-normal-resources.log",
+    "case": "extexpr-11",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-11",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-12-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-12-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10590550000779331,
+    "log": "extexpr-12-normal-resources.log",
+    "case": "extexpr-12",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-12",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-13-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-13-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10455869999714196,
+    "log": "extexpr-13-normal-resources.log",
+    "case": "extexpr-13",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-13",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-14-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-14-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10060870001325384,
+    "log": "extexpr-14-normal-resources.log",
+    "case": "extexpr-14",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-14",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-15-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-15-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11422699998365715,
+    "log": "extexpr-15-normal-resources.log",
+    "case": "extexpr-15",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-15",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-16-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-16-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11414719995809719,
+    "log": "extexpr-16-normal-resources.log",
+    "case": "extexpr-16",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-16",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-17-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-17-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11408359999768436,
+    "log": "extexpr-17-normal-resources.log",
+    "case": "extexpr-17",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-17",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-18-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-18-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10681979998480529,
+    "log": "extexpr-18-normal-resources.log",
+    "case": "extexpr-18",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-18",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-19-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-19-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10684850002871826,
+    "log": "extexpr-19-normal-resources.log",
+    "case": "extexpr-19",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-19",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-20-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-20-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10659209999721497,
+    "log": "extexpr-20-normal-resources.log",
+    "case": "extexpr-20",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-20",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-21-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-21-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10936469997977838,
+    "log": "extexpr-21-normal-resources.log",
+    "case": "extexpr-21",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-21",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-22-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-22-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10807369998656213,
+    "log": "extexpr-22-normal-resources.log",
+    "case": "extexpr-22",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-22",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-23-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-23-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10803890001261607,
+    "log": "extexpr-23-normal-resources.log",
+    "case": "extexpr-23",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-23",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-24-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-24-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10205689998110756,
+    "log": "extexpr-24-normal-resources.log",
+    "case": "extexpr-24",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-24",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-25-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-25-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10244079999392852,
+    "log": "extexpr-25-normal-resources.log",
+    "case": "extexpr-25",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-25",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extexpr-26-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-26-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10431049996986985,
+    "log": "extexpr-26-normal-resources.log",
+    "case": "extexpr-26",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-26",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10407199995825067,
+    "log": "K-ExtensionExpression-1-normal-resources.log",
+    "case": "K-ExtensionExpression-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-1",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10287589998915792,
+    "log": "K-ExtensionExpression-2-normal-resources.log",
+    "case": "K-ExtensionExpression-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-2",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1035161999752745,
+    "log": "K-ExtensionExpression-3-normal-resources.log",
+    "case": "K-ExtensionExpression-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-3",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10360999999102205,
+    "log": "K-ExtensionExpression-4-normal-resources.log",
+    "case": "K-ExtensionExpression-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4a-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4a-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10315300000365824,
+    "log": "K-ExtensionExpression-4a-normal-resources.log",
+    "case": "K-ExtensionExpression-4a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10706510004820302,
+    "log": "K-ExtensionExpression-5-normal-resources.log",
+    "case": "K-ExtensionExpression-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-5",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-6-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-6-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11000740004237741,
+    "log": "K-ExtensionExpression-6-normal-resources.log",
+    "case": "K-ExtensionExpression-6",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-6",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-7-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-7-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1076935000019148,
+    "log": "K-ExtensionExpression-7-normal-resources.log",
+    "case": "K-ExtensionExpression-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-8-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-8-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10920649999752641,
+    "log": "K-ExtensionExpression-8-normal-resources.log",
+    "case": "K-ExtensionExpression-8",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-8",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10564429999794811,
+    "log": "K2-ExtensionExpression-1-normal-resources.log",
+    "case": "K2-ExtensionExpression-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-1",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10327349998988211,
+    "log": "K2-ExtensionExpression-2-normal-resources.log",
+    "case": "K2-ExtensionExpression-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-2",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10942549997707829,
+    "log": "K2-ExtensionExpression-3-normal-resources.log",
+    "case": "K2-ExtensionExpression-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-3",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10888080002041534,
+    "log": "K2-ExtensionExpression-4-normal-resources.log",
+    "case": "K2-ExtensionExpression-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10715300001902506,
+    "log": "K2-ExtensionExpression-5-normal-resources.log",
+    "case": "K2-ExtensionExpression-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-5",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-6-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-6-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1112176000024192,
+    "log": "K2-ExtensionExpression-6-normal-resources.log",
+    "case": "K2-ExtensionExpression-6",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-6",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-7-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-7-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10293049999745563,
+    "log": "K2-ExtensionExpression-7-normal-resources.log",
+    "case": "K2-ExtensionExpression-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-8-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-8-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1017722999677062,
+    "log": "K2-ExtensionExpression-8-normal-resources.log",
+    "case": "K2-ExtensionExpression-8",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-8",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-9-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-9-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11122160003287718,
+    "log": "K2-ExtensionExpression-9-normal-resources.log",
+    "case": "K2-ExtensionExpression-9",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-9",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-10-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-10-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1074629999930039,
+    "log": "K2-ExtensionExpression-10-normal-resources.log",
+    "case": "K2-ExtensionExpression-10",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-10",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-11-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-11-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10662749997572973,
+    "log": "K2-ExtensionExpression-11-normal-resources.log",
+    "case": "K2-ExtensionExpression-11",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-11",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-12-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-12-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1087847999879159,
+    "log": "K2-ExtensionExpression-12-normal-resources.log",
+    "case": "K2-ExtensionExpression-12",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-12",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-13-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-13-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.107916800014209,
+    "log": "K2-ExtensionExpression-13-normal-resources.log",
+    "case": "K2-ExtensionExpression-13",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-13",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-14-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-14-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10734139999840409,
+    "log": "K2-ExtensionExpression-14-normal-resources.log",
+    "case": "K2-ExtensionExpression-14",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-14",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-15-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-15-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11584480002056807,
+    "log": "K2-ExtensionExpression-15-normal-resources.log",
+    "case": "K2-ExtensionExpression-15",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-15",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-16-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-16-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10677329997997731,
+    "log": "K2-ExtensionExpression-16-normal-resources.log",
+    "case": "K2-ExtensionExpression-16",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-16",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-17-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-17-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10602900001686066,
+    "log": "K2-ExtensionExpression-17-normal-resources.log",
+    "case": "K2-ExtensionExpression-17",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-17",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "pragma-no-namespace-001-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-001-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10856849997071549,
+    "log": "pragma-no-namespace-001-normal-resources.log",
+    "case": "pragma-no-namespace-001",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-001",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "pragma-no-namespace-002-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-002-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1034673000103794,
+    "log": "pragma-no-namespace-002-normal-resources.log",
+    "case": "pragma-no-namespace-002",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-002",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "pragma-no-namespace-003-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-003-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10242359997937456,
+    "log": "pragma-no-namespace-003-normal-resources.log",
+    "case": "pragma-no-namespace-003",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-003",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "pragma-no-namespace-004-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-004-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10418989998288453,
+    "log": "pragma-no-namespace-004-normal-resources.log",
+    "case": "pragma-no-namespace-004",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-004",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "pragma-no-namespace-005-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-005-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10397650004597381,
+    "log": "pragma-no-namespace-005-normal-resources.log",
+    "case": "pragma-no-namespace-005",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-005",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ExtensionExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "validate-as-105-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\validate-as-105-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10397399996872991,
+    "log": "validate-as-105-normal-resources.log",
+    "case": "validate-as-105",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validate-as-105",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/hats",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/hats.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ValidateExpr.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "XQST0079-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\XQST0079-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10854729998391122,
+    "log": "XQST0079-normal-resources.log",
+    "case": "XQST0079",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0079",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/misc/CombinedErrorCodes.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "eqname-006-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\eqname-006-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.46498439996503294,
+    "log": "eqname-006-normal-actual.log",
+    "case": "eqname-006",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "eqname-006",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "eqname-006-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\eqname-006-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.46790380001766607,
+    "log": "eqname-006-prototype-actual.log",
+    "case": "eqname-006",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "eqname-006",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33950780000304803,
+    "log": "extexpr-1-normal-actual.log",
+    "case": "extexpr-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21381589997326955,
+    "log": "extexpr-1-prototype-actual.log",
+    "case": "extexpr-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-1",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1805510999984108,
+    "log": "extexpr-2-normal-actual.log",
+    "case": "extexpr-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-2",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1894664000137709,
+    "log": "extexpr-2-prototype-actual.log",
+    "case": "extexpr-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-2",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19692920002853498,
+    "log": "extexpr-3-normal-actual.log",
+    "case": "extexpr-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20446950005134568,
+    "log": "extexpr-3-prototype-actual.log",
+    "case": "extexpr-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-3",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18723410001257434,
+    "log": "extexpr-4-normal-actual.log",
+    "case": "extexpr-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-4",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2061604000045918,
+    "log": "extexpr-4-prototype-actual.log",
+    "case": "extexpr-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-4",
+      "kind": "Failed",
+      "message": "Expected error XPST0081, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20482150005409494,
+    "log": "extexpr-5-normal-actual.log",
+    "case": "extexpr-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2113672000123188,
+    "log": "extexpr-5-prototype-actual.log",
+    "case": "extexpr-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-5",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-6-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-6-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19537540001329035,
+    "log": "extexpr-6-normal-actual.log",
+    "case": "extexpr-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-6",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-6-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-6-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21732100000372157,
+    "log": "extexpr-6-prototype-actual.log",
+    "case": "extexpr-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-6",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 11: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19432840001536533,
+    "log": "extexpr-7-normal-actual.log",
+    "case": "extexpr-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-7",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20271859999047592,
+    "log": "extexpr-7-prototype-actual.log",
+    "case": "extexpr-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-7",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1917814000044018,
+    "log": "extexpr-8-normal-actual.log",
+    "case": "extexpr-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-8",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19762600003741682,
+    "log": "extexpr-8-prototype-actual.log",
+    "case": "extexpr-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-8",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19270010001491755,
+    "log": "extexpr-9-normal-actual.log",
+    "case": "extexpr-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-9",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20666019996860996,
+    "log": "extexpr-9-prototype-actual.log",
+    "case": "extexpr-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-9",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-10-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-10-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1869516999577172,
+    "log": "extexpr-10-normal-actual.log",
+    "case": "extexpr-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-10",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-10-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-10-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2071400999557227,
+    "log": "extexpr-10-prototype-actual.log",
+    "case": "extexpr-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-10",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-11-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-11-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19399879995035008,
+    "log": "extexpr-11-normal-actual.log",
+    "case": "extexpr-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-11",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-11-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-11-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21162719995481893,
+    "log": "extexpr-11-prototype-actual.log",
+    "case": "extexpr-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-11",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-12-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-12-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18492749996948987,
+    "log": "extexpr-12-normal-actual.log",
+    "case": "extexpr-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-12",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-12-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-12-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20729719998780638,
+    "log": "extexpr-12-prototype-actual.log",
+    "case": "extexpr-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-12",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-13-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-13-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18940219999058172,
+    "log": "extexpr-13-normal-actual.log",
+    "case": "extexpr-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-13",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-13-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-13-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20612660003826022,
+    "log": "extexpr-13-prototype-actual.log",
+    "case": "extexpr-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-13",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-14-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-14-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19290929997805506,
+    "log": "extexpr-14-normal-actual.log",
+    "case": "extexpr-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-14",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-14-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-14-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1960704000084661,
+    "log": "extexpr-14-prototype-actual.log",
+    "case": "extexpr-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-14",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-15-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-15-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18564510002033785,
+    "log": "extexpr-15-normal-actual.log",
+    "case": "extexpr-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-15",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-15-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-15-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20133569999597967,
+    "log": "extexpr-15-prototype-actual.log",
+    "case": "extexpr-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-15",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-16-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-16-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19417560001602396,
+    "log": "extexpr-16-normal-actual.log",
+    "case": "extexpr-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-16",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-16-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-16-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20953749999171123,
+    "log": "extexpr-16-prototype-actual.log",
+    "case": "extexpr-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-16",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-17-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-17-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18810580001445487,
+    "log": "extexpr-17-normal-actual.log",
+    "case": "extexpr-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-17",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-17-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-17-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1995636000065133,
+    "log": "extexpr-17-prototype-actual.log",
+    "case": "extexpr-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-17",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-18-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-18-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.187305599974934,
+    "log": "extexpr-18-normal-actual.log",
+    "case": "extexpr-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-18",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-18-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-18-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20294309995369986,
+    "log": "extexpr-18-prototype-actual.log",
+    "case": "extexpr-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-18",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-19-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-19-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.188034399994649,
+    "log": "extexpr-19-normal-actual.log",
+    "case": "extexpr-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-19",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-19-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-19-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19967490003909916,
+    "log": "extexpr-19-prototype-actual.log",
+    "case": "extexpr-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-19",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-20-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-20-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1883821000228636,
+    "log": "extexpr-20-normal-actual.log",
+    "case": "extexpr-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-20",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-20-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-20-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20281759998761117,
+    "log": "extexpr-20-prototype-actual.log",
+    "case": "extexpr-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-20",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-21-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-21-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19354649999877438,
+    "log": "extexpr-21-normal-actual.log",
+    "case": "extexpr-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-21",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-21-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-21-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20260329998563975,
+    "log": "extexpr-21-prototype-actual.log",
+    "case": "extexpr-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-21",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-22-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-22-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1953448000131175,
+    "log": "extexpr-22-normal-actual.log",
+    "case": "extexpr-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-22",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-22-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-22-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20952520001446828,
+    "log": "extexpr-22-prototype-actual.log",
+    "case": "extexpr-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-22",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-23-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-23-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20009110000682995,
+    "log": "extexpr-23-normal-actual.log",
+    "case": "extexpr-23",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-23",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-23-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-23-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21253910002997145,
+    "log": "extexpr-23-prototype-actual.log",
+    "case": "extexpr-23",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-23",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-24-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-24-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19434779998846352,
+    "log": "extexpr-24-normal-actual.log",
+    "case": "extexpr-24",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-24",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-24-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-24-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2073497999808751,
+    "log": "extexpr-24-prototype-actual.log",
+    "case": "extexpr-24",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-24",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-25-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-25-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19237469998188317,
+    "log": "extexpr-25-normal-actual.log",
+    "case": "extexpr-25",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-25",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-25-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-25-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20941820001462474,
+    "log": "extexpr-25-prototype-actual.log",
+    "case": "extexpr-25",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-25",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "extexpr-26-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-26-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18964209995465353,
+    "log": "extexpr-26-normal-actual.log",
+    "case": "extexpr-26",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-26",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extexpr-26-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\extexpr-26-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21892429998843,
+    "log": "extexpr-26-prototype-actual.log",
+    "case": "extexpr-26",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extexpr-26",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22238849999848753,
+    "log": "K-ExtensionExpression-1-normal-actual.log",
+    "case": "K-ExtensionExpression-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22715220000827685,
+    "log": "K-ExtensionExpression-1-prototype-actual.log",
+    "case": "K-ExtensionExpression-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2194129999843426,
+    "log": "K-ExtensionExpression-2-normal-actual.log",
+    "case": "K-ExtensionExpression-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21799140004441142,
+    "log": "K-ExtensionExpression-2-prototype-actual.log",
+    "case": "K-ExtensionExpression-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19843579997541383,
+    "log": "K-ExtensionExpression-3-normal-actual.log",
+    "case": "K-ExtensionExpression-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20709589996840805,
+    "log": "K-ExtensionExpression-3-prototype-actual.log",
+    "case": "K-ExtensionExpression-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-3",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20950670004822314,
+    "log": "K-ExtensionExpression-4-normal-actual.log",
+    "case": "K-ExtensionExpression-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4",
+      "kind": "Failed",
+      "message": "Expected error XPST0081, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2179793000104837,
+    "log": "K-ExtensionExpression-4-prototype-actual.log",
+    "case": "K-ExtensionExpression-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4",
+      "kind": "Failed",
+      "message": "Expected error XPST0081, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4a-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4a-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2292635000194423,
+    "log": "K-ExtensionExpression-4a-normal-actual.log",
+    "case": "K-ExtensionExpression-4a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4a-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-4a-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22163149999687448,
+    "log": "K-ExtensionExpression-4a-prototype-actual.log",
+    "case": "K-ExtensionExpression-4a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1932533999788575,
+    "log": "K-ExtensionExpression-5-normal-actual.log",
+    "case": "K-ExtensionExpression-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22254899999825284,
+    "log": "K-ExtensionExpression-5-prototype-actual.log",
+    "case": "K-ExtensionExpression-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-5",
+      "kind": "Failed",
+      "message": "Expected error XPST0081, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-6-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-6-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19663280004169792,
+    "log": "K-ExtensionExpression-6-normal-actual.log",
+    "case": "K-ExtensionExpression-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-6",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-6-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-6-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21273490000749007,
+    "log": "K-ExtensionExpression-6-prototype-actual.log",
+    "case": "K-ExtensionExpression-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-6",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 6: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.187437399988994,
+    "log": "K-ExtensionExpression-7-normal-actual.log",
+    "case": "K-ExtensionExpression-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-7",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2215247999993153,
+    "log": "K-ExtensionExpression-7-prototype-actual.log",
+    "case": "K-ExtensionExpression-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-7",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20242689998121932,
+    "log": "K-ExtensionExpression-8-normal-actual.log",
+    "case": "K-ExtensionExpression-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-8",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K-ExtensionExpression-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21792779996758327,
+    "log": "K-ExtensionExpression-8-prototype-actual.log",
+    "case": "K-ExtensionExpression-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-8",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 12: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20122360001550987,
+    "log": "K2-ExtensionExpression-1-normal-actual.log",
+    "case": "K2-ExtensionExpression-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20470430003479123,
+    "log": "K2-ExtensionExpression-1-prototype-actual.log",
+    "case": "K2-ExtensionExpression-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-1",
+      "kind": "Failed",
+      "message": "Expected error XPST0081, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20445189997553825,
+    "log": "K2-ExtensionExpression-2-normal-actual.log",
+    "case": "K2-ExtensionExpression-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-2",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20130460005020723,
+    "log": "K2-ExtensionExpression-2-prototype-actual.log",
+    "case": "K2-ExtensionExpression-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-2",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18479610001668334,
+    "log": "K2-ExtensionExpression-3-normal-actual.log",
+    "case": "K2-ExtensionExpression-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21860889997333288,
+    "log": "K2-ExtensionExpression-3-prototype-actual.log",
+    "case": "K2-ExtensionExpression-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-3",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19667330000083894,
+    "log": "K2-ExtensionExpression-4-normal-actual.log",
+    "case": "K2-ExtensionExpression-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-4",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21336519997566938,
+    "log": "K2-ExtensionExpression-4-prototype-actual.log",
+    "case": "K2-ExtensionExpression-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-4",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20125819998793304,
+    "log": "K2-ExtensionExpression-5-normal-actual.log",
+    "case": "K2-ExtensionExpression-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2003388000302948,
+    "log": "K2-ExtensionExpression-5-prototype-actual.log",
+    "case": "K2-ExtensionExpression-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-5",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 27: XPST0003: Unterminated comment"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-6-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-6-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20232030004262924,
+    "log": "K2-ExtensionExpression-6-normal-actual.log",
+    "case": "K2-ExtensionExpression-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-6-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-6-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1960086000035517,
+    "log": "K2-ExtensionExpression-6-prototype-actual.log",
+    "case": "K2-ExtensionExpression-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20247929997276515,
+    "log": "K2-ExtensionExpression-7-normal-actual.log",
+    "case": "K2-ExtensionExpression-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20257030002539977,
+    "log": "K2-ExtensionExpression-7-prototype-actual.log",
+    "case": "K2-ExtensionExpression-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19861399999354035,
+    "log": "K2-ExtensionExpression-8-normal-actual.log",
+    "case": "K2-ExtensionExpression-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20805579994339496,
+    "log": "K2-ExtensionExpression-8-prototype-actual.log",
+    "case": "K2-ExtensionExpression-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20029690000228584,
+    "log": "K2-ExtensionExpression-9-normal-actual.log",
+    "case": "K2-ExtensionExpression-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20465680002234876,
+    "log": "K2-ExtensionExpression-9-prototype-actual.log",
+    "case": "K2-ExtensionExpression-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-10-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-10-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19681130000390112,
+    "log": "K2-ExtensionExpression-10-normal-actual.log",
+    "case": "K2-ExtensionExpression-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-10",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-10-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-10-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19932959997095168,
+    "log": "K2-ExtensionExpression-10-prototype-actual.log",
+    "case": "K2-ExtensionExpression-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-10",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-11-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-11-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1903541999636218,
+    "log": "K2-ExtensionExpression-11-normal-actual.log",
+    "case": "K2-ExtensionExpression-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-11",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-11-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-11-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20851579995360225,
+    "log": "K2-ExtensionExpression-11-prototype-actual.log",
+    "case": "K2-ExtensionExpression-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-11",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-12-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-12-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19134429999394342,
+    "log": "K2-ExtensionExpression-12-normal-actual.log",
+    "case": "K2-ExtensionExpression-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-12",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-12-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-12-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2041979999630712,
+    "log": "K2-ExtensionExpression-12-prototype-actual.log",
+    "case": "K2-ExtensionExpression-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-12",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-13-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-13-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2070016999496147,
+    "log": "K2-ExtensionExpression-13-normal-actual.log",
+    "case": "K2-ExtensionExpression-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-13",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-13-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-13-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21169359999476,
+    "log": "K2-ExtensionExpression-13-prototype-actual.log",
+    "case": "K2-ExtensionExpression-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-13",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-14-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-14-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21694720000959933,
+    "log": "K2-ExtensionExpression-14-normal-actual.log",
+    "case": "K2-ExtensionExpression-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-14",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-14-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-14-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23492240003542975,
+    "log": "K2-ExtensionExpression-14-prototype-actual.log",
+    "case": "K2-ExtensionExpression-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-14",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-15-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-15-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23585980001371354,
+    "log": "K2-ExtensionExpression-15-normal-actual.log",
+    "case": "K2-ExtensionExpression-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-15",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-15-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-15-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.24596030003158376,
+    "log": "K2-ExtensionExpression-15-prototype-actual.log",
+    "case": "K2-ExtensionExpression-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-15",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-16-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-16-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2387262000120245,
+    "log": "K2-ExtensionExpression-16-normal-actual.log",
+    "case": "K2-ExtensionExpression-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-16-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-16-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2530828000162728,
+    "log": "K2-ExtensionExpression-16-prototype-actual.log",
+    "case": "K2-ExtensionExpression-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-17-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-17-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.24365750001743436,
+    "log": "K2-ExtensionExpression-17-normal-actual.log",
+    "case": "K2-ExtensionExpression-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-17",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K2-ExtensionExpression-17-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\K2-ExtensionExpression-17-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21538919996237382,
+    "log": "K2-ExtensionExpression-17-prototype-actual.log",
+    "case": "K2-ExtensionExpression-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-ExtensionExpression-17",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-001-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-001-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21677530003944412,
+    "log": "pragma-no-namespace-001-normal-actual.log",
+    "case": "pragma-no-namespace-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-001",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-001-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-001-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.208367699990049,
+    "log": "pragma-no-namespace-001-prototype-actual.log",
+    "case": "pragma-no-namespace-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-001",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-002-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-002-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21023289998993278,
+    "log": "pragma-no-namespace-002-normal-actual.log",
+    "case": "pragma-no-namespace-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-002",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-002-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-002-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22459450003225356,
+    "log": "pragma-no-namespace-002-prototype-actual.log",
+    "case": "pragma-no-namespace-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-002",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-003-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-003-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20961949997581542,
+    "log": "pragma-no-namespace-003-normal-actual.log",
+    "case": "pragma-no-namespace-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-003",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-003-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-003-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21802739996928722,
+    "log": "pragma-no-namespace-003-prototype-actual.log",
+    "case": "pragma-no-namespace-003",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-003",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-004-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-004-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.213393600017298,
+    "log": "pragma-no-namespace-004-normal-actual.log",
+    "case": "pragma-no-namespace-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-004",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-004-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-004-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22159610001835972,
+    "log": "pragma-no-namespace-004-prototype-actual.log",
+    "case": "pragma-no-namespace-004",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-004",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-005-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-005-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21310409996658564,
+    "log": "pragma-no-namespace-005-normal-actual.log",
+    "case": "pragma-no-namespace-005",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-005",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "pragma-no-namespace-005-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\pragma-no-namespace-005-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2235019999789074,
+    "log": "pragma-no-namespace-005-prototype-actual.log",
+    "case": "pragma-no-namespace-005",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "pragma-no-namespace-005",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "validate-as-105-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\validate-as-105-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2058619000017643,
+    "log": "validate-as-105-normal-actual.log",
+    "case": "validate-as-105",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validate-as-105",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "validate-as-105-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\validate-as-105-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.215406300034374,
+    "log": "validate-as-105-prototype-actual.log",
+    "case": "validate-as-105",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "validate-as-105",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 15: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "XQST0079-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\XQST0079-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19612150004832074,
+    "log": "XQST0079-normal-actual.log",
+    "case": "XQST0079",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0079",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "XQST0079-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-review\\evidence\\XQST0079-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20523469999898225,
+    "log": "XQST0079-prototype-actual.log",
+    "case": "XQST0079",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0079",
+      "kind": "Failed",
+      "message": "Expected error XQST0079, got: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  }
+]

@@ -1,0 +1,5 @@
+# Native assessment / production-kernel carrier trial ? 31 October 2026
+
+Pre-execution record. Immutable references remain XPath 3.1 REC-xpath-31-20170321 sections 2.1.1, 2.4.2 and 3.14.2; XDM 3.1 REC-xpath-datamodel-31-20170321 sections 3.3.1.1?3/5.14; F&O 3.1 REC-xpath-functions-31-20170321 sections 18.1/19/19.1. No normative deviation or production semantic adoption occurs. The parent no-op/provenance disposition and fieldwise CLR carrier remain candidates.
+
+This isolated friend-test host composes the unchanged production scalar kernel and private compilation/session path with unchanged native assessment sources and the optimized carrier. A Runtime clone exposes only two internal test accessors forwarding existing evidence/access checks; no private reflection, new friend grant or global VM hook is used. A diagnostic Core strip helper keeps provider-produced scalar values plain. Explicit constructor composition admits provider-validated decimal/integer outcomes; arbitrary nested constructors are not automatically instrumented. Public provider/advisor contracts, full XSD 1.1 and multi-source operation admission are not accepted by this trial.

@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "decision": "session-owned-operation-leases-host-owned-resources",
+  "productionImplemented": false,
+  "ownerAccepted": false,
+  "cases": [
+    {
+      "id": "CO-01",
+      "trigger": "Two same-session distinct assessments",
+      "expected": "Both source roots evaluate; each issued scalar retains its original snapshot.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-02",
+      "trigger": "Default/null/duplicate/foreign members",
+      "expected": "Reject before acquiring leases or invoking work; equal fingerprints confer no admission.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-03",
+      "trigger": "Explicit empty membership",
+      "expected": "Source-free work succeeds; any node input refuses before its getters.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-04",
+      "trigger": "Capacity exceeded",
+      "expected": "Reject before any lease or work; no implicit materialization or bound increase.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-05",
+      "trigger": "Acquire member 2 throws",
+      "expected": "Release member 1 once; do not release member 2; work never runs.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-06",
+      "trigger": "Acquire member 3 fails and releases 2/1 fail",
+      "expected": "Attempt releases 2 then 1; aggregate entry error first, then both cleanup errors.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-07",
+      "trigger": "Cancellation after final acquisition",
+      "expected": "Recheck before publication; reverse-release all leases; work never runs.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-08",
+      "trigger": "Member closes during acquisition",
+      "expected": "Entry aborts or published guarded access refuses; no lease leak or unsafe getter.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-09",
+      "trigger": "One member revoked during deferred work",
+      "expected": "Entire group refuses guarded access; all leases remain until raw work completes.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-10",
+      "trigger": "Other operation omits revoked member",
+      "expected": "That operation remains usable and independently releasable.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-11",
+      "trigger": "Canceled wait with blocked raw task",
+      "expected": "Wait cancels; no lease releases until actual raw callback completes.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-12",
+      "trigger": "Successful callback and two release failures",
+      "expected": "Attempt all reverse releases; aggregate cleanup exceptions in attempted order.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-13",
+      "trigger": "Callback failure plus two cleanup failures",
+      "expected": "Original exception object first; then all cleanup objects; no recursive flattening.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-14",
+      "trigger": "Repeated completion after cleanup failure",
+      "expected": "No release is repeated and operation token remains invalid.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-15",
+      "trigger": "Input request from another membership token",
+      "expected": "Refuse even if member arrays are reference-identical and same order.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-16",
+      "trigger": "XSLT distinct match/global sources",
+      "expected": "Both admitted roots retained for complete transform; no role conflation.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-17",
+      "trigger": "XSLT same source in two roles",
+      "expected": "One admission listed once and one lease acquired; both roles validate.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-18",
+      "trigger": "Unadmitted or ambiguously owned variable node",
+      "expected": "Refuse before node getter; do not add a member implicitly.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-19",
+      "trigger": "Two independent component authorities",
+      "expected": "Unsupported without selected routing/compatibility proof; never merge by QName/digest.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-20",
+      "trigger": "Second OpenSnapshot fails after host acquisition",
+      "expected": "Host closes earlier admission and releases its own resources; engine does not invoke rejected callback.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-21",
+      "trigger": "Nested operation over same snapshots",
+      "expected": "Independent lease sets; inner completion cannot release outer ownership; reentry obeys provider profile.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-22",
+      "trigger": "Concurrent close and raw completion",
+      "expected": "Exactly-once release; access revoked; no release while another raw lease remains.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-23",
+      "trigger": "Resource callback requests additional source",
+      "expected": "Closed-resource refusal; membership remains immutable.",
+      "status": "NotRun"
+    },
+    {
+      "id": "CO-24",
+      "trigger": "Single-snapshot regression and allocation scaling",
+      "expected": "Existing qualified behavior retained; characterize 0/1/2/8 members separately from full-host throughput.",
+      "status": "NotRun"
+    }
+  ]
+}

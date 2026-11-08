@@ -1,0 +1,25 @@
+{
+  "processId": 25368,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XmlDb.IntegrationTests",
+      "identity": "Bosak.XmlDb.IntegrationTests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-reopen-layout-20261108\\tests\\Bosak.XmlDb.IntegrationTests\\bin\\Release\\net10.0\\Bosak.XmlDb.IntegrationTests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "341ea55ad23900b3a7a797f034246d14a26d32ac8362ec7a94de4fa5f3008603"
+    },
+    {
+      "name": "Bosak.XmlDb.Storage",
+      "identity": "Bosak.XmlDb.Storage, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\xmldb-reopen-layout-20261108\\tests\\Bosak.XmlDb.IntegrationTests\\bin\\Release\\net10.0\\Bosak.XmlDb.Storage.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "0.1.0-alpha.0.10\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "3069ac756aae51b0db5e5590b567950d8bf65bd0e28dccb807170c8ecd0796ae"
+    }
+  ],
+  "captureErrors": []
+}

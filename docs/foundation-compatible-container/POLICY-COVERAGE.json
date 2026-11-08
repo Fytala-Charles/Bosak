@@ -1,0 +1,23 @@
+{
+  "policyCases": "docs/foundation-container-policy/IMPLEMENTATION-CASES.json",
+  "additionalPassedTestCount": false,
+  "compatibleCoreSlice": "CC01-CC20",
+  "pairedWindowCases": [
+    "CC06",
+    "CC07",
+    "CC08",
+    "CC14",
+    "CC15",
+    "CC16",
+    "CC17"
+  ],
+  "retainedOrdinaryRegressions": 43,
+  "signatureHandoffRegression": "TC24",
+  "limitations": [
+    "Selected four immutable primitive families only; broader factory families require explicit payload snapshot/lifetime disposition before activation.",
+    "Both complete-container routes preserve empty/list/union boundaries, not all persistent/construction/nil/no-value host coverage.",
+    "Core fixtures and actual file tails do not qualify native/owner workloads or PF retained-memory budgets.",
+    "No blanket claim that all planned CTV groups and failure combinations are exhausted."
+  ],
+  "requirementsWaived": 0
+}

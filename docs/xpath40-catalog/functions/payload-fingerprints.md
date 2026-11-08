@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified integration contracts and limitations</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. BLAKE3 and CRC-32 remain unsupported FOHA0001; opaque hash options do not establish a missing standard named parameter. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 Function: [fn:hash](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-hash). Frozen 4.0.
@@ -52,6 +54,8 @@ Use the same representation and algorithm for comparisons. Trailing whitespace a
 Content changes are observable without exposing a claim about sender identity. Empty versus absent payload remains distinct. The default-MD5 fixture records the API default; the business example chooses its algorithm explicitly.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles UTF-8 string versus binary octets and absent versus empty payload; Default/explicit algorithm and unsupported-algorithm errors; Keyword/default/map-shape boundaries; extension parameters are implementation-defined. **Boundaries:** BLAKE3 and CRC-32 remain unsupported FOHA0001; opaque hash options do not establish a missing standard named parameter. Follow-up groups: F01, F11. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects them. Earlier-version comparisons use Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. All values are inline and deterministic.
 

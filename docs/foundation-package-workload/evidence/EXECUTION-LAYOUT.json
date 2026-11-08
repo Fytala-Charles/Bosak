@@ -1,0 +1,26 @@
+{
+  "path": "D:\\Development\\Bosak\\docs\\foundation-package-workload\\workload\\bin\\Release\\net10.0",
+  "files": {
+    "Bosak.Schema.dll": "8a41f9ebd7489f323c4006a0e3272795844c3e9974de29910b9acb7c58d8d119",
+    "Bosak.Schema.ExperimentalProvider.dll": "ef4352faa6f87e0ef459228cf6136d554de2d1c0ad2e676335fe991ee6fa017a",
+    "Bosak.Schema.ExperimentalProvider.pdb": "734f6c76ada6951a298855ea6b0cab6152a6ced20f5d226d41bdcffad7020920",
+    "Bosak.Schema.ExperimentalProvider.xml": "9821f9a6a36b5a2dc0953a1db597120ead427c037cc23faaa629aaae0d37249c",
+    "Bosak.Schema.OwnerWorkload.Protocol.deps.json": "9fb871c97d9f9c08de6d525c16caab5d788316ee77b3f55287d8ad8cca949ed5",
+    "Bosak.Schema.OwnerWorkload.Protocol.dll": "ef408de785a17551b4b7d4357e6bc2238f4e545fa370edbb8b975ffb67eeb0f5",
+    "Bosak.Schema.OwnerWorkload.Protocol.exe": "64779b122367bdc806ab9d5bbbcdf2b7c1d98cdf22a187e41b849d83ac3e6b76",
+    "Bosak.Schema.OwnerWorkload.Protocol.pdb": "2ca4e34e5f8b9ac69b1734e96d6be979b7571137a9a5c1d5d2ec7e48d14ee5a4",
+    "Bosak.Schema.OwnerWorkload.Protocol.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+    "Bosak.Schema.OwnerWorkload.Protocol.xml": "eac85129fd12b10339feeb9983c8a4ad1070e4bf12c83b62f10d7883f6a616fe",
+    "Bosak.Schema.pdb": "1af5a4e0a042675e0c714b7cfb1e3307872c0055a32b12ee51787a96f3d69d81",
+    "Bosak.Schema.xml": "c329a38dfdb24e7ca0a86a3fa923ca9995449f37016d178762510b709d21d4d0",
+    "Bosak.XPath.Api.dll": "0fa4de7d4432a24e0a049301c1192de2b21e9bf09adde5feacce4816fd374359",
+    "Bosak.XPath.Compiler.dll": "dd1ef817340dc210425fe570dc230f42b83903f17a9d353c86d28287c31e01f1",
+    "Bosak.XPath.Core.dll": "cab08b8c38f32b3d602b3e29e3dd36affc3a5853a813de96a1a0162ef02ffd43",
+    "Bosak.XPath.Parser.dll": "2a169b8a894ce78ffbb754bfa0a8a540b093fcd5e8024076a4c9372467aefe72",
+    "Bosak.XPath.Providers.dll": "09425c35455d20a777b285fcbfe8a960d4dd397972f1beb84704e7f3356775d8",
+    "Bosak.XPath.Runtime.dll": "e155763ce56c746e3d6916398ba0b317e72780008b3a8d4be2e7787a003c2151",
+    "Bosak.XPath.Standard.dll": "0814065371bc088de8cee39e764babab5a03dc46ceaa0edd0bf3e563569b0d02",
+    "Bosak.XQuery.dll": "9e6d351a7bf8d6aa6cf47c170f7a2b3ec214ce530b843d2c4933bf47d2fb8b07",
+    "Bosak.Xslt.dll": "383c794cf44b86244368990d2b49a7dfac708e5020969606f7a08ecfce3119cc"
+  }
+}

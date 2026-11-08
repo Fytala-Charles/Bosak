@@ -1,0 +1,4 @@
+# Preserve checkpoint identities and native receipts byte-for-byte across checkouts.
+** -text whitespace=cr-at-eol
+evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+api-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

@@ -1,0 +1,13 @@
+{
+  "processId": 53648,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Providers.Tests",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Providers.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Tests.dll",
+      "sha256": "9070041d3ab68549ddd017a0ee0245fef38ce93a02c745e1fafe1d3de62248ff",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

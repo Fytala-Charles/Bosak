@@ -1,0 +1,125 @@
+{
+  "mode": "naive",
+  "items": 1000,
+  "scope": "Isolated cloned-Core accessor/container probe; no VM or real Schema/XmlDb/Braid qualification",
+  "runtime": "10.0.11",
+  "framework": ".NET 10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "architecture": "X64",
+  "processorCount": 24,
+  "serverGc": false,
+  "pointerSize": 8,
+  "xdmValueSize": 48,
+  "pairSize": 56,
+  "coreSha256": "75cb90d0a838f78d905f7d9cde3bc8ccca6a2c0a0d6775563219226d294bcb39",
+  "controlCount": 21,
+  "intentionalNaiveAccessorFailures": 4,
+  "checks": [
+    {
+      "id": "access-Boolean",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Boolean",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Boolean",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Integer",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Double",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Double",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Double",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-String",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "marker-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-String",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Decimal",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "marker-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Decimal",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-QName",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "marker-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-QName",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-DateTime",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "marker-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-DateTime",
+      "observed": false,
+      "expected": false
+    }
+  ],
+  "measurements": []
+}

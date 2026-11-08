@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited keywords; placeholder blocker**. C04-G03 and C02-F01: keyword placeholders and per-function label/metadata gaps remain; not a universal dynamic-call keyword facility. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Keyword arguments** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -59,6 +61,9 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: Name start and length to clarify an otherwise positional call. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Parameter names belong to the function signature. Positional arguments must not follow keyword arguments.
 
 ## 12. Implementation
+
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S3-keywords. Reordered/mixed keywords, empty/default, Q{} EQNames and static rejection controls pass. Keyword partial application with ? fails parsing; positional partial application is a working alternative. Per-function metadata and spelling drift remain C02 F01. Dynamic calls have positional argument grammar; their rejection is not evidence of a missing universal keyword facility. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-27",
+  "kind": "Pre-implementation semantic adoption for bounded calendar fallback",
+  "sourceBase": "548d18a90064e92a3444757fa5ad5cfce05730c2",
+  "specifications": [
+    {
+      "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "revision": "REC-xpath-functions-31-20170321",
+      "sections": [
+        "9.8.4.8",
+        "9.8.4.7"
+      ],
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988"
+    },
+    {
+      "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/xpath-functions.xml",
+      "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+      "sections": [
+        "lang-cal-place",
+        "formatting-other-components"
+      ],
+      "sha256": "029dad6fca522956ae9c19fc3c7a890a3285dcb3fc5681081b797c5be6d4d675",
+      "calendarSectionSha256": "5b63c6828b82a50b963296a10afa1cd8e305a4a68fd4ea7ebaf95ce6e7d8495f"
+    }
+  ],
+  "listedDesignators": [
+    "AD",
+    "AH",
+    "AME",
+    "AM",
+    "AP",
+    "AS",
+    "BE",
+    "CB",
+    "CE",
+    "CL",
+    "CS",
+    "EE",
+    "FE",
+    "ISO",
+    "JE",
+    "KE",
+    "KY",
+    "ME",
+    "MS",
+    "NS",
+    "OS",
+    "RS",
+    "SE",
+    "SH",
+    "SS",
+    "TE",
+    "VE",
+    "VS"
+  ],
+  "policy": {
+    "listedUnsupported": "Format using AD with one [Calendar: AD] prefix per complete output",
+    "namespaced": "Use existing Gregorian fallback with explicit AD indication, including names matching supported local aliases",
+    "validation": "Validate once for nonempty date/time values, including empty and literal-only pictures; preserve empty-value short circuit",
+    "fallbackCalendarComponent": "AD when fallback selected; other C/E behavior unchanged",
+    "intentionalRetainedLimits": [
+      "Legacy Gregorian/ISO8601 aliases and case-insensitive supported aliases retained",
+      "Bare listed designators use exact specified spelling; arbitrary lowercase aliases not newly admitted",
+      "Legacy XSLT fallback for unknown bare names retained",
+      "Empty string calendar continues to use default",
+      "Prefixed calendar parser still uses placeholder namespace; no complete static QName resolution claim",
+      "Existing NCName/EQName parser approximation and language fallback behavior remain separate",
+      "No general alternate-calendar implementation or ISO era/week correction",
+      "No dependency admission or exact baseline change"
+    ]
+  }
+}

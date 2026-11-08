@@ -52,6 +52,11 @@
 //                      |                  |       |                | MaxEngineOperations), pre-run cancellation check, gate cleared in finally             |
 //                      | Charles Korthout | 1.18  | 11-10-2026     | C-F1/D-F1: document bounded profiles and unconditional terminal observations.            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.19  | 01-11-2026     | Add internal bounded explicit-context transform entry point. |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 01-11-2026     | Expose effective static values internally for bounded capture. |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.21 | 06-11-2026     | Run explicit source-role capture with local serialization diagnostics (1.76.0). |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -106,6 +111,55 @@ public sealed class XsltExecutable
     /// during the last transformation, if any.
     /// </summary>
     internal Stylesheet.OutputProperties? LastResultDocumentProperties { get; private set; }
+
+    /// <summary>Copies effective static values after the selected compilation profile has resolved them.</summary>
+    internal IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue> CaptureSchemaStaticValues()
+        => _stylesheet.StaticVariables;
+
+    /// <summary>Returns the raw principal result with independent document-match and node-global inputs.</summary>
+    /// <param name="matchInput">Document-root initial match input, or null for named-template work.</param>
+    /// <param name="globalInput">Explicit global context node; null means absent without source fallback.</param>
+    /// <param name="initialTemplate">Optional initial named template.</param>
+    /// <param name="context">Borrowed dynamic context, subject to transform context mutation.</param>
+    /// <returns>The raw principal result; secondary results are captured without external delivery.</returns>
+    /// <exception cref="NotSupportedException">The match input is not a document node.</exception>
+    internal XdmValue TransformWithExplicitContext(IXdmNode? matchInput, IXdmNode? globalInput, string? initialTemplate, EvaluationContext? context)
+    {
+        if (matchInput != null && matchInput.NodeKind != XdmNodeKind.Document)
+            throw new NotSupportedException("Explicit-context transforms admit only document-root initial match inputs.");
+        return RunWithStack(() => new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError)
+            .TransformCore(matchInput, initialTemplate, null, true, null, null, true, true, globalInput, false), DefaultTransformStackSize);
+    }
+
+
+    internal XdmValue TransformCapturedContext(IXdmNode? match,IXdmNode? global,string? template,string? mode,
+        bool raw,string? outputUri,EvaluationContext context)
+        =>RunWithStack(()=>new Runtime.TransformEngine(_stylesheet,context,null,_treatRecoverableAmbiguousMatchAsError)
+            .TransformCore(match,template,mode,raw,outputUri,null,true,false,global,false),DefaultTransformStackSize);
+
+    internal XsltCaptureResult CaptureExplicitContext(IXdmNode? match,IXdmNode? global,XsltCaptureOptions options,
+        EvaluationContext context,Action<Exception> observeError,Action<long>? observeProduction=null)
+    {
+        var session=new XsltCaptureSession(options,null,context.ExecutionGate,observeProduction,observeError);
+        Exception? failure=null;
+        try
+        {
+            context.ExecutionGate?.Checkpoint();
+            RunWithStack<object?>(()=>
+            {
+                var engine=new Runtime.TransformEngine(_stylesheet,context,session.MessageListener,_treatRecoverableAmbiguousMatchAsError);
+                engine.ResultDocumentCaptureObserver=session.ObserveResultDocument;
+                var result=engine.TransformCore(match,options.InitialTemplate,options.InitialMode,false,options.BaseOutputUri,null,true,false,global,false);
+                var props=(engine.PrincipalResultDocumentProperties??OutputProperties).Clone();
+                props.EffectiveVersion??=_stylesheet.Version;
+                props.ImplicitResultTree=engine.PrincipalResultDocumentProperties is null;
+                session.CapturePrincipal(result,props);
+                return null;
+            },DefaultTransformStackSize);
+        }
+        catch(Exception error){failure=error;}
+        return session.BuildResult(failure);
+    }
 
     /// <summary>
     /// Default stack size (bytes) allocated for the transformation thread.  A larger

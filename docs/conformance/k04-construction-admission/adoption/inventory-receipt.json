@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-admission-inventory\\bin\\Release\\net10.0\\Probe.dll",
+    "tests/Bosak.XPath.Conformance/bin/Release/net10.0",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\adoption\\adopted",
+    "prototype",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-admission\\evidence\\lexical-controls.json"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 60,
+  "wallSeconds": 0.6942372000194155
+}

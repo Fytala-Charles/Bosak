@@ -1,0 +1,80 @@
+{
+  "capturedAtUtc": "2026-11-01T20:09:36.640495+00:00",
+  "coreRevision": "2cf3797962adc8c858639c6ca79a22369a7856c0",
+  "productionVersion": "1.42.0",
+  "productionChanged": false,
+  "responses": {
+    "O2-Core": {
+      "originalPath": "D:\\Development\\Bosak\\docs\\foundation-r2-core-returns\\returns\\O2-Core.json",
+      "sha256": "460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f",
+      "copy": "inputs/O2-Core.json"
+    },
+    "O4-Core": {
+      "originalPath": "D:\\Development\\Bosak\\docs\\foundation-r2-core-returns\\returns\\O4-Core.json",
+      "sha256": "48ec1cb1f07470c8bf7f7a7366e7350b52fd80954cf88eb9b27f246c757bac26",
+      "copy": "inputs/O4-Core.json"
+    },
+    "O1-XmlDb": {
+      "originalPath": "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O1-XmlDb.response.json",
+      "sha256": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+      "copy": "inputs/O1-XmlDb.json"
+    },
+    "O3-Braid": {
+      "originalPath": "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O3-Braid.response.json",
+      "sha256": "b9de8b1f79f399cd9e618ca724dfe08d785279653ae7f6ab20f2243ec30bae78",
+      "copy": "inputs/O3-Braid.json"
+    },
+    "O4-XmlDb": {
+      "originalPath": "D:\\Development\\Bosak\\docs\\foundation-r2-owner-review\\returns\\O4-XmlDb.response.json",
+      "sha256": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+      "copy": "inputs/O4-XmlDb.json"
+    }
+  },
+  "schemaCommentSha256": "4b975ae23668877380f716fdfb86a3b98acbe59fc8f68da86baca356a38e456d",
+  "issueCommentsSha256": "6019d2b8084c28797ce89b6b10b9938a2e5e456f5916e6a197a63fee5beff29f",
+  "reviewInputs": {
+    "docs/foundation-r2-ledger/MANIFEST.json": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+    "docs/foundation-r2-ledger/LEDGER.json": "798663d22026b070cbc5d74eabaa6f60330f4c031b60983e4b1bca773d092d35",
+    "docs/foundation-r2-owner-review/PACKETS.json": "6ca6b7418d401c6bed7772bda907b7a74d02eb38b28f40accb430af0734895c9",
+    "docs/foundation-r2-owner-review/tools/returns.py": "0a121c5de966e331e0bda9ef8681c5d3e8f1310ea31295ae9f9dd4c3bfbc3763",
+    "docs/foundation-r2-response-review/INPUTS.json": "272ab06cab90bf0cf2c0effd361f03ec419d58144994f3b187e1b52fa369f3fd",
+    "docs/foundation-w1-readiness/ACCEPTANCE.json": "9ccafc3d5787a6753e56d189f20b03a87479a634ad425f65a11983b5bdebd516"
+  },
+  "latestCommentId": 6563123351,
+  "xmlDbSourceAudit": {
+    "root": "D:\\Development\\Bosal.XmlDb",
+    "revision": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+    "ownerReceiptSha256": "c338f649967399c1af83e14ca6a5d5b1fcded1bbeeb464552a33d727a411c179",
+    "workingTree": "Contains unrelated owner work; selected reviewed files match pinned commit and recorded raw hashes",
+    "files": {
+      "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": {
+        "ownerRecordedSha256": "ade4e0c6255d89442d02c4b1a5b2ed756983ab38c5829763dd60b29418f9e590",
+        "committedBytesSha256": "fba3bfcba4303505784cd433d527001c173f2350013beeb2be8e5f2871ba60de"
+      },
+      "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": {
+        "ownerRecordedSha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b",
+        "committedBytesSha256": "cef1dd1a0bcbdfcdcb3c3841337a8a310d327851ef9cbfca86a803bd6e4a83fa"
+      },
+      "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": {
+        "ownerRecordedSha256": "6ec0491a69eab73312268bfd428faaa425fb95b35ec131797ddcaf1484f08d11",
+        "committedBytesSha256": "a4bbc9cbf6af7061e442a06b6f39a47446de99912af65f36f32278f2ffee4357"
+      },
+      "src/Bosak.XmlDb.Storage/GenerationLease.cs": {
+        "ownerRecordedSha256": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d",
+        "committedBytesSha256": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d"
+      },
+      "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": {
+        "ownerRecordedSha256": "357bff44834dd357c2d0dd090120df73dd686d329d74b24fba2b58cd3f08cc5c",
+        "committedBytesSha256": "6911a4d22202b319e01103b91214222fc3ac268a8c6b56d4a5ae4c28b46a663f"
+      },
+      "tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs": {
+        "ownerRecordedSha256": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687",
+        "committedBytesSha256": "d0ca969609c324b4c048da0fb91c492f68ec3f3b3a213e933bca1e9c539d6687"
+      },
+      "tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs": {
+        "ownerRecordedSha256": "12ee62a5a8f4837177910032f6c7e56c2c648c7f1ea114095a6bcfc850b0aba2",
+        "committedBytesSha256": "50add1d355ccee9102f7cc4512ee01002c7476025b16297d5bcdb0e4e0b81d1a"
+      }
+    }
+  }
+}

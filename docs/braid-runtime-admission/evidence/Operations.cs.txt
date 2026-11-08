@@ -1,0 +1,36 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Executes public engine operations in an isolated approved-snapshot load context.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated runtime admission experiment                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Runtime.CompilerServices;
+using System.Xml.Linq;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+/// <summary>Uses baseline public APIs without changing engine or consumer implementations.</summary>
+public static class Operations
+{
+    /// <summary>Executes a real XML transform to exercise the non-XQuery engine path.</summary>
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static string Xslt() => new XsltCompiler().Compile("""
+    <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0">
+      <xsl:output omit-xml-declaration="yes"/><xsl:template match="/"><ok><xsl:value-of select="sum(/r/n)"/></ok></xsl:template>
+    </xsl:stylesheet>
+    """).TransformToString(new XDocumentNode(XDocument.Parse("<r><n>2</n></r>")));
+    /// <summary>Executes a deferred real query through the XQuery assembly.</summary>
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    public static string Query() => new XQueryCompiler().Compile("1 + 2").Evaluate(new XQueryContext()).ToString();
+}

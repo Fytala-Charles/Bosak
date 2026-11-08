@@ -1,0 +1,13 @@
+{
+  "allMatchQualified1530": true,
+  "loadedEngines": {
+    "Bosak.XPath.Parser": "032a9aa59230a0f529f029f406d84538739e084c989ca8b9a53914572bb62e98",
+    "Bosak.XPath.Api": "3b139308c4f7b0794d3846d0086f16122bc741b91f61598e6e86f99c387f74cc",
+    "Bosak.XPath.Compiler": "9ad3b2ad868bc7d4766f6a9a05fb7c718a19dbd8cd9654374dfffc5dc267ea0f",
+    "Bosak.XPath.Core": "ae3e66f5366ba1fa799fd8dd5796b4e5aa31ed4237605d6624153802323141c6",
+    "Bosak.XPath.Providers": "f6b43f47bdc33bc2e75d0cd06a9e723a4772d1fbcc2e892013a0d048fac61ea0",
+    "Bosak.XPath.Runtime": "a21e6bd40b2f0da46e7339e28451a1d11cf49d4103e00cb69d24a9e4896309b4",
+    "Bosak.XPath.Standard": "553a8565a9073d76cff3e6bb9362b38d32e10d4f21c73c359390670eaabc8fe0",
+    "Bosak.Xslt": "ee6de2e38aa98d78d07db88f972ce24568f82d5234a027a40034dfda632c90cf"
+  }
+}

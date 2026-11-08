@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "caa7344b566d4d04854798a49f24da34d02129daaa94a3f59bd1514d06c07148"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "1198d04c3a74d1b3c94491471158232167b3cbc02d9565ff063385b6e0bd7712"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "d58ea763f371a428ef39bb6a6e6445854087aedb143865883988761f24d80411"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "c194b3cc6ccd5c315859328e75152aca1cb193b3ca5552098f260c33c5f492d5"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "9afdd29f71d2d25f6cc03acb7612b624ca1e2378e37d89628def12bf22620962"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "f824c51b4f7ae356c356121d3cba2c6a717838d917433a7cad315e720149aa9c"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "b0ba85e2ffa7255637550a05998c51c8ca71187ef6e4c787457d123dc1ed0837"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "ea79d634bd71f8f74acc27c48b6e0fc3dc205029f5ea23515095db0676c8ea47"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-count-implementation/README.md",
+      "htmlSha256": "ff732085a9c7b07cd6d451cb075a26f5b82ff3f97136a5fe5020e8b00498f046"
+    },
+    {
+      "source": "docs/schema-count-implementation/GUIDE.md",
+      "htmlSha256": "af228badf3de1cc301f1c1033641c9dfe2eee6e115ff1687ea094dae3359018e"
+    },
+    {
+      "source": "docs/schema-count-implementation/ASSESSMENT-GUIDE.md",
+      "htmlSha256": "960166cfa50af9a0814bb1c0a130372e7b793f10602c1e0a5358183171ef8a3f"
+    },
+    {
+      "source": "docs/schema-count-implementation/ADOPTION.md",
+      "htmlSha256": "88b29b8faa9f6a053815cdd1ac3fe1e1c24715566667b484fc052cb6456c89f6"
+    },
+    {
+      "source": "docs/braid-readonly-adoption/README.md",
+      "htmlSha256": "0b93f1fe855fb418a43e8120a6970a0e224943042c76734cdcc73f6100278914"
+    },
+    {
+      "source": "docs/braid-readonly-adoption-review/README.md",
+      "htmlSha256": "67e5e6fa0bcf8cb25ae66876485d549856363c9f95f25f18e730350faabb36cb"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "c77d15aee82e141a2c97732eb86f6ab3a926ba799285ccf55f28cdfe6b0a48fb"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "31b8dfb08b0b210264d709a368de035171a24006e84ec4ab10ef0b2e060a9381"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "0b60e96ee2a7ec112f2c220fafc587ce4ed6f60f69d306522fb1c1069cbd8e53"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "f853529e219c4ddd48588db97ed5dfc5dc99182b952e7c6ffcdf5384567bd764"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "9f6682c9afbdb57fe3d43b1ba88a6200507def0df45bc03c2388d025078fee7f"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "d87dfb781bbe832e54edf01a17e75e923b15ba9f956600fcd88abd7989adc66d"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "8c2064d931685d6d92c2df5f463e5841207d1355b80c0f27203f46042a168828"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/COUNT-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "b61b98430ba2e9fd28d3b2d05e4db156d262287adadeb623b929ad8b68bac73b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-READONLY-ADOPTION-PROPOSAL.md",
+      "htmlSha256": "c89addf53ce9e53d6cadf6c16632451445148ad08ea667924e33bc2752024680"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-READONLY-ADOPTION-REVIEW.md",
+      "htmlSha256": "ae59cbaa6483fa76ad0034c2bedc1c383ee76b9f020c002a9b0c9573d288d0cc"
+    }
+  ],
+  "localLinks": 2450,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

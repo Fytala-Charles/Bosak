@@ -1,0 +1,12 @@
+from pathlib import Path
+import json
+E=Path('docs/conformance/k02-schema-inventory/evidence');P=Path('.guard-tmp/k02-wide-trace');P.mkdir(exist_ok=True)
+metadata={v['id']:v['result'] for v in json.loads((E/'metadata-results.json').read_text(encoding='utf-8'))};cases={v['id']:v for v in json.loads((E/'schema-cases.json').read_text(encoding='utf-8'))}
+samples=[]
+for id,constructor in [('Castable-UnionType-7','unrestrictedInteger'),('qischema030','hatsize')]:
+ v=metadata[id];samples.append(dict(id=id,expression=v['expression'],namespace=v['schemas'][0]['Uri'],schema=v['schemas'][0]['FilePath'],constructor=constructor,baseUri=cases[id]['normalFallbackBaseUri']))
+(E/'trace-requests.json').write_text(json.dumps(samples,indent=2)+'\n',encoding='utf-8')
+project='<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup>'
+for name in ['Bosak.XQuery','Bosak.XPath.Core','Bosak.XPath.Runtime']:
+ project+=f'<Reference Include="{name}"><HintPath>../../tests/Bosak.XQuery.Tests/bin/Release/net10.0/{name}.dll</HintPath></Reference>'
+project+='</ItemGroup></Project>';(P/'Probe.csproj').write_text(project,encoding='utf-8');(E/'trace-driver.csproj.txt').write_text(project,encoding='utf-8')

@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/README.md.html",
+      "sha256": "1d2984438714ab95a58249627a822ebaece8600b9ca9da83856fcdf6fa491bc2"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_ARCHITECTURE.md.html",
+      "sha256": "8ee623384c21258d5da3e99b5d2cfc193a5472a0b898e1e18f49e59b07c6a7b4"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "ee57361bccaa1defb7f78d92217a919936bc5bcc4ed0f9fd63b8f6e254b62169"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_INTEGRATION.md.html",
+      "sha256": "04de5444add8dd50a6a742318934a2573c7be0230f34346cff5cb8bf9003dc2c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "9b8cd0b5f0cdf34cff8d4f6df78a0b6800e8608ab77b7342294ce2520e130f65"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "a575caa1b26bdd660f365e1b58b5b56ec92c0b2ca5349453c1445d9ee4662db4"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "1a6f51ca873c0e39fd7e1340c7d8cff189cd8a09718e2de519320957628efc1c"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "2e5698e0ee8a862ea82440271290be016e217960ebcca3e4cfa260bf3964aaac"
+    },
+    {
+      "source": "docs/conformance/k04-context-routing-review/adoption/BASELINE-ADOPTION.md",
+      "html": ".guard-tmp/k04-context-routing-adoption-render/docs_conformance_k04-context-routing-review_adoption_BASELINE-ADOPTION.md.html",
+      "sha256": "b744761cd06b709f28bfafac24e8ea855de9cd0f0e1fde3dc531f312f92ffff4"
+    }
+  ]
+}

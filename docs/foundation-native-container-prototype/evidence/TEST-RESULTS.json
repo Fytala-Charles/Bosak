@@ -1,0 +1,31 @@
+{
+  "passed": 19,
+  "failed": 0,
+  "skipped": 0,
+  "trx": "evidence/guarded-trx/charl_CHARLES_2026-11-06_17_48_41_net10.0.trx",
+  "sha256": "79c48fbf6efdfb4b3cf7e9a7815329a266e4302b49f59db855d15928a53ee398",
+  "caseNames": [
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.ActualNativeCompleteContainers",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.CallerMutationIsIsolated",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.CanceledCaptureRefuses",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentAdvisorRefusesOrigin",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.DifferentSnapshotRefusesContainer",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.EqualSchemaIsNotAuthority",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactAuthorityMembership",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.ExactInputRootMembership",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.ExposedNodeMutationRevokesSnapshot",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.ForgedContainerRefusesBeforeFields",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.InputRevocationRefuses",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeCopyReissuedExplicitly",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: \"<order unknown='yes'/>\")",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeFailureDoesNotIssue(xml: \"<order><amount>bad</amount></order>\")",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.NativeScalarPublicExecution",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.NoPhantomRootOrAbsentChildContainer",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.PublicAssessmentIsExplicitlyUnsupported",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.RawCompleteViewExpires",
+    "Bosak.Schema.ContainerPrototype.NativeContainerTests.RawEvidenceAndCursorExpire"
+  ],
+  "initialRunPassed": 16,
+  "countsOverlapNotAdditive": true,
+  "scope": "New isolated native-container prototype only; no complete Core/native/conformance suite rerun."
+}

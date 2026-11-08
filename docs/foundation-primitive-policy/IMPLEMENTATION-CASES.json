@@ -1,0 +1,222 @@
+{
+  "status": "Planned_NotRun",
+  "newTestsPassed": 0,
+  "cases": [
+    {
+      "id": "PPV01",
+      "trigger": "OrdinarySevenFamilies",
+      "expected": "New seven kinds in ordinary complete reads",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV02",
+      "trigger": "CompatibleSevenFamilies",
+      "expected": "Same seven kinds under paired windows",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV03",
+      "trigger": "MixedList",
+      "expected": "Ordered all-eleven-kind list and heterogeneous union metadata",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV04",
+      "trigger": "EmptySingleton",
+      "expected": "Empty and singleton list/non-list shape regressions",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV05",
+      "trigger": "FloatNaN",
+      "expected": "Captured NaN representation and annotations preserved",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV06",
+      "trigger": "FloatInfinities",
+      "expected": "Both signs of infinity, both float/double",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV07",
+      "trigger": "NegativeZero",
+      "expected": "Stored sign bit preserved for float/double",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV08",
+      "trigger": "QNamePrefix",
+      "expected": "Same expanded name with distinct prefix stays distinct in captured representation",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV09",
+      "trigger": "QNameNotation",
+      "expected": "NOTATION/user tags retained with separately owned type evidence",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV10",
+      "trigger": "QNameNoNamespace",
+      "expected": "Empty prefix/namespace strings accepted",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV11",
+      "trigger": "MalformedQName",
+      "expected": "Null/empty local or null namespace/prefix reject",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV12",
+      "trigger": "TemporalKinds",
+      "expected": "Date/Time/DateTime kind and all fields retained",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV13",
+      "trigger": "TemporalFlags",
+      "expected": "Wrapper and XPathDateTime timezone flags/offset preserved without normalization",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV14",
+      "trigger": "ExtendedYears",
+      "expected": "Year zero and >9999 retained without DateTimeOffset conversion",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV15",
+      "trigger": "TemporalAnnotation",
+      "expected": "dateTimeStamp/g-calendar/user tags remain exact",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV16",
+      "trigger": "TemporalPrecision",
+      "expected": "Existing millisecond precision preserved; no invented fractions",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV17",
+      "trigger": "DurationLexical",
+      "expected": "Duration and derived lexical strings/tags retained without normalization",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV18",
+      "trigger": "NullDuration",
+      "expected": "Null lexical payload rejects",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV19",
+      "trigger": "StringUriBinary",
+      "expected": "Public annotated String carriers remain exact and already supported",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV20",
+      "trigger": "EnumOnlyDisposition",
+      "expected": "No fabricated Uri/Binary factory/public support claim",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV21",
+      "trigger": "MalformedTail",
+      "expected": "Malformed tail rejects after unsupported prefix",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV22",
+      "trigger": "AtomicAndMarkedRefusal",
+      "expected": "Default/non-atomic/already-marked/evidence-free cells reject",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV23",
+      "trigger": "Ownership",
+      "expected": "Foreign governing/declared/actual/origin/container evidence refuses",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV24",
+      "trigger": "AtomLimit",
+      "expected": "One-extra MoveNext refuses before excess Current",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV25",
+      "trigger": "NumericBounds",
+      "expected": "Existing integer/decimal digit/scale bounds apply in mixed lists",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV26",
+      "trigger": "NoRegistry",
+      "expected": "Success/empty/failure/retry do not change scalar registry count",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV27",
+      "trigger": "NoGetterReplay",
+      "expected": "Captured payloads/metadata not replaced by later provider getter mutation",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV28",
+      "trigger": "OrdinaryExpiry",
+      "expected": "All metadata/evidence/cursor access late-refuses before callbacks",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV29",
+      "trigger": "CompatibleExpiry",
+      "expected": "Same exact raw plus paired source/target revocation",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV30",
+      "trigger": "ProofTurnover",
+      "expected": "No latest proof or expired issuer revival across episodes",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV31",
+      "trigger": "OverlapReentry",
+      "expected": "Compatible full access remains serialized without cursor advance on refused overlap",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV32",
+      "trigger": "ResourceTail",
+      "expected": "Actual resource retention/drain through blocked access",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV33",
+      "trigger": "PlainEscape",
+      "expected": "Copied immutable values survive while evidence expires",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV34",
+      "trigger": "OtherExecutionProfiles",
+      "expected": "Wider complete support does not widen scalar/numeric/construction or other profiles",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV35",
+      "trigger": "OriginalFailure",
+      "expected": "Provider and enumeration/cleanup failure identity/order retained",
+      "status": "NotRun"
+    },
+    {
+      "id": "PPV36",
+      "trigger": "CostAndQualification",
+      "expected": "Caller cold/warm/tracing scope recorded; full/gates/API and actual hashes; no accepted owner budget",
+      "status": "NotRun"
+    }
+  ]
+}

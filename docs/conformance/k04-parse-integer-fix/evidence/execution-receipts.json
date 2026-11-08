@@ -1,0 +1,57 @@
+{
+  "regressionsBefore": {
+    "command": "dotnet test tests/Bosak.XPath.Standard.Tests -c Release --filter FullyQualifiedName~ParseIntegerTests",
+    "exitCode": 1,
+    "passed": 6,
+    "failed": 81,
+    "log": "regressions-before.log"
+  },
+  "regressionsInitial": {
+    "exitCode": 1,
+    "passed": 85,
+    "failed": 2,
+    "log": "regressions-after-initial.log",
+    "reason": "Two empty-value display expectations corrected to semantic empty assertions"
+  },
+  "regressionsAfter": {
+    "exitCode": 0,
+    "passed": 87,
+    "failed": 0,
+    "log": "regressions-after.log"
+  },
+  "build": {
+    "command": "dotnet build Bosak.sln -c Release",
+    "exitCode": 0,
+    "log": "solution-build.log"
+  },
+  "tests": {
+    "command": "dotnet test Bosak.sln -c Release --no-build",
+    "exitCode": 0,
+    "localHttpListenerAccess": true,
+    "log": "solution-tests.log",
+    "passed": 22198
+  },
+  "qt3": {
+    "command": "dotnet run --project tests/Bosak.XPath.Conformance -c Release --no-build",
+    "exitCode": 0,
+    "log": "qt3.log",
+    "totals": [
+      31161,
+      0,
+      660
+    ]
+  },
+  "qt4": {
+    "command": "dotnet run --project tests/Bosak.XPath.Conformance40 -c Release --no-build -- tests/qt4tests",
+    "environment": {
+      "BOSAK_QT4_GATE_ONLY": "1"
+    },
+    "exitCode": 0,
+    "log": "qt4.log",
+    "totals": [
+      8586,
+      0,
+      1893
+    ]
+  }
+}

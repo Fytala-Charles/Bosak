@@ -1,0 +1,30 @@
+89c90b4d5b6a216a4a37223e169d36e3a1a832bd
+2026-10-10T07:32:02+02:00
+2026-10-10T07:32:02+02:00
+feat(xpath40): REQ-123 sort-with cluster — fn:compare PR909 upgrade, array:sort-with, fn:is-NaN, fn:atomic-type-annotation, $map?$var lookup keys (#112)
+
+- fn:compare (frozen XPath40, 3.1 path byte-identical): comparands relaxed to
+  xs:anyAtomicType? per PR909 — exact BigInteger cross-numeric ordering
+  ((double)3.1 > (decimal)3.1, (float)3.1 < (decimal)3.1, 2e0 = 2), NaN below
+  -INF with NaN = NaN, +0 = -0, booleans, hex/base64 by decoded octets,
+  QName by {URI, local}, all duration subtypes by un-normalized
+  (months, days, seconds) tuple (P2Y > P1000D, PT1H = PT60M), g* types on the
+  UTC instant with missing tz = implicit timezone (PR2256; String-kind g values
+  now bypass the string branch), mixed kinds -> XPTY0004
+- fn:sort-with: comparator validation runs before the empty-input shortcut
+  (sort-with((), ()) -> XPTY0004)
+- new array:sort-with#2 (frozen XPath40)
+- new fn:is-NaN#1 (atomizing: arrays contribute members, maps/functions
+  FOTY0013, empty/multi XPTY0004)
+- new fn:atomic-type-annotation#1 record: name/is-simple/variety/base-type()/
+  primitive-type()/matches()/constructor(); XDM-natural type inferred from the
+  value kind when no explicit annotation is stored
+- parser PR2962: lookup keys accept variable references (?$var)
+- harness: DependencyFilter40 marks typedData unsupported (no PSVI-typed
+  sources); fn-sort-with + array-sort-with promoted into GatedSets (215 sets)
+- qt4tests: sort-with cluster 49/0/0, fn-is-NaN 14/0/2, fn-atomic-type-
+  annotation 2/0/4, fn-compare 220/13 exploratory (was 107 failures)
+- gates: dotnet test 3,570/0 + LanguageServer 72/72, QT3 31,142/0/679,
+  XSLT smoke 162/0/26, gate-only 7,764/0/1,833
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

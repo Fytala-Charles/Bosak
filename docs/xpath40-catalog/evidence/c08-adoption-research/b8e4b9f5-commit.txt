@@ -1,0 +1,6 @@
+b8e4b9f510543c04d88a7c10ee2af28808a0fd5c
+2026-10-10T18:36:23+02:00
+2026-10-10T18:36:23+02:00
+feat(xpath): REQ-123 destructuring-let cluster — XPath 4.0 destructuring let bindings (qt4 gate 221 → 223) (#129)
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

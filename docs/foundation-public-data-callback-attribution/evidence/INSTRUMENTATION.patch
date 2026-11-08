@@ -1,0 +1,111 @@
+--- TA-50/NativeContainerAdapter.cs
++++ instrumented/NativeContainerAdapter.cs
+@@ -16,6 +16,7 @@
+ //                      | Charles Korthout | 0.3   | 06-11-2026     | Add original element facts, private XML projection and exact node ownership.              |
+ //                      | Charles Korthout | 0.4   | 06-11-2026     | Add strict assessment delegation and explicit original-source output lineage.             |
+ //                      | Charles Korthout | 0.5   | 07-11-2026     | Check immutable private output liveness without repeated XML serialization.               |
++//                      | Charles Korthout | 0.6   | 07-11-2026     | Count observed provider boundary callbacks without removing checks.                      |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+@@ -42,7 +43,7 @@
+             _handles.TryAdd(declaration.Type, new Handle(this, declaration.Type));
+         }
+     }
+-    ISchemaAuthority ISchemaAssessor.Authority => this;
++    ISchemaAuthority ISchemaAssessor.Authority => ProviderDiagnostics.Observe(0, this);
+     SchemaLanguageVersion ISchemaAssessor.SchemaLanguage => SchemaLanguageVersion.Xsd11;
+     string ISchemaAssessor.AssessmentProfile => "preassessed-native-decimal-container-prototype/" + _native.Profile;
+     SchemaResult<ISchemaAssessmentAdvisor> ISchemaAssessor.Bind(IQuerySemanticEnvironment environment, CancellationToken token)
+@@ -55,8 +56,8 @@
+             return Outcome<ISchemaAssessmentAdvisor>.Unsupported();
+         return Outcome<ISchemaAssessmentAdvisor>.Supported(new Advisor(this, environment));
+     }
+-    bool ISchemaAuthority.Owns(ISchemaComponentHandle component) => component is Handle h && ReferenceEquals(h.Owner, this) &&
+-        _handles.TryGetValue(h.Component, out var issued) && ReferenceEquals(issued, h);
++    bool ISchemaAuthority.Owns(ISchemaComponentHandle component) => ProviderDiagnostics.Observe(10, component is Handle h && ReferenceEquals(h.Owner, this) &&
++        _handles.TryGetValue(h.Component, out var issued) && ReferenceEquals(issued, h));
+     SchemaResult<ISchemaComponentHandle> ISchemaAuthority.ResolveType(SchemaExpandedName name, CancellationToken token)
+     {
+         token.ThrowIfCancellationRequested();
+@@ -110,16 +111,18 @@
+             if (!ReferenceEquals(document.Schema, owner._native)) throw new ArgumentException("Foreign native assessor.");
+             return new Input(this, document);
+         }
+-        ISchemaAssessor ISchemaAssessmentAdvisor.Assessor => owner;
+-        IQuerySemanticEnvironment ISchemaAssessmentAdvisor.QueryEnvironment => environment;
+-        bool ISchemaAssessmentAdvisor.OwnsAssessment(ISchemaAssessmentOrigin origin) => origin is Origin o && ReferenceEquals(o.Input.Owner, this) || origin is AttemptOrigin attempt && ReferenceEquals(attempt.Owner, this);
+-        bool ISchemaAssessmentAdvisor.OwnsNodeFacts(ISchemaNodeFacts facts) => facts is Facts f && ReferenceEquals(f.Input.Owner, this) && f.Input.IsAvailable;
++        ISchemaAssessor ISchemaAssessmentAdvisor.Assessor => ProviderDiagnostics.Observe(1, owner);
++        IQuerySemanticEnvironment ISchemaAssessmentAdvisor.QueryEnvironment => ProviderDiagnostics.Observe(2, environment);
++        bool ISchemaAssessmentAdvisor.OwnsAssessment(ISchemaAssessmentOrigin origin) =>
++            ProviderDiagnostics.Observe(4, origin is Origin o && ReferenceEquals(o.Input.Owner, this) || origin is AttemptOrigin attempt && ReferenceEquals(attempt.Owner, this));
++        bool ISchemaAssessmentAdvisor.OwnsNodeFacts(ISchemaNodeFacts facts) =>
++            ProviderDiagnostics.Observe(5, facts is Facts f && ReferenceEquals(f.Input.Owner, this) && f.Input.IsAvailable);
+         bool ISchemaAssessmentAdvisor.OwnsNode(IXdmNode node, ISchemaNodeFacts facts, ISchemaAssessmentInput input, ISchemaAssessmentOrigin origin) =>
+-            node is ProjectedNode n && facts is Facts f && ReferenceEquals(n.State, f) && ReferenceEquals(f.Node, n) && ReferenceEquals(n.Input, input) &&
+-            ReferenceEquals(f.Input, input) && ReferenceEquals(f.Input.Owner, this) && ReferenceEquals(f.Input.Origin, origin) && f.Input.IsAvailable;
++            ProviderDiagnostics.Observe(6, node is ProjectedNode n && facts is Facts f && ReferenceEquals(n.State, f) && ReferenceEquals(f.Node, n) && ReferenceEquals(n.Input, input) &&
++            ReferenceEquals(f.Input, input) && ReferenceEquals(f.Input.Owner, this) && ReferenceEquals(f.Input.Origin, origin) && f.Input.IsAvailable);
+         bool ISchemaAssessmentAdvisor.OwnsTypedValue(ISchemaTypedValue value, ISchemaAssessmentInput input, ISchemaAssessmentOrigin? originalAssessment) =>
+-            value is Container c && ReferenceEquals(c.Input.Owner, this) && ReferenceEquals(c.Input, input) && ReferenceEquals(c.Input.Origin, originalAssessment) && c.Input.IsAvailable;
+-        void ISchemaAssessmentAdvisor.ThrowIfUnavailable(CancellationToken token) => token.ThrowIfCancellationRequested();
++            ProviderDiagnostics.Observe(7, value is Container c && ReferenceEquals(c.Input.Owner, this) && ReferenceEquals(c.Input, input) && ReferenceEquals(c.Input.Origin, originalAssessment) && c.Input.IsAvailable);
++        void ISchemaAssessmentAdvisor.ThrowIfUnavailable(CancellationToken token) { ProviderDiagnostics.Hit(3); token.ThrowIfCancellationRequested(); }
+         ISchemaAssessmentResult ISchemaAssessmentAdvisor.Assess(SchemaAssessmentRequest request, CancellationToken token)
+         { return AssessStrict(request, token); }
+         SchemaResult<ISchemaTypedValue> ISchemaAssessmentAdvisor.ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode, CancellationToken token)
+@@ -167,11 +170,11 @@
+         IXdmNode ISchemaAssessmentInput.Root { get { Check(default); return _root; } }
+         ISchemaSourceBinding ISchemaAssessmentInput.Source => _source;
+         ISchemaSnapshotBinding ISchemaAssessmentInput.Snapshot => _snapshot;
+-        bool ISchemaAssessmentInput.OwnsNode(IXdmNode node) => IsAvailable && _nodes.Contains(node);
++        bool ISchemaAssessmentInput.OwnsNode(IXdmNode node) => ProviderDiagnostics.Observe(9, IsAvailable && _nodes.Contains(node));
+         void ISchemaAssessmentInput.ThrowIfUnavailable(CancellationToken token) => Check(token);
+         internal void Check(CancellationToken token)
+         {
+-            token.ThrowIfCancellationRequested(); ObjectDisposedException.ThrowIf(!IsAvailable, this);
++            ProviderDiagnostics.Hit(8); token.ThrowIfCancellationRequested(); ObjectDisposedException.ThrowIf(!IsAvailable, this);
+             // The cloned tree is private; ProjectedNode exposes no mutable XObject.
+             // RequestInput has a separate mutable projection and keeps its mutation guard.
+         }
+@@ -184,7 +187,7 @@
+         {
+             private int _closed;
+             /// <inheritdoc/>
+-            public void ThrowIfUnavailable(CancellationToken token) { ObjectDisposedException.ThrowIf(Volatile.Read(ref _closed) != 0, this); input.Check(token); }
++            public void ThrowIfUnavailable(CancellationToken token) { ProviderDiagnostics.Hit(11); ObjectDisposedException.ThrowIf(Volatile.Read(ref _closed) != 0, this); input.Check(token); }
+             /// <inheritdoc/>
+             public void Dispose() { if (Interlocked.Exchange(ref _closed, 1) == 0) Interlocked.Increment(ref input.Releases); }
+         }
+--- TA-50/NativeNodeProjection.cs
++++ instrumented/NativeNodeProjection.cs
+@@ -15,6 +15,7 @@
+ //                      | Charles Korthout | 0.2   | 06-11-2026     | Guard exposed XML snapshot against mutation through provider node projections.           |
+ //                      | Charles Korthout | 0.3   | 06-11-2026     | Add original element facts, private XML projection and exact node ownership.              |
+ //                      | Charles Korthout | 0.4   | 06-11-2026     | Use retained owner fields without duplicate primary-constructor capture.                  |
++//                      | Charles Korthout | 0.5   | 07-11-2026     | Count node metadata reads without altering facts or callback guards.                      |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System.Xml.Linq;
+@@ -57,14 +58,14 @@
+     {
+         internal readonly Input Input = input;
+         internal readonly ProjectedNode Node = node;
+-        ISchemaComponentHandle ISchemaNodeFacts.Type { get { Input.Check(default); return Input.Owner.Type(native); } }
+-        ISchemaComponentHandle ISchemaNodeFacts.Declaration { get { Input.Check(default); return Input.Owner.Declaration(native); } }
+-        ISchemaAssessmentOrigin ISchemaNodeFacts.Origin { get { Input.Check(default); return Input.Origin; } }
+-        bool ISchemaNodeFacts.HasNoTypedValue { get { Input.Check(default); return native.HasNoTypedValue; } }
+-        bool ISchemaNodeFacts.IsNilled { get { Input.Check(default); return native.IsNilled; } }
++        ISchemaComponentHandle ISchemaNodeFacts.Type { get { ProviderDiagnostics.Hit(12); Input.Check(default); return Input.Owner.Type(native); } }
++        ISchemaComponentHandle ISchemaNodeFacts.Declaration { get { ProviderDiagnostics.Hit(13); Input.Check(default); return Input.Owner.Declaration(native); } }
++        ISchemaAssessmentOrigin ISchemaNodeFacts.Origin { get { ProviderDiagnostics.Hit(14); Input.Check(default); return Input.Origin; } }
++        bool ISchemaNodeFacts.HasNoTypedValue { get { ProviderDiagnostics.Hit(15); Input.Check(default); return native.HasNoTypedValue; } }
++        bool ISchemaNodeFacts.IsNilled { get { ProviderDiagnostics.Hit(16); Input.Check(default); return native.IsNilled; } }
+         SchemaResult<ISchemaTypedValue> ISchemaNodeFacts.ReadTypedValue(CancellationToken token)
+         {
+-            Input.Check(token);
++            ProviderDiagnostics.Hit(17); Input.Check(token);
+             if (native.HasNoTypedValue) throw new InvalidOperationException("FOTY0012: Native element has no typed value.");
+             return value is null ? Outcome<ISchemaTypedValue>.Unsupported() : Outcome<ISchemaTypedValue>.Supported(value);
+         }

@@ -1,0 +1,291 @@
+{
+  "originalCases": 57,
+  "allFinalPassed": true,
+  "cases": [
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"1 eq 0 and a eq 2\", children: \"<a>2</a><a>3</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"-2\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"2\", profile: \"decimal-sequence-assertions-v3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"1\", children: \"<b>9</b>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.SingularProjection_RequiresExactlyOnePresentMatch(count: 2)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.LaterRepeatedValue_StillRequiresExactDecimal(second: \"bad\", expected: Invalid)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.RepeatedStates_AreDistinctEvenWhenValuesAreEqual",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a le 3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.LaterRepeatedValue_StillRequiresExactDecimal(second: \"1e2\", expected: Invalid)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"a = 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a lt 3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.XQueryCopies_RetainOccurrenceStateAndOwnership(preserve: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a ge 1\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a gt 1\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"+2\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"1 eq 1 or a eq 2\", children: \"<a>2</a><a>3</a>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"1\", maximum: \"1\", profile: \"decimal-sequence-assertions-v1\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"1\", maximum: \"2\", profile: \"decimal-sequence-assertions-v3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"+0\", maximum: \"2\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \" 01 \", maximum: \" 002 \", profile: \"decimal-sequence-assertions-v3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.SingularProjection_RequiresExactlyOnePresentMatch(count: 1)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"2\", maximum: \"2\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"a eq 2\", children: \"\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<x>0</x><b>9</b>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"0\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<b>9</b><a>1</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"1 eq 1\", children: \"<a>2</a><a>3</a>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"1\", children: \"<a>1</a><a>2</a><b>9</b>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.LaterRepeatedValue_StillRequiresExactDecimal(second: \"0.00000000000000000000000000001\", expected: Unsupported)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"01\", profile: \"decimal-sequence-assertions-v2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"sum(a) gt 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a eq a\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.LaterRepeatedValue_StillRequiresExactDecimal(second: \"79228162514264337593543950336\", expected: Unsupported)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"a[1] eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<a>1</a><a>2</a><a>3</a><b>9</b>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<a>1</a><b>9</b><a>2</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.TotalMaximumBudget_AdmitsSixteenAndRefusesSeventeen",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a ne 2\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.XQueryCopies_RetainOccurrenceStateAndOwnership(preserve: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"2 eq a\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"1\", children: \"<a>1</a><b>9</b>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"a eq 2\", children: \"<a>2</a>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"9999999999999999999999999999999999\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a eq 2\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"16\", profile: \"decimal-sequence-assertions-v3\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<a>1</a><a>2</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<b>9</b>\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"17\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.ContiguousMatching_EnforcesCountsAndOrder(minimum: \"0\", children: \"<b>9</b><x>0</x>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.WiderAssertionGrammar_RemainsUnsupported(expression: \"count(a) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.AssertionEvaluation_RetainsEmptyAndShortCircuitBehavior(expression: \"a eq 2\", children: \"<a>3</a>\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.XsltCopies_RetainBothOccurrencesInOrder",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"a eq b\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.SingularProjection_RequiresExactlyOnePresentMatch(count: 0)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.MultiItemValueComparison_IsAssertionInvalid(expression: \"2 ne a\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.RepeatedDecimalAssessmentTests.OccurrenceBounds_SelectProfileOrRefuse(minimum: \"0\", maximum: \"unbounded\", profile: null)",
+      "before": "Passed",
+      "after": "Passed"
+    }
+  ]
+}

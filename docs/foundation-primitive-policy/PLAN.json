@@ -1,0 +1,28 @@
+{
+  "sourceVersion": "1.80.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T05",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-T04",
+      "status": "CorePolicySelected_ImplementationPending"
+    },
+    {
+      "id": "PV-T05",
+      "status": "Next_ElevenPublicFactoryKindCompleteTransport"
+    },
+    {
+      "id": "PV-T06",
+      "status": "RequiredEnumOnlyRepresentationDisposition"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderBudgetAcceptancePending"
+    }
+  ]
+}

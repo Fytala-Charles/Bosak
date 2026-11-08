@@ -1,0 +1,25 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Processor profile: Legacy
+Test sets: 234
+Filter: source-document
+Mode: schema-aware (schema_aware / schema-import features un-gated)
+
+  Starting: source-document ...
+  RUN  non-stream-103
+  SKIP non-stream-103: environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)
+  Done: source-document (1 tests, 0 passed, 0 failed, 1 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   59
+Passed:  0
+Failed:  0
+Skipped: 59
+Unselected: 58
+Selected: 1
+Selected skipped: 1
+Missing test sets: 0
+
+Pass rate: 0.0%

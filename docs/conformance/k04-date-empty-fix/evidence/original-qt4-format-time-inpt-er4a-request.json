@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "tests/qt4tests/fn/format-time.xml", "Name": "format-time-inpt-er4a", "expression": "format-time(xs:time('12:12:12'), \"[H01]\", ())", "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-string-value>12</assert-string-value>\n      </result>\n   "}

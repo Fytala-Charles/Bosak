@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 08-11-2026     | Normalize command document URIs consistently with synchronization.                       |
 // ===========================================================================================================================================================
 using System;
 using System.Threading;
@@ -24,6 +25,7 @@ using Bosak.XQuery.Api;
 using MediatR;
 using Newtonsoft.Json.Linq;
 using OmniSharp.Extensions.JsonRpc;
+using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Workspace;
@@ -69,7 +71,8 @@ public class ExecuteCommandHandler : ExecuteCommandHandlerBase
         }
         else
         {
-            var uri = value.Value?.ToString() ?? string.Empty;
+            // Match the representation used by typed didOpen/didChange notifications.
+            var uri = DocumentUri.From(value.Value?.ToString() ?? string.Empty).ToString();
             if (!_documents.TryGet(uri, out var text))
             {
                 language = null;

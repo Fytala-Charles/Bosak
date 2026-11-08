@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.76.0",
+  "historicalAudit": "docs/foundation-r3-scope/STATUS.json",
+  "completedWork": [
+    "AH-01",
+    "AH-02",
+    "AH-03"
+  ],
+  "nextCoreTask": "PV-01",
+  "requirementsWaived": 0,
+  "r3Complete": false,
+  "publicProposedTypePresence": {
+    "present": 46,
+    "total": 47,
+    "missing": 1
+  },
+  "remainingPublicTypes": [
+    "Bosak.XPath.Core.Schema.SchemaAtomics"
+  ],
+  "scope": "AH-02/AH-03 completion is bounded ordinary host coverage only. Schema-aware, broad numeric/assessment/container and native/owner requirements remain represented and unwaived.",
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false
+}

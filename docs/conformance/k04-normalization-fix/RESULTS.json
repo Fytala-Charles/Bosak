@@ -1,0 +1,50 @@
+{
+  "status": "Complete for pinned FULLY conversion; other normalization contracts remain open",
+  "date": "2026-10-28",
+  "slice": "K04-C21",
+  "sourceBase": "4ff820672daa9cd74472b7ddc28105232cedeb1f",
+  "candidateVersion": "1.29.1",
+  "publishedVersion": "1.26.3",
+  "newRegressionRows": 135,
+  "baselineFailed": 90,
+  "baselinePassed": 45,
+  "finalSolutionPassed": 23500,
+  "solutionProjects": 10,
+  "solutionEvidenceBasis": "Nine unchanged green projects from complete solution run plus fresh complete Standard.Tests after a test-rendering-only correction",
+  "standardFinalPassed": 13551,
+  "xsltPassed": 8196,
+  "unicodeCorpusCases": 20034,
+  "unicodeCorpusEquations": 200340,
+  "unicodeScalarClassifications": 1112064,
+  "unicodeIdentityChecks": 1094978,
+  "unicodeMismatches": 0,
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4": [
+    8895,
+    0,
+    1914
+  ],
+  "normalizationQt3": [
+    42,
+    0,
+    6
+  ],
+  "normalizationQt4": [
+    42,
+    2,
+    6
+  ],
+  "correctedReviewControls": 24,
+  "remainingReviewControls": 5,
+  "correctedPositiveOriginals": 2,
+  "conditionalNegativeOriginalsRetained": 4,
+  "gatedSets": 229,
+  "experimentalPasses": 11,
+  "admissionChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false
+}

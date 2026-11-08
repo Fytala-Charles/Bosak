@@ -1,0 +1,7 @@
+{
+  "source": "docs/conformance/k04-pragma-fallback/evidence/solution-receipt.json",
+  "receiptSha256": "5071375feb77df9dec226f688ef8b0bbfbc689b7a36470236d9a4a40f8d72d56",
+  "passed": 24164,
+  "regressionsPassed": 82,
+  "disposition": "Inherited from C37. No implementation or normal binary changes; qualification does not rebuild or rerun solution tests."
+}

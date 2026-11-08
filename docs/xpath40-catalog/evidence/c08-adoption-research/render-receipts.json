@@ -1,0 +1,71 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/c08-render/README.md.html",
+      "sha256": "a4d0abe64d444ee6ef3d67d4d5f4c1c8017011c601c788547b140850c962debf"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/c08-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6178d461168c8ff2c1b431a633a652abd9ab49b5d43e678988d5103a32408a63"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/c08-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "1a7ab3dcb1293359252e7665b819816ee39072458095112dbbd2c0aab9c4be35"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/c08-render/docs_INTEGRATION.md.html",
+      "sha256": "0828c14e18018ff7633cf4db00fe3911ca75c9586eefd21c878b9e097d56d514"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/c08-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "b8208fb9ff012355282ba847bb7a443b1cee4e215acca175f234b2a68892567f"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/c08-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "d8f34b273bfedde2e8041dcf28bf3ceecf7ae58d3d7ff9ac545e0641ae29bb61"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "3aba187defa2bf4b777be640974171498fb1f1128f913f30993956f057d1784b"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "8351f8b8d02e1c1b530254297877bfbca8ca445569a62625d1f8a70c17791962"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "398fd2f2b7247987a701c07a363fba306a816a2f5e44de1c0ae77f5e1b38dec5"
+    },
+    {
+      "source": "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_SUPPLEMENTARY-COVERAGE-AUDIT.md.html",
+      "sha256": "442987ef35f227aa4592cb43a08fce1687de0f98a228cb2a33310adbd8762791"
+    },
+    {
+      "source": "docs/xpath40-catalog/PROVENANCE.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_PROVENANCE.md.html",
+      "sha256": "998c3f7d7be0c2ccbe77cde6d5b0bfc094b0b7f3726a70b18d4a69476ff22fb2"
+    },
+    {
+      "source": "docs/xpath40-catalog/ADOPTION-HISTORY-RESEARCH.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_ADOPTION-HISTORY-RESEARCH.md.html",
+      "sha256": "ecbb077ec0aa0c679c658419baa0bb2f3e8784a5840ba8a17da90b3a65e2e46b"
+    },
+    {
+      "source": "docs/xpath40-catalog/LEGACY-ADOPTION-POLICY-PROPOSAL.md",
+      "html": ".guard-tmp/c08-render/docs_xpath40-catalog_LEGACY-ADOPTION-POLICY-PROPOSAL.md.html",
+      "sha256": "98b50f9c14d0de0bf32fbe727464641603c1a038e10ed33f641d6ba9a5a1a06d"
+    }
+  ]
+}

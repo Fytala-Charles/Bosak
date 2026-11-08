@@ -12,3 +12,6 @@ out/test/**
 *.bak
 
 test/**
+
+*.vsix
+package-lock.json

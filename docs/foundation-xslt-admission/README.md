@@ -1,0 +1,5 @@
+# TA-29: separate admission and rollback outcomes
+
+Development **1.73.0** qualifies [TA-29 separate admission outcomes](IMPLEMENTATION.md), the first internal AH-03 prerequisite: **25,948/0** tests, including **12 new controls**. Admission and reverse-order rollback errors retain their original identities and nested aggregate boundaries; the existing throwing entry retains primary-first error behavior. Public declarations/value layouts/friends/references remain unchanged (**312 types / 6,386 rows**), as do QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** (+11 experimental) and exact skip maps. AH-03 public XSLT/capture/final outcomes remain open. This is an internal prerequisite checkpoint, not completion of AH-03 or a publication candidate; owner/native/budget/freeze and release gates remain pending. No package, commit, push or publication.
+
+Read the [implementation](IMPLEMENTATION.md), [adoption](ADOPTION.json), [status](STATUS.json), [qualification verifier](tools/verify.py) and [package preflight](evidence/PACKAGE-PREFLIGHT.json). Historical TA-28 evidence remains sealed.

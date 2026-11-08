@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O4-Core",
+  "packet": "O4",
+  "owner": "Core",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "414496dbe2b8c7889f2a00847852189aa4ec9a67",
+  "signer": "Codex \u2014 Core engineering design review",
+  "date": "2026-11-01",
+  "profile": "Core design disposition of the compiled R2 declaration draft only; no production behavior, external owner, R4, C45 or freeze acceptance",
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": "Core selects host acquisition of actual owner resources before admission, cleanup of rejected resources by the host, and admission-owned release obligations only after successful transfer. Engine operation leases retain all admitted sources until the actual raw callback/task ends. Coordinator, source snapshot, advisor and engine admission lifetimes stay distinct. Ordinary XML must use a neutral source/lifetime route with absent assessment, not an issuer placeholder; the existing private schema evidence kernel is not that public route. W1 must separate neutral admission from optional schema evidence composition without adding concrete Schema/XmlDb dependencies."
+    },
+    {
+      "id": "O4-Q2",
+      "answer": "Core requires preservation of the original acquisition/work/cancellation exception followed by all cleanup failures, in attempted reverse order, without flattening provider exception objects. Source inspection of XmlDb 080859542786d514150d74f7ac9dd1ef56c6399a shows catch/finally paths where throwing cleanup can mask an earlier failure. Core\u2019s 57 synthetic host controls do not qualify or fix those provider paths. XmlDb must return actual fault injection, fix pin or an explicit supported limit. No new required Core disposal/acquisition method is demonstrated by this source risk."
+    },
+    {
+      "id": "O4-Q3",
+      "answer": "Core selects immutable same-session membership, explicit source reads and guarded callback-borrowed access. Engine close revokes admission and Drain tracks raw work; canceling a wait never owns cleanup. Actual resource release remains subject to the owner contract and host retention. Cached Current, raw/nested graphs, constant defaults and copied scalars do not acquire a universal all-access disposal guarantee. Sequential scope is the baseline; provider-supported reentry/concurrency must be stated and tested. No required Dispose is added to IXdmNode or sequence interfaces."
+    },
+    {
+      "id": "O4-Q4",
+      "answer": "Core retains the proposed IQueryOperationLifetime.Enter and IQueryOperationLease availability/release concepts: resources are already acquired; Enter is synchronous admission, not asynchronous I/O acquisition or store ownership transfer. There is no currently demonstrated additional Core signature for the audited lifetime paths. That finding is scoped, not a waiver of XmlDb\u2019s O1/O4 feasibility return. The candidate\u2019s exact implementation, actual reader/generation tests, old-store/unchanged-binary compatibility and PF-04/PF-05 workloads remain R4 obligations; product pins/storage are unchanged."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-r2-ledger/DECISIONS.md",
+      "sha256": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "docs/release-planning/OWNER-CAPABILITIES.md",
+      "sha256": "18553a52a7ee740a0bea72c89adba4f92dfaa5668cdd4b82753137665ec774c6"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs",
+      "sha256": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs",
+      "sha256": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "docs/foundation-host-acquisition-rollback/evidence/INPUTS.json",
+      "sha256": "f96b2196fb573054146c447f334a893ca38ccce000d263370ec86da570207cb0"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

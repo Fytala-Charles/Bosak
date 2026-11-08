@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.64.0",
+  "candidateVersion": "1.65.0",
+  "beforeHashes": {
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "00d7940bae654a7e62949c393a86546beac1b2c5e33ede94b3f7cb756460bc4c",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "df12d9b1877ddfe22a52416801a19bc43b8e4b38f157a09427ffb018fc320d12",
+    "src/Bosak.XPath.Core/Schema/QueryOperationLifetime.cs": "59c873444b045a93f6e77693dc1f4855dfd5c5fbc35ce996e65943981ceca622",
+    "src/Directory.Build.props": "9d0a220ac7fa0cacf7e6a79e46706722d61eac44fa9a6bdc05145033f4b760eb",
+    "docs/foundation-sourcefree-construction-policy/MANIFEST.json": "7f5fd0e556e185f623f9d67cf1d313e2c94cf727c48e16586bafe1cef3061166"
+  },
+  "basis": "TA-18 POLICY.md and LC01-LC16; internal host lifetime mechanics only. The exact 2017 dated W3C sections in TA-18 SPEC-BASIS.md remain the semantic boundary. No constructor, cast, XDM or lexical behavior is activated. No public contract additions.",
+  "exclusions": "Source-free construction and SC01-SC40 remain inactive; native/all-host ownership and publication remain separate."
+}

@@ -1,0 +1,20 @@
+{
+  "id": "W1-06",
+  "status": "Passed",
+  "trxSha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e",
+  "results": [
+    {
+      "executionId": "37a6541c-a7c7-48d5-99d5-3111b10637f6",
+      "testId": "3f061ea8-6d8c-a729-721d-e363208922c0",
+      "testName": "Bosak.XPath.Runtime.Tests.OrdinarySourceAdmissionTests.W1_06_ForeignPoisonNode",
+      "computerName": "CHARLES",
+      "duration": "00:00:00.0024215",
+      "startTime": "2026-11-03T18:06:50.1055016+01:00",
+      "endTime": "2026-11-03T18:06:50.1055016+01:00",
+      "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+      "outcome": "Passed",
+      "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+      "relativeResultsDirectory": "37a6541c-a7c7-48d5-99d5-3111b10637f6"
+    }
+  ]
+}

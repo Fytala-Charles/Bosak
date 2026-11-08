@@ -1,0 +1,25 @@
+{
+  "readOnly": true,
+  "returns": [
+    {
+      "path": "D:\\Development\\Bosak.Schema.Public\\docs\\core-disposition-responses\\2026-11-03-v2\\BCAP-O1-Schema.v2.response.json",
+      "sha256": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+      "decision": "AcceptWithScope",
+      "runtimeQualification": false,
+      "c45Accepted": false,
+      "apiFrozen": false,
+      "scope": "Agent-authored scoped design return over the original proposal,not1.81.0 actual-provider/runtime/budget acceptance"
+    },
+    {
+      "path": "D:\\Development\\Bosak.Schema.Public\\docs\\core-disposition-responses\\2026-11-03-v2\\BCAP-O2-Schema.v2.response.json",
+      "sha256": "e2737d309279ab23e192cc6c0de94ea75391d809bec60546067e867a9d9e4593",
+      "decision": "AcceptWithScope",
+      "runtimeQualification": false,
+      "c45Accepted": false,
+      "apiFrozen": false,
+      "scope": "Agent-authored scoped design return over the original proposal,not1.81.0 actual-provider/runtime/budget acceptance"
+    }
+  ],
+  "newOwnerAcceptanceReceived": false,
+  "messagesSent": false
+}

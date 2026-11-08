@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C23",
+  "sourceBase": "25d6d8179c42efb483a247c64e2e0ce6cb506e1f",
+  "kind": "Read-only admission review; exact proposed patch not applied",
+  "normalSourceIdentities": {
+    "AGENTS.md": "45d5fe518e886685abeee74269bcb7e944193fbc",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "686b673cb63efbfff7136bcf02b1860d7eb409e3",
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "d2dec917564c8a84eee5bc9d9c58f0abaaea10f1"
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "semanticAdoption": [
+    "docs/conformance/k04-normalization-fix/evidence/IMPLEMENTATION-PIN.json",
+    "docs/conformance/k04-normalization-options-fix/evidence/IMPLEMENTATION-PIN.json"
+  ],
+  "proposal": [
+    "Remove only repaired positive cbcl-fn-normalize-unicode-006 QT3 KnownSkip; retain other entries/guards",
+    "Promote only fn-normalize-unicode into qt4 GatedSets, from229to230",
+    "Update only exact QT3 expectation 31,164/0/657 to31,165/0/656"
+  ],
+  "limits": [
+    "No fixture/assertion/dependency filter/engine/version change",
+    "No admission before owner approval",
+    "No upstream/release/publication changes"
+  ]
+}

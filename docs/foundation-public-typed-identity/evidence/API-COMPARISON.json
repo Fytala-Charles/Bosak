@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "5c7ed4da8d58587adb8ef46958c9777987b3a65df2f7eee7b6a81c610ebd73b5",
+  "qualifiedInternalSlice": "TA-07-public-typed-identity-v1",
+  "scope": "Unchanged exported declarations, XdmValue field layout and friends. Public single-atomic typed identity activated through existing signatures; broader schema/native/freeze acceptance remains pending."
+}

@@ -1,0 +1,1 @@
+{"Suite":"qt4","Name":"parse-integer-904","kind":"Failed","message":"Expected error FORG0011, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."}

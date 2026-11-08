@@ -1,0 +1,5 @@
+{
+  "approvalSha256": "2e03632cc874d3e73e0f768a18c3cee5671c54c70643cf169b43bb0bba39a6b0",
+  "command": "python docs/foundation-xmldb-full-qualification/tools/run.py --lane integration",
+  "lane": "integration"
+}

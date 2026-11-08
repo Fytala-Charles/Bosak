@@ -1,0 +1,54 @@
+{"id":"none-transform-1","profile":"XPath31","result":"false","error":null}
+{"id":"none-transform-1","profile":"XPath40","result":"false","error":null}
+{"id":"none-transform-1","profile":"XPath40Experimental","result":"false","error":null}
+{"id":"none-transform-0","profile":"XPath31","result":"false","error":null}
+{"id":"none-transform-0","profile":"XPath40","result":"false","error":null}
+{"id":"none-transform-0","profile":"XPath40Experimental","result":"false","error":null}
+{"id":"none-load-xquery-module-2","profile":"XPath31","result":"true","error":null}
+{"id":"none-load-xquery-module-2","profile":"XPath40","result":"true","error":null}
+{"id":"none-load-xquery-module-2","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"none-scan-3","profile":"XPath31","result":"false","error":null}
+{"id":"none-scan-3","profile":"XPath40","result":"false","error":null}
+{"id":"none-scan-3","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"transform-transform-1","profile":"XPath31","result":"true","error":null}
+{"id":"transform-transform-1","profile":"XPath40","result":"true","error":null}
+{"id":"transform-transform-1","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"transform-transform-0","profile":"XPath31","result":"false","error":null}
+{"id":"transform-transform-0","profile":"XPath40","result":"false","error":null}
+{"id":"transform-transform-0","profile":"XPath40Experimental","result":"false","error":null}
+{"id":"transform-load-xquery-module-2","profile":"XPath31","result":"true","error":null}
+{"id":"transform-load-xquery-module-2","profile":"XPath40","result":"true","error":null}
+{"id":"transform-load-xquery-module-2","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"transform-scan-3","profile":"XPath31","result":"false","error":null}
+{"id":"transform-scan-3","profile":"XPath40","result":"false","error":null}
+{"id":"transform-scan-3","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"all-transform-1","profile":"XPath31","result":"true","error":null}
+{"id":"all-transform-1","profile":"XPath40","result":"true","error":null}
+{"id":"all-transform-1","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"all-transform-0","profile":"XPath31","result":"false","error":null}
+{"id":"all-transform-0","profile":"XPath40","result":"false","error":null}
+{"id":"all-transform-0","profile":"XPath40Experimental","result":"false","error":null}
+{"id":"all-load-xquery-module-2","profile":"XPath31","result":"true","error":null}
+{"id":"all-load-xquery-module-2","profile":"XPath40","result":"true","error":null}
+{"id":"all-load-xquery-module-2","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"all-scan-3","profile":"XPath31","result":"false","error":null}
+{"id":"all-scan-3","profile":"XPath40","result":"false","error":null}
+{"id":"all-scan-3","profile":"XPath40Experimental","result":"true","error":null}
+{"id":"none-loader-invocation","profile":"XPath31","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"none-loader-external-coercion","profile":"XPath31","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"none-loader-invocation","profile":"XPath40","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"none-loader-external-coercion","profile":"XPath40","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"none-loader-invocation","profile":"XPath40Experimental","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"none-loader-external-coercion","profile":"XPath40Experimental","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-invocation","profile":"XPath31","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-external-coercion","profile":"XPath31","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-invocation","profile":"XPath40","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-external-coercion","profile":"XPath40","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-invocation","profile":"XPath40Experimental","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"transform-loader-external-coercion","profile":"XPath40Experimental","result":null,"error":"FOQM0001: fn:load-xquery-module is not supported by this processor (no XQuery module loader)."}
+{"id":"all-loader-invocation","profile":"XPath31","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:m\u0027."}
+{"id":"all-loader-external-coercion","profile":"XPath31","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:typed\u0027."}
+{"id":"all-loader-invocation","profile":"XPath40","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:m\u0027."}
+{"id":"all-loader-external-coercion","profile":"XPath40","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:typed\u0027."}
+{"id":"all-loader-invocation","profile":"XPath40Experimental","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:m\u0027."}
+{"id":"all-loader-external-coercion","profile":"XPath40Experimental","result":null,"error":"FOQM0002: Unable to resolve the module URI \u0027urn:c06:typed\u0027."}

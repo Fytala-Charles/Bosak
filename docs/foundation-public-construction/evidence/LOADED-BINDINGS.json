@@ -1,0 +1,104 @@
+{
+  "allMatchExactCohorts": true,
+  "groups": {
+    "units": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Providers.Database",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "qt3": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "qt4": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ],
+    "final-units": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Providers.Database",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "final-qt3": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "final-qt4": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ],
+    "qualified-units": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Providers.Database",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "qualified-qt3": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "qualified-qt4": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ]
+  }
+}

@@ -4,6 +4,10 @@
   <p>21 October 2026</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited implemented nominal declaration**. Broader constructors/defaults/static/package/type conversion remain C03/C05/C06 scope limits. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
+**REQ-126 C03 complete — 26 October 2026:** [Constructor/type review](../CONSTRUCTOR-TYPE-RECONCILIATION.md) reconciles eight entries and all 49 focus constructors. All 1,333 asserted controls match across 1,357 observations; 245 focused schema/API/host tests pass. Bounded nominal defaults/static fields are now evidenced. Generic wide casts, decimal precision, schema/host context and broader conversion remain explicit boundaries; C02's atomic-annotation defect remains open. Ten closure workpackages remain; C04 is next. No engine/test/example/version/gate change or acceptance waiver; skips/Braid/extension work stays deferred. Earlier checkpoint counts are historical.
+
 ## 1. Name and Classification
 
 **Implemented bounded XSLT4.0 named-record behavior in public1.23.2; broader contracts remain separately scoped.** The historical deferred URL is retained. [Current review](../TYPE-PATTERN-GRAMMAR.md) separates constructor identity, structural annotation and noncoercing type/pattern tests.
@@ -49,6 +53,9 @@ Named records can be tested by named type/record patterns. [xsl:item-type](xslt-
 Preserves an identity boundary beyond fields but adds declaration/context coupling. This review does not certify every recursive/default/static/visibility/import/package/error edge, nor a standalone XPath named-declaration language.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-patterns. Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms. No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 New manifest checks use default Legacy host and effective version4.0, hence frozen XPath40. Legacy3.0 declaration/pattern refusals are explicit. Host selection, module/package identity, imports and authoring contexts need their own applicable tests; no exhaustive cross-context claim follows. No engine behavior changes.
 

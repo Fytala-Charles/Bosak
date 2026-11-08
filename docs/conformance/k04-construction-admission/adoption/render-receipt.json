@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/README.md.html",
+      "sha256": "9f1ebba88dd97f03d7a4f1328b610938b3bb5d640b504afdd8027b80a39eef12"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6512a954d273a615e8c30d5c1847e0a5c5cedc2a9a9df02737dcff1a630d29f4"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "5217367d84b996e09c3269d7c4c8f6d4f778717bca46bf9ff37df20c3e7b0b9c"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_INTEGRATION.md.html",
+      "sha256": "b45d18123cd7efa361ef141d79244bc2dea617e878d9247194579edb89926418"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "f440c1ff9305c937704471f528528117d5a7edbbe30d447e4841ffb5c92a12f9"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "ace76875bd06d008d82c96941b318bf3074f07c4b3270f5f8fc3026d815d20d6"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "d6d434cf6874acb1bbf16effbecf960acbb8dd4e6aa30ea36f6196eaba4ed650"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "0e693cfdf62f13e9f9c6cfdce3a61fce9152611732758b002d060f9525ae0b3a"
+    },
+    {
+      "source": "docs/conformance/k04-construction-admission/adoption/BASELINE-ADOPTION.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_conformance_k04-construction-admission_adoption_BASELINE-ADOPTION.md.html",
+      "sha256": "e0f6f84cda1894885b8a6391708ec931c5bc52b0c0180260ddf2e16374d640df"
+    },
+    {
+      "source": "docs/conformance/k04-construction-admission/adoption/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-construction-adoption-render/docs_conformance_k04-construction-admission_adoption_NEXT-SLICE.md.html",
+      "sha256": "5e4127acad82fa6d4fc3eb02ff001f788a9ce022bf2581670120045e263e6c8f"
+    }
+  ]
+}

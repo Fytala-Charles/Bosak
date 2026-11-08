@@ -1,0 +1,1404 @@
+{
+  "date": "2026-10-29",
+  "coreHead": "fd57955c64f0e3a967d32b61b692306c23ec292d",
+  "schemaHead": "8468f47511ef4ff741b952403f765cde2ea02176",
+  "method": "Read-only binary hashing; no replacement or consumer execution",
+  "priorSealedBinaryHashesMatch": true,
+  "groups": {
+    "XmlDb.baseline.tests": {
+      "workspaceRelativeDirectory": ".guard-tmp/xmldb-baseline/tests/Bosak.XmlDb.Xdm.Tests/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.XmlDb.Core.dll",
+          "bytes": 12288,
+          "sha256": "0b015b24799325e081f56140aa6c0fbaea79f1e0d4d000aee2105f08e0d0de18"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.pdb",
+          "bytes": 14148,
+          "sha256": "587ac3d2956f6e7ab50bd72b6ba3f6fc3e5a7c0fc07eae5acc32656e13e75581"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.xml",
+          "bytes": 7973,
+          "sha256": "a3e03976a162b119a4d9cbc22db5d64c05e4e151a63e27adfc72ea4a85be42a2"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.dll",
+          "bytes": 480256,
+          "sha256": "fc123f90fa6139a698ee4d259220f9293351eeb9fdf3fee2fd00a2492549bc40"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.pdb",
+          "bytes": 282872,
+          "sha256": "f632765ec76a2a0d6bb9b301839c44305121524651f74c40a4497fe3b283407b"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.xml",
+          "bytes": 27067,
+          "sha256": "6cd8613519f6e24f3a5afd9af3f3c06ba9cce467d0e7baeaf323e05086ca6e52"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.dll",
+          "bytes": 21504,
+          "sha256": "5d5b2b28dae2ac77202a0e1512fdcaa630eaea97f3b88050f8d6150636b88934"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.pdb",
+          "bytes": 18188,
+          "sha256": "8d5b418e4357cbc58747dded6ca5f8be1dca00d78f3d16c0bd05abc175f2f55d"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.Tests.deps.json",
+          "bytes": 22565,
+          "sha256": "568a6fecd25cae61518bb6ab7c1578f5a3af77d7afab21c301dca20a33afe7b6"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.Tests.dll",
+          "bytes": 23552,
+          "sha256": "117ca3c6d9bc95ecfe0ca52f7817b936c83b67cb926e4cf17e6cef4911fb7d82"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.Tests.pdb",
+          "bytes": 24608,
+          "sha256": "3982d51e35ca33070b1ce470d40d264344482a6fb101a2f4e6c35ceafed4dc69"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.Tests.runtimeconfig.json",
+          "bytes": 390,
+          "sha256": "a217d17be0661abf2717a26937c6e379c33542cb6f292fd3fc5a2d5113a9d6dc"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.Tests.xml",
+          "bytes": 3116,
+          "sha256": "939f2886abba96e08c12dcc17b74522666d01664d9aa3cdffe65eb1d6633fceb"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.xml",
+          "bytes": 4107,
+          "sha256": "25487891ad52bda890f9139d25e12b3122b40cefb520fd5001e6da66d4a5c770"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 128000,
+          "sha256": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 56832,
+          "sha256": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 226816,
+          "sha256": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 138240,
+          "sha256": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 329728,
+          "sha256": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 668160,
+          "sha256": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+        }
+      ]
+    },
+    "XmlDb.baseline.probe": {
+      "workspaceRelativeDirectory": ".guard-tmp/xmldb-baseline/probe/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.XmlDb.Core.dll",
+          "bytes": 12288,
+          "sha256": "0b015b24799325e081f56140aa6c0fbaea79f1e0d4d000aee2105f08e0d0de18"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.pdb",
+          "bytes": 14148,
+          "sha256": "587ac3d2956f6e7ab50bd72b6ba3f6fc3e5a7c0fc07eae5acc32656e13e75581"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.xml",
+          "bytes": 7973,
+          "sha256": "a3e03976a162b119a4d9cbc22db5d64c05e4e151a63e27adfc72ea4a85be42a2"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.dll",
+          "bytes": 480256,
+          "sha256": "fc123f90fa6139a698ee4d259220f9293351eeb9fdf3fee2fd00a2492549bc40"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.pdb",
+          "bytes": 282872,
+          "sha256": "f632765ec76a2a0d6bb9b301839c44305121524651f74c40a4497fe3b283407b"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.xml",
+          "bytes": 27067,
+          "sha256": "6cd8613519f6e24f3a5afd9af3f3c06ba9cce467d0e7baeaf323e05086ca6e52"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.dll",
+          "bytes": 21504,
+          "sha256": "5d5b2b28dae2ac77202a0e1512fdcaa630eaea97f3b88050f8d6150636b88934"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.pdb",
+          "bytes": 18188,
+          "sha256": "8d5b418e4357cbc58747dded6ca5f8be1dca00d78f3d16c0bd05abc175f2f55d"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.xml",
+          "bytes": 4107,
+          "sha256": "25487891ad52bda890f9139d25e12b3122b40cefb520fd5001e6da66d4a5c770"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 128000,
+          "sha256": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 56832,
+          "sha256": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 226816,
+          "sha256": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 138240,
+          "sha256": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 329728,
+          "sha256": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 668160,
+          "sha256": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+        },
+        {
+          "name": "Probe.deps.json",
+          "bytes": 6505,
+          "sha256": "58ed3f9b94eff185fc6b3444192f5cf7eab251c07d0b3768105297fc5258ba2a"
+        },
+        {
+          "name": "Probe.dll",
+          "bytes": 19456,
+          "sha256": "8e66249ea4f323b027e0aa5e8bd28553d2580239980e5296df27fcab98f14c22"
+        },
+        {
+          "name": "Probe.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        }
+      ]
+    },
+    "XmlDb.candidate.probe": {
+      "workspaceRelativeDirectory": ".guard-tmp/xmldb-candidate/probe/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.XmlDb.Core.dll",
+          "bytes": 12288,
+          "sha256": "2af2b12f663f7ea02c99d50fe8b8c39e321e1bfceb9804c43b82fb0e705ab1c0"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.pdb",
+          "bytes": 14148,
+          "sha256": "351ed885ef5e1171084957419450ed787780a8b1902478368a6f406bec6c5c4e"
+        },
+        {
+          "name": "Bosak.XmlDb.Core.xml",
+          "bytes": 7973,
+          "sha256": "a3e03976a162b119a4d9cbc22db5d64c05e4e151a63e27adfc72ea4a85be42a2"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.dll",
+          "bytes": 480256,
+          "sha256": "5c7086c90c0fa1b657324939b141452ece2dd48b2d39277b523c0f96626ea634"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.pdb",
+          "bytes": 282872,
+          "sha256": "1e5c8cf6402ebfcda04b2ead863e6173097dc434b65d58ac83b260a88276f012"
+        },
+        {
+          "name": "Bosak.XmlDb.Storage.xml",
+          "bytes": 27067,
+          "sha256": "6cd8613519f6e24f3a5afd9af3f3c06ba9cce467d0e7baeaf323e05086ca6e52"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.dll",
+          "bytes": 21504,
+          "sha256": "39d43e36a28572fc458d2ba79729a69ee81e583c0737059beae29182a53fe203"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.pdb",
+          "bytes": 18188,
+          "sha256": "6ac8becfec9f8d42bf201c0716987727efc921e27b794f0bcc748e0a8d34e241"
+        },
+        {
+          "name": "Bosak.XmlDb.Xdm.xml",
+          "bytes": 4107,
+          "sha256": "25487891ad52bda890f9139d25e12b3122b40cefb520fd5001e6da66d4a5c770"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "63a4eb2599f72673fd931b12b2e345340d3e0b2f47bec4418e9cddc21b470fa7"
+        },
+        {
+          "name": "Bosak.XPath.Api.pdb",
+          "bytes": 25856,
+          "sha256": "0d9d62d36fd0a5eb03c45d2f576497ed1348981303b2a2f5932cda5eb036eb40"
+        },
+        {
+          "name": "Bosak.XPath.Api.xml",
+          "bytes": 22891,
+          "sha256": "0233de729a1a32c3abf99edba64b3f81a3b370167b7d1ce48e82b428a13b503c"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 132608,
+          "sha256": "285d8dbaa2a3fb8647793712ac27bfc44c532eec0b694d6ab40ee500b9093028"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.pdb",
+          "bytes": 55464,
+          "sha256": "306a54a0a81c4d29581146d2a902f05c25b31133a107545d03fb5d9a85450776"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.xml",
+          "bytes": 92723,
+          "sha256": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 58880,
+          "sha256": "5d806074c7f66bf438667c5398b04cd13df5b6def358b2c1bebb0bf81aea3816"
+        },
+        {
+          "name": "Bosak.XPath.Core.pdb",
+          "bytes": 28616,
+          "sha256": "23e5d3785b38e2f36f16e41bed3fc75c01e21646c69681abc05ac05c01599481"
+        },
+        {
+          "name": "Bosak.XPath.Core.xml",
+          "bytes": 90383,
+          "sha256": "83527142f6ae95d2c2896e750c1bcfecb3bcd0a74c5a59bf58c24aed5bdb0e8f"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 230400,
+          "sha256": "836abeb13412c323e2050a6fef855df193e595c910b4d657a2bf7b87b849942c"
+        },
+        {
+          "name": "Bosak.XPath.Parser.pdb",
+          "bytes": 64792,
+          "sha256": "aad088de3e4be1f83f17bcd1cf3f5a5d61021d414b64eca8300877c498a48af1"
+        },
+        {
+          "name": "Bosak.XPath.Parser.xml",
+          "bytes": 168214,
+          "sha256": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 152064,
+          "sha256": "e08d3d8672968424e187dd43724958e5928facc8c1d539471b2fe61656e06b0c"
+        },
+        {
+          "name": "Bosak.XPath.Providers.pdb",
+          "bytes": 65092,
+          "sha256": "f2b62a06761e1a7ecdd2880c288c0c1cb24abead4d7daa37becbb8d15dd3d839"
+        },
+        {
+          "name": "Bosak.XPath.Providers.xml",
+          "bytes": 147514,
+          "sha256": "78cc8dd4f91ae924c602356d08a31dc05600cd59677709098748b2f5692bb986"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 332288,
+          "sha256": "4ed5be3f0cdd07b7cbbd78853205a630b10d3a286c58c6c6444ffc2e545a6606"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.pdb",
+          "bytes": 126016,
+          "sha256": "a531560f6280b7eec188cfbf7e9bcafb98272a1bafc57396fc1705142cc629eb"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.xml",
+          "bytes": 237734,
+          "sha256": "aef6e3c20565e368af5f905753e875b42686b2838baba16a55f840c7b7c6c880"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 721920,
+          "sha256": "1d460f9b5f2cad75bd893290d13034a5160d5c0a53818cc58c339ed43802c184"
+        },
+        {
+          "name": "Bosak.XPath.Standard.pdb",
+          "bytes": 178580,
+          "sha256": "494b746488a44a4f73304a0621d7fa3c72c4ef31723075b92ab5fde4f8889249"
+        },
+        {
+          "name": "Bosak.XPath.Standard.xml",
+          "bytes": 136989,
+          "sha256": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa"
+        },
+        {
+          "name": "Probe.deps.json",
+          "bytes": 5022,
+          "sha256": "7f0d8f6e9031a5643c4e2d8a37441689e5c030d01800518c410eb1be9971ba9f"
+        },
+        {
+          "name": "Probe.dll",
+          "bytes": 19456,
+          "sha256": "9876483c2b69a235d696d632f37dd6729ffe086822ca20bc9a94f1fb4d900fb0"
+        },
+        {
+          "name": "Probe.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        }
+      ]
+    },
+    "Braid.baseline.desktop": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-baseline/src/Bosak.Braid.Desktop/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Application.dll",
+          "bytes": 477184,
+          "sha256": "5658015438dade9de957a1ee2f772807c1c14f519f1e6044d929b2e8bda8390d"
+        },
+        {
+          "name": "Bosak.Braid.Application.pdb",
+          "bytes": 270264,
+          "sha256": "cc60b77117d91bf66304566c409a2b3c0e946c1757369dee17fece8fda164357"
+        },
+        {
+          "name": "Bosak.Braid.Application.xml",
+          "bytes": 396591,
+          "sha256": "8cf7658d803cc3c676d27d068dd9fa3ec22d5d9de984311102f4cd0af24b4a4d"
+        },
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "b2bd0ce47ca3a8d073322d7f09437b2e66c6cda4d171a7730beeaae873549d4c"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "9e3c5bc9e06c3a24570c17404e0df3e0bc2c76045f0b8e7e1fd80e4f27982042"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.deps.json",
+          "bytes": 30685,
+          "sha256": "3c8c0de42c36ceb1a4837aa70227a339c597079d5171d3b49a485b436ecc607d"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.dll",
+          "bytes": 13824,
+          "sha256": "58eb14b512a3570c6fd49ecaede5a63039abfe3fb0f874d6170eb027051d2a16"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.exe",
+          "bytes": 162304,
+          "sha256": "2810bd60b553cc67b5fedbf3aff5d21d85a5c3d77548ca32e21f77a67724878d"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.pdb",
+          "bytes": 16016,
+          "sha256": "bf8d4d7e31b96e8e8f89f4ba1948d8b40350881417654e0bccc9d8ca9af4f980"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.xml",
+          "bytes": 144,
+          "sha256": "23e45b405ff1963b85373b65ce2c8613a2957a9de6c52c02550200cd7b2b29a6"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.dll",
+          "bytes": 187904,
+          "sha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.pdb",
+          "bytes": 104136,
+          "sha256": "6c8d4c7c1a9b49290bb2b6464febbb2491a5b6dc253468f5660a033992d4612e"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.xml",
+          "bytes": 18463,
+          "sha256": "d254eed6d04414541f85e732739022c9c9831d15ee35238204b1e6217569e231"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.dll",
+          "bytes": 435712,
+          "sha256": "3ef5596ca88f4a2e1dfe663097d98d74689d8ed407582cca7b6fcc907492325c"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.pdb",
+          "bytes": 229772,
+          "sha256": "242d75013aa6985efe361b8d7485d2088e63b0e2d8f165899faa15a87adade3f"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.xml",
+          "bytes": 51348,
+          "sha256": "5c5be766e8b0e72a9374ee9b35cec48926560cf52f0b1c09499ec38fada213f1"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a"
+        },
+        {
+          "name": "Bosak.XPath.Api.pdb",
+          "bytes": 52016,
+          "sha256": "a2484a7f923117b7fca2febf037840a6719ec072726913a80cafe140bed4fd10"
+        },
+        {
+          "name": "Bosak.XPath.Api.xml",
+          "bytes": 22891,
+          "sha256": "0233de729a1a32c3abf99edba64b3f81a3b370167b7d1ce48e82b428a13b503c"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 128000,
+          "sha256": "c8e42d149b6caa4399536df9cc773c173bd64268fa49da66e12035a5bb0175bf"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.pdb",
+          "bytes": 110672,
+          "sha256": "c56f5571adfb3b787f6584f854d9cd7848dd6b044326ecad9ac04f33887da25a"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.xml",
+          "bytes": 89661,
+          "sha256": "552648f210be3e652d35b5d489de9c3cc6b0dd80c52c4d629070db51c66ececb"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 56832,
+          "sha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a"
+        },
+        {
+          "name": "Bosak.XPath.Core.pdb",
+          "bytes": 67352,
+          "sha256": "d81fe653ceeb4005d1d5fc092007a3055ab913c9855e534010238e0a27a02f70"
+        },
+        {
+          "name": "Bosak.XPath.Core.xml",
+          "bytes": 88273,
+          "sha256": "0b9b94bb78ff3907274d5abb10882a177ed2e3710de63641adcd4c2c85164c04"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 226816,
+          "sha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc"
+        },
+        {
+          "name": "Bosak.XPath.Parser.pdb",
+          "bytes": 138740,
+          "sha256": "a69d7cc403a0e9840257a462591799bf8cf4b9daed8aece8c64378067029bfbb"
+        },
+        {
+          "name": "Bosak.XPath.Parser.xml",
+          "bytes": 165837,
+          "sha256": "a670243ddb33069a51940d52b159529cf2ece22abacbfeebe3c9fef482760537"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 138240,
+          "sha256": "786a7c17ed847976031439fef2b9e57a7fbc9f24a774819a9757fea90834407f"
+        },
+        {
+          "name": "Bosak.XPath.Providers.pdb",
+          "bytes": 167412,
+          "sha256": "eb7de4be4f82e31fc2428bf754ad9d8d1ba5a7e9bc786955b1d2dfc538b3842a"
+        },
+        {
+          "name": "Bosak.XPath.Providers.xml",
+          "bytes": 143430,
+          "sha256": "fae8174b405cfa208fc2b4ba274838d220702eceb3b75c800aa841575da3fba9"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 329728,
+          "sha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.pdb",
+          "bytes": 334232,
+          "sha256": "867890fd5103343676fba44ca1cd2ae045cf671b3ec305c5411e6ea78e36e56c"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.xml",
+          "bytes": 236150,
+          "sha256": "16e99be7cd813bc268706142e6b9043b9a524e40b4e4742a093072520ee5ab2b"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 668160,
+          "sha256": "cc22d4e34b2ddf2b16068478026375274e7e5811548b25700992ad754548d7d5"
+        },
+        {
+          "name": "Bosak.XPath.Standard.pdb",
+          "bytes": 456188,
+          "sha256": "bf14bd20ab13296f30fc5cfc763e748efc155ce842be9264afa98c2bdfaa7f84"
+        },
+        {
+          "name": "Bosak.XPath.Standard.xml",
+          "bytes": 136018,
+          "sha256": "be676a1861d110e54b006b925cd15e0421755d673ab4ace508759f5654bc72c2"
+        },
+        {
+          "name": "Bosak.XQuery.dll",
+          "bytes": 142336,
+          "sha256": "8389fe47a4f7af09dc88ff03bda5b6e56ce06b97b165675c284e2c4656ad5950"
+        },
+        {
+          "name": "Bosak.XQuery.pdb",
+          "bytes": 95500,
+          "sha256": "1dc72a91751c9823648254bd6ea6c10675abde5b4be0569202d18e1ea5caa076"
+        },
+        {
+          "name": "Bosak.XQuery.xml",
+          "bytes": 35415,
+          "sha256": "37de8ea241c73d2b9e0063710fa12d53dcf38da485d0db2236b579eb0dd520a6"
+        },
+        {
+          "name": "Bosak.Xslt.dll",
+          "bytes": 1402880,
+          "sha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9"
+        },
+        {
+          "name": "Bosak.Xslt.pdb",
+          "bytes": 1198436,
+          "sha256": "aa0ed562b9978a816c1565972105c342183c5419453b91332f8016ff81a18a12"
+        },
+        {
+          "name": "Bosak.Xslt.xml",
+          "bytes": 852113,
+          "sha256": "39e4379b78eb0f2a5032e31291e6fa923c85d8f468c67f1dc49a47d7b6ed8d0c"
+        }
+      ]
+    },
+    "Braid.candidate.desktop": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-candidate/src/Bosak.Braid.Desktop/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Application.dll",
+          "bytes": 477184,
+          "sha256": "4f0d85f2ff8596247af305bb8764fc758fe914ce61af37a5455323466d1003c7"
+        },
+        {
+          "name": "Bosak.Braid.Application.pdb",
+          "bytes": 270264,
+          "sha256": "4d14dc86fa77bacc9554f7427e39d012e97d2628b581e78e36540cacc8cd3114"
+        },
+        {
+          "name": "Bosak.Braid.Application.xml",
+          "bytes": 396591,
+          "sha256": "8cf7658d803cc3c676d27d068dd9fa3ec22d5d9de984311102f4cd0af24b4a4d"
+        },
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "de558f21192275ecc179e3909d991173171f1a09c08f74a0220838beef8b8985"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "f795b2cd9a8c77db84ee716d7451ccb664e18e428fb68b9e5c6212c2a5386078"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.deps.json",
+          "bytes": 30685,
+          "sha256": "1876759f5ccabc6df18f6767e56a5f16c4b14e16631e07c670ba93951d00aa8f"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.dll",
+          "bytes": 13824,
+          "sha256": "3229b62963f58b940ad2867b712378569298d997da621d663cad219c805b68af"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.exe",
+          "bytes": 162304,
+          "sha256": "4395fc9c03eb56494ddccf2c2e68c11adda53b84b510343474a59d3f22ec58ae"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.pdb",
+          "bytes": 16020,
+          "sha256": "8664d49ce4a01e4f9e4e871a1ca773eddf706a0893fa060a2e04bc14d42cf99b"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.xml",
+          "bytes": 144,
+          "sha256": "23e45b405ff1963b85373b65ce2c8613a2957a9de6c52c02550200cd7b2b29a6"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.dll",
+          "bytes": 187904,
+          "sha256": "c3d7ac0688574d8d290a28651b37a629a5562d5849466b33e9d6591968398498"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.pdb",
+          "bytes": 104136,
+          "sha256": "0204282bb7d4b06ef789f173f9ac29946373b5b397dca133a219bbafe3a05259"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.xml",
+          "bytes": 18463,
+          "sha256": "d254eed6d04414541f85e732739022c9c9831d15ee35238204b1e6217569e231"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.dll",
+          "bytes": 435712,
+          "sha256": "3a42730217c3a2f2d178f4f0b1d51bcdcc8f6d1c8c1982e7284f45f5c97a7231"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.pdb",
+          "bytes": 229772,
+          "sha256": "7f9f9bab427515a9f31356c6ef3fe29115f438d93ff4e9044d14ff7c30bba985"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.xml",
+          "bytes": 51348,
+          "sha256": "5c5be766e8b0e72a9374ee9b35cec48926560cf52f0b1c09499ec38fada213f1"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "63a4eb2599f72673fd931b12b2e345340d3e0b2f47bec4418e9cddc21b470fa7"
+        },
+        {
+          "name": "Bosak.XPath.Api.pdb",
+          "bytes": 25856,
+          "sha256": "0d9d62d36fd0a5eb03c45d2f576497ed1348981303b2a2f5932cda5eb036eb40"
+        },
+        {
+          "name": "Bosak.XPath.Api.xml",
+          "bytes": 22891,
+          "sha256": "0233de729a1a32c3abf99edba64b3f81a3b370167b7d1ce48e82b428a13b503c"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 132608,
+          "sha256": "285d8dbaa2a3fb8647793712ac27bfc44c532eec0b694d6ab40ee500b9093028"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.pdb",
+          "bytes": 55464,
+          "sha256": "306a54a0a81c4d29581146d2a902f05c25b31133a107545d03fb5d9a85450776"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.xml",
+          "bytes": 92723,
+          "sha256": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 58880,
+          "sha256": "5d806074c7f66bf438667c5398b04cd13df5b6def358b2c1bebb0bf81aea3816"
+        },
+        {
+          "name": "Bosak.XPath.Core.pdb",
+          "bytes": 28616,
+          "sha256": "23e5d3785b38e2f36f16e41bed3fc75c01e21646c69681abc05ac05c01599481"
+        },
+        {
+          "name": "Bosak.XPath.Core.xml",
+          "bytes": 90383,
+          "sha256": "83527142f6ae95d2c2896e750c1bcfecb3bcd0a74c5a59bf58c24aed5bdb0e8f"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 230400,
+          "sha256": "836abeb13412c323e2050a6fef855df193e595c910b4d657a2bf7b87b849942c"
+        },
+        {
+          "name": "Bosak.XPath.Parser.pdb",
+          "bytes": 64792,
+          "sha256": "aad088de3e4be1f83f17bcd1cf3f5a5d61021d414b64eca8300877c498a48af1"
+        },
+        {
+          "name": "Bosak.XPath.Parser.xml",
+          "bytes": 168214,
+          "sha256": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 152064,
+          "sha256": "e08d3d8672968424e187dd43724958e5928facc8c1d539471b2fe61656e06b0c"
+        },
+        {
+          "name": "Bosak.XPath.Providers.pdb",
+          "bytes": 65092,
+          "sha256": "f2b62a06761e1a7ecdd2880c288c0c1cb24abead4d7daa37becbb8d15dd3d839"
+        },
+        {
+          "name": "Bosak.XPath.Providers.xml",
+          "bytes": 147514,
+          "sha256": "78cc8dd4f91ae924c602356d08a31dc05600cd59677709098748b2f5692bb986"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 332288,
+          "sha256": "4ed5be3f0cdd07b7cbbd78853205a630b10d3a286c58c6c6444ffc2e545a6606"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.pdb",
+          "bytes": 126016,
+          "sha256": "a531560f6280b7eec188cfbf7e9bcafb98272a1bafc57396fc1705142cc629eb"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.xml",
+          "bytes": 237734,
+          "sha256": "aef6e3c20565e368af5f905753e875b42686b2838baba16a55f840c7b7c6c880"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 721920,
+          "sha256": "1d460f9b5f2cad75bd893290d13034a5160d5c0a53818cc58c339ed43802c184"
+        },
+        {
+          "name": "Bosak.XPath.Standard.pdb",
+          "bytes": 178580,
+          "sha256": "494b746488a44a4f73304a0621d7fa3c72c4ef31723075b92ab5fde4f8889249"
+        },
+        {
+          "name": "Bosak.XPath.Standard.xml",
+          "bytes": 136989,
+          "sha256": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa"
+        },
+        {
+          "name": "Bosak.XQuery.dll",
+          "bytes": 155648,
+          "sha256": "38e026c6278cc71b7163f904865b56b890b04762c8152d62e903dc02397122d5"
+        },
+        {
+          "name": "Bosak.XQuery.pdb",
+          "bytes": 49140,
+          "sha256": "9908e76b15a8219c5e5fb9c92467fc52e2d1297de3e99f6bfb48a2d92eb7d2e6"
+        },
+        {
+          "name": "Bosak.XQuery.xml",
+          "bytes": 40564,
+          "sha256": "7f97e5f5c5ed213107efca98a8e102e55a6c6aa87d094ff7e97a8834b3fcf086"
+        },
+        {
+          "name": "Bosak.Xslt.dll",
+          "bytes": 1403392,
+          "sha256": "f243dc0c205d7af2e85792bd689f890fa7d14bfa14fcd21fddb4af3b5281010e"
+        },
+        {
+          "name": "Bosak.Xslt.pdb",
+          "bytes": 461724,
+          "sha256": "703a381601e840c930fda34f2a5232c2dd848b9e845468f913c6102a2ef509ff"
+        },
+        {
+          "name": "Bosak.Xslt.xml",
+          "bytes": 852113,
+          "sha256": "39e4379b78eb0f2a5032e31291e6fa923c85d8f468c67f1dc49a47d7b6ed8d0c"
+        }
+      ]
+    },
+    "Braid.baseline.Core.tests": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-baseline/tests/Bosak.Braid.Core.Tests/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "4a1c3b82fbeef30e63f37b02315d554dc46943a47684886041d58bbdd66cc360"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "4509527d4330798731dd0ecdac0eed86ee8f03a5d14566698944fcb280cd3aa1"
+        },
+        {
+          "name": "Bosak.Braid.Core.Tests.deps.json",
+          "bytes": 17393,
+          "sha256": "2cc4f45a40d5728e16985f9bcaa061fc932773e3fc4136613df52407bd31dd52"
+        },
+        {
+          "name": "Bosak.Braid.Core.Tests.dll",
+          "bytes": 12800,
+          "sha256": "4a8d9985dc42040917203856c418476e911df290e083bd66a3712bcf90993e35"
+        },
+        {
+          "name": "Bosak.Braid.Core.Tests.pdb",
+          "bytes": 17660,
+          "sha256": "e6445bc7cb193c3af5aa73cc4d174a1869f57d4be852e6c69c77ec20fe3a5d71"
+        },
+        {
+          "name": "Bosak.Braid.Core.Tests.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Core.Tests.xml",
+          "bytes": 3289,
+          "sha256": "7cebe2a6add1bdb39575fdae50b1214dd0bfe3280ddb295cd7d7e97d70171704"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        }
+      ]
+    },
+    "Braid.baseline.Application.tests": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-baseline/tests/Bosak.Braid.Application.Tests/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Application.dll",
+          "bytes": 477184,
+          "sha256": "caeeb4377ac33fafba1c84ea6d919cd4bf49b1cd3384ef1eb2d6a4b013ab1cc8"
+        },
+        {
+          "name": "Bosak.Braid.Application.pdb",
+          "bytes": 270264,
+          "sha256": "d9673b98d749df321e9003e045cc92092d254e0fa4ccfb9bcb4053ae0fd1617b"
+        },
+        {
+          "name": "Bosak.Braid.Application.Tests.deps.json",
+          "bytes": 17845,
+          "sha256": "fb7a67be40d64df4917b8a44bf3d55bbcbe0584f3d4611c31c1ca8ad2af22343"
+        },
+        {
+          "name": "Bosak.Braid.Application.Tests.dll",
+          "bytes": 607232,
+          "sha256": "b6eae8faee2deada79e2c92c918b65e285077a569645c2c882d649f8c5932aed"
+        },
+        {
+          "name": "Bosak.Braid.Application.Tests.pdb",
+          "bytes": 203456,
+          "sha256": "b8907f0551be26c202d125930bd63bf11a8ddaee334680f60211ab35d5811a63"
+        },
+        {
+          "name": "Bosak.Braid.Application.Tests.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Application.Tests.xml",
+          "bytes": 77962,
+          "sha256": "cea6eac2be4cffc81acaa05ee77ac846fedea0bbb2611f7e158c8c6c7c6086ac"
+        },
+        {
+          "name": "Bosak.Braid.Application.xml",
+          "bytes": 396591,
+          "sha256": "8cf7658d803cc3c676d27d068dd9fa3ec22d5d9de984311102f4cd0af24b4a4d"
+        },
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "4a1c3b82fbeef30e63f37b02315d554dc46943a47684886041d58bbdd66cc360"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "4509527d4330798731dd0ecdac0eed86ee8f03a5d14566698944fcb280cd3aa1"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        }
+      ]
+    },
+    "Braid.baseline.Infrastructure.tests": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-baseline/tests/Bosak.Braid.Infrastructure.Tests/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Application.dll",
+          "bytes": 477184,
+          "sha256": "5658015438dade9de957a1ee2f772807c1c14f519f1e6044d929b2e8bda8390d"
+        },
+        {
+          "name": "Bosak.Braid.Application.pdb",
+          "bytes": 270264,
+          "sha256": "cc60b77117d91bf66304566c409a2b3c0e946c1757369dee17fece8fda164357"
+        },
+        {
+          "name": "Bosak.Braid.Application.xml",
+          "bytes": 396591,
+          "sha256": "8cf7658d803cc3c676d27d068dd9fa3ec22d5d9de984311102f4cd0af24b4a4d"
+        },
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "b2bd0ce47ca3a8d073322d7f09437b2e66c6cda4d171a7730beeaae873549d4c"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "9e3c5bc9e06c3a24570c17404e0df3e0bc2c76045f0b8e7e1fd80e4f27982042"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.deps.json",
+          "bytes": 30685,
+          "sha256": "3c8c0de42c36ceb1a4837aa70227a339c597079d5171d3b49a485b436ecc607d"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.exe",
+          "bytes": 162304,
+          "sha256": "2810bd60b553cc67b5fedbf3aff5d21d85a5c3d77548ca32e21f77a67724878d"
+        },
+        {
+          "name": "Bosak.Braid.Desktop.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.dll",
+          "bytes": 187904,
+          "sha256": "913b61c6e021146e27c2b356091b287e62cbf5f60e7a40d955940fcf9adf9d72"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.pdb",
+          "bytes": 104136,
+          "sha256": "6c8d4c7c1a9b49290bb2b6464febbb2491a5b6dc253468f5660a033992d4612e"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.Tests.deps.json",
+          "bytes": 23515,
+          "sha256": "35d167efed695d05bf1602247bd4aa3af3b62aaee9ba718e4d2f236d3cda07c0"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.Tests.dll",
+          "bytes": 782848,
+          "sha256": "53faa3f7261f9ffb282ccb5945ddb0e644b60fe24c8dc6a8e50a3626da954732"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.Tests.pdb",
+          "bytes": 271012,
+          "sha256": "c1a5a55eeaf78c4ccd0368e54e8550977667f11b283d4ff27259632b773b64fd"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.Tests.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.Tests.xml",
+          "bytes": 88084,
+          "sha256": "011f8b5d97b4decc14ce7d2983c2c08a48b1dcd45f6c3b4d419e6d8d556cd52b"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.xml",
+          "bytes": 18463,
+          "sha256": "d254eed6d04414541f85e732739022c9c9831d15ee35238204b1e6217569e231"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 55296,
+          "sha256": "d747e45b4aaf6e68917eb401e27e133ef3f68f9f9e04b72d79839630bc0dac4a"
+        },
+        {
+          "name": "Bosak.XPath.Api.pdb",
+          "bytes": 52016,
+          "sha256": "a2484a7f923117b7fca2febf037840a6719ec072726913a80cafe140bed4fd10"
+        },
+        {
+          "name": "Bosak.XPath.Api.xml",
+          "bytes": 22891,
+          "sha256": "0233de729a1a32c3abf99edba64b3f81a3b370167b7d1ce48e82b428a13b503c"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 128000,
+          "sha256": "c8e42d149b6caa4399536df9cc773c173bd64268fa49da66e12035a5bb0175bf"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.pdb",
+          "bytes": 110672,
+          "sha256": "c56f5571adfb3b787f6584f854d9cd7848dd6b044326ecad9ac04f33887da25a"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.xml",
+          "bytes": 89661,
+          "sha256": "552648f210be3e652d35b5d489de9c3cc6b0dd80c52c4d629070db51c66ececb"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 56832,
+          "sha256": "4c0f4e9439dbb1399484171fcd236579766b2a0c5a03e619a318c51aeb51788a"
+        },
+        {
+          "name": "Bosak.XPath.Core.pdb",
+          "bytes": 67352,
+          "sha256": "d81fe653ceeb4005d1d5fc092007a3055ab913c9855e534010238e0a27a02f70"
+        },
+        {
+          "name": "Bosak.XPath.Core.xml",
+          "bytes": 88273,
+          "sha256": "0b9b94bb78ff3907274d5abb10882a177ed2e3710de63641adcd4c2c85164c04"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 226816,
+          "sha256": "87c7d44424434470e4afc9c45836562be65b4d24f9804274ba805e17d9559dcc"
+        },
+        {
+          "name": "Bosak.XPath.Parser.pdb",
+          "bytes": 138740,
+          "sha256": "a69d7cc403a0e9840257a462591799bf8cf4b9daed8aece8c64378067029bfbb"
+        },
+        {
+          "name": "Bosak.XPath.Parser.xml",
+          "bytes": 165837,
+          "sha256": "a670243ddb33069a51940d52b159529cf2ece22abacbfeebe3c9fef482760537"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 138240,
+          "sha256": "786a7c17ed847976031439fef2b9e57a7fbc9f24a774819a9757fea90834407f"
+        },
+        {
+          "name": "Bosak.XPath.Providers.pdb",
+          "bytes": 167412,
+          "sha256": "eb7de4be4f82e31fc2428bf754ad9d8d1ba5a7e9bc786955b1d2dfc538b3842a"
+        },
+        {
+          "name": "Bosak.XPath.Providers.xml",
+          "bytes": 143430,
+          "sha256": "fae8174b405cfa208fc2b4ba274838d220702eceb3b75c800aa841575da3fba9"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 329728,
+          "sha256": "bd816b6379df1ab4663265d34bd822c5a8a03522fdc5c1c90a6721bb727a01d9"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.pdb",
+          "bytes": 334232,
+          "sha256": "867890fd5103343676fba44ca1cd2ae045cf671b3ec305c5411e6ea78e36e56c"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.xml",
+          "bytes": 236150,
+          "sha256": "16e99be7cd813bc268706142e6b9043b9a524e40b4e4742a093072520ee5ab2b"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 668160,
+          "sha256": "cc22d4e34b2ddf2b16068478026375274e7e5811548b25700992ad754548d7d5"
+        },
+        {
+          "name": "Bosak.XPath.Standard.pdb",
+          "bytes": 456188,
+          "sha256": "bf14bd20ab13296f30fc5cfc763e748efc155ce842be9264afa98c2bdfaa7f84"
+        },
+        {
+          "name": "Bosak.XPath.Standard.xml",
+          "bytes": 136018,
+          "sha256": "be676a1861d110e54b006b925cd15e0421755d673ab4ace508759f5654bc72c2"
+        },
+        {
+          "name": "Bosak.XQuery.dll",
+          "bytes": 142336,
+          "sha256": "8389fe47a4f7af09dc88ff03bda5b6e56ce06b97b165675c284e2c4656ad5950"
+        },
+        {
+          "name": "Bosak.XQuery.pdb",
+          "bytes": 95500,
+          "sha256": "1dc72a91751c9823648254bd6ea6c10675abde5b4be0569202d18e1ea5caa076"
+        },
+        {
+          "name": "Bosak.XQuery.xml",
+          "bytes": 35415,
+          "sha256": "37de8ea241c73d2b9e0063710fa12d53dcf38da485d0db2236b579eb0dd520a6"
+        },
+        {
+          "name": "Bosak.Xslt.dll",
+          "bytes": 1402880,
+          "sha256": "333d7e41dc1ca9bd913eb89edd33d6a26b03679109a72973d9a9b5bed57cd9c9"
+        },
+        {
+          "name": "Bosak.Xslt.pdb",
+          "bytes": 1198436,
+          "sha256": "aa0ed562b9978a816c1565972105c342183c5419453b91332f8016ff81a18a12"
+        },
+        {
+          "name": "Bosak.Xslt.xml",
+          "bytes": 852113,
+          "sha256": "39e4379b78eb0f2a5032e31291e6fa923c85d8f468c67f1dc49a47d7b6ed8d0c"
+        }
+      ]
+    },
+    "Braid.baseline.Workbench.tests": {
+      "workspaceRelativeDirectory": ".guard-tmp/braid-baseline/tests/Bosak.Braid.Workbench.Tests/bin/Release/net10.0",
+      "files": [
+        {
+          "name": "Bosak.Braid.Application.dll",
+          "bytes": 477184,
+          "sha256": "caeeb4377ac33fafba1c84ea6d919cd4bf49b1cd3384ef1eb2d6a4b013ab1cc8"
+        },
+        {
+          "name": "Bosak.Braid.Application.pdb",
+          "bytes": 270264,
+          "sha256": "d9673b98d749df321e9003e045cc92092d254e0fa4ccfb9bcb4053ae0fd1617b"
+        },
+        {
+          "name": "Bosak.Braid.Application.xml",
+          "bytes": 396591,
+          "sha256": "8cf7658d803cc3c676d27d068dd9fa3ec22d5d9de984311102f4cd0af24b4a4d"
+        },
+        {
+          "name": "Bosak.Braid.Core.dll",
+          "bytes": 7168,
+          "sha256": "4a1c3b82fbeef30e63f37b02315d554dc46943a47684886041d58bbdd66cc360"
+        },
+        {
+          "name": "Bosak.Braid.Core.pdb",
+          "bytes": 14520,
+          "sha256": "4509527d4330798731dd0ecdac0eed86ee8f03a5d14566698944fcb280cd3aa1"
+        },
+        {
+          "name": "Bosak.Braid.Core.xml",
+          "bytes": 3133,
+          "sha256": "d1025c848a413456b8ed2a0bd69001ac3c61bd5b642a98a94f35886ef5b3f5a1"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.dll",
+          "bytes": 187904,
+          "sha256": "2278b1024ecee88e36a81be3717e9d4e1b3fefcf85a052a02bb7a9fd10b85f9c"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.pdb",
+          "bytes": 104164,
+          "sha256": "9eacf2dede19ebf9a5cb3947e5b26692b39285b506499b77dbd03c79f3808338"
+        },
+        {
+          "name": "Bosak.Braid.Infrastructure.xml",
+          "bytes": 18463,
+          "sha256": "d254eed6d04414541f85e732739022c9c9831d15ee35238204b1e6217569e231"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.dll",
+          "bytes": 435712,
+          "sha256": "df4f3e5c41fbc468704642105fe2c77e168c656b6614bc440ab174d98321c4a6"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.pdb",
+          "bytes": 229772,
+          "sha256": "6ea5ffd1056a6b7632a8275071c14ffadfa1175784b22fd27f91a427f50c5f23"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.Tests.deps.json",
+          "bytes": 34018,
+          "sha256": "4c54972854e994b36ba4b8873fd2c56a193befa3d874dfde614cb6358fe75b0a"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.Tests.dll",
+          "bytes": 622592,
+          "sha256": "a7e74a93d463f40b39b635ff63ddc0ff195dcb1157d93a5d8aa6b3b0f49e5751"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.Tests.pdb",
+          "bytes": 260284,
+          "sha256": "1f327b5d054e4028ad878782184e48abe5eff1ec1b29b222a2fa68cead777112"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.Tests.runtimeconfig.json",
+          "bytes": 342,
+          "sha256": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.Tests.xml",
+          "bytes": 86658,
+          "sha256": "94899ad045fe13329bbcb6eb683be8244c665d36a89805ba819dc5e67dcf097a"
+        },
+        {
+          "name": "Bosak.Braid.Workbench.xml",
+          "bytes": 51348,
+          "sha256": "5c5be766e8b0e72a9374ee9b35cec48926560cf52f0b1c09499ec38fada213f1"
+        },
+        {
+          "name": "Bosak.XPath.Api.dll",
+          "bytes": 58880,
+          "sha256": "ac305a46f18c3751987c663326ee91840b1cbf92110cf7295cc3605729d80965"
+        },
+        {
+          "name": "Bosak.XPath.Api.pdb",
+          "bytes": 56396,
+          "sha256": "a59a84473676b895c0979cb4c3af9b54e78a27b26b831cd1155d14ff5a628eac"
+        },
+        {
+          "name": "Bosak.XPath.Api.xml",
+          "bytes": 22891,
+          "sha256": "0233de729a1a32c3abf99edba64b3f81a3b370167b7d1ce48e82b428a13b503c"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.dll",
+          "bytes": 136704,
+          "sha256": "255ecffae88d5b9186f96ce2141e0d06f8765d871005b7d3111e57065dc1c3d9"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.pdb",
+          "bytes": 124560,
+          "sha256": "b4e34dce8c383f9aaf102d9676eb9d85c144f074dca5f07fcaaa57ab9c307f75"
+        },
+        {
+          "name": "Bosak.XPath.Compiler.xml",
+          "bytes": 89661,
+          "sha256": "552648f210be3e652d35b5d489de9c3cc6b0dd80c52c4d629070db51c66ececb"
+        },
+        {
+          "name": "Bosak.XPath.Core.dll",
+          "bytes": 59904,
+          "sha256": "cb32447bf343831863ce6af87bc17d3ddf3c8ae84664963bf144dbf5c15145c5"
+        },
+        {
+          "name": "Bosak.XPath.Core.pdb",
+          "bytes": 70868,
+          "sha256": "22ac05fad05e90add5a5847124f2ee164d7e21251c359b7c134dd18f4faefd78"
+        },
+        {
+          "name": "Bosak.XPath.Core.xml",
+          "bytes": 88273,
+          "sha256": "0b9b94bb78ff3907274d5abb10882a177ed2e3710de63641adcd4c2c85164c04"
+        },
+        {
+          "name": "Bosak.XPath.Parser.dll",
+          "bytes": 241664,
+          "sha256": "f975d023424a29277cc1f90534b11473d9d0bb00634a6810a934ea7b698cb7b3"
+        },
+        {
+          "name": "Bosak.XPath.Parser.pdb",
+          "bytes": 155844,
+          "sha256": "6a961c84d580648e1c5cce25787af2b2e2e0a464b0252d1af135fe917b359367"
+        },
+        {
+          "name": "Bosak.XPath.Parser.xml",
+          "bytes": 165837,
+          "sha256": "a670243ddb33069a51940d52b159529cf2ece22abacbfeebe3c9fef482760537"
+        },
+        {
+          "name": "Bosak.XPath.Providers.dll",
+          "bytes": 153600,
+          "sha256": "6c42941ca3c57f93d3f5f04c9994b92b1a3c124bd8725ef407d8080e6f126ddf"
+        },
+        {
+          "name": "Bosak.XPath.Providers.pdb",
+          "bytes": 186552,
+          "sha256": "bc045797e660aef27484d55ac8a501eadf959c8a1eb21b8549e44c1113b009e1"
+        },
+        {
+          "name": "Bosak.XPath.Providers.xml",
+          "bytes": 143430,
+          "sha256": "fae8174b405cfa208fc2b4ba274838d220702eceb3b75c800aa841575da3fba9"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.dll",
+          "bytes": 376320,
+          "sha256": "3b5f892319d2312a0968d6334ee1e9c6b83be5ab8038775560c177c2e1ac6b0a"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.pdb",
+          "bytes": 384984,
+          "sha256": "716fcd3c8d03f026bb030a7133a1be8d063041cd3e16c332000fa05832e9e06c"
+        },
+        {
+          "name": "Bosak.XPath.Runtime.xml",
+          "bytes": 236150,
+          "sha256": "16e99be7cd813bc268706142e6b9043b9a524e40b4e4742a093072520ee5ab2b"
+        },
+        {
+          "name": "Bosak.XPath.Standard.dll",
+          "bytes": 736768,
+          "sha256": "2de41463cf0b2cf46bd36b2069062aa50cadb1a302072092b48c2d814e4038d9"
+        },
+        {
+          "name": "Bosak.XPath.Standard.pdb",
+          "bytes": 531624,
+          "sha256": "a97854bb439ec5519793831702561cf14878c6d20b2c094d8a503f0064b9b587"
+        },
+        {
+          "name": "Bosak.XPath.Standard.xml",
+          "bytes": 136018,
+          "sha256": "be676a1861d110e54b006b925cd15e0421755d673ab4ace508759f5654bc72c2"
+        },
+        {
+          "name": "Bosak.XQuery.dll",
+          "bytes": 149504,
+          "sha256": "af19810628d8ef3955b51efad9315785ecef75388dc74e2b60cd368bb8e78262"
+        },
+        {
+          "name": "Bosak.XQuery.pdb",
+          "bytes": 106040,
+          "sha256": "542bcdceadbae955952efc8aae5dc22a8827c7f181dd4ecd946b283457fd5d29"
+        },
+        {
+          "name": "Bosak.XQuery.xml",
+          "bytes": 35415,
+          "sha256": "37de8ea241c73d2b9e0063710fa12d53dcf38da485d0db2236b579eb0dd520a6"
+        },
+        {
+          "name": "Bosak.Xslt.dll",
+          "bytes": 1545216,
+          "sha256": "3b6cb5f4642c2acf8d9d3a4f969a06cb0492536cc4a27b7f0207d015a9d54fb2"
+        },
+        {
+          "name": "Bosak.Xslt.pdb",
+          "bytes": 1383724,
+          "sha256": "ce904b7d0527fb97929267f250674371d115df405961af4a0873bab4164bf01a"
+        },
+        {
+          "name": "Bosak.Xslt.xml",
+          "bytes": 852113,
+          "sha256": "39e4379b78eb0f2a5032e31291e6fa923c85d8f468c67f1dc49a47d7b6ed8d0c"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "sourceCandidate": "1.34.2",
+  "status": "Implemented and locally qualified; not published or frozen",
+  "baseRevision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+  "build": {
+    "initialFullErrors": 0,
+    "initialFullWarnings": 5,
+    "finalBuildErrors": 0,
+    "finalBuildWarnings": 0,
+    "postInitialBuildEdit": "Restored original punctuation in one unrelated comment; no executable logic changed; final build/focused tests/API comparison repeated"
+  },
+  "focused": {
+    "before": {
+      "passed": 5,
+      "failed": 6
+    },
+    "after": {
+      "passed": 11,
+      "failed": 0
+    },
+    "final": {
+      "passed": 11,
+      "failed": 0
+    },
+    "overlapsFullSuite": true
+  },
+  "fullTests": {
+    "passed": 24225,
+    "failed": 0,
+    "projects": [
+      {
+        "assembly": "bosak.xpath.providers.tests.dll",
+        "passed": 223,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.providers.tests.dll.trx.gz",
+        "uncompressedSha256": "33e5a7a75ae8de495ab9b1b7c9dd7227106b1a1a31d3eb25f085aabf2fe87055",
+        "gzipSha256": "22f5279c382094e76a0db5903e985ff72aeda862476421b93588f8954f6afb15"
+      },
+      {
+        "assembly": "bosak.xpath.compiler.tests.dll",
+        "passed": 66,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.compiler.tests.dll.trx.gz",
+        "uncompressedSha256": "01e7f386d6f651872a1548add93e65556241521be0e2a73f7a2c07c1e45761ae",
+        "gzipSha256": "1119e8aee5f69318ecb68870bce9537307a2eb786a58853571aba5a1d68ac479"
+      },
+      {
+        "assembly": "bosak.xpath.parser.tests.dll",
+        "passed": 202,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.parser.tests.dll.trx.gz",
+        "uncompressedSha256": "7dcc9e5e62326b95b656c0d0b9bf88cf63356ca637a059b70727b40a912e8464",
+        "gzipSha256": "6979aa95bdb82aedf8fefb4d488a05b32013c4a8cb0405a6e9cbb916f87802fa"
+      },
+      {
+        "assembly": "bosak.xpath.api.tests.dll",
+        "passed": 489,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.api.tests.dll.trx.gz",
+        "uncompressedSha256": "e9a9d5a049adadeb64f8aa7c32cc56f05b645e01474a75702a1f16214c8ad725",
+        "gzipSha256": "69ba11137e55d55e5ac195c3c48a1a3552ba93302dc3165e3b30cdefae7d3ffe"
+      },
+      {
+        "assembly": "bosak.xquery.tests.dll",
+        "passed": 804,
+        "failed": 0,
+        "receipt": "full-bosak.xquery.tests.dll.trx.gz",
+        "uncompressedSha256": "978b9fd1dc396c05e2a7536eb08b564f4d9cf39e70c7207be3bfe228a02ef511",
+        "gzipSha256": "95f8dc56676e5dcdf90e2d7ad42f920f1f6fd35e73477a36f5740cbcef08e578"
+      },
+      {
+        "assembly": "bosak.xpath.core.tests.dll",
+        "passed": 132,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.core.tests.dll.trx.gz",
+        "uncompressedSha256": "ef1f7b8c38384a22a72a0a215679b6f5d5cce97113a4bfa6f85836b9dabe9003",
+        "gzipSha256": "8307f8235d0482ca705d643920a6579e7c987487eac48733782c3df010a7f6c8"
+      },
+      {
+        "assembly": "bosak.xpath.providers.database.tests.dll",
+        "passed": 47,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.providers.database.tests.dll.trx.gz",
+        "uncompressedSha256": "f3ddafb714403d9add7765c407a5291fdec4ae7f4479ab1ea43b437fac59d2e1",
+        "gzipSha256": "d4178c25f5e6e63c8d3de624f2ea18b4adb4c54f1eeaeacf43b0dfa679411dca"
+      },
+      {
+        "assembly": "bosak.xpath.runtime.tests.dll",
+        "passed": 269,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.runtime.tests.dll.trx.gz",
+        "uncompressedSha256": "aed3d3d1aeb9aec18a50657a4be748dbffe7c1bb48e9de3f214ba23f7cc98465",
+        "gzipSha256": "360de26199a523033ae4af1f1d30c3dc31438c73be9612b3d0e4e227648fc081"
+      },
+      {
+        "assembly": "bosak.xpath.standard.tests.dll",
+        "passed": 13797,
+        "failed": 0,
+        "receipt": "full-bosak.xpath.standard.tests.dll.trx.gz",
+        "uncompressedSha256": "ae1b3542f43fc1b000e1f1cbba534d7c15837dda8ad149c3446b6c57347cf293",
+        "gzipSha256": "125483cf785e2e4364ab7057915330adf34fa02c89e0e8b63c6017031fb66ffa"
+      },
+      {
+        "assembly": "bosak.xslt.tests.dll",
+        "passed": 8196,
+        "failed": 0,
+        "receipt": "full-bosak.xslt.tests.dll.trx.gz",
+        "uncompressedSha256": "bdd1dcc0069f1ec7e9fc303aa5d98a0b2be52661acb3d5a1289fb041ecc62abe",
+        "gzipSha256": "37242cfa4532409920bf4d2477cccb67ea40af06b0f7cc9a3462a3a2cb3289c7"
+      }
+    ],
+    "xsltApplicationControlWorkaroundNeeded": false
+  },
+  "gates": {
+    "qt3": {
+      "passed": 31397,
+      "failed": 0,
+      "skipped": 424,
+      "exactNamesAndReasonsUnchanged": true,
+      "baseline": "docs/schema-integration/evidence/qt3-skips.txt"
+    },
+    "qt4": {
+      "passed": 8941,
+      "failed": 0,
+      "skipped": 1918,
+      "exactNamesAndReasonsUnchanged": true,
+      "baseline": "docs/schema-integration/evidence/qt4-skips.txt"
+    }
+  },
+  "qt4GatedSets": 230,
+  "qt4ExperimentalPasses": 11,
+  "api": {
+    "assemblies": 11,
+    "types": 270,
+    "metadataEntries": 5766,
+    "exactDeclarationsUnchanged": true,
+    "candidatePackageIdentitiesChangedByPatch": true,
+    "realConsumerAbiQualified": false
+  },
+  "externalOwnerProjectsChanged": false,
+  "earlyAbandonmentRedesigned": false,
+  "fullXsd11Claimed": false,
+  "packagePublished": false,
+  "apiFreezeAccepted": false,
+  "documentationChecks": {
+    "result": "Passed",
+    "renderedPages": 29,
+    "localLinksChecked": 2929,
+    "scope": "HTML render and local destinations; no screenshot/PDF/hosted CI claim"
+  },
+  "auditToolTests": {
+    "passed": 10,
+    "failed": 0,
+    "oldMemberManifestUnchanged": true
+  }
+}

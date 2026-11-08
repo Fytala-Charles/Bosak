@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,subprocess,concurrent.futures
+C=Path('docs/xpath40-catalog');E=C/'evidence/c08-adoption-research';E.mkdir(exist_ok=True)
+rows=json.loads((C/'evidence/closure-triage/catalog-inventory.json').read_text(encoding='utf-8'))['missingAdoptedSpecPins']
+def read(pr):
+ args=['gh','pr','view',str(pr),'--repo','Fytala-Charles/Bosak','--json','number,title,body,url,createdAt,mergedAt,mergeCommit,headRefOid,baseRefOid,comments,reviews,files']
+ p=subprocess.run(args,capture_output=True);(E/f'pr-{pr}.json').write_bytes(p.stdout)
+ if p.returncode:raise RuntimeError(str(pr)+': '+p.stderr.decode('utf-8',errors='replace')[:300])
+ return pr
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+ result=list(pool.map(read,sorted({v['bosakPr'] for v in rows})))
+(E/'retrieval-receipt.json').write_text(json.dumps(dict(date='2026-10-26',repository='Fytala-Charles/Bosak',operation='Read-only gh pr view with bodies, comments, reviews, merge metadata and changed paths; no writes to GitHub.',pullRequests=result),indent=2)+'\n',encoding='utf-8');print('Saved',len(result),'original PR records')

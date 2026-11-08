@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O2-Schema",
+  "packet": "BCAP-O2",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "Revise",
+  "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "signer": "Copilot - Schema design reviewer, submitted on explicit user direction; designated signer fytala-charles@fytala.com (not independently authenticated)",
+  "date": "2026-11-02",
+  "profile": "Schema source/design disposition only, bound to the exact BCAP manifest. Public Bosak.Schema checkout reviewed at 20090180755d0427d824b091cf838e9a03ca9adc; native assessor candidate c3624998eca8c83018e121fa84af611f834a0501 is a separate audited lane. The bounded backend evidence is decimal-only and does not establish general list/union, complete XSD 1.1 authority or compatible-universe support. No public SDK implementation, native integration, R4 qualification, accepted performance budgets, C45 acceptance, API freeze or product adoption is claimed.",
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": "Retain the six proposed XdmValue intents: FromInteger(BigInteger), its schema-name overload, BigIntegerValue, FromDecimal(XdmExactDecimal), its schema-name overload, and ExactDecimalValue. XdmExactDecimal is a normalized exact finite coefficient/nonnegative-scale representation, with zero normalized to scale zero. Preserve existing wrong-kind checks; legacy narrowing must refuse overflow or inexact conversion, never round. BigIntegerValue accepts integer kind and only recognized decimal-backed integer representations, not an ordinary decimal; ExactDecimalValue accepts decimal kind and the specified integer-tagged decimal representation while refusing Kind.Integer. Schema annotation strings never confer authority/provenance. Enforce finite digit/scale/atom limits during admission, lexical parsing and arithmetic before large allocations where possible, and bound map-key hashing/comparison and serialization/output formatting. An already allocated caller BigInteger is not retroactively bounded. The six members and exact-decimal implementation are proposal-only; no production implementation is claimed, and finite defaults/accepted numeric limits remain unselected. These unresolved policy/implementation items support Revise."
+    },
+    {
+      "id": "O2-Q2",
+      "answer": "Preserve IsList independently of atom count: empty and singleton lists remain lists; neither becomes absent value or scalar. Preserve each atomic item's selected type/provenance so union-member selection is not lost. Keep nilled, HasNoTypedValue and an empty typed list distinct. Original PSVI/assessment remains original evidence; fresh construction may issue current constructed type evidence but no original assessment. The proposed shape represents these distinctions, but the audited native backend establishes only an exact-decimal profile and does not establish general list/union, union-of-lists or all XSD 1.1 typed-value coverage. Return explicit Unsupported for unimplemented backend/profile cases; that does not remove the required representation contract. No additional required type/member is identified from the reviewed packet, but implementation and profile qualification remain open."
+    },
+    {
+      "id": "O2-Q3",
+      "answer": "For N1/N8, component/source/snapshot/query identities must remain distinct; actual authority membership and same-component comparison are provider-verified, never inferred from names, GUIDs or digests. For N2, derivation, affiliation and complete component closure return Supported only for complete provider answers; otherwise Unsupported, never false/empty as a success-shaped fallback. For N3/N5, retain governing type, original node facts/PSVI, list/union shape and per-atomic provenance, with nil/no-typed-value distinctions. For N4, bind the advisor to an immutable effective environment (host/version, XDM revision, behavior profile and normalized static context) and a fixed assessment episode (date/time/timezone); unsupported assertion/CTA routes remain explicitly Unsupported. For N7, raw work and deferred consumption stay within the admitted operation lifetime, with actual provider resource ownership kept separate from engine admission/revocation. The proposal contains corresponding authority, advisor, context, episode and lifetime shapes; current Schema implementation does not qualify them generally. No extra required member is identified from the BCAP delta, but exact finite numeric defaults, adopted semantic/profile coverage and source-backed implementation remain unresolved, so this is not an acceptance."
+    },
+    {
+      "id": "O2-Q4",
+      "answer": "Compatibility is directional and must be established for exact source and target advisors under the exact execution environment. A compatible view preserves original source facts/PSVI and does not rewrite provenance. Return Incompatible only where a supported complete proof establishes it; return Unsupported where proof is incomplete. QName, digest or descriptive-label equality is never proof. The reviewed Schema backend has no qualified general cross-universe compatibility route; such routes are refused as Unsupported pending provider evidence. The proposed compatibility authority/view signatures express the design boundary, but are proposal-only and have no positive runtime proof. No additional signature gap is identified from the current packet; provider support, explicit profile decisions and R4 positive runtime evidence remain pending."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "BCAP manifest ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688; REVIEW.md R01-R08; O2 questions in PACKETS.json; proposal inputs/proposal/ExactNumeric.cs.txt and Provider.cs.txt. Proposed declaration bodies are not production execution."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Bosak.Schema public source revision 20090180755d0427d824b091cf838e9a03ca9adc; public docs/XSD11_GAP_MATRIX.md and docs/AGENT_HANDOVER.md record incomplete XSD 1.1/backend and core session/PSVI integration."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak/docs/foundation-r2-ledger/DECISIONS.md D07-D10 and D12; Bosak/docs/foundation-r2-ledger/REQUIREMENTS.md N1-N8 remain pending owner acceptance."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak/docs/release-planning/OWNER-CAPABILITIES.md: bounded decimal-only native profile, no established general list/union or compatible-universe route, and explicit need to represent unsupported backend cases."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O2-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": "R01: capture is an XSLT output route and does not widen Schema numeric or compatible-view support. R02: principal/secondary serialized output, properties and messages are not typed XDM values or PSVI and must not be used to infer Schema provenance. R03: preserve original provider failures and keep them separate from typed-value/assessment outcomes; a captured output does not convert Unsupported or Invalid into success. R04: existing finite snapshot/atom/digit/scale controls are design intents, not selected workload defaults; parsing, arithmetic, map-key work and serialization need bounded policy, while no new Schema-specific capture limit is accepted here. R05: typed values and their provider evidence are borrowed within the exact admitted operation; capture does not transfer authority or extend resource lifetime. R06: raw exception graphs remain local diagnostics and are not traversed or serialized as schema evidence. R07: Core cost measurements are observations, not accepted Schema performance budgets; actual Schema numeric, list/union and compatibility workloads remain unqualified. R08: this is Revise for the exact design review; no public SDK/runtime support, C45, API freeze or product release acceptance is implied.",
+  "originalExceptionGraphDisposition": "Exception, Data and InnerException graphs are local diagnostic references only, not immutable/detached schema evidence and not safe for IPC. Preserve object identity and aggregate boundaries for local diagnosis; do not recursively inspect provider objects, treat exception payloads as schema facts, or traverse nodes after admission revocation. Do not serialize or publish raw exception graphs. Any external diagnostic projection requires a separate owner-controlled bounded allowlist/redaction policy. Exception retention does not establish typed-value validity, authority, compatibility or successful cleanup.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null
+}

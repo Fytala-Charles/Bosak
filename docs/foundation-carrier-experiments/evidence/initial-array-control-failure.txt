@@ -1,0 +1,1 @@
+Control mismatch: array-value. Probe used XdmArray.Get(0), but the actual public API is 1-based. Fixed to Get(1); product code unchanged. Initial fatal exception was slow to exit under this host; added handled runner failure exit and process timeout.

@@ -1,0 +1,1895 @@
+{
+  "status": "Proposal only; member-level closure and both consumer sign-offs pending",
+  "types": [
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.CodeActionHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.CodeLensHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.CompletionHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.DefinitionHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.DiagnosticsHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.DocumentManager",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.DocumentSymbolHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXPathHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXPathParams",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXPathResult",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXQueryHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXQueryParams",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.EvaluateXQueryResult",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.ExecuteCommandHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.HoverHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.RunInitialTemplateHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.RunInitialTemplateParams",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.RunInitialTemplateResult",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.SemanticTokensHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.TextDocumentSyncHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.TransformXsltHandler",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.TransformXsltParams",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.LanguageServer",
+      "type": "Bosak.LanguageServer.TransformXsltResult",
+      "proposedGroup": "outside-proposed-foundation-application-surface",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.CompileOptions",
+      "proposedGroup": "query-entry-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.XPath31Expression",
+      "proposedGroup": "query-entry-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.XPathCompatibility",
+      "proposedGroup": "query-entry-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.XPathExpression",
+      "proposedGroup": "query-entry-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.IXsdValidator",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.XsdValidationError",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.XsdValidationResult",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.XsdValidationSeverity",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.XsdValidator",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Api",
+      "type": "Bosak.XPath.Api.Xsd.XsdValidatorOptions",
+      "proposedGroup": "legacy-xsd-compatibility-and-replacement-review",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.FunctionItem",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.ISinglePassSequence",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.IXdmNode",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.IXdmSequence",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.IXdmSequenceEnumerator",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.OccurrenceIndicator",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XPathDateTime",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmArray",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmAttributeValue",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmAxis",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmConstructionMode",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmContentItem",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmContentKind",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmElementSpec",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmJNode",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmMap",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmNodeKind",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmRecordField",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmRecordType",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmSequence+Enumerator",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmSequence",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmValue",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmValueEqualityComparer",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XdmValueKind",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Core",
+      "type": "Bosak.XPath.Core.Xdm.XsQName",
+      "proposedGroup": "foundation-candidate-member-review-required",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Parser",
+      "type": "Bosak.XPath.Parser.XPathParseException",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.BaseXConnectionOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.DatabaseConnectionOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.DatabaseDocumentLoader",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.DatabaseLoaderOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.ExistConnectionOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers.Database",
+      "type": "Bosak.XPath.Providers.Database.MarkLogicConnectionOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Streaming.IStreamingDocument",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Streaming.IStreamingNode",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Streaming.StreamingException",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Streaming.StreamingLoadOptions",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Streaming.XmlStreamingProvider",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XDocumentNode",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XDocumentProvider",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XdmElementAssessment",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XdmSchemaAnnotator",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XdmSubtreeValidationResult",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XdmValidationMode",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.XdmValidationOptions",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.Xml11Attribute",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.Xml11Loader",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Providers",
+      "type": "Bosak.XPath.Providers.Xml.Xml11NameCodec",
+      "proposedGroup": "provider-and-bounded-bridge-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Core.Xdm.XdmValueComparer",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.CoercedFunctionItem",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.DelegateFunctionItem",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.FunctionSignature",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.InlineFunctionItem",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction0",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction1",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction2",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Functions.XPathFunction",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourcePolicy",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceReceipt",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceReceiptOutcome",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceRequest",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceResponse",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledResourceRoute",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.ControlledSchemaResolver",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Resources.IControlledResourceAuthority",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.DecimalFormat",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.ErrorDetails",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.EvaluationContext",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.GlobalVariableEvaluationException",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.XPathErrorException",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Runtime",
+      "type": "Bosak.XPath.Runtime.Vm.XdmConversions",
+      "proposedGroup": "dependency-surface-review-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "type": "Bosak.XPath.Standard.Functions.FunctionLibrary+KeywordSignatureInfo",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "type": "Bosak.XPath.Standard.Functions.FunctionLibrary",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "type": "Bosak.XPath.Standard.Json.XdmJsonOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XPath.Standard",
+      "type": "Bosak.XPath.Standard.Json.XdmJsonSerializer",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Api.XQueryCompiler",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Api.XQueryContext",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Api.XQueryExecutable",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Compiler.ModuleImport",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Compiler.SchemaImport",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.XQuery",
+      "type": "Bosak.XQuery.Compiler.UserFunctionParameter",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.FileSystemUriResolver",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.IXsltMessageListener",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.IXsltUriResolver",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.PackageVersion+Component",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.PackageVersion",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.PackageVersionResolutionStrategy",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.StreamingTransformOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.XsltCompiler",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.XsltExecutable",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.XsltFunctionLibrary",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Api.XsltProcessorProfile",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringAttributeDescriptor",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringAttributeSlotKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringCapabilities",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringChangedSlot",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalOperation",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalReparenting",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalUnwrapTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalWrapProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringConditionalWrapTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringDeletionFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringDeletionFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringEditCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringEditFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringEditFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringEditProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringEditResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringFidelityMode",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInsertionFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInsertionFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInsertionFormattingMode",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInsertionSourceEdit",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInspectionOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInspectionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringInspector",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCorrespondence",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeCreationTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeDeletionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeOperation",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateNoChange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralAttributeUpdateTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementDeletionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementExchange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementInsertionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementMoveDirection",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementNoChange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementOperation",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementRenameTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderNoChange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringLiteralElementReorderTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringModuleDescriptor",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringModuleEdge",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringModuleEdgeKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringNamespaceBinding",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringNodeDescriptor",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringNodeKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringQName",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringSnapshot",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringSource",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementNoChange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextBodyReplacementTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextDeletionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextInsertionCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextInsertionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextInsertionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextInsertionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextInsertionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextMergeFragment",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringTextMergeGroup",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfDeletionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionCandidate",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionProposal",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTarget",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.AuthoringValueOfInsertionTargetResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.ExpressionSlotContext",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.FileSystemAuthoringModuleResolver",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.IAuthoringModuleResolver",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.SourceCoordinateMap",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.SourceRange",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Authoring.XsltAuthoring",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCaptureFailure",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCaptureFailureKind",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCaptureOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCaptureOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCaptureResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Capture.XsltCapturedOutput",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Runtime.XsltGlobalVariableException",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Runtime.XsltRuntimeException",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Stylesheet.OutputProperties",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidation",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationCoverage",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationCoverageGap",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationDiagnostic",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationOptions",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationOutcome",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    },
+    {
+      "assembly": "Bosak.Xslt",
+      "type": "Bosak.Xslt.Validation.XsltValidationResult",
+      "proposedGroup": "compatibility-watch-no-blanket-freeze",
+      "ownerDisposition": "Pending",
+      "frozen": false
+    }
+  ]
+}

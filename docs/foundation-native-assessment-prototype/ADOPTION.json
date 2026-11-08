@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "recordedBeforeImplementation": true,
+  "scope": "PV-Q03c isolated strict whole-document assessment requests over provider-owned version-guarded inputs;native bounded profile only. No production/API/general host validation integration.",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "beforeFiles": {
+    "docs/foundation-native-node-prototype/MANIFEST.json": "76dedd4c044674e16e60c0ceaf151625f6cc9814cc055f4bd3950b1c80b41852",
+    "docs/foundation-native-container-prototype/MANIFEST.json": "b2f833088205ade108642381a55223fbca0ef3a273ecb21a9314dc2b21e7b4ee",
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a"
+  },
+  "nativeFiles": {
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "docs/DOCUMENT-ASSESSMENT.md": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91",
+    "AGENTS.md": "095293df131025a5c786b8fab4e30946b8d19c8bfeeac858cdcab8f1b81fb1f7",
+    "docs/ASSESSMENT-ADOPTION-2026-10-29.md": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ],
+      "source": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/"
+    },
+    {
+      "revision": "REC-xmlschema11-2-20120405",
+      "sections": [
+        "3.3.3"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/"
+    },
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.8",
+        "3.13"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/"
+    }
+  ],
+  "intentionalDeviations": "Strict maps only to the existing native bounded whole-document assessment profile. Unknown trusted-input implementations and lax/type/constructed/compatible routes remain Unsupported. Provider-owned input capture, exact output source lineage/fresh snapshot, issuer ownership, finite diagnostic budgets and transactional publication are Bosak host policy. No new native XSD/lexical/assertion semantics;no generic XQuery/XSLT validate mapping, external input ownership or owner release acceptance.",
+  "implementationLocation": "Core dossier prototype test project only;production and sibling sources unchanged"
+}

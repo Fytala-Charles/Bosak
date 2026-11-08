@@ -1,0 +1,110 @@
+// Generated isolated C45 public-shape proposal; all bodies refuse execution.
+// AUTHOR: Charles Korthout; COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System;
+using System.Collections.Immutable;
+using System.Threading;
+using System.Threading.Tasks;
+using Bosak.XPath.Core.Schema;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+namespace Bosak.XPath.Api.Schema;
+/// <summary>Explicit finite admission limits; no owner workload defaults are selected.</summary>
+public readonly struct SchemaQueryLimits
+{
+    /// <summary>Specifies positive counts and nonnegative scale; the default struct is invalid.</summary>
+    /// <param name="maxOpenSnapshots">Maximum live admitted snapshots per session.</param>
+    /// <param name="maxCachedValuesPerSnapshot">Maximum issued scalar cache entries per snapshot.</param>
+    /// <param name="maxTypedValueAtoms">Maximum atoms consumed from one typed-value result.</param>
+    /// <param name="maxNumericDigits">Positive maximum exact coefficient digits admitted or created.</param>
+    /// <param name="maxDecimalScale">Nonnegative maximum supplied decimal scale.</param>
+    public SchemaQueryLimits(int maxOpenSnapshots, int maxCachedValuesPerSnapshot, int maxTypedValueAtoms, int maxNumericDigits, int maxDecimalScale) => throw new NotSupportedException("Proposal only");
+    /// <summary>Maximum live admitted snapshots.</summary>
+    public int MaxOpenSnapshots => throw new NotSupportedException("Proposal only");
+    /// <summary>Maximum issued scalar cache entries per snapshot.</summary>
+    public int MaxCachedValuesPerSnapshot => throw new NotSupportedException("Proposal only");
+    /// <summary>Maximum atoms consumed from one result, checked during consumption.</summary>
+    public int MaxTypedValueAtoms => throw new NotSupportedException("Proposal only");
+    /// <summary>Maximum coefficient digits checked before normalization and arithmetic allocation.</summary>
+    public int MaxNumericDigits => throw new NotSupportedException("Proposal only");
+    /// <summary>Maximum supplied decimal scale, including zero.</summary>
+    public int MaxDecimalScale => throw new NotSupportedException("Proposal only");
+}
+/// <summary>Engine-created opt-in compiled host session; provider resources remain borrowed.</summary>
+public sealed class SchemaQuerySession : IDisposable
+{
+    private SchemaQuerySession() { }
+    /// <summary>Captures the actual immutable environment and optionally binds a compiled assessor.</summary>
+    /// <param name="expression">XPath source.</param>
+    /// <param name="limits">Explicit finite counts and nonnegative scale.</param>
+    /// <param name="options">Existing options copied under the selected capture policy.</param>
+    /// <param name="assessor">Optional borrowed schema assessor.</param>
+    /// <param name="cancellationToken">Compilation/binding cancellation.</param>
+    /// <returns>A session or explicit Unsupported; no implicit legacy/native fallback.</returns>
+    public static SchemaResult<SchemaQuerySession> CompileXPath(string expression, SchemaQueryLimits limits, CompileOptions? options = null, ISchemaAssessor? assessor = null, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+    /// <summary>The exact engine-issued immutable compilation environment.</summary>
+    public IQuerySemanticEnvironment Environment => throw new NotSupportedException("Proposal only");
+    /// <summary>The exact bound advisor, or null for the ordinary-XML profile.</summary>
+    public ISchemaAssessmentAdvisor? Advisor => throw new NotSupportedException("Proposal only");
+    /// <summary>Admits one borrowed input identity and its actual resource lifetime.</summary>
+    /// <param name="input">Immutable/version-guarded input.</param>
+    /// <param name="lifetime">Admission over already-owned resources.</param>
+    /// <param name="originalAssessment">Issued original assessment, absent for ordinary XML.</param>
+    /// <param name="compatibilityView">Explicit admitted source/target proof when required.</param>
+    /// <param name="cancellationToken">Admission cancellation.</param>
+    /// <returns>An engine-created snapshot admission or Unsupported.</returns>
+    public SchemaResult<SchemaQuerySnapshot> OpenSnapshot(ISchemaAssessmentInput input, IQueryOperationLifetime lifetime, ISchemaAssessmentOrigin? originalAssessment = null, ISchemaCompatibilityView? compatibilityView = null, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+    /// <summary>Owns admissions through the complete callback consumption/detachment interval.</summary>
+    /// <typeparam name="T">Caller result type; returned graphs are not recursively detached.</typeparam>
+    /// <param name="snapshots">An immutable set of same-session admissions; empty for source-free work.</param>
+    /// <param name="work">Borrowed operation callback.</param>
+    /// <param name="cancellationToken">Cooperative raw-work cancellation.</param>
+    /// <returns>The callback result after admissions finish.</returns>
+    public T Run<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, T> work, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+    /// <summary>Retains admissions until the raw callback task completes, independent of canceled waits.</summary>
+    /// <typeparam name="T">Caller result type.</typeparam>
+    /// <param name="snapshots">Same-session snapshot admissions.</param>
+    /// <param name="work">Raw asynchronous callback including deferred consumption.</param>
+    /// <param name="cancellationToken">Cooperative raw-work cancellation.</param>
+    /// <returns>The actual operation task.</returns>
+    public Task<T> RunAsync<T>(ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation, Task<T>> work, CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+    /// <summary>Waits for admitted raw work; canceling this wait does not end that work.</summary>
+    /// <param name="cancellationToken">Wait cancellation only.</param>
+    /// <returns>A task completing when admitted raw work has finished.</returns>
+    public Task DrainAsync(CancellationToken cancellationToken = default) => throw new NotSupportedException("Proposal only");
+    /// <summary>Revokes engine admissions; does not dispose borrowed provider resources or force raw work to end.</summary>
+    public void Dispose() => throw new NotSupportedException("Proposal only");
+}
+/// <summary>Engine-created revocable admission over a caller-owned input snapshot.</summary>
+public sealed class SchemaQuerySnapshot : IDisposable
+{
+    private SchemaQuerySnapshot() { }
+    /// <summary>The descriptive provider snapshot binding; no new authority or lease.</summary>
+    public ISchemaSnapshotBinding Binding => throw new NotSupportedException("Proposal only");
+    /// <summary>Revokes this engine admission; actual owner cleanup follows admitted raw work.</summary>
+    public void Dispose() => throw new NotSupportedException("Proposal only");
+}
+/// <summary>Callback-borrowed operation over its complete admitted snapshot set.</summary>
+public sealed class SchemaQueryOperation
+{
+    private SchemaQueryOperation() { }
+    /// <summary>Projects an admitted root under this operation's availability checks.</summary>
+    /// <param name="snapshot">A snapshot in this operation's admitted set.</param>
+    /// <returns>The borrowed root; no ownership transfer or automatic detachment.</returns>
+    public IXdmNode GetRoot(SchemaQuerySnapshot snapshot) => throw new NotSupportedException("Proposal only");
+    /// <summary>Admits an authority-issued atomic/list/union container before reading its contents.</summary>
+    /// <param name="snapshot">The exact source admission in this operation.</param>
+    /// <param name="value">The immutable issued provider value.</param>
+    /// <returns>Flattened XDM atomics with per-atomic evidence, or Unsupported.</returns>
+    public SchemaResult<XdmValue> ReadTypedValue(SchemaQuerySnapshot snapshot, ISchemaTypedValue value) => throw new NotSupportedException("Proposal only");
+    /// <summary>Requests explicit provider-owned simple construction and admits its result.</summary>
+    /// <param name="input">Atomic/lexical input under the selected constructor profile.</param>
+    /// <param name="targetType">Owned simple target type.</param>
+    /// <param name="episode">Captured assessment constants.</param>
+    /// <returns>Constructed atomics, Invalid or Unsupported; no fabricated original assessment.</returns>
+    public SchemaResult<XdmValue> ConstructSimpleValue(XdmValue input, ISchemaComponentHandle targetType, ISchemaAssessmentEpisode episode) => throw new NotSupportedException("Proposal only");
+    /// <summary>Evaluates captured XPath or XQuery; XSLT uses its typed transform producer instead.</summary>
+    /// <param name="context">Dynamic inputs whose selected policy must be enforced.</param>
+    /// <returns>The ordinary result graph, borrowed unless explicitly detached by the caller.</returns>
+    public XdmValue Evaluate(EvaluationContext context) => throw new NotSupportedException("Proposal only");
+}

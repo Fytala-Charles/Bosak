@@ -1,0 +1,32 @@
+{
+  "selectedBaseline": null,
+  "cohorts": [
+    {
+      "id": "TA-49-original-serialization-provider",
+      "status": "DiagnosticBeforeFixOnly_NotComparableToCurrentProtocol",
+      "reason": "Earlier max2 schema and single-child driver/format differ;never an accepted owner baseline."
+    },
+    {
+      "id": "TA-50-immutable-provider-pilot",
+      "status": "PriorDiagnosticOnly_NotComparableToCurrentProtocol",
+      "reason": "Earlier max2 schema/100-cycle single-session driver differs from max8 three-session method."
+    },
+    {
+      "id": "repository-recorded-shipped-release",
+      "status": "NotQualifiedForThisProtocol",
+      "reason": "No supplied matching public provider capability,fixture/profile/limit/cohort/load receipt;do not execute or infer comparable results."
+    },
+    {
+      "id": "current-immutable-provider",
+      "status": "CandidateMethodObservedOnly",
+      "reason": "Six runs are candidate repetitions,not an independently selected baseline."
+    }
+  ],
+  "requiredBeforeBaselineRun": [
+    "Owner-selected compatible provider/engine cohort and immutable binary/configuration hashes",
+    "Same fixture bytes,query,profile,limits,work-unit scope and runtime/architecture/OS",
+    "Same compile-versus-execution and warmup/repetition protocol",
+    "Separate loaded-binding receipts and safe finite launcher",
+    "Owner-approved workload and explicit unit-bearing budget;no implicit waiver"
+  ]
+}

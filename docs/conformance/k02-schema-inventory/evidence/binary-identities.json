@@ -1,0 +1,62 @@
+[
+  {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+    "sha256": "4d338e54ad4c660e6345a2cd24b602bfc42f87318e4d2fb7655c48b127a87de8",
+    "role": "implemented",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+    "sha256": "2c3ac989b8048724c3764a44fde1543b6f167622ea078f3b00241ad29fa3cfe8",
+    "role": "implemented",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+    "sha256": "940293d926080b9deb4bdc0be214d0f7732ea6489c612926d514ed85b8809c91",
+    "role": "implemented",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-loader\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+    "sha256": "f34a476df45064205add826fccdc764e75d827ea4893d32ece5c728d6f478577",
+    "role": "isolated-prototype",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-loader\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+    "sha256": "708589e7e4046fc4e87c7ffd19cd56f6c866363b021cef91cfd17edede5e792f",
+    "role": "isolated-prototype",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-loader\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+    "sha256": "7670ce59e2c8788f79f7fab75b5a372be78748e4a13a274d67140da28b5e8801",
+    "role": "isolated-prototype",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-implemented\\bin\\Release\\net10.0\\K02LoaderDiagnostic.dll",
+    "sha256": "6244ff0ecfe0163b1480e9517b9fefd562c2b4f1a1b063bfb0fe65b4aa731a23",
+    "role": "driver-or-qt4",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+    "sha256": "7c5604b42f070e789c1bfe07207a4967975221ea64005a99b1e15f5dd2f402e3",
+    "role": "driver-or-qt4",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-wide\\bin\\Release\\net10.0\\K02WideDiagnostic.dll",
+    "sha256": "5e55690458a78a49c194c176dd64652ac13dbb2d12ccd43fc046ae8946ea9769",
+    "role": "audit-driver",
+    "signedPackageClaim": false
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\k02-wide-trace\\bin\\Release\\net10.0\\Probe.dll",
+    "sha256": "5264945c4cebf01b0d3bad02c1c72b6aef852425406b0836862e67173c81f61b",
+    "role": "audit-driver",
+    "signedPackageClaim": false
+  }
+]

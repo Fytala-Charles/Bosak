@@ -1,0 +1,66 @@
+{
+  "additionalPassedTests": 0,
+  "checks": [
+    {
+      "id": "UBR01",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Public factory inventory"
+    },
+    {
+      "id": "UBR02",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Annotated String production routes"
+    },
+    {
+      "id": "UBR03",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Exact carrier/tags and separate ownership"
+    },
+    {
+      "id": "UBR04",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Preserved public enum identities"
+    },
+    {
+      "id": "UBR05",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Complete-delivery whitelist exclusion"
+    },
+    {
+      "id": "UBR06",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Getter/consumer activation hazard"
+    },
+    {
+      "id": "UBR07",
+      "status": "CompletedCoreStaticReview",
+      "subject": "No byte-buffer/new lease claim"
+    },
+    {
+      "id": "UBR08",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Constructor versus complete read distinction"
+    },
+    {
+      "id": "UBR09",
+      "status": "CompletedCoreStaticReview",
+      "subject": "No broad semantic/native acceptance"
+    },
+    {
+      "id": "UBR10",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Future activation prerequisites"
+    },
+    {
+      "id": "UBR11",
+      "status": "CompletedCoreStaticReview",
+      "subject": "No reflected discriminant qualification"
+    },
+    {
+      "id": "UBR12",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Next legacy scope and unwaived R4-R7"
+    }
+  ],
+  "ownerAccepted": false
+}

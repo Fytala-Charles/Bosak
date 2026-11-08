@@ -1,0 +1,23 @@
+python : test_complete_observed_baseline (test_manifest.ManifestChecks.test_complete_observed_baseline) ... ok
+At line:14 char:1
++ python -m unittest discover -s docs/foundation-api-contract-draft/too ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_complete_o...aseline) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+test_duplicate_entry_refuses (test_manifest.ManifestChecks.test_duplicate_entry_refuses) ... ok
+test_fabricated_case_result_refuses (test_manifest.ManifestChecks.test_fabricated_case_result_refuses) ... ok
+test_false_freeze_refuses (test_manifest.ManifestChecks.test_false_freeze_refuses) ... ok
+test_incomplete_closure_refuses (test_manifest.ManifestChecks.test_incomplete_closure_refuses) ... ok
+test_lost_parameter_dependency_refuses (test_manifest.ManifestChecks.test_lost_parameter_dependency_refuses) ... ok
+test_missing_entry_refuses (test_manifest.ManifestChecks.test_missing_entry_refuses) ... ok
+test_overloads_have_distinct_exact_ids (test_manifest.ManifestChecks.test_overloads_have_distinct_exact_ids) ... ok
+test_parameter_only_runtime_dependency_is_retained
+(test_manifest.ManifestChecks.test_parameter_only_runtime_dependency_is_retained) ... ok
+test_required_and_default_node_slots_differ (test_manifest.ManifestChecks.test_required_and_default_node_slots_differ)
+... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.516s
+
+OK

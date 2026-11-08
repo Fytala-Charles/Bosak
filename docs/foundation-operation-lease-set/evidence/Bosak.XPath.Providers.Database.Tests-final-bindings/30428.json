@@ -1,0 +1,41 @@
+{
+  "processId": 30428,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\operation-lease-set\\DatabaseLoopback\\Bosak.XPath.Core.dll",
+      "sha256": "2e67eddbd172c2969e35251ca186c09acea9b021cd3a7ce2e97c8834eff7ae29",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\operation-lease-set\\DatabaseLoopback\\Bosak.XPath.Providers.Database.Tests.dll",
+      "sha256": "07f9b614c20dd13e6715fd684bdaeec5dcdad6c1f7fc0d1e5609a47caf355f0e",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\operation-lease-set\\DatabaseLoopback\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "8b5c6dd4591d6facef32ed2828f877cb5f62f35df46ebd43d65c765780da8feb",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\operation-lease-set\\DatabaseLoopback\\Bosak.XPath.Providers.dll",
+      "sha256": "feed752b59990035d08dc3a3c831465d3b85895aa987b92ff08d34801b12b2ce",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\operation-lease-set\\DatabaseLoopback\\Bosak.XPath.Runtime.dll",
+      "sha256": "4f581d21e0d255f47d6925905d54cee127a038eca155c22e764632b6d8a37be7",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "scope": "PV-Q03 read-only feasibility and proposed isolated prototype; no semantic implementation or owner adoption",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeStatus": "",
+  "nativeFiles": {
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "docs/DOCUMENT-ASSESSMENT.md": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91",
+    "AGENTS.md": "095293df131025a5c786b8fab4e30946b8d19c8bfeeac858cdcab8f1b81fb1f7"
+  },
+  "coreFiles": {
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Core/Schema/QueryOperationLifetime.cs": "59c873444b045a93f6e77693dc1f4855dfd5c5fbc35ce996e65943981ceca622",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "23139a2daca89ab1f836941314bb523f797c0a7d52fe4111bce2fb0e5ca78109",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "52ed9b5eb06b7810ed47009364747d1ff133552b437e35b3ae2acc65aeda850a",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd"
+  },
+  "priorPackets": {
+    "docs/foundation-native-schema-lane/MANIFEST.json": "c5e3bc9b5082c8c77c8b106cc9214d701f691b0941df11bf81d6a26765fa23c7",
+    "docs/foundation-legacy-disposition/ADOPTION.json": "4f959b38eccfeb9c85384765cfb04e24af72003cd25ecb152b5266b2e7c4916d",
+    "docs/foundation-public-primitives/MANIFEST.json": "5b4bda148a8ca95e9440b0bdd6ae6a616a8545b25402f6563c68a9498c3b4437"
+  },
+  "specificationBasis": "Existing immutable XDM adoption in foundation-legacy-disposition/ADOPTION.json; no new normative schema/host mapping adopted here. Exact provider and host contract bytes pinned above. Refresh immutable adoption before prototype implementation.",
+  "intentionalDeviations": "Proposed provider issuance, membership and raw lifetime are Bosak host policy. No new XSD semantics, lax/type mapping, compatibility or full conformance is adopted."
+}

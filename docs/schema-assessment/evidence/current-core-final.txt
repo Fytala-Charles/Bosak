@@ -1,0 +1,16 @@
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Schema.Current -> D:\Development\Bosak\.guard-tmp\schema-assessment-current\Source\bin\Release\net10.0\Bosak.Schema.dll
+  Schema.Current.Tests -> D:\Development\Bosak\.guard-tmp\schema-assessment-current\Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-assessment-current\Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-assessment-current-qualified-results\charl_CHARLES_2026-10-29_13_40_05_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   191, Skipped:     0, Total:   191, Duration: 204 ms - Bosak.Schema.Tests.dll (net10.0)

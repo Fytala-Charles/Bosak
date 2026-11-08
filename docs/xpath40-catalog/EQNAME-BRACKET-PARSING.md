@@ -4,6 +4,8 @@
   <p>22 October 2026 - source 1.23.5, unpublished</p>
 </div>
 
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-compound. Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical. Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 **Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
 
 ## Contract and finding

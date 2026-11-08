@@ -1,0 +1,36 @@
+{
+  "slice": "K04-C31",
+  "status": "qualified bounded namespace-copy implementation; admission unchanged",
+  "candidateVersion": "1.31.0",
+  "publishedVersion": "1.26.3",
+  "regressionsPassed": 76,
+  "oldEngine": {
+    "Passed": 9,
+    "Failed": 67
+  },
+  "solutionPassed": 24010,
+  "originalsPassed": 49,
+  "contextOriginalsUnchanged": 43,
+  "normalQt3": [
+    31208,
+    0,
+    613
+  ],
+  "prototypeQt3": [
+    31257,
+    0,
+    564
+  ],
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "gatedSets": 230,
+  "diagnosticProcesses": 216,
+  "constructionImplemented": false,
+  "normalRoutingChanged": false,
+  "baselineChanged": false,
+  "release": false,
+  "next": "C32 exact copy-only admission review"
+}

@@ -1,0 +1,59 @@
+{
+  "basis": "Nine unchanged projects from the complete solution run plus fresh complete Standard.Tests after a unit assertion rendering correction. No production change after full run.",
+  "projects": [
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "passed": 66,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Parser.Tests",
+      "passed": 202,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Core.Tests",
+      "passed": 132,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "passed": 269,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Api.Tests",
+      "passed": 489,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XQuery.Tests",
+      "passed": 347,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "passed": 47,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Providers.Tests",
+      "passed": 201,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.Xslt.Tests",
+      "passed": 8196,
+      "source": "initial-solution-tests.log"
+    },
+    {
+      "name": "Bosak.XPath.Standard.Tests",
+      "passed": 13551,
+      "source": "standard-tests-final.log"
+    }
+  ],
+  "totalPassed": 23500,
+  "finalFailed": 0,
+  "initialFullExitCode": 1,
+  "correctedProjectExitCode": 0
+}

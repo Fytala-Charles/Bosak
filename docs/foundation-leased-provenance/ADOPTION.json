@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.77.0",
+  "candidateVersion": "1.78.0",
+  "beforeHashes": {
+    "docs/foundation-public-provenance/MANIFEST.json": "a0a78f4f75afeacc838c09ae38fa9818f1f03c6666d6981f83ce40cb415eacff",
+    "docs/foundation-public-provenance/OPEN-ITEMS.json": "3566d609a7e3d35adc669a6bdfa41206147a332d7a1974863cd768a5d8f40380",
+    "docs/foundation-provenance-policy/POLICY.json": "012c99ae7b3dac13d80d253f8fc2cd3022e070f6053c0d8de55ab1407238c7cd",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "51a2b52a8144125e1667c5b12e2d8207d9bd0a146ddf31603169ea1ed20287ae",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "2bfc19eeaae8384c234ee13c45d231dd075ef8785bf35c066172b8ca5b1b58f7",
+    "tests/Bosak.XPath.Runtime.Tests/PublicCompatibleTests.cs": "09cb5f153aaaf907a1f28382dd4f372ca26961b837c92db9ca8620849897d069",
+    "src/Directory.Build.props": "ffa4ff33ef0de7c188494fc1a66ac90c13ba4e10679f59ce00daf5da0df46dce"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.7.1",
+        "2.7.5"
+      ]
+    }
+  ],
+  "semanticScope": "PV-H02 bounded leased compatible atomic observation. Type metadata follows the immutable XDM basis; raw lease/proof, expiry and additive signature are explicit Bosak Core policy. Source metadata is not rewritten into target-owned handles. Existing proof episode, scalar identity and context-free helper behavior remain unchanged.",
+  "newCoreSignature": "public SchemaResult<ISchemaAtomicProvenance> SchemaQueryOperation.ReadAtomicProvenance(XdmValue value)",
+  "signatureDisposition": "Core-selected additive member addressing the documented PV-H02 gap, not a member of the original reviewed throwing draft. Requires final owner/manifest acceptance before freeze; preserve original draft/receipts unchanged.",
+  "lifetimePolicy": "Only public compatible singleton identity profile is selected. Create view and read every property within the exact raw operation's serialized source/target provider window, validating registered carrier and current operation issuer against that operation's already-established positive proof and current endpoints/source/type ownership. No new Establish per getter, no issuer/view stored in the stable payload cache, no ambient authority, no scalar/source quota slot. Retained views refuse after raw close/cancellation before provider callbacks; real in-flight calls retain admissions until completion.",
+  "exclusions": "No general public list/union/empty container transport, target-type remapping, legacy evidence adapter, hard sandbox, owner/native/performance budget/C45/freeze/package/publication acceptance."
+}

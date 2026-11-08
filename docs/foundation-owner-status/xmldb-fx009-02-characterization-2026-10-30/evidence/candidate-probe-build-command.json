@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\candidate\\source\\qualification\\Probe\\Fx009Probe.csproj",
+    "-c",
+    "Release",
+    "--no-restore",
+    "-v",
+    "quiet"
+  ],
+  "exitCode": 0,
+  "seconds": 1.6342328999890015,
+  "timeoutSeconds": 240,
+  "isolatedNuGetAuditDisabled": false
+}

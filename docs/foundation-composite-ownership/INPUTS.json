@@ -1,0 +1,19 @@
+{
+  "reviewBase": "986b56d62724da494b953057ebd2962a8a8e1d23",
+  "productionRevision": "f72db224",
+  "productionVersion": "1.39.0",
+  "productionChanges": false,
+  "files": {
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "d64408e99937d88250c60eb0cfcc0f60110fca7bcc313be04bb6812ae31e0827",
+    "src/Bosak.XPath.Runtime/Vm/SchemaProviderSessionBinding.cs": "2b799036d3b17a40ee795df4bfef9bcfd56c69f02ca4dba1a3f5b91ec878fa7a",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+    "src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs": "9e61088b33d50790dd1b9ce26cffa96ef51ef556d1fc69281cf9d508c69ad30c",
+    "docs/foundation-c45-revised-shape/proposal/QueryFacade.cs.txt": "5a15e9eda43d062c71e01aca95dad6977d2f58df2cade318a3494c4412e8eb9c",
+    "docs/foundation-c45-revised-shape/README.md": "445129bb147d54c8edcef4e19ef2adbbedb0c2b027bfa7cea86ccbccb0019385",
+    "docs/foundation-c45-handoff136/SCHEMA.md": "680bf73854a65cb125d56fa057a94200491ddc72a1a4846a272c9d80d6e6a604",
+    "docs/foundation-c45-handoff136/XMLDB.md": "ca4a261b17e768e6c79b2fd5a5fdbf5f35c8f5c465d2bddc33d720681f56be54",
+    "docs/foundation-c45-handoff136/BRAID.md": "b4cf32fbf797d88229c7619db87da7822c98e289dda71dbf191113f2fa804158",
+    "docs/foundation-independent-owners/evidence/INPUTS.json": "fab627dd478b3f820ada46a13b1383509f9c77c659ee7df5849c4e03a0e30bfc",
+    "docs/foundation-independent-owners/README.md": "728bb96ae872ca67a2566961862a0979791c3490eec6408db11565b2c7a0a3c7"
+  }
+}

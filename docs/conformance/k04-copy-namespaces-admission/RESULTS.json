@@ -1,0 +1,32 @@
+{
+  "slice": "K04-C32",
+  "status": "exact 49-case admission qualified; owner approval pending",
+  "catalogCases": 31821,
+  "catalogSets": 428,
+  "changedPredicates": 49,
+  "constructionPredicatesRetained": 87,
+  "contextPredicatesUnchanged": 43,
+  "normalQt3": [
+    31208,
+    0,
+    613
+  ],
+  "prototypeQt3": [
+    31257,
+    0,
+    564
+  ],
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "lexicalControls": 37,
+  "diagnosticProcesses": 152,
+  "sourceChanged": false,
+  "baselineChanged": false,
+  "versionChanged": false,
+  "release": false,
+  "inheritedSolutionPassed": 24010,
+  "inheritedFocusedPassed": 76
+}

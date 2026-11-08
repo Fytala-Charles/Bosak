@@ -1,0 +1,56 @@
+c0427907002a355f6662ddcdc7412ad8f4a18846
+2026-10-08T21:14:47+02:00
+2026-10-08T21:14:47+02:00
+feat(xslt40): REQ-118 4.0-S7 — XSLT 4.0 easy surfaces (#91)
+
+* feat(xslt40): REQ-118 4.0-S7 — XSLT 4.0 easy surfaces
+
+- Supported XSLT version is now 4.0: IsForwardsCompatible/IsForwardsCompatibleElement
+  (Stylesheet) and the TransformEngine mirror treat versions > 4.0 as
+  forwards-compatible; per draft §3.8.2/§3.8.3 no differences are defined for
+  XSLT 3.0 behavior, so the new surfaces are NOT version-gated.
+- xsl:note (§3.11.2): stripped at load in ValidateInstructionTree without
+  validation; may appear anywhere except as the outermost element.
+- xsl:if then/else (§8.1): plain expressions in place of the sequence
+  constructor; then+children is a static XTSE0010; else defaults to ();
+  no-EBV test raises FORG0006. Implemented in the template-body, function-body,
+  simple-content and accumulator-rule evaluators.
+- separator on xsl:for-each (§7.1.1) and xsl:apply-templates (§6.7): an AVT
+  inserted as a text node between successive items of the sorted sequence
+  (raw-sequence contexts get a string item); streamed single-pass paths
+  included; separator whitelisted on apply-templates.
+- xsl:map select/duplicates (§21.1.1): select coerces input to map(*)* (non-map
+  XTTE3375) and merges as map:merge; duplicates accepts use-first/use-last/
+  use-any/combine/reject or an arity-2 combining function (FOJS0005 invalid,
+  'reject' FOJS0003, default XTDE3365 preserved); select+content is XTSE3185.
+- StreamabilityAnalyzer: xsl:map with @select analyzes the select operand only.
+
+* test(xslt40): REQ-118 4.0-S7 — XSLT 4.0 surface tests (38 methods)
+
+Xslt40SurfaceTests covers xsl:note discard/early-strip, xsl:if then/else
+(true/false/else-only/else-with-content/XTSE0010/FORG0006/function body),
+separator on for-each/apply-templates (sort, AVT, empty/single, raw-sequence
+variable), xsl:map select/duplicates (all five strategies, combining
+function, XTTE3375/XTDE3365/FOJS0003/FOJS0005/XTSE3185), map-entry promotion
+(XTSE3280 pinned by xt3), and version behavior: surfaces work at version=3.0
+per draft §3.8.2/§3.8.3, version=4.0 is fully supported, version=5.0 keeps
+forwards-compatible processing.
+
+* docs: REQ-118 4.0-S7 — registry row, integration note, sixty-third handover
+
+* docs: record 4.0-S7 commit hashes in handover
+
+* fix(xslt40): keep supported-version ceiling at 3.0 (S7 post-review correction)
+
+The S7 ceiling bump to 4.0 regressed 21 W3C forwards-*/version-* tests:
+the frozen 3.x catalog exercises forward compatibility with
+version="4.0"/"3.3" stylesheets. The draft's §3.8.2/§3.8.3 same-results
+rule makes the new surfaces version-independent anyway, so the ceiling
+reverts to > 3.0 in Stylesheet.IsForwardsCompatible,
+IsForwardsCompatibleElement, and the TransformEngine mirror. The deviation
+test is rewritten to assert the correct behavior (4.0 = forwards-compatible
+ignore, 3.0 = XTSE0010) plus a new 3.0 rejection test; docs corrected.
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

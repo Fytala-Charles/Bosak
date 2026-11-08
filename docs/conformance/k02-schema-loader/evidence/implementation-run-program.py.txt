@@ -1,0 +1,15 @@
+from pathlib import Path
+import json,subprocess,time
+E=Path('docs/conformance/k02-schema-loader/evidence');requests=E/'implementation-requests.json';rows=json.loads(requests.read_text(encoding='utf-8'));receipts=[]
+for q in rows:
+ for mode in q['modes']:
+  log=E/('implemented-'+q['id']+'-'+mode+'.log');command=['dotnet','.guard-tmp/k02-implemented/bin/Release/net10.0/K02LoaderDiagnostic.dll',str(requests),q['id'],mode];start=time.monotonic()
+  with log.open('wb') as output:
+   try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+   except subprocess.TimeoutExpired:code=None;timeout=True
+  lines=log.read_text(encoding='utf-8-sig').splitlines();result=None
+  if code==0:
+   try:result=json.loads(lines[-1])
+   except(ValueError,IndexError):pass
+  receipts.append(dict(id=q['id'],mode=mode,exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result));print(q['id'],mode,result['kind'] if result else code,result['decision'] if result else '',flush=True)
+(E/'implementation-results.json').write_text(json.dumps(receipts,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')

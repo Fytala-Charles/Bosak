@@ -1,0 +1,24 @@
+{
+  "sourceVersion": "1.80.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-T04",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-T03",
+      "status": "CompleteBoundedCoreSelection"
+    },
+    {
+      "id": "PV-T04",
+      "status": "Next_WiderPrimitivePayloadPolicyAndDisposition"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "RequiredActualProviderBudgetAcceptance"
+    }
+  ]
+}

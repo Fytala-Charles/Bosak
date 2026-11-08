@@ -1,0 +1,15 @@
+{
+  "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs": "edfdbbfc2e4e1b9e89832a6dc25cf9241be954b6",
+  "src/Bosak.XPath.Core/Xdm/XdmElementSpec.cs": "efc6b2ef22de22ca2e90427bb85f366cd6baa470",
+  "src/Bosak.XPath.Parser/Ast/XPathParser.cs": "61767c311c05a591d50d46b4d1cee6eb285e2e78",
+  "src/Bosak.XPath.Providers/XDocument/XDocumentNode.cs": "a4de31fc97adb6274b7c29f8f4f1e117d2a85185",
+  "src/Bosak.XPath.Providers/XDocument/XDocumentProvider.cs": "b918510d064a46d3b86c59318d8942672767e733",
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "3e62be7d7803c0c553267e70da434445df131f07",
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": "7d857c34385e5dce2a25ada5c6c6e4a09761a6a8",
+  "src/Bosak.XQuery/Compiler/XQueryStaticContext.cs": "296249717143f9bcb830e79f94aadec825aa316b",
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": "b4d07d32c06e96fe4e7c2803dd84f002b34a8a91",
+  "src/Directory.Build.props": "77d2ba73a2439ffb38dda30c2144fa5dc164f64e",
+  "tests/Bosak.XQuery.Tests/CopyNamespacesTests.cs": "5b31506fb7ae185a9273c0d38c6df5e159c0c1d0",
+  "src/Bosak.XPath.Providers/XDocument/XQueryConstructionMetadata.cs": "b9154402b811f6cc7d0c5f4173ffd0c3be188bc1",
+  "tests/Bosak.XQuery.Tests/ConstructionModeTests.cs": "07faadccefa43522d0d616c44be91f32030444b1"
+}

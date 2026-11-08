@@ -1,0 +1,260 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-014",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-015",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-016",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-017",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-018",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-019",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-020",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-021",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-022",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-023",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-028",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-029",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-030",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-031",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-032",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-033",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-034",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-035",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-036",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-037",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-038",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-039",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-040",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-041",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-042",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-043",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-044",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-045",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-046",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-049",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-050",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-051",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-053",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-055",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-056",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-057",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-058",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-059",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-060",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-061",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-015",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-016a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-016b",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  }
+]

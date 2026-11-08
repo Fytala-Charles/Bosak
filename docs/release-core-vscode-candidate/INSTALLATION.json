@@ -1,0 +1,47 @@
+[
+  {
+    "label": "fresh",
+    "command": [
+      "C:\\Program Files\\Microsoft VS Code\\bin\\code.cmd",
+      "--user-data-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\fresh\\profile",
+      "--extensions-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\fresh\\extensions",
+      "--install-extension",
+      "D:\\Development\\Bosak\\docs\\release-core-vscode-candidate\\vscode-bosak-0.2.6-candidate.vsix",
+      "--force"
+    ],
+    "exitCode": 0,
+    "artifactSha256": "d83b9b8dfbc335d185ab729df6d9010379f53c5a2cbf368e806741664f4ca1bf"
+  },
+  {
+    "label": "upgrade-baseline",
+    "command": [
+      "C:\\Program Files\\Microsoft VS Code\\bin\\code.cmd",
+      "--user-data-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\upgrade\\profile",
+      "--extensions-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\upgrade\\extensions",
+      "--install-extension",
+      "D:\\Development\\Bosak\\.guard-tmp\\vscode-bosak-0.2.5-marketplace.vsix",
+      "--force"
+    ],
+    "exitCode": 0,
+    "artifactSha256": "3d2c15cb03a4bf9d4487ea0711fc0bc9e861b4eebfdf368c1fca38be17dd9e1c"
+  },
+  {
+    "label": "upgrade-candidate",
+    "command": [
+      "C:\\Program Files\\Microsoft VS Code\\bin\\code.cmd",
+      "--user-data-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\upgrade\\profile",
+      "--extensions-dir",
+      "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\upgrade\\extensions",
+      "--install-extension",
+      "D:\\Development\\Bosak\\docs\\release-core-vscode-candidate\\vscode-bosak-0.2.6-candidate.vsix",
+      "--force"
+    ],
+    "exitCode": 0,
+    "artifactSha256": "d83b9b8dfbc335d185ab729df6d9010379f53c5a2cbf368e806741664f4ca1bf"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.81.0",
+  "productionChanged": false,
+  "publicApiChanged": false,
+  "dispositionSelected": true,
+  "decisionCount": 12,
+  "newTestsPassed": 0,
+  "existingCharacterizationTestsPassed": 553,
+  "retainedUnitTestsPassed": 26338,
+  "freshFullRun": false,
+  "enumOnlyActivationImplemented": false,
+  "pvT06CoreDispositionCompleteWithScope": true,
+  "pv01Complete": false,
+  "ownerAccepted": false,
+  "requirementsWaived": 0,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "packagesBuilt": false,
+  "pushPerformed": false,
+  "nextSlice": "PV-L01"
+}

@@ -1,0 +1,26 @@
+{
+  "originalsRetainedIn": "EXECUTION-RECEIPTS.zip",
+  "corrections": [
+    {
+      "receipt": "typed-evidence-build-0.log.json",
+      "sha256": "71aa2a9f08a0fff535df8ffe5c7c89f88e51e99b5045c801dffdf56574318313",
+      "exitCode": 1,
+      "correction": "Initial test-fixture API compile corrections"
+    },
+    {
+      "receipt": "typed-evidence-build-1.log.json",
+      "sha256": "cc3c62f339bdccbfdf65c71552cbfeaaa142a062846e8ac6b62c177bd9b37b12",
+      "exitCode": 1,
+      "correction": "Enumerator fixture compile correction"
+    },
+    {
+      "receipt": "typed-evidence-controls-3.log.json",
+      "sha256": "cd679c95ba4fb9f7822c56393be036afdd61256a9bf092735d1b4b0be53bc469",
+      "exitCode": 1,
+      "correction": "Await asynchronous drain instead of requiring immediate completion"
+    }
+  ],
+  "finalBuild": "typed-evidence-build-4.log.json",
+  "finalFocused": "typed-evidence-controls-4.log.json",
+  "finalSuite": "typed-evidence-units.log.json"
+}

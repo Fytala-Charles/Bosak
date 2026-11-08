@@ -1,0 +1,11 @@
+# K04-C44 — Isolated schema session and identity prototype
+
+Use the C43 proposal as a review input. Implement only an isolated prototype under ignored temporary workspace paths, with reproducible sources/receipts in the evidence dossier; do not wire new public hooks into product assemblies or change the sibling repository.
+
+1. Prototype neutral immutable schema sessions, scoped type/declaration identities and the five explicit verdict classes with a deterministic fake provider. Prove that owned unsupported/invalid operations never fall through to legacy validation, while unowned legacy requests retain their behavior.
+2. Trace a provider-owned annotation through node matching, typed atomization, user-defined atomic values, binding/conversion and copied/stripped nodes. Resolve the concrete optional identity channel and assess XdmValue binary/layout/API compatibility before proposing permanent signatures. Equal QNames across sessions must not grant authority.
+3. Exercise complete actual-member sets with multi-head affiliation, abstract/block/nillability edges and function parameter contravariance. A fake-provider success qualifies core contract mechanics only; it does not implement or certify Bosak.Schema's missing component model or the original six assertions.
+4. Pin closure keys, resource/static context, cancellation, error/diagnostic mapping, mixed authority refusal, concurrency and escaped-value/session lifetime. Measure prototype costs without claiming product no-provider overhead from an isolated model.
+5. Prepare exact proposed API signatures, dependency placement, consumer migration/compatibility review and a bounded production implementation plan. Only then seek owner acceptance of the amended ADR-006/core contract before S4c/API freeze. Keep REQ-139 Pending until its actual acceptance criteria are fulfilled.
+
+Inherit C42's source-identical solution qualification and C43's fresh no-provider gates/maps; rerun appropriate gates if product source changes are later explicitly approved. No commercial activation, key handling, package dependency, normal harness/profile/skip/baseline change, upstream submission or release is included. Bosak.Schema owns XSD 1.1; provider-specific implementation and the separate XSLT integration run remain future work.

@@ -1,0 +1,50 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "C33-strip",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-preserve",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-duplicate",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-invalid",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-missing-semicolon",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-variable-order",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-function-order",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C33-mixed",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\controls\\controls.xml"
+  }
+]

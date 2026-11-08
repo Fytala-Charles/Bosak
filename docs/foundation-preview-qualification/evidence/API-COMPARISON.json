@@ -1,0 +1,13 @@
+{
+  "publicTypes": 318,
+  "declarationRows": 6465,
+  "products": 11,
+  "packaged": 9,
+  "unchangedNonpackaged": [
+    "Bosak.LanguageServer",
+    "Bosak.XPath.Providers.Database"
+  ],
+  "observedMetadataDelta": false,
+  "inventoryToolSha256": "e93d8313e17d8908210ed1b1c4ffb364a84bc8fc5d99cf5a57db4ba976b703aa",
+  "scope": "Public/protected declarations, defaults, enum constants, attributes/value layouts, references/friends and identities; not behavioral or owner/API-freeze acceptance."
+}

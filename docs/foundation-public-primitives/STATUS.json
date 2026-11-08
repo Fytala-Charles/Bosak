@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.81.0",
+  "unitTestsPassed": 26338,
+  "newTestsPassed": 102,
+  "focusedTestsPassed": 189,
+  "pvT05CompleteBounded": true,
+  "publicFactoryKindsSupported": 11,
+  "enumOnlyKindsImplemented": false,
+  "pv01Complete": false,
+  "publicTypes": 318,
+  "declarationRows": 6465,
+  "newDeclarationRows": 0,
+  "qt3": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "packagesBuilt": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "pushPerformed": false,
+  "nextSlice": "PV-T06"
+}

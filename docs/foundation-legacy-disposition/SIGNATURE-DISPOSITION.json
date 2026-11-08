@@ -1,0 +1,9 @@
+{
+  "existing": "Existing private and public contracts remain distinct;provider re-issuance uses current public API",
+  "newSignatureSelected": false,
+  "publicApiChanged": false,
+  "automaticLegacyBridgeImplemented": false,
+  "originalDraftModified": false,
+  "ownerAccepted": false,
+  "finalManifestAccepted": false
+}

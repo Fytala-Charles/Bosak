@@ -1,0 +1,183 @@
+// Generated synthetic advisor/compatibility protocol probe, not an XSD validator.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using C13901.Draft;
+using Bosak.XPath.Core.Xdm;
+try {
+ var checks=new List<object>();void Check(string id,bool ok){checks.Add(new{id,passed=ok});if(!ok)throw new Exception("Protocol control: "+id);}
+ void Throws<T>(string id,Action a) where T:Exception {bool seen=false;try{a();}catch(T){seen=true;}Check(id,seen);}
+ var bindings=new Dictionary<string,string>{{"p","urn:before"}};var context=new StaticContext(bindings);var envA=new EnvironmentToken(context);var envB=new EnvironmentToken(new StaticContext(new Dictionary<string,string>{{"p","urn:target"}}));var envC=new EnvironmentToken(context);var unsupported=new EnvironmentToken(context,"4.0");
+ var admitted=new HashSet<IQuerySemanticEnvironment>(ReferenceEqualityComparer.Instance){envA,envB,envC,unsupported};bindings["p"]="urn:after";
+ Check("C01-static-copy",envA.StaticContext.Namespaces["p"]=="urn:before");
+ var a=new Assessor(admitted);var b=new Assessor(admitted);var c=new Assessor(admitted);
+ var source=a.Bind(envA,default).Value;var target=b.Bind(envB,default).Value;var third=c.Bind(envC,default).Value;
+ Check("C02-separate-query-schema",source.QueryEnvironment.HostVersion=="3.1"&&source.Assessor.SchemaLanguage==SchemaLanguageVersion.Xsd11);
+ Check("C03-captured-endpoints",ReferenceEquals(source.QueryEnvironment,envA)&&ReferenceEquals(target.QueryEnvironment,envB)&&ReferenceEquals(source.Assessor,a));
+ Check("C04-unsupported-query-profile",a.Bind(unsupported,default).Kind==SchemaResultKind.Unsupported);
+ Throws<ArgumentException>("C05-lookalike-environment-not-admitted",()=>a.Bind(new EnvironmentToken(context),default));
+ using(var ct=new CancellationTokenSource()){ct.Cancel();Throws<OperationCanceledException>("C06-pre-canceled-bind",()=>a.Bind(envA,ct.Token));}
+ Throws<ArgumentException>("C47-unknown-assessment-mode",()=>source.Assess(new SchemaAssessmentRequest(new Input(),(SchemaAssessmentMode)999,null,null,new Episode(DateTimeOffset.UnixEpoch,0)),default));
+ var type=a.A.ResolveType(new("urn:types","T"),default);Check("C07-owned-type-lookup",type.Kind==SchemaResultKind.Supported&&a.A.Owns(type.Value));
+ Check("C08-missing-distinct",a.A.ResolveType(new("urn:types","missing"),default).Kind==SchemaResultKind.NotFound);
+ Check("C09-declaration-lookups",a.A.ResolveElementDeclaration(new("urn:types","root"),default).Kind==SchemaResultKind.Supported&&a.A.ResolveAttributeDeclaration(new("urn:types","id"),default).Kind==SchemaResultKind.Supported);
+ var forged=new Handle(a.A,"T",true);Check("C10-forged-handle-not-owned",!a.A.Owns(forged));Throws<ArgumentException>("C11-forged-relation-refused",()=>a.A.IsDerivedFrom(forged,a.A.Type,default));
+ a.A.ClosureAvailable=false;Check("C12-closure-unsupported-not-empty",a.A.GetComponentClosure(a.A.Type,default).Kind==SchemaResultKind.Unsupported);a.A.ClosureAvailable=true;
+ var input=new Input();var episode=new Episode(new DateTimeOffset(2026,10,31,12,0,0,TimeSpan.Zero),60);var req=new SchemaAssessmentRequest(input,SchemaAssessmentMode.Strict,null,null,episode);
+ var valid=source.Assess(req,default);Check("C13-valid-root-and-evidence",valid.Status==SchemaAssessmentStatus.Valid&&valid.ValidatedRoot is not null&&valid.Evidence!.IsComplete);
+ var location=new SchemaDiagnosticLocation(input.Source,input.Snapshot,input.Root,new Uri("file:///diagnostic.xml"),1,1,0,7);
+ var diagnostic=new SchemaAssessmentDiagnostic("DIAGNOSTIC","location-shape",location);
+ Check("C52-location-keeps-source-snapshot",ReferenceEquals(diagnostic.Location!.Source,input.Source)&&ReferenceEquals(diagnostic.Location.Snapshot,input.Snapshot)&&diagnostic.Location.ByteStart==0&&diagnostic.Location.ByteLength==7);
+ Throws<ArgumentOutOfRangeException>("C53-invalid-diagnostic-budgets",()=>source.Assess(req with {Limits=new SchemaAssessmentLimits(0,1)},default));
+ var truncated=source.Assess(req with {Input=new Input(SchemaAssessmentStatus.Invalid,true,true),Limits=new SchemaAssessmentLimits(1,10)},default);
+ Check("C54-diagnostic-truncation-not-coverage",truncated.DiagnosticsTruncated&&truncated.Evidence!.IsComplete&&truncated.Status==SchemaAssessmentStatus.Invalid);
+ var facts=((Advisor)source).Facts(valid.Evidence!.Origin);var originalOrigin=facts.Origin;var originalType=facts.Type;
+ Check("C14-original-evidence-owned",source.OwnsAssessment(originalOrigin)&&source.OwnsNodeFacts(facts)&&!target.OwnsAssessment(originalOrigin));
+ Check("C15-source-snapshot-separated",!ReferenceEquals(input.Source,input.Snapshot)&&ReferenceEquals(originalOrigin.Source,input.Source));
+ Throws<ArgumentException>("C48-requested-type-needs-type-mode",()=>source.Assess(req with {RequestedType=a.A.Type},default));
+ Throws<ArgumentException>("C49-governing-handle-role",()=>source.Assess(req with {GoverningDeclaration=a.A.Type},default));
+ var invalid=source.Assess(req with {Input=new Input(SchemaAssessmentStatus.Invalid)},default);Check("C16-invalid-no-query-root",invalid.Status==SchemaAssessmentStatus.Invalid&&invalid.ValidatedRoot is null&&invalid.Evidence is not null);
+ Throws<ArgumentException>("C50-invalid-not-published-as-node-facts",()=>((Advisor)source).Facts(invalid.Evidence!.Origin));
+ var notCovered=source.Assess(req with {Input=new Input(SchemaAssessmentStatus.Unsupported,false)},default);Check("C17-unsupported-no-query-root",notCovered.Status==SchemaAssessmentStatus.Unsupported&&notCovered.ValidatedRoot is null);
+ Throws<ArgumentException>("C51-unsupported-not-published-as-node-facts",()=>((Advisor)source).Facts(notCovered.Evidence!.Origin));
+ Throws<InvalidOperationException>("C18-incomplete-valid-refused",()=>source.Assess(req with {Input=new Input(SchemaAssessmentStatus.Valid,false)},default));
+ var stale=new Input();stale.Invalidate();int before=((Advisor)source).AssessCalls;Throws<ObjectDisposedException>("C19-stale-input-before-assessment",()=>source.Assess(req with {Input=stale},default));Check("C20-stale-not-dispatched",((Advisor)source).AssessCalls==before);
+ var changed=new Input(){InvalidateOnSecondCheck=true};Throws<ObjectDisposedException>("C21-changed-input-before-publication",()=>source.Assess(req with {Input=changed},default));
+ Throws<ArgumentException>("C22-foreign-requested-type",()=>source.Assess(req with {Mode=SchemaAssessmentMode.Type,RequestedType=b.A.Type},default));
+ Throws<ArgumentException>("C23-type-mode-needs-type",()=>source.Assess(req with {Mode=SchemaAssessmentMode.Type},default));
+ Throws<ArgumentOutOfRangeException>("C24-episode-timezone-bounds",()=>source.Assess(req with {Episode=new Episode(episode.CurrentDateTime,841)},default));
+ var moving=new MovingEpisode();var episodeInput=new Input(){BeforeSecondCheck=()=>moving.Now=moving.Now.AddDays(1)};var initial=moving.Now;
+ source.Assess(req with {Input=episodeInput,Episode=moving},default);Check("C25-episode-snapshotted-once",((Advisor)source).LastEpisodeTime==initial&&moving.Reads==1);
+ Check("C26-construction-unsupported-explicit",source.ConstructSimpleValue(XdmValue.FromString("value"),a.A.Type,episode,default).Kind==SchemaResultKind.Unsupported);
+ Check("C27-construction-invalid-distinct",source.ConstructSimpleValue(XdmValue.FromString("injected-invalid"),a.A.Type,episode,default).Kind==SchemaResultKind.Invalid);
+ var proof=new ProofAuthority(source,target,third);int assessments=((Advisor)source).AssessCalls;
+ var established=proof.Establish(source,target,envB,default);Check("C28-compatible-has-view",established.Decision==SchemaCompatibilityDecision.Compatible&&established.View is not null);var view=established.View!;
+ Check("C29-view-endpoints-exact",ReferenceEquals(view.Source,source)&&ReferenceEquals(view.Target,target)&&ReferenceEquals(view.ExecutionEnvironment,envB));
+ Check("C30-cross-universe-derived",view.IsDerivedFrom(a.A.Type,b.A.Type,default).Value);
+ Check("C31-matches-original-declaration",view.MatchesDeclaration(facts,b.A.Element,default).Value);
+ Check("C32-original-psvi-not-rewritten",ReferenceEquals(facts.Origin,originalOrigin)&&ReferenceEquals(facts.Type,originalType));Check("C33-no-instance-reassessment",((Advisor)source).AssessCalls==assessments);
+ Check("C34-no-implied-reverse",proof.Establish(target,source,envA,default).Decision==SchemaCompatibilityDecision.Unsupported);
+ Check("C35-explicit-incompatibility",proof.Establish(source,third,envC,default).Decision==SchemaCompatibilityDecision.Incompatible);
+ Check("C36-no-transitive-proof",proof.Establish(target,third,envC,default).Decision==SchemaCompatibilityDecision.Unsupported);
+ int establishedCount=proof.Dispatches;Throws<ArgumentException>("C37-same-description-wrong-token",()=>proof.Establish(source,target,new EnvironmentToken((StaticContext)envB.StaticContext),default));Check("C38-profile-guard-before-proof",proof.Dispatches==establishedCount);
+ Throws<ArgumentException>("C39-foreign-source-handle",()=>view.IsDerivedFrom(c.A.Type,b.A.Type,default));
+ Throws<ArgumentException>("C40-foreign-target-handle",()=>view.IsDerivedFrom(a.A.Type,c.A.Type,default));
+ Throws<ArgumentException>("C41-forged-facts-valid-fields",()=>view.MatchesDeclaration(new CopiedFacts(facts),b.A.Element,default));
+ using(var ct=new CancellationTokenSource()){ct.Cancel();Throws<OperationCanceledException>("C42-canceled-view-query",()=>view.IsDerivedFrom(a.A.Type,b.A.Type,ct.Token));}
+ Check("C43-supported-negative-relation",!view.IsDerivedFrom(a.A.OtherType,b.A.Type,default).Value);
+ b.Close();Throws<ObjectDisposedException>("C44-closed-target-view-refuses",()=>view.IsDerivedFrom(a.A.Type,b.A.Type,default));
+ Check("C45-closed-view-keeps-original-metadata",ReferenceEquals(facts.Origin,originalOrigin)&&ReferenceEquals(facts.Type,originalType));
+ Throws<ObjectDisposedException>("C46-closed-target-establish-refuses",()=>proof.Establish(source,target,envB,default));
+ Boundary.Run(Check);
+ var surface=typeof(ISchemaAssessor).Assembly.GetExportedTypes().OrderBy(t=>t.FullName).Select(t=>new {name=t.FullName,members=t.GetMembers(BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.DeclaredOnly).Select(m=>m.ToString()).Order().ToArray()}).ToArray();
+ var core=typeof(XdmValue).Assembly;
+ Console.WriteLine(JsonSerializer.Serialize(new {scope="Synthetic protocol guards only: no schema validation, actual compiler capture or compatibility algorithm",runtime=System.Environment.Version.ToString(),os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,coreSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(core.Location))).ToLowerInvariant(),checkCount=checks.Count,checks,surface,assessmentCalls=((Advisor)source).AssessCalls,proofDispatches=proof.Dispatches,originalEvidencePreserved=true},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error){Console.Error.WriteLine(error);System.Environment.ExitCode=1;}
+sealed class StaticContext:IQueryStaticContext {
+ public StaticContext(IDictionary<string,string> map){Namespaces=map.ToImmutableDictionary();}
+ public ImmutableDictionary<string,string> Namespaces{get;}
+}
+sealed class EnvironmentToken(IQueryStaticContext context,string version="3.1"):IQuerySemanticEnvironment {public QueryHostLanguage HostLanguage=>QueryHostLanguage.XPath;public string HostVersion=>version;public Uri XdmSpecificationRevision=>new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");public string BehaviorProfile=>"diagnostic";public IQueryStaticContext StaticContext=>context;public string DescriptorFormatVersion=>"boundary-test-v1";public string StaticContextFingerprint=>"protocol-fixture";}
+sealed record Episode(DateTimeOffset CurrentDateTime,int ImplicitTimezoneOffsetMinutes):ISchemaAssessmentEpisode;
+sealed class MovingEpisode:ISchemaAssessmentEpisode {public DateTimeOffset Now=new(2026,10,31,0,0,0,TimeSpan.Zero);public int Reads;public DateTimeOffset CurrentDateTime{get{Reads++;return Now;}}public int ImplicitTimezoneOffsetMinutes=>0;}
+sealed class Source:ISchemaSourceBinding {} sealed class Snapshot:ISchemaSnapshotBinding {}
+sealed class Input(SchemaAssessmentStatus status=SchemaAssessmentStatus.Valid,bool complete=true,bool truncated=false):ISchemaAssessmentInput {
+ bool current=true;int calls;public bool InvalidateOnSecondCheck;public Action? BeforeSecondCheck;public SchemaAssessmentStatus Status=>status;public bool Complete=>complete;public bool Truncated=>truncated;
+ public IXdmNode Root{get;}=new Node();public ISchemaSourceBinding Source{get;}=new Source();public ISchemaSnapshotBinding Snapshot{get;}=new Snapshot();public void Invalidate()=>current=false;
+ public void ThrowIfUnavailable(CancellationToken token){token.ThrowIfCancellationRequested();calls++;if(calls==2){BeforeSecondCheck?.Invoke();if(InvalidateOnSecondCheck)current=false;}if(!current)throw new ObjectDisposedException("input");}
+}
+sealed class Node:IXdmNode {public XdmNodeKind NodeKind=>XdmNodeKind.Element;public string LocalName=>"root";public string NamespaceUri=>"urn:diagnostic";public string Prefix=>"p";public string StringValue=>"probe";public XdmValue TypedValue=>XdmValue.FromString("probe");public IXdmNode? Parent=>null;public IXdmNode? Document=>null;public long DocumentOrder=>1;public string BaseUri=>"";public string DocumentUri=>"";public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>XdmSequence.Empty;public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>XdmSequence.Empty;public XdmSequence Axis(XdmAxis axis)=>XdmSequence.Empty;public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>"<root/>";}
+sealed class Outcome<T>(SchemaResultKind kind,T? value=default):SchemaResult<T> {public override SchemaResultKind Kind=>kind;public override T Value=>kind==SchemaResultKind.Supported?value!:throw new InvalidOperationException("No supported payload");public override string? DiagnosticCode=>kind==SchemaResultKind.Supported?null:"DIAGNOSTIC";}
+sealed class Handle(ISchemaAuthority owner,string name,bool type):ISchemaComponentHandle {public ISchemaAuthority Authority=>owner;public string Name=>name;public bool IsType=>type;}
+sealed class Authority:ISchemaAuthority {
+ readonly HashSet<ISchemaComponentHandle> owned=new(ReferenceEqualityComparer.Instance);public Handle Type{get;}public Handle OtherType{get;}public Handle Element{get;}public Handle Attribute{get;}public bool ClosureAvailable=true;
+ public Authority(){Type=new(this,"T",true);OtherType=new(this,"Other",true);Element=new(this,"root",false);Attribute=new(this,"id",false);owned.UnionWith(new[]{Type,OtherType,Element,Attribute});}
+ public bool Owns(ISchemaComponentHandle h)=>owned.Contains(h);public void Guard(ISchemaComponentHandle h){if(!Owns(h))throw new ArgumentException("Foreign/forged component");}
+ SchemaResult<ISchemaComponentHandle> Resolve(SchemaExpandedName name,Handle expected,CancellationToken token){token.ThrowIfCancellationRequested();return name.NamespaceUri=="urn:types"&&name.LocalName==expected.Name?new Outcome<ISchemaComponentHandle>(SchemaResultKind.Supported,expected):new Outcome<ISchemaComponentHandle>(SchemaResultKind.NotFound);}
+ public SchemaResult<ISchemaComponentHandle> ResolveType(SchemaExpandedName n,CancellationToken t)=>Resolve(n,Type,t);public SchemaResult<ISchemaComponentHandle> ResolveElementDeclaration(SchemaExpandedName n,CancellationToken t)=>Resolve(n,Element,t);public SchemaResult<ISchemaComponentHandle> ResolveAttributeDeclaration(SchemaExpandedName n,CancellationToken t)=>Resolve(n,Attribute,t);
+ public SchemaResult<bool> IsSameComponent(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){t.ThrowIfCancellationRequested();Guard(a);Guard(b);return new Outcome<bool>(SchemaResultKind.Supported,ReferenceEquals(a,b));}
+ public SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t)=>IsSameComponent(a,b,t);public SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t)=>IsSameComponent(a,b,t);
+ public SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle h,CancellationToken t){t.ThrowIfCancellationRequested();Guard(h);return ClosureAvailable?new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Supported,owned.ToImmutableArray()):new Outcome<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Unsupported);}
+}
+sealed class Assessor(HashSet<IQuerySemanticEnvironment> admitted):ISchemaAssessor {public Authority A{get;}=new();bool closed;public ISchemaAuthority Authority=>A;public SchemaLanguageVersion SchemaLanguage=>SchemaLanguageVersion.Xsd11;public string AssessmentProfile=>"injected-protocol-only";public void Close()=>closed=true;public void Check(CancellationToken t){t.ThrowIfCancellationRequested();if(closed)throw new ObjectDisposedException("assessor");}public SchemaResult<ISchemaAssessmentAdvisor> Bind(IQuerySemanticEnvironment e,CancellationToken t){Check(t);if(!admitted.Contains(e))throw new ArgumentException("Not engine-admitted");return e.HostVersion=="3.1"?new Outcome<ISchemaAssessmentAdvisor>(SchemaResultKind.Supported,new Advisor(this,e)):new Outcome<ISchemaAssessmentAdvisor>(SchemaResultKind.Unsupported);}}
+sealed record Evidence(ISchemaAssessmentOrigin Origin,SchemaAssessmentStatus Status,bool IsComplete):ISchemaAssessmentEvidence;
+sealed record AssessmentResult(SchemaAssessmentStatus Status,ISchemaAssessmentEvidence? Evidence,IXdmNode? ValidatedRoot,bool DiagnosticsTruncated=false):ISchemaAssessmentResult {public ImmutableArray<SchemaAssessmentDiagnostic> Diagnostics=>ImmutableArray<SchemaAssessmentDiagnostic>.Empty;}
+sealed class Advisor(Assessor assessor,IQuerySemanticEnvironment environment):ISchemaAssessmentAdvisor {
+ public ISchemaAssessor Assessor=>assessor;public IQuerySemanticEnvironment QueryEnvironment=>environment;public int AssessCalls;public DateTimeOffset LastEpisodeTime;
+ public void ThrowIfUnavailable(CancellationToken t)=>assessor.Check(t);
+ public bool OwnsAssessment(ISchemaAssessmentOrigin o)=>o is Origin x&&ReferenceEquals(x.Issuer,this);
+ public readonly HashSet<ISchemaTypedValue> IssuedValues=new(ReferenceEqualityComparer.Instance);
+ public bool OwnsTypedValue(ISchemaTypedValue v)=>IssuedValues.Contains(v);
+ public bool OwnsNodeFacts(ISchemaNodeFacts f)=>f is FactsIssued x&&ReferenceEquals(x.Issuer,this)&&OwnsAssessment(f.Origin);
+ public ISchemaAssessmentResult Assess(SchemaAssessmentRequest r,CancellationToken t){ThrowIfUnavailable(t);r.Input.ThrowIfUnavailable(t);if(r.Limits is {} limits&&(limits.MaxDiagnostics<=0||limits.MaxDiagnosticCharacters<=0))throw new ArgumentOutOfRangeException("diagnostic budgets");if(!Enum.IsDefined(r.Mode))throw new ArgumentException("Unknown mode");if(r.Mode!=SchemaAssessmentMode.Type&&r.RequestedType is not null)throw new ArgumentException("Type-mode required");if(r.Mode==SchemaAssessmentMode.Type&&r.RequestedType is null)throw new ArgumentException("Type required");if(r.RequestedType is not null){assessor.A.Guard(r.RequestedType);if(r.RequestedType is not Handle h||!h.IsType)throw new ArgumentException("Expected type");}if(r.GoverningDeclaration is not null){assessor.A.Guard(r.GoverningDeclaration);if(r.GoverningDeclaration is not Handle h||h.IsType)throw new ArgumentException("Expected declaration");}var now=r.Episode.CurrentDateTime;int tz=r.Episode.ImplicitTimezoneOffsetMinutes;if(tz is < -840 or > 840)throw new ArgumentOutOfRangeException("timezone");LastEpisodeTime=now;if(r.Input is not Input input)throw new ArgumentException("Not host-admitted input");var root=r.Input.Root;var origin=new Origin(this,r.Input.Source,input.Status);AssessCalls++;if(input.Status==SchemaAssessmentStatus.Valid&&!input.Complete)throw new InvalidOperationException("Incomplete Valid cannot publish");r.Input.ThrowIfUnavailable(t);return new AssessmentResult(input.Status,new Evidence(origin,input.Status,input.Complete),input.Status==SchemaAssessmentStatus.Valid?root:null,input.Truncated);}
+ public ISchemaNodeFacts Facts(ISchemaAssessmentOrigin origin){if(!OwnsAssessment(origin)||origin is not Origin issued||issued.Status!=SchemaAssessmentStatus.Valid)throw new ArgumentException("Foreign or non-valid origin");return new FactsIssued(this,origin,assessor.A.Type,assessor.A.Element);}
+ public SchemaResult<ISchemaTypedValue> ConstructSimpleValue(XdmValue input,ISchemaComponentHandle target,ISchemaAssessmentEpisode e,CancellationToken t){ThrowIfUnavailable(t);assessor.A.Guard(target);return new Outcome<ISchemaTypedValue>(input.Kind==XdmValueKind.String&&input.StringValue=="injected-invalid"?SchemaResultKind.Invalid:SchemaResultKind.Unsupported);}
+ sealed class Origin(Advisor owner,ISchemaSourceBinding source,SchemaAssessmentStatus status):ISchemaAssessmentOrigin {public SchemaAssessmentStatus Status=>status;public Advisor Issuer=>owner;public ISchemaSourceBinding Source=>source;}
+ sealed class FactsIssued(Advisor owner,ISchemaAssessmentOrigin origin,ISchemaComponentHandle type,ISchemaComponentHandle declaration):ISchemaNodeFacts {public Advisor Issuer=>owner;public ISchemaComponentHandle Type=>type;public ISchemaComponentHandle? Declaration=>declaration;public ISchemaAssessmentOrigin Origin=>origin;public bool HasNoTypedValue=>false;public bool IsNilled=>false;public SchemaResult<ISchemaTypedValue> ReadTypedValue(CancellationToken t){t.ThrowIfCancellationRequested();return new Outcome<ISchemaTypedValue>(SchemaResultKind.Unsupported);}}
+}
+sealed class CopiedFacts(ISchemaNodeFacts f):ISchemaNodeFacts {public ISchemaComponentHandle Type=>f.Type;public ISchemaComponentHandle? Declaration=>f.Declaration;public ISchemaAssessmentOrigin Origin=>f.Origin;public bool HasNoTypedValue=>f.HasNoTypedValue;public bool IsNilled=>f.IsNilled;public SchemaResult<ISchemaTypedValue> ReadTypedValue(CancellationToken t)=>f.ReadTypedValue(t);}
+sealed record CompatibilityResult(SchemaCompatibilityDecision Decision,ISchemaCompatibilityView? View=null):ISchemaCompatibilityResult {public ImmutableArray<SchemaAssessmentDiagnostic> Diagnostics=>ImmutableArray<SchemaAssessmentDiagnostic>.Empty;}
+sealed class ProofAuthority(ISchemaAssessmentAdvisor source,ISchemaAssessmentAdvisor target,ISchemaAssessmentAdvisor incompatible):ISchemaCompatibilityAuthority {
+ public int Dispatches;
+ public ISchemaCompatibilityResult Establish(ISchemaAssessmentAdvisor s,ISchemaAssessmentAdvisor t,IQuerySemanticEnvironment e,CancellationToken token){token.ThrowIfCancellationRequested();s.ThrowIfUnavailable(token);t.ThrowIfUnavailable(token);if(!ReferenceEquals(t.QueryEnvironment,e))throw new ArgumentException("Wrong captured environment");Dispatches++;if(ReferenceEquals(s,source)&&ReferenceEquals(t,target))return new CompatibilityResult(SchemaCompatibilityDecision.Compatible,new View(s,t,e));if(ReferenceEquals(s,source)&&ReferenceEquals(t,incompatible))return new CompatibilityResult(SchemaCompatibilityDecision.Incompatible);return new CompatibilityResult(SchemaCompatibilityDecision.Unsupported);}
+ sealed class View(ISchemaAssessmentAdvisor source,ISchemaAssessmentAdvisor target,IQuerySemanticEnvironment environment):ISchemaCompatibilityView {
+  public ISchemaAssessmentAdvisor Source=>source;public ISchemaAssessmentAdvisor Target=>target;public IQuerySemanticEnvironment ExecutionEnvironment=>environment;
+  void Ready(CancellationToken t){source.ThrowIfUnavailable(t);target.ThrowIfUnavailable(t);if(!ReferenceEquals(target.QueryEnvironment,environment))throw new InvalidOperationException("Environment drift");}
+  public SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Ready(t);if(!source.Assessor.Authority.Owns(a)||!target.Assessor.Authority.Owns(b))throw new ArgumentException("Foreign view handle");return new Outcome<bool>(SchemaResultKind.Supported,ReferenceEquals(a,((Assessor)source.Assessor).A.Type)&&ReferenceEquals(b,((Assessor)target.Assessor).A.Type));}
+  public SchemaResult<bool> MatchesDeclaration(ISchemaNodeFacts f,ISchemaComponentHandle d,CancellationToken t){Ready(t);if(!source.OwnsNodeFacts(f)||!source.OwnsAssessment(f.Origin)||!source.Assessor.Authority.Owns(f.Type)||!target.Assessor.Authority.Owns(d))throw new ArgumentException("Foreign/forged facts");return new Outcome<bool>(SchemaResultKind.Supported,ReferenceEquals(d,((Assessor)target.Assessor).A.Element));}
+ }
+}
+
+sealed record AtomicEvidence(ISchemaComponentHandle DeclaredType,ISchemaComponentHandle ActualType,ISchemaAssessmentOrigin? OriginalAssessment=null):ISchemaAtomicProvenance;
+sealed class Cells(ISchemaComponentHandle type,bool list,SchemaAtomicItem[] items,bool scalar=false):ISchemaTypedValue {
+ public int Reads;public ISchemaComponentHandle GoverningType=>type;public bool IsList=>list;
+ public IEnumerable<SchemaAtomicItem> AtomicItems {get{Reads++;return items;}}
+ public bool TryGetSingleAtomic(out SchemaAtomicItem item){item=scalar?items[0]:default;return scalar;}
+}
+sealed class Trap:ISchemaTypedValue {
+ public int Reads;public ISchemaComponentHandle GoverningType{get{Reads++;throw new Exception("untrusted getter");}}
+ public bool IsList{get{Reads++;throw new Exception("untrusted getter");}}
+ public IEnumerable<SchemaAtomicItem> AtomicItems{get{Reads++;throw new Exception("untrusted enumeration");}}
+}
+static class Boundary {
+ static SchemaAtomicItem[] Read(Advisor a,ISchemaTypedValue value){
+  a.ThrowIfUnavailable(default);
+  if(!a.OwnsTypedValue(value))throw new ArgumentException("Unissued container");
+  if(!a.Assessor.Authority.Owns(value.GoverningType))throw new ArgumentException("Unissued governing type");
+  var cells=value.TryGetSingleAtomic(out var scalar)?new[]{scalar}:value.AtomicItems.ToArray();
+  foreach(var cell in cells){
+   if(cell.Value.Kind is < XdmValueKind.String or > XdmValueKind.Binary || cell.TypeEvidence is null)throw new ArgumentException("Invalid cell");
+   if(!a.Assessor.Authority.Owns(cell.TypeEvidence.DeclaredType)||!a.Assessor.Authority.Owns(cell.TypeEvidence.ActualType))throw new ArgumentException("Unissued component");
+   if(cell.TypeEvidence.OriginalAssessment is {} origin&&!a.OwnsAssessment(origin))throw new ArgumentException("Unissued origin");
+  }
+  if(!value.IsList&&cells.Length!=1)throw new ArgumentException("Scalar cardinality");
+  return cells;
+ }
+ static string Descriptor(IDictionary<string,string> ns,string hostRevision){
+  // Test encoding only: JSON array of ordered prefix/URI pairs followed by immutable host revision.
+  var ordered=ns.OrderBy(x=>x.Key,StringComparer.Ordinal).Select(x=>new[]{x.Key,x.Value}).ToArray();
+  return Convert.ToHexString(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(new{format="boundary-test-v1",namespaces=ordered,hostRevision})));
+ }
+ public static void Run(Action<string,bool> check){
+  void Refuses(string id,Action action){bool refused=false;try{action();}catch(ArgumentException){refused=true;}check(id,refused);}
+  var env=new EnvironmentToken(new StaticContext(new Dictionary<string,string>()));var endpoint=new Assessor(new(ReferenceEqualityComparer.Instance){env});var advisor=(Advisor)endpoint.Bind(env,default).Value;
+  var e=new AtomicEvidence(endpoint.A.Type,endpoint.A.OtherType);var item=new SchemaAtomicItem(XdmValue.FromString("plain"),e);
+  var scalar=new Cells(endpoint.A.Type,false,new[]{item},true);advisor.IssuedValues.Add(scalar);
+  var result=Read(advisor,scalar);check("B01-plain-value",result[0].Value.StringValue=="plain");check("B02-separate-evidence",ReferenceEquals(result[0].TypeEvidence,e));check("B03-scalar-no-enumeration",scalar.Reads==0);check("B04-computed-no-original",e.OriginalAssessment is null);
+  var empty=new Cells(endpoint.A.Type,true,Array.Empty<SchemaAtomicItem>());advisor.IssuedValues.Add(empty);check("B05-empty-list",Read(advisor,empty).Length==0&&empty.IsList);
+  var singleton=new Cells(endpoint.A.Type,true,new[]{item});advisor.IssuedValues.Add(singleton);check("B06-singleton-list",Read(advisor,singleton).Length==1&&singleton.IsList);
+  var other=new AtomicEvidence(endpoint.A.Type,endpoint.A.Type);var union=new Cells(endpoint.A.Type,true,new[]{item,new SchemaAtomicItem(XdmValue.FromString("second"),other)});advisor.IssuedValues.Add(union);var ordered=Read(advisor,union);check("B07-ordered-members",ReferenceEquals(ordered[0].TypeEvidence.ActualType,endpoint.A.OtherType)&&ReferenceEquals(ordered[1].TypeEvidence.ActualType,endpoint.A.Type));
+  var trap=new Trap();Refuses("B08-unissued-before-getter",()=>Read(advisor,trap));check("B09-no-untrusted-access",trap.Reads==0);
+  var copy=new Cells(endpoint.A.Type,false,new[]{item});Refuses("B10-copied-cells-not-issued",()=>Read(advisor,copy));check("B11-copy-not-enumerated",copy.Reads==0);
+  var invalid=new Cells(endpoint.A.Type,true,new[]{default(SchemaAtomicItem)});advisor.IssuedValues.Add(invalid);Refuses("B12-default-cell",()=>Read(advisor,invalid));
+  var nonAtomic=new Cells(endpoint.A.Type,true,new[]{new SchemaAtomicItem(XdmValue.FromNode(new Node()),e)});advisor.IssuedValues.Add(nonAtomic);Refuses("B13-non-atomic",()=>Read(advisor,nonAtomic));
+  Refuses("B14-null-evidence",()=>new SchemaAtomicItem(XdmValue.FromString("x"),null!));
+  var foreign=new Authority();var bad=new Cells(endpoint.A.Type,true,new[]{new SchemaAtomicItem(XdmValue.FromString("x"),new AtomicEvidence(foreign.Type,foreign.Type))});advisor.IssuedValues.Add(bad);Refuses("B15-foreign-component",()=>Read(advisor,bad));
+  var map=new Dictionary<string,string>{{"z","urn:z"},{"p","urn:p"}};var frozen=new StaticContext(map);var digest=Descriptor(map,"host-1");var reversed=map.Reverse().ToDictionary(x=>x.Key,x=>x.Value);check("B16-order-independent-descriptor",digest==Descriptor(reversed,"host-1"));check("B17-private-host-revision",digest!=Descriptor(map,"host-2"));map["p"]="changed";check("B18-namespace-snapshot",frozen.Namespaces["p"]=="urn:p");
+  var forged=new EnvironmentToken(env.StaticContext);check("B19-description-equal",forged.StaticContextFingerprint==env.StaticContextFingerprint);Refuses("B20-environment-instance",()=>endpoint.Bind(forged,default));
+  endpoint.Close();bool unavailable=false;try{Read(advisor,scalar);}catch(ObjectDisposedException){unavailable=true;}check("B21-closed-before-read",unavailable);
+ }
+}

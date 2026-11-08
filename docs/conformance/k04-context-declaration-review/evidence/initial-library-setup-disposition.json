@@ -1,0 +1,10 @@
+{
+  "outcome": "Diagnostic setup failed before parser invocation",
+  "error": "TypeLoadException: incorrect parser namespace in reflection lookup",
+  "watchdogSeconds": 20,
+  "timeout": true,
+  "correction": "Use actual Bosak.XQuery.Compiler.XQueryParser namespace and catch/report all final probe results",
+  "sourceSnapshot": "initial-library-executor.cs.txt",
+  "log": "initial-library-setup.log",
+  "engineOrFixtureChanged": false
+}

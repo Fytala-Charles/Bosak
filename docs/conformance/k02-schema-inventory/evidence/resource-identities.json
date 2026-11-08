@@ -1,0 +1,6102 @@
+{
+  "tests/qt3tests/fn/analyze-string/analyze-string.xsd": {
+    "sha256": "7ccfc25c4f32f264b1b22f7ab063ab2c8b461ad05198835ce65fcaca74c81cbd",
+    "roles": [
+      {
+        "case": "analyzeString-024",
+        "role": "schemas"
+      },
+      {
+        "case": "analyzeString-025",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/2005/xpath-functions",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/docs/QName-schema.xsd": {
+    "sha256": "d082934ea6e8e709260c772562e7153d9aa01550b598aa8b13163ed3ae5f654b",
+    "roles": [
+      {
+        "case": "K2-DataFunc-6",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-in-scope-prefixes-24",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc001",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc002",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc003",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc004",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc005",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc010",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc012",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc013",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc014",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc018",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc019",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc020",
+        "role": "schemas"
+      },
+      {
+        "case": "LocalNameFromQNameFunc021",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc001",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc002",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc003",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc004",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc005",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc010",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc012",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc013",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc014",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc018",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc019",
+        "role": "schemas"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc020",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-normalize-space-23",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-normalize-space-24",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-normalize-space-25",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-normalize-space-26",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-string-22",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-string-length-22",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-string-length-23",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-string-length-24",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-string-length-25",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/QNameXSD",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/docs/QName-source.xml": {
+    "sha256": "68109dcc0321a7df44d453ac9cd11b94bf3bcef26980559965745ba293756cf7",
+    "roles": [
+      {
+        "case": "K2-DataFunc-6",
+        "role": "sources"
+      },
+      {
+        "case": "fn-in-scope-prefixes-24",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc001",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc002",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc003",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc004",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc005",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc010",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc012",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc013",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc014",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc018",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc019",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc020",
+        "role": "sources"
+      },
+      {
+        "case": "LocalNameFromQNameFunc021",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc001",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc002",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc003",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc004",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc005",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc010",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc012",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc013",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc014",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc018",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc019",
+        "role": "sources"
+      },
+      {
+        "case": "NamespaceURIFromQNameFunc020",
+        "role": "sources"
+      },
+      {
+        "case": "fn-normalize-space-23",
+        "role": "sources"
+      },
+      {
+        "case": "fn-normalize-space-24",
+        "role": "sources"
+      },
+      {
+        "case": "fn-normalize-space-25",
+        "role": "sources"
+      },
+      {
+        "case": "fn-normalize-space-26",
+        "role": "sources"
+      },
+      {
+        "case": "fn-string-22",
+        "role": "sources"
+      },
+      {
+        "case": "fn-string-length-22",
+        "role": "sources"
+      },
+      {
+        "case": "fn-string-length-23",
+        "role": "sources"
+      },
+      {
+        "case": "fn-string-length-24",
+        "role": "sources"
+      },
+      {
+        "case": "fn-string-length-25",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/data/mixedcontent.xsd": {
+    "sha256": "7b2aeffda11c2e9a7da98e61d210c74d572d248011c13c9e736aa448744a335c",
+    "roles": [
+      {
+        "case": "fn-datacomplextype-1",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/mixedcontent",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/data/mixed.xml": {
+    "sha256": "6a4465522620924c685778cce32cad15290b1673313d52056998f15cf80cdb65",
+    "roles": [
+      {
+        "case": "fn-datacomplextype-1",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/data/examples.xsd": {
+    "sha256": "9c63d5530f1d0be21c09155b562f686ba1dc1e2ffca9319cac0362892cb92a67",
+    "roles": [
+      {
+        "case": "fn-data-1",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/someExamples",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/data/examples.xml": {
+    "sha256": "ee0c4c76415d9fefe952146eb5a4d60797330d10cb5fa1722f3c93a7dd2eaca8",
+    "roles": [
+      {
+        "case": "fn-data-1",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/data/complexData.xsd": {
+    "sha256": "41c0efcdf83571c5930bb11443f10992b8f591cdd64c17e29347227dbc79b0de",
+    "roles": [
+      {
+        "case": "cbcl-data-002",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-data-003",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-data-004",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-data-005",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-data-006",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-data-007",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-module-001",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-module-004",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-15",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.cbcl.co.uk/XQueryTest/complexData",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/data/complexData.xml": {
+    "sha256": "6bcb2fa6b720984d184083c918c35b8615097455d5b73834b3f2aad20ab785af",
+    "roles": [
+      {
+        "case": "cbcl-data-002",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-data-003",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-data-004",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-data-005",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-data-006",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-data-007",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-module-001",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-module-004",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-15",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/deep-equal/perverse.xsd": {
+    "sha256": "c7aab8e8dee4cbfde2e36febf1c2db6b0533a8482ee8882080dfdc3744c86926",
+    "roles": [
+      {
+        "case": "K2-SeqDeepEqualFunc-38",
+        "role": "schemas"
+      },
+      {
+        "case": "K2-SeqDeepEqualFunc-39",
+        "role": "schemas"
+      },
+      {
+        "case": "K2-SeqDeepEqualFunc-41",
+        "role": "schemas"
+      },
+      {
+        "case": "K2-SeqDeepEqualFunc-42",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/perversity",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/id/id.xsd": {
+    "sha256": "b7cd311dc70f6c758035d13979fd6217ad652afc6cc4d8eb6ec3b43e97d615fa",
+    "roles": [
+      {
+        "case": "fn-element-with-id-1",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-element-with-id-2",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-element-with-id-3",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-element-with-id-4",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-element-with-id-5",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-5",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-6",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-7",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-8",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-9",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-10",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-11",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-12",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-13",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-14",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-15",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-16",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-17",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-18",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-19",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-20",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-21",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-id-23",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-5",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-6",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-7",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-8",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-9",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-10",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-11",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-12",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-13",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-14",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-15",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-16",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-17",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-18",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-19",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-20",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-21",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-23",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-30",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-31",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-32",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-33",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-idref-34",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/ididrefs",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/id/id2.xml": {
+    "sha256": "aea51f3e3d9beb199c8f09084acaf4ac4ad7f9b7f57416b6466f48ed5adf5b8d",
+    "roles": [
+      {
+        "case": "fn-element-with-id-1",
+        "role": "sources"
+      },
+      {
+        "case": "fn-element-with-id-2",
+        "role": "sources"
+      },
+      {
+        "case": "fn-element-with-id-3",
+        "role": "sources"
+      },
+      {
+        "case": "fn-element-with-id-4",
+        "role": "sources"
+      },
+      {
+        "case": "fn-element-with-id-5",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-30",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-31",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-32",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-33",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-34",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/id/id.xml": {
+    "sha256": "a36abebdc4e5453eb3e8dd1484cca0533f165bf88bde1f449d3a09018e9b669d",
+    "roles": [
+      {
+        "case": "fn-id-5",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-6",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-7",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-8",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-9",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-10",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-11",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-12",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-13",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-14",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-15",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-16",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-17",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-18",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-19",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-20",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-21",
+        "role": "sources"
+      },
+      {
+        "case": "fn-id-23",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-5",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-6",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-7",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-8",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-9",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-10",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-11",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-12",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-13",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-14",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-15",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-16",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-17",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-18",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-19",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-20",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-21",
+        "role": "sources"
+      },
+      {
+        "case": "fn-idref-23",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/json-to-xml/schema-for-json.xsd": {
+    "sha256": "0f690869b923f165fa0b24c2516b8d3cc441095d059f49d09baa4a88640f73d8",
+    "roles": [
+      {
+        "case": "json-to-xml-001",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-002",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-003",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-004",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-005",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-006",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-007",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-013",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-014",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-015",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-016",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-017",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-018",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-019",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-020",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-036",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-037",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-038",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-040",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-042",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-002",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-003",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-004",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-005",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-006",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-007",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-008",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-009",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-010",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-011",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-012",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-013",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-014",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-015",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-016",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-017",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-018",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-019",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-020",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-021",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-022",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-023",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-024",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-025",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-026",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-027",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-028",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-042",
+        "role": "schemas"
+      },
+      {
+        "case": "json-to-xml-error-043",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/2005/xpath-functions",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/hats.xsd": {
+    "sha256": "413b692f8332d5af6ca22cf4093bec0a69e689c5ac8bda746cbc7cb25d7c8dd9",
+    "roles": [
+      {
+        "case": "fn-load-xquery-module-050",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema001",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema002",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema003",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema004",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema030",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema031",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema040",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema040a",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema044",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema062",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90031-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90041-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90042-err",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-101",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-102",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-103",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-104",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-106",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91011",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91012",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91014",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91015",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91016",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-as-91017",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/hats",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/abf.xsd": {
+    "sha256": "b4e8ab7dd18905b15a7cf5b8893f22208bbff89cb34b5b25c4b19ff306648aeb",
+    "roles": [
+      {
+        "case": "fn-load-xquery-module-051",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-052",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-053",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-054",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-055",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-056",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-load-xquery-module-057",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema011",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema012",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema016",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90051-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90061-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90071-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90081-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90082-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90101-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90102-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90131-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90151-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90171-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90172-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/abf",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/docs/atomic.xsd": {
+    "sha256": "0572fe7e7e785a2edbaf55fc1066b39daca58bbb7690664e514794db109e3321",
+    "roles": [
+      {
+        "case": "fn-local-name-3",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-4",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-5",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-8a",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-11a",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-13a",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-from-qname-022",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-local-name-from-qname-023",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-not-22",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-not-23",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-not-28",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-not-29",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-prefix-from-qname-21",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-prefix-from-qname-22",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-001",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-002",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-003",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-004",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-005",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-006",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-007",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-007a",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-009",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-011",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-012",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-013",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-014",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-015",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-016",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-017",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-018",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-019",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-020",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-021",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-022",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-023",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-024",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-025",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-026",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-027",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-028",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-029",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-030",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-031",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-101",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-102",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-103",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-104",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-105",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-106",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-106a",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-107",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-107a",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-109",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-119",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-123",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-124",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-125",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-126",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-127",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-127a",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-128",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-129",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-130",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-131",
+        "role": "schemas"
+      },
+      {
+        "case": "serialize-xml-131a",
+        "role": "schemas"
+      },
+      {
+        "case": "xs-numeric-021",
+        "role": "schemas"
+      },
+      {
+        "case": "xs-numeric-022",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-015",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-016",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-017",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-018",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-019",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-020",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-except-node-args-021",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-015",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-016",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-017",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-018",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-019",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-020",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-021",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-intersect-node-args-022",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-2",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-3",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-4",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-5",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-6",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-7",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-8",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-9",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-10",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-11",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-12",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-015",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-016",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-017",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-018",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-019",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-020",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-021",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-union-node-args-022",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds1",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds2",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds3",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds4",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds5",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds6",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds7",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds8",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds9",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds10",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds11",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds12",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds13",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds14",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds15",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds16",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds17",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds18",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds19",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds20",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds21",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds22",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds23",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds24",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds25",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds26",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds27",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds28",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds29",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds30",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds31",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds32",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds33",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds34",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds35",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds36",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds37",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds38",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds39",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds40",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds41",
+        "role": "schemas"
+      },
+      {
+        "case": "casthcds42",
+        "role": "schemas"
+      },
+      {
+        "case": "Constr-compattr-compname-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Constr-compelem-compname-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Constr-comppi-compname-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Constr-comppi-compname-9",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-4",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-5",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-6",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-7",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-8",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-9",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-10",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-11",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-12",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-13",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-14",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-15",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-16",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-17",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-18",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-19",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-20",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-21",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-22",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-23",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-25",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-26",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-27",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-28",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-29",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-30",
+        "role": "schemas"
+      },
+      {
+        "case": "schema-import-31",
+        "role": "schemas"
+      },
+      {
+        "case": "combined-errors-2",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/docs/atomic.xml": {
+    "sha256": "e75299ec5a7b9ebea66ff27e24e84c63619b77d7790eb182e41eca1801be69d7",
+    "roles": [
+      {
+        "case": "fn-local-name-3",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-4",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-5",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-8a",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-11a",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-13a",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-from-qname-022",
+        "role": "sources"
+      },
+      {
+        "case": "fn-local-name-from-qname-023",
+        "role": "sources"
+      },
+      {
+        "case": "fn-not-22",
+        "role": "sources"
+      },
+      {
+        "case": "fn-not-23",
+        "role": "sources"
+      },
+      {
+        "case": "fn-not-28",
+        "role": "sources"
+      },
+      {
+        "case": "fn-not-29",
+        "role": "sources"
+      },
+      {
+        "case": "fn-prefix-from-qname-21",
+        "role": "sources"
+      },
+      {
+        "case": "fn-prefix-from-qname-22",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-001",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-002",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-003",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-004",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-005",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-006",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-007",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-007a",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-009",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-011",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-012",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-013",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-014",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-015",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-016",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-017",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-018",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-019",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-020",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-021",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-022",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-023",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-024",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-025",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-026",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-027",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-028",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-029",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-030",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-031",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-101",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-102",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-103",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-104",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-105",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-106",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-106a",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-107",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-107a",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-109",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-119",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-123",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-124",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-125",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-126",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-127",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-127a",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-128",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-129",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-130",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-131",
+        "role": "sources"
+      },
+      {
+        "case": "serialize-xml-131a",
+        "role": "sources"
+      },
+      {
+        "case": "xs-numeric-021",
+        "role": "sources"
+      },
+      {
+        "case": "xs-numeric-022",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-015",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-016",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-017",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-018",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-019",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-020",
+        "role": "sources"
+      },
+      {
+        "case": "fn-except-node-args-021",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-015",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-016",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-017",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-018",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-019",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-020",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-021",
+        "role": "sources"
+      },
+      {
+        "case": "fn-intersect-node-args-022",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-2",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-3",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-4",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-5",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-6",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-7",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-8",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-9",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-10",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-11",
+        "role": "sources"
+      },
+      {
+        "case": "op-numeric-add-12",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-015",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-016",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-017",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-018",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-019",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-020",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-021",
+        "role": "sources"
+      },
+      {
+        "case": "fn-union-node-args-022",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds1",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds2",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds3",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds4",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds5",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds6",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds7",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds8",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds9",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds10",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds11",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds12",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds13",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds14",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds15",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds16",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds17",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds18",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds19",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds20",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds21",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds22",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds23",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds24",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds25",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds26",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds27",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds28",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds29",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds30",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds31",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds32",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds33",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds34",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds35",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds36",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds37",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds38",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds39",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds40",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds41",
+        "role": "sources"
+      },
+      {
+        "case": "casthcds42",
+        "role": "sources"
+      },
+      {
+        "case": "Constr-compattr-compname-8",
+        "role": "sources"
+      },
+      {
+        "case": "Constr-compelem-compname-8",
+        "role": "sources"
+      },
+      {
+        "case": "Constr-comppi-compname-8",
+        "role": "sources"
+      },
+      {
+        "case": "Constr-comppi-compname-9",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-4",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-5",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-6",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-7",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-8",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-9",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-10",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-11",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-12",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-13",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-14",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-15",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-16",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-17",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-18",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-19",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-20",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-21",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-22",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-23",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-25",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-26",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-27",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-28",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-29",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-30",
+        "role": "sources"
+      },
+      {
+        "case": "schema-import-31",
+        "role": "sources"
+      },
+      {
+        "case": "combined-errors-2",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/nilled/nillable.xsd": {
+    "sha256": "c67a7cede1464bac96bc541b79c8d7270d2f021b26608577f98bc9c8e10d1341",
+    "roles": [
+      {
+        "case": "fn-nilled-31",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-32",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-33",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-34",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-35",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-36",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-37",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-38",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-39",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-40",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-41",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-42",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-43",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-44",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-45",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-46",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-47",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-48",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-49",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-50",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-51",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-52",
+        "role": "schemas"
+      },
+      {
+        "case": "fn-nilled-53",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/nillable",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/nilled/nillable.xml": {
+    "sha256": "a066bca685232e87f4c0a8212ce911713a37df4a5cabb4b00db6a4c0021ef5d8",
+    "roles": [
+      {
+        "case": "fn-nilled-31",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-32",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-33",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-34",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-35",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-36",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-37",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-38",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-39",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-40",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-41",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-42",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-43",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-44",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-45",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-46",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-47",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-48",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-49",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-50",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-51",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-52",
+        "role": "sources"
+      },
+      {
+        "case": "fn-nilled-53",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/fn/nilled/validate.xsd": {
+    "sha256": "94868b1c72e01d2e3f10fdf35b9be24f877edf7ca95e7c2be95c679bf4c4984f",
+    "roles": [
+      {
+        "case": "cbcl-nilled-001",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-nilled-002",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-nilled-003",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-nilled-004",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-nilled-005",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-nilled-006",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-1",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-2",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-3",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-4",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-5",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-6",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-7",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-8",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-element-9",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validated-schema-element-4",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-attribute-1",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-schema-attribute-2",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-default-attribute-1",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-default-attribute-2",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-fixed-attribute-1",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-fixed-attribute-2",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-43",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-1",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-2",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-3",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-4",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-5",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-6",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-7",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-8",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-9",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-10",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-14",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-16",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-validateexpr-17",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/testcases",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/fn/nilled/validate.xml": {
+    "sha256": "b0ca9c5a2e9b449b2ca536cded4a5391bf8737ff9b1a3458c30a18b2a883968b",
+    "roles": [
+      {
+        "case": "cbcl-nilled-001",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-nilled-002",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-nilled-003",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-nilled-004",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-nilled-005",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-nilled-006",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-1",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-2",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-3",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-4",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-5",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-6",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-7",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-8",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-element-9",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validated-schema-element-4",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-attribute-1",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-schema-attribute-2",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-default-attribute-1",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-default-attribute-2",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-fixed-attribute-1",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-fixed-attribute-2",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-43",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-1",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-2",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-3",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-4",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-5",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-6",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-7",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-8",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-9",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-10",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-14",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-16",
+        "role": "sources"
+      },
+      {
+        "case": "cbcl-validateexpr-17",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/SchemaImport/unionListDefined.xsd": {
+    "sha256": "daf031c7fe6f080bd9c72292d59487f8d16295bf9a02d7ddfc3c78a217c3d861",
+    "roles": [
+      {
+        "case": "Add-UnionType-36",
+        "role": "schemas"
+      },
+      {
+        "case": "Add-UnionType-37",
+        "role": "schemas"
+      },
+      {
+        "case": "UnionType-equal-01",
+        "role": "schemas"
+      },
+      {
+        "case": "UnionType-equal-02",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-1",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-2",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-3",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-4",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-5",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-6",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-7",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-9",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-10",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-11",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-12",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-13",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-14",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-15",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-16",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-17",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-18",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-19",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-20",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-21",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-22",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-23",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-24",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-25",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-26",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-36",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-37",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-UnionType-38",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-2",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-3",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-4",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-5",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-6",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-7",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-9",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-10",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-11",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-12",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-13",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-14",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-15",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-16",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-17",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-18",
+        "role": "schemas"
+      },
+      {
+        "case": "Castable-ListType-19",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-001",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-002",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-003",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-004",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-005",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-006",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-007",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-008",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-009",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-010",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-011",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-012",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-013",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-014",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-015",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-016",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-017",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-018",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-019",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-impure-020",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-001",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-002",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-003",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-004",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-005",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-006",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-007",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-008",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-009",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-010",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-011",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-012",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-013",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-014",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-015",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-016",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-017",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-018",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-019",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-castable-restricted-union-020",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-1",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-2",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-3",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-4",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-5",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-5a",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-6",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-7",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-8",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-9",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-10",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-11",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-12",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-13",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-14",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-15",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-16",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-17",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-18",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-19",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-20",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-21",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-22",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-23",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-24",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-25",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-26",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-27",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-28",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-29",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-30",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-31",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-32",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-33",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-34",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-35",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-36",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-37",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-UnionType-38",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-1",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-2",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-3",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-4",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-5",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-6",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-21",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-22",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-23",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-24",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-25",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-26",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-31",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAs-ListType-32",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-049",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-050",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-051",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-052",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-053",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-054",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof117",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof118",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof119",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof120",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof134",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof135",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof136",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof137",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof138",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof139",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof140",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof141",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/unionListDefined",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/op/NOTATION-equal/notationschema.xsd": {
+    "sha256": "707bb52d4cb944bf6ea156ff9d1e4ca5fee985718110ffa1c3767c22ea9e1b0d",
+    "roles": [
+      {
+        "case": "Comp-notation-1",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-2",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-3",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-4",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-5",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-6",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-7",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-8",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-9",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-10",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-11",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-12",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-13",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-14",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-15",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-16",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-17",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-18",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-19",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-20",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-21",
+        "role": "schemas"
+      },
+      {
+        "case": "Comp-notation-22",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/notation",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/op/NOTATION-equal/notation.xml": {
+    "sha256": "98568b275b3e1b78bcd43485196b36f7a8bd025be7aff79e6d0144f5e1abcf4a",
+    "roles": [
+      {
+        "case": "Comp-notation-1",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-2",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-3",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-4",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-5",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-6",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-7",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-8",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-9",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-10",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-11",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-12",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-13",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-14",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-15",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-16",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-17",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-18",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-19",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-20",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-21",
+        "role": "sources"
+      },
+      {
+        "case": "Comp-notation-22",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/docs/userdefined.xsd": {
+    "sha256": "55ea45103f7f042f77f6f509f51587e3ac5dacaa9884b10f73b29052c9bb41d9",
+    "roles": [
+      {
+        "case": "op-numeric-add-13",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-14",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-15",
+        "role": "schemas"
+      },
+      {
+        "case": "op-numeric-add-16",
+        "role": "schemas"
+      },
+      {
+        "case": "qname-cast-2",
+        "role": "schemas"
+      },
+      {
+        "case": "qname-cast-3",
+        "role": "schemas"
+      },
+      {
+        "case": "qname-cast-4",
+        "role": "schemas"
+      },
+      {
+        "case": "notation-cast-2",
+        "role": "schemas"
+      },
+      {
+        "case": "notation-cast-3",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-1",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-2",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-3",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-4",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-5",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-6",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-7",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-8",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-9",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-10",
+        "role": "schemas"
+      },
+      {
+        "case": "user-defined-11",
+        "role": "schemas"
+      },
+      {
+        "case": "GenCompEq-26",
+        "role": "schemas"
+      },
+      {
+        "case": "GenCompEq-27",
+        "role": "schemas"
+      },
+      {
+        "case": "errata6-003",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-36",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-37",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-38",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-39",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-40",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-41",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-42",
+        "role": "schemas"
+      },
+      {
+        "case": "value-comparison-3",
+        "role": "schemas"
+      },
+      {
+        "case": "value-comparison-4",
+        "role": "schemas"
+      },
+      {
+        "case": "value-comparison-13",
+        "role": "schemas"
+      },
+      {
+        "case": "value-comparison-14",
+        "role": "schemas"
+      },
+      {
+        "case": "hof-009",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/userDefinedTypes",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/CastExpr/derived.xsd": {
+    "sha256": "6d8ec851e6cda6480a9282346a42c16f4d79ac559e47ef07164e6c5698790f56",
+    "roles": [
+      {
+        "case": "CastableAs651",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs652",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs653",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs654",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs655",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs656",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs657",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs658",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs659",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs660",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs661",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs662",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs665",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs666",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs667",
+        "role": "schemas"
+      },
+      {
+        "case": "CastableAs668",
+        "role": "schemas"
+      },
+      {
+        "case": "cbcl-cast-derived-001",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/derivedTypes",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/CastExpr/notation.xsd": {
+    "sha256": "a1ae2eb6e1df8f7a5a13bb295f4e9f56077453e2155411c250ac67ecb35da62e",
+    "roles": [
+      {
+        "case": "CastAsNamespaceSensitiveType-6",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-7",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-8",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-9",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-10",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-11",
+        "role": "schemas"
+      },
+      {
+        "case": "CastAsNamespaceSensitiveType-12",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/Cast/Notation",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/CompNamespaceConstructor/schema.xsd": {
+    "sha256": "7eec41aeb69eecc6e882eac4f6ac6fa9ee064f110bb60d85e1e05da48b0b5fda",
+    "roles": [
+      {
+        "case": "nscons-040",
+        "role": "schemas"
+      },
+      {
+        "case": "nscons-041",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/TestSchemas/cnc",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/OrderByClause/orderData.xsd": {
+    "sha256": "08c7054054f27e6b95025fbdfbab10136ac75dec74c63582fc566ac854ea60d0",
+    "roles": [
+      {
+        "case": "ForExprType010",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType009",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType011",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType013",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType014",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy1",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy2",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy3",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy4",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy5",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy6",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy7",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy8",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy9",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy10",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy11",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy12",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy13",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy14",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy15",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy16",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy17",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy18",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy19",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy20",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy21",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy22",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy23",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy24",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy25",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy26",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy27",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy28",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy29",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy30",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy31",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy32",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy33",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy34",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy35",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy36",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy37",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy38",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy39",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy40",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy41",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy42",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy43",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy44",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy45",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy46",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy47",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy49",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy50",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy51",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy52",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy53",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy54",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy55",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy56",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy57",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy59",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy60",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy61",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy62",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy63",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy64",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy65",
+        "role": "schemas"
+      },
+      {
+        "case": "orderBy66",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-1",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-2",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-3",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-4",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-5",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-6",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-7",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-8",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-9",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-10",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-11",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-12",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-13",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-14",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-15",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-16",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-17",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-18",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-19",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-20",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-21",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-23",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-29",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-30",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-31",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-32",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-33",
+        "role": "schemas"
+      },
+      {
+        "case": "combined-errors-3",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTestOrderBy",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/OrderByClause/orderData.xml": {
+    "sha256": "04a6813de952f4dc43b9ef81f8e7e9c0042b5f816d5e41e7fd49cff8b4e93b16",
+    "roles": [
+      {
+        "case": "ForExprType010",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType009",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType011",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType013",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType014",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy1",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy2",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy3",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy4",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy5",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy6",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy7",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy8",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy9",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy10",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy11",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy12",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy13",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy14",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy15",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy16",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy17",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy18",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy19",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy20",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy21",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy22",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy23",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy24",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy25",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy26",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy27",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy28",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy29",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy30",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy31",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy32",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy33",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy34",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy35",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy36",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy37",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy38",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy39",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy40",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy41",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy42",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy43",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy44",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy45",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy46",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy47",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy49",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy50",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy51",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy52",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy53",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy54",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy55",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy56",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy57",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy59",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy60",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy61",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy62",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy63",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy64",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy65",
+        "role": "sources"
+      },
+      {
+        "case": "orderBy66",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-1",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-2",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-3",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-4",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-5",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-6",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-7",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-8",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-9",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-10",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-11",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-12",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-13",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-14",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-15",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-16",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-17",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-18",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-19",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-20",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-21",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-23",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-29",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-30",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-31",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-32",
+        "role": "sources"
+      },
+      {
+        "case": "validateexpr-33",
+        "role": "sources"
+      },
+      {
+        "case": "combined-errors-3",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/ForClause/SpecialTypes.xsd": {
+    "sha256": "f3e48405668b79e6a301a65038d974a71522f94bc92a227fa10b631fe3d056d0",
+    "roles": [
+      {
+        "case": "ForExprType025",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType026",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType027",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType037",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType038",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType039",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType040",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType041",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType042",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType043",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType044",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType048",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType049",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType050",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType051",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType052",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType053",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType022",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType023",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType024",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType036",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType045",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType046",
+        "role": "schemas"
+      },
+      {
+        "case": "ForExprType047",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/typedecl",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ForClause/SpecialTypes.xml": {
+    "sha256": "7ccebdb8eb1841b62d86d00aa310c8b297500981996e2ec6ca1594eb3114fd0e",
+    "roles": [
+      {
+        "case": "ForExprType025",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType026",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType027",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType037",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType038",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType039",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType040",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType041",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType042",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType043",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType044",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType048",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType049",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType050",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType051",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType052",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType053",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType022",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType023",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType024",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType036",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType045",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType046",
+        "role": "sources"
+      },
+      {
+        "case": "ForExprType047",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/FLWORExpr/extendedTypes.xsd": {
+    "sha256": "172be63771ff4ea41707439e7d3026aa3d68a1d717c8529ff339ff9f8a4de909",
+    "roles": [
+      {
+        "case": "step-expr-si-1",
+        "role": "schemas"
+      },
+      {
+        "case": "step-expr-si-2",
+        "role": "schemas"
+      },
+      {
+        "case": "step-expr-si-3",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/XQueryTest/extendedTypes",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/FLWORExpr/extendedTypes.xml": {
+    "sha256": "f217f8661a634cff215453e93ecba1a632de718d42eba73d7c29459273f21faf",
+    "roles": [
+      {
+        "case": "step-expr-si-1",
+        "role": "sources"
+      },
+      {
+        "case": "step-expr-si-2",
+        "role": "sources"
+      },
+      {
+        "case": "step-expr-si-3",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/ValidateExpr/listunion.xsd": {
+    "sha256": "5f21e136d77a10de8f5b28b9df285cb6c9a59040b3e5c47573dd5ad02187da7a",
+    "roles": [
+      {
+        "case": "FunctionCall-028",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-029",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-030",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-031",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-032",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-033",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-034",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-035",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-036",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-037",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-038",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-039",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-040",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-041",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-042",
+        "role": "schemas"
+      },
+      {
+        "case": "FunctionCall-043",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof112",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof113",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof114",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof115",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof116",
+        "role": "schemas"
+      },
+      {
+        "case": "instanceof142",
+        "role": "schemas"
+      },
+      {
+        "case": "typeswitch-112",
+        "role": "schemas"
+      },
+      {
+        "case": "typeswitch-113",
+        "role": "schemas"
+      },
+      {
+        "case": "typeswitch-114",
+        "role": "schemas"
+      },
+      {
+        "case": "typeswitch-115",
+        "role": "schemas"
+      },
+      {
+        "case": "typeswitch-116",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-24",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/ListUnionTypes",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ModuleImport/simple.xsd": {
+    "sha256": "a76ef8b918e9b663077481e6083735ff6094de315c3056975fb8063c5a24e10d",
+    "roles": [
+      {
+        "case": "modules-19b",
+        "role": "schemas"
+      },
+      {
+        "case": "modules-20b",
+        "role": "schemas"
+      },
+      {
+        "case": "modules-21",
+        "role": "schemas"
+      },
+      {
+        "case": "modules-24",
+        "role": "schemas"
+      },
+      {
+        "case": "modules-schema-context",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/simple",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/xqischema008.xml": {
+    "sha256": "071509c530070f5d656b622a353115badc9d5b6e31cdbcc8a5eca9972ce148ef",
+    "roles": [
+      {
+        "case": "qischema016",
+        "role": "sources"
+      },
+      {
+        "case": "qischema90171-err",
+        "role": "sources"
+      },
+      {
+        "case": "qischema90172-err",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/SchemaImport/qischema032.xsd": {
+    "sha256": "328ca20b2c3247442b301c070685c3d26833e0ec79380cdd9ef54ec861051324",
+    "roles": [
+      {
+        "case": "qischema032",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema032a",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema032b",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema032c",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://schema.highwire.org/Publishing/Fragment",
+    "schemaReferences": [
+      {
+        "kind": "import",
+        "namespace": "http://schema.highwire.org/Publishing/Resource",
+        "location": "qischema032a.xsd"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/SchemaImport/qischema032.xml": {
+    "sha256": "aa23e5ded5aefc6444a06eeecf0ee87a61e793f02a91d775bfad7932b5c864f5",
+    "roles": [
+      {
+        "case": "qischema032",
+        "role": "sources"
+      },
+      {
+        "case": "qischema032a",
+        "role": "sources"
+      },
+      {
+        "case": "qischema032b",
+        "role": "sources"
+      },
+      {
+        "case": "qischema032c",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/SchemaImport/mini-fpml.xsd": {
+    "sha256": "995324b461827adc0e4be431c534a5d881b7c2a65f2b5bd2f390fede7c06cddc",
+    "roles": [
+      {
+        "case": "qischema043",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema070",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90431-no-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90701-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90702-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90703-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.fpml.org/2005/FpML-4-2",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/addresses.xsd": {
+    "sha256": "c5f077093f0f88b9bce790098d02fd2978f7eb24f7efd5cbb943c26a2686a7ef",
+    "roles": [
+      {
+        "case": "qischema061",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema064",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema065",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90611-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90612-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90613-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/addresses",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/money.xsd": {
+    "sha256": "abaca899c3b92c743a0edc41b67d9e5b06525f346d3983e24a770d8853d9004b",
+    "roles": [
+      {
+        "case": "qischema063",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema063q02-err",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema90631-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/money",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/qischema072.xsd": {
+    "sha256": "1500419092db1c52c3406d8f0634520fd7d51b19536ae02e28ce276c0da759f3",
+    "roles": [
+      {
+        "case": "qischema072-01",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema072-02",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema072-03",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema072-04",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema072-05",
+        "role": "schemas"
+      },
+      {
+        "case": "qischema072-06",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://schema.highwire.org/Publishing/Resource/qischema072",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/docs/emptydoc.xml": {
+    "sha256": "d121426362a54e177ad0e94ad4a481a9697ee18ee8349f81aa37cdfe2085ba7c",
+    "roles": [
+      {
+        "case": "qischema90081-err",
+        "role": "sources"
+      },
+      {
+        "case": "qischema90082-err",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/SchemaImport/qischema061.xsd": {
+    "sha256": "6854e2d6cb03750202ce8348ba1a6d02b9210dc8d53d0f801f58b7d3e550989a",
+    "roles": [
+      {
+        "case": "qischema90614-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/addresses",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/qischema062.xsd": {
+    "sha256": "826f8ad4935f41213e51b07fd86e75e0f8168288cf453e6f3417e6fabd785c9a",
+    "roles": [
+      {
+        "case": "qischema90621-err",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/qischema062",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/SchemaImport/substitution11.xsd": {
+    "sha256": "cdcaf21b589fd62855ebff6df733f0304c9cf1706141188b45fa323cfd4d442c",
+    "roles": [
+      {
+        "case": "substitution-020",
+        "role": "schemas"
+      },
+      {
+        "case": "substitution-021",
+        "role": "schemas"
+      },
+      {
+        "case": "substitution-022",
+        "role": "schemas"
+      },
+      {
+        "case": "substitution-023",
+        "role": "schemas"
+      },
+      {
+        "case": "substitution-024",
+        "role": "schemas"
+      },
+      {
+        "case": "substitution-025",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/substitution11",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/simple.xsd": {
+    "sha256": "a76ef8b918e9b663077481e6083735ff6094de315c3056975fb8063c5a24e10d",
+    "roles": [
+      {
+        "case": "validateexpr-25",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/XQueryTest/simple",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/dm-e005.xsd": {
+    "sha256": "69571e6c266b7343596dc3097933d7ce375d8f0c9c279fa787b77549aa1ac5e0",
+    "roles": [
+      {
+        "case": "validateexpr-27",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/ns/test",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/dm-e005.xml": {
+    "sha256": "733c0db3f9804f6e4482068cff30b84eba914be06aa6d0f069747a92f618028b",
+    "roles": [
+      {
+        "case": "validateexpr-27",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/ValidateExpr/xq-e18.xsd": {
+    "sha256": "4968d5974da63eb685e070428ff8416aa31396c737816ed8e257eb43dc5b3c89",
+    "roles": [
+      {
+        "case": "validateexpr-28",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.com/ns/test/xq-e18",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/constraints.xsd": {
+    "sha256": "648a72c4f6c557de3f44e80c5554d15c955a331c2282a8ca4e370c76a6e76c32",
+    "roles": [
+      {
+        "case": "validate-constraints-1",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-constraints-2",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-constraints-3",
+        "role": "schemas"
+      },
+      {
+        "case": "validate-constraints-4",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/constraints",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/simpleContent.xsd": {
+    "sha256": "2c33c51df66d95934935ee2f5caa43e7bda431f9c9a87e77dbfb023559dbf085",
+    "roles": [
+      {
+        "case": "validate-sc-1",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-2",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-4",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-5",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-6",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-7",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-8",
+        "role": "schemas"
+      },
+      {
+        "case": "validateexpr-sc-9",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.w3.org/query-test/complexSimple",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/AbstractType/schema.xsd": {
+    "sha256": "72550dc230c2d0646d0d7fc9fd85f11ab4214cc351ef087cea20145a5d10c490",
+    "roles": [
+      {
+        "case": "validate-as-107",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://myns",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValidateExpr/AbstractType/obj.xml": {
+    "sha256": "c82008fdff5130cb021097da697c8884072090e2eb01702237d14c4298267195",
+    "roles": [
+      {
+        "case": "validate-as-107",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/ValueComp/valueComp200.xsd": {
+    "sha256": "0608560fa05155ad0f89e5cad1d5938063773016362fad636b9caa367e7fcdf0",
+    "roles": [
+      {
+        "case": "value-comparison-12",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.xpathtest.com/test",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/ValueComp/valueComp200.xml": {
+    "sha256": "a5d297a836bb12465a82adaebbfdb7297ebd523e93549a0208579bc199429e76",
+    "roles": [
+      {
+        "case": "value-comparison-12",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/arrange_rows.xsd": {
+    "sha256": "6c5221c8a00788f9c43bafe57391e844a333388f41f5c6437909133824e49560",
+    "roles": [
+      {
+        "case": "WindowingUseCase01S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/arrange_rows.xml": {
+    "sha256": "3232fbd4b07702a06ada6a4dfd1dad03b19ef00e0d3ddd51499656d467b4a1a2",
+    "roles": [
+      {
+        "case": "WindowingUseCase01S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/head_para.xsd": {
+    "sha256": "3d300423a02f75502aa116137dff39bbda2258aaf879e756b83e9e45da82181b",
+    "roles": [
+      {
+        "case": "WindowingUseCase02S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/head_para.xml": {
+    "sha256": "885e757309d6f9d71222a33bcf1cb8541761fb30551538a825d8d861a70c6055",
+    "roles": [
+      {
+        "case": "WindowingUseCase02S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/term_def_list.xsd": {
+    "sha256": "f41a72b90f8b4de83a9a2e28774ec43765d465a66b7ce4c2a6c0585f989a88af",
+    "roles": [
+      {
+        "case": "WindowingUseCase03S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/term_def_list.xml": {
+    "sha256": "64cc86fd9fa7614be6308e3108c0c005f931c3898b16324e1d507ee056e6a12c",
+    "roles": [
+      {
+        "case": "WindowingUseCase03S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/temp_events.xsd": {
+    "sha256": "d30873135c6810f60b1379550a66fa5268e7372f1bf6ba5a78cf4de759273842",
+    "roles": [
+      {
+        "case": "WindowingUseCase04S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase05S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase06S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/temp_events.xml": {
+    "sha256": "1b21d2efcb0ca26410e6d638482bffc25bab5fc88cf8d48f3a8ee279fcc9b3d5",
+    "roles": [
+      {
+        "case": "WindowingUseCase04S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase05S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase06S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/person_events.xsd": {
+    "sha256": "9ce7807e12dacdf0c179f0f9d380fa96bce7dc7a50ae9548eef55c9957c04f8f",
+    "roles": [
+      {
+        "case": "WindowingUseCase07S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase08S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase09S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase10S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase11S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase12S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase13S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/person_events.xml": {
+    "sha256": "ecb366c8355397d6f3a10102ef2850d17622cc5c0d8525290bfb4939dada6e70",
+    "roles": [
+      {
+        "case": "WindowingUseCase07S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase08S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase09S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase10S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase11S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase12S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase13S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/rss.xsd": {
+    "sha256": "d89f165e72a485725239c987d63e80365f650f4c450977fa33fc4dacac72ee53",
+    "roles": [
+      {
+        "case": "WindowingUseCase14S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase15S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase16S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/rss.xml": {
+    "sha256": "28304ef6ecb288dadb8ee27a3efffb5d23ac9dbf9ec53c9faa3b8d89ebcb3592",
+    "roles": [
+      {
+        "case": "WindowingUseCase14S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase15S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase16S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/prod/WindowClause/cxml.xsd": {
+    "sha256": "b4c3bcff2ed4f114aec192b77254a1805191e2e13988286014d5286fae65b243",
+    "roles": [
+      {
+        "case": "WindowingUseCase17S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase18S",
+        "role": "schemas"
+      },
+      {
+        "case": "WindowingUseCase19S",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": null,
+    "schemaReferences": []
+  },
+  "tests/qt3tests/prod/WindowClause/cxml.xml": {
+    "sha256": "270be6014f3b116b04c87737cf8f042dd8b4a253ceb44ff8c0e404f82ca91b5f",
+    "roles": [
+      {
+        "case": "WindowingUseCase17S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase18S",
+        "role": "sources"
+      },
+      {
+        "case": "WindowingUseCase19S",
+        "role": "sources"
+      }
+    ]
+  },
+  "tests/qt3tests/misc/CombinedErrorCodes/FOTY0012.xsd": {
+    "sha256": "99f8f75ea1d89b0b5ed7086ed72b796943973a1c3234c83d92eb59827a8a329a",
+    "roles": [
+      {
+        "case": "FOTY0012",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.org/2007/schema/FOTY0012",
+    "schemaReferences": []
+  },
+  "tests/qt3tests/misc/CombinedErrorCodes/XQDY0084.xsd": {
+    "sha256": "32880d2858669f4dbecbe16ee7e46fa06b824f2904b65af2e9e23a9e3fe26899",
+    "roles": [
+      {
+        "case": "XQDY0084",
+        "role": "schemas"
+      }
+    ],
+    "targetNamespace": "http://www.example.org/2007/schema/XQDY0084",
+    "schemaReferences": []
+  }
+}

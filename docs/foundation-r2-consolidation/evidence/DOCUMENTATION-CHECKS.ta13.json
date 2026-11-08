@@ -1,0 +1,73 @@
+{
+  "date": "2026-11-05",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "74a7b6b66cffcbd2e67b51ba3e25031cd0443b18a605a79befd7afe1289b89fa",
+      "htmlSha256": "f4fee07a41fbd99dc871fd8e04e57d9ac5c3542614b589ac85508a46860be696"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "a0ea6ff547960cc16bfa8f5d7a1e09d932a633e47d4a40cf4b25e117569b5f33",
+      "htmlSha256": "0692745c7a57ca69fa9b1ffcc95f0956c0bcb6823ab131a659df7672122d59e3"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "66a2c6b896990238e765e61be03c1136be2778f1c6fcf0805812e123e49145da",
+      "htmlSha256": "228fdfaf30edcde47b4ce0e251579c07232172b58369df997e1375be40b83a08"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "465661221c684d8f34c185479b695877e9deb3a84e76e9fe5c5b6975a079301f",
+      "htmlSha256": "6625ba3a147d787d4e18b44e088c39561f8d823e21d6b833af15927f62868f56"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "8e77c3e560964397a86f39de50131133764eb528542b14ab041b6d331fcf0763",
+      "htmlSha256": "e5bb0c5cc32fdaf7776c99c0ede1d44c703f789896e0b2754a9ded60fdc9a9d2"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "bda4226b96156430c2345463f50981072a9f347383eb4adf6632527a209ee244",
+      "htmlSha256": "aba2d52a829862560ffdb1bca443044f0e31139871fd162ab907ba9e688637da"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "5123725653341fe5ac82d295ea02e889f9176ea33b1e001e7448446497bfc38c",
+      "htmlSha256": "d8c792bf8a6deab41df43a35b48766130cf8272440210bf35b8af4c68fa93ac3"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "16887d6448ad449d9e45ed8e6bb390f54ee358d5dbe6ee84c45348dc4477523e",
+      "htmlSha256": "50f77918f76da56b0555d48c11de862f359bbca0e765f0f213c58a05363aefc7"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "cdba22bfb40ac2129a424d01ba3c4a20057247185c4c00dbb2e775e7818bed53",
+      "htmlSha256": "c41a0cc6f7e149e6980572cb4125af365791b36be8a37583a2dd287058c1c036"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "b9f6017f20da2550712c669e481395778c20dc0943a77459c260f90942d25268",
+      "htmlSha256": "f3549c86116b7e3a1f4f2e83995cd28d190004f9cbe841707e734920f447ec0b"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "27bf58171c0dc631dddd56d1179ca913e1382f17030112646bf37c1cb633a741",
+      "htmlSha256": "1bc6fc2630aa85289ea8298e5b5d09cb1d0287752ee101f73f0a89c207b02dde"
+    },
+    {
+      "source": "docs/foundation-node-metadata-reader/README.md",
+      "sourceSha256": "6ae7c1adfb425fe49a1235ec9b49f80fd246375ccdf06bd6aabf6a4ec4a8b15a",
+      "htmlSha256": "bc487d6731e4aa2cc4a61566d12bf6c46b82e818be690c75a72809b74a9b6a53"
+    },
+    {
+      "source": "docs/foundation-node-metadata-reader/SPEC-BASIS.md",
+      "sourceSha256": "17aa68232afa38501b76b6ab3a91b53f8be1cc6795685fe6f2efb4479c1f6470",
+      "htmlSha256": "c7df33d8c3b35a631f007de5401361291401df4c8b4e28ffd6214a4c9d1b702c"
+    }
+  ],
+  "localLinks": 3494,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot/PDF claim"
+}

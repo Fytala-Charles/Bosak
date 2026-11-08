@@ -1,0 +1,138 @@
+{
+  "cases": 9,
+  "rowsIdentical": true,
+  "unchangedCallerSha256": "eb4f0aba5db13296f1885418e64387a512a3f833b54cb693c1a61da7013d91e1",
+  "scope": "Exact profile/descriptor/SHA256 descriptor-fingerprint equality for nine unchanged ordinary/v1/v2/v3 expressions; actual loaded engine hashes verified. Not all caller source/binary or native ABI qualification.",
+  "baseline": {
+    "rows": [
+      {
+        "expression": "string($x)",
+        "profile": "bosak-ordinary-string-boolean-v1",
+        "descriptor": "bosak-private-static-v1",
+        "fingerprint": "508C1E8467DB5C6C666F0B44322DBF0A1BA80A973B489818EC209A802E9BBC8C"
+      },
+      {
+        "expression": "1+2",
+        "profile": "bosak-exact-arithmetic-v1",
+        "descriptor": "bosak-exact-arithmetic-static-v1",
+        "fingerprint": "F8DE7B287907256289B243D62D2429E80EACF4973CA1BE2533A7180D077DE4A0"
+      },
+      {
+        "expression": "$x+1",
+        "profile": "bosak-exact-arithmetic-v1",
+        "descriptor": "bosak-exact-arithmetic-static-v1",
+        "fingerprint": "F8DE7B287907256289B243D62D2429E80EACF4973CA1BE2533A7180D077DE4A0"
+      },
+      {
+        "expression": "1 eq 2",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "string(1+2)",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "fn:string(.1+.2)",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "1 idiv 2",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      },
+      {
+        "expression": "9 mod 2",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      },
+      {
+        "expression": "string(9 idiv 2)",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      }
+    ],
+    "assemblies": {
+      "Bosak.XPath.Api": "29d5cdb32e1f50c608900cf0435e0283ff3a4958e12063133f7c15b2d07487c3",
+      "Bosak.XPath.Core": "230a9efb5b674e3c0caf218538911fcdcc5e942212df3ed01de712dcd04db616",
+      "Bosak.XPath.Runtime": "ccedf3605a71db340c5a6d82e25d67259585020daeae751308b56913b2955acb",
+      "Bosak.XPath.Parser": "da4c78c68ab12b27da5817b2bd026d092cf4a3ef3a8809085f801462f82461df",
+      "Bosak.XPath.Compiler": "9fce210233dd6e4760da90d45d6fdaefe77137657ea3f9d1dffabd451179a204",
+      "Bosak.XPath.Standard": "78a86e870d25dc976bb094cfd156e29e1be24f49e4dad467a497d44a7797b295"
+    }
+  },
+  "candidate": {
+    "rows": [
+      {
+        "expression": "string($x)",
+        "profile": "bosak-ordinary-string-boolean-v1",
+        "descriptor": "bosak-private-static-v1",
+        "fingerprint": "508C1E8467DB5C6C666F0B44322DBF0A1BA80A973B489818EC209A802E9BBC8C"
+      },
+      {
+        "expression": "1+2",
+        "profile": "bosak-exact-arithmetic-v1",
+        "descriptor": "bosak-exact-arithmetic-static-v1",
+        "fingerprint": "F8DE7B287907256289B243D62D2429E80EACF4973CA1BE2533A7180D077DE4A0"
+      },
+      {
+        "expression": "$x+1",
+        "profile": "bosak-exact-arithmetic-v1",
+        "descriptor": "bosak-exact-arithmetic-static-v1",
+        "fingerprint": "F8DE7B287907256289B243D62D2429E80EACF4973CA1BE2533A7180D077DE4A0"
+      },
+      {
+        "expression": "1 eq 2",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "string(1+2)",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "fn:string(.1+.2)",
+        "profile": "bosak-exact-scalars-v2",
+        "descriptor": "bosak-exact-scalars-static-v2",
+        "fingerprint": "F6CBCCDC1FDEC2989FE4199744F5620DEBDF337EBAA9B9DE367F72E61B220656"
+      },
+      {
+        "expression": "1 idiv 2",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      },
+      {
+        "expression": "9 mod 2",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      },
+      {
+        "expression": "string(9 idiv 2)",
+        "profile": "bosak-exact-quotient-v3",
+        "descriptor": "bosak-exact-quotient-static-v3",
+        "fingerprint": "7BF16534068FD81F467FD33EECE8703C03A9D1D441B94EEE4E8AB8A273D87FA2"
+      }
+    ],
+    "assemblies": {
+      "Bosak.XPath.Api": "90f32ea6b5f20cc91cf295568de3b60e5b0be00a895d25b04f93845b97808fa1",
+      "Bosak.XPath.Core": "be6789d0e0c3eb1075e734068e6abbb47d5142d5a052125a1f0c19474d1b7ad3",
+      "Bosak.XPath.Runtime": "38e0fe841835ffa423df420f4082271e23c9aafef275752feea77ce5bd762414",
+      "Bosak.XPath.Parser": "05bd17bbe7518001e3e7415fa1c099475b334e0b3ec033163342d3c50bf446f7",
+      "Bosak.XPath.Compiler": "2547175dc1b05359e8407d6c0b5f1299e130f5e27f16907cd500a594527feb1f",
+      "Bosak.XPath.Standard": "e3be2143588ecb03f7c0c55a0a5acec6a9c4f12e775844fa69c7e72e71a2ab44"
+    }
+  }
+}

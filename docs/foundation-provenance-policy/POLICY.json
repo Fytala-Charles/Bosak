@@ -1,0 +1,122 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.76.0",
+  "status": "CoreSelectedBoundedPolicy_ImplementationPending",
+  "decisions": [
+    {
+      "id": "PO01",
+      "title": "Exact declaration",
+      "decision": "Retain static bool SchemaAtomics.TryGetProvenance(in XdmValue value, out ISchemaAtomicProvenance? provenance). No public attachment/registration factory or new required provider member."
+    },
+    {
+      "id": "PO02",
+      "title": "Observation meaning",
+      "decision": "True describes an engine-admitted cached declared/actual/origin tuple; it grants no lease, fresh provider ownership, current compatibility or permission to evaluate."
+    },
+    {
+      "id": "PO03",
+      "title": "Plain and unknown",
+      "decision": "Return false with null output for ordinary/computed/exact-numeric/markless atomized values, unknown markers and labels without authenticated transport. Never reconstruct by payload, QName or a global lookup."
+    },
+    {
+      "id": "PO04",
+      "title": "Ordinary registered source",
+      "decision": "A registered non-operation-bound typed scalar may be observed while its exact engine session/snapshot/cache remains live and its marker, ordinal, registration and payload still match. Return cached references only; do not call the issuer/provider."
+    },
+    {
+      "id": "PO05",
+      "title": "Originless registered cell",
+      "decision": "The same bounded ordinary registry policy permits OriginalAssessment=null. Never manufacture assessment/source lineage or merge originless and original cache keys."
+    },
+    {
+      "id": "PO06",
+      "title": "Constructed receipt",
+      "decision": "A genuine operation-local receipt may expose cached declared/actual types and null origin only while its exact raw operation and engine session remain active. After raw completion, close or cancellation return false/null."
+    },
+    {
+      "id": "PO07",
+      "title": "Current-compatible entry",
+      "decision": "Return false/null for operation-bound compatible payload entries in this context-free helper, even inside a caller operation. A stable entry has no current operation/proof identity. Never retain a prior issuer, introduce ambient authority, overwrite stable entries with the latest proof or use descriptive evidence as reproof."
+    },
+    {
+      "id": "PO08",
+      "title": "Compatible requirement remains",
+      "decision": "Context-aware provenance for compatible values is an open required route. Settle a separately leased observation/disposition before final freeze; the bounded helper refusal is not owner acceptance or a waiver."
+    },
+    {
+      "id": "PO09",
+      "title": "Expired/malformed try result",
+      "decision": "Known expired/closed/canceled engine observations, unregistered or rebound representations return false/null. Do not use blanket catches to hide unexpected engine defects or to execute provider callbacks speculatively."
+    },
+    {
+      "id": "PO10",
+      "title": "Guarded observation object",
+      "decision": "A future returned engine view exposes cached type/origin references, with callback-free engine lifetime checks on every getter. Retaining it after revocation must not continue to yield evidence. Obtaining opaque handles still does not authorize subsequent provider operations."
+    },
+    {
+      "id": "PO11",
+      "title": "Provider callbacks",
+      "decision": "The helper and its provenance getters never call provider/type/origin properties, Owns/IsSameComponent, compatibility proof, lazy getters, enumerators or native admission/release callbacks. Reference returns do not recursively guard arbitrary methods on returned provider objects; use them only under explicit owner/raw lifetimes."
+    },
+    {
+      "id": "PO12",
+      "title": "Transport authenticity",
+      "decision": "Recognize sealed engine transport only and validate exact payload/type tags without attachment, conversion, provider-defined equality or stringification. No XdmValue layout/friend/reference changes or public marker SPI are selected."
+    },
+    {
+      "id": "PO13",
+      "title": "Legacy private kernel",
+      "decision": "Opaque private SchemaEvidenceKernel markers are not automatically public-contract provenance merely because object fields can be cast. A separate authenticated adapter/disposition is required; bounded observation returns false until qualified."
+    },
+    {
+      "id": "PO14",
+      "title": "Atomic versus container",
+      "decision": "The helper observes one atomic carrier and never claims container GoverningType, IsList or cardinality. Preserve a container separately; an atomic observation cannot reconstruct its boundaries."
+    },
+    {
+      "id": "PO15",
+      "title": "Empty lists",
+      "decision": "Empty lists retain valid governing/list metadata at the complete-container boundary, have no atomic marker/provenance item, and consume zero per-atomic scalar slots. False for Undefined is not an invalid-list classification."
+    },
+    {
+      "id": "PO16",
+      "title": "Singleton lists",
+      "decision": "Do not infer scalar container shape from one atomic. Ordinary singleton-list registration keeps IsList in its container; an exposed cell may have its own provenance. Existing compatible/constructor list refusals remain explicit and unwaived for broader support."
+    },
+    {
+      "id": "PO17",
+      "title": "Union selections",
+      "decision": "Preserve per-cell cached declared and selected actual handles by reference and ordered origin; never replace all members by a container governing/union handle or infer a member from its primitive payload."
+    },
+    {
+      "id": "PO18",
+      "title": "Complete bounded batches",
+      "decision": "Validate the full ordered container, every cell and captured atom/numeric/cache limits before publication/commit. No prefix success, silent truncation, partial quota mutation or conversion of empty/list/multiple-atomic shapes into scalar success."
+    },
+    {
+      "id": "PO19",
+      "title": "Flattened data",
+      "decision": "Existing public original-node atomization remains its selected flattened plain-value route. Do not retroactively attach provenance or reinterpret existing returned graphs in this policy step; marker-preserving general transport is separate implementation work."
+    },
+    {
+      "id": "PO20",
+      "title": "Admission remains mandatory",
+      "decision": "Runtime typed use still requires exact session/snapshot/operation, complete ownership and current issuer checks. An observed tuple or provider-created SchemaAtomicItem cannot substitute for issued container identity or mint an engine marker."
+    },
+    {
+      "id": "PO21",
+      "title": "Quota and concurrency",
+      "decision": "Observation acquires no native lease, source/cache/typed-atom quota slot or ambient operation. Registration/close races must not publish unguarded evidence; implementation must define the callback-free linearization check. Storage/allocation cost must be measured, not assigned an owner budget."
+    },
+    {
+      "id": "PO22",
+      "title": "No broad closure",
+      "decision": "This policy closes only the Core design selection. Helper/container implementation, tests, Schema/other owner review, native resources/performance, C45/freeze and publication remain open."
+    }
+  ],
+  "schemaReviewAccepted": false,
+  "ownerAccepted": false,
+  "requirementsWaived": 0,
+  "publicHelperActivated": false,
+  "pv01Complete": false
+}

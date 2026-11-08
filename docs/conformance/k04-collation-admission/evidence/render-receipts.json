@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-collation-render/README.md.html",
+      "sha256": "a4799bcdba051f0f1e4427fb864c6c91130b0b0d46fe42ce4bef5aa5b7ee1053"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-collation-render/docs_ARCHITECTURE.md.html",
+      "sha256": "49f1e764310287f686466aa0c2fae3bbc4e21b0d1fd9a029c684fa35a472f836"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-collation-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "0a32f3ff424d5bf65595f5f0106a987aeb22d7c2fd5388a9302a1e92c60697ef"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-collation-render/docs_INTEGRATION.md.html",
+      "sha256": "1eb08504023962faf606dc26c61857c961a688eb256bae4c847f31d05a1f920c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-collation-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "974b27cbccb403dca5bb5d8bef53f5db0d596c61aa2b491a3d54f7de3d4b6da3"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-collation-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "98cde7c05e6c566ed6d5fa9ccca27801ded255d2e4b6dfb9d74cf61ef6836b2e"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-collation-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "516659292fad847b7f99597397efc04c8bd00b540802dc041e8b4e0fbb1cbbb9"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-collation-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "e70fa8efb7abf90340d1e5735a6060a8a5dd3c0fe9ea5a17623c51bea685649d"
+    },
+    {
+      "source": "docs/conformance/k04-feature-inventory/README.md",
+      "html": ".guard-tmp/k04-collation-render/docs_conformance_k04-feature-inventory_README.md.html",
+      "sha256": "1e8ac681c39620a1e8df828290522628a474edceaf1a093ec971f51a9d510167"
+    },
+    {
+      "source": "docs/conformance/k04-collation-admission/README.md",
+      "html": ".guard-tmp/k04-collation-render/docs_conformance_k04-collation-admission_README.md.html",
+      "sha256": "3710ac158819570fb994131a68908c856a7491320a8c1ff57ac46bd90e3826ce"
+    }
+  ]
+}

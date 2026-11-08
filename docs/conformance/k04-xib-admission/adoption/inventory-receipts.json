@@ -1,0 +1,36 @@
+[
+  {
+    "name": "qt3-inventory",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-xib-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\adoption\\qt3-adopted",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\review-names.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\polarity-requests.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.715835299983155,
+    "log": "qt3-inventory.log"
+  },
+  {
+    "name": "qt4-inventory",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-xib-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\adoption\\qt4-adopted",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\review-names.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-xib-admission\\evidence\\polarity-requests.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.9078689999878407,
+    "log": "qt4-inventory.log"
+  }
+]

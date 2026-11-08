@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-07",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "68466be09c5966a2703834764d2db4bea7bd7befb4334251a20b65525f9c2d65"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "25310029ad1f78c0fba27b588951e12b78ab6fb11920c02c5d6fdc55c2cad963"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "eb9fce43fbfe31f1d06094ddb9bff680f7f3d11ad62bd2a488a68a35a8d682cd"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "be5ee38049cd25d48c4e4f1211886d1e8f750b9fb3a9ce394c0de2c97bf4e9a6"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "6228ba29a279f6c35818fe3d6bbc8ca9689dfa69c9cedbdcb32c754c59a51a0a"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "92629ccdf49642012393c1bfb9122f56efb0f93398adca0bc97a706ef2b7df6f"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "1f1ff6a3ee53f2ae24b3fa95cd0f0ce672332d374e7cd1836ac88f1dce880f3f"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "5124e10f97187edd218994e64db93f3653c5e9ff5514779774a8fae0330c9542"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "85467189a93e13e8adadda0e810a5cfb1acdc697bd2f297c7c05eef0c2052c3b"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "144b04f9437697154ce3addfc224eca6280dd935235e1deaf1fae1fd16c05ae2"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "515bca697c0e1f72bbd62a883fa5909d90dc576fc8dc41c00f8e8f172086d2f3"
+    },
+    {
+      "source": "docs/foundation-captured-identity-candidate/README.md",
+      "sourceSha256": "40701110ade442095f523501f8870eafb1ba749fd8d4f3a351b2d2b4fcc99c04"
+    }
+  ],
+  "localLinks": 3790,
+  "htmlRendered": false,
+  "scope": "Static Markdown source/hash/local file checks only;no new HTML/screenshot/PDF approval",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91"
+}

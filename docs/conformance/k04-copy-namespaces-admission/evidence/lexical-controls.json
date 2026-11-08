@@ -1,0 +1,224 @@
+[
+  {
+    "Name": "copy-0",
+    "Expression": "declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-1",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-2",
+    "Expression": "declare\ncopy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-3",
+    "Expression": "declare copy-namespaces preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-4",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-5",
+    "Expression": "declare\ncopy-namespaces preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-6",
+    "Expression": "declare copy-namespaces no-preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-7",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces no-preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-8",
+    "Expression": "declare\ncopy-namespaces no-preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-9",
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-10",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces no-preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-11",
+    "Expression": "declare\ncopy-namespaces no-preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "literal-\"",
+    "Expression": "\"declare copy-namespaces\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled-\"",
+    "Expression": "\"a\"\"declare copy-namespaces\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "literal-'",
+    "Expression": "'declare copy-namespaces'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled-'",
+    "Expression": "'a''declare copy-namespaces'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "comment",
+    "Expression": "(: declare copy-namespaces preserve, inherit :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "nested-comment",
+    "Expression": "(: a (: declare copy-namespaces :) a :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "prefix-keyword",
+    "Expression": "declarecopy-namespaces preserve, inherit; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "keyword-suffix",
+    "Expression": "declare copy-namespacesx preserve, inherit; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "context-adopted",
+    "Expression": "declare context item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "construction-21",
+    "Expression": "declare construction strip; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-22",
+    "Expression": "declare construction strip; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-23",
+    "Expression": "declare(:a:)construction strip; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-24",
+    "Expression": "declare(:a:)construction strip; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-25",
+    "Expression": "declare\nconstruction strip; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-26",
+    "Expression": "declare\nconstruction strip; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-27",
+    "Expression": "declare construction preserve; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-28",
+    "Expression": "declare construction preserve; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-29",
+    "Expression": "declare(:a:)construction preserve; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-30",
+    "Expression": "declare(:a:)construction preserve; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-31",
+    "Expression": "declare\nconstruction preserve; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction-32",
+    "Expression": "declare\nconstruction preserve; declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "pragma",
+    "Expression": "(# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-pragma",
+    "Expression": "declare copy-namespaces preserve, inherit; (# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-uppercase",
+    "Expression": "DECLARE COPY-NAMESPACES PRESERVE, INHERIT; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "malformed-boundary",
+    "Expression": "declare copy-namespaces-extra preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  }
+]

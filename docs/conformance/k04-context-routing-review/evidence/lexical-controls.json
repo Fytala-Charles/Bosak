@@ -1,0 +1,182 @@
+[
+  {
+    "Name": "simple",
+    "Expression": "declare context item := 1; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "comments",
+    "Expression": "declare(:outer(:nested:) :)context(:gap:)item := 1; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "newlines",
+    "Expression": "declare\ncontext\titem external; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "uppercase",
+    "Expression": "DECLARE CONTEXT ITEM := 1; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "external",
+    "Expression": "declare context item as xs:integer external; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces preserve, inherit5",
+    "Expression": "declare copy-namespaces preserve, inherit; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-namespaces preserve, inherit6",
+    "Expression": "declare copy-namespaces preserve, inherit; declare context item := 1; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-namespaces preserve, inherit7",
+    "Expression": "declare(:gap:)copy-namespaces preserve, inherit; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-namespaces preserve, inherit8",
+    "Expression": "declare(:gap:)copy-namespaces preserve, inherit; declare context item := 1; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction preserve9",
+    "Expression": "declare construction preserve; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction preserve10",
+    "Expression": "declare construction preserve; declare context item := 1; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction preserve11",
+    "Expression": "declare(:gap:)construction preserve; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "construction preserve12",
+    "Expression": "declare(:gap:)construction preserve; declare context item := 1; .",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "literal\"",
+    "Expression": "\"declare context item\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled\"",
+    "Expression": "\"a\"\"declare context item\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "literal'",
+    "Expression": "'declare context item'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "doubled'",
+    "Expression": "'a''declare context item'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "comment",
+    "Expression": "(: declare context item :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "nested-comment",
+    "Expression": "(: a (: declare context item :) b :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "qname-prefix",
+    "Expression": "declare contextual item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "identifier",
+    "Expression": "declarecontext item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "variable",
+    "Expression": "$declare-context",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "pragma",
+    "Expression": "(# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "context-pragma",
+    "Expression": "declare context item := 1; (# p:x #) { . }",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "hyphen-boundary-conservative",
+    "Expression": "declare context-item := 1; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "context-plus-quoted-construction",
+    "Expression": "declare context item := \"declare construction preserve\"; .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "context-plus-commented-copy",
+    "Expression": "declare context item := 1; (: declare copy-namespaces preserve, inherit :) .",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "split-keyword",
+    "Expression": "de(:gap:)clare context item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "quoted-context-real-construction",
+    "Expression": "declare construction preserve; \"declare context item\"",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "context-nested-comment-pragma",
+    "Expression": "declare(:a(:b:)a:)context item := 1; (# p:x #) { . }",
+    "Before": false,
+    "After": false
+  }
+]

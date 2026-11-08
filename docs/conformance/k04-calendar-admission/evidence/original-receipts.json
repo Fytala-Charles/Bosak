@@ -1,0 +1,286 @@
+[
+  {
+    "suite": "qt3",
+    "name": "format-date-en152",
+    "mode": "direct",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-calendar-admission\\evidence\\qt3-format-date-en152-direct-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3072251999983564,
+    "log": "qt3-format-date-en152-direct.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en152",
+      "kind": "Passed",
+      "message": null
+    },
+    "counts": null
+  },
+  {
+    "suite": "qt3",
+    "name": "format-date-en152",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-date",
+      "format-date-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.07228110000141896,
+    "log": "qt3-format-date-en152-current.log",
+    "result": null,
+    "counts": [
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "format-date-en152",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-harness-qt3\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-date",
+      "format-date-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2870060999994166,
+    "log": "qt3-format-date-en152-prototype.log",
+    "result": null,
+    "counts": [
+      1,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "format-dateTime-en152",
+    "mode": "direct",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-calendar-admission\\evidence\\qt3-format-dateTime-en152-direct-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3302716000180226,
+    "log": "qt3-format-dateTime-en152-direct.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en152",
+      "kind": "Passed",
+      "message": null
+    },
+    "counts": null
+  },
+  {
+    "suite": "qt3",
+    "name": "format-dateTime-en152",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-dateTime",
+      "format-dateTime-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.07116629998199642,
+    "log": "qt3-format-dateTime-en152-current.log",
+    "result": null,
+    "counts": [
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "format-dateTime-en152",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-harness-qt3\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-format-dateTime",
+      "format-dateTime-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30343259999062866,
+    "log": "qt3-format-dateTime-en152-prototype.log",
+    "result": null,
+    "counts": [
+      1,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "suite": "qt4",
+    "name": "format-date-en152",
+    "mode": "direct",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-calendar-admission\\evidence\\qt4-format-date-en152-direct-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29327480000210926,
+    "log": "qt4-format-date-en152-direct.log",
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-date-en152",
+      "kind": "Passed",
+      "message": null
+    },
+    "counts": null
+  },
+  {
+    "suite": "qt4",
+    "name": "format-date-en152",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-date",
+      "format-date-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.07283229997847229,
+    "log": "qt4-format-date-en152-current.log",
+    "result": null,
+    "counts": [
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "suite": "qt4",
+    "name": "format-date-en152",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-harness-qt4\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-date",
+      "format-date-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2637588999932632,
+    "log": "qt4-format-date-en152-prototype.log",
+    "result": null,
+    "counts": [
+      1,
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "suite": "qt4",
+    "name": "format-dateTime-en152",
+    "mode": "direct",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-calendar-admission\\evidence\\qt4-format-dateTime-en152-direct-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.271887400012929,
+    "log": "qt4-format-dateTime-en152-direct.log",
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-dateTime-en152",
+      "kind": "Passed",
+      "message": null
+    },
+    "counts": null
+  },
+  {
+    "suite": "qt4",
+    "name": "format-dateTime-en152",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-dateTime",
+      "format-dateTime-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.06881470000371337,
+    "log": "qt4-format-dateTime-en152-current.log",
+    "result": null,
+    "counts": [
+      1,
+      0,
+      0,
+      1
+    ]
+  },
+  {
+    "suite": "qt4",
+    "name": "format-dateTime-en152",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-calendar-harness-qt4\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-dateTime",
+      "format-dateTime-en152"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26101730001391843,
+    "log": "qt4-format-dateTime-en152-prototype.log",
+    "result": null,
+    "counts": [
+      1,
+      1,
+      0,
+      0
+    ]
+  }
+]

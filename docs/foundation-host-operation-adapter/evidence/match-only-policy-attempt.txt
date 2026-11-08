@@ -1,0 +1,4 @@
+System.Exception: xslt-match-does-not-supply-template-focus
+   at Experiment.Check(String id, Boolean ok) in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 58
+   at Experiment.Run() in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 92
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\host-operation-adapter\Adapter.cs:line 15

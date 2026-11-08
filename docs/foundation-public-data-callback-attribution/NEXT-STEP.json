@@ -1,0 +1,16 @@
+{
+  "id": "PV-Q04d",
+  "status": "Next_BoundedCheckCoalescingPolicyAndIsolatedEngineCandidate",
+  "requirements": [
+    "Record immutable adoption before semantic engine optimization",
+    "Distinguish engine-only raw liveness/membership guards from provider callbacks/full binding proofs",
+    "Preserve exact pre/post callback cancellation,source/snapshot/advisor/authority/tuple/container authentication",
+    "No positive provider-ownership cache across callback,raw boundary,await or revocation",
+    "Preserve serialized provider gate,reentry refusal,resource cleanup and primary-failure precedence",
+    "Prove callback mutation/revocation cases before merging;full required unit/native/binary/QT3/qt4 qualification for engine changes",
+    "Use identical workload/counter paths for diagnostic before/after;no synthetic owner budget acceptance"
+  ],
+  "coreOptimizationSelected": false,
+  "publicApiChangeSelected": false,
+  "ownerBudgetsAccepted": false
+}

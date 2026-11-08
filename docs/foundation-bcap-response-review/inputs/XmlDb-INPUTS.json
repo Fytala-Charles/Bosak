@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-02",
+  "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+  "workingMembershipIsUncommitted": true,
+  "coreObservedRevision": "54997c04d677fd172594fc402fce07263d5c4e0f",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "workingSourceHashes": {
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": "6ec0491a69eab73312268bfd428faaa425fb95b35ec131797ddcaf1484f08d11",
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b",
+    "src/Bosak.XmlDb.Storage/GenerationLease.cs": "f8b78040ee931b571c51924adeeb5bca095d70dcbf7d7068dde4508c1479d33d",
+    "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": "1c93aa403039da17c83fc8e123e69a638592b2ddb926ffda86429db552a559ab",
+    "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": "c9049aa69c061905f6599d2218703931fa97c7f7639eebb3373804f8a569d063",
+    "tests/Bosak.XmlDb.Xdm.Tests/PersistentMembershipTests.cs": "a1cee796f0b85f8d5217c62bed9613e6b21ae737d740139e03efe53ae2d82d3c",
+    "docs/foundation-requirements/membership/results.json": "1809e3e3ac690f48dbc7fc27d0d2812755e679990c3b132354238d57e05faafe"
+  },
+  "draftHashes": {
+    "README.md": "863034c011e6ba5ea4231ec9191720a09c15400ca6058de757c4d5ec7038e5bf",
+    "REVIEW.md": "cb5bf24130c70bc955dab4f34e26dd1bafcdffd27d2ade0625170bb75586e17f",
+    "ROLE-MATRIX.json": "eef87542d30ea7055394a3fee0fa526da84c8639de4c81f8175bde0d930895a1",
+    "PACKETS.json": "c80b4ed5a48eaa10d3e443befe8632fb3c7983132f44008d19dfe8aa4928ace3",
+    "PROPOSAL-MANIFEST.json": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+    "inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b",
+    "inputs/prior-returns/O1-XmlDb.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+    "inputs/prior-returns/O4-XmlDb.json": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243",
+    "tools/returns.py": "de28f26473ea298d371a6c2bb70b52d9ea0d466725abbf3162a1fa2eb3eeae1a"
+  },
+  "priorResponses": {
+    "O1-XmlDb.json": "59d90b7a2afb81f94cc26fedba8565c1fcb4e9fdd481d488c0c80dbd88f06a6a",
+    "O4-XmlDb.json": "7f00886e921a9ef7a2f3de743f57a5ae37a050899bc7081897c100c50424a243"
+  },
+  "responses": {
+    "BCAP-O1-XmlDb.response.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+    "BCAP-O4-XmlDb.response.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376"
+  },
+  "runtimeQualification": false,
+  "humanSignature": false,
+  "acceptedPerformanceBudgets": null,
+  "CorePin": "1.26.2",
+  "delivery": "Two exact-byte local BCAP submissions in Bosak returns/; no remote message, authenticated human sign-off or Core substantive review receipt claimed",
+  "recordedUtc": "2026-11-02T06:18:44.108759+00:00",
+  "deliveredCopies": {
+    "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O1-XmlDb.response.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+    "D:\\Development\\Bosak\\docs\\foundation-bcap-owner-review\\returns\\BCAP-O4-XmlDb.response.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376"
+  },
+  "deliveredUtc": "2026-11-02T06:19:40.710611+00:00",
+  "staticChecks": {
+    "strictDocumentation": true,
+    "documentationPortability": true,
+    "gitWhitespace": true,
+    "exactCandidatePacketVerification": true,
+    "revisedReturnBindingAndFormat": true,
+    "workingSourcePinsUnchanged": true,
+    "priorReturnBytesUnchanged": true,
+    "deliveredCopiesEqual": true,
+    "membershipSourceAndEvidencePreserved": true
+  },
+  "checkArtifacts": {
+    ".tools/bcap-xmldb-docs-final.log": "5c4be434cbde984cd7975007fab19e690130d2716231ad22c08b9e94464cd024",
+    ".tools/bcap-xmldb-portability-final.log": "822c14cc391c4361ad25ea6418c5e1b368886c5b323c811221f9aab3a03a105a",
+    ".tools/bcap-xmldb-diff-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    ".tools/bcap-xmldb-returns-final.log": "716c56b93c5070cf4ed3554e6a343ea74a085a3cf83bf120238812fb3a2c5b46",
+    ".tools/bcap-xmldb-packet-final.log": "6b6b7086411ef5b5692d0ec4167e5c106b73555f59ea2bda6dddb8fbb48ef713"
+  },
+  "reviewReportSha256": "d1024530e88062792cbc30b1b7a8f5a599772df1e7346f882c530381443cdb3f",
+  "finalUtc": "2026-11-02T06:24:51.445420+00:00"
+}

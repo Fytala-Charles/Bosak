@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.81.0",
+  "policyBeforeImplementation": true,
+  "productionChanged": false,
+  "beforeHashes": {
+    "docs/foundation-uri-binary-disposition/MANIFEST.json": "044c0ea968a35923650b26d14853a001eac2b73b5a2625115ef4a013a1bc447a",
+    "docs/foundation-provenance-policy/POLICY.json": "012c99ae7b3dac13d80d253f8fc2cd3022e070f6053c0d8de55ab1407238c7cd",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Core/Schema/SchemaAtomics.cs": "38c9de64be63884dfde6050de5e328bc23efecf27ceea3d3079a85c1f1b20989",
+    "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "src/Bosak.XPath.Runtime/Vm/SchemaProviderSessionBinding.cs": "a76817e9a20d0f93be89d1cfb45b97b803f06fa85e525b6177f20c218bd7bd32",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "23139a2daca89ab1f836941314bb523f797c0a7d52fe4111bce2fb0e5ca78109",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "52ed9b5eb06b7810ed47009364747d1ff133552b437e35b3ae2acc65aeda850a",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaAtomicsTests.cs": "3bd702a77271ad559f5520561666040ebe39f751f98d16cfc8e9267086f452d4"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ]
+    }
+  ],
+  "scope": "PV-L01 Core disposition of internal legacy scalar evidence. Preserve existing private issuer/snapshot/seal semantics and public observation refusal. No opaque-field cast, marker promotion, automatic migration adapter, source/API/version change or new accepted owner scope.",
+  "intentionalExtensions": "Private-to-public authority, raw lifetime and migration rules are explicit Bosak host policy beyond XDM representation. A future bridge requires actual public provider issuance, ownership, input/origin/environment and lifetime proof under refreshed immutable adoption; object shape or copied labels do not supply it. Private here means internal engine contracts, not a sibling licensing repository."
+}

@@ -1,0 +1,1514 @@
+[
+  {
+    "id": "validateexpr-28",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 1.2614464999933261,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-28",
+      "current"
+    ],
+    "log": "validateexpr-28-current.log",
+    "result": {
+      "id": "validateexpr-28",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace t=\"http://www.example.com/ns/test/xq-e18\";\n        let $doc := validate strict { document { <doc xmlns=\"http://www.example.com/ns/test/xq-e18\"> <para1>PT3H21M</para1> <para2>P3M</para2> </doc> } } let $p1 := data($doc/t:doc/t:para1) let $p2 := data($doc/t:doc/t:para2) let $t1 := xs:dayTimeDuration(\"PT3H21M\") let $t2 := xs:yearMonthDuration(\"P3M\") return <results> <case1>{if ($p1 = $t1) then \"pass\" else \"fail\"}</case1> <case2>{if ($p2 = $t2) then \"pass\" else \"fail\"}</case2> </results>\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <any-of>\r\n            <assert-xml><![CDATA[<results><case1>pass</case1><case2>pass</case2></results>]]></assert-xml>\r\n            <error code=\"XQST0012\" />\r\n         </any-of>\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-28",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.275976000004448,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-28",
+      "guarded"
+    ],
+    "log": "validateexpr-28-guarded.log",
+    "result": {
+      "id": "validateexpr-28",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace t=\"http://www.example.com/ns/test/xq-e18\";\n        let $doc := validate strict { document { <doc xmlns=\"http://www.example.com/ns/test/xq-e18\"> <para1>PT3H21M</para1> <para2>P3M</para2> </doc> } } let $p1 := data($doc/t:doc/t:para1) let $p2 := data($doc/t:doc/t:para2) let $t1 := xs:dayTimeDuration(\"PT3H21M\") let $t2 := xs:yearMonthDuration(\"P3M\") return <results> <case1>{if ($p1 = $t1) then \"pass\" else \"fail\"}</case1> <case2>{if ($p2 = $t2) then \"pass\" else \"fail\"}</case2> </results>\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <any-of>\r\n            <assert-xml><![CDATA[<results><case1>pass</case1><case2>pass</case2></results>]]></assert-xml>\r\n            <error code=\"XQST0012\" />\r\n         </any-of>\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-1",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27141829999163747,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-1",
+      "current"
+    ],
+    "log": "validateexpr-1-current.log",
+    "result": {
+      "id": "validateexpr-1",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n          declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n          import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n          validate {/DataValues/Strings union /DataValues/PositiveNumbers}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XQTY0030\" />\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-1",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.259075700014364,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-1",
+      "guarded"
+    ],
+    "log": "validateexpr-1-guarded.log",
+    "result": {
+      "id": "validateexpr-1",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "\n          declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n          import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n          validate {/DataValues/Strings union /DataValues/PositiveNumbers}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XQTY0030\" />\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-2",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2706412000115961,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-2",
+      "current"
+    ],
+    "log": "validateexpr-2-current.log",
+    "result": {
+      "id": "validateexpr-2",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        let $var := <Strings><orderData>one string</orderData></Strings> \n        return validate strict {$var}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-2",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27730719998362474,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-2",
+      "guarded"
+    ],
+    "log": "validateexpr-2-guarded.log",
+    "result": {
+      "id": "validateexpr-2",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "\n        declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        let $var := <Strings><orderData>one string</orderData></Strings> \n        return validate strict {$var}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-3",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2776688000012655,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-3",
+      "current"
+    ],
+    "log": "validateexpr-3-current.log",
+    "result": {
+      "id": "validateexpr-3",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        let $var := <Strings><orderData>one string</orderData></Strings> \n        return validate lax {$var}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n      </result>"
+    }
+  },
+  {
+    "id": "validateexpr-3",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27715949999401346,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "validateexpr-3",
+      "guarded"
+    ],
+    "log": "validateexpr-3-guarded.log",
+    "result": {
+      "id": "validateexpr-3",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "\n        declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        let $var := <Strings><orderData>one string</orderData></Strings> \n        return validate lax {$var}\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-020",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.169803700002376,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-020",
+      "current"
+    ],
+    "log": "substitution-020-current.log",
+    "result": {
+      "id": "substitution-020",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-020",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20523699998739175,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-020",
+      "guarded"
+    ],
+    "log": "substitution-020-guarded.log",
+    "result": {
+      "id": "substitution-020",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-021",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.15896080000675283,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-021",
+      "current"
+    ],
+    "log": "substitution-021-current.log",
+    "result": {
+      "id": "substitution-021",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-021",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20050609999452718,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-021",
+      "guarded"
+    ],
+    "log": "substitution-021-guarded.log",
+    "result": {
+      "id": "substitution-021",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-022",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16826180001953617,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-022",
+      "current"
+    ],
+    "log": "substitution-022-current.log",
+    "result": {
+      "id": "substitution-022",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-022",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20408580001094379,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-022",
+      "guarded"
+    ],
+    "log": "substitution-022-guarded.log",
+    "result": {
+      "id": "substitution-022",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-023",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1605660000059288,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-023",
+      "current"
+    ],
+    "log": "substitution-023-current.log",
+    "result": {
+      "id": "substitution-023",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-023",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21788189999642782,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-023",
+      "guarded"
+    ],
+    "log": "substitution-023-guarded.log",
+    "result": {
+      "id": "substitution-023",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-024",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17306870000902563,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-024",
+      "current"
+    ],
+    "log": "substitution-024-current.log",
+    "result": {
+      "id": "substitution-024",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-024",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21978260000469163,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-024",
+      "guarded"
+    ],
+    "log": "substitution-024-guarded.log",
+    "result": {
+      "id": "substitution-024",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-025",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16626960001303814,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-025",
+      "current"
+    ],
+    "log": "substitution-025-current.log",
+    "result": {
+      "id": "substitution-025",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "substitution-025",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19760509999468923,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "substitution-025",
+      "guarded"
+    ],
+    "log": "substitution-025-guarded.log",
+    "result": {
+      "id": "substitution-025",
+      "mode": "guarded",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>"
+    }
+  },
+  {
+    "id": "valid-import",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25173720001475886,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "valid-import",
+      "current"
+    ],
+    "log": "valid-import-current.log",
+    "result": {
+      "id": "valid-import",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "valid-import",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25081599998520687,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "valid-import",
+      "guarded"
+    ],
+    "log": "valid-import-guarded.log",
+    "result": {
+      "id": "valid-import",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "invalid-import",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17341069999383762,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "invalid-import",
+      "current"
+    ],
+    "log": "invalid-import-current.log",
+    "result": {
+      "id": "invalid-import",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0012\" /></result>"
+    }
+  },
+  {
+    "id": "invalid-import",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34072720000403933,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "invalid-import",
+      "guarded"
+    ],
+    "log": "invalid-import-guarded.log",
+    "result": {
+      "id": "invalid-import",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0012\" /></result>"
+    }
+  },
+  {
+    "id": "wrong-assertion",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2546574000152759,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "wrong-assertion",
+      "current"
+    ],
+    "log": "wrong-assertion-current.log",
+    "result": {
+      "id": "wrong-assertion",
+      "mode": "current",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: 99, Got: 7",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>99</assert-eq></result>"
+    }
+  },
+  {
+    "id": "wrong-assertion",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2438652999990154,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "wrong-assertion",
+      "guarded"
+    ],
+    "log": "wrong-assertion-guarded.log",
+    "result": {
+      "id": "wrong-assertion",
+      "mode": "guarded",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: 99, Got: 7",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>99</assert-eq></result>"
+    }
+  },
+  {
+    "id": "wrong-error",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1732301999873016,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "wrong-error",
+      "current"
+    ],
+    "log": "wrong-error-current.log",
+    "result": {
+      "id": "wrong-error",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0059\" /></result>"
+    }
+  },
+  {
+    "id": "wrong-error",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20354450002196245,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "wrong-error",
+      "guarded"
+    ],
+    "log": "wrong-error-guarded.log",
+    "result": {
+      "id": "wrong-error",
+      "mode": "guarded",
+      "kind": "Failed",
+      "message": "Expected error XQST0059, got: XQST0012: Schema compilation failed:\nType 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0059\" /></result>"
+    }
+  },
+  {
+    "id": "no-import-unsafe",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16975639999145642,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "no-import-unsafe",
+      "current"
+    ],
+    "log": "no-import-unsafe-current.log",
+    "result": {
+      "id": "no-import-unsafe",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "declare namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "no-import-unsafe",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19407569998293184,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "no-import-unsafe",
+      "guarded"
+    ],
+    "log": "no-import-unsafe-guarded.log",
+    "result": {
+      "id": "no-import-unsafe",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "NoQueryImports",
+      "expression": "declare namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "no-import-unsafe",
+    "mode": "unsafe-control",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2549760000256356,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "no-import-unsafe",
+      "unsafe-control"
+    ],
+    "log": "no-import-unsafe-unsafe-control.log",
+    "result": {
+      "id": "no-import-unsafe",
+      "mode": "unsafe-control",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "UnsafeUnconditionalControl",
+      "expression": "declare namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "partial-import-unsafe",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16962950001470745,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "partial-import-unsafe",
+      "current"
+    ],
+    "log": "partial-import-unsafe-current.log",
+    "result": {
+      "id": "partial-import-unsafe",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:MissingType' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "partial-import-unsafe",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18829200000618584,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "partial-import-unsafe",
+      "guarded"
+    ],
+    "log": "partial-import-unsafe-guarded.log",
+    "result": {
+      "id": "partial-import-unsafe",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:MissingType' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "UnownedEnvironmentNamespace",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "partial-import-unsafe",
+    "mode": "unsafe-control",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2438642999914009,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "partial-import-unsafe",
+      "unsafe-control"
+    ],
+    "log": "partial-import-unsafe-unsafe-control.log",
+    "result": {
+      "id": "partial-import-unsafe",
+      "mode": "unsafe-control",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "UnsafeUnconditionalControl",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "strict-invalid-source",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17787599997245707,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "strict-invalid-source",
+      "current"
+    ],
+    "log": "strict-invalid-source-current.log",
+    "result": {
+      "id": "strict-invalid-source",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Document validation failed against the supplied schema(s):\nThe 'urn:loader:e' element is invalid - The value 'oops' is invalid according to its datatype 'http://www.w3.org/2001/XMLSchema:integer' - The string 'oops' is not a valid Integer value.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaValidationException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "strict-invalid-source",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1678294999874197,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "strict-invalid-source",
+      "guarded"
+    ],
+    "log": "strict-invalid-source-guarded.log",
+    "result": {
+      "id": "strict-invalid-source",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Document validation failed against the supplied schema(s):\nThe 'urn:loader:e' element is invalid - The value 'oops' is invalid according to its datatype 'http://www.w3.org/2001/XMLSchema:integer' - The string 'oops' is not a valid Integer value.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaValidationException",
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "strict-valid-source",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2668699999921955,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "strict-valid-source",
+      "current"
+    ],
+    "log": "strict-valid-source-current.log",
+    "result": {
+      "id": "strict-valid-source",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "strict-valid-source",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2597470000036992,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "strict-valid-source",
+      "guarded"
+    ],
+    "log": "strict-valid-source-guarded.log",
+    "result": {
+      "id": "strict-valid-source",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "inline-context-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1767260000051465,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "inline-context-guard",
+      "current"
+    ],
+    "log": "inline-context-guard-current.log",
+    "result": {
+      "id": "inline-context-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "inline-context-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1743142000050284,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "inline-context-guard",
+      "guarded"
+    ],
+    "log": "inline-context-guard-guarded.log",
+    "result": {
+      "id": "inline-context-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "InlineContext",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "parameter-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18161610001698136,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "parameter-guard",
+      "current"
+    ],
+    "log": "parameter-guard-current.log",
+    "result": {
+      "id": "parameter-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "parameter-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17250280000735074,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "parameter-guard",
+      "guarded"
+    ],
+    "log": "parameter-guard-guarded.log",
+    "result": {
+      "id": "parameter-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "EnvironmentParameters",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "collection-query-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16000140001415275,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "collection-query-guard",
+      "current"
+    ],
+    "log": "collection-query-guard-current.log",
+    "result": {
+      "id": "collection-query-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "collection-query-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1829530000104569,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "collection-query-guard",
+      "guarded"
+    ],
+    "log": "collection-query-guard-guarded.log",
+    "result": {
+      "id": "collection-query-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CollectionQueries",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "multiple-components-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2886424000025727,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "multiple-components-guard",
+      "current"
+    ],
+    "log": "multiple-components-guard-current.log",
+    "result": {
+      "id": "multiple-components-guard",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "multiple-components-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30272090001381,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "multiple-components-guard",
+      "guarded"
+    ],
+    "log": "multiple-components-guard-guarded.log",
+    "result": {
+      "id": "multiple-components-guard",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "MultiplePhysicalComponents",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "missing-file-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1591715000104159,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "missing-file-guard",
+      "current"
+    ],
+    "log": "missing-file-guard-current.log",
+    "result": {
+      "id": "missing-file-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Could not find file 'D:\\Development\\Bosak\\tests\\qt3tests\\missing.xsd'.",
+      "exceptionType": "System.IO.FileNotFoundException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "missing-file-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.16348449999350123,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "missing-file-guard",
+      "guarded"
+    ],
+    "log": "missing-file-guard-guarded.log",
+    "result": {
+      "id": "missing-file-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Could not find file 'D:\\Development\\Bosak\\tests\\qt3tests\\missing.xsd'.",
+      "exceptionType": "System.IO.FileNotFoundException",
+      "deferred": false,
+      "decision": "MissingSchemaFile",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "unmapped-namespace-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1747795999981463,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "unmapped-namespace-guard",
+      "current"
+    ],
+    "log": "unmapped-namespace-guard-current.log",
+    "result": {
+      "id": "unmapped-namespace-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "unmapped-namespace-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18451540000387467,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "unmapped-namespace-guard",
+      "guarded"
+    ],
+    "log": "unmapped-namespace-guard-guarded.log",
+    "result": {
+      "id": "unmapped-namespace-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "NoNamespaceAssociation",
+      "expression": "import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "xpath-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1793447000090964,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "xpath-guard",
+      "current"
+    ],
+    "log": "xpath-guard-current.log",
+    "result": {
+      "id": "xpath-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "xpath-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17018900002585724,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "xpath-guard",
+      "guarded"
+    ],
+    "log": "xpath-guard-guarded.log",
+    "result": {
+      "id": "xpath-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "XPathPath",
+      "expression": "7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><assert-eq>7</assert-eq></result>"
+    }
+  },
+  {
+    "id": "declarations-before-import",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17836019999231212,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "declarations-before-import",
+      "current"
+    ],
+    "log": "declarations-before-import-current.log",
+    "result": {
+      "id": "declarations-before-import",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "xquery version \"3.1\"; declare namespace u=\"urn:u\"; import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0012\" /></result>"
+    }
+  },
+  {
+    "id": "declarations-before-import",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23510089999763295,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "declarations-before-import",
+      "guarded"
+    ],
+    "log": "declarations-before-import-guarded.log",
+    "result": {
+      "id": "declarations-before-import",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": true,
+      "decision": "QueryOwnedImportSubset",
+      "expression": "xquery version \"3.1\"; declare namespace u=\"urn:u\"; import schema namespace t=\"urn:loader\"; 7",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XQST0012\" /></result>"
+    }
+  },
+  {
+    "id": "malformed-query-guard",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17105699999956414,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "malformed-query-guard",
+      "current"
+    ],
+    "log": "malformed-query-guard-current.log",
+    "result": {
+      "id": "malformed-query-guard",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "import schema namespace t=\"urn:loader\"; 7 +",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XPST0003\" /></result>"
+    }
+  },
+  {
+    "id": "malformed-query-guard",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18415569997159764,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll",
+      "docs\\conformance\\k02-schema-loader\\evidence\\requests.json",
+      "malformed-query-guard",
+      "guarded"
+    ],
+    "log": "malformed-query-guard-guarded.log",
+    "result": {
+      "id": "malformed-query-guard",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:XPathParseException",
+      "expression": "import schema namespace t=\"urn:loader\"; 7 +",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\"><error code=\"XPST0003\" /></result>"
+    }
+  }
+]

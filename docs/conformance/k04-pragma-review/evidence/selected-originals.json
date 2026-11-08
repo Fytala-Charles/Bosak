@@ -1,0 +1,362 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "eqname-006",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\EQName.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-11",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-12",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-13",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-14",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-15",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-16",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-17",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-18",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-19",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-20",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-21",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-22",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-23",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-24",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-25",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extexpr-26",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-4a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-11",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-12",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-13",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-14",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-15",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-16",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ExtensionExpression-17",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "pragma-no-namespace-001",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "pragma-no-namespace-002",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "pragma-no-namespace-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "pragma-no-namespace-004",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "pragma-no-namespace-005",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ExtensionExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "validate-as-105",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ValidateExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQST0079",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "total": 31,
+  "cases": [
+    {
+      "id": "LP01",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP01_LeasedSourceMetadata(kind: \"boolean\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP01_LeasedSourceMetadata(kind: \"string\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP01_LeasedSourceMetadata(kind: \"decimal\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP01_LeasedSourceMetadata(kind: \"integer\")"
+      ]
+    },
+    {
+      "id": "LP02",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP02_ExpiredView"
+      ]
+    },
+    {
+      "id": "LP03",
+      "count": 6,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"map\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"rebound\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"plain\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"undefined\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"source\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP03_InvalidCarrier(mode: \"foreign\")"
+      ]
+    },
+    {
+      "id": "LP04",
+      "count": 7,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"origin\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"declared\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"view-environment\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"view-source\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"actual\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"container\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP04_CurrentValidation(mode: \"view-target\")"
+      ]
+    },
+    {
+      "id": "LP05",
+      "count": 5,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP05_Revocation(mode: \"snapshot\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP05_Revocation(mode: \"target\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP05_Revocation(mode: \"original\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP05_Revocation(mode: \"cancel\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP05_Revocation(mode: \"source\")"
+      ]
+    },
+    {
+      "id": "LP06",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP06_FreshEpisodeStableScalar"
+      ]
+    },
+    {
+      "id": "LP07",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP07_OtherProfileUnsupported"
+      ]
+    },
+    {
+      "id": "LP08",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP08_Reentry"
+      ]
+    },
+    {
+      "id": "LP09",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP09_ActualGetterTail"
+      ]
+    },
+    {
+      "id": "LP10",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP10_Overlap"
+      ]
+    },
+    {
+      "id": "LP11",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP11_OriginalFailureIdentity"
+      ]
+    },
+    {
+      "id": "LP12",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP12_CostObservation"
+      ]
+    },
+    {
+      "id": "LP13",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.LP13_IndependentOperationViews"
+      ]
+    }
+  ],
+  "scope": "Executed LP cases; policy decisions are not additional tests."
+}

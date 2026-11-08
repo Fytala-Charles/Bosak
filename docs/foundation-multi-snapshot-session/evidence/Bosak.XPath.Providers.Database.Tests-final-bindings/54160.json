@@ -1,0 +1,41 @@
+{
+  "processId": 54160,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\multi-snapshot-session\\DatabaseLoopback\\Bosak.XPath.Core.dll",
+      "sha256": "24321ce4cb9b3ed5dcf91a9531a4e8916a96f5e4b2396c67cedb622957a6f7b4",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\multi-snapshot-session\\DatabaseLoopback\\Bosak.XPath.Providers.Database.Tests.dll",
+      "sha256": "e5ac11e6f326367650616847c17d44dab88cd677125475dde62054f47fc90b8d",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\multi-snapshot-session\\DatabaseLoopback\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "e902c028d0f332c64a24d87d58d594033205294c338daf061e506002e5ea7f5b",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\multi-snapshot-session\\DatabaseLoopback\\Bosak.XPath.Providers.dll",
+      "sha256": "5adfe648c09e174639ff0cd9dd5334c83a65633030b3af54cb1e42735f1a7d87",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\multi-snapshot-session\\DatabaseLoopback\\Bosak.XPath.Runtime.dll",
+      "sha256": "31da67d41bee82373c27eeea2e5293b6064325b5c964252a5adc2dd55faf9e1c",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

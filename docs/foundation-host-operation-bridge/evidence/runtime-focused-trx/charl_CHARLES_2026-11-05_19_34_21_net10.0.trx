@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0bb83d4b-4115-4425-ae0f-ea462c2dd587" name="charl@CHARLES 2026-11-05 19:34:21" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T19:34:21.2907467+01:00" queuing="2026-11-05T19:34:21.2907469+01:00" start="2026-11-05T19:34:20.3245311+01:00" finish="2026-11-05T19:34:21.3186086+01:00" />
+  <TestSettings name="default" id="b1468c20-91e9-4903-bd4d-740981a1f7a6">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-05_19_34_21" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="cb522ec9-a463-485f-9dc1-ee807d695a7a" testId="07388e3e-b146-0a90-1447-b2d1b56a7f3c" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC12_IndependentOperations" computerName="CHARLES" duration="00:00:00.1903992" startTime="2026-11-05T19:34:21.2227555+01:00" endTime="2026-11-05T19:34:21.2227728+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cb522ec9-a463-485f-9dc1-ee807d695a7a" />
+    <UnitTestResult executionId="e75c1c8e-2297-4bf6-9e44-18b21872f6f5" testId="f1230f41-11a2-f158-cce8-f1cb427522cb" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: False)" computerName="CHARLES" duration="00:00:00.0004113" startTime="2026-11-05T19:34:21.2477430+01:00" endTime="2026-11-05T19:34:21.2477431+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e75c1c8e-2297-4bf6-9e44-18b21872f6f5">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: Exception type was not an exact match&#xD;
+Expected: typeof(System.ArgumentException)&#xD;
+Actual:   typeof(System.NotSupportedException)&#xD;
+---- System.NotSupportedException : Unadmitted variable node.</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(Boolean ambiguous) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79&#xD;
+   at InvokeStub_CapturedHostBindingTests.HC03_ExactDynamicOwnership(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+----- Inner Stack Trace -----&#xD;
+   at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputsCore(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot, Boolean typedIdentity, Boolean originalNode) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs:line 443&#xD;
+   at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs:line 386&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CaptureInputs(EvaluationContext caller, Int32 maxBindings, Int32 maxNamespaces) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 495&#xD;
+   at Bosak.XPath.Api.Schema.CapturedHostBinding.&lt;&gt;c__DisplayClass15_0`1.&lt;Call&gt;b__0(Action guard) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs:line 51&#xD;
+   at Bosak.XPath.Runtime.Vm.QueryProviderOperationScope.CallHost[T](Object host, Func`2 work) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QueryProviderOperationScope.cs:line 71&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CallHost[T](Object host, Func`2 work) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 320&#xD;
+   at Bosak.XPath.Api.Schema.CapturedHostBinding.Call[T](SchemaQueryOperation operation, Object executable, EvaluationContext context, SchemaQuerySnapshot match, SchemaQuerySnapshot global, Func`2 producer) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs:line 48&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.Fixture.Call[T](SchemaQueryOperation op, Func`2 producer, EvaluationContext context, SchemaQuerySnapshot match) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 60&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__1(SchemaQueryOperation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79&#xD;
+   at Bosak.XPath.Api.Schema.SchemaQuerySession.&lt;&gt;c__DisplayClass45_0`1.&lt;Run&gt;b__0(Operation op) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs:line 323&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 223&#xD;
+--- End of stack trace from previous location ---&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 224&#xD;
+   at Bosak.XPath.Api.Schema.SchemaQuerySession.Run[T](ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs:line 323&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cff58efc-d37e-4ca0-aa7e-643fdcab8347" testId="ff3894cf-f1c5-1376-2767-e145f4cccc5e" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;snapshot&quot;)" computerName="CHARLES" duration="00:00:00.0004015" startTime="2026-11-05T19:34:21.2734425+01:00" endTime="2026-11-05T19:34:21.2734425+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cff58efc-d37e-4ca0-aa7e-643fdcab8347" />
+    <UnitTestResult executionId="4a697461-8e6b-4cd9-9813-7c0038b99e62" testId="ba6b1711-c0bd-f647-c177-e9f242fc9393" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC10_ExpiredWindows" computerName="CHARLES" duration="00:00:00.0006223" startTime="2026-11-05T19:34:21.2732860+01:00" endTime="2026-11-05T19:34:21.2732860+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4a697461-8e6b-4cd9-9813-7c0038b99e62" />
+    <UnitTestResult executionId="74f3a499-5ec9-46a3-9dc4-7556e4062bd9" testId="a143cfc6-1883-3800-9840-a7c1ee732b9f" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC05_EmptyMembership" computerName="CHARLES" duration="00:00:00.0006874" startTime="2026-11-05T19:34:21.2741592+01:00" endTime="2026-11-05T19:34:21.2741592+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="74f3a499-5ec9-46a3-9dc4-7556e4062bd9" />
+    <UnitTestResult executionId="9c0b8b3d-ee0c-40f7-bab4-47b06510590d" testId="6e3bcef5-7341-8445-53e8-8c1df237cbf8" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC08_ActualTailAndDrain" computerName="CHARLES" duration="00:00:00.0068518" startTime="2026-11-05T19:34:21.2741473+01:00" endTime="2026-11-05T19:34:21.2741475+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c0b8b3d-ee0c-40f7-bab4-47b06510590d" />
+    <UnitTestResult executionId="f6256289-24f1-47f4-9d50-4c2d197f9635" testId="cde381a8-4340-9f4a-4de1-b7a1040e2660" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignIdentity(mode: &quot;operation&quot;)" computerName="CHARLES" duration="00:00:00.0010302" startTime="2026-11-05T19:34:21.2734896+01:00" endTime="2026-11-05T19:34:21.2734896+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6256289-24f1-47f4-9d50-4c2d197f9635" />
+    <UnitTestResult executionId="b723e17e-09c9-42d0-b467-3747240d6165" testId="7489cabe-810b-e4ad-a353-9af6f54e9d5e" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_BoundedCapture(mode: &quot;namespaces&quot;)" computerName="CHARLES" duration="00:00:00.0002133" startTime="2026-11-05T19:34:21.2734170+01:00" endTime="2026-11-05T19:34:21.2734170+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b723e17e-09c9-42d0-b467-3747240d6165" />
+    <UnitTestResult executionId="15c118f5-af85-4069-84b4-df6fef468c36" testId="3ce863bd-da9f-f94c-b11c-b70e72dcfa7c" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignRoleBeforeRoot" computerName="CHARLES" duration="00:00:00.0010149" startTime="2026-11-05T19:34:21.2741357+01:00" endTime="2026-11-05T19:34:21.2741358+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15c118f5-af85-4069-84b4-df6fef468c36" />
+    <UnitTestResult executionId="4b547f5e-82f6-40f0-bcd7-88e639d5e3af" testId="55d4de02-506d-fa2a-e2a7-d181f5d2ce12" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC13_Descriptors" computerName="CHARLES" duration="00:00:00.0024350" startTime="2026-11-05T19:34:21.2740504+01:00" endTime="2026-11-05T19:34:21.2740504+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b547f5e-82f6-40f0-bcd7-88e639d5e3af" />
+    <UnitTestResult executionId="1d79bfba-ce35-4076-806a-a620a55cf771" testId="336a27b5-b581-be8c-8dfa-12a08a9462d0" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;structured&quot;)" computerName="CHARLES" duration="00:00:00.0054971" startTime="2026-11-05T19:34:21.2502865+01:00" endTime="2026-11-05T19:34:21.2502869+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d79bfba-ce35-4076-806a-a620a55cf771" />
+    <UnitTestResult executionId="72f451ab-e4f7-4de3-99dc-9f2474be31f6" testId="ee634b43-4b50-c45b-e245-ca353f0f50eb" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: True)" computerName="CHARLES" duration="00:00:00.0022790" startTime="2026-11-05T19:34:21.2470664+01:00" endTime="2026-11-05T19:34:21.2470666+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72f451ab-e4f7-4de3-99dc-9f2474be31f6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Throws() Failure: Exception type was not an exact match&#xD;
+Expected: typeof(System.ArgumentException)&#xD;
+Actual:   typeof(System.NotSupportedException)&#xD;
+---- System.NotSupportedException : Unadmitted variable node.</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(Boolean ambiguous) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+----- Inner Stack Trace -----&#xD;
+   at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputsCore(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot, Boolean typedIdentity, Boolean originalNode) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs:line 443&#xD;
+   at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs:line 386&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CaptureInputs(EvaluationContext caller, Int32 maxBindings, Int32 maxNamespaces) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 495&#xD;
+   at Bosak.XPath.Api.Schema.CapturedHostBinding.&lt;&gt;c__DisplayClass15_0`1.&lt;Call&gt;b__0(Action guard) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs:line 51&#xD;
+   at Bosak.XPath.Runtime.Vm.QueryProviderOperationScope.CallHost[T](Object host, Func`2 work) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QueryProviderOperationScope.cs:line 71&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CallHost[T](Object host, Func`2 work) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 320&#xD;
+   at Bosak.XPath.Api.Schema.CapturedHostBinding.Call[T](SchemaQueryOperation operation, Object executable, EvaluationContext context, SchemaQuerySnapshot match, SchemaQuerySnapshot global, Func`2 producer) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs:line 48&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.Fixture.Call[T](SchemaQueryOperation op, Func`2 producer, EvaluationContext context, SchemaQuerySnapshot match) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 60&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__1(SchemaQueryOperation op) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79&#xD;
+   at Bosak.XPath.Api.Schema.SchemaQuerySession.&lt;&gt;c__DisplayClass45_0`1.&lt;Run&gt;b__0(Operation op) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs:line 323&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 223&#xD;
+--- End of stack trace from previous location ---&#xD;
+   at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs:line 224&#xD;
+   at Bosak.XPath.Api.Schema.SchemaQuerySession.Run[T](ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs:line 323&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__0() in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs:line 79</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6d1bd62a-f7c0-4aa4-a1a4-7dc16e4aab8d" testId="e64270d1-ef3c-6f56-9b84-bde6491009fe" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;session&quot;)" computerName="CHARLES" duration="00:00:00.0000883" startTime="2026-11-05T19:34:21.2734569+01:00" endTime="2026-11-05T19:34:21.2734570+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d1bd62a-f7c0-4aa4-a1a4-7dc16e4aab8d" />
+    <UnitTestResult executionId="bea05a40-7804-449c-839b-8f694d5d6595" testId="be63032f-3531-7e85-384b-f5f07a03bcfb" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC09_FailureOrdering" computerName="CHARLES" duration="00:00:00.0045836" startTime="2026-11-05T19:34:21.2771661+01:00" endTime="2026-11-05T19:34:21.2771662+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bea05a40-7804-449c-839b-8f694d5d6595" />
+    <UnitTestResult executionId="e27e2a31-9ce9-4943-ac93-e170f1b03d0e" testId="c46f40cc-1b92-9ca8-3f02-9c5409b489f6" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;function&quot;)" computerName="CHARLES" duration="00:00:00.0001104" startTime="2026-11-05T19:34:21.2503741+01:00" endTime="2026-11-05T19:34:21.2503743+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e27e2a31-9ce9-4943-ac93-e170f1b03d0e" />
+    <UnitTestResult executionId="079c2e4e-b942-4f4d-ab15-09f168df930c" testId="2efe9410-8f40-cb2e-94b4-16454b7aea73" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC12_Reentry" computerName="CHARLES" duration="00:00:00.0004523" startTime="2026-11-05T19:34:21.2740753+01:00" endTime="2026-11-05T19:34:21.2740753+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="079c2e4e-b942-4f4d-ab15-09f168df930c" />
+    <UnitTestResult executionId="bbdf5184-06f6-4c11-b4e9-00d1bd5af59a" testId="84be441c-7f0b-18d0-76ff-4452f9d30ee5" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;cancel&quot;)" computerName="CHARLES" duration="00:00:00.0007295" startTime="2026-11-05T19:34:21.2734291+01:00" endTime="2026-11-05T19:34:21.2734292+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbdf5184-06f6-4c11-b4e9-00d1bd5af59a" />
+    <UnitTestResult executionId="79ad172d-3f64-4d08-afc4-a19ce7433cbe" testId="0627b8c4-59ea-69f4-f0f8-7b8631290464" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC01_ExactHostMetadata" computerName="CHARLES" duration="00:00:00.0047170" startTime="2026-11-05T19:34:21.2741055+01:00" endTime="2026-11-05T19:34:21.2741055+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79ad172d-3f64-4d08-afc4-a19ce7433cbe" />
+    <UnitTestResult executionId="efd32d8d-494f-4b03-b2f3-cbc2e1143722" testId="f7d487bc-2d18-d9d4-a4e4-827af5cc2fc5" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignIdentity(mode: &quot;executable&quot;)" computerName="CHARLES" duration="00:00:00.0007203" startTime="2026-11-05T19:34:21.2734811+01:00" endTime="2026-11-05T19:34:21.2734812+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="efd32d8d-494f-4b03-b2f3-cbc2e1143722" />
+    <UnitTestResult executionId="a14cffcc-f339-4f2d-910a-5bb66661a90f" testId="c1ca614a-8d40-38e4-87e4-a25a598a8c39" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;loader&quot;)" computerName="CHARLES" duration="00:00:00.0005661" startTime="2026-11-05T19:34:21.2477760+01:00" endTime="2026-11-05T19:34:21.2477760+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a14cffcc-f339-4f2d-910a-5bb66661a90f" />
+    <UnitTestResult executionId="3132404f-627c-47df-a8ea-257c0f9f7414" testId="163c55f8-a945-ed09-65b3-7e0381584e28" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;ownership&quot;)" computerName="CHARLES" duration="00:00:00.0001848" startTime="2026-11-05T19:34:21.2271080+01:00" endTime="2026-11-05T19:34:21.2271083+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3132404f-627c-47df-a8ea-257c0f9f7414" />
+    <UnitTestResult executionId="4bf8ec25-4f73-4f0f-949a-eb950c1ea51a" testId="475069f7-0631-e49f-bc6e-518faa6679a9" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;availability&quot;)" computerName="CHARLES" duration="00:00:00.0029810" startTime="2026-11-05T19:34:21.2262057+01:00" endTime="2026-11-05T19:34:21.2262058+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bf8ec25-4f73-4f0f-949a-eb950c1ea51a" />
+    <UnitTestResult executionId="51f62a01-26b7-4155-bd08-a9ceab1da72b" testId="27a09102-783d-8708-2128-68095f4c37f8" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;root&quot;)" computerName="CHARLES" duration="00:00:00.0006299" startTime="2026-11-05T19:34:21.2268814+01:00" endTime="2026-11-05T19:34:21.2268816+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51f62a01-26b7-4155-bd08-a9ceab1da72b" />
+    <UnitTestResult executionId="27f463ca-cf24-4b68-8b94-6c967623f817" testId="1e9267d0-fb5a-34b5-6b34-5ce2d2ba757c" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC04_RolesAndLeaseUnits" computerName="CHARLES" duration="00:00:00.0010713" startTime="2026-11-05T19:34:21.2740903+01:00" endTime="2026-11-05T19:34:21.2740904+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27f463ca-cf24-4b68-8b94-6c967623f817" />
+    <UnitTestResult executionId="fc497573-81a3-4208-86b4-6121df26e5c0" testId="e7592f1d-3ff8-3056-286c-07146e46bc7e" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_BoundedCapture(mode: &quot;bindings&quot;)" computerName="CHARLES" duration="00:00:00.0004147" startTime="2026-11-05T19:34:21.2734018+01:00" endTime="2026-11-05T19:34:21.2734018+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fc497573-81a3-4208-86b4-6121df26e5c0" />
+    <UnitTestResult executionId="6b899720-69df-46b9-ab6a-ce4c06bf49c6" testId="16321828-2a69-92c8-1e9b-ed86fad7169c" testName="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;input&quot;)" computerName="CHARLES" duration="00:00:00.0000756" startTime="2026-11-05T19:34:21.2734693+01:00" endTime="2026-11-05T19:34:21.2734694+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b899720-69df-46b9-ab6a-ce4c06bf49c6" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_BoundedCapture(mode: &quot;namespaces&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="7489cabe-810b-e4ad-a353-9af6f54e9d5e">
+      <Execution id="b723e17e-09c9-42d0-b467-3747240d6165" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC06_BoundedCapture" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC10_ExpiredWindows" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ba6b1711-c0bd-f647-c177-e9f242fc9393">
+      <Execution id="4a697461-8e6b-4cd9-9813-7c0038b99e62" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC10_ExpiredWindows" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;loader&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="c1ca614a-8d40-38e4-87e4-a25a598a8c39">
+      <Execution id="a14cffcc-f339-4f2d-910a-5bb66661a90f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC06_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC08_ActualTailAndDrain" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="6e3bcef5-7341-8445-53e8-8c1df237cbf8">
+      <Execution id="9c0b8b3d-ee0c-40f7-bab4-47b06510590d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC08_ActualTailAndDrain" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;ownership&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="163c55f8-a945-ed09-65b3-7e0381584e28">
+      <Execution id="3132404f-627c-47df-a8ea-257c0f9f7414" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_InputCallbackClosure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ee634b43-4b50-c45b-e245-ca353f0f50eb">
+      <Execution id="72f451ab-e4f7-4de3-99dc-9f2474be31f6" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC03_ExactDynamicOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;session&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="e64270d1-ef3c-6f56-9b84-bde6491009fe">
+      <Execution id="6d1bd62a-f7c0-4aa4-a1a4-7dc16e4aab8d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_Revocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignIdentity(mode: &quot;executable&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f7d487bc-2d18-d9d4-a4e4-827af5cc2fc5">
+      <Execution id="efd32d8d-494f-4b03-b2f3-cbc2e1143722" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC02_ForeignIdentity" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="f1230f41-11a2-f158-cce8-f1cb427522cb">
+      <Execution id="e75c1c8e-2297-4bf6-9e44-18b21872f6f5" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC03_ExactDynamicOwnership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC04_RolesAndLeaseUnits" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="1e9267d0-fb5a-34b5-6b34-5ce2d2ba757c">
+      <Execution id="27f463ca-cf24-4b68-8b94-6c967623f817" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC04_RolesAndLeaseUnits" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC09_FailureOrdering" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="be63032f-3531-7e85-384b-f5f07a03bcfb">
+      <Execution id="bea05a40-7804-449c-839b-8f694d5d6595" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC09_FailureOrdering" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignRoleBeforeRoot" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="3ce863bd-da9f-f94c-b11c-b70e72dcfa7c">
+      <Execution id="15c118f5-af85-4069-84b4-df6fef468c36" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC02_ForeignRoleBeforeRoot" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC12_Reentry" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="2efe9410-8f40-cb2e-94b4-16454b7aea73">
+      <Execution id="079c2e4e-b942-4f4d-ab15-09f168df930c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC12_Reentry" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC12_IndependentOperations" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="07388e3e-b146-0a90-1447-b2d1b56a7f3c">
+      <Execution id="cb522ec9-a463-485f-9dc1-ee807d695a7a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC12_IndependentOperations" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;function&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="c46f40cc-1b92-9ca8-3f02-9c5409b489f6">
+      <Execution id="e27e2a31-9ce9-4943-ac93-e170f1b03d0e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC06_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;availability&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="475069f7-0631-e49f-bc6e-518faa6679a9">
+      <Execution id="4bf8ec25-4f73-4f0f-949a-eb950c1ea51a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_InputCallbackClosure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;snapshot&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ff3894cf-f1c5-1376-2767-e145f4cccc5e">
+      <Execution id="cff58efc-d37e-4ca0-aa7e-643fdcab8347" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_Revocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_ContextRefusal(mode: &quot;structured&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="336a27b5-b581-be8c-8dfa-12a08a9462d0">
+      <Execution id="1d79bfba-ce35-4076-806a-a620a55cf771" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC06_ContextRefusal" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;input&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="16321828-2a69-92c8-1e9b-ed86fad7169c">
+      <Execution id="6b899720-69df-46b9-ab6a-ce4c06bf49c6" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_Revocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_Revocation(mode: &quot;cancel&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="84be441c-7f0b-18d0-76ff-4452f9d30ee5">
+      <Execution id="bbdf5184-06f6-4c11-b4e9-00d1bd5af59a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_Revocation" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC07_InputCallbackClosure(stage: &quot;root&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="27a09102-783d-8708-2128-68095f4c37f8">
+      <Execution id="51f62a01-26b7-4155-bd08-a9ceab1da72b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC07_InputCallbackClosure" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC05_EmptyMembership" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="a143cfc6-1883-3800-9840-a7c1ee732b9f">
+      <Execution id="74f3a499-5ec9-46a3-9dc4-7556e4062bd9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC05_EmptyMembership" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC06_BoundedCapture(mode: &quot;bindings&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="e7592f1d-3ff8-3056-286c-07146e46bc7e">
+      <Execution id="fc497573-81a3-4208-86b4-6121df26e5c0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC06_BoundedCapture" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC13_Descriptors" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="55d4de02-506d-fa2a-e2a7-d181f5d2ce12">
+      <Execution id="4b547f5e-82f6-40f0-bcd7-88e639d5e3af" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC13_Descriptors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC01_ExactHostMetadata" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="0627b8c4-59ea-69f4-f0f8-7b8631290464">
+      <Execution id="79ad172d-3f64-4d08-afc4-a19ce7433cbe" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC01_ExactHostMetadata" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC02_ForeignIdentity(mode: &quot;operation&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="cde381a8-4340-9f4a-4de1-b7a1040e2660">
+      <Execution id="f6256289-24f1-47f4-9d50-4c2d197f9635" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedHostBindingTests" name="HC02_ForeignIdentity" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="07388e3e-b146-0a90-1447-b2d1b56a7f3c" executionId="cb522ec9-a463-485f-9dc1-ee807d695a7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1230f41-11a2-f158-cce8-f1cb427522cb" executionId="e75c1c8e-2297-4bf6-9e44-18b21872f6f5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff3894cf-f1c5-1376-2767-e145f4cccc5e" executionId="cff58efc-d37e-4ca0-aa7e-643fdcab8347" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba6b1711-c0bd-f647-c177-e9f242fc9393" executionId="4a697461-8e6b-4cd9-9813-7c0038b99e62" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a143cfc6-1883-3800-9840-a7c1ee732b9f" executionId="74f3a499-5ec9-46a3-9dc4-7556e4062bd9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e3bcef5-7341-8445-53e8-8c1df237cbf8" executionId="9c0b8b3d-ee0c-40f7-bab4-47b06510590d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cde381a8-4340-9f4a-4de1-b7a1040e2660" executionId="f6256289-24f1-47f4-9d50-4c2d197f9635" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7489cabe-810b-e4ad-a353-9af6f54e9d5e" executionId="b723e17e-09c9-42d0-b467-3747240d6165" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3ce863bd-da9f-f94c-b11c-b70e72dcfa7c" executionId="15c118f5-af85-4069-84b4-df6fef468c36" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="55d4de02-506d-fa2a-e2a7-d181f5d2ce12" executionId="4b547f5e-82f6-40f0-bcd7-88e639d5e3af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="336a27b5-b581-be8c-8dfa-12a08a9462d0" executionId="1d79bfba-ce35-4076-806a-a620a55cf771" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee634b43-4b50-c45b-e245-ca353f0f50eb" executionId="72f451ab-e4f7-4de3-99dc-9f2474be31f6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e64270d1-ef3c-6f56-9b84-bde6491009fe" executionId="6d1bd62a-f7c0-4aa4-a1a4-7dc16e4aab8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be63032f-3531-7e85-384b-f5f07a03bcfb" executionId="bea05a40-7804-449c-839b-8f694d5d6595" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c46f40cc-1b92-9ca8-3f02-9c5409b489f6" executionId="e27e2a31-9ce9-4943-ac93-e170f1b03d0e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2efe9410-8f40-cb2e-94b4-16454b7aea73" executionId="079c2e4e-b942-4f4d-ab15-09f168df930c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84be441c-7f0b-18d0-76ff-4452f9d30ee5" executionId="bbdf5184-06f6-4c11-b4e9-00d1bd5af59a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0627b8c4-59ea-69f4-f0f8-7b8631290464" executionId="79ad172d-3f64-4d08-afc4-a19ce7433cbe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f7d487bc-2d18-d9d4-a4e4-827af5cc2fc5" executionId="efd32d8d-494f-4b03-b2f3-cbc2e1143722" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1ca614a-8d40-38e4-87e4-a25a598a8c39" executionId="a14cffcc-f339-4f2d-910a-5bb66661a90f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="163c55f8-a945-ed09-65b3-7e0381584e28" executionId="3132404f-627c-47df-a8ea-257c0f9f7414" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="475069f7-0631-e49f-bc6e-518faa6679a9" executionId="4bf8ec25-4f73-4f0f-949a-eb950c1ea51a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="27a09102-783d-8708-2128-68095f4c37f8" executionId="51f62a01-26b7-4155-bd08-a9ceab1da72b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e9267d0-fb5a-34b5-6b34-5ce2d2ba757c" executionId="27f463ca-cf24-4b68-8b94-6c967623f817" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e7592f1d-3ff8-3056-286c-07146e46bc7e" executionId="fc497573-81a3-4208-86b4-6121df26e5c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16321828-2a69-92c8-1e9b-ed86fad7169c" executionId="6b899720-69df-46b9-ab6a-ce4c06bf49c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="26" executed="26" passed="24" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.28]   Discovering: Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.39]   Discovered:  Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.39]   Starting:    Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.63]       Assert.Throws() Failure: Exception type was not an exact match&#xD;
+[xUnit.net 00:00:00.63]       Expected: typeof(System.ArgumentException)&#xD;
+[xUnit.net 00:00:00.63]       Actual:   typeof(System.NotSupportedException)&#xD;
+[xUnit.net 00:00:00.63]       ---- System.NotSupportedException : Unadmitted variable node.&#xD;
+[xUnit.net 00:00:00.63]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(Boolean ambiguous)&#xD;
+[xUnit.net 00:00:00.63]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.63]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.63]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs(443,0): at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputsCore(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot, Boolean typedIdentity, Boolean originalNode)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs(386,0): at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(495,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CaptureInputs(EvaluationContext caller, Int32 maxBindings, Int32 maxNamespaces)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs(51,0): at Bosak.XPath.Api.Schema.CapturedHostBinding.&lt;&gt;c__DisplayClass15_0`1.&lt;Call&gt;b__0(Action guard)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QueryProviderOperationScope.cs(71,0): at Bosak.XPath.Runtime.Vm.QueryProviderOperationScope.CallHost[T](Object host, Func`2 work)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(320,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CallHost[T](Object host, Func`2 work)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs(48,0): at Bosak.XPath.Api.Schema.CapturedHostBinding.Call[T](SchemaQueryOperation operation, Object executable, EvaluationContext context, SchemaQuerySnapshot match, SchemaQuerySnapshot global, Func`2 producer)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(60,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.Fixture.Call[T](SchemaQueryOperation op, Func`2 producer, EvaluationContext context, SchemaQuerySnapshot match)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__1(SchemaQueryOperation op)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs(323,0): at Bosak.XPath.Api.Schema.SchemaQuerySession.&lt;&gt;c__DisplayClass45_0`1.&lt;Run&gt;b__0(Operation op)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(223,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation)&#xD;
+[xUnit.net 00:00:00.63]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(224,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs(323,0): at Bosak.XPath.Api.Schema.SchemaQuerySession.Run[T](ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__0()&#xD;
+[xUnit.net 00:00:00.63]       Assert.Throws() Failure: Exception type was not an exact match&#xD;
+[xUnit.net 00:00:00.63]       Expected: typeof(System.ArgumentException)&#xD;
+[xUnit.net 00:00:00.63]       Actual:   typeof(System.NotSupportedException)&#xD;
+[xUnit.net 00:00:00.63]       ---- System.NotSupportedException : Unadmitted variable node.&#xD;
+[xUnit.net 00:00:00.63]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(Boolean ambiguous)&#xD;
+[xUnit.net 00:00:00.63]            at InvokeStub_CapturedHostBindingTests.HC03_ExactDynamicOwnership(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.63]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.63]         ----- Inner Stack Trace -----&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs(443,0): at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputsCore(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot, Boolean typedIdentity, Boolean originalNode)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\EvaluationContext.cs(386,0): at Bosak.XPath.Runtime.Vm.EvaluationContext.CaptureSchemaInputs(Func`2 ownsNode, Int32 maxBindings, Int32 maxNamespaces, Snapshot snapshot)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(495,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CaptureInputs(EvaluationContext caller, Int32 maxBindings, Int32 maxNamespaces)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs(51,0): at Bosak.XPath.Api.Schema.CapturedHostBinding.&lt;&gt;c__DisplayClass15_0`1.&lt;Call&gt;b__0(Action guard)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QueryProviderOperationScope.cs(71,0): at Bosak.XPath.Runtime.Vm.QueryProviderOperationScope.CallHost[T](Object host, Func`2 work)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(320,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Operation.CallHost[T](Object host, Func`2 work)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\CapturedHostBinding.cs(48,0): at Bosak.XPath.Api.Schema.CapturedHostBinding.Call[T](SchemaQueryOperation operation, Object executable, EvaluationContext context, SchemaQuerySnapshot match, SchemaQuerySnapshot global, Func`2 producer)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(60,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.Fixture.Call[T](SchemaQueryOperation op, Func`2 producer, EvaluationContext context, SchemaQuerySnapshot match)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__1(SchemaQueryOperation op)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs(323,0): at Bosak.XPath.Api.Schema.SchemaQuerySession.&lt;&gt;c__DisplayClass45_0`1.&lt;Run&gt;b__0(Operation op)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(223,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation)&#xD;
+[xUnit.net 00:00:00.63]         --- End of stack trace from previous location ---&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\QuerySourceSession.cs(224,0): at Bosak.XPath.Runtime.Vm.QuerySourceSession.Run[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellation)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\src\Bosak.XPath.Api\Schema\SchemaQuerySession.cs(323,0): at Bosak.XPath.Api.Schema.SchemaQuerySession.Run[T](ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken)&#xD;
+[xUnit.net 00:00:00.63]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedHostBindingTests.cs(79,0): at Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.&lt;&gt;c__DisplayClass7_0.&lt;HC03_ExactDynamicOwnership&gt;b__0()&#xD;
+[xUnit.net 00:00:00.66]   Finished:    Bosak.XPath.Runtime.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T19:34:21.2455692+01:00">
+        <Text>[xUnit.net 00:00:00.63]     Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T19:34:21.2473733+01:00">
+        <Text>[xUnit.net 00:00:00.63]     Bosak.XPath.Runtime.Tests.CapturedHostBindingTests.HC03_ExactDynamicOwnership(ambiguous: False) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

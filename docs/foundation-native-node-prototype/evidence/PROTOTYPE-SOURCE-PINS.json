@@ -1,0 +1,7 @@
+{
+  "prototype/NativeContainerAdapter.cs": "1e729f26c3fcbeb5a67d550cd43d743e4b817f4de74dffe09f9a1789af2528af",
+  "prototype/NativeContainerTests.cs": "ecd7a5be205cb8871343a1086b2021d45c094b0c4b16a9308e90924625336746",
+  "prototype/NativeNodeProjection.cs": "d5800eb85af1e285867e05dabea771047cbc23ab94aca1ba92f728330e09401e",
+  "prototype/NativeNodeTests.cs": "49fa1ab8a1125e0073e9a0aef7da99a3add0b7847deb13ab2188eed3121396d6",
+  "prototype/Prototype.csproj": "fd97b0f6a1569725756255c0c61efc83bc6fac6948bee67cb9fce8522250bc47"
+}

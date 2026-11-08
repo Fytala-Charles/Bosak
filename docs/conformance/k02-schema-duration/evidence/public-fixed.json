@@ -1,0 +1,1 @@
+{"phase":"evaluate","result":null,"error":"System.InvalidOperationException: XQST0012: Schema compilation failed:\nType \u0027http://www.w3.org/2001/XMLSchema:dayTimeDuration\u0027 is not declared, or is not a simple type.\nType \u0027http://www.w3.org/2001/XMLSchema:yearMonthDuration\u0027 is not declared, or is not a simple type."}

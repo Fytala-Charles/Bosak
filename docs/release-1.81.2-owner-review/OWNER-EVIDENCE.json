@@ -1,0 +1,41 @@
+[
+  {
+    "owner": "Schema",
+    "repositoryHead": "20090180755d0427d824b091cf838e9a03ca9adc",
+    "workingTreeChanged": true,
+    "inspectedReviewPath": "docs/core-disposition-responses/2026-11-03-v2/BCAP-O1-Schema.v2.response.json",
+    "inspectedReviewSha256": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+    "historicalDecision": "AcceptWithScope",
+    "historicalReviewDate": "2026-11-03",
+    "historicalSourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+    "searchScope": "docs/**/*.md and docs/**/*.json; case-insensitive 1.81.2 or 7249d0e0",
+    "exactCohortMatchingFiles": [],
+    "interpretation": "Historical design review; no exact hosted cohort acceptance established. No owner repository was changed."
+  },
+  {
+    "owner": "XmlDb",
+    "repositoryHead": "fbb829052f606f683aaf8620fa9401b4ba46c8e9",
+    "workingTreeChanged": false,
+    "inspectedReviewPath": "docs/foundation-requirements/bcap-owner-review/BCAP-O1-XmlDb.response.json",
+    "inspectedReviewSha256": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+    "historicalDecision": "AcceptWithScope",
+    "historicalReviewDate": "2026-11-02",
+    "historicalSourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+    "searchScope": "docs/**/*.md and docs/**/*.json; case-insensitive 1.81.2 or 7249d0e0",
+    "exactCohortMatchingFiles": [],
+    "interpretation": "Historical design review; no exact hosted cohort acceptance established. No owner repository was changed."
+  },
+  {
+    "owner": "Braid",
+    "repositoryHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+    "workingTreeChanged": true,
+    "inspectedReviewPath": "docs/reviews/BCAP-O3-Braid.response.json",
+    "inspectedReviewSha256": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+    "historicalDecision": "AcceptWithScope",
+    "historicalReviewDate": "2026-11-02",
+    "historicalSourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+    "searchScope": "docs/**/*.md and docs/**/*.json; case-insensitive 1.81.2 or 7249d0e0",
+    "exactCohortMatchingFiles": [],
+    "interpretation": "Historical design review; no exact hosted cohort acceptance established. No owner repository was changed."
+  }
+]

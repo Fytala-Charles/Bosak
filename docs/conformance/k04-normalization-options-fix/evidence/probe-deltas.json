@@ -1,0 +1,20 @@
+{
+  "correctedControls": 5,
+  "changes": [
+    "control-qt3-form-NBSP",
+    "control-qt4-form-NBSP",
+    "control-qt4-qt4-default-form-empty",
+    "control-qt4-qt4-default-form-compose",
+    "control-qt4-qt4-keyword-form"
+  ],
+  "current": {
+    "original": {
+      "Passed": 4,
+      "Failed": 4
+    },
+    "control": {
+      "Passed": 62
+    }
+  },
+  "otherResultsUnchanged": true
+}

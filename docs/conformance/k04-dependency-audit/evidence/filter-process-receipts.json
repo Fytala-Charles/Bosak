@@ -1,0 +1,76 @@
+[
+  {
+    "suite": "qt3",
+    "mode": "catalog",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\qt3-catalog.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 1.0716760999930557,
+    "output": "qt3-catalog.jsonl",
+    "log": "qt3-catalog.log",
+    "rows": 619
+  },
+  {
+    "suite": "qt3",
+    "mode": "synthetic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-driver/bin/Release/net10.0/Probe.dll",
+      "qt3",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\synthetic-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\qt3-synthetic.jsonl",
+      "synthetic"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.120488699991256,
+    "output": "qt3-synthetic.jsonl",
+    "log": "qt3-synthetic.log",
+    "rows": 31
+  },
+  {
+    "suite": "qt4",
+    "mode": "catalog",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\qt4-catalog.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 2.042535900021903,
+    "output": "qt4-catalog.jsonl",
+    "log": "qt4-catalog.log",
+    "rows": 1893
+  },
+  {
+    "suite": "qt4",
+    "mode": "synthetic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-driver/bin/Release/net10.0/Probe.dll",
+      "qt4",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\synthetic-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-dependency-audit\\evidence\\qt4-synthetic.jsonl",
+      "synthetic"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0761124000127893,
+    "output": "qt4-synthetic.jsonl",
+    "log": "qt4-synthetic.log",
+    "rows": 31
+  }
+]

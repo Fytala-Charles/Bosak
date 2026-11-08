@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-06",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "68466be09c5966a2703834764d2db4bea7bd7befb4334251a20b65525f9c2d65"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "b77bb93dac59dd00bf9bd313dea9fd46d33036dc78d930a5924b10b56c17786a"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "3c15fa08c91763b5768ed0bc305078012a251f9107058b94a8b23dd616cdaa30"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "64c4bf8da5bf7593023706b1e2fff1d63065403896e2c720f8995902231dbb5d"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "6d6d26bb08ce63a6cab290fd88147668d8cfd9682d873b2bef0ea7b8031cfe7f"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "7efdcce91fce742c3b8cfc208b8f90964ee1b33572fdacef4651a93625f2feff"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "efb8d543415d07aa47d5694783210890a82a40ab00c64d45ac9d3268ca4ccff8"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "5dc637bcec015b09ad9a235a14709e0e113b0f2acbd7c089a5703474eb2f742f"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "dbcc8fee8f7b799a4320c90067d17285631c1f251ccf28ad1c139b070b56982d"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "c109d90d2a7396cc5776361ec02487375989dca63ce8b7453f9be0d4ea604f31"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "102f01846ffbb6b920fcb2322445deaebe8f338333f03076141f7504fb6642d2"
+    },
+    {
+      "source": "docs/foundation-schema-adapter-feasibility/README.md",
+      "sourceSha256": "fc193be078db47c2634769df8d1e5fee4b5e6d3ca3476d92aae2b075ec8b7126"
+    }
+  ],
+  "localLinks": 3753,
+  "htmlRendered": false,
+  "scope": "Static Markdown source hashes and local destinations only; markdown-it unavailable in checked local locations; no HTML/screenshot/PDF claim",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91"
+}

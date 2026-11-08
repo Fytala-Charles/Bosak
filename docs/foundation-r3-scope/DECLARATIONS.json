@@ -1,0 +1,385 @@
+{
+  "proposedTypes": 47,
+  "presentTypes": 40,
+  "missingTypes": 7,
+  "rows": [
+    {
+      "type": "Bosak.XPath.Api.Schema.SchemaQueryLimits",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Api",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Api.Schema.SchemaQueryOperation",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Api",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Api.Schema.SchemaQuerySession",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Api",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Api.Schema.SchemaQuerySnapshot",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Api",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.IQueryOperationLease",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.IQueryOperationLifetime",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.IQuerySemanticEnvironment",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.IQueryStaticContext",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAnnotatedNode",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentAdvisor",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentEpisode",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentEvidence",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentInput",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentOrigin",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessmentResult",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAssessor",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAtomicProvenance",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaAuthority",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaCompatibilityAuthority",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaCompatibilityResult",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaCompatibilityView",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaComponentHandle",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaNodeFacts",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaSnapshotBinding",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaSourceBinding",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.ISchemaTypedValue",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.QueryHostLanguage",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAssessmentDiagnostic",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAssessmentLimits",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAssessmentMode",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAssessmentRequest",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAssessmentStatus",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAtomicItem",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaAtomics",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "PV-01",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaCompatibilityDecision",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaDiagnosticLocation",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaExpandedName",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaLanguageVersion",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaResultKind",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Schema.SchemaResult`1<!0>",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XPath.Core.Xdm.XdmExactDecimal",
+      "presentInProduction": true,
+      "assembly": "Bosak.XPath.Core",
+      "status": "DeclaredNotFullBehaviorAcceptance",
+      "nextWork": null,
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.XQuery.Api.Schema.SchemaXQueryCompiler",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-02",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.Xslt.Api.Schema.SchemaXsltCaptureResult",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-03",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.Xslt.Api.Schema.SchemaXsltCompiler",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-03",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.Xslt.Api.Schema.SchemaXsltExecutable",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-03",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.Xslt.Api.Schema.SchemaXsltInvocation",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-03",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    },
+    {
+      "type": "Bosak.Xslt.Api.Schema.SchemaXsltRunResult",
+      "presentInProduction": false,
+      "assembly": null,
+      "status": "MissingProductionDeclaration",
+      "nextWork": "AH-03",
+      "scope": "Type-name presence only; signatures/defaults/semantics and backend qualification are separate."
+    }
+  ],
+  "additionalCompatibleResult": "Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult",
+  "typePresenceIsBehaviorAcceptance": false
+}

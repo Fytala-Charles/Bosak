@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-cldr-render/README.md.html",
+      "sha256": "5b41651e8296cc28337fef7c7fa0df0c06dba61718cddf3144efa0f21b7ae51e"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_ARCHITECTURE.md.html",
+      "sha256": "93bcef498d8336c5aee2cefa8ed366be15f59644a37a20b49da5800a9f175762"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "f903afc4fab3368c5917de7f4962345ccac5676643a17d5de6b1c958dd0d3345"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_INTEGRATION.md.html",
+      "sha256": "df632e689c1775c4e2b1bee50335cf7b5a2338a3fb486404a6879598484b61d6"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "4ca4704a2be06eb40ea95edbf7a4c0cda515ae39f2a90c5ed0acf1b5481f3ecf"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "52b4731dd52a9cf3c11d094691cb427e7eb39bc869ee194c37b8a6a793e91508"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "25ca8ec23969f767e18cb9cd9f2d6199dcb9a582f6e2c600e933ee33c173b29a"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "f0e7fc68dd641593577ddec12d31f28ed3f49c795bb97bc4213f1135b13bcf67"
+    },
+    {
+      "source": "docs/conformance/k04-collation-admission/README.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_conformance_k04-collation-admission_README.md.html",
+      "sha256": "6bc49844539f617174af969d1dd3948d3aae485f1b30e92bb92cf2cabc6b0be4"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-review/README.md",
+      "html": ".guard-tmp/k04-cldr-render/docs_conformance_k04-cldr-review_README.md.html",
+      "sha256": "d7665808106b6ac1a2adfe5a1504aa12aa9e82372ac4eb4aa5eb86fa2b4dca8f"
+    }
+  ]
+}

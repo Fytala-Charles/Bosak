@@ -23,6 +23,8 @@ The full branding contract applies to these canonical documents:
 
 Internal handover notes and package-level READMEs may use a compact heading without a branded banner. They should still use clear structure, accessible images, and the Fytala palette when they contain custom diagrams.
 
+The root README is a reader-facing introduction: keep implementation checkpoints, test-count logs, internal approval records and workspace paths out of it. Use [implementation status](IMPLEMENTATION_STATUS.md) for current technical detail, [development history](DEVELOPMENT_HISTORY.md) for dated summaries and the original evidence dossiers for receipts. The [roadmap](../ROADMAP.md) describes current direction rather than replaying historical launch checklists.
+
 ## About FYTALA
 
 Every FYTALA project `README.md` should include the following company statement immediately after the standard header banner, separated by a horizontal rule. Keep the text verbatim unless the FYTALA mission statement changes.

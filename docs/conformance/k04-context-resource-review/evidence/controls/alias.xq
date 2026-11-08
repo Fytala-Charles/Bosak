@@ -1,0 +1,1 @@
+module namespace m='urn:c27:lib'; declare namespace t='http://www.w3.org/2001/XMLSchema'; declare context item as t:integer external; declare variable $m:v := .;

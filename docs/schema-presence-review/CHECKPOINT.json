@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "4f71de9d3f2e878683d25c0dfb1f1fc6f83f8bbd",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/schema-presence-review/README.md",
+  "freshSchemaPassed": 451,
+  "productionCorrectionRequired": false
+}

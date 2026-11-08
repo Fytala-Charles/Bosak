@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "69e371759a0a5e2e26e29469ff17a53aa199610baeda5cdb2c501af3d958a633",
+  "qualifiedInternalSlice": "TA-11-original-facts-guard-cost-v1",
+  "scope": "Unchanged exported declarations, XdmValue layout and friends. Original metadata guard cost reduction qualified; public profiles unchanged; no native/freeze acceptance."
+}

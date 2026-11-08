@@ -1,0 +1,30 @@
+{
+  "qt3": {
+    "name": "cbcl-fn-normalize-unicode-006",
+    "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+    "unchangedExpectedScalars": [
+      32,
+      2494
+    ],
+    "dependencies": [
+      {
+        "type": "unicode-normalization-form",
+        "value": "FULLY-NORMALIZED"
+      }
+    ]
+  },
+  "qt4": {
+    "name": "cbcl-fn-normalize-unicode-006",
+    "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+    "unchangedExpectedScalars": [
+      32,
+      2494
+    ],
+    "dependencies": [
+      {
+        "type": "unicode-normalization-form",
+        "value": "FULLY-NORMALIZED"
+      }
+    ]
+  }
+}

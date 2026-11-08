@@ -1,0 +1,195 @@
+{"id":"char-positive","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"char-positive","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"char-zero","profile":"XPath40","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"char-zero","profile":"XPath40Experimental","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"char-negative","profile":"XPath40","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"char-negative","profile":"XPath40Experimental","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"char-string-keyword","profile":"XPath40","result":null,"error":"XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.","exceptionType":"System.InvalidOperationException"}
+{"id":"char-string-keyword","profile":"XPath40Experimental","result":null,"error":"XPST0017: Function char does not declare keyword parameters and cannot be called with keyword arguments.","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-normal","profile":"XPath40","result":"AB","error":null,"exceptionType":null}
+{"id":"partial-apply-normal","profile":"XPath40Experimental","result":"AB","error":null,"exceptionType":null}
+{"id":"partial-apply-empty","profile":"XPath40","result":"AB","error":null,"exceptionType":null}
+{"id":"partial-apply-empty","profile":"XPath40Experimental","result":"AB","error":null,"exceptionType":null}
+{"id":"partial-apply-string-key","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-string-key","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-zero-key","profile":"XPath40","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-zero-key","profile":"XPath40Experimental","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-negative-key","profile":"XPath40","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-negative-key","profile":"XPath40Experimental","result":null,"error":"XPTY0004: fn:partial-apply: $arguments keys must be positive integers.","exceptionType":"System.InvalidOperationException"}
+{"id":"partial-apply-high-key","profile":"XPath40","result":"AB","error":null,"exceptionType":null}
+{"id":"partial-apply-high-key","profile":"XPath40Experimental","result":"AB","error":null,"exceptionType":null}
+{"id":"trim-explicit","profile":"XPath40","result":"A","error":null,"exceptionType":null}
+{"id":"trim-explicit","profile":"XPath40Experimental","result":"A","error":null,"exceptionType":null}
+{"id":"trim-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"trim-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"trim-context-default","profile":"XPath40","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}trim-space#0 not found.","exceptionType":"System.InvalidOperationException"}
+{"id":"trim-context-default","profile":"XPath40Experimental","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}trim-space#0 not found.","exceptionType":"System.InvalidOperationException"}
+{"id":"trim-unknown-option","profile":"XPath40","result":"A","error":null,"exceptionType":null}
+{"id":"trim-unknown-option","profile":"XPath40Experimental","result":"A","error":null,"exceptionType":null}
+{"id":"pad-unknown-option","profile":"XPath40","result":"A  ","error":null,"exceptionType":null}
+{"id":"pad-unknown-option","profile":"XPath40Experimental","result":"A  ","error":null,"exceptionType":null}
+{"id":"pad-unused-invalid-side","profile":"XPath40","result":"ABC","error":null,"exceptionType":null}
+{"id":"pad-unused-invalid-side","profile":"XPath40Experimental","result":"ABC","error":null,"exceptionType":null}
+{"id":"pad-numeric-padding","profile":"XPath40","result":"A77","error":null,"exceptionType":null}
+{"id":"pad-numeric-padding","profile":"XPath40Experimental","result":"A77","error":null,"exceptionType":null}
+{"id":"unix-default","profile":"XPath40","result":"1970-01-01T00:00:00Z","error":null,"exceptionType":null}
+{"id":"unix-default","profile":"XPath40Experimental","result":"1970-01-01T00:00:00Z","error":null,"exceptionType":null}
+{"id":"unix-empty","profile":"XPath40","result":"1970-01-01T00:00:00Z","error":null,"exceptionType":null}
+{"id":"unix-empty","profile":"XPath40Experimental","result":"1970-01-01T00:00:00Z","error":null,"exceptionType":null}
+{"id":"unix-negative-frozen","profile":"XPath40","result":null,"error":"FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"unix-negative-experimental","profile":"XPath40Experimental","result":"1969-12-31T23:59:59.999Z","error":null,"exceptionType":null}
+{"id":"unix-wide-range","profile":"XPath40","result":null,"error":"FODT0001: fn:unix-dateTime value is outside the representable date range.","exceptionType":"System.InvalidOperationException"}
+{"id":"unix-wide-range","profile":"XPath40Experimental","result":null,"error":"FODT0001: fn:unix-dateTime value is outside the representable date range.","exceptionType":"System.InvalidOperationException"}
+{"id":"uri-boolean-option","profile":"XPath40","result":"443","error":null,"exceptionType":null}
+{"id":"uri-boolean-option","profile":"XPath40Experimental","result":"443","error":null,"exceptionType":null}
+{"id":"uri-string-option","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"uri-string-option","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"uri-empty-query-precedence","profile":"XPath40","result":"https://example.test?old=1","error":null,"exceptionType":null}
+{"id":"uri-empty-query-precedence","profile":"XPath40Experimental","result":"https://example.test?old=1","error":null,"exceptionType":null}
+{"id":"uri-raw-authority","profile":"XPath40","result":"https://user:pass@example.test:443","error":null,"exceptionType":null}
+{"id":"uri-raw-authority","profile":"XPath40Experimental","result":"https://user:pass@example.test:443","error":null,"exceptionType":null}
+{"id":"sort-default-key","profile":"XPath40","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-default-key","profile":"XPath40Experimental","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-explicit-empty-key","profile":"XPath40","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"sort-explicit-empty-key","profile":"XPath40Experimental","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"array-sort-explicit-empty-key","profile":"XPath40","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"array-sort-explicit-empty-key","profile":"XPath40Experimental","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"sort-unknown-collation","profile":"XPath40","result":"A,B","error":null,"exceptionType":null}
+{"id":"sort-unknown-collation","profile":"XPath40Experimental","result":"A,B","error":null,"exceptionType":null}
+{"id":"sort-nan-left","profile":"XPath40","result":"1,NaN","error":null,"exceptionType":null}
+{"id":"sort-nan-left","profile":"XPath40Experimental","result":"1,NaN","error":null,"exceptionType":null}
+{"id":"sort-nan-right","profile":"XPath40","result":"NaN,1","error":null,"exceptionType":null}
+{"id":"sort-nan-right","profile":"XPath40Experimental","result":"NaN,1","error":null,"exceptionType":null}
+{"id":"sort-exact-numeric","profile":"XPath40","result":"double,decimal","error":null,"exceptionType":null}
+{"id":"sort-exact-numeric","profile":"XPath40Experimental","result":"double,decimal","error":null,"exceptionType":null}
+{"id":"sort-by-empty-defaults","profile":"XPath40","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-by-empty-defaults","profile":"XPath40Experimental","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-by-unknown-field","profile":"XPath40","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-by-unknown-field","profile":"XPath40Experimental","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"sort-by-invalid-order","profile":"XPath40","result":null,"error":"FORG0001: fn:sort-by \u0027order\u0027 field must be \u0027ascending\u0027 or \u0027descending\u0027","exceptionType":"System.InvalidOperationException"}
+{"id":"sort-by-invalid-order","profile":"XPath40Experimental","result":null,"error":"FORG0001: fn:sort-by \u0027order\u0027 field must be \u0027ascending\u0027 or \u0027descending\u0027","exceptionType":"System.InvalidOperationException"}
+{"id":"highest-nan","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"highest-nan","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"lowest-nan","profile":"XPath40","result":"2","error":null,"exceptionType":null}
+{"id":"lowest-nan","profile":"XPath40Experimental","result":"2","error":null,"exceptionType":null}
+{"id":"merge-default","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"merge-default","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"merge-empty-options","profile":"XPath40","result":null,"error":"XPTY0004: map:merge options must be a single map","exceptionType":"System.InvalidOperationException"}
+{"id":"merge-empty-options","profile":"XPath40Experimental","result":null,"error":"XPTY0004: map:merge options must be a single map","exceptionType":"System.InvalidOperationException"}
+{"id":"merge-malformed-input","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"merge-malformed-input","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"merge-duplicates-cardinality","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"merge-duplicates-cardinality","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"map-filter-string-predicate","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"map-filter-string-predicate","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"all-equal-map","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"all-equal-map","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"duplicate-values-maps","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"duplicate-values-maps","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"deep-equal-options","profile":"XPath40","result":null,"error":"FOTY0013","exceptionType":"System.InvalidOperationException"}
+{"id":"deep-equal-options","profile":"XPath40Experimental","result":null,"error":"FOTY0013","exceptionType":"System.InvalidOperationException"}
+{"id":"index-of-empty-collation","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"index-of-empty-collation","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"compare-mixed-exact","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"compare-mixed-exact","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"compare-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"compare-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"compare-current-keywords","profile":"XPath40","result":null,"error":"XPST0017: Unknown keyword argument \u0027value1\u0027 in call of compare.","exceptionType":"System.InvalidOperationException"}
+{"id":"compare-current-keywords","profile":"XPath40Experimental","result":null,"error":"XPST0017: Unknown keyword argument \u0027value1\u0027 in call of compare.","exceptionType":"System.InvalidOperationException"}
+{"id":"date-fraction-precision","profile":"XPath40","result":"4.267","error":null,"exceptionType":null}
+{"id":"date-fraction-precision","profile":"XPath40Experimental","result":"4.267","error":null,"exceptionType":null}
+{"id":"days-malformed-text","profile":"XPath40","result":"29","error":null,"exceptionType":null}
+{"id":"days-malformed-text","profile":"XPath40Experimental","result":"29","error":null,"exceptionType":null}
+{"id":"days-multiple-values","profile":"XPath40","result":"29","error":null,"exceptionType":null}
+{"id":"days-multiple-values","profile":"XPath40Experimental","result":"29","error":null,"exceptionType":null}
+{"id":"hash-sha256","profile":"XPath40","result":"BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD","error":null,"exceptionType":null}
+{"id":"hash-sha256","profile":"XPath40Experimental","result":"BA7816BF8F01CFEA414140DE5DAE2223B00361A396177A9CB410FF61F20015AD","error":null,"exceptionType":null}
+{"id":"hash-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"hash-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"hash-blake3","profile":"XPath40","result":null,"error":"FOHA0001: Hash algorithm \u0027BLAKE3\u0027 is not supported by this implementation","exceptionType":"System.InvalidOperationException"}
+{"id":"hash-blake3","profile":"XPath40Experimental","result":null,"error":"FOHA0001: Hash algorithm \u0027BLAKE3\u0027 is not supported by this implementation","exceptionType":"System.InvalidOperationException"}
+{"id":"hash-crc32","profile":"XPath40","result":null,"error":"FOHA0001: Hash algorithm \u0027CRC-32\u0027 is not supported by this implementation","exceptionType":"System.InvalidOperationException"}
+{"id":"hash-crc32","profile":"XPath40Experimental","result":null,"error":"FOHA0001: Hash algorithm \u0027CRC-32\u0027 is not supported by this implementation","exceptionType":"System.InvalidOperationException"}
+{"id":"csv-positive-selection","profile":"XPath40","result":"B,A","error":null,"exceptionType":null}
+{"id":"csv-positive-selection","profile":"XPath40Experimental","result":"B,A","error":null,"exceptionType":null}
+{"id":"csv-nonpositive-selection","profile":"XPath40","result":null,"error":"XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"csv-nonpositive-selection","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"csv-qname-extension","profile":"XPath40","result":null,"error":"XPTY0004: fn:parse-csv: unknown option \u0027opt\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"csv-qname-extension","profile":"XPath40Experimental","result":null,"error":"XPTY0004: fn:parse-csv: unknown option \u0027opt\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"json-default-duplicates","profile":"XPath31","result":"1","error":null,"exceptionType":null}
+{"id":"json-default-duplicates","profile":"XPath40","result":"1","error":null,"exceptionType":null}
+{"id":"json-default-duplicates","profile":"XPath40Experimental","result":"1","error":null,"exceptionType":null}
+{"id":"json-last-duplicates","profile":"XPath31","result":"2","error":null,"exceptionType":null}
+{"id":"json-last-duplicates","profile":"XPath40","result":"2","error":null,"exceptionType":null}
+{"id":"json-last-duplicates","profile":"XPath40Experimental","result":"2","error":null,"exceptionType":null}
+{"id":"json-reject-duplicates","profile":"XPath31","result":null,"error":"FOJS0003: Duplicate key in JSON object","exceptionType":"System.InvalidOperationException"}
+{"id":"json-reject-duplicates","profile":"XPath40","result":null,"error":"FOJS0003: Duplicate key in JSON object","exceptionType":"System.InvalidOperationException"}
+{"id":"json-reject-duplicates","profile":"XPath40Experimental","result":null,"error":"FOJS0003: Duplicate key in JSON object","exceptionType":"System.InvalidOperationException"}
+{"id":"json-boolean-type","profile":"XPath31","result":null,"error":"XPTY0004: The liberal option must be a single xs:boolean","exceptionType":"System.InvalidOperationException"}
+{"id":"json-boolean-type","profile":"XPath40","result":null,"error":"XPTY0004: The liberal option must be a single xs:boolean","exceptionType":"System.InvalidOperationException"}
+{"id":"json-boolean-type","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The liberal option must be a single xs:boolean","exceptionType":"System.InvalidOperationException"}
+{"id":"json-unknown-option","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"json-unknown-option","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"json-unknown-option","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"json-qname-extension","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"json-qname-extension","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"json-qname-extension","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"abs-wide-integer-identity","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"abs-wide-integer-identity","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"abs-wide-integer-identity","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"floor-wide-integer-identity","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"floor-wide-integer-identity","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"floor-wide-integer-identity","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"ceiling-wide-integer-identity","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"ceiling-wide-integer-identity","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"ceiling-wide-integer-identity","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"round-extreme-precision","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"round-extreme-precision","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"round-extreme-precision","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"array-sort-with-normal","profile":"XPath40","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"array-sort-with-normal","profile":"XPath40Experimental","result":"1,2,3","error":null,"exceptionType":null}
+{"id":"array-sort-with-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"array-sort-with-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"array-sort-with-invalid","profile":"XPath40","result":null,"error":"XPTY0004: sort-with comparators must be function items of arity 2","exceptionType":"System.InvalidOperationException"}
+{"id":"array-sort-with-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: sort-with comparators must be function items of arity 2","exceptionType":"System.InvalidOperationException"}
+{"id":"element-to-map-plan-normal","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"element-to-map-plan-normal","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"element-to-map-plan-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"element-to-map-plan-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"element-to-map-plan-invalid","profile":"XPath40","result":null,"error":"XPTY0004: fn:element-to-map-plan input must be nodes","exceptionType":"System.InvalidOperationException"}
+{"id":"element-to-map-plan-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: fn:element-to-map-plan input must be nodes","exceptionType":"System.InvalidOperationException"}
+{"id":"element-to-map-escape-names","profile":"XPath40","result":null,"error":"XPTY0004: unknown option \u0027escape-names\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"element-to-map-escape-names","profile":"XPath40Experimental","result":null,"error":"XPTY0004: unknown option \u0027escape-names\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"map-to-element-escape-names","profile":"XPath40","result":null,"error":"XPTY0004: unknown option \u0027escape-names\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"map-to-element-escape-names","profile":"XPath40Experimental","result":null,"error":"XPTY0004: unknown option \u0027escape-names\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"array-slice-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"array-slice-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"array-slice-invalid","profile":"XPath40","result":null,"error":"XPTY0004: Cannot access ArrayValue on XDM value of kind \u0027String\u0027","exceptionType":"System.InvalidOperationException"}
+{"id":"array-slice-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot access ArrayValue on XDM value of kind \u0027String\u0027","exceptionType":"System.InvalidOperationException"}
+{"id":"atomic-equal-empty","profile":"XPath40","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:anyAtomicType","exceptionType":"System.InvalidOperationException"}
+{"id":"atomic-equal-empty","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:anyAtomicType","exceptionType":"System.InvalidOperationException"}
+{"id":"atomic-annotation-empty","profile":"XPath40","result":"(map)","error":null,"exceptionType":null}
+{"id":"atomic-annotation-empty","profile":"XPath40Experimental","result":"(map)","error":null,"exceptionType":null}
+{"id":"element-to-map-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"element-to-map-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"map-to-element-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"map-to-element-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"every-empty","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"every-empty","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"every-string-result","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"every-string-result","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"some-empty","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"some-empty","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"some-string-result","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"some-string-result","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"partition-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"partition-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"partition-string-result","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"partition-string-result","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:boolean?","exceptionType":"System.InvalidOperationException"}
+{"id":"scan-empty","profile":"XPath40Experimental","result":"100","error":null,"exceptionType":null}
+{"id":"sort-with-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"sort-with-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"sort-with-invalid","profile":"XPath40","result":null,"error":"XPTY0004: sort-with comparators must be function items of arity 2","exceptionType":"System.InvalidOperationException"}
+{"id":"sort-with-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: sort-with comparators must be function items of arity 2","exceptionType":"System.InvalidOperationException"}
+{"id":"transitive-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"transitive-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}

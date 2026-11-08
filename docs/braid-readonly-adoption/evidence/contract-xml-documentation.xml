@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Proposal</name>
+    </assembly>
+    <members>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionState">
+            <summary>Proposed finite session states; Closed means release requested, not garbage collected.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionState.Ready">
+            <summary>Admission is possible when no operation is active.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionState.Quiescing">
+            <summary>New work is refused while an active operation drains.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionState.Closed">
+            <summary>No operation remains active and underlying release has been requested.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind">
+            <summary>Proposed conceptual refusal categories; no published Braid code is assigned here.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.Busy">
+            <summary>Another call owns the session lane.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.SessionUnavailable">
+            <summary>The session is closing or closed.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.ArtifactMismatch">
+            <summary>The approved artifact no longer matches.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.BindingMismatch">
+            <summary>Runtime/shared-contract binding could not be established.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.UnsupportedProfile">
+            <summary>The requested profile is unavailable.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.InvalidConfiguration">
+            <summary>Caller options are outside the supported finite bounds.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.InvalidResponse">
+            <summary>An underlying result violated the projected-data contract.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.EngineFailure">
+            <summary>Unexpected nonfatal engine execution failed without publishable data.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.SelfDrain">
+            <summary>The active callback attempted to drain its own session.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind.NotClosing">
+            <summary>Drain was requested before close began.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal">
+            <summary>Immutable refusal evidence; messages do not contain raw engine state.</summary>
+            <param name="Kind">Conceptual refusal category.</param>
+            <param name="Message">Bounded consumer-safe explanation.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal.#ctor(Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusalKind,System.String)">
+            <summary>Immutable refusal evidence; messages do not contain raw engine state.</summary>
+            <param name="Kind">Conceptual refusal category.</param>
+            <param name="Message">Bounded consumer-safe explanation.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal.Kind">
+            <summary>Conceptual refusal category.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal.Message">
+            <summary>Bounded consumer-safe explanation.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity">
+            <summary>Separates original source pin, exact approved artifact and session instance identity.</summary>
+            <param name="SessionId">Fresh process-local session identifier, never restored as authority.</param>
+            <param name="ReviewedSourceRevision">The explicitly selected engine source revision.</param>
+            <param name="ArtifactIdentity">Verified artifact-manifest identity.</param>
+            <param name="ProfileId">Finite read-only profile identity.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity.#ctor(System.Guid,System.String,System.String,System.String)">
+            <summary>Separates original source pin, exact approved artifact and session instance identity.</summary>
+            <param name="SessionId">Fresh process-local session identifier, never restored as authority.</param>
+            <param name="ReviewedSourceRevision">The explicitly selected engine source revision.</param>
+            <param name="ArtifactIdentity">Verified artifact-manifest identity.</param>
+            <param name="ProfileId">Finite read-only profile identity.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity.SessionId">
+            <summary>Fresh process-local session identifier, never restored as authority.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity.ReviewedSourceRevision">
+            <summary>The explicitly selected engine source revision.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity.ArtifactIdentity">
+            <summary>Verified artifact-manifest identity.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionIdentity.ProfileId">
+            <summary>Finite read-only profile identity.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason">
+            <summary>First terminal lifecycle cause, distinct from per-call refusal categories.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason.OwnerClose">
+            <summary>The owner explicitly initiated close.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason.ArtifactMismatch">
+            <summary>Approved artifact bytes no longer match.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason.BindingFailure">
+            <summary>Runtime or shared-contract binding could not remain admitted.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason.FatalSessionFault">
+            <summary>A nonrecoverable session invariant failed.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus">
+            <summary>Informational lifecycle snapshot; callers still undergo admission checks.</summary>
+            <param name="State">Current lifecycle state.</param>
+            <param name="OperationActive">Whether a raw operation is still owned.</param>
+            <param name="FirstTerminalReason">First close/revocation reason, when present.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus.#ctor(Bosak.Braid.Application.EngineSessions.ReadOnlySessionState,System.Boolean,System.Nullable{Bosak.Braid.Application.EngineSessions.ReadOnlySessionCloseReason})">
+            <summary>Informational lifecycle snapshot; callers still undergo admission checks.</summary>
+            <param name="State">Current lifecycle state.</param>
+            <param name="OperationActive">Whether a raw operation is still owned.</param>
+            <param name="FirstTerminalReason">First close/revocation reason, when present.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus.State">
+            <summary>Current lifecycle state.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus.OperationActive">
+            <summary>Whether a raw operation is still owned.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus.FirstTerminalReason">
+            <summary>First close/revocation reason, when present.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions">
+            <summary>Caller limits only; these options never approve an engine artifact.</summary>
+            <param name="ModuleByteLimit">Positive per-module byte bound, default eight MiB.</param>
+            <param name="ModuleLimit">Positive module-count bound, default sixty-four.</param>
+            <param name="TotalByteLimit">Positive aggregate byte bound, default thirty-two MiB.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions.#ctor(System.Int32,System.Int32,System.Int64)">
+            <summary>Caller limits only; these options never approve an engine artifact.</summary>
+            <param name="ModuleByteLimit">Positive per-module byte bound, default eight MiB.</param>
+            <param name="ModuleLimit">Positive module-count bound, default sixty-four.</param>
+            <param name="TotalByteLimit">Positive aggregate byte bound, default thirty-two MiB.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions.ModuleByteLimit">
+            <summary>Positive per-module byte bound, default eight MiB.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions.ModuleLimit">
+            <summary>Positive module-count bound, default sixty-four.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions.TotalByteLimit">
+            <summary>Positive aggregate byte bound, default thirty-two MiB.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData">
+            <summary>Inspection data only: no editor, opaque target, candidate, review or Apply authority.</summary>
+            <param name="SourceWasInspectable">Structural inspection outcome, not validation/conformance.</param>
+            <param name="Modules">Frozen projected module bytes and extents.</param>
+            <param name="Issues">Frozen classified inspection/resource diagnostics.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData.#ctor(System.Boolean,System.Collections.Generic.IReadOnlyList{Bosak.Braid.Application.InspectionModule},System.Collections.Generic.IReadOnlyList{Bosak.Braid.Application.InspectionIssue})">
+            <summary>Inspection data only: no editor, opaque target, candidate, review or Apply authority.</summary>
+            <param name="SourceWasInspectable">Structural inspection outcome, not validation/conformance.</param>
+            <param name="Modules">Frozen projected module bytes and extents.</param>
+            <param name="Issues">Frozen classified inspection/resource diagnostics.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData.SourceWasInspectable">
+            <summary>Structural inspection outcome, not validation/conformance.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData.Modules">
+            <summary>Frozen projected module bytes and extents.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData.Issues">
+            <summary>Frozen classified inspection/resource diagnostics.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionReply">
+            <summary>Completed data or refusal; exactly one field is populated by a conforming implementation.</summary>
+            <param name="Data">Read-only data, including legitimate source diagnostics.</param>
+            <param name="Refusal">Session/admission refusal, with no data authority.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionReply.#ctor(Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionData,Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal)">
+            <summary>Completed data or refusal; exactly one field is populated by a conforming implementation.</summary>
+            <param name="Data">Read-only data, including legitimate source diagnostics.</param>
+            <param name="Refusal">Session/admission refusal, with no data authority.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionReply.Data">
+            <summary>Read-only data, including legitimate source diagnostics.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionReply.Refusal">
+            <summary>Session/admission refusal, with no data authority.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainOutcome">
+            <summary>Proposed bounded drain outcomes.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainOutcome.Drained">
+            <summary>The operation ended and underlying release was requested.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainOutcome.Incomplete">
+            <summary>The bound expired; ownership and closed admission remain retained.</summary>
+        </member>
+        <member name="F:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainOutcome.Refused">
+            <summary>The drain request was invalid or would wait on itself.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainReply">
+            <summary>Drain evidence; no outcome certifies CLR unload or garbage collection.</summary>
+            <param name="Outcome">Bounded drain result.</param>
+            <param name="Status">Lifecycle state observed with the outcome.</param>
+            <param name="Refusal">Refusal detail only when Outcome is Refused.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainReply.#ctor(Bosak.Braid.Application.EngineSessions.ReadOnlyDrainOutcome,Bosak.Braid.Application.EngineSessions.ReadOnlySessionStatus,Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal)">
+            <summary>Drain evidence; no outcome certifies CLR unload or garbage collection.</summary>
+            <param name="Outcome">Bounded drain result.</param>
+            <param name="Status">Lifecycle state observed with the outcome.</param>
+            <param name="Refusal">Refusal detail only when Outcome is Refused.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainReply.Outcome">
+            <summary>Bounded drain result.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainReply.Status">
+            <summary>Lifecycle state observed with the outcome.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlyDrainReply.Refusal">
+            <summary>Refusal detail only when Outcome is Refused.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.ReadOnlySessionOpenReply">
+            <summary>Session or refusal; exactly one field is populated by a conforming factory.</summary>
+            <param name="Session">Fresh admitted read-only session.</param>
+            <param name="Refusal">No session was admitted.</param>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.ReadOnlySessionOpenReply.#ctor(Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession,Bosak.Braid.Application.EngineSessions.ReadOnlySessionRefusal)">
+            <summary>Session or refusal; exactly one field is populated by a conforming factory.</summary>
+            <param name="Session">Fresh admitted read-only session.</param>
+            <param name="Refusal">No session was admitted.</param>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionOpenReply.Session">
+            <summary>Fresh admitted read-only session.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.ReadOnlySessionOpenReply.Refusal">
+            <summary>No session was admitted.</summary>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession">
+            <summary>Proposed consumer-owned session; Dispose stops admission without blocking a callback.</summary>
+            <remarks>Call BeginClose then bounded DrainAsync when the owner needs shutdown evidence.</remarks>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.Identity">
+            <summary>Gets immutable identity labels; they do not replace operation admission.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.Status">
+            <summary>Gets an informational lifecycle snapshot.</summary>
+        </member>
+        <member name="P:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.EngineCapabilities">
+            <summary>Gets informational engine capabilities, distinct from the read-only admitted profile.</summary>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.InspectAsync(Bosak.Braid.Core.SourceDocument,System.Threading.CancellationToken)">
+            <summary>Inspects retained bytes through the single-lane read-only profile.</summary>
+            <param name="source">Immutable principal source bytes and URI.</param>
+            <param name="cancellationToken">Cooperative cancellation; ownership persists until raw completion.</param>
+            <returns>Completed inspection data or an explicit admission refusal.</returns>
+            <exception cref="T:System.OperationCanceledException">Cancellation is observed before publication.</exception>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.BeginClose">
+            <summary>Idempotently stops admission without waiting for active work.</summary>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSession.DrainAsync(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>Waits externally for drain up to a bound; does not force in-process termination.</summary>
+            <param name="timeout">Positive finite wait bound.</param>
+            <param name="cancellationToken">Cancels only this drain wait.</param>
+            <returns>Drained, incomplete or an explicit refusal such as self-drain.</returns>
+            <exception cref="T:System.OperationCanceledException">The caller cancels this wait.</exception>
+        </member>
+        <member name="T:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSessionFactory">
+            <summary>Factory composed with a private trusted deployment approval; callers cannot supply approvals.</summary>
+        </member>
+        <member name="M:Bosak.Braid.Application.EngineSessions.IReadOnlyInspectionSessionFactory.OpenAsync(Bosak.Braid.Application.EngineSessions.ReadOnlyInspectionOptions,Bosak.Braid.Application.IResourceReader,System.Threading.CancellationToken)">
+            <summary>Opens a fresh session at the factory's explicitly reviewed deployment pin.</summary>
+            <param name="options">Supported finite caller limits.</param>
+            <param name="resources">Existing host resource-reader policy, or null for principal-only.</param>
+            <param name="cancellationToken">Cancellation before session publication.</param>
+            <returns>A fresh session or explicit admission/configuration refusal.</returns>
+            <exception cref="T:System.OperationCanceledException">Cancellation is observed before publication.</exception>
+        </member>
+    </members>
+</doc>

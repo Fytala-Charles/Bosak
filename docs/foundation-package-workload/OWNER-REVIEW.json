@@ -1,0 +1,167 @@
+{
+  "date": "2026-11-07",
+  "previewVersion": "1.81.1-preview.c0b926de",
+  "candidateCommit": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "evidence": {
+    "docs/foundation-preview-packages/evidence/PACKAGES.json": "4eedea7e1d0608ac6beb1b1c4b1d2ad9a199521efc9e81b741d4fc7fa11f9537",
+    "docs/foundation-preview-qualification/MANIFEST.json": "9e1ec45bed4951329ebcbaa266b903b4765dd1e46adb3a756e9ef7fed07e37c1",
+    "docs/foundation-preview-qualification/evidence/RESULTS.json": "4c7905c216c40c06353d390e6b57078073a8b1fe396d702a8a47e6ef624dc528",
+    "docs/foundation-package-workload/CANDIDATE-PINS.json": "47cb1e292b4d3052d72ea9801d149cc16dc7ea7c9488c509394680725bc608c7",
+    "docs/foundation-package-workload/evidence/SUMMARY.json": "dcecf8f7af93b29539a3b869ee85b4f3d3611aa4a59caf364be51ab439b2ec17",
+    "docs/foundation-provider-adoption/SCHEMA-ADOPTION.md": "8a0b0e29e7ba09f16fe64a8f25d4ba99049511f989c36545be46894194f14115",
+    "docs/foundation-owner-workload-protocol/BUDGET-PROPOSAL.json": "c7049573439c6f432389a337fa9f76d5d16e697bcf3f8d10557099ed5cb119e4"
+  },
+  "owners": [
+    {
+      "role": "Core",
+      "scenarios": [
+        "PF-01",
+        "PF-02",
+        "PF-03",
+        "PF-04",
+        "PF-05",
+        "PF-06",
+        "PF-07",
+        "PF-08",
+        "PF-09"
+      ],
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false,
+      "productionAdoptionAccepted": false
+    },
+    {
+      "role": "Schema",
+      "scenarios": [
+        "PF-02",
+        "PF-03",
+        "PF-06",
+        "PF-08",
+        "PF-09"
+      ],
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false,
+      "productionAdoptionAccepted": false
+    },
+    {
+      "role": "XmlDb",
+      "scenarios": [
+        "PF-04",
+        "PF-05",
+        "PF-06",
+        "PF-08",
+        "PF-09"
+      ],
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false,
+      "productionAdoptionAccepted": false
+    },
+    {
+      "role": "Braid",
+      "scenarios": [
+        "PF-06",
+        "PF-07",
+        "PF-08",
+        "PF-09"
+      ],
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false,
+      "productionAdoptionAccepted": false
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "PF-01",
+      "owners": "Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-02",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-03",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-04",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-05",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-06",
+      "owners": "Braid + Core + Schema + XmlDb",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-07",
+      "owners": "Braid + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-08",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-09",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    }
+  ],
+  "requirementsWaived": 0,
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "messagesSent": false,
+  "nextAction": "Review the concrete exact-package evidence and provide dated owner workload/baseline/budget/adoption dispositions; source/pin changes require separate qualification."
+}

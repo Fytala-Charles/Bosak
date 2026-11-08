@@ -1,0 +1,9 @@
+{
+  "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll": "9fdb8ba139eba9656af11af1d0d7053dfcef0f6a8eed4ff9e8f624070c1b8a0b",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll": "fe51185fa709af0900198bade70b330bf11e5cda1c7094e723332f759375f3a6",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Core.dll": "e424ffd9d541d0613671ec593a5cdc2ccf88a1b875cb1cb4c4b7fb18283a2973",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Runtime.dll": "399ce17c58c3addc514b7759246681c509df470281198f9d32c9df6c96e9d21c",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Standard.dll": "4aa69691c49866cf552858525fca66cd31ffc4cdd8917abd9b8cfdbcf4775dd2",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Api.dll": "c5812ed89eb2862a30dac50bee80e9cfd3aec9d8fdb09afb54f9c486308f27a7",
+  "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Providers.dll": "ca8a1407a0e0575d4eabd89c810507746beda2e850ba6c250ec30f9f9b11b8c6"
+}

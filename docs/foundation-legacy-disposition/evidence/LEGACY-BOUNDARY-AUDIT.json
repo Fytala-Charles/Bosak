@@ -1,0 +1,82 @@
+{
+  "sourceVersion": "1.81.0",
+  "sourceFiles": {
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+    "src/Bosak.XPath.Core/Schema/SchemaAtomics.cs": "38c9de64be63884dfde6050de5e328bc23efecf27ceea3d3079a85c1f1b20989",
+    "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "src/Bosak.XPath.Runtime/Vm/SchemaProviderSessionBinding.cs": "a76817e9a20d0f93be89d1cfb45b97b803f06fa85e525b6177f20c218bd7bd32",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "23139a2daca89ab1f836941314bb523f797c0a7d52fe4111bce2fb0e5ca78109",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "52ed9b5eb06b7810ed47009364747d1ff133552b437e35b3ae2acc65aeda850a"
+  },
+  "apiInventory": "docs/foundation-public-primitives/evidence/public-api.json",
+  "apiInventorySha256": "e855b35790be80d3a30c261431c6abd443671f5434774b8a03ca76d77ba23016",
+  "privateTypesNotExported": true,
+  "receipts": [
+    {
+      "id": "OpaquePrivateScalarContract",
+      "path": "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs",
+      "startLine": 45,
+      "endLine": 56,
+      "sourceSha256": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+      "normalizedSnippetSha256": "8acbc5a025b7209a3ab08f6e7c1a05cd83f61a3508f66faca75e011feaf241e5",
+      "snippet": "internal interface ISchemaIssuedScalar\n{\n    /// <summary>The plain atomic value.</summary>\n    XdmValue Value { get; }\n    /// <summary>The original governing type.</summary>\n    object DeclaredType { get; }\n    /// <summary>The actual atomic type.</summary>\n    object ActualType { get; }\n    /// <summary>The original assessment, or null for construction.</summary>\n    object? OriginalAssessment { get; }\n}\n\n"
+    },
+    {
+      "id": "SealedPrivateMarker",
+      "path": "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs",
+      "startLine": 257,
+      "endLine": 269,
+      "sourceSha256": "ff16fb74590ce2611b4b93d7a430e64b110e7dc0c59e696c44e09eb6cf59d36c",
+      "normalizedSnippetSha256": "ef23554b949c6e8fbbccf5249ed2327eb67696cc0fb12530c50f4ddc76c1b9ef",
+      "snippet": "    internal sealed class Evidence\n    {\n        private readonly object _seal;\n        internal Evidence(object seal, XdmValue value, object declared, object actual, object? origin, Snapshot? snapshot)\n        { _seal = seal; Value = value; DeclaredType = declared; ActualType = actual; OriginalAssessment = origin; Snapshot = snapshot; }\n        internal bool IsIssuedBy(object seal) => ReferenceEquals(_seal, seal);\n        internal Snapshot? Snapshot { get; }\n        internal XdmValue Value { get; }\n        internal object DeclaredType { get; }\n        internal object ActualType { get; }\n        internal object? OriginalAssessment { get; }\n    }\n\n"
+    },
+    {
+      "id": "PublicObservationGate",
+      "path": "src/Bosak.XPath.Core/Schema/SchemaAtomics.cs",
+      "startLine": 29,
+      "endLine": 37,
+      "sourceSha256": "38c9de64be63884dfde6050de5e328bc23efecf27ceea3d3079a85c1f1b20989",
+      "normalizedSnippetSha256": "9b69f7d7b38903cf9c984b7d569ec43df0c91275db95f26859bf9139a53ab220",
+      "snippet": "    public static bool TryGetProvenance(in XdmValue value,out ISchemaAtomicProvenance? provenance)\n    {\n        provenance=null;\n        if(!value.IsAtomic||XdmValue.SchemaTransportMarker(value) is not ISchemaAtomicObservation observation)return false;\n        if(!observation.TryObserve(in value,out var observed)||observed is null)return false;\n        provenance=observed;return true;\n    }\n}\n\n"
+    },
+    {
+      "id": "PrivateExactInputOriginChecks",
+      "path": "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs",
+      "startLine": 87,
+      "endLine": 94,
+      "sourceSha256": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+      "normalizedSnippetSha256": "695aab061fcfec16ce8c94458a546f548af7d3830174b0e3d4d528d0a7927191",
+      "snippet": "    private void CheckRaw(ISchemaIssuedScalar value)\n    {\n        Check();\n        if (!_advisor.OwnsTypedValue(value, _input, _origin)) throw new ArgumentException(\"Typed scalar is not issued for this exact input and origin.\", nameof(value));\n        Check();\n    }\n    private T ReadRaw<T>(ISchemaIssuedScalar value, Func<T> read)\n    { CheckRaw(value); var result = read(); CheckRaw(value); return result; }\n"
+    },
+    {
+      "id": "PrivateRegistrationAndTypes",
+      "path": "src/Bosak.XPath.Runtime/Vm/QuerySchemaAssociation.cs",
+      "startLine": 131,
+      "endLine": 139,
+      "sourceSha256": "c4c3d7e577a3b0a9c79f0972296c9743963ae151dd150c4cd0f513c0e210cc20",
+      "normalizedSnippetSha256": "c8c9b424f72e9d6299505c3a00e70ded22abd467691b852781b962ffa6fe6a51",
+      "snippet": "    internal bool TryValidateTransport(XdmValue value, out SchemaEvidenceKernel.Evidence? evidence)\n    {\n        evidence = null;\n        if (XdmValue.SchemaTransportMarker(value) is not SchemaEvidenceKernel.Evidence marker || !ReferenceEquals(marker.Snapshot, _snapshot)) return false;\n        Check(); ISchemaIssuedScalar scalar;\n        lock (_gate) if (!_issued.TryGetValue(marker, out scalar!)) throw new ArgumentException(\"Unregistered scalar evidence.\", nameof(value));\n        CheckRaw(scalar); evidence = _kernel.ReadValue(value) ?? throw new ArgumentException(\"Missing scalar evidence.\", nameof(value));\n        CheckTypes(evidence); CheckRaw(scalar); return true;\n    }\n"
+    },
+    {
+      "id": "PublicIssuerBeforeGetters",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs",
+      "startLine": 105,
+      "endLine": 118,
+      "sourceSha256": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+      "normalizedSnippetSha256": "c13a1aaedb54f7a2b20b2a3c133fd119aa231675bdec9e259921ebcdf47c2d82",
+      "snippet": "    private void CheckContainer()\n    {Check();if(!_issuer.OwnsContainer(_value,_originalInput,_snapshot.Input,_origin))throw new ArgumentException(\"Unissued typed container.\");Check();}\n    private TResult Read<TSource,TResult>(TSource source,Func<TSource,TResult> getter)\n    {CheckContainer();var result=getter(source);CheckContainer();return result;}\n    private void OwnType(ISchemaComponentHandle? type)\n    {CheckContainer();if(type is null||!_authority.Owns(type))throw new ArgumentException(\"Unissued type component.\");CheckContainer();}\n    private QueryTypedContainer.Cell Validate(SchemaAtomicItem item)\n    {\n        CheckContainer();var evidence=item.TypeEvidence??throw new ArgumentException(\"Default atomic cell has no evidence.\");\n        var declared=Read(evidence,static e=>e.DeclaredType);OwnType(declared);\n        var actual=Read(evidence,static e=>e.ActualType);OwnType(actual);\n        var origin=Read(evidence,static e=>e.OriginalAssessment);\n        if(!ReferenceEquals(origin,_origin))throw new ArgumentException(\"Atomic evidence has a different original assessment.\");\n        var value=item.Value;\n"
+    },
+    {
+      "id": "PublicPlainCellRefusal",
+      "path": "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs",
+      "startLine": 175,
+      "endLine": 181,
+      "sourceSha256": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+      "normalizedSnippetSha256": "d2943a0740fad04983c619095dfaeafc5f56e23633c488c041266ac8b4af9fdf",
+      "snippet": "    private void ValidatePayload(XdmValue value)\n    {\n        if(XdmValue.SchemaTransportMarker(value) is not null||value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)throw new ArgumentException(\"Plain atomic payload required.\");\n        if(value.Kind==XdmValueKind.Integer)_=new XdmExactDecimal(value.BigIntegerValue,0,_digits,_scale);\n        else if(value.Kind==XdmValueKind.Decimal){var(c,s)=value.DecimalRepresentation;_=new XdmExactDecimal(c,s,_digits,_scale);}\n    }\n    internal QueryTypedContainer Read()\n"
+    }
+  ],
+  "scope": "Pinned source/API boundary review. PG02 uses a private Evidence marker; genuine private admission is characterized in separate kernel/transport fixtures. No actual public-provider/native migration bridge is newly implemented or executed."
+}

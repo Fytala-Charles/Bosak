@@ -1,0 +1,490 @@
+{
+  "mode": "overlay",
+  "items": 100000,
+  "scope": "Isolated cloned-Core accessor/container probe; no VM or real Schema/XmlDb/Braid qualification",
+  "runtime": "10.0.11",
+  "framework": ".NET 10.0.11",
+  "os": "Microsoft Windows 10.0.26300",
+  "architecture": "X64",
+  "processorCount": 24,
+  "serverGc": false,
+  "pointerSize": 8,
+  "xdmValueSize": 48,
+  "pairSize": 56,
+  "coreSha256": "4bce5d7afbe265260905e8bc2166f1a2c52d5c1128f56b42066f211222f88516",
+  "controlCount": 49,
+  "intentionalNaiveAccessorFailures": 0,
+  "checks": [
+    {
+      "id": "access-Boolean",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Boolean",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Boolean",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Integer",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Double",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Double",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Double",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-String",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-Decimal",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-QName",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "access-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "marker-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "foreign-DateTime",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "array-value",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-value",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "sequence-value",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "function-carrier",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-equality-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-hash-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-key-Integer",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-equality-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-hash-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-key-String",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-equality-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-hash-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-key-Decimal",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-equality-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-hash-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-key-QName",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-equality-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "xpath-hash-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "map-key-DateTime",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "wrapper-local",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "wrapper-unwrapped-array-loss",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "wrapper-unwrapped-map-loss",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "new-computed-no-automatic-authority",
+      "observed": false,
+      "expected": false
+    },
+    {
+      "id": "empty-list-distinct",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "singleton-list-distinct",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "list-member-marker",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "list-boundary-lost-on-atomics-only",
+      "observed": true,
+      "expected": true
+    },
+    {
+      "id": "clr-default-equality",
+      "observed": false,
+      "expected": false
+    }
+  ],
+  "measurements": [
+    {
+      "id": "copy-create",
+      "items": 100000,
+      "samples": [
+        {
+          "elapsedNanoseconds": 15063000,
+          "allocatedBytes": 8000032,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "elapsedNanoseconds": 1831000,
+          "allocatedBytes": 8000024,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 16620500,
+          "allocatedBytes": 8000024,
+          "gen0": 2,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "elapsedNanoseconds": 1117200,
+          "allocatedBytes": 8000024,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 11547300,
+          "allocatedBytes": 8000048,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        },
+        {
+          "elapsedNanoseconds": 1509000,
+          "allocatedBytes": 8000024,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 14261400,
+          "allocatedBytes": 8000024,
+          "gen0": 1,
+          "gen1": 1,
+          "gen2": 1
+        }
+      ],
+      "checksum": 42
+    },
+    {
+      "id": "string-access",
+      "items": 100000,
+      "samples": [
+        {
+          "elapsedNanoseconds": 472000,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 492900,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 476200,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 462100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 497200,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 491300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 465300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ],
+      "checksum": 5000000
+    },
+    {
+      "id": "plain-string-access",
+      "items": 100000,
+      "samples": [
+        {
+          "elapsedNanoseconds": 507900,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 516000,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 587400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 516200,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 501400,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 517100,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 499600,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ],
+      "checksum": 5000000
+    },
+    {
+      "id": "integer-access",
+      "items": 100000,
+      "samples": [
+        {
+          "elapsedNanoseconds": 199900,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 205500,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 201300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 199900,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 200200,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 205000,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        },
+        {
+          "elapsedNanoseconds": 217300,
+          "allocatedBytes": 0,
+          "gen0": 0,
+          "gen1": 0,
+          "gen2": 0
+        }
+      ],
+      "checksum": 42000000
+    }
+  ]
+}

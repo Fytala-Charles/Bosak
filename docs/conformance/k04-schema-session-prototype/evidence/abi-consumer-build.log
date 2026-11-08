@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\k04-schema-session-abi\consumer\OldConsumer.csproj (in 62 ms).
+  Restored D:\Development\Bosak\.guard-tmp\k04-schema-session-abi\v1\CarrierAbi.csproj (in 56 ms).
+  CarrierAbi -> D:\Development\Bosak\.guard-tmp\k04-schema-session-abi\v1\bin\Release\net10.0\CarrierAbi.dll
+  OldConsumer -> D:\Development\Bosak\.guard-tmp\k04-schema-session-abi\consumer\bin\Release\net10.0\OldConsumer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.17

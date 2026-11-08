@@ -1,0 +1,1259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7b11b943-548c-43f1-a2de-123f87aff8b7" name="charl@CHARLES 2026-11-05 14:21:42" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T14:21:42.3253970+01:00" queuing="2026-11-05T14:21:42.3253971+01:00" start="2026-11-05T14:21:41.7622058+01:00" finish="2026-11-05T14:21:42.4972445+01:00" />
+  <TestSettings name="default" id="9f2bdacb-7dee-4e42-9367-590f0c2090e4">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-05_14_21_42" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="192322b5-5278-49fc-9766-1cfb57fa07b7" testId="3e29facf-178f-3f52-6cbc-d810b9866a1e" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_MarkLogicUri_StreamsOverQueryParameterForm" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3176331+01:00" endTime="2026-11-05T14:21:42.3176332+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="192322b5-5278-49fc-9766-1cfb57fa07b7">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d0a99581-d94c-4b01-a5df-def40fa1e615" testId="a863b51f-5a37-4d42-c8ec-6d6d13813c00" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_Exist_RecursesIntoSubcollections" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3316770+01:00" endTime="2026-11-05T14:21:42.3316771+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0a99581-d94c-4b01-a5df-def40fa1e615">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c4e597bc-f3bf-4c61-917c-a654770c6f73" testId="73b25fd8-1ce6-9565-b276-1ce01d8ee756" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3135393+01:00" endTime="2026-11-05T14:21:42.3135394+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c4e597bc-f3bf-4c61-917c-a654770c6f73">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="47c9bc99-5b6f-4bea-9a7a-418974bcd865" testId="ed084f97-e76f-4e65-ccef-a73a3cfaabdd" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UserInfoInUri_ThrowsUriFormatException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3299937+01:00" endTime="2026-11-05T14:21:42.3299939+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47c9bc99-5b6f-4bea-9a7a-418974bcd865">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="471016c0-669c-45a6-a6ab-7ec6b3be4618" testId="d816c7d4-4d76-c358-60fc-f5f5928a250e" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicMalformedResponseBody_ThrowsXmlException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3092435+01:00" endTime="2026-11-05T14:21:42.3092437+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="471016c0-669c-45a6-a6ab-7ec6b3be4618">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="30ae316c-718e-4a5b-b249-beb3ecf22801" testId="1fc2534c-17de-39a7-2a5b-260e75925cf9" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UriEmbeddedCredentials_ThrowsUriFormatException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3245712+01:00" endTime="2026-11-05T14:21:42.3245713+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30ae316c-718e-4a5b-b249-beb3ecf22801">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a7a278d3-6e61-4228-a438-895454d7606e" testId="415211b4-d4ef-ebb3-5800-12034f07a651" testName="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_BasexUri_ReturnsForwardOnlyStreamingDocument" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2815376+01:00" endTime="2026-11-05T14:21:42.2815377+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a7a278d3-6e61-4228-a438-895454d7606e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs:line 34&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="231557a4-a910-438d-976d-1b7e443985f6" testId="6324b450-cd2a-9e3f-598b-55dae6b4f8da" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_MalformedResponseBody_ThrowsXmlException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3194804+01:00" endTime="2026-11-05T14:21:42.3194805+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="231557a4-a910-438d-976d-1b7e443985f6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="19e1eae0-9ec4-43fd-8aa1-1c9525aef650" testId="dd7adc1c-2419-1c89-6045-51555c078fb9" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.ExistUri_WithoutPort_MapsToDefaultPort8080" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3107221+01:00" endTime="2026-11-05T14:21:42.3107222+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19e1eae0-9ec4-43fd-8aa1-1c9525aef650">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c042591e-faa4-4d62-b71d-8ba6231f327a" testId="8e7b3802-6a66-6085-264e-5b9e20de7393" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithCredentials_SendsBasicAuthorizationHeader" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3218647+01:00" endTime="2026-11-05T14:21:42.3218647+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c042591e-faa4-4d62-b71d-8ba6231f327a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5598dea9-5f24-4bd6-9b86-f4fce171d132" testId="17d7834b-9825-088c-c7e1-46161832ebab" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_EndpointBaseOverride_AppendsDocumentsSuffixAndUriParameter" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2881777+01:00" endTime="2026-11-05T14:21:42.2881778+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5598dea9-5f24-4bd6-9b86-f4fce171d132">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="28b759ff-0c91-4a44-9d82-9494c092f766" testId="092fdda5-bb20-fcac-224c-e604a1d8e0d7" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UnreachableEndpoint_ThrowsIOException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3213097+01:00" endTime="2026-11-05T14:21:42.3213098+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28b759ff-0c91-4a44-9d82-9494c092f766">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ef77ddd1-3b27-45d1-8f4e-479ecdf36d32" testId="46af5df6-d4ea-7d01-3d6f-a92a5c83498b" testName="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_OtherUri_DelegatesToFallback" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2775252+01:00" endTime="2026-11-05T14:21:42.2775401+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef77ddd1-3b27-45d1-8f4e-479ecdf36d32">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs:line 34&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3e333f0c-c310-42f1-8757-a92dd1d7592f" testId="f624ca99-abc2-5247-2474-c7ce4e29adc1" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_UnknownScheme_DelegatesToFallbackPerSchemeOptions" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2863572+01:00" endTime="2026-11-05T14:21:42.2863573+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e333f0c-c310-42f1-8757-a92dd1d7592f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8b6d4e74-08b1-47f5-b5a3-8acb07770447" testId="170f8926-99d0-5061-0006-a766291e0234" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_WithoutPort_RebuildsMemberUrisWithDefaultPort" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3311233+01:00" endTime="2026-11-05T14:21:42.3311234+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b6d4e74-08b1-47f5-b5a3-8acb07770447">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d9b9e652-0b7d-48e7-9aa4-4f853ae4a005" testId="e4823207-f672-c3a9-2356-c0475e262069" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_HttpErrorStatus_ThrowsIOException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3251895+01:00" endTime="2026-11-05T14:21:42.3251896+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d9b9e652-0b7d-48e7-9aa4-4f853ae4a005">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="efff2b76-b08a-491e-ac1f-2dc01d4a147d" testId="4d05cc5f-8a98-e2f1-a7e6-0f1382ae2a24" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_EmptyDirectoryTriggersFollowUpRequest" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3322329+01:00" endTime="2026-11-05T14:21:42.3322331+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="efff2b76-b08a-491e-ac1f-2dc01d4a147d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="caab59db-af8c-469f-a182-5fbbf2308456" testId="0b5ea2a2-f531-6547-4219-7fe88f72cac6" testName="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.ResponseBoundStream_Dispose_DisposesResponseContent" computerName="CHARLES" duration="00:00:00.0001589" startTime="2026-11-05T14:21:42.3850094+01:00" endTime="2026-11-05T14:21:42.3850094+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="caab59db-af8c-469f-a182-5fbbf2308456" />
+    <UnitTestResult executionId="e3a1f353-6ce7-44c5-bc40-657e7111e3e4" testId="16869bae-b62b-626f-88d1-72f60aa9db4d" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistUriEmbeddedCredentials_ThrowsUriFormatException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3115295+01:00" endTime="2026-11-05T14:21:42.3115296+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3a1f353-6ce7-44c5-bc40-657e7111e3e4">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a5bbb9de-7a23-44dc-8e85-532525c5ea39" testId="5ecd6ca2-0744-0f4e-db43-902e7093f832" testName="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_SecondEnumerationOfRecords_Throws" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2824992+01:00" endTime="2026-11-05T14:21:42.2824993+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a5bbb9de-7a23-44dc-8e85-532525c5ea39">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs:line 34&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6398507c-4a06-4afc-857f-1ad84c030d70" testId="d8ba4530-c4ea-0638-6682-1fda0e3d9a2b" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistWithCredentials_SendsBasicAuthorizationHeader" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3167566+01:00" endTime="2026-11-05T14:21:42.3167566+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6398507c-4a06-4afc-857f-1ad84c030d70">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="79b7bccf-7907-4f7a-9d31-07c4301e1c50" testId="bb48f9b6-fbcd-0307-415a-5dbfe19c0051" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_OtherUri_DelegatesToFallback" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3227932+01:00" endTime="2026-11-05T14:21:42.3227933+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="79b7bccf-7907-4f7a-9d31-07c4301e1c50">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cfe516f4-b58b-4fbd-b396-fce19687f23b" testId="571aa7b0-c365-c225-1667-a7355c5eaf3b" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.LoadDocument_ThroughEvaluationContext_MapsLoaderFailureToFODC0002" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3239922+01:00" endTime="2026-11-05T14:21:42.3239923+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cfe516f4-b58b-4fbd-b396-fce19687f23b">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f2fc142f-bece-4751-89d7-46c1f9f47020" testId="0850c99d-f871-4a45-8cd0-0eae7d806c8b" testName="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.ResponseBoundStream_DoubleDispose_IsIdempotent" computerName="CHARLES" duration="00:00:00.0482342" startTime="2026-11-05T14:21:42.3842005+01:00" endTime="2026-11-05T14:21:42.3842009+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f2fc142f-bece-4751-89d7-46c1f9f47020" />
+    <UnitTestResult executionId="25a368b4-cef5-457c-b10f-4fb232a08faa" testId="22dc7b2a-65df-c1a4-ed7b-77e2cf8be2e6" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UnregisteredScheme_ThrowsArgumentException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3260531+01:00" endTime="2026-11-05T14:21:42.3260532+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25a368b4-cef5-457c-b10f-4fb232a08faa">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e831e5c9-c909-4fcf-a29e-84dedfd12f84" testId="e1fe14af-32d0-a0e1-308b-627fbe6d9b18" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_ExistUri_ReturnsStreamingDocumentOverExistRestPath" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2869800+01:00" endTime="2026-11-05T14:21:42.2869801+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e831e5c9-c909-4fcf-a29e-84dedfd12f84">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d10974c2-ad73-4d02-a4e8-3d64b17077ea" testId="76bd3eb9-9abf-32fe-06c9-2528503a4906" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicWithCredentials_SendsBasicAuthorizationHeader" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3185094+01:00" endTime="2026-11-05T14:21:42.3185095+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d10974c2-ad73-4d02-a4e8-3d64b17077ea">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6d354864-3376-46c4-95ae-b17b4670580a" testId="7f1f4fa2-3e89-aa39-0241-e7e415d4a4d9" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistUri_FetchesViaExistRestPath" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3128935+01:00" endTime="2026-11-05T14:21:42.3128936+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d354864-3376-46c4-95ae-b17b4670580a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7d59f175-9a45-4b1b-8686-5cf4eeb5e9a2" testId="e704318a-64ae-03b5-a064-98cdc49bdafe" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_WithoutPort_MapsToDefaultPort8000WithQueryParameter" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2856480+01:00" endTime="2026-11-05T14:21:42.2856482+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7d59f175-9a45-4b1b-8686-5cf4eeb5e9a2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c19a1923-39f9-441f-983c-f838e653e2a0" testId="48bcb6cf-c64e-38a1-4f4a-6896920b0b13" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_ReturnsMembersInListingOrder" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3305738+01:00" endTime="2026-11-05T14:21:42.3305740+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c19a1923-39f9-441f-983c-f838e653e2a0">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="58f26e6e-a849-41bf-adef-6e7e7d973baa" testId="efccf7af-189f-d264-3f5a-dba258803e0e" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_NonBasexUri_ThrowsArgumentException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3200956+01:00" endTime="2026-11-05T14:21:42.3200957+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="58f26e6e-a849-41bf-adef-6e7e7d973baa">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5ffa1c42-92ca-46f6-98d0-4fa9a64b819a" testId="c7c58675-afa5-d7c0-bb47-846dabf6ccbd" testName="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords" computerName="CHARLES" duration="00:00:00.0658880" startTime="2026-11-05T14:21:42.4514894+01:00" endTime="2026-11-05T14:21:42.4514899+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ffa1c42-92ca-46f6-98d0-4fa9a64b819a">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingTeardownTests.cs:line 40&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="44fc9341-59c6-4286-b482-a47b6251412c" testId="48b4c7ac-80bf-8653-d193-1126a219c5ad" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3207316+01:00" endTime="2026-11-05T14:21:42.3207317+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44fc9341-59c6-4286-b482-a47b6251412c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="aa590681-6e9f-48b4-a262-6f9a10e54dde" testId="4302bc1a-11b4-f8d3-5d32-13d14fea4e7d" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MarkLogic_UsesSearchViewUris" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3328298+01:00" endTime="2026-11-05T14:21:42.3328299+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa590681-6e9f-48b4-a262-6f9a10e54dde">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c73eddf5-4bf4-4fa2-8921-aab84f954cc9" testId="34c0203b-63c3-8af7-1094-d86cce132162" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Handles_RecognizesAllRegisteredSchemesOnly" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3159793+01:00" endTime="2026-11-05T14:21:42.3159794+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c73eddf5-4bf4-4fa2-8921-aab84f954cc9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3c45c9ca-0847-40f6-9e21-758dfe187b9d" testId="3413510d-244e-90f0-5a12-e8f19dd60642" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.CollectionLoader_SeamEndToEnd_LoadsMembersThroughDocumentLoader" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3273144+01:00" endTime="2026-11-05T14:21:42.3273145+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c45c9ca-0847-40f6-9e21-758dfe187b9d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="eeeec30b-23c9-496e-a456-376cdd8542d2" testId="b3d61f65-cc69-7619-8f18-b677c96860ab" testName="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_UnreachableEndpoint_ThrowsIOException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2832102+01:00" endTime="2026-11-05T14:21:42.2832103+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eeeec30b-23c9-496e-a456-376cdd8542d2">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs:line 34&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b52bbc55-9633-4fa8-b12c-6e769fa2cb60" testId="8d70f422-3257-4d70-a650-f8a06dde3e8b" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MalformedListing_ThrowsXmlException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3287979+01:00" endTime="2026-11-05T14:21:42.3287980+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b52bbc55-9633-4fa8-b12c-6e769fa2cb60">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3c7b0ac3-3bd2-4091-8139-94949ccb0168" testId="8b4afd43-7031-a271-ac5d-de4c4b209bd5" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicUri_UsesQueryParameterDocumentUriAndXmlAcceptHeader" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3141753+01:00" endTime="2026-11-05T14:21:42.3141754+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3c7b0ac3-3bd2-4091-8139-94949ccb0168">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0884db1c-c359-479c-b17c-bd58cb0848c9" testId="3799952b-068c-862c-e88a-afe9c6481902" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_EndpointError_ThrowsIOException" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3266907+01:00" endTime="2026-11-05T14:21:42.3266908+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0884db1c-c359-479c-b17c-bd58cb0848c9">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c27cecb7-d299-4a18-8423-14172acdb967" testId="3d38021b-0f14-9b40-06cd-f8449701c0c9" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_OtherSchemeUri_DelegatesToFallback" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3278925+01:00" endTime="2026-11-05T14:21:42.3278926+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c27cecb7-d299-4a18-8423-14172acdb967">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fd3688e2-83c9-415e-a978-2bab9bf4256f" testId="614e9efc-f58b-aca4-2923-cd222597619d" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistHttpErrorStatus_ThrowsIOExceptionNamingExist" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3100354+01:00" endTime="2026-11-05T14:21:42.3100355+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd3688e2-83c9-415e-a978-2bab9bf4256f">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="33eedd64-d533-4a16-809e-a894be0ea9d1" testId="17637e72-5487-11cf-332e-95fc39297069" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_AllThreeSchemes_FetchesEachViaItsOwnRestShape" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3122108+01:00" endTime="2026-11-05T14:21:42.3122109+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="33eedd64-d533-4a16-809e-a894be0ea9d1">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e3b364bd-c8e5-4993-a914-8c111bba76d0" testId="1410a973-6494-fcbb-3bb1-75299f007a55" testName="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_DatabaseSchemeUri_ListsCollection" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3293960+01:00" endTime="2026-11-05T14:21:42.3293961+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3b364bd-c8e5-4993-a914-8c111bba76d0">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c7914a0e-3a31-46a8-9924-fe7d2a10f405" testId="6d4f2ab2-d2a8-e534-bfee-1a7f95ec51b0" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.BaseXUri_WithoutPort_StillMapsToDefaultPort8984" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3082478+01:00" endTime="2026-11-05T14:21:42.3082479+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7914a0e-3a31-46a8-9924-fe7d2a10f405">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f235bd20-da6c-4f70-a380-364d3b33c806" testId="87e4f178-839e-74ed-60ec-a72ec794df2a" testName="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_BasexUri_FetchesViaRestAndWrapsDocument" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.3234512+01:00" endTime="2026-11-05T14:21:42.3234512+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f235bd20-da6c-4f70-a380-364d3b33c806">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs:line 35&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="58bad2e4-6add-422b-ad1e-79e6290dc7f6" testId="6e9159cc-ed12-2151-244f-ab941a3a5265" testName="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicHttpErrorStatus_ThrowsIOExceptionNamingMarkLogic" computerName="CHARLES" duration="00:00:00.0010000" startTime="2026-11-05T14:21:42.2875826+01:00" endTime="2026-11-05T14:21:42.2875828+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="58bad2e4-6add-422b-ad1e-79e6290dc7f6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.Net.HttpListenerException : The handle is invalid.</Message>
+          <StackTrace>   at System.Net.HttpListener.SetupV2Config()&#xD;
+   at System.Net.HttpListener.Start()&#xD;
+   at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs:line 62&#xD;
+   at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor() in D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs:line 33&#xD;
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_AllThreeSchemes_FetchesEachViaItsOwnRestShape" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="17637e72-5487-11cf-332e-95fc39297069">
+      <Execution id="33eedd64-d533-4a16-809e-a894be0ea9d1" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_AllThreeSchemes_FetchesEachViaItsOwnRestShape" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MarkLogic_UsesSearchViewUris" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="4302bc1a-11b4-f8d3-5d32-13d14fea4e7d">
+      <Execution id="aa590681-6e9f-48b4-a262-6f9a10e54dde" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_MarkLogic_UsesSearchViewUris" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistHttpErrorStatus_ThrowsIOExceptionNamingExist" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="614e9efc-f58b-aca4-2923-cd222597619d">
+      <Execution id="fd3688e2-83c9-415e-a978-2bab9bf4256f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Load_ExistHttpErrorStatus_ThrowsIOExceptionNamingExist" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_ExistUri_ReturnsStreamingDocumentOverExistRestPath" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="e1fe14af-32d0-a0e1-308b-627fbe6d9b18">
+      <Execution id="e831e5c9-c909-4fcf-a29e-84dedfd12f84" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="DispatchStreaming_ExistUri_ReturnsStreamingDocumentOverExistRestPath" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.BaseXUri_WithoutPort_StillMapsToDefaultPort8984" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="6d4f2ab2-d2a8-e534-bfee-1a7f95ec51b0">
+      <Execution id="c7914a0e-3a31-46a8-9924-fe7d2a10f405" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="BaseXUri_WithoutPort_StillMapsToDefaultPort8984" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.LoadDocument_ThroughEvaluationContext_MapsLoaderFailureToFODC0002" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="571aa7b0-c365-c225-1667-a7355c5eaf3b">
+      <Execution id="cfe516f4-b58b-4fbd-b396-fce19687f23b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="LoadDocument_ThroughEvaluationContext_MapsLoaderFailureToFODC0002" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.ExistUri_WithoutPort_MapsToDefaultPort8080" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="dd7adc1c-2419-1c89-6045-51555c078fb9">
+      <Execution id="19e1eae0-9ec4-43fd-8aa1-1c9525aef650" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="ExistUri_WithoutPort_MapsToDefaultPort8080" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicMalformedResponseBody_ThrowsXmlException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="d816c7d4-4d76-c358-60fc-f5f5928a250e">
+      <Execution id="471016c0-669c-45a6-a6ab-7ec6b3be4618" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Load_MarkLogicMalformedResponseBody_ThrowsXmlException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_ReturnsMembersInListingOrder" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="48bcb6cf-c64e-38a1-4f4a-6896920b0b13">
+      <Execution id="c19a1923-39f9-441f-983c-f838e653e2a0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_BaseX_ReturnsMembersInListingOrder" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_NonBasexUri_ThrowsArgumentException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="efccf7af-189f-d264-3f5a-dba258803e0e">
+      <Execution id="58f26e6e-a849-41bf-adef-6e7e7d973baa" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Load_NonBasexUri_ThrowsArgumentException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistWithCredentials_SendsBasicAuthorizationHeader" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="d8ba4530-c4ea-0638-6682-1fda0e3d9a2b">
+      <Execution id="6398507c-4a06-4afc-857f-1ad84c030d70" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_ExistWithCredentials_SendsBasicAuthorizationHeader" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_OtherUri_DelegatesToFallback" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="46af5df6-d4ea-7d01-3d6f-a92a5c83498b">
+      <Execution id="ef77ddd1-3b27-45d1-8f4e-479ecdf36d32" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests" name="DispatchStreaming_OtherUri_DelegatesToFallback" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_DatabaseSchemeUri_ListsCollection" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="1410a973-6494-fcbb-3bb1-75299f007a55">
+      <Execution id="e3b364bd-c8e5-4993-a914-8c111bba76d0" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="DispatchCollection_DatabaseSchemeUri_ListsCollection" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_UnreachableEndpoint_ThrowsIOException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="b3d61f65-cc69-7619-8f18-b677c96860ab">
+      <Execution id="eeeec30b-23c9-496e-a456-376cdd8542d2" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests" name="DispatchStreaming_UnreachableEndpoint_ThrowsIOException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UnregisteredScheme_ThrowsArgumentException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="22dc7b2a-65df-c1a4-ed7b-77e2cf8be2e6">
+      <Execution id="25a368b4-cef5-457c-b10f-4fb232a08faa" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_UnregisteredScheme_ThrowsArgumentException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_UnknownScheme_DelegatesToFallbackPerSchemeOptions" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="f624ca99-abc2-5247-2474-c7ce4e29adc1">
+      <Execution id="3e333f0c-c310-42f1-8757-a92dd1d7592f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_UnknownScheme_DelegatesToFallbackPerSchemeOptions" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_EmptyDirectoryTriggersFollowUpRequest" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="4d05cc5f-8a98-e2f1-a7e6-0f1382ae2a24">
+      <Execution id="efff2b76-b08a-491e-ac1f-2dc01d4a147d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_BaseX_EmptyDirectoryTriggersFollowUpRequest" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicHttpErrorStatus_ThrowsIOExceptionNamingMarkLogic" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="6e9159cc-ed12-2151-244f-ab941a3a5265">
+      <Execution id="58bad2e4-6add-422b-ad1e-79e6290dc7f6" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Load_MarkLogicHttpErrorStatus_ThrowsIOExceptionNamingMarkLogic" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_OtherSchemeUri_DelegatesToFallback" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="3d38021b-0f14-9b40-06cd-f8449701c0c9">
+      <Execution id="c27cecb7-d299-4a18-8423-14172acdb967" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="DispatchCollection_OtherSchemeUri_DelegatesToFallback" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="c7c58675-afa5-d7c0-bb47-846dabf6ccbd">
+      <Execution id="5ffa1c42-92ca-46f6-98d0-4fa9a64b819a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests" name="LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UriEmbeddedCredentials_ThrowsUriFormatException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="1fc2534c-17de-39a7-2a5b-260e75925cf9">
+      <Execution id="30ae316c-718e-4a5b-b249-beb3ecf22801" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Load_UriEmbeddedCredentials_ThrowsUriFormatException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MalformedListing_ThrowsXmlException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="8d70f422-3257-4d70-a650-f8a06dde3e8b">
+      <Execution id="b52bbc55-9633-4fa8-b12c-6e769fa2cb60" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_MalformedListing_ThrowsXmlException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicWithCredentials_SendsBasicAuthorizationHeader" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="76bd3eb9-9abf-32fe-06c9-2528503a4906">
+      <Execution id="d10974c2-ad73-4d02-a4e8-3d64b17077ea" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_MarkLogicWithCredentials_SendsBasicAuthorizationHeader" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_BasexUri_ReturnsForwardOnlyStreamingDocument" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="415211b4-d4ef-ebb3-5800-12034f07a651">
+      <Execution id="a7a278d3-6e61-4228-a438-895454d7606e" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests" name="DispatchStreaming_BasexUri_ReturnsForwardOnlyStreamingDocument" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.CollectionLoader_SeamEndToEnd_LoadsMembersThroughDocumentLoader" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="3413510d-244e-90f0-5a12-e8f19dd60642">
+      <Execution id="3c45c9ca-0847-40f6-9e21-758dfe187b9d" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="CollectionLoader_SeamEndToEnd_LoadsMembersThroughDocumentLoader" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_WithoutPort_MapsToDefaultPort8000WithQueryParameter" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="e704318a-64ae-03b5-a064-98cdc49bdafe">
+      <Execution id="7d59f175-9a45-4b1b-8686-5cf4eeb5e9a2" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="MarkLogicUri_WithoutPort_MapsToDefaultPort8000WithQueryParameter" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_BasexUri_FetchesViaRestAndWrapsDocument" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="87e4f178-839e-74ed-60ec-a72ec794df2a">
+      <Execution id="f235bd20-da6c-4f70-a380-364d3b33c806" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Dispatch_BasexUri_FetchesViaRestAndWrapsDocument" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_Exist_RecursesIntoSubcollections" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="a863b51f-5a37-4d42-c8ec-6d6d13813c00">
+      <Execution id="d0a99581-d94c-4b01-a5df-def40fa1e615" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_Exist_RecursesIntoSubcollections" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistUriEmbeddedCredentials_ThrowsUriFormatException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="16869bae-b62b-626f-88d1-72f60aa9db4d">
+      <Execution id="e3a1f353-6ce7-44c5-bc40-657e7111e3e4" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Load_ExistUriEmbeddedCredentials_ThrowsUriFormatException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_OtherUri_DelegatesToFallback" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="bb48f9b6-fbcd-0307-415a-5dbfe19c0051">
+      <Execution id="79b7bccf-7907-4f7a-9d31-07c4301e1c50" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Dispatch_OtherUri_DelegatesToFallback" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Handles_RecognizesAllRegisteredSchemesOnly" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="34c0203b-63c3-8af7-1094-d86cce132162">
+      <Execution id="c73eddf5-4bf4-4fa2-8921-aab84f954cc9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Handles_RecognizesAllRegisteredSchemesOnly" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_WithoutPort_RebuildsMemberUrisWithDefaultPort" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="170f8926-99d0-5061-0006-a766291e0234">
+      <Execution id="8b6d4e74-08b1-47f5-b5a3-8acb07770447" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_WithoutPort_RebuildsMemberUrisWithDefaultPort" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_MalformedResponseBody_ThrowsXmlException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="6324b450-cd2a-9e3f-598b-55dae6b4f8da">
+      <Execution id="231557a4-a910-438d-976d-1b7e443985f6" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Load_MalformedResponseBody_ThrowsXmlException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_HttpErrorStatus_ThrowsIOException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="e4823207-f672-c3a9-2356-c0475e262069">
+      <Execution id="d9b9e652-0b7d-48e7-9aa4-4f853ae4a005" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Load_HttpErrorStatus_ThrowsIOException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.ResponseBoundStream_Dispose_DisposesResponseContent" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="0b5ea2a2-f531-6547-4219-7fe88f72cac6">
+      <Execution id="caab59db-af8c-469f-a182-5fbbf2308456" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests" name="ResponseBoundStream_Dispose_DisposesResponseContent" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_MarkLogicUri_StreamsOverQueryParameterForm" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="3e29facf-178f-3f52-6cbc-d810b9866a1e">
+      <Execution id="192322b5-5278-49fc-9766-1cfb57fa07b7" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="DispatchStreaming_MarkLogicUri_StreamsOverQueryParameterForm" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.ResponseBoundStream_DoubleDispose_IsIdempotent" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="0850c99d-f871-4a45-8cd0-0eae7d806c8b">
+      <Execution id="f2fc142f-bece-4751-89d7-46c1f9f47020" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests" name="ResponseBoundStream_DoubleDispose_IsIdempotent" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="48b4c7ac-80bf-8653-d193-1126a219c5ad">
+      <Execution id="44fc9341-59c6-4286-b482-a47b6251412c" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Dispatch_WithEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="73b25fd8-1ce6-9565-b276-1ce01d8ee756">
+      <Execution id="c4e597bc-f3bf-4c61-917c-a654770c6f73" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_ExistEndpointBaseOverride_UsesOverrideAndIgnoresAuthority" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicUri_UsesQueryParameterDocumentUriAndXmlAcceptHeader" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="8b4afd43-7031-a271-ac5d-de4c4b209bd5">
+      <Execution id="3c7b0ac3-3bd2-4091-8139-94949ccb0168" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_MarkLogicUri_UsesQueryParameterDocumentUriAndXmlAcceptHeader" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UnreachableEndpoint_ThrowsIOException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="092fdda5-bb20-fcac-224c-e604a1d8e0d7">
+      <Execution id="28b759ff-0c91-4a44-9d82-9494c092f766" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Load_UnreachableEndpoint_ThrowsIOException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UserInfoInUri_ThrowsUriFormatException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="ed084f97-e76f-4e65-ccef-a73a3cfaabdd">
+      <Execution id="47c9bc99-5b6f-4bea-9a7a-418974bcd865" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_UserInfoInUri_ThrowsUriFormatException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_SecondEnumerationOfRecords_Throws" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="5ecd6ca2-0744-0f4e-db43-902e7093f832">
+      <Execution id="a5bbb9de-7a23-44dc-8e85-532525c5ea39" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests" name="DispatchStreaming_SecondEnumerationOfRecords_Throws" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistUri_FetchesViaExistRestPath" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="7f1f4fa2-3e89-aa39-0241-e7e415d4a4d9">
+      <Execution id="6d354864-3376-46c4-95ae-b17b4670580a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="Dispatch_ExistUri_FetchesViaExistRestPath" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_EndpointError_ThrowsIOException" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="3799952b-068c-862c-e88a-afe9c6481902">
+      <Execution id="0884db1c-c359-479c-b17c-bd58cb0848c9" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests" name="LoadCollection_EndpointError_ThrowsIOException" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_EndpointBaseOverride_AppendsDocumentsSuffixAndUriParameter" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="17d7834b-9825-088c-c7e1-46161832ebab">
+      <Execution id="5598dea9-5f24-4bd6-9b86-f4fce171d132" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests" name="MarkLogicUri_EndpointBaseOverride_AppendsDocumentsSuffixAndUriParameter" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithCredentials_SendsBasicAuthorizationHeader" storage="d:\development\bosak\tests\bosak.xpath.providers.database.tests\bin\release\net10.0\bosak.xpath.providers.database.tests.dll" id="8e7b3802-6a66-6085-264e-5b9e20de7393">
+      <Execution id="c042591e-faa4-4d62-b71d-8ba6231f327a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests" name="Dispatch_WithCredentials_SendsBasicAuthorizationHeader" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="3e29facf-178f-3f52-6cbc-d810b9866a1e" executionId="192322b5-5278-49fc-9766-1cfb57fa07b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a863b51f-5a37-4d42-c8ec-6d6d13813c00" executionId="d0a99581-d94c-4b01-a5df-def40fa1e615" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73b25fd8-1ce6-9565-b276-1ce01d8ee756" executionId="c4e597bc-f3bf-4c61-917c-a654770c6f73" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ed084f97-e76f-4e65-ccef-a73a3cfaabdd" executionId="47c9bc99-5b6f-4bea-9a7a-418974bcd865" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d816c7d4-4d76-c358-60fc-f5f5928a250e" executionId="471016c0-669c-45a6-a6ab-7ec6b3be4618" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1fc2534c-17de-39a7-2a5b-260e75925cf9" executionId="30ae316c-718e-4a5b-b249-beb3ecf22801" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="415211b4-d4ef-ebb3-5800-12034f07a651" executionId="a7a278d3-6e61-4228-a438-895454d7606e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6324b450-cd2a-9e3f-598b-55dae6b4f8da" executionId="231557a4-a910-438d-976d-1b7e443985f6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dd7adc1c-2419-1c89-6045-51555c078fb9" executionId="19e1eae0-9ec4-43fd-8aa1-1c9525aef650" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e7b3802-6a66-6085-264e-5b9e20de7393" executionId="c042591e-faa4-4d62-b71d-8ba6231f327a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17d7834b-9825-088c-c7e1-46161832ebab" executionId="5598dea9-5f24-4bd6-9b86-f4fce171d132" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="092fdda5-bb20-fcac-224c-e604a1d8e0d7" executionId="28b759ff-0c91-4a44-9d82-9494c092f766" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="46af5df6-d4ea-7d01-3d6f-a92a5c83498b" executionId="ef77ddd1-3b27-45d1-8f4e-479ecdf36d32" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f624ca99-abc2-5247-2474-c7ce4e29adc1" executionId="3e333f0c-c310-42f1-8757-a92dd1d7592f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="170f8926-99d0-5061-0006-a766291e0234" executionId="8b6d4e74-08b1-47f5-b5a3-8acb07770447" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e4823207-f672-c3a9-2356-c0475e262069" executionId="d9b9e652-0b7d-48e7-9aa4-4f853ae4a005" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4d05cc5f-8a98-e2f1-a7e6-0f1382ae2a24" executionId="efff2b76-b08a-491e-ac1f-2dc01d4a147d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b5ea2a2-f531-6547-4219-7fe88f72cac6" executionId="caab59db-af8c-469f-a182-5fbbf2308456" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16869bae-b62b-626f-88d1-72f60aa9db4d" executionId="e3a1f353-6ce7-44c5-bc40-657e7111e3e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5ecd6ca2-0744-0f4e-db43-902e7093f832" executionId="a5bbb9de-7a23-44dc-8e85-532525c5ea39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d8ba4530-c4ea-0638-6682-1fda0e3d9a2b" executionId="6398507c-4a06-4afc-857f-1ad84c030d70" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bb48f9b6-fbcd-0307-415a-5dbfe19c0051" executionId="79b7bccf-7907-4f7a-9d31-07c4301e1c50" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="571aa7b0-c365-c225-1667-a7355c5eaf3b" executionId="cfe516f4-b58b-4fbd-b396-fce19687f23b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0850c99d-f871-4a45-8cd0-0eae7d806c8b" executionId="f2fc142f-bece-4751-89d7-46c1f9f47020" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="22dc7b2a-65df-c1a4-ed7b-77e2cf8be2e6" executionId="25a368b4-cef5-457c-b10f-4fb232a08faa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1fe14af-32d0-a0e1-308b-627fbe6d9b18" executionId="e831e5c9-c909-4fcf-a29e-84dedfd12f84" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76bd3eb9-9abf-32fe-06c9-2528503a4906" executionId="d10974c2-ad73-4d02-a4e8-3d64b17077ea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f1f4fa2-3e89-aa39-0241-e7e415d4a4d9" executionId="6d354864-3376-46c4-95ae-b17b4670580a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e704318a-64ae-03b5-a064-98cdc49bdafe" executionId="7d59f175-9a45-4b1b-8686-5cf4eeb5e9a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48bcb6cf-c64e-38a1-4f4a-6896920b0b13" executionId="c19a1923-39f9-441f-983c-f838e653e2a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="efccf7af-189f-d264-3f5a-dba258803e0e" executionId="58f26e6e-a849-41bf-adef-6e7e7d973baa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7c58675-afa5-d7c0-bb47-846dabf6ccbd" executionId="5ffa1c42-92ca-46f6-98d0-4fa9a64b819a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48b4c7ac-80bf-8653-d193-1126a219c5ad" executionId="44fc9341-59c6-4286-b482-a47b6251412c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4302bc1a-11b4-f8d3-5d32-13d14fea4e7d" executionId="aa590681-6e9f-48b4-a262-6f9a10e54dde" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="34c0203b-63c3-8af7-1094-d86cce132162" executionId="c73eddf5-4bf4-4fa2-8921-aab84f954cc9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3413510d-244e-90f0-5a12-e8f19dd60642" executionId="3c45c9ca-0847-40f6-9e21-758dfe187b9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3d61f65-cc69-7619-8f18-b677c96860ab" executionId="eeeec30b-23c9-496e-a456-376cdd8542d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d70f422-3257-4d70-a650-f8a06dde3e8b" executionId="b52bbc55-9633-4fa8-b12c-6e769fa2cb60" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b4afd43-7031-a271-ac5d-de4c4b209bd5" executionId="3c7b0ac3-3bd2-4091-8139-94949ccb0168" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3799952b-068c-862c-e88a-afe9c6481902" executionId="0884db1c-c359-479c-b17c-bd58cb0848c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d38021b-0f14-9b40-06cd-f8449701c0c9" executionId="c27cecb7-d299-4a18-8423-14172acdb967" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="614e9efc-f58b-aca4-2923-cd222597619d" executionId="fd3688e2-83c9-415e-a978-2bab9bf4256f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="17637e72-5487-11cf-332e-95fc39297069" executionId="33eedd64-d533-4a16-809e-a894be0ea9d1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1410a973-6494-fcbb-3bb1-75299f007a55" executionId="e3b364bd-c8e5-4993-a914-8c111bba76d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d4f2ab2-d2a8-e534-bfee-1a7f95ec51b0" executionId="c7914a0e-3a31-46a8-9924-fe7d2a10f405" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="87e4f178-839e-74ed-60ec-a72ec794df2a" executionId="f235bd20-da6c-4f70-a380-364d3b33c806" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e9159cc-ed12-2151-244f-ab941a3a5265" executionId="58bad2e4-6add-422b-ad1e-79e6290dc7f6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="47" executed="47" passed="2" failed="45" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.06]   Discovering: Bosak.XPath.Providers.Database.Tests&#xD;
+[xUnit.net 00:00:00.09]   Discovered:  Bosak.XPath.Providers.Database.Tests&#xD;
+[xUnit.net 00:00:00.09]   Starting:    Bosak.XPath.Providers.Database.Tests&#xD;
+[xUnit.net 00:00:00.13]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.13]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs(34,0): at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.13]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.13]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.13]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs(34,0): at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.13]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.13]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.13]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs(34,0): at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.13]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.13]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.13]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.13]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.13]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingDocumentLoaderTests.cs(34,0): at Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.13]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.14]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.14]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.14]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.14]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.14]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.14]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.14]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.14]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.14]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.14]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.14]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.14]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.14]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.14]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.14]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.14]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.14]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.16]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.16]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.16]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.16]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.16]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\SchemeRegistryTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.17]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.17]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.17]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.17]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.17]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseDocumentLoaderTests.cs(35,0): at Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.18]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.18]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.18]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.18]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseCollectionLoaderTests.cs(33,0): at Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests..ctor()&#xD;
+[xUnit.net 00:00:00.18]            at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)&#xD;
+[xUnit.net 00:00:00.30]       System.Net.HttpListenerException : The handle is invalid.&#xD;
+[xUnit.net 00:00:00.30]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.30]            at System.Net.HttpListener.SetupV2Config()&#xD;
+[xUnit.net 00:00:00.30]            at System.Net.HttpListener.Start()&#xD;
+[xUnit.net 00:00:00.30]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\DatabaseRestStub.cs(62,0): at Bosak.XPath.Providers.Database.Tests.DatabaseRestStub..ctor()&#xD;
+[xUnit.net 00:00:00.30]         D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\StreamingTeardownTests.cs(40,0): at Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords()&#xD;
+[xUnit.net 00:00:00.30]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.30]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.30]   Finished:    Bosak.XPath.Providers.Database.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2762715+01:00">
+        <Text>[xUnit.net 00:00:00.13]     Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_OtherUri_DelegatesToFallback [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2814367+01:00">
+        <Text>[xUnit.net 00:00:00.13]     Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_BasexUri_ReturnsForwardOnlyStreamingDocument [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2824592+01:00">
+        <Text>[xUnit.net 00:00:00.13]     Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_SecondEnumerationOfRecords_Throws [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2831607+01:00">
+        <Text>[xUnit.net 00:00:00.13]     Bosak.XPath.Providers.Database.Tests.StreamingDocumentLoaderTests.DispatchStreaming_UnreachableEndpoint_ThrowsIOException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2856399+01:00">
+        <Text>[xUnit.net 00:00:00.14]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_WithoutPort_MapsToDefaultPort8000WithQueryParameter [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2864476+01:00">
+        <Text>[xUnit.net 00:00:00.14]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_UnknownScheme_DelegatesToFallbackPerSchemeOptions [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2869498+01:00">
+        <Text>[xUnit.net 00:00:00.14]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_ExistUri_ReturnsStreamingDocumentOverExistRestPath [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2875763+01:00">
+        <Text>[xUnit.net 00:00:00.14]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicHttpErrorStatus_ThrowsIOExceptionNamingMarkLogic [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.2881491+01:00">
+        <Text>[xUnit.net 00:00:00.14]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.MarkLogicUri_EndpointBaseOverride_AppendsDocumentsSuffixAndUriParameter [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3308486+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.BaseXUri_WithoutPort_StillMapsToDefaultPort8984 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3308692+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_MarkLogicMalformedResponseBody_ThrowsXmlException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3308858+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistHttpErrorStatus_ThrowsIOExceptionNamingExist [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309017+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.ExistUri_WithoutPort_MapsToDefaultPort8080 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309211+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Load_ExistUriEmbeddedCredentials_ThrowsUriFormatException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309423+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_AllThreeSchemes_FetchesEachViaItsOwnRestShape [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309588+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistUri_FetchesViaExistRestPath [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309749+01:00">
+        <Text>[xUnit.net 00:00:00.16]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistEndpointBaseOverride_UsesOverrideAndIgnoresAuthority [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3309919+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicUri_UsesQueryParameterDocumentUriAndXmlAcceptHeader [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3316375+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Handles_RecognizesAllRegisteredSchemesOnly [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3316598+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_ExistWithCredentials_SendsBasicAuthorizationHeader [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3316781+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.DispatchStreaming_MarkLogicUri_StreamsOverQueryParameterForm [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3316951+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.SchemeRegistryTests.Dispatch_MarkLogicWithCredentials_SendsBasicAuthorizationHeader [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3317114+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_MalformedResponseBody_ThrowsXmlException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3317309+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_NonBasexUri_ThrowsArgumentException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3317535+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithEndpointBaseOverride_UsesOverrideAndIgnoresAuthority [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3317699+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UnreachableEndpoint_ThrowsIOException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3317863+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_WithCredentials_SendsBasicAuthorizationHeader [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3323994+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_OtherUri_DelegatesToFallback [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3324176+01:00">
+        <Text>[xUnit.net 00:00:00.17]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Dispatch_BasexUri_FetchesViaRestAndWrapsDocument [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3324373+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.LoadDocument_ThroughEvaluationContext_MapsLoaderFailureToFODC0002 [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3324546+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_UriEmbeddedCredentials_ThrowsUriFormatException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3324707+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseDocumentLoaderTests.Load_HttpErrorStatus_ThrowsIOException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3324896+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UnregisteredScheme_ThrowsArgumentException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3325056+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_EndpointError_ThrowsIOException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3325263+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.CollectionLoader_SeamEndToEnd_LoadsMembersThroughDocumentLoader [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3325424+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_OtherSchemeUri_DelegatesToFallback [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3331442+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MalformedListing_ThrowsXmlException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3331619+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.DispatchCollection_DatabaseSchemeUri_ListsCollection [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3331980+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_UserInfoInUri_ThrowsUriFormatException [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3332162+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_ReturnsMembersInListingOrder [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3332323+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_WithoutPort_RebuildsMemberUrisWithDefaultPort [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3332490+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_Exist_RecursesIntoSubcollections [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3332674+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_BaseX_EmptyDirectoryTriggersFollowUpRequest [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.3332822+01:00">
+        <Text>[xUnit.net 00:00:00.18]     Bosak.XPath.Providers.Database.Tests.DatabaseCollectionLoaderTests.LoadCollection_MarkLogic_UsesSearchViewUris [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T14:21:42.4515024+01:00">
+        <Text>[xUnit.net 00:00:00.30]     Bosak.XPath.Providers.Database.Tests.StreamingTeardownTests.LoadStreaming_WithResponseBoundStream_FullEnumerationStillYieldsAllRecords [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

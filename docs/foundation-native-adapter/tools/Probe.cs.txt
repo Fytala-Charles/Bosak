@@ -1,0 +1,109 @@
+// Generated isolated native Schema adapter diagnostic; not a production provider or carrier.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using C13901.Draft;
+try {
+ var checks=new List<object>();void Check(string id,bool ok){checks.Add(new{id,passed=ok});if(!ok)throw new Exception(id);}
+ void Refuses(string id,Action action){bool refused=false;try{action();}catch(ArgumentException){refused=true;}Check(id,refused);}
+ const string schema="""
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1">
+ <xs:element name="invoice"><xs:complexType><xs:sequence>
+ <xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="2"/>
+ <xs:element name="tax" type="xs:decimal" minOccurs="0"/>
+ </xs:sequence><xs:assert test="count(amount) eq 2 and empty(tax)"/></xs:complexType></xs:element>
+ </xs:schema>
+ """;
+ var compiled=AssessmentProfileParser.Compile(XDocument.Parse(schema));Check("N01-native-profile",compiled.IsSupported&&compiled.Profile=="decimal-sequence-assertions-v5");
+ var input=XDocument.Parse("<invoice><amount> 10.00 </amount><amount>5</amount></invoice>");var assessed=compiled.Assess(input);Check("N02-native-valid",assessed.Outcome==SchemaAssessmentOutcome.Valid&&assessed.Document is not null);var document=assessed.Document!;
+ Check("N03-original-local-components",ReferenceEquals(document.Elements[1].Declaration,compiled.ChildDeclarations[0])&&ReferenceEquals(document.Elements[2].Declaration,compiled.ChildDeclarations[0]));
+ Check("N04-distinct-occurrence-state",!ReferenceEquals(document.Elements[1],document.Elements[2]));Check("N05-absent-declaration-retained",compiled.ChildDeclarations.Count==2&&document.Elements.Count==3);
+ var adapter=new NativeAdapter(compiled);var view=adapter.Open(document);var copy=adapter.Copy(view);Check("N06-copy-snapshot",copy.Document.SnapshotIdentity!=document.SnapshotIdentity&&copy.Document.AssessmentIdentity==document.AssessmentIdentity);Check("N07-copy-original-state",ReferenceEquals(copy.Document.Elements[1],document.Elements[1])&&ReferenceEquals(copy.Origin,view.Origin));
+ var root=adapter.Node(view,0);var first=adapter.Node(view,1);var second=adapter.Node(view,2);var copied=adapter.Node(copy,1);
+ Check("N08-anonymous-root",document.Elements[0].Declaration.Type.Name is null&&root.OriginalSchemaFacts.HasNoTypedValue);Check("N09-original-declaration-handle",ReferenceEquals(((NativeHandle)first.OriginalSchemaFacts.Declaration!).Original,compiled.ChildDeclarations[0]));Check("N10-shared-type-handle",ReferenceEquals(first.OriginalSchemaFacts.Type,second.OriginalSchemaFacts.Type));
+ Check("N11-copy-type-origin",ReferenceEquals(copied.OriginalSchemaFacts.Type,first.OriginalSchemaFacts.Type)&&ReferenceEquals(copied.OriginalSchemaFacts.Origin,first.OriginalSchemaFacts.Origin));
+ var typed=first.OriginalSchemaFacts.ReadTypedValue(default).Value;var cells=adapter.Read(typed);Check("N12-plain-decimal",cells[0].Value.DecimalValue==10m);Check("N13-real-original-evidence",ReferenceEquals(cells[0].TypeEvidence.OriginalAssessment,view.Origin)&&ReferenceEquals(((NativeHandle)cells[0].TypeEvidence.ActualType).Original,document.Elements[1].Declaration.Type));Check("N14-scalar-no-enumeration",((NativeValue)typed).EnumerationReads==0);
+ var foreignCompiled=AssessmentProfileParser.Compile(XDocument.Parse(schema));var foreignAdapter=new NativeAdapter(foreignCompiled);var foreignDoc=foreignCompiled.Assess(XDocument.Parse("<invoice><amount>10</amount><amount>5</amount></invoice>")).Document!;var foreignView=foreignAdapter.Open(foreignDoc);
+ Check("N15-equal-digest-distinct-authority",compiled.SchemaDigest==foreignCompiled.SchemaDigest&&!adapter.Owns(foreignAdapter.Node(foreignView,1).OriginalSchemaFacts.Type));Refuses("N16-foreign-document",()=>adapter.Open(foreignDoc));Refuses("N17-unissued-value",()=>adapter.Read(new NativeValue(typed.GoverningType,cells[0])));
+ input.Root!.RemoveAll();Check("N18-input-mutation-isolated",document.Elements[1].TypedValue!.Value.DecimalValue==10m);
+ var exported=document.CreateDocumentCopy(false);exported.Root!.RemoveAll();Check("N19-export-mutation-isolated",document.CreateDocumentCopy(false).Root!.Elements().Count()==2);
+ var invalid=compiled.Assess(XDocument.Parse("<invoice><amount>bad</amount><amount>5</amount></invoice>"));Check("N20-invalid-no-document",invalid.Outcome==SchemaAssessmentOutcome.Invalid&&invalid.Document is null);
+ var unsupported=compiled.Assess(XDocument.Parse("<invoice xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'><amount>10</amount><amount>5</amount></invoice>"));Check("N21-unsupported-no-document",unsupported.Outcome==SchemaAssessmentOutcome.Unsupported&&unsupported.Document is null);
+ using(var canceled=new CancellationTokenSource()){canceled.Cancel();bool seen=false;try{compiled.Assess(document.CreateDocumentCopy(false),canceled.Token);}catch(OperationCanceledException){seen=true;}Check("N22-native-cancellation",seen);}
+ var assertionFailure=compiled.Assess(XDocument.Parse("<invoice><amount>10</amount></invoice>"));Check("N24-assertion-invalid",assertionFailure.Outcome==SchemaAssessmentOutcome.Invalid&&assertionFailure.Document is null);
+ var precision=compiled.Assess(XDocument.Parse("<invoice><amount>0.1234567890123456789012345678912345</amount><amount>5</amount></invoice>"));Check("N25-exactness-unsupported",precision.Outcome==SchemaAssessmentOutcome.Unsupported&&precision.Document is null);
+ var independent=adapter.Open(compiled.Assess(XDocument.Parse("<invoice><amount>10</amount><amount>5</amount></invoice>")).Document!);Check("N26-independent-origin",!ReferenceEquals(independent.Origin,view.Origin)&&ReferenceEquals(adapter.Node(independent,1).OriginalSchemaFacts.Type,first.OriginalSchemaFacts.Type));
+ Check("N27-actual-component-identity",adapter.IsSameComponent(first.OriginalSchemaFacts.Type,second.OriginalSchemaFacts.Type,default).Value);Refuses("N28-foreign-identity-refused",()=>adapter.IsSameComponent(first.OriginalSchemaFacts.Type,foreignAdapter.Node(foreignView,1).OriginalSchemaFacts.Type,default));
+ var observations=new List<object>();
+ var tests=new(string id,string expression,string expected,bool marker)[]{("identity","$v","10",true),("let","let $x := $v return $x","10",true),("array","[$v](1)","10",true),("map","map{'a':$v}?a","10",true),("function","(function($x){$x})($v)","10",true),("node-data","data($n)","10",true),("copied-node-data","data($copy)","10",true),("arithmetic","$v + 1","11",false),("decimal-cast","xs:decimal($v)","10",true),("integer-cast","xs:integer($v)","10",false),("sum","$v + $w","15",false)};
+ foreach(var test in tests){var context=new EvaluationContext().WithVariable("v",first.TypedValue).WithVariable("w",second.TypedValue).WithVariable("n",XdmValue.FromNode(first)).WithVariable("copy",XdmValue.FromNode(copied));var value=XPath31Expression.Compile(test.expression).Evaluate(context);if(value.IsSequence){foreach(var item in XdmSequence.FromSource(value.SequenceValue!)){value=item;break;}}var provenance=Transport.Marker(value) as ISchemaAtomicProvenance;var marker=provenance?.OriginalAssessment;Check("VM-value-"+test.id,value.ToString()==test.expected);Check("VM-marker-"+test.id,ReferenceEquals(marker,view.Origin)==(Transport.Enabled&&test.marker));Check("VM-type-"+test.id,!Transport.Enabled||!test.marker||ReferenceEquals(provenance?.ActualType,first.OriginalSchemaFacts.Type));observations.Add(new{test.id,test.expression,value=value.ToString(),markerPreserved=ReferenceEquals(marker,view.Origin),typePreserved=ReferenceEquals(provenance?.ActualType,first.OriginalSchemaFacts.Type)});}
+ bool noTyped=false;try{XPath31Expression.Compile("data($r)").Evaluate(new EvaluationContext().WithVariable("r",XdmValue.FromNode(root)));}catch(Exception error){noTyped=error.Message.Contains("FOTY0012",StringComparison.Ordinal);}Check("N23-root-FOTY0012",noTyped);
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.XPath.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant(),context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{mode=args[0],scope="Unchanged selected native source + V5 adapter + actual package API/VM; holder replaces Core only; not full provider acceptance",checks,checkCount=checks.Count,observations,bindings},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+static class Transport {
+ public static bool Enabled {
+ get {
+#if PATCHED
+ return true;
+#else
+ return false;
+#endif
+ }}
+ public static XdmValue Attach(SchemaAtomicItem cell){
+#if PATCHED
+ return XdmValue.PrototypeAttach(cell.Value,cell.TypeEvidence);
+#else
+ return cell.Value;
+#endif
+ }
+ public static object? Marker(XdmValue value){
+#if PATCHED
+ return XdmValue.PrototypeMarker(value);
+#else
+ return null;
+#endif
+ }
+}
+sealed record NativeOrigin(ISchemaSourceBinding Source):ISchemaAssessmentOrigin;
+sealed class NativeSource:ISchemaSourceBinding {}
+sealed record NativeView(AssessedDocument Document,NativeOrigin Origin);
+sealed class NativeHandle(NativeAdapter owner,object original):ISchemaComponentHandle {public ISchemaAuthority Authority=>owner;public object Original=>original;}
+sealed record NativeEvidence(ISchemaComponentHandle DeclaredType,ISchemaComponentHandle ActualType,ISchemaAssessmentOrigin? OriginalAssessment):ISchemaAtomicProvenance;
+sealed class NativeValue(ISchemaComponentHandle type,SchemaAtomicItem cell):ISchemaTypedValue {public int EnumerationReads;public ISchemaComponentHandle GoverningType=>type;public bool IsList=>false;public IEnumerable<SchemaAtomicItem> AtomicItems{get{EnumerationReads++;return new[]{cell};}}public bool TryGetSingleAtomic(out SchemaAtomicItem item){item=cell;return true;}}
+sealed class NativeResult<T>(SchemaResultKind kind,T? value=default):SchemaResult<T>{public override SchemaResultKind Kind=>kind;public override T Value=>kind==SchemaResultKind.Supported?value!:throw new InvalidOperationException("No supported value");public override string? DiagnosticCode=>kind==SchemaResultKind.Supported?null:"NATIVE-UNSUPPORTED";}
+sealed class NativeAdapter(XsdDocumentAssessor compiled):ISchemaAuthority {
+ readonly Dictionary<object,NativeHandle> handles=new(ReferenceEqualityComparer.Instance);readonly HashSet<NativeView> views=new(ReferenceEqualityComparer.Instance);readonly HashSet<ISchemaTypedValue> values=new(ReferenceEqualityComparer.Instance);
+ public NativeView Open(AssessedDocument document){if(!ReferenceEquals(document.Schema,compiled))throw new ArgumentException("Foreign schema");var view=new NativeView(document,new NativeOrigin(new NativeSource()));views.Add(view);return view;}
+ public NativeView Copy(NativeView original){if(!views.Contains(original))throw new ArgumentException("Unissued view");var view=new NativeView(original.Document.Copy(),original.Origin);views.Add(view);return view;}
+ public NativeHandle Handle(object original){if(!handles.TryGetValue(original,out var handle)){bool present=ReferenceEquals(original,compiled.RootDeclaration)||ReferenceEquals(original,compiled.RootDeclaration?.Type)||compiled.ChildDeclarations.Any(d=>ReferenceEquals(original,d)||ReferenceEquals(original,d.Type));if(!present)throw new ArgumentException("Foreign component");handle=new NativeHandle(this,original);handles.Add(original,handle);}return handle;}
+ public NativeNode Node(NativeView view,int index){if(!views.Contains(view))throw new ArgumentException("Unissued view");var state=view.Document.Elements[index];var xml=view.Document.CreateDocumentCopy(true).Root!;var element=index==0?xml:xml.Elements().ElementAt(index-1);var type=Handle(state.Declaration.Type);NativeValue? value=null;if(state.TypedValue is {} plain){value=new NativeValue(type,new SchemaAtomicItem(plain,new NativeEvidence(type,type,view.Origin)));values.Add(value);}return new NativeNode(new XDocumentNode(element),new NativeFacts(type,Handle(state.Declaration),view.Origin,state,value),this);}
+ public SchemaAtomicItem[] Read(ISchemaTypedValue value){if(!values.Contains(value))throw new ArgumentException("Unissued typed value");var result=value.TryGetSingleAtomic(out var cell)?new[]{cell}:value.AtomicItems.ToArray();foreach(var item in result)if(item.TypeEvidence is null||!Owns(item.TypeEvidence.DeclaredType)||!Owns(item.TypeEvidence.ActualType)||item.Value.Kind!=XdmValueKind.Decimal)throw new ArgumentException("Invalid native cell");return result;}
+ public bool Owns(ISchemaComponentHandle h)=>h is NativeHandle n&&handles.TryGetValue(n.Original,out var issued)&&ReferenceEquals(n,issued);
+ void Guard(CancellationToken t,params ISchemaComponentHandle[] hs){t.ThrowIfCancellationRequested();if(hs.Any(h=>!Owns(h)))throw new ArgumentException("Unissued component");}
+ public SchemaResult<bool> IsSameComponent(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Supported,ReferenceEquals(((NativeHandle)a).Original,((NativeHandle)b).Original));}
+ public SchemaResult<ISchemaComponentHandle> ResolveType(SchemaExpandedName n,CancellationToken t){t.ThrowIfCancellationRequested();return new NativeResult<ISchemaComponentHandle>(SchemaResultKind.Unsupported);}
+ public SchemaResult<ISchemaComponentHandle> ResolveElementDeclaration(SchemaExpandedName n,CancellationToken t)=>ResolveType(n,t);
+ public SchemaResult<ISchemaComponentHandle> ResolveAttributeDeclaration(SchemaExpandedName n,CancellationToken t)=>ResolveType(n,t);
+ public SchemaResult<bool> IsDerivedFrom(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Unsupported);}
+ public SchemaResult<bool> IsAffiliatedWith(ISchemaComponentHandle a,ISchemaComponentHandle b,CancellationToken t){Guard(t,a,b);return new NativeResult<bool>(SchemaResultKind.Unsupported);}
+ public SchemaResult<ImmutableArray<ISchemaComponentHandle>> GetComponentClosure(ISchemaComponentHandle h,CancellationToken t){Guard(t,h);return new NativeResult<ImmutableArray<ISchemaComponentHandle>>(SchemaResultKind.Unsupported);}
+}
+sealed class NativeFacts(ISchemaComponentHandle type,ISchemaComponentHandle declaration,ISchemaAssessmentOrigin origin,AssessedElement state,NativeValue? value):ISchemaNodeFacts {
+ public ISchemaComponentHandle Type=>type;public ISchemaComponentHandle? Declaration=>declaration;public ISchemaAssessmentOrigin Origin=>origin;public bool HasNoTypedValue=>state.HasNoTypedValue;public bool IsNilled=>state.IsNilled;public SchemaResult<ISchemaTypedValue> ReadTypedValue(CancellationToken t){t.ThrowIfCancellationRequested();return value is null?new NativeResult<ISchemaTypedValue>(SchemaResultKind.Unsupported):new NativeResult<ISchemaTypedValue>(SchemaResultKind.Supported,value);}
+}
+sealed class NativeNode(IXdmNode inner,NativeFacts facts,NativeAdapter owner):ISchemaAnnotatedNode {
+ public ISchemaNodeFacts OriginalSchemaFacts=>facts;public XdmValue TypedValue=>facts.HasNoTypedValue?XdmValue.Undefined:Transport.Attach(owner.Read(facts.ReadTypedValue(default).Value)[0]);
+ public bool HasNoTypedValue=>facts.HasNoTypedValue;public bool IsComplexType=>facts.HasNoTypedValue;public bool IsNilled=>facts.IsNilled;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>inner.SchemaTypeAnnotation;
+ public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;public string StringValue=>inner.StringValue;public IXdmNode? Parent=>inner.Parent;public IXdmNode? Document=>inner.Document;public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;
+ public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>inner.Children(kind);public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>inner.Attributes(localName,namespaceUri);public XdmSequence Axis(XdmAxis axis)=>inner.Axis(axis);public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>inner.ToXmlString();
+}

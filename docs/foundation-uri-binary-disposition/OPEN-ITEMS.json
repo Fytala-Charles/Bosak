@@ -1,0 +1,37 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-T06",
+      "status": "CoreDispositionCompleteWithScope_OwnerNativeAcceptancePending"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredPrivateLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderBudgetAcceptancePending"
+    },
+    {
+      "id": "NativeUriBinaryRepresentation",
+      "status": "FreshOwnerRequirementAndActivationReviewBeforeAnyNewCarrier"
+    },
+    {
+      "id": "PersistentConstructionNilNoValue",
+      "status": "Open"
+    },
+    {
+      "id": "NU-01",
+      "status": "Open"
+    },
+    {
+      "id": "SC-01",
+      "status": "Open"
+    },
+    {
+      "id": "R4-R7",
+      "status": "Unwaived"
+    }
+  ]
+}

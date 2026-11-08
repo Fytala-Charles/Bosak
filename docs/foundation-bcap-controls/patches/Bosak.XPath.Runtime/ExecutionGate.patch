@@ -1,0 +1,45 @@
+--- a/src/Bosak.XPath.Runtime/ExecutionGate.cs
++++ b/src/Bosak.XPath.Runtime/ExecutionGate.cs
+@@ -14,6 +14,7 @@
+ //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice D)                                                               |
+ //                      | Charles Korthout | 0.2   | 11-10-2026     | D-F1: unconditional terminal control observation without spending operations.            |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.3 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Runtime;
+@@ -82,6 +83,7 @@
+ /// </remarks>
+ internal sealed class ExecutionGate
+ {
++    private readonly ExecutionGate? _parent, _local;
+     private readonly CancellationToken _cancellationToken;
+     private readonly long _deadlineTick;
+     private long _remainingBudgetChecks;
+@@ -94,6 +96,10 @@
+         _remainingOperations = operationBudget;
+     }
+ 
++    internal static ExecutionGate Compose(ExecutionGate? parent, ExecutionGate local)
++        => parent is null ? local : new ExecutionGate(parent, local);
++    private ExecutionGate(ExecutionGate parent, ExecutionGate local) : this(default, 0, long.MaxValue)
++    { _parent = parent; _local = local; }
+     /// <summary>
+     /// Creates a gate for the supplied controls. <paramref name="timeLimit"/> is turned into a
+     /// wall-clock deadline at creation; <paramref name="operationBudget"/> counts engine
+@@ -119,6 +125,7 @@
+     /// </summary>
+     internal void Checkpoint()
+     {
++        if (_parent is not null) { _parent.Checkpoint(); _local!.Checkpoint(); return; }
+         if (--_remainingOperations < 0)
+             throw new ExecutionInterruptException(ExecutionGateInterruptKind.OperationLimitExceeded,
+                 "The engine-operation budget was exhausted.");
+@@ -137,6 +144,7 @@
+     /// </summary>
+     internal void ObserveControls()
+     {
++        if (_parent is not null) { _parent.ObserveControls(); _local!.ObserveControls(); return; }
+ 
+         if (_cancellationToken.IsCancellationRequested)
+             throw new ExecutionInterruptException(ExecutionGateInterruptKind.Cancelled,

@@ -1,0 +1,35 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-format-date
+
+Discovered 738 test sets.
+  Starting: fn-format-date ...
+  Done: fn-format-date (138 tests total) [P+=130 F+=4 S+=4]
+  Starting: fn-format-dateTime ...
+  Done: fn-format-dateTime (232 tests total) [P+=76 F+=2 S+=16]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   232
+Passed:  206
+Failed:  6
+Skipped: 20
+
+Pass rate: 88.79%
+
+First 20 failures:
+  FAIL format-date-inpt-er4a: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-date#3 not found.
+  FAIL format-date-049: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-date#4 not found.
+  FAIL format-date-050: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-date#4 not found.
+  FAIL format-date-051: Expected error FOFD1340, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-date#4 not found.
+  FAIL format-dateTime-inpt-er4a: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-dateTime#3 not found.
+  FAIL format-dateTime-019: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}format-dateTime#4 not found.
+
+Skip reasons (grouped):
+     20  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 6
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.40s
+Skip details written to docs/conformance/k04-calendar-admission/evidence/qt4-fn-format-date-current-skips.txt

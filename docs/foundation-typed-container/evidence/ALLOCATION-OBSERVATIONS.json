@@ -1,0 +1,18 @@
+{
+  "scope": "Owned inputs, pre-held raw operation; each admission uncached. Runtime warmup 100 reads, 1000 measured reads; refusal includes caught exception. Not retained-memory/latency/owner budget qualification.",
+  "bytesPerRead": {
+    "scalar": 312,
+    "list-three": 832,
+    "limit-refusal": 864
+  },
+  "providerReadsForFirstAdmission": {
+    "scalar": 6,
+    "list-three": 22
+  },
+  "regressionCeilingsBytes": {
+    "scalar": 2048,
+    "list-three": 4096,
+    "limit-refusal": 4096
+  },
+  "budgetsAccepted": false
+}

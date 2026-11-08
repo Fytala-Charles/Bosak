@@ -1,0 +1,416 @@
+{
+  "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs": {
+    "gitBlob": "b613b6d4290091933750b208105b982cf8b0106a",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs": {
+    "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+    "methods": [
+      "PublishedExample_MatchesDeclaredOutcome"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": {
+    "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+    "methods": [
+      "Compile_ArityOneConstructors_DefaultOptions_StillWork",
+      "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+      "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+      "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+      "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+      "Compile_EnumType_31Mode_ThrowsXpst0003",
+      "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+      "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+      "Compile_FocusFunction_31Mode_ThrowsXpst0003",
+      "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+      "Compile_ForMember_31Mode_ThrowsXpst0003",
+      "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+      "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+      "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+      "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+      "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+      "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+      "Compile_SortWithCluster_3Point1Functions_StillWork",
+      "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+      "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+      "Evaluate_AtomicEqual_FrozenXPath40_Works",
+      "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins",
+      "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+      "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004",
+      "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+      "Evaluate_ElementToMap_FrozenXPath40_Works",
+      "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive",
+      "Evaluate_FocusConstructors_FrozenXPath40_Works",
+      "Evaluate_FocusFunction_AfterMappingArrow",
+      "Evaluate_FocusFunction_BindsArgumentAsWholeContextValue",
+      "Evaluate_FocusFunction_SpecExamples",
+      "Evaluate_FocusFunction_WrongArityThrows",
+      "Evaluate_ForKeyValue_IteratesEntries",
+      "Evaluate_ForKeyValue_PositionalCountsAcrossMaps",
+      "Evaluate_ForMember_IteratesMembers",
+      "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole",
+      "Evaluate_ForMember_SequenceOfArraysCountsPositionsAcrossArrays",
+      "Evaluate_HexBinaryLiterals_31Mode_ThrowXpst0003",
+      "Evaluate_HexBinaryLiterals_XPath40Mode_Work",
+      "Evaluate_JNodeFunctions_FrozenXPath40_Work",
+      "Evaluate_KeywordArgs_FullyKeyworded_Works",
+      "Evaluate_KeywordArgs_MixedWithPositionals_Works",
+      "Evaluate_MappingArrow_AppliesFunctionPerItem",
+      "Evaluate_MappingArrow_WithArgumentsPrependsContextItem",
+      "Evaluate_Otherwise_EmptyLeftYieldsRight",
+      "Evaluate_ParseCsv_FrozenXPath40_Works",
+      "Evaluate_Pipeline_FocusRestoredAfterEvaluation",
+      "Evaluate_Pipeline_SetsFixedFocusPositionOneSizeOne",
+      "Evaluate_Pipeline_SpecExample_SumOfPowers",
+      "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+      "Evaluate_Scan_XPath40Experimental_Works",
+      "Evaluate_SortWithCluster_FrozenXPath40_Works",
+      "Evaluate_StringTemplate_FixedOnly_Works",
+      "Evaluate_StringTemplate_Interpolation_Works",
+      "Evaluate_TypedLet_FrozenXPath40_Coerces",
+      "Evaluate_UnderscoreSeparators_XPath40Mode_Work"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/StreamingAccumulatorTests.cs": {
+    "gitBlob": "c211d9e83649e0684318c113b72fc9fd0c3daac2",
+    "methods": [
+      "CounterAccumulator_Parity",
+      "InapplicableAccumulator_ThrowsXTDE3362",
+      "SumWithAccumulatorAfter_Parity",
+      "UnknownAccumulator_ThrowsXTDE3341"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/StreamingSnapshotTests.cs": {
+    "gitBlob": "3c3b16b730cec6ea4959eb39960fc4a35eef9941",
+    "methods": [
+      "SnapshotDocumentNode_ParityWithInMemory",
+      "SnapshotShellRoot_KeepsDocumentParent"
+    ]
+  },
+  "tests/Bosak.XQuery.Tests/PlaceholderTests.cs": {
+    "gitBlob": "5c46364a61ab2b139666220634d33b68ae0539db",
+    "methods": [
+      "XQuery_ComputedAttribute_AddsToElement",
+      "XQuery_ComputedAttribute_AfterContent_Rejected",
+      "XQuery_ComputedComment_DoubleHyphen_Rejected",
+      "XQuery_ComputedDocument_WrapsContent",
+      "XQuery_ComputedElement_ComputedNameAndAtomicContent",
+      "XQuery_ComputedElement_EmptyContent",
+      "XQuery_ComputedElement_StaticName",
+      "XQuery_ComputedNamespace_BecomesDeclaration",
+      "XQuery_ComputedPI_NestedTerminator_Rejected",
+      "XQuery_ComputedTextCommentAndPI"
+    ]
+  },
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": {
+    "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/StylesheetTests.cs": {
+    "gitBlob": "2cc8e2769cd6fffb41f86bc8342cb744be608c84",
+    "methods": [
+      "Hash_Current_Resolves_To_Current_Mode",
+      "Initial_Mode_With_Source_Succeeds",
+      "Mode_All_Matches_All_Modes",
+      "Mode_OnNoMatch_ShallowSkip"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/ModeConflictResolutionTests.cs": {
+    "gitBlob": "2d813ee224857b49bdf12e19254ca686a69f7f9b",
+    "methods": [
+      "SamePrecedenceConflict_UnresolvedByHigherPrecedence_ThrowsXtse0545",
+      "SamePrecedenceDisjointAttributes_MergeWithoutError"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs": {
+    "gitBlob": "80c05a40cf69633862f4493cda507a2da3e56c0f",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordAliasTests.cs": {
+    "gitBlob": "ed061a8e84861027a390f28d1daa65da9f16a731",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs": {
+    "gitBlob": "392ee66e2cdc428c12d74f131e23084693649ef3",
+    "methods": [
+      "Matching"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs": {
+    "gitBlob": "4521e6e960596bb55a9e5aaaa8db3bc25475562d",
+    "methods": []
+  },
+  "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs": {
+    "gitBlob": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+    "methods": [
+      "AllDifferent_SpecSemantics",
+      "AllEqual_SpecExamples",
+      "ArrayBuild_ActionReceivesItemAndPosition",
+      "ArrayBuild_ResultSequenceBecomesSingleMember",
+      "ArrayEmpty_OnlyZeroMemberArrayIsEmpty",
+      "ArrayItems_ConcatenatesMembersNonRecursively",
+      "ArraySlice_OutOfBoundsYieldsEmptyArrayNoError",
+      "ArraySlice_StartEndStep",
+      "AtomicTypeAnnotation_DerivedDayTimeDuration_HierarchyAndMatches",
+      "AtomicTypeAnnotation_PrimitiveBoolean_RecordShape",
+      "BuildDateTime_AllSevenComponentsWithoutTimezone_IsDateTime",
+      "BuildDateTime_InvalidFieldSet_RaisesFodt0005",
+      "BuildDateTime_OutOfRangeComponent_RaisesForg0001",
+      "BuildDateTime_SpecDateTimeStampExample",
+      "BuildDateTime_TimeWithFractionalSeconds",
+      "BuildDateTime_TimezoneOutOfRange_RaisesFodt0003",
+      "BuildUri_OmitDefaultPortsOption",
+      "BuildUri_ParseRoundTrip_ReencodesDelimiters",
+      "BuildUri_PathSegmentsEscapedOnlyWhenHierarchical",
+      "BuildUri_QueryParameters_EscapeAndEmptyKey",
+      "BuildUri_UncPathOption_DoubleSlashPrefix",
+      "Char_MultiCodepointEntity_ReturnsFullString",
+      "Characters_NonAsciiString_SplitsByCodepoint",
+      "CollationAvailable_ReportsRecognizedCollations",
+      "Compare40_BooleansAndBinariesAndQName",
+      "Compare40_CrossNumericExact_DoubleVsDecimal",
+      "Compare40_KeywordFormAndEmptyCollation",
+      "Compare40_MixedIncomparable_RaisesXpty0004",
+      "Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself",
+      "ContainsSubsequence_CallbackEmptyResult_TreatedAsFalse",
+      "ContainsSubsequence_ContiguousRange_ReturnsTrue",
+      "ContainsSubsequence_NonContiguousOrLonger_ReturnsFalse",
+      "DaysInMonth_ProlepticGregorianYearZeroIsLeap",
+      "DaysInMonth_SpecExamples",
+      "DecodeFromUri_InvalidEscapesAndInvalidUtf8_BecomeReplacementChar",
+      "DecodeFromUri_SpecExamples",
+      "DoUntil_ActionEvaluatedBeforePredicate",
+      "DoUntil_EmptyInput_StillRunsAction",
+      "DoUntil_PositionIncrementsFromOne",
+      "DropWhile_DropsPrefixUpToFirstNonMatch",
+      "DropWhile_TakeWhile_ReconstructInput",
+      "DuplicateValues_NoDuplicates_ReturnsEmpty",
+      "DuplicateValues_ResultInSecondAppearanceOrder",
+      "DurationToSeconds_SpecExamples",
+      "EndsWithSubsequence_SuffixMatch",
+      "EndsWithSubsequence_WithCallback",
+      "Every_EmptyInput_ReturnsTrue",
+      "Foot_EmptySequence_ReturnsEmpty",
+      "Graphemes_CombiningMark_AttachesToBase",
+      "Graphemes_EmojiZwjSequence_IsOneGrapheme",
+      "Hash_AlgorithmIsNormalized",
+      "Hash_BinaryInputs_HashOctets",
+      "Hash_EmptySequence_ReturnsEmpty",
+      "Hash_SpecVectors",
+      "Hash_UnsupportedAlgorithm_RaisesFoha0001",
+      "Highest_EqualBoundaryItems_AllRetainedInInputOrder",
+      "Highest_WithComputedKey",
+      "Identity_ReturnsArgumentUnchanged",
+      "IndexOfSubstring_EmptySubstring_MatchesEveryPosition",
+      "IndexOfSubstring_PositionsInCodepoints",
+      "IndexOfSubstring_SpecExamples",
+      "IndexWhere_ReturnsAscendingPositions",
+      "InsertSeparator_MultiItemSeparator_InsertedAsBlock",
+      "IsNan_DetectsDoubleAndFloatNaN",
+      "IsNan_EmptyMultiMapFunction_Raise",
+      "ItemsAt_DuplicatePositionsKept",
+      "ItemsAt_MultiplePositionsInAtOrder",
+      "Lowest_SelectsMinimum",
+      "MapBuild_DuplicatesCombinerFunction_AppliesCombiner",
+      "MapBuild_DuplicatesReject_RaisesFojs0003",
+      "MapBuild_DuplicatesUseLast_KeepsLastValue",
+      "MapEntries_ReturnsSingleEntryMapsInOrder",
+      "MapFilter_EmptyPredicateResultMeansFalse",
+      "MapItems_ReturnsValuesInEntryOrder",
+      "MinMax_QNameOrdering_OnlyIn40",
+      "PadString_BothSidesSplitsWithExtraAtEnd",
+      "PadString_NeverTruncates",
+      "ParseUri_FileScheme_SegmentsAndFilepath",
+      "ParseUri_HierarchicalHttp_AllFields",
+      "ParseUri_OmitDefaultPorts",
+      "ParseUri_PortIsInteger",
+      "ParseUri_QueryParametersAccumulateDuplicateKeys",
+      "ParseUri_UnmatchedBracketInAuthority_RaisesFour0001",
+      "ParseUri_UserInfoPasswordDiscardedUnlessDeprecatedAllowed",
+      "PartialApply_ArrayAsFunction",
+      "PartialApply_BindingAllArguments_YieldsZeroArityFunction",
+      "PartialApply_BoundValueCoercion_FailsAtCallTimeWhenNoTypeMetadata",
+      "PartialApply_EmptyMap_ReturnsFunctionUnchanged",
+      "PartialApply_InlineFunctionBase",
+      "PartialApply_KeysBeyondArity_AreIgnored",
+      "PartialApply_NonIntegerKey_RaisesXpty0004",
+      "Partition_EmptyInput_ReturnsEmpty",
+      "Partition_FixedSizeGroups",
+      "Partition_SplitsOnValueChange",
+      "Replicate_MultiItem_RepeatsWholeSequence",
+      "Replicate_NegativeCount_RaisesXpty0004",
+      "SecondsAndDurationToSeconds_AreInverses",
+      "Seconds_EmptySequence_ReturnsEmpty",
+      "Seconds_SpecExamples",
+      "Slice_NegativeStartPositiveEnd_ReversesRange",
+      "Slice_StartAndEnd_IsInclusive",
+      "Some_PositionArgument_IsOneBased",
+      "SortBy_MultipleKeyDefinitions_MajorToMinor",
+      "SortBy_WithKeyFunction_StableForEqualKeys",
+      "StartsWithSubsequence_PrefixMatch",
+      "StartsWithSubsequence_WithCallback",
+      "SubstringAfterLast_SpecExamples",
+      "SubstringAfterLast_WithCollation",
+      "SubstringBeforeLast_SpecExamples",
+      "TakeWhile_EmptyPredicateResultMeansFalse",
+      "TakeWhile_MapAsPredicate_LooksUpEachItem",
+      "TakeWhile_StopsAtFirstNonMatch",
+      "TransitiveClosure_DuplicatesAndCycles_Terminate",
+      "TransitiveClosure_EmptyNode_ReturnsEmpty",
+      "TransitiveClosure_NonNode_RaisesXpty0004",
+      "TransitiveClosure_ReachesAllDescendants",
+      "TransitiveClosure_ResultExcludesStartNode",
+      "TrimSpace_DefaultTrimsBothEnds",
+      "TrimSpace_XmlWhitespaceOnly",
+      "Trunk_Singleton_ReturnsEmpty",
+      "UnixDateTime_LargeTimestamp",
+      "UnixDateTime_NegativeValue_RaisesFoca0002",
+      "UnixDateTime_SpecExamples",
+      "WhileDo_ActionError_Propagates",
+      "WhileDo_EmptyPredicateResultMeansFalse",
+      "WhileDo_PositionIncrementsFromOne",
+      "WhileDo_PredicateInitiallyFalse_NeverCallsAction",
+      "WhileDo_WholeSequenceIsTheValue"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/CsvResourceContractTests.cs": {
+    "gitBlob": "df899d0e64d58a51b2bb4ffeefe0bf7046de8517",
+    "methods": [
+      "EmptySource_BypassesOptionInspection",
+      "Keywords_ReadLocalResource",
+      "LocalResource_EncodingAndEmptyRows",
+      "LocalResource_PreservesErrors",
+      "LocalResource_UsesOptions",
+      "MissingResource_RaisesFout1170"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/CsvTests.cs": {
+    "gitBlob": "f4f1b2bd60c1f641ebd85f3f9997ca05e0a69cd3",
+    "methods": []
+  },
+  "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs": {
+    "gitBlob": "edf681598c8139b24c94cf56ada1b84041064baa",
+    "methods": [
+      "MapToElement_EmptySequence_ReturnsEmpty",
+      "MapToElement_NonMapInput_Xpty0004",
+      "MapToElement_SingleEntryMap_BuildsElement"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/SubstringExperimentalContractTests.cs": {
+    "gitBlob": "7c94264ca2a485d0d00e7a3c73ee2ef6a7d3b7a5",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/SubstringExperimentalHostBoundaryTests.cs": {
+    "gitBlob": "5fa885d4caec4d67496ef0b2c18296c40e7f61d9",
+    "methods": []
+  },
+  "tests/Bosak.XPath.Standard.Tests/FnOpTests.cs": {
+    "gitBlob": "4e007e45777ffa1c7c0c5f930f1a77283ecb55ce",
+    "methods": [
+      "Op_ForEachPair_SpecExample"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/UnixDateTimeContractTests.cs": {
+    "gitBlob": "17d5fc3320b917cc4e8264521afd8e6fffea38bd",
+    "methods": [
+      "DeadlineReport_MatchesXPath31Baseline",
+      "Default_IsEpochRatherThanNow",
+      "ResultTypeAndUtc_AreIndependentOfImplicitTimezone",
+      "SupportedMilliseconds_AreExact"
+    ]
+  },
+  "tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs": {
+    "gitBlob": "a6749a57c3e2bc83791a2006f4813d24b52eaa33",
+    "methods": [
+      "Sort_Mixed_Integer_Decimal",
+      "Sort_Mixed_Types_Throws",
+      "Sort_Strings"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs": {
+    "gitBlob": "41cbb0fd50f6f334d449b244434db4ef059e9767",
+    "methods": [
+      "Compile_InvalidDigitGroup_ThrowsXpst0003",
+      "Evaluate_ValidDigitGroups_ReturnExpectedValues"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs": {
+    "gitBlob": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+    "methods": [
+      "ButWith_CoercesRhsValuesToFieldTypes",
+      "ButWith_PlainMapLhs_XPTY0004",
+      "ButWith_ResultEntriesFollowDeclarationOrder",
+      "ButWith_ResultKeepsRecordAnnotation",
+      "ButWith_UnknownField_XPTY0004",
+      "Cast_DiscardsSurplusKeys",
+      "Coercion_BuildsAnnotatedRecord",
+      "Coercion_MissingFieldBecomesEmptyEntry",
+      "Coercion_SurplusKeys_XPTY0004"
+    ]
+  },
+  "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs": {
+    "gitBlob": "29a556aa648f365db75ff1f70f36d982561143c8",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs": {
+    "gitBlob": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+    "methods": [
+      "ForEach_Separator_BetweenItems",
+      "ForEach_Separator_EmptyAndSingleItem_NoSeparator",
+      "ForEach_Separator_WithSort",
+      "If_ThenElse_FalseBranch",
+      "If_ThenElse_TrueBranch",
+      "If_ThenOnly_FalseIsEmpty",
+      "Map_Select_DuplicatesDefault_XTDE3365",
+      "Map_Select_DuplicatesUseFirst",
+      "Map_Select_MergesInputMaps",
+      "Note_AtTopLevel_IsDiscarded",
+      "Note_ContentIsNotValidated",
+      "Note_InTemplate_IsDiscarded"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs": {
+    "gitBlob": "b716c33db17c53f629a486b30ede046c946bfe6a",
+    "methods": [
+      "CompilationCapturesProfile",
+      "DefaultAndInvalidProfile",
+      "DraftXPathIndependentOfVersion",
+      "LocalVersion",
+      "ModuleValidationInheritsProfile",
+      "ModulesInheritProfile",
+      "StaticXPathProfile",
+      "UnknownAttributeMatrix",
+      "UsedPackageInheritsProfile"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40MapEntryPatternTests.cs": {
+    "gitBlob": "10de8512e7a5c1e94e94692e92d48f44cebadcd1",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArrayPatternTests.cs": {
+    "gitBlob": "4fb204aa0e57aeb89316fb23a1d97c1bae27e295",
+    "methods": [
+      "Matching"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs": {
+    "gitBlob": "495cb9309dc003d6239a71377968397d356aef05",
+    "methods": [
+      "Array_ForEachSelect_MemberIsWholeSequence",
+      "Array_Select_OneSingletonMemberPerItem",
+      "Array_Select_TokenizedString",
+      "Switch_GeneralComparison_NumericPromotion",
+      "Switch_LookupTable_SelectBranches",
+      "Switch_TestSequences_DaysInMonth"
+    ]
+  },
+  "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs": {
+    "gitBlob": "2f1fa063937e21653ace204a2ccf2e3a06b3d1d8",
+    "methods": []
+  },
+  "tests/Bosak.Xslt.Tests/ArraySelectNativeBoundaryTests.cs": {
+    "gitBlob": "20eed0b87d73cc49018d6d940840e2d7df872d31",
+    "methods": [
+      "NativeBoundary"
+    ]
+  }
+}

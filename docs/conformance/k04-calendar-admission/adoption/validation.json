@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C16 adoption",
+  "proposalRevision": "6df9a58bb382c22931d5998a728cf41db424f28b",
+  "decisionId": "K04-CB-calendar-adoption-v1",
+  "ownerApproved": true,
+  "buildExitCode": 0,
+  "solutionExitCode": 0,
+  "solutionPassed": 22579,
+  "solutionProjects": 10,
+  "xsltPassed": 8196,
+  "normalQt3": [
+    31164,
+    0,
+    657
+  ],
+  "normalQt4Gate": [
+    8587,
+    0,
+    1892
+  ],
+  "normalQt4ExploratoryCombined": [
+    208,
+    6,
+    18
+  ],
+  "normalQt4ExploratoryDateTime": [
+    77,
+    2,
+    15
+  ],
+  "retainedQt3NamesAndReasons": 657,
+  "retainedQt4GateNamesAndReasons": 1892,
+  "retainedQt4ExploratoryNamesAndReasons": 18,
+  "unchangedExploratoryFailures": 6,
+  "normalFilterControls": 364,
+  "profileOutcomes": 538,
+  "normalProjectionControls": 40,
+  "normalOriginalPasses": 4,
+  "gatedSets": 226,
+  "experimentalPasses": 11,
+  "boundedNormalProcesses": 12,
+  "timeouts": 0,
+  "candidateVersion": "1.28.1",
+  "publishedVersion": "1.26.3",
+  "engineChanged": false,
+  "releaseApproved": false
+}

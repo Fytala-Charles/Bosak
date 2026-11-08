@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "732dff4445fdef8967e7c8e21a39e2f5c2fd04f09f705b4dfec066b9a0483639",
+  "qualifiedInternalSlice": "TA-04-public-contract-adapter-v1",
+  "scope": "Unchanged exported metadata/friends and XdmValue field layout; public-contract adapter slice qualified separately. No new public profile, native ABI or freeze acceptance."
+}

@@ -1,0 +1,77 @@
+{
+  "projects": [
+    {
+      "project": "Bosak.XPath.Parser.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_27_net10.0.trx",
+      "sha256": "f23d10d250a51cd9bfb80559bdec14e5e9e100b34412995fa275337ba57e119b",
+      "passed": 202,
+      "testBinarySha256": "a0ad1ef4d593d9cc1d77e53f44009358c01c9edba366b3b1a5c489b827346161"
+    },
+    {
+      "project": "Bosak.XPath.Compiler.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_27_net10.0[1].trx",
+      "sha256": "2ce4e7c34ee90168d11af3c3c766631356e8fd395ec731aa80bb60afb0ba22d3",
+      "passed": 66,
+      "testBinarySha256": "c3a622305910a0e1233468dd54fe45def6664a873005157b752cb1b64aaca2be"
+    },
+    {
+      "project": "Bosak.XPath.Core.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_27_net10.0[2].trx",
+      "sha256": "3215d68ada7ae3949c0f477eceedd4d635ce7fa9fb576191f84abe622b39de25",
+      "passed": 266,
+      "testBinarySha256": "e7ca94c9b7c97cd212319f049f55ffb8378ef72085cdd61d78b7c8f3dde875ca"
+    },
+    {
+      "project": "Bosak.XPath.Api.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_27_net10.0[3].trx",
+      "sha256": "a3e970c78256cd2ce86fcadbc00ed62f048e54aeeb3910ee227002b06fd893af",
+      "passed": 681,
+      "testBinarySha256": "61f0c0f1409d2432eac8dbcc5e54a97665c0b37fcaa9128dc720c40537889ca2"
+    },
+    {
+      "project": "Bosak.XPath.Runtime.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_27_net10.0[4].trx",
+      "sha256": "a7a3ef22659ea971d8e930649d4812ee9c007219efb44e4a62dd58a8980ac877",
+      "passed": 1016,
+      "testBinarySha256": "6afc5ff07c79eb3b1c9aa921ba35e125f7e3031c1b00c5ed293ceaa733b9be08"
+    },
+    {
+      "project": "Bosak.XQuery.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_28_net10.0.trx",
+      "sha256": "1272aa4fd5286b48351806ed1dfe87856c1deaf0b02065f73daea0cfa93b60e6",
+      "passed": 804,
+      "testBinarySha256": "fef538cdca18b7b1ee9e1615d9b3e5b3e6ae5ca930bd176725e4a636923397e0"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Database.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_28_net10.0[1].trx",
+      "sha256": "762a92b39c262318d4fc539fea983eb68aaacf9efa102bb1947048ef8390db70",
+      "passed": 47,
+      "testBinarySha256": "1cfbee3445f9ac721a01e6d1d92a5fd3e8107e60da5a40b4cc8c8e0edaa753ff"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_28_net10.0[2].trx",
+      "sha256": "fc7c32b62707e881a8714c5c8c4ed9e2a6c288a7019897fd5726e152a589a1b6",
+      "passed": 223,
+      "testBinarySha256": "88a7428a7e857c55b40f2c2cfdf923186cb6b0cad68eef4a36dcef87aebd90a3"
+    },
+    {
+      "project": "Bosak.XPath.Standard.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_29_net10.0.trx",
+      "sha256": "10468bba2a1ab898bf2f5d023c1ca6ba429b801c59573f6eab00db9ff92fcb78",
+      "passed": 13797,
+      "testBinarySha256": "1ade57c218f6ae0762103128b051b6f808e0c7cc1562b546e88857058408090d"
+    },
+    {
+      "project": "Bosak.Xslt.Tests",
+      "trx": "nilled-cost-unit-trx/charl_CHARLES_2026-11-05_11_51_30_net10.0.trx",
+      "sha256": "0961cbd219b7d83af22c839dbd9702006bafd7e14171c8f89f51e9d45b3057ec",
+      "passed": 8234,
+      "testBinarySha256": "52fbf65b3ee51b7231d2763da8460aea53e0bd199bdb1a8a7be586d45bffc59b"
+    }
+  ],
+  "passed": 25336,
+  "failed": 0,
+  "scope": "All ten projects pass in one full solution run outside sandbox for database loopback HTTP listener."
+}

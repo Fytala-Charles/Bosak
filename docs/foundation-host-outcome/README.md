@@ -1,0 +1,5 @@
+# TA-31: exact API host outcome routing
+
+Development **1.75.0** qualifies [TA-31 API host outcome routing](IMPLEMENTATION.md), an internal AH-03 prerequisite: **25,987/0** tests, including **23 new controls**. Only the exact engine-issued executable/binding/session can route a structured source run. One internally staged diagnostic object survives final refusal without implying success; expired/repeated/mismatched staging refuses. Post-cleanup delivery checks engine session/snapshot lifetime and preserves original work/cleanup error categories and identities. Public declarations/value layouts/friends/references remain unchanged (**312 types / 6,386 rows**), as do QT3 **31,397/0/424**, gated qt4 **8,941/0/1,918** (+11 experimental) and exact skip maps. AH-03 public XSLT/capture/final outcomes, actual owners/budgets/freeze and publication remain open. No package, commit, push or publication.
+
+Read the [implementation](IMPLEMENTATION.md), [adoption](ADOPTION.json), [status](STATUS.json), [plan](PLAN.json), [verifier](tools/verify.py) and [package metadata](evidence/PACKAGE-PREFLIGHT.json). Prior TA-30 evidence remains sealed.

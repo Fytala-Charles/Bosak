@@ -1,0 +1,92 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 28 October 2026
+// PURPOSE              : Verify optional date-formatting calls, typing, defaults and profile boundaries.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+using Xunit;
+
+namespace Bosak.XPath.Standard.Tests;
+
+/// <summary>Verify optional date-formatting calls, typing, defaults and profile boundaries.</summary>
+public sealed class DateFormattingOptionalTests
+{
+    private const string Fn = "http://www.w3.org/2005/xpath-functions";
+
+    /// <summary>Supplies positional, dynamic, keyword, typing and profile controls.</summary>
+    /// <returns>Profile, XSLT mode, expression, expected lexical result and optional error.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+        foreach (bool xslt in new[] { false, true })
+        foreach (var item in new[]
+        {
+            ("format-date", "xs:date('2002-03-07')", "2002-03-07", "[D01]", "07"),
+            ("format-dateTime", "xs:dateTime('2002-03-07T12:30:00')", "2002-03-07T12:30:00", "[D01]", "07"),
+            ("format-time", "xs:time('12:30:00')", "12:30:00", "[H01]", "12")
+        })
+        {
+            bool modern = profile != XPathCompatibility.XPath31;
+            string absent = modern ? "" : "XPST0017";
+            foreach (int arity in new[] { 3, 4 })
+            {
+                string tail = arity == 3 ? ", ()" : ", 'en', 'AD'";
+                string args = $"{item.Item2}, '{item.Item4}'{tail}";
+                yield return [profile, xslt, $"{item.Item1}({args})", item.Item5, absent];
+                yield return [profile, xslt, $"({item.Item1}#{arity})({args})", item.Item5, absent];
+                yield return [profile, xslt, $"exists(function-lookup(QName('{Fn}','{item.Item1}'),{arity}))", modern ? "true" : "false", ""];
+                if (modern)
+                    yield return [profile, xslt, $"function-lookup(QName('{Fn}','{item.Item1}'),{arity})({args})", item.Item5, ""];
+                yield return [profile, xslt, $"empty({item.Item1}((), '{item.Item4}'{tail}))", "true", absent];
+                string nodeTail = arity == 3 ? ", $d/r/l" : ", $d/r/l, $d/r/c";
+                yield return [profile, xslt, $"let $d := parse-xml('<r><v>{item.Item3}</v><p>{item.Item4}</p><l>en</l><c>AD</c></r>') return {item.Item1}($d/r/v, $d/r/p{nodeTail})", item.Item5, absent];
+                string wrongTail = arity == 3 ? ", 42" : ", 42, ()";
+                yield return [profile, xslt, $"{item.Item1}({item.Item2}, '{item.Item4}'{wrongTail})", "", modern ? "XPTY0004" : absent];
+                string emptyTail = arity == 3 ? ", ()" : ", (), ()";
+                yield return [profile, xslt, $"{item.Item1}({item.Item2}, '{item.Item4}'{emptyTail})", item.Item5, absent];
+            }
+            yield return [profile, xslt, $"{item.Item1}({item.Item2}, '{item.Item4}', 'en', 'CB')", "[Calendar: AD]" + item.Item5, absent];
+            yield return [profile, xslt, $"{item.Item1}({item.Item2}, '{item.Item4}', 'en', 'Q{{}}1')", "", modern ? "FOFD1340" : absent];
+            foreach (string expr in new[]
+            {
+                $"{item.Item1}(picture := '{item.Item4}', value := {item.Item2})",
+                $"{item.Item1}(calendar := 'AD', value := {item.Item2}, picture := '{item.Item4}')",
+                $"{item.Item1}(place := (), language := (), picture := '{item.Item4}', value := {item.Item2}, calendar := ())"
+            }) yield return [profile, xslt, expr, item.Item5, modern ? "" : "XPST0003"];
+            yield return [profile, xslt, $"empty({item.Item1}(picture := '{item.Item4}', value := ()))", "true", modern ? "" : "XPST0003"];
+            yield return [profile, xslt, $"{item.Item1}(value := {item.Item2}, picture := '{item.Item4}', language := 42)", "", modern ? "XPTY0004" : "XPST0003"];
+            yield return [profile, xslt, $"{item.Item1}({item.Item2})", "", "XPST0017"];
+            yield return [profile, xslt, $"{item.Item1}({item.Item2}, '{item.Item4}', (), (), (), ())", "", "XPST0017"];
+        }
+    }
+
+    /// <summary>Checks optional calls while retaining lower-profile refusal and argument typing.</summary>
+    /// <param name="profile">The compatibility profile.</param>
+    /// <param name="xslt">Whether the shared formatter runs in XSLT mode.</param>
+    /// <param name="expression">The call expression.</param>
+    /// <param name="expected">The exact lexical result.</param>
+    /// <param name="code">The expected error, or empty for success.</param>
+    [Theory, MemberData(nameof(Cases))]
+    public void OptionalContract(XPathCompatibility profile, bool xslt, string expression, string expected, string code)
+    {
+        var context = new EvaluationContext { IsXsltMode = xslt };
+        FunctionLibrary.Populate(context);
+        string Run() => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(context).ToString();
+        if (code.Length == 0) Assert.Equal(expected, Run());
+        else Assert.Contains(code, Assert.ThrowsAny<Exception>(() => Run()).Message);
+    }
+}

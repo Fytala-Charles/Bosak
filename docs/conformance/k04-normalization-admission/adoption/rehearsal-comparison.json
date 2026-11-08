@@ -1,0 +1,62 @@
+[
+  {
+    "scope": "qt3-gate",
+    "totals": [
+      31165,
+      0,
+      656
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 656
+  },
+  {
+    "scope": "qt4-gate",
+    "totals": [
+      8939,
+      0,
+      1920
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 1920
+  },
+  {
+    "scope": "qt3-normalization",
+    "totals": [
+      43,
+      0,
+      5
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 5
+  },
+  {
+    "scope": "qt4-normalization",
+    "totals": [
+      44,
+      0,
+      6
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 6
+  },
+  {
+    "scope": "qt3-original",
+    "totals": [
+      1,
+      0,
+      1
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 1
+  },
+  {
+    "scope": "qt4-original",
+    "totals": [
+      1,
+      0,
+      1
+    ],
+    "matchesRehearsal": true,
+    "skipNamesAndReasons": 1
+  }
+]

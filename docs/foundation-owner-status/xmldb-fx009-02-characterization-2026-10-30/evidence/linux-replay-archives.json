@@ -1,0 +1,21 @@
+{
+  "archives": {
+    "control": {
+      "path": "results/linux-replay/frozen-control.tar.gz",
+      "sha256": "b23fd4881af56e379dacbcd959f95478887ef44807ba3f327c047744d6e77e02",
+      "bytes": 3984829,
+      "fileCount": 125,
+      "sameExactFilesAsPrimaryFrozenLayouts": true
+    },
+    "replacement": {
+      "path": "results/linux-replay/frozen-replacement.tar.gz",
+      "sha256": "788b9c11dd7ffe718c2995c0adafe7e2e5e706e654af113a2061a59acdc711b6",
+      "bytes": 4055534,
+      "fileCount": 125,
+      "sameExactFilesAsPrimaryFrozenLayouts": true
+    }
+  },
+  "replayRunsOverlapPrimary": true,
+  "allFourReplayObservationSetsMatchPrimary": true,
+  "replayTestCasesPerRole": 27
+}

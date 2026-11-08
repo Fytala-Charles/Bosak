@@ -1,0 +1,29 @@
+{
+  "lineEndingPolicy": "Patch/files use LF; git apply may materialize CRLF according to repository attributes. Compare normalized LF and retain exact materialized hashes.",
+  "files": {
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+      "sha256": "a2b1a460cd7fe03a833d9dd3d1f603e96d286fed48328f2999154507d921927c",
+      "lfSha256": "9add10cab7a6f8240ac89388b33a3872cac4a33a2b8479a961b8158d3f5b8490"
+    },
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": {
+      "sha256": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+      "lfSha256": "a143845618d0020fb63fc0b2bb2099463249d81e50acbc5d295afef8a8dfb06d"
+    },
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+      "sha256": "7574bc8ecaf1c4529f8ca1a83f0c04a718f173eba3bd3203de3e57bd49cef8d4",
+      "lfSha256": "9550849d4ee630de863e0250d3aca33cde40635acf33f0509ae682c29a582818"
+    },
+    "src/Directory.Build.props": {
+      "sha256": "6e6b8033c79bb2c5051632158e23374e7d92990c12383fbb994aa7e8e86d4161",
+      "lfSha256": "f4b6fad3f15497268ad38b85a02b28b508cdaa3f289ba7ff8c7f989040cdc52e"
+    },
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": {
+      "sha256": "944a8676962dd642638ff062a6c5d848fa81811e52522b00b7a17d5361eb6d3d",
+      "lfSha256": "a2997404d8e40bbeba63ed170aa8675d8744052d2392c2b41be158b37f1854d0"
+    },
+    "tests/Bosak.XPath.Runtime.Tests/SchemaValueTransportTests.cs": {
+      "sha256": "33fc8d8d18487b59251a6746e0cc616fbc0641d7bce049f89e63bcfd03faaa86",
+      "lfSha256": "a0fb0dbed27f20d1e29729afc31618ebf0f47b81207617030b6180bec2f2a162"
+    }
+  }
+}

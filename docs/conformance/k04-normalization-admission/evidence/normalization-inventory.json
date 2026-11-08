@@ -1,0 +1,745 @@
+{
+  "cases": {
+    "qt3": [
+      {
+        "name": "fn-normalize-unicode1args-1",
+        "expression": "normalize-unicode('Nothing to normalize.')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-2",
+        "expression": "normalize-unicode(())",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-3",
+        "expression": "matches('\u01fa', normalize-unicode('A\u030a\u0301'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-4",
+        "expression": "matches('\u00c5', normalize-unicode('A\u030a'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-5",
+        "expression": "matches('A\u030a', normalize-unicode('A\u030a'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-6",
+        "expression": "(normalize-unicode('\u00c5') eq normalize-unicode('\u212b'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-7",
+        "expression": "normalize-unicode(12)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-8",
+        "expression": "normalize-unicode('','','')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-1",
+        "expression": "normalize-unicode('Nothing to normalize.', 'NFC')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-2",
+        "expression": "normalize-unicode('Nothing to normalize.', 'nFc')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-3",
+        "expression": "normalize-unicode((), 'NFC')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-4",
+        "expression": "(normalize-unicode('\u00c5', '') eq normalize-unicode('\u212b', ''))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-5",
+        "expression": "normalize-unicode('',())",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-6",
+        "expression": "normalize-unicode('',12)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-1",
+        "expression": "fn:concat(fn:normalize-unicode(\"\u00c5\",\" NFC \"),fn:normalize-unicode(\"\u00c5\",\"NFC\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>\u00c5\u00c5</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-2",
+        "expression": "fn:normalize-unicode(\"\u00e8\",\"chancesareyoudonotsupportthis123ifyoudowaoo\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-3",
+        "expression": "fn:upper-case(fn:normalize-unicode(\"normalizedstring\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>NORMALIZEDSTRING</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-4",
+        "expression": "fn:lower-case(fn:normalize-unicode(\"NORMALIZEDSTRING\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>normalizedstring</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-5",
+        "expression": "fn:string-length(fn:normalize-unicode(\"NORMALIZEDSTRING\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>16</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-6",
+        "expression": "fn:concat(fn:normalize-unicode(\"NORMALIZEDSTRING\"),\"another string\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>NORMALIZEDSTRINGanother string</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-7",
+        "expression": "fn:substring(fn:normalize-unicode(\"NORMALIZEDSTRING\"),5)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>ALIZEDSTRING</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-8",
+        "expression": "string-to-codepoints(normalize-unicode('\ufdd0'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>64976</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-9",
+        "expression": "string-to-codepoints(fn:normalize-unicode('e\u0302\ufdd0e\u0302\ufdd0e\u0302'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>234, 64976, 234, 64976, 234</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-10",
+        "expression": "string-to-codepoints(fn:normalize-unicode('e\ufdd0\u0302'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>101, 64976, 770</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "5.2"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11-6-0",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "6.0"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11-6-2",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "6.2"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-1",
+        "expression": "normalize-unicode()",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-2",
+        "expression": "normalize-unicode(\"a string\", \"NFC\", \"wrong param\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-3",
+        "expression": "normalize-unicode(\"a string\", \"example.com/notSupported/\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-4",
+        "expression": "normalize-unicode(\"foo\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-5",
+        "expression": "normalize-unicode(\"foo\", \"NFC\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-6",
+        "expression": "normalize-unicode(\"foo\", \"NFD\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFD"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-7",
+        "expression": "normalize-unicode(\"foo\", \"NFKD\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFKD"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-8",
+        "expression": "normalize-unicode(\"foo\", \"NFKC\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFKC"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-9",
+        "expression": "normalize-unicode(\"f oo\", \"\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-10",
+        "expression": "normalize-unicode(\"foo\", \"\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-11",
+        "expression": "normalize-unicode(\"f oo\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-12",
+        "expression": "normalize-unicode(\"f oo\", \"NFC\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-13",
+        "expression": "normalize-unicode((\"a string\", error()), \"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:error code=\"FOER0000\" />\n            <ns0:error code=\"XPTY0004\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-001",
+        "expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:assert-string-value>blah</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-001a",
+        "expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED",
+            "satisfied": "false"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-002",
+        "expression": "boolean(normalize-unicode(\"blah\",\"NFC\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-003",
+        "expression": "boolean(normalize-unicode(\"blah\",\"ZZZ\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-004",
+        "expression": "normalize-unicode((),\"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-005",
+        "expression": "normalize-unicode(\"\",\"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-006",
+        "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:assert-string-value> \u09be</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-006a",
+        "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED",
+            "satisfied": "false"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      }
+    ],
+    "qt4": [
+      {
+        "name": "fn-normalize-unicode1args-1",
+        "expression": "normalize-unicode('Nothing to normalize.')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-2",
+        "expression": "normalize-unicode(())",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-3",
+        "expression": "matches('\u01fa', normalize-unicode('A\u030a\u0301'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-4",
+        "expression": "matches('\u00c5', normalize-unicode('A\u030a'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-5",
+        "expression": "matches('A\u030a', normalize-unicode('A\u030a'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-6",
+        "expression": "(normalize-unicode('\u00c5') eq normalize-unicode('\u212b'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-7",
+        "expression": "normalize-unicode(12)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode1args-8",
+        "expression": "normalize-unicode('','','')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-1",
+        "expression": "normalize-unicode('Nothing to normalize.', 'NFC')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-2",
+        "expression": "normalize-unicode('Nothing to normalize.', 'nFc')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>Nothing to normalize.</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-3",
+        "expression": "normalize-unicode((), 'NFC')",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-4",
+        "expression": "(normalize-unicode('\u00c5', '') eq normalize-unicode('\u212b', ''))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-false />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-5",
+        "expression": "normalize-unicode('',())",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XP20 XP30 XP31 XQ10 XQ30 XQ31"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-5a",
+        "expression": "normalize-unicode('',())",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XP40+ XQ40+"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode2args-6",
+        "expression": "normalize-unicode('',12)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPTY0004\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-1",
+        "expression": "fn:concat(fn:normalize-unicode(\"\u00c5\",\" NFC \"),fn:normalize-unicode(\"\u00c5\",\"NFC\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>\u00c5\u00c5</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-2",
+        "expression": "fn:normalize-unicode(\"\u00e8\",\"chancesareyoudonotsupportthis123ifyoudowaoo\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-3",
+        "expression": "fn:upper-case(fn:normalize-unicode(\"normalizedstring\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>NORMALIZEDSTRING</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-4",
+        "expression": "fn:lower-case(fn:normalize-unicode(\"NORMALIZEDSTRING\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>normalizedstring</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-5",
+        "expression": "fn:string-length(fn:normalize-unicode(\"NORMALIZEDSTRING\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>16</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-6",
+        "expression": "fn:concat(fn:normalize-unicode(\"NORMALIZEDSTRING\"),\"another string\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>NORMALIZEDSTRINGanother string</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-7",
+        "expression": "fn:substring(fn:normalize-unicode(\"NORMALIZEDSTRING\"),5)",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>ALIZEDSTRING</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-8",
+        "expression": "string-to-codepoints(normalize-unicode('\ufdd0'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>64976</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-9",
+        "expression": "string-to-codepoints(fn:normalize-unicode('e\u0302\ufdd0e\u0302\ufdd0e\u0302'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>234, 64976, 234, 64976, 234</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-10",
+        "expression": "string-to-codepoints(fn:normalize-unicode('e\ufdd0\u0302'))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>101, 64976, 770</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "5.2"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11-6-0",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "6.0"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-11-6-2",
+        "expression": "",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XQ10+"
+          },
+          {
+            "type": "unicode-version",
+            "value": "6.2"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-xml>&lt;out/&gt;</ns0:assert-xml>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-1",
+        "expression": "normalize-unicode()",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-2",
+        "expression": "normalize-unicode(\"a string\", \"NFC\", \"wrong param\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0017\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-3",
+        "expression": "normalize-unicode(\"a string\", \"example.com/notSupported/\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-4",
+        "expression": "normalize-unicode(\"foo\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-5",
+        "expression": "normalize-unicode(\"foo\", \"NFC\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-6",
+        "expression": "normalize-unicode(\"foo\", \"NFD\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFD"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-7",
+        "expression": "normalize-unicode(\"foo\", \"NFKD\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFKD"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-8",
+        "expression": "normalize-unicode(\"foo\", \"NFKC\") eq \"foo\"",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "NFKC"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-9",
+        "expression": "normalize-unicode(\"f oo\", \"\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-10",
+        "expression": "normalize-unicode(\"foo\", \"\") eq \"foo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-11",
+        "expression": "normalize-unicode(\"f oo\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-12",
+        "expression": "normalize-unicode(\"f oo\", \"NFC\") eq \"f oo\"",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "K-NormalizeUnicodeFunc-13",
+        "expression": "normalize-unicode((\"a string\", error()), \"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:error code=\"FOER0000\" />\n            <ns0:error code=\"XPTY0004\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-001",
+        "expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:assert-string-value>blah</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-001a",
+        "expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED",
+            "satisfied": "false"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-002",
+        "expression": "boolean(normalize-unicode(\"blah\",\"NFC\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-003",
+        "expression": "boolean(normalize-unicode(\"blah\",\"ZZZ\"))",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-004",
+        "expression": "normalize-unicode((),\"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-005",
+        "expression": "normalize-unicode(\"\",\"NFC\")",
+        "dependencies": [],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-006",
+        "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:assert-string-value> \u09be</ns0:assert-string-value>\n      </ns0:result>\n   "
+      },
+      {
+        "name": "cbcl-fn-normalize-unicode-006a",
+        "expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+        "dependencies": [
+          {
+            "type": "unicode-normalization-form",
+            "value": "FULLY-NORMALIZED",
+            "satisfied": "false"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <ns0:error code=\"FOCH0003\" />\n      </ns0:result>\n   "
+      },
+      {
+        "name": "fn-normalize-unicode-empty",
+        "expression": "normalize-unicode('A\u030a', ())",
+        "dependencies": [
+          {
+            "type": "spec",
+            "value": "XP40+ XQ40+"
+          }
+        ],
+        "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>\u00c5</ns0:assert-string-value>\n      </ns0:result>\n   "
+      }
+    ]
+  },
+  "fixtureHashes": {
+    "tests/qt3tests/catalog.xml": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+    "tests/qt3tests/fn/normalize-unicode.xml": "60ff5569967868700973c8682db21be7f0e0e858ac658106b723aa407c2fa081",
+    "tests/qt4tests/catalog.xml": "eb5978513539ec0c5416994c0de2cd5239734cd13018508a6d2d463f4aeca7e8",
+    "tests/qt4tests/fn/normalize-unicode.xml": "3a61626b9c1f5b31a6f4fbc3e1aa1731f99d83919b08c130311dc3929e27de63"
+  }
+}

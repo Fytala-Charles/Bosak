@@ -1,0 +1,342 @@
+[
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-001",
+    "expression": "format-integer(255, '16^xxxx')",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"00ff\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-002",
+    "expression": "format-integer(65535, '16^XX:XX')",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"FF:FF\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-003",
+    "expression": "every $r in (2 to 36) satisfies format-integer(0, $r || '^X') = \"0\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-004",
+    "expression": "every $r in (2 to 36) satisfies format-integer(1, $r || '^X') = \"1\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-005",
+    "expression": "every $r in (2 to 36) satisfies format-integer(-1, $r || '^X') = \"-1\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-006",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r, $r || '^X') = \"10\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-007",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r+1, $r || '^X') = \"11\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-008",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r*$r, $r || '^XXXX') = \"0100\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-009",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r*$r*$r, $r || '^X_XXX') = \"1_000\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-010",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r*$r*$r, $r || '^XX_X_XXX') = \"00_1_000\"",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-011",
+    "expression": "every $r in (2 to 36) satisfies format-integer($r - 1, $r || '^x') = \n            substring(\"0123456789abcdefghijklmnopqrstuvwxyz\", $r, 1)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-012",
+    "expression": "every $r in (2 to 36), \n                    $n in (0, 1, 7, 23, 86, 159, 2134672, 105093381562) \n                    satisfies (format-integer($n, $r || '^X') => parse-integer($r)) eq $n\n        ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-013",
+    "expression": "format-integer(999, \"8^#:#:#:#:XX\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"1:7:47\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-014",
+    "expression": "format-integer(999, \"10^0000\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"00^0999\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-015",
+    "expression": "format-integer(999, \"9^9999\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"0^0999\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-016",
+    "expression": "format-integer(65535, \"16^xx^xx\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"ff^ff\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-017",
+    "expression": "format-integer(21, \"16^xx;o\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-eq>\"15st\"</ns0:assert-eq>\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  }
+]

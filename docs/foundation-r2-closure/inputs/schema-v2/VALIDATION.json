@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-11-03",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responses": [
+    {
+      "path": "BCAP-O1-Schema.v2.response.json",
+      "sha256": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+      "returnId": "BCAP-O1-Schema",
+      "decision": "AcceptWithScope",
+      "bindingAndCompletenessValid": true,
+      "supersededBcapResponseSha256": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf"
+    },
+    {
+      "path": "BCAP-O2-Schema.v2.response.json",
+      "sha256": "e2737d309279ab23e192cc6c0de94ea75391d809bec60546067e867a9d9e4593",
+      "returnId": "BCAP-O2-Schema",
+      "decision": "AcceptWithScope",
+      "bindingAndCompletenessValid": true,
+      "supersededBcapResponseSha256": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a"
+    }
+  ],
+  "validator": {
+    "path": "D:/Development/Bosak/docs/foundation-bcap-owner-review/tools/returns.py",
+    "sha256": "de28f26473ea298d371a6c2bb70b52d9ea0d466725abbf3162a1fa2eb3eeae1a",
+    "baseSha256": "0a121c5de966e331e0bda9ef8681c5d3e8f1310ea31295ae9f9dd4c3bfbc3763",
+    "roleMatrixSha256": "eef87542d30ea7055394a3fee0fa526da84c8639de4c81f8175bde0d930895a1",
+    "packetsSha256": "c80b4ed5a48eaa10d3e443befe8632fb3c7983132f44008d19dfe8aa4928ace3"
+  },
+  "inboxManifestSha256": "b3e544a960d6c341c176b76ed3b8aab4c689a057cc09222af539d1d06f1de5a1",
+  "inboxFilesVerified": 22,
+  "proposalDeclarationInputsVerified": 9,
+  "priorResponseHashSemantics": "priorResponseSha256 remains null because original O1-Schema/O2-Schema files are absent from the BCAP packet; supersedesResponse separately binds the preserved submitted BCAP Revise bytes.",
+  "ownerAuthenticationClaimed": false,
+  "allSevenRolesValidated": false,
+  "scopedR2ClosureClaimed": false,
+  "runtimeQualification": false,
+  "apiFrozen": false,
+  "coreCheckoutModified": false
+}

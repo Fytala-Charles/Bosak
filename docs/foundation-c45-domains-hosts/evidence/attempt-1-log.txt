@@ -1,0 +1,17 @@
+System.InvalidOperationException: XPDY0002: The context item is absent.
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 671
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 477
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\src\Bosak.XPath.Api\XPath31Expression.cs:line 858
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 9085
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 7415
+   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 7183
+   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 19554
+   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 7182
+   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 7679
+   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\Development\Bosak\src\Bosak.Xslt\Runtime\TransformEngine.cs:line 1435
+   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass11_0.<Transform>b__0() in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltExecutable.cs:line 132
+   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltExecutable.cs:line 811
+--- End of stack trace from previous location ---
+   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltExecutable.cs:line 821
+   at Bosak.Xslt.Api.XsltExecutable.Transform(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri) in D:\Development\Bosak\src\Bosak.Xslt\Api\XsltExecutable.cs:line 129
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\c45-domains-hosts\Program.cs:line 45

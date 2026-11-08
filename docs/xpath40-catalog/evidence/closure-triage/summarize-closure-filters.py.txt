@@ -1,0 +1,30 @@
+from pathlib import Path
+import json,collections
+e=Path('D:/Development/Bosak/docs/xpath40-catalog/evidence/closure-triage')
+rows=json.loads((e/'skip-cases.json').read_text());results=[json.loads(x) for x in (e/'filter-results.jsonl').read_text().splitlines()];lookup={(x['Suite'],x['Name']):x for x in results}
+summary={}
+for suite in ['qt3','qt4']:
+ group=[r for r in rows if r['Suite']==suite];deps=[r for r in group if r['SkipReason']=='Unsupported dependency'];counter=collections.Counter();anydeps=collections.Counter()
+ for row in deps:
+  actual=lookup[suite,row['Name']];assert not actual['xpathSupported']
+  if suite=='qt3':assert not(actual['xqueryDependenciesSupported'] and actual['canRouteXquery'])
+  rejected=actual['rejectedDependencies'];assert rejected
+  def label(d):return d['Type']+':'+d['Value']+(' [negative]' if not d['Satisfied'] else '')
+  primary='XQuery syntax/routing restriction' if suite=='qt3' and actual['xqueryDependenciesSupported'] and not actual['canRouteXquery'] else label(rejected[0])
+  counter[primary]+=1;anydeps.update(set(label(d) for d in rejected));row['FilterAssessment']=actual;row['PrimaryInventoryBlocker']=primary
+ summary[suite]=dict(unsupportedDependencyCases=len(deps),primaryInventoryBlockers=dict(counter.most_common()),allRejectedDependencyMentions=dict(anydeps.most_common()),countPolicy='Primary XPath filter blocker, except separately admitted-XQuery-dependency/routing refusal. Multiple blocker mentions overlap; no support inference from declarations.')
+(e/'skip-cases.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+(e/'dependency-summary.json').write_text(json.dumps(summary,indent=2)+'\n',encoding='utf-8')
+print(json.dumps(summary,indent=2))
+print('Non-dependency cases:')
+for row in rows:
+ if row['SkipReason'] not in ['Unsupported dependency'] and (row['SkipReason'].startswith(('Engine gap:','Harness error:','Unexpected error:'))):print(json.dumps({k:row[k] for k in ['Suite','Name','Set','Expression','SkipReason']}))
+typed=[r for r in rows if r['Suite']=='qt4' and r.get('FilterAssessment') and r['FilterAssessment']['rejectedDependencies']==[dict(Type='feature',Value='typedData',Satisfied=True)]]
+print('Only typedData:',len(typed))
+selected=[];seen=set()
+for row in sorted(typed,key=lambda x:len(x['Expression'])):
+ if row['Set'] in seen:continue
+ selected.append(row);seen.add(row['Set'])
+ if len(selected)==8:break
+for row in selected:print(json.dumps({k:row[k] for k in ['Suite','Name','Set','Expression']}))
+(e/'typed-data-diagnostic-selection.json').write_text(json.dumps(selected,indent=2)+'\n',encoding='utf-8')

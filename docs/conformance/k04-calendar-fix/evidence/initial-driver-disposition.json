@@ -1,0 +1,6 @@
+{
+  "kind": "Failed initial diagnostic attempt, retained separately",
+  "reason": "Reused driver references 1.28.0 assemblies after normal harness rebuilt as 1.28.1; observed FileLoadException and first-original 20-second watchdog timeout.",
+  "disposition": "Build a new diagnostic driver against actual 1.28.1 assemblies; no engine retry or relaxed watchdog.",
+  "assemblyVersion": "1.28.1.0"
+}

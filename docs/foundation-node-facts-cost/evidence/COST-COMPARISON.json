@@ -1,0 +1,17 @@
+{
+  "baseline": {
+    "cold": 35051,
+    "warm": 64,
+    "callbacksPerObservation": 108
+  },
+  "candidate": {
+    "cold": 1396,
+    "warm": 0,
+    "callbacksPerObservation": 54
+  },
+  "baselinePath": "docs/foundation-node-facts-reader/evidence/FACT-ALLOCATION.json",
+  "baselineSha256": "e63063a1ddbde2e9be07c7cacde9911fb467fd050fcbff8d1c3aeeb88b28bd84",
+  "coldReductionPercent": 96.02,
+  "callbackReductionPercent": 50,
+  "scope": "Same fixture shape and counts; local managed allocation/selected issuer callback observations. No latency or owner/native budget acceptance."
+}

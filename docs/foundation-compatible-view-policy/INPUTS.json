@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.66.0",
+  "reviewInputs": {
+    "docs/foundation-public-construction/MANIFEST.json": "2a3a4f9f059d5202eb61f1e273d86c11cb518dea99e36a9d7d33408a0683f1a0",
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "fbd78cab2bf18d30c36260dc6fe81e54991debf7a575bf4964a28298d472b447",
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "c73ba3b2bc063cc54365b02a43d6519c1fd8f371a4f20023236f0795d6fd90ca",
+    "src/Bosak.XPath.Runtime/Vm/QueryProviderOperationScope.cs": "7c829714ef99c53ac28c83bfaa0bd0c0dd2a3ce3ba7909b5f7a4e2a75f50a449",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "1009091faa73b89287bfe144313ef9ace8a09f6aaa6c443e6318040dbd7cedd5",
+    "src/Directory.Build.props": "c218724c3b36dfcf639603cbb631b5eefa3e150ef22b9d51763130e3bcca700b",
+    "docs/foundation-r2-ledger/LEDGER.json": "798663d22026b070cbc5d74eabaa6f60330f4c031b60983e4b1bca773d092d35",
+    "docs/foundation-provenance-lifetime/PROPOSED-LAWS.json": "c2f6bee61a2542a7f8bdbded89465ecf8fac9a305ca106919c72e262505fc810",
+    "docs/foundation-owner-reconciliation/README.md": "6d788c2c23db5d1e8aaa88f5c7421e9614cef943088ed168ef79ecacff1bc365",
+    "docs/foundation-package-qualification/tools/CandidateAssets.targets": "818cab39de9eda9160d7d2bf5b15452a2876dfe67d2ecfb3afd26601e70b6ab7",
+    "docs/foundation-exact-value-transport/evidence/SOURCE-COMPATIBILITY.json": "c1cde1235f2cdcc0bc63a5e34fb4ead882e79e0248c21ce613b909c4523441d3"
+  }
+}

@@ -51,6 +51,9 @@
 //                      |                  |       |                | typed-let coercion incl. numeric downcasting, lexical let scoping                        |
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
 //                      | Charles Korthout | 0.13  | 24-10-2026     | Correct fn-map-to-element gate name to enforce the frozen native test set.                |
+//                      | Charles Korthout | 0.14  | 27-10-2026     | Promote zero-failure integer parse/format sets after complete original-case validation. |
+//                      | Charles Korthout | 0.15  | 28-10-2026     | Promote zero-failure date/dateTime/time sets after optional-argument implementation.     |
+//                      | Charles Korthout | 0.16  | 28-10-2026     | Promote owner-approved zero-failure Unicode normalization set (230 gated sets).         |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -354,6 +357,13 @@ internal sealed class ConformanceRunner40
         "app-UseCaseNLP",
         "app-UseCaseSEQ",
         "app-UseCaseSTRING",
+        // K04-C19: complete normal date-formatting sets verified with zero failures.
+        "fn-format-date",
+        "fn-format-dateTime",
+        "fn-format-time",
+        "fn-format-integer",
+        "fn-parse-integer",
+        "fn-normalize-unicode",
     };
 
     /// <summary>Failures inside <see cref="GatedSets"/> — these fail the run.</summary>

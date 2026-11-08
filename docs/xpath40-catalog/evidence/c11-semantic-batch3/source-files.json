@@ -1,0 +1,15 @@
+{
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+  "tests/Bosak.XPath.Standard.Tests/UnixDateTimeContractTests.cs": "17d5fc3320b917cc4e8264521afd8e6fffea38bd",
+  "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+  "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs": "3c13602651ac208808900cbb2358d74b56e18563",
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+  "tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs": "a6749a57c3e2bc83791a2006f4813d24b52eaa33",
+  "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+  "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs": "532c2ab459855d322c46b14c7ed6406ed153b297",
+  "src/Bosak.XPath.Parser/Ast/XPathParser.cs": "7443e0a7d416043f39d1fb06c48ebade1d6e7d54",
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "85383daf06921a46ff81656cce8174ad66a7ae01",
+  "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs": "2348c3c2cfff1b507741839df58116daa90dd1c3",
+  "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs": "41cbb0fd50f6f334d449b244434db4ef059e9767",
+  "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2"
+}

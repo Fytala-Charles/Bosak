@@ -1,0 +1,47 @@
+{
+  ".guard-tmp/k04-construction-admission-harness/ConformanceRunner.cs": {
+    "source": "tests/Bosak.XPath.Conformance/ConformanceRunner.cs",
+    "changed": false,
+    "sha256": "ebce2011a4dbed44395b55bb169878a7cc398377a9023b1ca84544c6bca84f2e"
+  },
+  ".guard-tmp/k04-construction-admission-harness/DependencyFilter.cs": {
+    "source": "tests/Bosak.XPath.Conformance/DependencyFilter.cs",
+    "changed": false,
+    "sha256": "dbc3fe0314f88e01c77dfd4a92aafd338b6ce29a0a04e493d7cedc10d432c2c4"
+  },
+  ".guard-tmp/k04-construction-admission-harness/Program.cs": {
+    "source": "tests/Bosak.XPath.Conformance/Program.cs",
+    "changed": false,
+    "sha256": "840ec972c404da80923944b3872ab5804659081823a1e984d813a4cb8f64a440"
+  },
+  ".guard-tmp/k04-construction-admission-harness/ResultComparer.cs": {
+    "source": "tests/Bosak.XPath.Conformance/ResultComparer.cs",
+    "changed": false,
+    "sha256": "165bc64ea949f26a6e5c47be33180c3d81a34e8839169868b713f987dfe4c0b2"
+  },
+  ".guard-tmp/k04-construction-admission-harness/TestCase.cs": {
+    "source": "tests/Bosak.XPath.Conformance/TestCase.cs",
+    "changed": false,
+    "sha256": "2a9988271fcbda34f946f6c9412bd21f9116f932e1ebd9a59e690f5d31630490"
+  },
+  ".guard-tmp/k04-construction-admission-harness/TestEnvironment.cs": {
+    "source": "tests/Bosak.XPath.Conformance/TestEnvironment.cs",
+    "changed": false,
+    "sha256": "d8dbe1bdc320553600a07df8b7c8d3f77556e28a9983cd0f3585e7c2cb116c84"
+  },
+  ".guard-tmp/k04-construction-admission-harness/TestExecutor.cs": {
+    "source": "tests/Bosak.XPath.Conformance/TestExecutor.cs",
+    "changed": true,
+    "sha256": "da341599d765ae8f273bd0566d12a5c71ef46222665d981e6edfdc2a5a8068d6"
+  },
+  ".guard-tmp/k04-construction-admission-harness/TestOutcome.cs": {
+    "source": "tests/Bosak.XPath.Conformance/TestOutcome.cs",
+    "changed": false,
+    "sha256": "40b315713eccebd94eae051c14655b048473ba4b0f9502b2e27d10f9fce75b98"
+  },
+  ".guard-tmp/k04-construction-admission-harness/TestReport.cs": {
+    "source": "tests/Bosak.XPath.Conformance/TestReport.cs",
+    "changed": false,
+    "sha256": "a93eacaa750b7ca7db43cb034223f15dacece0a98f7243d9164977501b21812a"
+  }
+}

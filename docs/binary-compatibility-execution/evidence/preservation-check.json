@@ -1,0 +1,57 @@
+{
+  "date": "2026-10-29",
+  "priorDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16,
+    "schema-repeated-implementation": 33,
+    "schema-repetition-review": 9,
+    "schema-count-assertions": 17,
+    "schema-count-implementation": 30,
+    "schema-count-review": 9,
+    "schema-presence-implementation": 28,
+    "schema-presence-review": 9,
+    "schema-consumer-priorities": 6,
+    "xmldb-compatibility": 28,
+    "braid-compatibility": 36,
+    "consumer-qualification-review": 6,
+    "binary-compatibility-scope": 9
+  },
+  "allOriginalBytesPreserved": true,
+  "coreAndSchemaProductionUnchanged": true,
+  "actualConsumerCheckouts": {
+    "XmlDb": {
+      "head": "3f722daf6ae38f0a5b67de1c678f3175768b28dd",
+      "status": [
+        " M AGENTS.md",
+        " M M2_STATUS.md",
+        " M README.md",
+        " M ROADMAP.md",
+        " M docs/AGENT_HANDOVER.md",
+        " M docs/ARCHITECTURE.md",
+        " M docs/FEATURE_REQUESTS.md",
+        " M docs/INTEGRATION.md",
+        " M docs/implementation/M2_APPLICATION_AUTHORITY_FORMAT_V1.md",
+        " M src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Cutover.cs",
+        " M src/Bosak.XmlDb.Storage/MigrationCutoverSession.cs",
+        " M src/Bosak.XmlDb.Storage/MigrationCutoverValidation.cs",
+        "?? docs/ADR-032-owner-bound-first-enrollment-preparation.md",
+        "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_PREPARATION.md",
+        "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_VALIDATION.md",
+        "?? docs/implementation/m2-application-authority-enrollment-results.json",
+        "?? src/Bosak.XmlDb.Storage/ApplicationAuthorityEnrollment.cs",
+        "?? tests/Bosak.XmlDb.Storage.Tests/ApplicationAuthorityEnrollmentTests.cs"
+      ]
+    },
+    "Braid": {
+      "head": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "status": []
+    }
+  },
+  "productDependencyAdopted": false
+}

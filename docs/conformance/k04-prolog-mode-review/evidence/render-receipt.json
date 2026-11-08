@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/README.md.html",
+      "sha256": "059a59a453127a5a7ed9b728224c8eedd5ea01b6262eb58afb4a2c9857648c62"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_ARCHITECTURE.md.html",
+      "sha256": "c7229ed89622dec16aeb1d0f619fbbe6b8580634a2a8d7e983cd3eec3b5ad5ae"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "a9d182412871ed52acc13cb1f209df7aee88efba910097977f6a6f5151dbda2a"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_INTEGRATION.md.html",
+      "sha256": "3ab38272674c0dafb7f589b8390289e9f5de5726f8c3925eb0e5d887b2b448a4"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "4e337d2e37b5774cdec875c77ebc3128ffdd0f5624764432cc655e2c305f0eb1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "e966d1039de2141583f0422b83ae79015f8b2b7a495515f98e05cc41bc136d46"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "26a7ce3b98bb6c37a052fa2e7f3674d94367b104910909f5ef16a4a826c1df8d"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "7812a51d6dc90707bf640adbee76646a703c4af710a529c02c78e4f0f057e46d"
+    },
+    {
+      "source": "docs/conformance/k04-prolog-mode-review/README.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_conformance_k04-prolog-mode-review_README.md.html",
+      "sha256": "e9986b9da7b675358d544f4d2d9b07d5a7f4951dd4782b54669c7995e2f21711"
+    },
+    {
+      "source": "docs/conformance/k04-prolog-mode-review/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-prolog-mode-review-render/docs_conformance_k04-prolog-mode-review_NEXT-SLICE.md.html",
+      "sha256": "a553c4ec44fddb2661cf532985880b55a2176f00eb7fafcbb45fd2ae88ba10ef"
+    }
+  ]
+}

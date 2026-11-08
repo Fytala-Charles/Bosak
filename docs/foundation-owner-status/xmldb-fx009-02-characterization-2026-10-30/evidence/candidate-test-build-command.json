@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "D:\\Development\\Bosal.XmlDb\\.tools\\fx009-02\\candidate\\source\\tests\\Bosak.XmlDb.Xdm.Tests\\Bosak.XmlDb.Xdm.Tests.csproj",
+    "-c",
+    "Release",
+    "--no-restore",
+    "-v",
+    "quiet"
+  ],
+  "exitCode": 0,
+  "seconds": 2.3630389999889303,
+  "timeoutSeconds": 240,
+  "isolatedNuGetAuditDisabled": false
+}

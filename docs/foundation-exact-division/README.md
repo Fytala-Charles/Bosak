@@ -1,0 +1,15 @@
+# Exact terminating division qualification â€” 4 November 2026
+
+Source **1.51.0**, based on `80dd99cb`, implements bounded primitive integer/decimal `div` through **bosak-exact-division-v4**. Successful results are Decimal; nonterminating quotients explicitly refuse without rounding. This is a finite exact subset, not general XPath decimal-division conformance. R3 remains InProgress.
+
+All **24,747 tests** pass, including 33 new controls: five Core cases, 19 public API cases and nine additional raw-session lifecycle cases. QT3 remains **31,397/0/424**; gated qt4 remains **8,941/0/1,918**, including 11 experimental passes. Exact skip names/reasons are unchanged. All eleven assemblies retain **310 public types / 6,369 declaration rows** and original friend grants. The full test run uses loopback permission for the unchanged database fixture; XSLT passes in its normal layout.
+
+The Core controls include 5,000 independent rational-identity/termination cases, a 10,001-digit coefficient, supplied/result quotas, extreme scales, cancellation inside numeric work and three warmed owned-input refusal allocation observations. Public controls exercise types/precedence/variables/string/comparison composition, reusable failures, close/cancellation during actual factor work, no root reads and exactly-once deferred release/drain. A frozen caller built against 1.50.0 retains identical profile, descriptor identity and SHA-256 descriptor fingerprints for nine unchanged ordinary/v1/v2/v3 expressions under candidate binaries, with actual loaded hashes verified. This is finite compatibility evidence, not complete owner source/binary or native ABI acceptance.
+
+Read the [consumer guide](GUIDE.md), [adoption/deviation record](SPEC-BASIS.md), [completed checklist](ACCEPTANCE.md), [case results](ACCEPTANCE.json) and [status](STATUS.json). Source/binary pins, actual bindings, full runner logs/TRX, profile caller and engine/source archives are retained under `evidence/`. Replay `python docs/foundation-exact-division/tools/verify.py` without rebuilding.
+
+The first focused run found a Boolean formatting branch missing from the test helper; its receipt is retained alongside the corrected successful run. The production arithmetic was unchanged by that test-only correction. Allocation observations include caught exceptions with inputs already owned; they establish neither accepted owner budgets nor hard latency/aggregate-memory bounds. No private-prototype suite was rerun.
+
+The [historical policy packet](../foundation-decimal-division-policy/README.md) remains sealed preparation evidence. Next: typed/schema numeric integration and all-host qualification. Wider rounded decimal division/error policy, native qualification, typed-default source migration disposition, final SemVer, C45/freeze and publication remain pending. No tag or package publication follows from this checkpoint.
+
+A final XML parameter-comment completion in the new Core test file was followed by a same-engine full Core rerun (260 passes). UNIT-RESULTS.json selects that final Core receipt; the original successful full-solution receipt remains archived.

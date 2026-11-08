@@ -1,0 +1,20 @@
+{
+  "DECLARATIONS.json": "a5ef389d48feccac6ab33d20605f29bbe2fb00e307d248f02ec9235d0f0d7352",
+  "evidence/controls.log": "9761da6374babe8323eb5488606478afea63ee95687597b8ca48be725bc2f68b",
+  "evidence/controls.log.json": "1a7ad9bfe3480baadbc9adfd0e86d4e280638a13ac8fb813edb32bfb854a42df",
+  "evidence/DOCUMENTATION-CHECKS.json": "57b278f98b5f05e0fba7185c809f24d9c7de26ceddf1e151a9bafb3d112ca7a1",
+  "evidence/NUMERIC-INTENTS.json": "7cb7a7975c53f272f23d7fa1032fa832253bf773e5d9112d767dafab3dc88da3",
+  "evidence/prior-proof.log": "aa6ca7b51f218a133faf487ecf0b6e3827431a6e56c226b5a143a963ed5919fa",
+  "evidence/prior-proof.log.json": "9f3ebe57d2ccaf8c61af10ce76f8e524089d8233927f4bbf0a2d51ba95f4d448",
+  "HOST-CASES.json": "009ef8ed3d073df77d5dbf47b64650d021c1175a00b330321eef0b607ef42d22",
+  "INPUTS.json": "bd188075265ae137d8567487e881c3dcc0d7c93f0518ecf90d468fbc5e9de823",
+  "NEXT-HOST-BRIDGE.md": "1364ee6957c63c3a785690170e9f2413520a391a0bb5c84fb47497390f16930c",
+  "PLAN.json": "697928cefccf48c7b7458a1d95e06a14ed98f7332f6085f51b90de4463e17d3f",
+  "README.md": "fbe96e83f9a527ce1c78c6b0d1c9aa9a684bd7695148e81c12865b9836f45749",
+  "REQUIREMENTS.json": "66f2463529ec136cdd7f3ac0cd4afad8d89cfb93cb131c73311e1dc99170dc81",
+  "STATUS.json": "a4381da8bce6f51803e807b34bcdb0bb074fc226a458bc9a4ed8e51b2f9940d9",
+  "tools/audit.py": "03741b7dfd56fad7ae93cadd42b0f39cdf0125cd2436ed0ad779a35aa0e8404a",
+  "tools/render.cjs": "d86cb80637d75265b051ba9c3ac920eddf88a1eadabf74d74cf9853dd1ad17e5",
+  "tools/test_verify.py": "2ef001bf977559e4c3fb4da378f3ff4f3958820af346843b5c06646f30628fa9",
+  "tools/verify.py": "a333d2fa41a8ff622decfb760a44446c83f93329bd5bf965fc0e765e025e3dcd"
+}

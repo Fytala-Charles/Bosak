@@ -1,0 +1,9 @@
+{
+  "status": "passed review checks",
+  "checksBeforeManifest": 70376,
+  "isolatedGateExpectedFailure": true,
+  "admissionQualified": false,
+  "productionSourceUnchanged": true,
+  "baselineUnchanged": true,
+  "processes": 434
+}

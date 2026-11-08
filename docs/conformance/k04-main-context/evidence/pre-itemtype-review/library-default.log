@@ -1,0 +1,1 @@
+{"Name":"library-default","kind":"Passed","expectedCode":"XQST0113","errorType":"XPathParseException","error":"Parse error at position 67: XQST0113: A context item declaration in a library module must not specify an initial or default value."}

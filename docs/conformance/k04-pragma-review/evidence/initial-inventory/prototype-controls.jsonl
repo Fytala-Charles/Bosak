@@ -1,0 +1,14 @@
+{"Name":"simple","Expression":"declare namespace p=\u0022urn:unknown\u0022; (#p:x#){1}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"comment","Expression":"(: (#p:x#){1} :) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"string","Expression":"\u0022(#p:x#){1}\u0022","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"nested-comment","Expression":"(:a(: (#p:x#) :)b:) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"uri-name","Expression":"(#Q{urn:unknown}x#){1}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"unprefixed","Expression":"(#x#){1}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"empty-name","Expression":"(##){1}","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"missing-fallback","Expression":"(#p:x#){}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"multiple","Expression":"(#p:x#)(#p:y#){1}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"whitespace","Expression":"(# \np:x #){1}","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"pragma-in-string","Expression":"\u0027(# p:x #)\u0027","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"construction","Expression":"declare construction strip; 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"copy","Expression":"declare copy-namespaces no-preserve,inherit;1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"context","Expression":"declare context item:=1;.","before":true,"after":true,"actual":true,"passed":true}

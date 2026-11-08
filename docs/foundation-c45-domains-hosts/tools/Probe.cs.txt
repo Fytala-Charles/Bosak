@@ -1,0 +1,64 @@
+// Generated bounded public-host characterization; no production semantics changed.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+try {
+ var observations=new List<object>();var controls=new List<object>();
+ var fixtures=new (string id,string expression,string exact,bool integer,bool withinProfile)[]{
+  ("small-int","42","42",true,true),
+  ("long-max","9223372036854775807","9223372036854775807",true,true),
+  ("long-plus-one","9223372036854775808","9223372036854775808",true,true),
+  ("unsigned-long-max","xs:unsignedLong('18446744073709551615')","18446744073709551615",true,true),
+  ("decimal-max-integer","79228162514264337593543950335","79228162514264337593543950335",true,true),
+  ("decimal-max-plus-one","79228162514264337593543950336","79228162514264337593543950336",true,false),
+  ("integer-40-literal","1234567890123456789012345678901234567890","1234567890123456789012345678901234567890",true,false),
+  ("integer-40-constructor","xs:integer('1234567890123456789012345678901234567890')","1234567890123456789012345678901234567890",true,false),
+  ("decimal-28","xs:decimal('0.1234567890123456789012345678')","0.1234567890123456789012345678",false,true),
+  ("decimal-39","xs:decimal('0.123456789012345678901234567890123456789')","0.123456789012345678901234567890123456789",false,false),
+  ("decimal-39-literal","0.123456789012345678901234567890123456789","0.123456789012345678901234567890123456789",false,false),
+  ("integer-difference","1000000000000000000000000000000000000001 - 1000000000000000000000000000000000000000","1",true,false),
+  ("long-safe-comparison","9007199254740993 eq 9007199254740992","false",false,true),
+  ("invalid-decimal","xs:decimal('not-a-number')","",false,false)
+ };
+ foreach(var f in fixtures)foreach(var host in new[]{"XPath","XQuery","XSLT"}){
+  var query="let $v := ("+f.expression+") return ($v,string($v),$v instance of xs:integer)";
+  try{
+   var items=Items(Eval(host,query));if(items.Length!=3)throw new Exception("Expected three result fields");
+   bool integer=items[2].BooleanValue;var canonical=items[1].StringValue;
+   observations.Add(new{f.id,host,f.expression,expectedExact=f.exact,expectedInteger=f.integer,f.withinProfile,kind=items[0].Kind.ToString(),schemaTypeName=items[0].SchemaTypeName,canonical,integer,exact=canonical==f.exact&&integer==f.integer,error=(string?)null});
+  }catch(Exception error){var code=System.Text.RegularExpressions.Regex.Match(error.Message,@"\b[A-Z]{4}[0-9]{4}\b").Value;observations.Add(new{f.id,host,f.expression,expectedExact=f.exact,expectedInteger=f.integer,f.withinProfile,kind=(string?)null,schemaTypeName=(string?)null,canonical=(string?)null,integer=false,exact=false,error=code.Length>0?code:error.GetType().Name});}
+ }
+ var node=new TypedNode(new XDocumentNode(XElement.Parse("<n>999</n>")));
+ foreach(var host in new[]{"XPath","XQuery","XSLT"}){
+  XdmValue value=host switch{
+   "XPath"=>XPath31Expression.Compile("data($n)").Evaluate(new EvaluationContext().WithVariable("n",XdmValue.FromNode(node))),
+   "XQuery"=>new XQueryCompiler().Compile("declare variable $n external;data($n)").Evaluate(new XQueryContext().WithVariable("n",XdmValue.FromNode(node))),
+   _=>new XsltCompiler().Compile(Stylesheet("data($n)",true)).Transform(null,new EvaluationContext().WithVariable("n",XdmValue.FromNode(node)),initialTemplate:"main",rawResult:true)};
+  var item=Items(value).Single();controls.Add(new{id="typed-node",host,value=item.ToString(),kind=item.Kind.ToString(),passed=item.Kind==XdmValueKind.Decimal&&item.DecimalValue==10m});
+ }
+ var compiler=new XQueryCompiler().WithNamespace("p","urn:caller");
+ var executable=compiler.Compile("declare namespace p='urn:query';namespace-uri-from-QName(xs:QName('p:x'))");compiler.WithNamespace("p","urn:changed");
+ var namespaceValue=Items(executable.Evaluate(new XQueryContext())).Single().ToString();controls.Add(new{id="effective-prolog",host="XQuery",value=namespaceValue,kind="String",passed=namespaceValue=="urn:query"});
+ bool absent=false;try{new XsltCompiler().Compile(Stylesheet("data(.)")).Transform(node,initialTemplate:"main",rawResult:true);}catch(Exception error){absent=error.Message.Contains("XPDY0002",StringComparison.Ordinal);}controls.Add(new{id="named-template-no-context",host="XSLT",value="XPDY0002",kind="Error",passed=absent});
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant(),context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{fixtures=fixtures.Length,observations,controls,bindings,scope="Public ordinary-host numeric/typed-node characterization; no C45 public provider binding or production changes."},new JsonSerializerOptions{WriteIndented=true}));
+}catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+static XdmValue Eval(string host,string query)=>host switch{
+ "XPath"=>XPath31Expression.Compile(query).Evaluate(new EvaluationContext()),
+ "XQuery"=>new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()),
+ _=>new XsltCompiler().Compile(Stylesheet(query)).Transform(null,initialTemplate:"main",rawResult:true)};
+static string Stylesheet(string expression,bool parameter=false){XNamespace xsl="http://www.w3.org/1999/XSL/Transform";return new XElement(xsl+"stylesheet",new XAttribute("version","3.0"),new XAttribute(XNamespace.Xmlns+"xsl",xsl),new XAttribute(XNamespace.Xmlns+"xs","http://www.w3.org/2001/XMLSchema"),parameter?new XElement(xsl+"param",new XAttribute("name","n")):null,new XElement(xsl+"template",new XAttribute("name","main"),new XElement(xsl+"sequence",new XAttribute("select",expression)))).ToString();}
+static XdmValue[] Items(XdmValue v){if(!v.IsSequence)return v.IsUndefined?Array.Empty<XdmValue>():new[]{v};var list=new List<XdmValue>();foreach(var item in XdmSequence.FromSource(v.SequenceValue!)){if(list.Count==16)throw new Exception("Bounded diagnostic result overflow");list.Add(item);}return list.ToArray();}
+sealed class TypedNode(IXdmNode inner):IXdmNode {
+ public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;public string StringValue=>inner.StringValue;public XdmValue TypedValue=>XdmValue.FromDecimal(10m);public bool HasNoTypedValue=>false;public bool IsComplexType=>false;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>("http://www.w3.org/2001/XMLSchema","decimal");
+ public IXdmNode? Parent=>inner.Parent;public IXdmNode? Document=>inner.Document;public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All)=>inner.Children(kind);public XdmSequence Attributes(string? localName=null,string? namespaceUri=null)=>inner.Attributes(localName,namespaceUri);public XdmSequence Axis(XdmAxis axis)=>inner.Axis(axis);public bool IsSameNode(IXdmNode other)=>ReferenceEquals(this,other);public string ToXmlString()=>inner.ToXmlString();
+}

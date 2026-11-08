@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/README.md.html",
+      "sha256": "a49d1680ff8b2c7da25065b3cb9aae98fbcace501274dcdad698a54011553644"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "02e6a2ec3711ac8bc9ec889d2aca44c02d64bbcb042c4ed53bbff734fc41b97a"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "94ba5eafc6c7f7d7d175c605411d406345cae0b11b51ef0479b7156286474ce1"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "2df191f051443278d29327be8d742fb03f9d0b2511b1b785ab42304e3cc66835"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "1f5289a593ebea2473f5939d5b5f22f28e0170a17230883dd6feb17dd6d9ca0a"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "6200b620b8974f315e0afb6729f35facebbb94248a982ac6ec00781e6759425c"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "0b52802b0a6c28d9b5748fc9da693ccb8cd71de117f7425a9fcd50799c5e2f97"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "e18c0e750ad7fcb163b4c5b5cb357d4182d8c1dae324d43ec41e7fd05e0ce474"
+    },
+    {
+      "source": "docs/conformance/k04-date-empty-fix/README.md",
+      "html": ".guard-tmp/k04-date-empty-fix-render/docs_conformance_k04-date-empty-fix_README.md.html",
+      "sha256": "68972b4230d517eee3acaceb9d7ebd0eaac8bbdc1fe29f0418f44ebb0d42522a"
+    }
+  ]
+}

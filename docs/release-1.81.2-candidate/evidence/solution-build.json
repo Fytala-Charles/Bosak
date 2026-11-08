@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\Bosak.sln",
+    "-c",
+    "Release",
+    "--configfile",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\NuGet.Config",
+    "-p:Version=1.81.2",
+    "-p:PackageVersion=1.81.2",
+    "-p:SourceRevisionId=e992d90b0efa01d45224771a9f8e53dee05096a6",
+    "-p:RepositoryCommit=e992d90b0efa01d45224771a9f8e53dee05096a6",
+    "-p:NuGetAudit=false",
+    "-p:ContinuousIntegrationBuild=true"
+  ],
+  "exitCode": 1,
+  "logSha256": "1b69cbe6a28d8cceb103b891fbd63208824f7a45336f2ac29a6990f7eda33916"
+}

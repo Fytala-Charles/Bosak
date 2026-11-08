@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.74.0",
+  "candidateVersion": "1.75.0",
+  "beforeHashes": {
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "c31c6bcfd7fe61b897431fc825054ea221b6ef0e9114feebc2b28a2eac8e7ef4",
+    "src/Bosak.XPath.Api/Schema/CapturedHostBinding.cs": "68c4f45d94c24e2eaabe936f0296a88dec9afd71d633babe4285e0b563a3bbdf",
+    "tests/Bosak.XPath.Runtime.Tests/CapturedHostBindingTests.cs": "5b44f8531e66ccf6d5d2280f299626546162b3e76520dd2ed362ddb4ec837e7c",
+    "src/Directory.Build.props": "a626fb2eb7d71af5b4caf3675b343ee74f599cf2855923e2dbd3a7f68d1fab31",
+    "docs/foundation-xslt-completion/MANIFEST.json": "e04c4ce703c2094c6f116184a1bbc7f64f04a02c3c9d319fa5abd30394692f0f",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Xslt.cs.txt": "626cbf582c85033e55090a90692ab05e8778d19863d9a5a2f3b37277b97c3a8b"
+  },
+  "semanticScope": "AH-03 internal API host outcome routing only. Immutable XSLT REC https://www.w3.org/TR/2017/REC-xslt-30-20170608/ sections 2.3.2-2.3.4 and 2.9 remain the invocation/error context; this step changes host-owned lifetime/error reporting, not language semantics.",
+  "hostPolicy": "Bind the structured raw source report to the exact engine-issued executable/binding/session. Malformed membership/closed/canceled raw admission is reported without entering producers. After completion, check engine session/snapshot lifetime only; preserve original work/cleanup error identities and keep an existing work error instead of replacing it with a delivery failure.",
+  "stagingPolicy": "Internal reference-type capture staging retains one already-produced detached diagnostic object if final frame/raw/delivery guards refuse. The staging callback is engine-only, accepts one non-null result during the producer callback, cannot survive that callback, and a normally returned result must be the same reference. Staging does not certify detachment, grant graph authority or convert failure to success; the future serializer/capture layer must supply actual detached data.",
+  "exclusions": "No public generic callback/outcome API, no public XSLT types, serializer/control-gate changes, provider members or owner/native/budget/freeze/package/publication acceptance. Ordinary Run/RunAsync and public XQuery behavior remain unchanged."
+}

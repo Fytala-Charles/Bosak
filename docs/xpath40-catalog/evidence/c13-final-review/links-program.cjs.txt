@@ -1,0 +1,32 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const md=require('C:/Users/charl/AppData/Local/npm-cache/_npx/28f98e99224dac41/node_modules/markdown-it')({html:true});
+const C='docs/xpath40-catalog',E=C+'/evidence/c13-final-review';
+const sources=JSON.parse(fs.readFileSync(E+'/entry-sources.json','utf8'));
+const changed=JSON.parse(fs.readFileSync(E+'/changed-markdown.json','utf8'));
+const files=[...new Set([...changed,...Object.keys(sources).map(n=>C+'/'+n),...['invoice-to-erp','manual-to-html','order-reconciliation','order-routing'].map(n=>C+'/worked-examples/'+n+'/README.md'),'docs/REQ-118-xpath-xslt-40.md'])].sort();
+const cache=new Map();
+function anchors(file){
+ if(cache.has(file))return cache.get(file);
+ const text=fs.readFileSync(file,'utf8'),tokens=md.parse(text,{}),found=new Set(),counts=new Map();
+ for(let i=0;i<tokens.length;i++)if(tokens[i].type==='heading_open'){
+  const plain=(tokens[i+1].children||[]).map(t=>['text','code_inline'].includes(t.type)?t.content:t.type==='image'?t.content:'').join('');
+  const base=plain.toLowerCase().replace(/[^\p{L}\p{N}_\- ]/gu,'').replace(/ /g,'-');
+  const count=counts.get(base)||0;counts.set(base,count+1);found.add(base+(count?'-'+count:''));
+ }
+ for(const m of text.matchAll(/\b(?:id|name)\s*=\s*["']([^"']+)["']/g))found.add(m[1]);
+ cache.set(file,found);return found;
+}
+const links=[],bad=[];
+for(const source of files){
+ const tokens=md.parse(fs.readFileSync(source,'utf8'),{});
+ for(const token of tokens)for(const child of token.children||[]){
+  const href=child.type==='link_open'?child.attrGet('href'):child.type==='image'?child.attrGet('src'):null;
+  if(href===null||/^[a-z][a-z0-9+.-]*:/i.test(href)||href.startsWith('//'))continue;
+  const [name,fragment]=href.split('#'),target=path.resolve(path.dirname(source),decodeURIComponent(name));
+  const exists=fs.existsSync(target),anchor=exists&&fragment&&path.extname(target)==='.md'?anchors(target).has(decodeURIComponent(fragment)):null;
+  const row={source,href,target:path.relative(process.cwd(),target).replaceAll('\\','/'),exists,fragment:fragment||null,anchor};links.push(row);
+  if(!exists||anchor===false)bad.push(row);
+ }
+}
+fs.writeFileSync(E+'/link-audit.json',JSON.stringify({method:'markdown-it link/image tokens; local paths and GitHub-style Markdown heading/explicit anchors; external URLs not fetched',files,links,bad},null,2)+'\n');
+console.log(JSON.stringify({pages:files.length,links:links.length,bad:bad.length,first:bad.slice(0,15)},null,2));

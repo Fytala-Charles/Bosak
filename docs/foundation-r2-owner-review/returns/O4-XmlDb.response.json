@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O4-XmlDb",
+  "packet": "O4",
+  "owner": "XmlDb",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "Submitted",
+  "decision": "Revise",
+  "sourceRevision": "b09c7341e7961f90f2c320fd9a180367b35e0035",
+  "signer": "Codex - XmlDb source/design review requested by repository owner; not a human acceptance signature",
+  "date": "2026-11-01",
+  "profile": "Source review only: finite sequential borrowed-snapshot target; normal-release evidence is inherited, actual primary/cleanup-failure preservation and R2 adapter are unqualified. Concurrent snapshot disposal and reentrant provider access are unsupported. No new required Core signature demonstrated; XmlDb implementation/failure-profile issue remains open.",
+  "answers": [
+    {
+      "id": "O4-Q1",
+      "answer": "Current public format-1 path: EmbeddedXmlDatabase.BeginRead -> OpenPinnedSnapshot -> GenerationLease.Acquire -> ImmutableXmlSnapshot.OpenVersion -> AttachReaderLease. The actual shared generation FileStream belongs to the returned snapshot, independently of coordinator disposal. Transactional roots must use BeginRead; standalone ImmutableXmlSnapshot.Open is a distinct immutable-root path, not an alternate transactional admission. Internal epoch OpenAdmittedEpoch transfers exact child admission plus optional generation lease into EpochSnapshotLifetime attached to the snapshot. A future IQueryOperationLifetime.Enter lease must count operation admission over these already acquired/retained resources, not silently transfer/dispose the coordinator or acquire per-node leases. Acquire in the authorized owner; on rejected Core admission release only resources newly owned by that attempt, preserving borrowed owners and all failures. Existing GenerationLeaseTests proves selected current-pin lifetime behavior; it does not implement the R2 adapter."
+    },
+    {
+      "id": "O4-Q2",
+      "answer": "Revise / unresolved actual-provider failure contract: source still has cleanup masking. In OpenPinnedSnapshot catch, lease?.Dispose() runs before _faulted=true and bare throw; a cleanup throw can replace the acquisition failure and skip setting _faulted. OpenAdmittedEpoch catch tries generation.Dispose then finally admission.Dispose: generation failure can replace the original, and admission failure can replace both. EpochSnapshotLifetime.Dispose likewise can mask generation failure with admission failure. ImmutableXmlSnapshot.Dispose clears its stored lease before invoking Dispose; a throw is not confirmed release or an automatic retry capability. These are SOURCE findings, not newly injected actual failures or proof native FileStream.Dispose throws in this environment. No fix pin is supplied and this return does not accept D11 failure preservation for these fault paths. Supported current observation is normal successful release in the existing finite tests; a guarantee preserving primary plus every actual cleanup failure remains unqualified. Next XmlDb work must design/qualify the actual acquisition/release seam, preserve original exception objects first and all cleanup failures in reverse release order, mark uncertainty without blind retry, and prove owner fault state even when cleanup throws. HI1 memory probes and Core synthetic tests cannot discharge this item."
+    },
+    {
+      "id": "O4-Q3",
+      "answer": "Selected candidate target profile: one actual snapshot per evaluation thread, sequential provider access and owner disposal only after all admitted raw work completes. ImmutableXmlSnapshot explicitly documents concurrent disposal unsupported and its mutable cache is not a concurrent-use guarantee. The adapter must refuse same-owner reentry/overlap before getters; any close/cancel race at the operation layer may revoke new admission but must defer actual snapshot disposal until raw task and deferred consumption/serialization finish. Cancellation is cooperative at supported checkpoints; canceling an await is not raw completion. No current simultaneous snapshot-disposal or arbitrary concurrent node access is accepted. Provider NodeSequence/NodeEnumerator check lifetime at provider entry/fetch, but public cached XdmSequence.Current, Equals/GetHashCode and constant defaults are not universal all-access guards. BindResult is an outer fetch guard, not recursive detachment of maps/arrays/nested graphs. Copied immutable scalar strings may outlive the snapshot; borrowed nodes/containers remain scoped. Early break, abandoned iterators and exceptions do not transfer snapshot ownership. No new required node/sequence Dispose is requested."
+    },
+    {
+      "id": "O4-Q4",
+      "answer": "No exact additional required Core signature is demonstrated: the proposed neutral input, IQueryOperationLifetime/Lease, same-session Run/RunAsync and DrainAsync shapes can express the finite target above. The unresolved issue here is XmlDb provider implementation/qualification and explicit failure/concurrency scope, not an invented Core disposal API. Current source checkpoint is b09c7341e7961f90f2c320fd9a180367b35e0035 with separate uncommitted HI1-C test/docs work; reviewed production files match that checkpoint and product Core remains 1.26.2 (6a3372fc3b91e733b71a426cf40f26feaaeb3bcb). Before R4 use the one agreed candidate/manifest, actual snapshot reader/generation locks, acquisition rejection, original+generation+admission cleanup failures, early break/abandonment, cancellation before admission/during deferred consumption, canceled wait with raw work paused, duplicate/same-session admissions, reentry/concurrent-close refusal and unchanged-binary/provider regressions. Select actual owner cleanup serialization and candidate binding; no C45, package upgrade, freeze, release or history deletion is approved."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb b09c7341e7961f90f2c320fd9a180367b35e0035: src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs; src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs (BeginRead/OpenPinnedSnapshot); ImmutableXmlSnapshot.cs (OpenAdmittedEpoch/EpochSnapshotLifetime/Dispose); GenerationLease.cs. Exact SHA-256 pins in D:/Development/Bosal.XmlDb/docs/foundation-requirements/r2-owner-review/INPUTS.json."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak exact draft 0890592eaf79ccb462f9635dd33e7536862685bb: foundation-r2-ledger/proposal/Provider.cs.txt, QueryFacade.cs.txt, OperationLifetime.cs.txt, DECISIONS.md D01-D03/D05/D11/D13; proposal manifest 63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "XmlDb docs/foundation-requirements/README.md FXR-01..15/FXG-01..06; tests/Bosak.XmlDb.Storage.Tests/GenerationLeaseTests.cs and tests/Bosak.XmlDb.Xdm.Tests/PersistentQueryTests.cs. Prior current-pin/FX009 receipts retain their own scope; no tests rerun and no candidate runtime qualification inferred."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "unresolvedProviderQualificationItems": [
+    "Actual acquisition and multi-cleanup failure preservation (OpenPinnedSnapshot/OpenAdmittedEpoch/EpochSnapshotLifetime); no fix pin or fault-injection qualification",
+    "Actual R2 lifetime/membership adapter and finite cancellation/reentry/concurrent-close profile against agreed candidate"
+  ]
+}

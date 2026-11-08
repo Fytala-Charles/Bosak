@@ -1,0 +1,66 @@
+{
+  "additionalPassedTests": 0,
+  "checks": [
+    {
+      "id": "LGR01",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Opaque private fields and issuer checks"
+    },
+    {
+      "id": "LGR02",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Private marker seal/snapshot scope"
+    },
+    {
+      "id": "LGR03",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Public marker-interface refusal before fields"
+    },
+    {
+      "id": "LGR04",
+      "status": "CompletedCoreStaticReview",
+      "subject": "No public attachment or promotion SPI"
+    },
+    {
+      "id": "LGR05",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Current public issuer before getters"
+    },
+    {
+      "id": "LGR06",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Marked private cells are not plain provider inputs"
+    },
+    {
+      "id": "LGR07",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Provider re-issuance migration requirement"
+    },
+    {
+      "id": "LGR08",
+      "status": "CompletedCoreStaticReview",
+      "subject": "No invented origin/list/union/nilled state"
+    },
+    {
+      "id": "LGR09",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Exact lifetime and compatible proof boundaries"
+    },
+    {
+      "id": "LGR10",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Preserve private cache/quota/cleanup behavior"
+    },
+    {
+      "id": "LGR11",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Direct-bridge activation prerequisites"
+    },
+    {
+      "id": "LGR12",
+      "status": "CompletedCoreStaticReview",
+      "subject": "Owner/native/budget/release scope remains open"
+    }
+  ],
+  "ownerAccepted": false
+}

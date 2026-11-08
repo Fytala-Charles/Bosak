@@ -1,0 +1,6 @@
+{
+  "qt4PositiveXQueryOnlySpecificationCases": 1873,
+  "qt4XQuery40OnlyCases": 106,
+  "qt3AdmittedXQueryDependenciesButRoutingRefused": 246,
+  "nonDependencyDiagnosticCases": 10
+}

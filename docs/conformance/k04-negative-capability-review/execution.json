@@ -1,0 +1,206 @@
+[
+  {
+    "name": "qt3-format-date-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-format-date-en151-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en151",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "qt3-format-date-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-format-date-en152-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    }
+  },
+  {
+    "name": "qt3-format-dateTime-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-format-dateTime-en151-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en151",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "qt3-format-dateTime-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-format-dateTime-en152-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    }
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-001a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-cbcl-fn-normalize-unicode-001a-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    }
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-006a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt3-cbcl-fn-normalize-unicode-006a-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    }
+  },
+  {
+    "name": "qt4-format-date-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-format-date-en151-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-date-en151",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "qt4-format-date-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-format-date-en152-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-date-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    }
+  },
+  {
+    "name": "qt4-format-dateTime-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-format-dateTime-en151-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-dateTime-en151",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "qt4-format-dateTime-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-format-dateTime-en152-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-dateTime-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    }
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-001a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-cbcl-fn-normalize-unicode-001a-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    }
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-006a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-parse-fix-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-negative-capability-review\\qt4-cbcl-fn-normalize-unicode-006a-request.json"
+    ],
+    "exitCode": 0,
+    "watchdogSeconds": 20,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    }
+  }
+]

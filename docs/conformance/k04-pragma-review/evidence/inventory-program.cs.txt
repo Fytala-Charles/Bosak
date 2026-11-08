@@ -1,0 +1,56 @@
+// Generated read-only catalog/routing diagnostic; production source and fixtures remain unchanged.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+string dir=Path.GetFullPath(args[0]),root=Path.GetFullPath("tests/qt3tests"),output=args[1],phase=args[2];
+AssemblyLoadContext.Default.Resolving+=(c,n)=>File.Exists(Path.Combine(dir,n.Name+".dll"))?Assembly.LoadFrom(Path.Combine(dir,n.Name+".dll")):null;
+var a=Assembly.LoadFrom(Path.Combine(dir,"Bosak.XPath.Conformance.dll"));
+var flags=BindingFlags.Static|BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic;
+Type T(string n)=>a.GetType("Bosak.XPath.Conformance."+n,true)!;
+object? Call(Type t,string n,object? instance,params object?[] xs)=>t.GetMethod(n,flags)!.Invoke(instance,xs);
+object? Field(object o,string n)=>o.GetType().GetProperty(n,flags)!.GetValue(o);
+var executor=T("TestExecutor");var filter=T("DependencyFilter");var filterObj=Activator.CreateInstance(filter,true)!;
+var unsupported=(Regex)executor.GetField("UnsupportedXQueryConstructRegex",flags)!.GetValue(null)!;
+string Strip(string s)=>(string)Call(executor,"StripLiteralsAndComments",null,s)!;
+var originalGuard=new Regex(@"\(#\s*[A-Za-z_]",RegexOptions.Compiled);
+bool Before(string s)=>!originalGuard.IsMatch(Strip(s).TrimStart());
+bool After(string s)=>true;
+bool Actual(string s)=>(bool)Call(executor,"CanHandleAsXQuery",null,s)!;
+using var originals=new StreamWriter(output+"-originals.jsonl");
+using var all=new StreamWriter(output+"-catalog.jsonl");using var affected=new StreamWriter(output+"-affected.jsonl");int sets=0,count=0,delta=0;
+var catalog=XDocument.Load(Path.Combine(root,"catalog.xml"));var ns=catalog.Root!.Name.Namespace;
+foreach(var entry in catalog.Root.Elements(ns+"test-set")){
+ string file=Path.Combine(root,(string)entry.Attribute("file")!);var doc=XDocument.Load(file);sets++;
+ var depsType=T("Dependency");var deps=Activator.CreateInstance(typeof(List<>).MakeGenericType(depsType))!;
+ foreach(var dep in doc.Root!.Elements(ns+"dependency")){var item=Call(depsType,"FromElement",null,dep)!;deps.GetType().GetMethod("Add")!.Invoke(deps,new[]{item});}
+ foreach(var element in doc.Root.Elements(ns+"test-case")){
+  var test=Call(T("TestCase"),"FromElement",null,element,ns,deps,Path.GetDirectoryName(file))!;
+  string expression=(string)Field(test,"Expression")!;string name=(string)Field(test,"Name")!;
+  bool before=Before(expression),after=After(expression),actual=Actual(expression);
+  if(actual!=(phase=="normal"?before:after))throw new Exception("Predicate disagreement "+name);
+  bool xp=(bool)Call(filter,"IsSupported",filterObj,Field(test,"Dependencies"),false)!;
+  bool xq=(bool)Call(filter,"IsSupported",filterObj,Field(test,"Dependencies"),true)!;
+  var depRows=new List<object>();
+  foreach(var dep in (System.Collections.IEnumerable)Field(test,"Dependencies")!){
+   var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(depsType))!;list.GetType().GetMethod("Add")!.Invoke(list,new[]{dep});
+   depRows.Add(new{Type=Field(dep,"Type"),Value=Field(dep,"Value"),Satisfied=Field(dep,"Satisfied"),xpathSupported=Call(filter,"IsSupported",filterObj,list,false),xquerySupported=Call(filter,"IsSupported",filterObj,list,true)});
+  }
+  var row=new{Dependencies=depRows,OwnDependencies=Field(test,"OwnDependencies"),Set=(string?)entry.Attribute("name"),Name=name,File=Path.GetRelativePath(root,file).Replace('\\','/'),ExpressionSha256=Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(expression))).ToLowerInvariant(),before,after,actual,xpathSupported=xp,xquerySupported=xq};
+  all.WriteLine(JsonSerializer.Serialize(row));count++;
+  if(before!=after || (string?)entry.Attribute("name")=="prod-ExtensionExpr") originals.WriteLine(JsonSerializer.Serialize(new{row,Expression=expression,Assertion=element.Element(ns+"result")!.ToString(),Modules=Field(test,"Modules"),Environment=element.Element(ns+"environment")?.ToString(),Dependencies=Field(test,"Dependencies")}));
+  if(before!=after){affected.WriteLine(JsonSerializer.Serialize(new{row,Expression=expression,Assertion=element.Element(ns+"result")!.ToString(),Modules=Field(test,"Modules"),Environment=element.Element(ns+"environment")?.ToString(),Dependencies=Field(test,"Dependencies")}));delta++;}
+ }
+}
+File.WriteAllText(output+"-summary.json",JsonSerializer.Serialize(new{phase,sets,count,delta},new JsonSerializerOptions{WriteIndented=true}));
+using var controls=new StreamWriter(output+"-controls.jsonl");
+foreach(var c in JsonSerializer.Deserialize<Control[]>(File.ReadAllText(args[3]))!){
+ bool before=Before(c.Expression),after=After(c.Expression),actual=Actual(c.Expression);
+ if(before!=c.Before||after!=c.After||actual!=(phase=="normal"?c.Before:c.After))throw new Exception("Control failed: "+c.Name);
+ controls.WriteLine(JsonSerializer.Serialize(new{c.Name,c.Expression,before,after,actual,passed=true}));
+}
+Console.WriteLine($"{phase}: {count} cases / {sets} sets; {delta} routing deltas; lexical controls passed.");
+record Control(string Name,string Expression,bool Before,bool After);

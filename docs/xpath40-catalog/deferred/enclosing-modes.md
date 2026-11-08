@@ -4,6 +4,8 @@
   <p>Deferred — portable named-mode dispatch remains supported</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified unsupported-proposal disposition**. No draft enclosure diagnostic/package/unused-body certification. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Enclosing modes — Deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the deferral. This record documents the boundary without enabling nested declarations. Bosak baseline reviewed 2026-10-12: [revision d7cc935a](https://github.com/Fytala-Charles/Bosak/commit/d7cc935a3690c767fc17b01b90de4105a7140bed), engine 1.1.2.

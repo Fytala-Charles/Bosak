@@ -1,0 +1,4 @@
+{
+  "reason": "The first diagnostic used bare jnode('a') as a navigation step, which resolves as an unavailable function call. Corrected only the probe input to the documented string-key step /\"a\"; original requests/results retained. No engine expectations changed.",
+  "exactErrorMarker": "Tightened csv-invalid-separator from family FOCV to exact FOCV0002 already required by the retained CSV bad-delimiter fixtures. The expression and observed results are unchanged."
+}

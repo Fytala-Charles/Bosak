@@ -1,0 +1,57 @@
+--- a/src/Bosak.Xslt/Capture/XsltCaptureSession.cs
++++ b/src/Bosak.Xslt/Capture/XsltCaptureSession.cs
+@@ -17,6 +17,7 @@
+ //                      |                  |       |                | Cancelled/TimeLimitExceeded/OperationLimitExceeded classification (XV0011-XV0013)        |
+ //                      | Charles Korthout | 0.3   | 11-10-2026     | C-F1/D-F1: bounded serialization and terminal control observation.                       |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.4 | 01-11-2026 | Isolated capture and cleanup outcome preservation. |
+ // ===========================================================================================================================================================
+ 
+ using Bosak.XPath.Core.Xdm;
+@@ -44,6 +45,15 @@
+     internal const string OperationLimitCode = "XV0012";
+     internal const string CancelledCode = "XV0013";
+ 
++    private List<Exception>? _originalErrors;
++    internal bool PreserveOriginals { get; set; }
++    internal IReadOnlyList<Exception> OriginalErrors => _originalErrors is null ? Array.Empty<Exception>() : Array.AsReadOnly(_originalErrors.ToArray());
++    internal void RetainOriginal(Exception error)
++    {
++        if (!PreserveOriginals) return;
++        var errors = _originalErrors ??= new List<Exception>();
++        if (!errors.Any(e => ReferenceEquals(e, error))) errors.Add(error);
++    }
+     private readonly XsltCaptureOptions _options;
+     private readonly ExecutionGate? _gate;
+     private readonly Action<long>? _observeProduction;
+@@ -154,6 +164,7 @@
+         }
+         catch (SerializationByteLimitException ex)
+         {
++            RetainOriginal(ex);
+             var perOutput = ex.PerOutput;
+             var kind = perOutput ? XsltCaptureFailureKind.OutputSizeLimitExceeded
+                 : XsltCaptureFailureKind.AggregateSizeLimitExceeded;
+@@ -162,12 +173,14 @@
+                 $"Output '{identity}' exceeded its {(perOutput ? "per-output" : "remaining aggregate")} byte budget ({ex.Limit}) during production; serialization stopped and the output was dropped."));
+             throw new XsltCaptureLimitException(kind, identity);
+         }
++        catch (Exception error) { RetainOriginal(error); throw; }
+     }
+ 
+     // Assembles the immutable public result. failure is the exception that ended the run, if any;
+     // it is classified here unless it is a bound breach that was already recorded at the breach point.
+     internal XsltCaptureResult BuildResult(Exception? failure)
+     {
++        if (failure is not null) RetainOriginal(failure);
+         if (failure is XsltCaptureLimitException)
+         {
+             // Recorded at the breach point; nothing more to classify. (A stylesheet-level xsl:catch
+@@ -191,6 +204,7 @@
+         try { _gate?.ObserveControls(); }
+         catch (ExecutionInterruptException ex)
+         {
++            RetainOriginal(ex);
+             RecordInterrupt(ex);
+             failure = ex;
+         }

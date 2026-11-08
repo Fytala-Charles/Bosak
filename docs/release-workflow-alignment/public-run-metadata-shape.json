@@ -1,0 +1,11 @@
+{
+  "id": 40322323357,
+  "event": "push",
+  "conclusion": "success",
+  "path": ".github/workflows/release.yml",
+  "head_sha": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "head_repository": {
+    "full_name": "Fytala-Charles/Bosak"
+  },
+  "scope": "Read-only shape check against an existing public historical run; not execution or approval of the edited workflows."
+}

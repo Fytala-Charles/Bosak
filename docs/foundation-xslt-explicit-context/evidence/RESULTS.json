@@ -1,0 +1,9 @@
+{
+  "legacyCases": 7,
+  "candidateCases": 22,
+  "candidatePassed": 22,
+  "legacyIdentical": true,
+  "repeatIdentical": true,
+  "probeSha256": "80d5545a52a9f2f26f54bcc0d749e1554e91a9b76249506e33c85d55bbbcbf17",
+  "sourceSha256": "cc61a0ee9b09a5d09ea9a8e92acf6ede6e2852a3dcec51ad5ed1abeebc53d27a"
+}

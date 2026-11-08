@@ -1,0 +1,43 @@
+### REQ-139: XSD 1.1 Engine Seam for Bosak.Schema
+
+Requester: **Bosak.Schema**. Registered: **2026-10-27**. Status: **Pending**. Target: **TBD**. Owner: **Unassigned**.
+
+#### Problem Statement
+
+Bosak.Schema (REQ-009, staged W3C XML Schema 1.1) has shipped add-side: an immutable compiled XSD 1.1 model, secure resolution, `xs:assert` validation, `xs:assertion` facets, and (S5a/S5b) open content and default attributes compile support. Its S0 source audit confirmed the blocker on this side: **every schema-bearing core API — `XsltCompiler.SchemaSet`, `EvaluationContext.SchemaSet`/`GetSchema*`, `XdmSchemaAnnotator`, `IXsdValidator` — is typed against `System.Xml.Schema.XmlSchemaSet`, which is XSD 1.0 only**. The 30 harness-confirmed W3C XSD 1.1 conformance skips (core REQ-112 posture; 18× stream/non-stream-101…109, 6× merge-049…054, accumulator-073, si-apply-templates-007/012, catalog-005/009, strip-space-009) close only via engine integration: `xs:alternative` types elements during the engine's own assessment, and no amount of add-side document validation removes the skips.
+
+#### Proposed Solution
+
+Per drafted [ADR-006](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/ADR-006-xsd11-engine-seam-compatibility.md) (Proposed, in the Bosak.Schema repo): an **additive, opt-in schema-typing callback seam**. The core gains a host-settable advisor the engine consults during validation-relevant operations — type lookup by expanded QName, `xs:alternative` applicability assessment, assertion consultation. All existing `XmlSchemaSet` paths remain bit-identical when no advisor is registered. `Bosak.Schema` supplies the advisor over its compiled model (absent without an activated license, preserving inert-before-activation); explicit `Refused`/`UnsupportedCoverage` posture where the advisor cannot type a node. Conformance closure via a **test-only** package reference from `tests/Bosak.Xslt.Conformance` to `Bosak.Schema` — core product assemblies never reference the add-on; skip removal is gated on advisor-registered harness runs staying green. Alternatives recorded in ADR-006: generalizing `SchemaSet` to a version-neutral abstraction (rejected for S4/S5 — breaking, audit-wide blast radius; candidate for a future major), add-side-only annotation (cannot type nodes during engine assessment), status quo (skips never close).
+
+#### Acceptance Criteria
+
+- [ ] ADR-006 accepted by the core owner before the Bosak.Schema S4 (`xs:alternative`) design freeze
+- [ ] Seam is additive: no existing public signature, overload set, or XSD 1.0 code path changes; unregistered behavior bit-identical (proven by the unchanged 1.0 conformance baseline)
+- [ ] Explicit `Refused`/`UnsupportedCoverage` posture where the advisor cannot type a node; never silent acceptance
+- [ ] Full core test suites pass: conformance harness with and without the registered advisor (the QT3 frozen gate 31,145/0/676 and the qt4 gate unchanged without the advisor), XSLT/XQuery/PSVI regression
+- [ ] Core product assemblies never reference `Bosak.Schema` (test-project dependency only)
+- [ ] New seam contract documented as a permanent public API surface with versioning and diagnostic conventions
+
+#### Impact Analysis
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | None | |
+| Compiler | None expected | |
+| Runtime | New opt-in consultation hook | Consulted only when registered; 1.0 paths untouched |
+| Standard | None | |
+| XSLT | None expected | `xsl:validation`-relevant operations consult the advisor |
+| API | **Additive** | New seam interface + registration point; not a breaking change; the rejected `SchemaSet` generalization would have been breaking |
+
+#### Related Requests
+
+- Bosak.Schema REQ-009 (the add-side staged implementation this unblocks — S4/S5)
+- Bosak.XmlDb REQ-008 (optional schema adapter — independent of this seam)
+- Core REQ-112 (the conformance-skip posture that listed the 28-era skips)
+
+#### Decision Log
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-10-27 | Kimi (Bosak.Schema) | Registered, status `Pending` | Filed per the §2.1 quick-add process; ADR-006 drafted in the Bosak.Schema repo awaiting owner acceptance; no engine change is made by this filing |

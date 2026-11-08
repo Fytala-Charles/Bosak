@@ -1,0 +1,31 @@
+{
+  "extensionVersion": "0.2.6",
+  "results": [
+    {
+      "name": "valid",
+      "languageId": "xslt",
+      "diagnostics": []
+    },
+    {
+      "name": "invalid",
+      "languageId": "xslt",
+      "diagnostics": [
+        "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+      ]
+    },
+    {
+      "name": "corrected-live",
+      "diagnostics": []
+    },
+    {
+      "name": "xpath-invalid-and-live-correction",
+      "languageId": "xpath",
+      "diagnostics": []
+    },
+    {
+      "name": "xquery-invalid-and-live-correction",
+      "languageId": "xquery",
+      "diagnostics": []
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C05",
+  "status": "Read-only review complete;implementation and qt4 feature admission remain open",
+  "sourceBase": "01e67cec0035d1e6252f1339f4a932fda241b23e",
+  "summary": {
+    "originalCases": 6,
+    "originalQt3Passed": 2,
+    "originalQt4PassedDirect": 2,
+    "originalQt4FailedDirect": 2,
+    "normalQt3Passed": 2,
+    "normalQt4Skipped": 4,
+    "finalModifierControlProcesses": 22,
+    "finalModifierControlsPassed": 14,
+    "finalModifierControlsFailed": 8,
+    "initialCalibrationProcesses": 22,
+    "initialExpectationMistakes": 6,
+    "smallWatchdogProcesses": 56,
+    "timeouts": 0,
+    "sourceChanged": false,
+    "baselineChanged": false,
+    "inheritedSolutionPassed": 22007,
+    "inheritedNormalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "inheritedQt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "candidateVersion": "1.26.11",
+    "publishedVersion": "1.26.3"
+  },
+  "findings": [
+    {
+      "id": "K04-CLDR-01",
+      "observation": "ParseModifier accepts plain c and o(...), but rejects named cardinal c(...), yielding FODF1310 in original qt4 cases076/077.",
+      "source": "FormatIntegerEngine.ParseModifier",
+      "scope": "Original assertion failure;fix requires immutable specification/CLDR pins before semantic changes."
+    },
+    {
+      "id": "K04-CLDR-02",
+      "observation": "GermanToOrdinalWords maps every percent-prefixed variation to ending e. Named s/r/n controls yield Erste instead of Erstes/Erster/Ersten;explicit -es/-er/-en controls pass in both profiles.",
+      "source": "FormatIntegerEngine.GermanToOrdinalWords",
+      "scope": "Derived mechanism diagnosis, not a new conformance certification."
+    },
+    {
+      "id": "K04-CLDR-CALIBRATION",
+      "observation": "Initial explicit-ending controls incorrectly used -s/-r/-n;these are literal endings and produced Ersts/Erstr/Erstn. Corrected controls use -es/-er/-en. All initial inputs/results retained separately.",
+      "scope": "Six initial expected-value mistakes are not engine defects."
+    }
+  ],
+  "retainedOriginalFailures": [
+    {
+      "name": "qt4-format-integer-076",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-format-integer-076-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.2642165000142995,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-076",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-format-integer-076.log"
+    },
+    {
+      "name": "qt4-format-integer-077",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-format-integer-077-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.2527958000137005,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-077",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Unexpected error: FODF1310; Unexpected error: FODF1310]"
+      },
+      "log": "qt4-format-integer-077.log"
+    }
+  ],
+  "retainedModifierFailures": [
+    {
+      "name": "qt3-control-cardinal-named",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-cardinal-named-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3213720000057947,
+      "result": {
+        "Suite": "qt3",
+        "Name": "control-cardinal-named",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt3-control-cardinal-named.log"
+    },
+    {
+      "name": "qt4-control-cardinal-named",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-cardinal-named-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3167665000073612,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-cardinal-named",
+        "kind": "Failed",
+        "message": "Unexpected error: FODF1310"
+      },
+      "log": "qt4-control-cardinal-named.log"
+    },
+    {
+      "name": "qt3-control-ordinal-named-s",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-s-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.33358780000708066,
+      "result": {
+        "Suite": "qt3",
+        "Name": "control-ordinal-named-s",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Erstes, Got: Erste"
+      },
+      "log": "qt3-control-ordinal-named-s.log"
+    },
+    {
+      "name": "qt4-control-ordinal-named-s",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-s-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.30240270000649616,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-ordinal-named-s",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Erstes, Got: Erste"
+      },
+      "log": "qt4-control-ordinal-named-s.log"
+    },
+    {
+      "name": "qt3-control-ordinal-named-r",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-r-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3205076999729499,
+      "result": {
+        "Suite": "qt3",
+        "Name": "control-ordinal-named-r",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Erster, Got: Erste"
+      },
+      "log": "qt3-control-ordinal-named-r.log"
+    },
+    {
+      "name": "qt4-control-ordinal-named-r",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-r-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3112789000151679,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-ordinal-named-r",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Erster, Got: Erste"
+      },
+      "log": "qt4-control-ordinal-named-r.log"
+    },
+    {
+      "name": "qt3-control-ordinal-named-n",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt3-control-ordinal-named-n-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.33663599999272265,
+      "result": {
+        "Suite": "qt3",
+        "Name": "control-ordinal-named-n",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Ersten, Got: Erste"
+      },
+      "log": "qt3-control-ordinal-named-n.log"
+    },
+    {
+      "name": "qt4-control-ordinal-named-n",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-review\\evidence\\qt4-control-ordinal-named-n-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.3265916000236757,
+      "result": {
+        "Suite": "qt4",
+        "Name": "control-ordinal-named-n",
+        "kind": "Failed",
+        "message": "assert-eq failed. Expected: Ersten, Got: Erste"
+      },
+      "log": "qt4-control-ordinal-named-n.log"
+    }
+  ],
+  "next": "Pin immutable F&O and CLDR variation semantics;implement bounded named-cardinal parsing and known German ordinal endings;preserve malformed pictures and fallback behavior;pass original cases/unit regressions/full gates before considering qt4 CLDR admission.",
+  "limits": [
+    "No source,harness,fixture,assertion,version,admission or baseline change",
+    "No fresh full solution/conformance gate run;source-identical accepted results inherited explicitly",
+    "QT3 legacy admission is not complete CLDR support",
+    "Bosak.Schema owns staged XSD1.1;REQ-126 remains Complete",
+    "No release or upstream contribution"
+  ]
+}

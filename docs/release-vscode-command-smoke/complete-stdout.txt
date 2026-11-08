@@ -1,0 +1,30 @@
+
+[main 2026-11-08T08:14:44.546Z] [node-compile-cache] main: packaged cache inactive (status: missing, configured: C:\Program Files\Microsoft VS Code\2c33b50b16\resources\app\node-compile-cache\main, active: none)
+[main 2026-11-08T08:14:44.558Z] StorageMainService: creating application shared storage
+[main 2026-11-08T08:14:44.600Z] [shared storage] Creating shared storage database at ':memory:' (wasCreated: true)
+[main 2026-11-08T08:14:44.603Z] [shared storage] Initializing fallback application storage (path: in-memory)
+[main 2026-11-08T08:14:44.622Z] [shared storage] Fallback application storage initialized with 3 items
+[main 2026-11-08T08:14:44.626Z] update#setState disabled
+[main 2026-11-08T08:14:44.629Z] update#ctor - updates are disabled by the environment
+[RemoteAgentHost] Reconciling: desired=[], current=[]
+[AgentHost:renderer] Acquiring MessagePort to agent host...
+[main 2026-11-08T08:14:44.954Z] AgentHostProcessManager: agent host started
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey=undefined conversationKey=undefined modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[AgentHost:renderer] MessagePort acquired, creating client...
+Started local extension host with pid 75328.
+Loading development extension at d:\Development\Bosak\.guard-tmp\core-vscode-candidate-20261108\command-complete-harness
+[RemoteAgentHostProtocol] Sending initialize: address=local clientId=750ac6e8-3340-42e8-88b2-3952fd620dbf requestId=1
+[RemoteAgentHostProtocol] Initialized: address=local clientId=750ac6e8-3340-42e8-88b2-3952fd620dbf durationMs=462
+[AgentHost:renderer] Protocol connection established; clientId=750ac6e8-3340-42e8-88b2-3952fd620dbf
+[AccountPolicyGate] apply: state=inactive, reason=undefined, isRestricted=false
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey="local" conversationKey="vscode-chat-session://local/ZDVlYzMyMDAtOWU5Zi00NjkzLTlmYjItY2Y4NmUxOWVmMDBh" modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[RemoteAgentHost] Reconciling: desired=[], current=[]
+Settings Sync: Account status changed from uninitialized to unavailable
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[AgentHost] No signed-in session resolved for resource: https://api.github.com
+[AgentHost] No signed-in session resolved for resource: https://api.github.com/repos
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey="local" conversationKey="vscode-chat-session://local/ZDVlYzMyMDAtOWU5Zi00NjkzLTlmYjItY2Y4NmUxOWVmMDBh" modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[AccountPolicyGate] apply: state=inactive, reason=undefined, isRestricted=false
+[ChatModelSelection] event=no-model-at-toolbar-build surface="workbench" sessionKey="local" conversationKey="vscode-chat-session://local/ZDVlYzMyMDAtOWU5Zi00NjkzLTlmYjItY2Y4NmUxOWVmMDBh" modelTarget=undefined storageKey="chat.currentLanguageModel.panel" widgetViewKind="view"
+[main 2026-11-08T08:15:24.464Z] Extension host with pid 75328 exited with code: 0, signal: unknown.

@@ -1,0 +1,7 @@
+{
+  "from": "candidate-cache",
+  "to": "obj/candidate-cache",
+  "scope": "Derived completed-build NuGet cache moved into build output; no package/archive bytes changed",
+  "reason": "Governed documentation scanner excludes build output, not arbitrary caches; no scanner policy modified",
+  "verifiedCandidateArchiveHashes": 7
+}

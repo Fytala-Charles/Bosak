@@ -1,0 +1,9 @@
+# Delivery and review boundary
+
+The implementation follows TA-16 with no new public signatures. QueryNodeFactsReader.Atomize stages authentic metadata and issued containers; the snapshot registry keeps its stable selected issuer and existing scalar identity keys. A transient GuardedIssuer retains original tuple/type proof through extraction/commit/delivery; committed entries keep independently issued container evidence rather than permanent extraction-node identity. QueryAtomizedSequence is a private eager transport buffer with no provider callbacks in traversal.
+
+Metadata-only nilled and default complete facts reads remain separate. The new exact public OriginalNodeDataPlan uses closed node capture before typed scalar fallback. The formerly unsupported exact assessor-bound data syntax is superseded only by this new profile; ordinary/no-assessor and old identity/numeric/nilled descriptors keep their meanings. Public registration/construction/compatible-view APIs do not gain a generic fallback.
+
+Review the candidate delta, exact source/binary hashes, all 40 case mappings, winner/capacity race controls, prefix-free publication, simulated allocation failure, FOTY0012/empty distinctions, later cell authorization and raw drain behavior. The final full suite/gates and API comparison bind the admitted candidate. Initial source/binary snapshots and original failed/retried build logs remain separate evidence.
+
+No native or all-host source was changed. Controlled fixtures do not establish full schema facet/union validation by a native provider or accepted performance budgets. Source-free construction, compatible views, actual Schema/XmlDb/Braid qualification, R4-R7 and package/version selection remain their own work. The next construction scope must define owner admission and scalar accounting without inventing a source snapshot.

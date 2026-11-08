@@ -1,0 +1,9 @@
+# Decimal division implementation policy — 4 November 2026
+
+Core selected an **exact terminating division subset** as the next implementation slice. No rounding fallback or rounding-mode API is introduced. Source remains **1.50.0** at `f9e7c615`; production `div` remains unsupported by the opt-in session compiler. This is Core preparation, not owner acceptance, a new runtime qualification or API freeze.
+
+[Policy](POLICY.md) defines result kind, error/refusal behavior, coefficient/scale bounds and scale-safe factor cancellation. [Implementation checklist](IMPLEMENTATION.md) names the baseline, proposed profile, controls, runner commands and receipt destinations. The [immutable specification basis](SPEC-BASIS.md) distinguishes the intended subset from general XPath decimal division.
+
+The independent Python reference passes **22 boundary cases**, **5,000 random rational-oracle cases** (51 exact results, 4,949 nontermination refusals), **2,000 generated terminating quotients** and **five availability checks**. [Results](evidence/REFERENCE-RESULTS.json) are reproducible with `python docs/foundation-decimal-division-policy/tools/verify.py`. This proves the reference arithmetic and refusal policy only; it does not run C# or exercise runtime leases, memory, latency or real consumers.
+
+The prior 24,714 runtime tests and unchanged QT3/qt4 gates remain historical qualification of the same source/binaries; they were not rerun for this documentation/reference step. The verifier checks their existing sealed source/binary evidence. Public API metadata, final SemVer, typed-default migration, native qualification, schema/all-host integration, C45 and publication remain unchanged or pending. Next implement and qualify the finite division profile against this checklist; wider rounded decimal division stays explicitly unresolved.

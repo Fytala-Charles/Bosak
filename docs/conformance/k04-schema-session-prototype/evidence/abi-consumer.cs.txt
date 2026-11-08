@@ -1,0 +1,31 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+using C44.Abi;
+// This source is compiled once against v1, then identical executable bytes run with v1 and v2.
+var values=new[]{Value.FromInteger(42),Value.FromString("payload"),Value.FromDecimal(12.50m),Value.FromDouble(1.25),Value.FromBoolean(true)};
+var expected=new[]{"42","payload","12.50","1.25","True"};var rows=new List<object>();int failed=0;
+void Check(string name, bool passed){rows.Add(new{name,passed});if(!passed)failed++;}
+static string Describe(in Value value)=>value.Kind switch{Kind.Integer=>value.IntegerValue.ToString(System.Globalization.CultureInfo.InvariantCulture),Kind.String=>value.StringValue,Kind.Decimal=>value.DecimalValue.ToString(System.Globalization.CultureInfo.InvariantCulture),Kind.Double=>value.DoubleValue.ToString(System.Globalization.CultureInfo.InvariantCulture),Kind.Boolean=>value.BooleanValue.ToString(),_=>throw new Exception()};
+static string Generic<T>(T value) where T:struct=>Describe((Value)(object)value);
+var addition=typeof(Value).GetMethod("WithIdentity");
+for(int i=0;i<values.Length;i++){
+ var value=values[i];Check("plain "+i,Describe(in value)==expected[i]);var copy=value;Check("copy "+i,Describe(in copy)==expected[i]);Check("array "+i,Describe(in values[i])==expected[i]);Check("boxed "+i,Describe((Value)(object)value)==expected[i]);Check("generic "+i,Generic(value)==expected[i]);
+ if(addition!=null){var identity=new object();var annotated=(Value)addition.Invoke(value,new[]{identity})!;Check("annotated "+i,Describe(in annotated)==expected[i]);var annotatedCopy=annotated;Check("annotated copy "+i,Describe(in annotatedCopy)==expected[i]);var array=new[]{annotated};Check("annotated array "+i,Describe(in array[0])==expected[i]);Check("annotated boxed "+i,Describe((Value)(object)annotated)==expected[i]);Check("annotated generic "+i,Generic(annotated)==expected[i]);Check("identity "+i,ReferenceEquals(typeof(Value).GetProperty("Identity")!.GetValue(annotated),identity));}
+}
+Console.WriteLine(JsonSerializer.Serialize(new{passed=rows.Count-failed,failed,size=Unsafe.SizeOf<Value>(),hasAddition=addition!=null,tests=rows,scope="Synthetic same-assembly-identity carrier only; no Bosak product DLL replacement or production ABI claim."},new JsonSerializerOptions{WriteIndented=true}));return failed==0?0:2;

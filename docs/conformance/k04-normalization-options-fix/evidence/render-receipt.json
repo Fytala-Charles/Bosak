@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/README.md.html",
+      "sha256": "729d819efa3b90ac813f3702eea503e844746f14d1b14c60df736c4411ae59b6"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "c7a7e91c47c0255ee087f4a00fe42bba345e4faa65ae7706a486208d45f8729f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "44860af46c0e7ebdc79fa83be9457307f35130bce435ba9c8699924caaba49ff"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "22aca462add22add8637808caaeb8a73dee5263b5d454e2da3b0214a4180e22e"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "019dbabf17a8d48941ccac25b09e8f0b49de0df469391b04d9672ee92e2d2cfa"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "e95ec3923f301c1b1474c646e618ef1d3f339f28152256c8ab32e7723e11fe2f"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "fb1dcafa3d4c5a0fbc168a4fca30bcf705d988d8dd0bffdb367af33bd7c79229"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "51a8ca41b1ffe399e4bad7b37be113fcffa097f458c4dddd96dca09bbc3132fa"
+    },
+    {
+      "source": "docs/conformance/k04-normalization-options-fix/README.md",
+      "html": ".guard-tmp/k04-normalization-options-fix-render/docs_conformance_k04-normalization-options-fix_README.md.html",
+      "sha256": "c1d67fb669f03e06f7aea5c687169913325b60b533815f3a46b5b55c609f7f54"
+    }
+  ]
+}

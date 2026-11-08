@@ -1,0 +1,1 @@
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:c44r2' xmlns:t='urn:c44r2'><xs:simpleType name='Extra'><xs:restriction base='t:Base'><xs:minInclusive value='0'/></xs:restriction></xs:simpleType></xs:schema>

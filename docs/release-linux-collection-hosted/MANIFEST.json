@@ -1,0 +1,58 @@
+{
+  "42479094503-artifacts.json": {
+    "sha256": "3ed8be9e6a02cb063970e8d200f788dba52ead821e8586f201a487a4609b7afa",
+    "bytes": 1527
+  },
+  "42479094503-jobs.json": {
+    "sha256": "0d14ce5e68dcc003f5372165c0f668ddbd336bbc1f08738de75122472ee11fe5",
+    "bytes": 3833
+  },
+  "42479094503-run.json": {
+    "sha256": "29ce495ff499aea5afe8747acd7e6b1860e01edddc29ab4c2399a0085da3b934",
+    "bytes": 12771
+  },
+  "42479096917-artifacts.json": {
+    "sha256": "4f4a34982cd43e61a059c6d4c4b631d83a0f2dda0a6cfc4a37a5829352223eca",
+    "bytes": 1527
+  },
+  "42479096917-jobs.json": {
+    "sha256": "0d89e2b6b449092960d8836f7e1721cca759ca8168ee651b949548bd4dad3d37",
+    "bytes": 4585
+  },
+  "42479096917-run.json": {
+    "sha256": "79921689370db11685c9c8b5359712fe9ecc157910adb59761016c14daf79607",
+    "bytes": 12814
+  },
+  "nuget-42479094503.zip": {
+    "sha256": "48275c11f1129cb104f8104b1b14738b4a30e56c5886066782858af5291b31d7",
+    "bytes": 8169518
+  },
+  "nuget-workflow-log.zip": {
+    "sha256": "01b379bbe3987af358b5d2f2569437b597d278bd57aef2c2a7d01fde5be60178",
+    "bytes": 31250
+  },
+  "README.md": {
+    "sha256": "7bc03052a8cfeb59091b0495bad3a888fa1551f2875388393a1a99df6ace221e",
+    "bytes": 3023
+  },
+  "RESULTS.json": {
+    "sha256": "8dd52ea9cb81598cef771571710b7e048930e234be3806946eed103abbbb3246",
+    "bytes": 6748
+  },
+  "verify.py": {
+    "sha256": "e4b7ebd7274a2860dfee56d003673b0f84c6f12037b873ec9a09ccbd2a3d4d5c",
+    "bytes": 2266
+  },
+  "vscode-42479096917.zip": {
+    "sha256": "9cdaede45d4a34a4732966d091edaa1d8e48fac9d81ff2689e9798a513edf224",
+    "bytes": 4758076
+  },
+  "vscode-workflow-log.zip": {
+    "sha256": "f730c2eb1da10bc29468dd8a43cce3b1973bce314fbd4785c9cf653c090e5778",
+    "bytes": 10001
+  },
+  "VSIX-VERIFICATION.json": {
+    "sha256": "9dd5a31c8ad33dde912806c90599bad74db497770814f5a7cf5d8297c8583268",
+    "bytes": 798
+  }
+}

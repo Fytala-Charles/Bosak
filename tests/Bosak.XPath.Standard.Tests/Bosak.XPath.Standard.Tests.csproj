@@ -25,4 +25,9 @@
     <ProjectReference Include="..\..\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Compile the real QT3 environment parser into harness regression tests. -->
+    <Compile Include="..\Bosak.XPath.Conformance\TestEnvironment.cs" Link="Conformance\TestEnvironment.cs" />
+  </ItemGroup>
+
 </Project>

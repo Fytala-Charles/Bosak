@@ -1,0 +1,88 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Globalization;
+namespace C44.Abi;
+/// <summary>Bounded synthetic carrier kind; this is not Bosak.XdmValue.</summary>
+public enum Kind
+{
+    /// <summary>Integer payload.</summary>
+    Integer,
+    /// <summary>String payload.</summary>
+    String,
+    /// <summary>Decimal payload.</summary>
+    Decimal,
+    /// <summary>Double payload.</summary>
+    Double,
+    /// <summary>Boolean payload.</summary>
+    Boolean
+}
+/// <summary>Six-field ABI experiment independent of all Bosak product assemblies.</summary>
+public readonly struct Value
+{
+    private readonly Kind _kind;
+    private readonly long _integer;
+    private readonly double _double;
+    private readonly object? _reference;
+    private readonly string? _schemaTypeName;
+    private readonly string? _userSchemaTypeName;
+    private Value(Kind kind, long integer=0, double number=0, object? reference=null, string? schema=null, string? user=null)
+        => (_kind,_integer,_double,_reference,_schemaTypeName,_userSchemaTypeName)=(kind,integer,number,reference,schema,user);
+    private sealed record Envelope(object? Payload, object Identity);
+    private object? Payload => _reference is Envelope e ? e.Payload : _reference;
+    /// <summary>Gets the additional optional prototype identity.</summary>
+    public object? Identity => (_reference as Envelope)?.Identity;
+    /// <summary>Attaches identity through the existing reference slot.</summary>
+    /// <param name="identity">The retained session token.</param>
+    /// <returns>A same-layout annotated carrier.</returns>
+    public Value WithIdentity(object identity) => new(_kind,_integer,_double,new Envelope(Payload,identity),_schemaTypeName,_userSchemaTypeName);
+    /// <summary>Gets the kind discriminator.</summary>
+    public Kind Kind => _kind;
+    /// <summary>Gets the integer payload.</summary>
+    public long IntegerValue => _integer;
+    /// <summary>Gets the string payload.</summary>
+    public string StringValue => (string)Payload!;
+    /// <summary>Gets the decimal payload.</summary>
+    public decimal DecimalValue => (decimal)Payload!;
+    /// <summary>Gets the double payload.</summary>
+    public double DoubleValue => _double;
+    /// <summary>Gets the boolean payload.</summary>
+    public bool BooleanValue => _integer!=0;
+    /// <summary>Gets the legacy built-in name.</summary>
+    public string? SchemaTypeName => _schemaTypeName;
+    /// <summary>Gets the legacy user type display name.</summary>
+    public string? UserSchemaTypeName => _userSchemaTypeName;
+    /// <summary>Creates an integer carrier.</summary>
+    /// <param name="value">The integer payload.</param>
+    /// <returns>The unannotated carrier.</returns>
+    public static Value FromInteger(long value) => new(Kind.Integer,integer:value);
+    /// <summary>Creates a string carrier.</summary>
+    /// <param name="value">The string payload.</param>
+    /// <returns>The unannotated carrier.</returns>
+    public static Value FromString(string value) => new(Kind.String,reference:value);
+    /// <summary>Creates a decimal carrier.</summary>
+    /// <param name="value">The decimal payload.</param>
+    /// <returns>The unannotated carrier.</returns>
+    public static Value FromDecimal(decimal value) => new(Kind.Decimal,reference:value);
+    /// <summary>Creates a double carrier.</summary>
+    /// <param name="value">The double payload.</param>
+    /// <returns>The unannotated carrier.</returns>
+    public static Value FromDouble(double value) => new(Kind.Double,number:value);
+    /// <summary>Creates a boolean carrier.</summary>
+    /// <param name="value">The boolean payload.</param>
+    /// <returns>The unannotated carrier.</returns>
+    public static Value FromBoolean(bool value) => new(Kind.Boolean,integer:value?1:0);
+}

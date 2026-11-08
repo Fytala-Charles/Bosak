@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><AssemblyName>Fx009Probe</AssemblyName></PropertyGroup><ItemGroup><ProjectReference Include="../../src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj"/><PackageReference Include="Bosak.XPath.Api" Version="[1.26.2]"/><PackageReference Include="Bosak.XPath.Providers" Version="[1.26.2]"/></ItemGroup></Project>

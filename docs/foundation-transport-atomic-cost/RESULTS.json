@@ -1,0 +1,1714 @@
+{
+  "date": "2026-10-31",
+  "productionModified": false,
+  "fixtures": 39,
+  "publicFactoryKinds": 11,
+  "finalAtomicChecksPerRun": 376,
+  "finalNativeCandidateChecksPerRun": 121,
+  "finalNativeControlChecksPerRun": 103,
+  "runsPerModePerPhase": 2,
+  "finalBuilds": 7,
+  "finalLegacyReplays": 2,
+  "finalLegacyPassedPerReplay": 20,
+  "matchedBeforeExpectedFailuresPerCandidateRun": 12,
+  "reservedKindsWithoutPublicFactories": [
+    "Uri",
+    "Binary"
+  ],
+  "costs": {
+    "before": {
+      "control": {
+        "integer|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 14.0,
+          "minNsPerOp": 13.6,
+          "maxNsPerOp": 1028.7,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 253.9,
+          "minNsPerOp": 236.1,
+          "maxNsPerOp": 371.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 257.54999999999995,
+          "minNsPerOp": 228.5,
+          "maxNsPerOp": 357.8,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 43.05,
+          "minNsPerOp": 40.5,
+          "maxNsPerOp": 45.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 227.45,
+          "minNsPerOp": 213.8,
+          "maxNsPerOp": 264.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 5.032500000000001,
+          "minNsPerOp": 4.83,
+          "maxNsPerOp": 5.37,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 181.825,
+          "minNsPerOp": 166.695,
+          "maxNsPerOp": 286.22,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 2,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 181.805,
+          "minNsPerOp": 166.19,
+          "maxNsPerOp": 244.59,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 33.44,
+          "minNsPerOp": 31.99,
+          "maxNsPerOp": 36.315,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 205.6875,
+          "minNsPerOp": 195.875,
+          "maxNsPerOp": 214.745,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 11.649999999999999,
+          "minNsPerOp": 10.7,
+          "maxNsPerOp": 12.6,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 186.65,
+          "minNsPerOp": 170.8,
+          "maxNsPerOp": 233.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 192.1,
+          "minNsPerOp": 178.7,
+          "maxNsPerOp": 224.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 43.0,
+          "minNsPerOp": 40.1,
+          "maxNsPerOp": 49.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 211.3,
+          "minNsPerOp": 173.3,
+          "maxNsPerOp": 321.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 3.4875,
+          "minNsPerOp": 2.85,
+          "maxNsPerOp": 4.33,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 183.49,
+          "minNsPerOp": 167.03,
+          "maxNsPerOp": 213.99,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 188.54500000000002,
+          "minNsPerOp": 169.435,
+          "maxNsPerOp": 209.61,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 34.2,
+          "minNsPerOp": 29.785,
+          "maxNsPerOp": 87.195,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 192.5,
+          "minNsPerOp": 178.1,
+          "maxNsPerOp": 256.255,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 10.55,
+          "minNsPerOp": 9.9,
+          "maxNsPerOp": 14.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 173.1,
+          "minNsPerOp": 165.8,
+          "maxNsPerOp": 203.6,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 173.15,
+          "minNsPerOp": 167.8,
+          "maxNsPerOp": 180.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 39.4,
+          "minNsPerOp": 36.8,
+          "maxNsPerOp": 45.9,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 96.0,
+          "minBytesPerOp": 96.0,
+          "maxBytesPerOp": 96.0,
+          "medianNsPerOp": 480.7,
+          "minNsPerOp": 434.0,
+          "maxNsPerOp": 996.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 5.300000000000001,
+          "minNsPerOp": 4.64,
+          "maxNsPerOp": 5.64,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 172.3,
+          "minNsPerOp": 160.865,
+          "maxNsPerOp": 195.8,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 176.5125,
+          "minNsPerOp": 160.97,
+          "maxNsPerOp": 188.255,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 31.6175,
+          "minNsPerOp": 30.2,
+          "maxNsPerOp": 38.22,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 96.0,
+          "minBytesPerOp": 96.0,
+          "maxBytesPerOp": 96.0,
+          "medianNsPerOp": 447.8325,
+          "minNsPerOp": 426.84,
+          "maxNsPerOp": 564.14,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        }
+      },
+      "carrier": {
+        "integer|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 15.25,
+          "minNsPerOp": 13.5,
+          "maxNsPerOp": 1954.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 238.64999999999998,
+          "minNsPerOp": 231.7,
+          "maxNsPerOp": 308.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 281.15,
+          "minNsPerOp": 275.4,
+          "maxNsPerOp": 306.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 116.95,
+          "minNsPerOp": 113.7,
+          "maxNsPerOp": 123.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 381.4,
+          "minNsPerOp": 367.9,
+          "maxNsPerOp": 563.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 5.0275,
+          "minNsPerOp": 4.57,
+          "maxNsPerOp": 5.31,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 187.9475,
+          "minNsPerOp": 163.1,
+          "maxNsPerOp": 329.33,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 2,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 215.59750000000003,
+          "minNsPerOp": 195.455,
+          "maxNsPerOp": 266.935,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 108.6025,
+          "minNsPerOp": 103.25,
+          "maxNsPerOp": 138.105,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 345.9275,
+          "minNsPerOp": 308.53,
+          "maxNsPerOp": 384.04,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 14.5,
+          "minNsPerOp": 12.5,
+          "maxNsPerOp": 15.9,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 188.60000000000002,
+          "minNsPerOp": 165.3,
+          "maxNsPerOp": 215.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 208.0,
+          "minBytesPerOp": 208.0,
+          "maxBytesPerOp": 208.0,
+          "medianNsPerOp": 235.45,
+          "minNsPerOp": 211.4,
+          "maxNsPerOp": 345.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 113.4,
+          "minNsPerOp": 99.8,
+          "maxNsPerOp": 141.7,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 363.55,
+          "minNsPerOp": 316.2,
+          "maxNsPerOp": 434.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 6.99,
+          "minNsPerOp": 5.015,
+          "maxNsPerOp": 7.82,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 185.2,
+          "minNsPerOp": 160.81,
+          "maxNsPerOp": 334.91,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 208.0,
+          "minBytesPerOp": 208.0,
+          "maxBytesPerOp": 208.0,
+          "medianNsPerOp": 227.365,
+          "minNsPerOp": 205.835,
+          "maxNsPerOp": 261.105,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 103.5375,
+          "minNsPerOp": 89.59,
+          "maxNsPerOp": 120.725,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 387.845,
+          "minNsPerOp": 192.51,
+          "maxNsPerOp": 622.675,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 14.8,
+          "minNsPerOp": 10.1,
+          "maxNsPerOp": 25.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 251.29999999999998,
+          "minNsPerOp": 154.1,
+          "maxNsPerOp": 393.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 208.0,
+          "minBytesPerOp": 208.0,
+          "maxBytesPerOp": 208.0,
+          "medianNsPerOp": 293.20000000000005,
+          "minNsPerOp": 194.9,
+          "maxNsPerOp": 445.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 480.70000000000005,
+          "minNsPerOp": 340.7,
+          "maxNsPerOp": 628.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 192.0,
+          "minBytesPerOp": 192.0,
+          "maxBytesPerOp": 192.0,
+          "medianNsPerOp": 1091.25,
+          "minNsPerOp": 717.3,
+          "maxNsPerOp": 1241.7,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 15.04,
+          "minNsPerOp": 11.42,
+          "maxNsPerOp": 17.78,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 208.0925,
+          "minNsPerOp": 158.12,
+          "maxNsPerOp": 258.025,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 208.0,
+          "minBytesPerOp": 208.0,
+          "maxBytesPerOp": 208.0,
+          "medianNsPerOp": 235.9475,
+          "minNsPerOp": 189.86,
+          "maxNsPerOp": 311.64,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 452.9375,
+          "minNsPerOp": 86.12,
+          "maxNsPerOp": 491.47,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 192.0,
+          "minBytesPerOp": 192.0,
+          "maxBytesPerOp": 192.0,
+          "medianNsPerOp": 270.36,
+          "minNsPerOp": 257.42,
+          "maxNsPerOp": 747.85,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        }
+      }
+    },
+    "final": {
+      "control": {
+        "integer|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 16.2,
+          "minNsPerOp": 13.3,
+          "maxNsPerOp": 1050.6,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 239.95,
+          "minNsPerOp": 220.0,
+          "maxNsPerOp": 281.7,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 234.0,
+          "minNsPerOp": 220.4,
+          "maxNsPerOp": 261.6,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 43.55,
+          "minNsPerOp": 42.5,
+          "maxNsPerOp": 45.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 223.75,
+          "minNsPerOp": 208.6,
+          "maxNsPerOp": 291.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 7.4825,
+          "minNsPerOp": 4.51,
+          "maxNsPerOp": 9.855,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 180.1725,
+          "minNsPerOp": 162.115,
+          "maxNsPerOp": 259.945,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 2,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 180.3375,
+          "minNsPerOp": 162.85,
+          "maxNsPerOp": 258.29,
+          "gcEvents": {
+            "gen0": 4,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 35.9825,
+          "minNsPerOp": 31.3,
+          "maxNsPerOp": 41.54,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 196.73250000000002,
+          "minNsPerOp": 185.335,
+          "maxNsPerOp": 240.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 11.0,
+          "minNsPerOp": 10.5,
+          "maxNsPerOp": 11.9,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 183.5,
+          "minNsPerOp": 168.1,
+          "maxNsPerOp": 204.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 183.5,
+          "minNsPerOp": 167.1,
+          "maxNsPerOp": 209.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 40.8,
+          "minNsPerOp": 38.5,
+          "maxNsPerOp": 44.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 196.60000000000002,
+          "minNsPerOp": 187.6,
+          "maxNsPerOp": 210.3,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 7.375,
+          "minNsPerOp": 3.115,
+          "maxNsPerOp": 11.525,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 182.3375,
+          "minNsPerOp": 170.62,
+          "maxNsPerOp": 245.78,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 179.76,
+          "minNsPerOp": 168.335,
+          "maxNsPerOp": 236.555,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 32.34,
+          "minNsPerOp": 29.645,
+          "maxNsPerOp": 45.47,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 193.495,
+          "minNsPerOp": 178.285,
+          "maxNsPerOp": 253.725,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 10.3,
+          "minNsPerOp": 9.5,
+          "maxNsPerOp": 11.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 170.3,
+          "minNsPerOp": 164.8,
+          "maxNsPerOp": 228.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 190.5,
+          "minNsPerOp": 167.5,
+          "maxNsPerOp": 236.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 43.150000000000006,
+          "minNsPerOp": 40.7,
+          "maxNsPerOp": 57.8,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 96.0,
+          "minBytesPerOp": 96.0,
+          "maxBytesPerOp": 96.0,
+          "medianNsPerOp": 329.25,
+          "minNsPerOp": 261.2,
+          "maxNsPerOp": 550.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 6.3825,
+          "minNsPerOp": 4.99,
+          "maxNsPerOp": 45.08,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 196.3875,
+          "minNsPerOp": 170.03,
+          "maxNsPerOp": 229.27,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 176.0,
+          "minBytesPerOp": 176.0,
+          "maxBytesPerOp": 176.0,
+          "medianNsPerOp": 174.14249999999998,
+          "minNsPerOp": 165.63,
+          "maxNsPerOp": 202.5,
+          "gcEvents": {
+            "gen0": 2,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 34.150000000000006,
+          "minNsPerOp": 31.53,
+          "maxNsPerOp": 43.28,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 96.0,
+          "minBytesPerOp": 96.0,
+          "maxBytesPerOp": 96.0,
+          "medianNsPerOp": 431.495,
+          "minNsPerOp": 153.24,
+          "maxNsPerOp": 543.07,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        }
+      },
+      "carrier": {
+        "integer|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 15.649999999999999,
+          "minNsPerOp": 14.5,
+          "maxNsPerOp": 2939.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 130.95,
+          "minNsPerOp": 119.9,
+          "maxNsPerOp": 140.8,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 187.4,
+          "minNsPerOp": 167.6,
+          "maxNsPerOp": 195.2,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 108.15,
+          "minNsPerOp": 97.7,
+          "maxNsPerOp": 114.4,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 347.75,
+          "minNsPerOp": 314.0,
+          "maxNsPerOp": 1036.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 4.76,
+          "minNsPerOp": 4.4,
+          "maxNsPerOp": 5.005,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 121.48249999999999,
+          "minNsPerOp": 117.245,
+          "maxNsPerOp": 144.675,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 159.075,
+          "minNsPerOp": 136.89,
+          "maxNsPerOp": 189.975,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 87.84,
+          "minNsPerOp": 81.5,
+          "maxNsPerOp": 117.935,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "integer|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 313.0175,
+          "minNsPerOp": 265.19,
+          "maxNsPerOp": 398.71,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 14.15,
+          "minNsPerOp": 12.9,
+          "maxNsPerOp": 15.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 136.25,
+          "minNsPerOp": 110.8,
+          "maxNsPerOp": 177.7,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 193.45,
+          "minNsPerOp": 167.4,
+          "maxNsPerOp": 223.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 102.15,
+          "minNsPerOp": 88.5,
+          "maxNsPerOp": 118.6,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 356.2,
+          "minNsPerOp": 327.5,
+          "maxNsPerOp": 435.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 6.815,
+          "minNsPerOp": 5.11,
+          "maxNsPerOp": 9.63,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 117.6225,
+          "minNsPerOp": 105.8,
+          "maxNsPerOp": 142.82,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 166.7125,
+          "minNsPerOp": 150.755,
+          "maxNsPerOp": 204.045,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 97.8625,
+          "minNsPerOp": 80.7,
+          "maxNsPerOp": 146.225,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "string|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 350.73249999999996,
+          "minNsPerOp": 275.175,
+          "maxNsPerOp": 422.055,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 14.299999999999999,
+          "minNsPerOp": 11.8,
+          "maxNsPerOp": 17.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 126.85,
+          "minNsPerOp": 110.9,
+          "maxNsPerOp": 148.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 203.35,
+          "minNsPerOp": 159.7,
+          "maxNsPerOp": 305.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 100.5,
+          "minNsPerOp": 85.8,
+          "maxNsPerOp": 117.5,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|1000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 376.1,
+          "minNsPerOp": 295.8,
+          "maxNsPerOp": 438.1,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|payload-access|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 9.01,
+          "minNsPerOp": 7.34,
+          "maxNsPerOp": 10.0,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|cached-kernel-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 118.5025,
+          "minNsPerOp": 106.82,
+          "maxNsPerOp": 171.885,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|issued-value-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 32.0,
+          "minBytesPerOp": 32.0,
+          "maxBytesPerOp": 32.0,
+          "medianNsPerOp": 159.8675,
+          "minNsPerOp": 141.99,
+          "maxNsPerOp": 184.86,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|evidence-read|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 0.0,
+          "minBytesPerOp": 0.0,
+          "maxBytesPerOp": 0.0,
+          "medianNsPerOp": 95.025,
+          "minNsPerOp": 84.66,
+          "maxNsPerOp": 146.945,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        },
+        "decimal|exact-noop|20000": {
+          "samples": 14,
+          "medianBytesPerOp": 64.0,
+          "minBytesPerOp": 64.0,
+          "maxBytesPerOp": 64.0,
+          "medianNsPerOp": 313.28999999999996,
+          "minNsPerOp": 268.88,
+          "maxNsPerOp": 376.36,
+          "gcEvents": {
+            "gen0": 0,
+            "gen1": 0,
+            "gen2": 0
+          }
+        }
+      }
+    }
+  },
+  "budgetAccepted": false,
+  "publicApiAccepted": false
+}

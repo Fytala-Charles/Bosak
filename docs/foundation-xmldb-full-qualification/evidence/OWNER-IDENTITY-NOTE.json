@@ -1,0 +1,9 @@
+{
+  "ownerSourceRevision": "fbb829052f606f683aaf8620fa9401b4ba46c8e9",
+  "diagnosticInformationalVersion": "0.1.0-alpha.0.10+c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "appendedRevisionIsParentCoreBuildContext": true,
+  "appendedRevisionIsOwnerSourceProvenance": false,
+  "qualificationIdentity": "Use the immutable owner source export, source hashes and exact binary hashes in PLAN.json and execution layouts; do not infer the owner source revision from this diagnostic assembly label.",
+  "ownerReleaseArtifactsPrepared": false,
+  "requiredBeforeOwnerArtifactDelivery": "Set owner SourceRevisionId/RepositoryCommit and version provenance explicitly in a separately qualified build. New resulting bytes require their own qualification; do not relabel the current receipts."
+}

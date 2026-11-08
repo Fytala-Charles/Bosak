@@ -1,0 +1,37 @@
+{
+  "legacy": {
+    "total": 37,
+    "passed": 15,
+    "failed": 22,
+    "coreSubstitutionFailures": [
+      "substitution-003",
+      "substitution-010",
+      "substitution-011",
+      "substitution-030"
+    ],
+    "intrinsicProfileMismatches": 18
+  },
+  "preparation": {
+    "total": 6,
+    "harnessExceptions": 6,
+    "failedStage": "XmlSchemaSet.Add / schema preparation",
+    "resource": "SchemaImport/substitution11.xsd"
+  },
+  "companions": {
+    "total": 9,
+    "passed": 9,
+    "queryHashesEqual": true
+  },
+  "independentControls": {
+    "nodesPassed": 6,
+    "nodesFailed": 4,
+    "functionSubtypeFailed": 1
+  },
+  "dispositions": {
+    "legacy-intrinsic-counter-profile-mismatch": 18,
+    "legacy-direct-pass-retain-profile-exclusion": 15,
+    "existing-core-substitution-contract-gap": 4,
+    "xsd11-multiple-affiliation-preparation-boundary": 6,
+    "current-profile-companion-passes": 9
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "90a4ea3f04679dfdcb173cb9c43b1a04df5f01b00565432cb468eaa8d59cf47e"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "ee125f2e59c5e373ffc9041ed9133b287da97d3d2d5e29126451ffd73ead259a"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "80537cf9492bb0616c38ddd60e28f15df62118092e53da580f7eae669e4f3982"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "668c369d6c1259c53d43071214ccd4416fcb6ccfbcc805c6378d1e326fdaef22"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "c2eadbf5af75e4bee8684a2d5895b81e221a0f1c6637f2cb9626da78fe4b04b0"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "2f79982ceadc0084545074fd8d25347605e097b4c6600139e24b85c10ceac84f"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "7a78a5a38e5fbb5b2f0023cd94922dbf50f6df5358d548b8202302d2c512c4c3"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "b52e422d93748b7da80edb5126908b4c8fdbe7d8ed5713c061bc26877dccbae7"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-repeated-children/README.md",
+      "htmlSha256": "fc1e8fe630c8ea85df1baaf0bd332720f75055a71017402f35675d88f38476c9"
+    },
+    {
+      "source": "docs/schema-repeated-children/REPEATED-DECIMAL-ADOPTION-2026-10-29.md",
+      "htmlSha256": "8b92bc014010edc14c9ba95fc68440e7904a4ebc38424f66944521ab4a954ed2"
+    },
+    {
+      "source": "docs/schema-repeated-children/REPEATED-DECIMAL-PLAN.md",
+      "htmlSha256": "7a11e3cec92ca3215203d84b03e682765e4daf4f158dd2d381ad4d9e7a41029d"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "613d6706ea2b553b465030daa311857bcb991d88247e45a9e22831a105432ec8"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "93784db10de522c1918a2a01d0d70d900cdd4ca5b2307684d641540108028a2a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "47bc4f7431fd421d50be3c965d7a24cfc7b7ca64c33313c7bf161c2ba125395f"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "29b2ee6c4abec5bbaf1bf4bce673401d7e20a9932a231dcada6cbe69b1d086ef"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "611d51654e5b612a03fe46d2f9dbe7f6ca9e5de6f924c78ac54ffda911071b41"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "f55cdd965d4668e8c5be20d3bc7d294b91ef75eef988feae536b36fda395ceaa"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "84e1d8fade1ad4fee0e759fe3f426a56c09efdd8c99538adffb592876a62d2a3"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "d2b69f3a7a0310f0ef586d7ebe85c7a769586da757f26230b60962ecd4d3822e"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/REPEATED-DECIMAL-ADOPTION-2026-10-29.md",
+      "htmlSha256": "8b92bc014010edc14c9ba95fc68440e7904a4ebc38424f66944521ab4a954ed2"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/REPEATED-DECIMAL-PLAN.md",
+      "htmlSha256": "7a11e3cec92ca3215203d84b03e682765e4daf4f158dd2d381ad4d9e7a41029d"
+    }
+  ],
+  "localLinks": 1984,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

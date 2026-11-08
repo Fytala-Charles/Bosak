@@ -1,0 +1,126 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/c03-render/README.md.html",
+      "sha256": "49862b03c243b35c2f2c7669d9b8223875db0d25076801af0fe2822017b22f41"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/c03-render/docs_ARCHITECTURE.md.html",
+      "sha256": "0e73f63b0e95f0b1539cf9e419ef5774fb82b004a92e1c16258e3955f966996a"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/c03-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "f713984f624b53e70e7becea85ce9633cec0cc00f459f01b6d6a28ce85592f71"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/c03-render/docs_INTEGRATION.md.html",
+      "sha256": "6a9755a0f4450bc91642b4576f990953ab6f03afd3c9d58e1dfb1b8ed804dcaa"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/c03-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "bd2d1f12acb59cf42d31f824249e1a1bdf101e8a5cdd26ca3a3e47805041e40a"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/c03-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "cfdaa3bf0595bab9b0e5ec8730d40ceb5778c3a61647b58aa77aa30bcc81c852"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "eb43e8b3b482321a63d94a38cde13583b99099ff2005ce149129172f68a715db"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "a79df6aa78b76e1d7fe4bc66a07fe9e0b64cdc9a94c15d0bf04a24b811454224"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "2bd7a86b5b5fcf896933e344a29ef483ea07d5c8fc57af738eeaa395ba6f1133"
+    },
+    {
+      "source": "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_SUPPLEMENTARY-COVERAGE-AUDIT.md.html",
+      "sha256": "cfc441c2f9716175e0cf151fd3e15f0047b3dfe3ac4b1d23cc5e221070110e00"
+    },
+    {
+      "source": "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_FUNCTION-OPTIONS-RECONCILIATION.md.html",
+      "sha256": "6bb664277838d0cc0659da10f1cbbacfda7755357e192c954b87d1d73c11b09d"
+    },
+    {
+      "source": "docs/xpath40-catalog/INTEGER-CAST-AUDIT.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_INTEGER-CAST-AUDIT.md.html",
+      "sha256": "c695e1f5ab3d836dae45a3c4469469a8e1cc70d9e5eba980d197ff7c2860c1b1"
+    },
+    {
+      "source": "docs/xpath40-catalog/RECORD-CONTRACTS.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_RECORD-CONTRACTS.md.html",
+      "sha256": "90da567c93c5511ecf88955828da046d8718a8ec3ac87b362417a397836c5521"
+    },
+    {
+      "source": "docs/xpath40-catalog/examples/focus-functions/README.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_examples_focus-functions_README.md.html",
+      "sha256": "294be09b80a9dea7c4efd9512b392f2a6cbb11eb9aa23f3f4494d157b293c599"
+    },
+    {
+      "source": "docs/xpath40-catalog/deferred/xslt-record-type.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_deferred_xslt-record-type.md.html",
+      "sha256": "ed8b1f9aba7bf3b8972cf43555cbdeed702ef104925b14e1750a87c3b76dabc5"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONSTRUCTOR-TYPE-RECONCILIATION.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_CONSTRUCTOR-TYPE-RECONCILIATION.md.html",
+      "sha256": "7cbd6aa2dd4b8a49bfdda9a0fabc1614d436068d6e108b7256b114145192e047"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/focus-functions.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_operators-and-syntax_focus-functions.md.html",
+      "sha256": "ca5934a880e8d689ac2129b44226c03b45bbc4e967cdc7d916e37a196e22cabf"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/numeric-literals.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_operators-and-syntax_numeric-literals.md.html",
+      "sha256": "d655cf6682b5729470bb336c3634f2d0ce6e546b5e1383904f4a8815a2821652"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/choice-types.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_choice-types.md.html",
+      "sha256": "ae3e29484c9945a5e4ecd959cf6e80e35b260894522334f08902579fbf770dce"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/enum-types.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_enum-types.md.html",
+      "sha256": "a44023dbcc32f7807d6a60b667f22f228b2c05b412fa13230df1056d3b2c78da"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/nominative-records.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_nominative-records.md.html",
+      "sha256": "f5f45c578fe441952b37d49b3c99cb855e4e41e30c04f5de4e71f9194dbffa49"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/record-updates.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_record-updates.md.html",
+      "sha256": "15e6ddb30bfbfb4c0e5c0c93959b23c2502825599f2ef264cee9146d9b71c418"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/structural-records.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_structural-records.md.html",
+      "sha256": "436e9a688ea38bf7976910cb44b922f2ab44fbc28becbbb106300cb837fd7f60"
+    },
+    {
+      "source": "docs/xpath40-catalog/type-system/typed-let-coercion.md",
+      "html": ".guard-tmp/c03-render/docs_xpath40-catalog_type-system_typed-let-coercion.md.html",
+      "sha256": "7166ea86ca5ccaf3150fd9be48afe69126d2c0c52b16f72f9413ce1b76d57598"
+    }
+  ]
+}

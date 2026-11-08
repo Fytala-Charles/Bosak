@@ -1,0 +1,25 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\Bosak.XmlDb.IntegrationTests.csproj (in 133 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\samples\EmbeddedQuickstart\EmbeddedQuickstart.csproj (in 133 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.Xdm.Tests\Bosak.XmlDb.Xdm.Tests.csproj (in 133 ms).
+  Restored D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\src\Bosak.XmlDb.Xdm\Bosak.XmlDb.Xdm.csproj (in 133 ms).
+  3 of 7 projects are up-to-date for restore.
+  Bosak.XmlDb.Core -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\src\Bosak.XmlDb.Core\bin\Release\net10.0\Bosak.XmlDb.Core.dll
+  Bosak.XmlDb.Storage -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\src\Bosak.XmlDb.Storage\bin\Release\net10.0\Bosak.XmlDb.Storage.dll
+  Bosak.XmlDb.Xdm -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\src\Bosak.XmlDb.Xdm\bin\Release\net10.0\Bosak.XmlDb.Xdm.dll
+  Bosak.XmlDb.Storage.Tests -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.Storage.Tests\bin\Release\net10.0\Bosak.XmlDb.Storage.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.Storage.Tests\bin\Release\net10.0\Bosak.XmlDb.Storage.Tests.dll (.NETCoreApp,Version=v10.0)
+  EmbeddedQuickstart -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\samples\EmbeddedQuickstart\bin\Release\net10.0\EmbeddedQuickstart.dll
+  Bosak.XmlDb.Xdm.Tests -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.Xdm.Tests\bin\Release\net10.0\Bosak.XmlDb.Xdm.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.Xdm.Tests\bin\Release\net10.0\Bosak.XmlDb.Xdm.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+  Bosak.XmlDb.IntegrationTests -> D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\bin\Release\net10.0\Bosak.XmlDb.IntegrationTests.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-consumers\XmlDb\tests\Bosak.XmlDb.IntegrationTests\bin\Release\net10.0\Bosak.XmlDb.IntegrationTests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-consumer-results\XmlDb-final\charl_CHARLES_2026-10-29_11_51_34_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 35 s - Bosak.XmlDb.Xdm.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\schema-consumer-results\XmlDb-final\charl_CHARLES_2026-10-29_11_51_35_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   593, Skipped:     0, Total:   593, Duration: 9 m 45 s - Bosak.XmlDb.IntegrationTests.dll (net10.0)

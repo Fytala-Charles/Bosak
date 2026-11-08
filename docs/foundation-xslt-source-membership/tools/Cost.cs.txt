@@ -1,0 +1,32 @@
+// Generated private multi-snapshot allocation fixture; not a consumer workload.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+var provider = new Issuer();
+var caller = new EvaluationContext().WithVariable("v", XdmValue.FromInteger(42));
+Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> owns = static (_, _) => false;
+var rows = new List<object>();
+foreach (int count in new[] { 0, 1, 2, 8 })
+{
+    using var session = new SchemaQuerySession(new SchemaQueryEnvironment(ImmutableDictionary<string,string>.Empty,"cost"), c=>c.SnapshotVariables()[("v","")],provider,8,16);
+    var snapshots = Enumerable.Range(0,count).Select(n=>session.OpenSnapshot(session.Environment,new object(),provider.Origins[n],static()=>{})).ToImmutableArray();
+    Func<SchemaQuerySession.Operation,int> work=op=>{var input=op.CaptureInputs(caller,owns,16,16);op.EvaluateAtomic(input,16).ForEachAtomic(static _=>{});return 0;};
+    void Run()=>session.Run(session.Environment,snapshots,work);
+    for(int n=0;n<100;n++)Run();long start=GC.GetAllocatedBytesForCurrentThread();
+    for(int n=0;n<1000;n++)Run();
+    rows.Add(new{members=count,bytesPerOperation=(GC.GetAllocatedBytesForCurrentThread()-start)/1000});
+}
+var runtime=typeof(EvaluationContext).Assembly;
+Console.WriteLine(JsonSerializer.Serialize(new{rows,iterations=1000,runtimeSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(runtime.Location))).ToLowerInvariant(),scope="Real snapshot leases, composite entry, scalar input capture, fresh child context and guarded result visitation; stub evaluator. Excludes compilation, provider acquisition, bound closed-resource policy, actual host execution and concurrency throughput."},new JsonSerializerOptions{WriteIndented=true}));
+sealed class Issuer : ISchemaEvidenceIssuer
+{
+    internal readonly object[] Origins=Enumerable.Range(0,8).Select(_=>new object()).ToArray();
+    bool ISchemaEvidenceIssuer.OwnsAssessment(object value)=>Origins.Contains(value);
+    bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar value)=>false;
+    bool ISchemaEvidenceIssuer.OwnsType(object value)=>false;
+    bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+}

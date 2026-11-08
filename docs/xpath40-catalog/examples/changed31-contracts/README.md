@@ -4,6 +4,8 @@
   <p>Dated 3.1 declarations, pinned 4.0 differences and consumer boundaries</p>
 </div>
 
+**K04-C19 executable update ? 28 October 2026:** Candidate 1.29.0 adds typed date/dateTime/time arities 3/4 and keyword defaults in 4.0. The twelve current case expectations now require lookup presence and named-reference arity in 4.0, retaining 3.1 absence/refusal; XPath files are unchanged. The dated inventory and REQ-126 acceptance receipts remain historical, including their original unmet observations. See [implementation evidence](../../../conformance/k04-date-optional-fix/README.md).
+
 ## Business case and policy
 
 A warehouse diagnostic requests quantities for stock codes A and Z and the code at row positions 1 and 4. It must distinguish explicit zero stock from an absent code and avoid out-of-range array access. For this report, an absent stock code has diagnostic quantity zero and an absent row is labelled missing-row. This is an explicit reporting policy, not proof that a missing code means zero stock in an authoritative inventory.
@@ -171,12 +173,12 @@ The [inventory review](../../CHANGED-31-CONTRACT-INVENTORY.md) explains seventee
 | [reference-fn-concat-1.xpath](reference-fn-concat-1.xpath) | `XPST0017` |
 | [reference-fn-doc-2.xpath](reference-fn-doc-2.xpath) | `XPST0017` |
 | [reference-fn-doc-available-2.xpath](reference-fn-doc-available-2.xpath) | `XPST0017` |
-| [reference-fn-format-date-3.xpath](reference-fn-format-date-3.xpath) | `XPST0017` |
-| [reference-fn-format-date-4.xpath](reference-fn-format-date-4.xpath) | `XPST0017` |
-| [reference-fn-format-dateTime-3.xpath](reference-fn-format-dateTime-3.xpath) | `XPST0017` |
-| [reference-fn-format-dateTime-4.xpath](reference-fn-format-dateTime-4.xpath) | `XPST0017` |
-| [reference-fn-format-time-3.xpath](reference-fn-format-time-3.xpath) | `XPST0017` |
-| [reference-fn-format-time-4.xpath](reference-fn-format-time-4.xpath) | `XPST0017` |
+| [reference-fn-format-date-3.xpath](reference-fn-format-date-3.xpath) | `3` (4.0); `XPST0017` (3.1) |
+| [reference-fn-format-date-4.xpath](reference-fn-format-date-4.xpath) | `4` (4.0); `XPST0017` (3.1) |
+| [reference-fn-format-dateTime-3.xpath](reference-fn-format-dateTime-3.xpath) | `3` (4.0); `XPST0017` (3.1) |
+| [reference-fn-format-dateTime-4.xpath](reference-fn-format-dateTime-4.xpath) | `4` (4.0); `XPST0017` (3.1) |
+| [reference-fn-format-time-3.xpath](reference-fn-format-time-3.xpath) | `3` (4.0); `XPST0017` (3.1) |
+| [reference-fn-format-time-4.xpath](reference-fn-format-time-4.xpath) | `4` (4.0); `XPST0017` (3.1) |
 | [reference-fn-parse-xml-2.xpath](reference-fn-parse-xml-2.xpath) | `XPST0017` |
 | [reference-fn-parse-xml-fragment-2.xpath](reference-fn-parse-xml-fragment-2.xpath) | `XPST0017` |
 | [reference-fn-path-2.xpath](reference-fn-path-2.xpath) | `XPST0017` |
@@ -270,11 +272,11 @@ Every row below has exact lookup fixtures at Frozen 4.0 with an independently ob
 | `fn:fold-right` | [#3](inventory-fn-fold-right-3.xpath) | #3: 1/1 |
 | `fn:for-each` | [#2](inventory-fn-for-each-2.xpath) | #2: 1/1 |
 | `fn:for-each-pair` | [#3](inventory-fn-for-each-pair-3.xpath) | #3: 1/1 |
-| `fn:format-date` | [#2](inventory-fn-format-date-2.xpath), [#3](inventory-fn-format-date-3.xpath), [#4](inventory-fn-format-date-4.xpath), [#5](inventory-fn-format-date-5.xpath) | #2: 1/1, #3: 0/0, #4: 0/0, #5: 1/1 |
-| `fn:format-dateTime` | [#2](inventory-fn-format-dateTime-2.xpath), [#3](inventory-fn-format-dateTime-3.xpath), [#4](inventory-fn-format-dateTime-4.xpath), [#5](inventory-fn-format-dateTime-5.xpath) | #2: 1/1, #3: 0/0, #4: 0/0, #5: 1/1 |
+| `fn:format-date` | [#2](inventory-fn-format-date-2.xpath), [#3](inventory-fn-format-date-3.xpath), [#4](inventory-fn-format-date-4.xpath), [#5](inventory-fn-format-date-5.xpath) | #2: 1/1, #3: 1/0, #4: 1/0, #5: 1/1 |
+| `fn:format-dateTime` | [#2](inventory-fn-format-dateTime-2.xpath), [#3](inventory-fn-format-dateTime-3.xpath), [#4](inventory-fn-format-dateTime-4.xpath), [#5](inventory-fn-format-dateTime-5.xpath) | #2: 1/1, #3: 1/0, #4: 1/0, #5: 1/1 |
 | `fn:format-integer` | [#2](inventory-fn-format-integer-2.xpath), [#3](inventory-fn-format-integer-3.xpath) | #2: 1/1, #3: 1/1 |
 | `fn:format-number` | [#2](inventory-fn-format-number-2.xpath), [#3](inventory-fn-format-number-3.xpath) | #2: 1/1, #3: 1/1 |
-| `fn:format-time` | [#2](inventory-fn-format-time-2.xpath), [#3](inventory-fn-format-time-3.xpath), [#4](inventory-fn-format-time-4.xpath), [#5](inventory-fn-format-time-5.xpath) | #2: 1/1, #3: 0/0, #4: 0/0, #5: 1/1 |
+| `fn:format-time` | [#2](inventory-fn-format-time-2.xpath), [#3](inventory-fn-format-time-3.xpath), [#4](inventory-fn-format-time-4.xpath), [#5](inventory-fn-format-time-5.xpath) | #2: 1/1, #3: 1/0, #4: 1/0, #5: 1/1 |
 | `fn:function-arity` | [#1](inventory-fn-function-arity-1.xpath) | #1: 1/1 |
 | `fn:function-lookup` | [#2](inventory-fn-function-lookup-2.xpath) | #2: 1/1 |
 | `fn:function-name` | [#1](inventory-fn-function-name-1.xpath) | #1: 1/1 |

@@ -1,0 +1,9 @@
+# Internal admission report prerequisite
+
+The reviewed public XSLT run result requires admission, execution and cleanup failures to remain separate. A throwing admission path can combine entry and rollback errors in an AggregateException. Inferring their origins later by flattening would lose provider aggregate boundaries and repeated identities.
+
+SchemaOperationLeaseSet.AcquireOutcome now returns an internal immutable report containing either the live lease set or the original admission exception and an immutable ordered cleanup array. Metadata validation, cancellation and final lifetime checks precede lease publication. Failed entry releases only acquired leases, in reverse order, and captures every original release exception. A successful report transfers ownership without releasing leases. The existing Acquire method consumes the same report and preserves its prior original-error or primary-first aggregate behavior. Complete and CompleteFailures retain their existing behavior.
+
+Twelve new cases cover live lease transfer, empty membership, five invalid membership shapes, nested/repeated exception identities, pre/final cancellation, final revocation and a null returned lease. All previous lease and host/session tests run in the full suite. This does not establish arbitrary provider concurrency, acceptable owner budgets or public XSLT behavior. The report adds an engine-owned allocation during admission; representative owner performance acceptance remains open.
+
+Next, source admission and deferred provider completion must expose similarly structured reports without early release or guessing exception provenance. The five public XSLT types, invocation routing, copied bounded capture options, serialization ownership, original execution diagnostics and inherited gates are still unimplemented in the public profile.

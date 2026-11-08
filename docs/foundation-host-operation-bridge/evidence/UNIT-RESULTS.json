@@ -1,0 +1,85 @@
+{
+  "passed": 25882,
+  "projects": [
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0.trx",
+      "sha256": "8e3260f2731fc0a8807be5721f6a624ab9d4342e8ef099c34c71ab130f7482a9",
+      "passed": 202,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.parser.tests\\bin\\release\\net10.0\\bosak.xpath.parser.tests.dll",
+      "testBinarySha256": "e2056ac1ed2fc57bfb236e4ff66336afd07f1f93c369fb9991d14cdd2b6a9542",
+      "testAssembly": "bosak.xpath.parser.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0[1].trx",
+      "sha256": "7eb2afa8fc64cc06329ac9ed4db345a63cef4c157a9cfe5f872354109e72050a",
+      "passed": 66,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.compiler.tests\\bin\\release\\net10.0\\bosak.xpath.compiler.tests.dll",
+      "testBinarySha256": "f640b08dac533267cc5a8eca1c783472b2f2582e2acf81665bdaff32b6de3eee",
+      "testAssembly": "bosak.xpath.compiler.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0[2].trx",
+      "sha256": "c2826d6e7e324dc0e467741af04d04545d87053b8015f0c02838c266041da64c",
+      "passed": 681,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.api.tests\\bin\\release\\net10.0\\bosak.xpath.api.tests.dll",
+      "testBinarySha256": "e203dbf5e80536e73a02aba1135a22df80a98e8c307cd999f584c35919f73bd5",
+      "testAssembly": "bosak.xpath.api.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0[3].trx",
+      "sha256": "fbc50942f9aafdeb61236151c88ee24f567a2653da83bd0e820250db5bf5a1e9",
+      "passed": 266,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.core.tests\\bin\\release\\net10.0\\bosak.xpath.core.tests.dll",
+      "testBinarySha256": "47585f7d46afdaf3025923001cb4f36acf75752aa05b661367d0839922693b58",
+      "testAssembly": "bosak.xpath.core.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0[4].trx",
+      "sha256": "c0ef6948e9f89043a16d7c162296c634a96044a75d71f5c5564ad982eeea8917",
+      "passed": 223,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.providers.tests\\bin\\release\\net10.0\\bosak.xpath.providers.tests.dll",
+      "testBinarySha256": "1da02a2c8e2954529fdd456d6c70c0ae88d01b55f5ff3ba0885a61d046091915",
+      "testAssembly": "bosak.xpath.providers.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_05_net10.0[5].trx",
+      "sha256": "da2b780e62f826d86c53b5101d448a830104d857bb93e07c0b67d22f9894fef6",
+      "passed": 1543,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.runtime.tests\\bin\\release\\net10.0\\bosak.xpath.runtime.tests.dll",
+      "testBinarySha256": "bbe007f17754fb2a4b9e1534841dbbd23b15069d9e62d98721ab6731d9cf22e3",
+      "testAssembly": "bosak.xpath.runtime.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_06_net10.0.trx",
+      "sha256": "8ea90e9528bf68d083815feb501c324162211af13a664d76f8f2f14ec69e3b9a",
+      "passed": 804,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xquery.tests\\bin\\release\\net10.0\\bosak.xquery.tests.dll",
+      "testBinarySha256": "5cb495347fdb911ac247c774374bdf1163934050f09a16c0bab9cce29f8c7618",
+      "testAssembly": "bosak.xquery.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_06_net10.0[1].trx",
+      "sha256": "9930a84d3add861e2f1a0f2a94ae6e3884aef99f688feed802210bc38da5d2ac",
+      "passed": 47,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.providers.database.tests\\bin\\release\\net10.0\\bosak.xpath.providers.database.tests.dll",
+      "testBinarySha256": "7843ac0f2de7dac09c7ca96c7a743894a827e42b5adb5f9c0dbd77680a5616d0",
+      "testAssembly": "bosak.xpath.providers.database.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_07_net10.0.trx",
+      "sha256": "6762780cc8419cfae3d81ef515f7da307bd6e353419b669f8a43c21bae0c0d9a",
+      "passed": 13797,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xpath.standard.tests\\bin\\release\\net10.0\\bosak.xpath.standard.tests.dll",
+      "testBinarySha256": "e34b573d85e891f2f1baa953a3e1dd6ee75eaeb3f1fe6cbb898f4d32655dcfef",
+      "testAssembly": "bosak.xpath.standard.tests"
+    },
+    {
+      "trx": "unit-trx/charl_CHARLES_2026-11-05_19_39_07_net10.0[1].trx",
+      "sha256": "4bbe133b44f40c24ee9635a4ebe32d9336ac404dfb734914ac6e9039161b8bfb",
+      "passed": 8253,
+      "testBinaryPath": "d:\\development\\bosak\\tests\\bosak.xslt.tests\\bin\\release\\net10.0\\bosak.xslt.tests.dll",
+      "testBinarySha256": "f3b0d3d68b69a36ae49a980f3ebe5a60b7c28046df25be6db06a500b9c5c63dc",
+      "testAssembly": "bosak.xslt.tests"
+    }
+  ]
+}

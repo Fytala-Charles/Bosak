@@ -1,0 +1,205 @@
+// Generated isolated C44-R2 compatibility/mutation controls; no product or licensed-provider execution.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0); SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Core.Xdm;
+using C44R2;
+using C44R2.Proposed;
+
+Experiment.Mutation=args.Length>0?args[0]:"none";
+var results=new List<object>();int passed=0,failed=0;
+void Check(string name,Func<bool> test)
+{
+    bool success=false;string? error=null;
+    try {success=test();}catch(Exception e){error=e.GetType().Name+": "+e.Message;}
+    results.Add(new{name,passed=success,error});if(success)passed++;else failed++;
+}
+bool Throws<T>(Action action,string? message=null) where T:Exception
+{try{action();return false;}catch(T e){return message is null||e.Message==message;}}
+var profile=new QuerySemanticProfile(QueryHostLanguage.XPath,"4.0",Experiment.Revision,"c44r2-fake",Experiment.Hash("query-scope"));
+var provider=new Provider();
+SchemaCompilationRequest Request(bool extra=false,bool other=false,QuerySemanticProfile? query=null,SchemaLanguageVersion version=SchemaLanguageVersion.Xsd11,string? rootChange=null,string? alias=null,string? slot=null,bool complete=true)
+{
+    string K(string key)=>(alias??"")+key;
+    var rootTypes=new List<TypeDef>{new(K("Base"),"Base",Block:rootChange=="base"?SchemaDerivation.Extension:SchemaDerivation.None),new(K("Mid"),"Mid",K("Base"),SchemaDerivation.Restriction),new(K("Other"),"Other",K("Base"),SchemaDerivation.Extension),new(K("Anon"),null,K(rootChange=="anonymous"?"Other":"Mid"),SchemaDerivation.Restriction,AnonymousOrigin:"https://schema.example/root.fake#type/anonymous-1")};
+    var elements=new List<ElementDef>{new(K("H1"),"H1",K("Base"),[]),new(K("H2"),"H2",K("Base"),[]),new(K("A"),"A",K("Base"),[K("H1"),K("H2")],Abstract:true),new(K("M"),"M",K("Base"),[K("A")],Nillable:rootChange!="declaration"),new(K("R"),"R",K("Mid"),[K("H1")]),new(K("BH"),"BH",K("Base"),[],Block:SchemaDerivation.Restriction),new(K("BM"),"BM",K("Mid"),[K("BH")]),new(K("Local"),"M",K("Base"),[],Scope:"/owner/local")};
+    var imported=new List<TypeDef>();
+    if(extra)imported.Add(new(K("Extra"),"Extra",K("Mid"),SchemaDerivation.Restriction,ExclusiveSlot:slot));
+    if(other)imported.Add(new(K("TargetOnly"),"TargetOnly",K("Base"),SchemaDerivation.Extension,ExclusiveSlot:slot));
+    SchemaResource Resource(string uri,FakeDocument doc)=>new(new(uri),ImmutableArray.CreateRange(JsonSerializer.SerializeToUtf8Bytes(doc)));
+    return new([Resource("https://schema.example/root.fake",new(["types.fake"],rootTypes.ToImmutableArray(),elements.ToImmutableArray())),Resource("https://schema.example/types.fake",new([],imported.ToImmutableArray(),[],complete))],new("https://schema.example/root.fake"),query??profile,version,"deny-network",[],Experiment.Hash("schema-context"));
+}
+Session Open(SchemaCompilationRequest request,Provider? owner=null)=>(Session)Experiment.Owned(()=>(owner??provider).OpenSession(request,default));
+ISchemaCompatibilityView Bridge(Session source,Session target,QuerySemanticProfile? query=null)=>Experiment.Owned(()=>provider.Establish(new(source,target,query??target.QueryProfile),default));
+bool Refused(SchemaOutcome<ISchemaCompatibilityView> response,string reason,SchemaVerdict verdict=SchemaVerdict.Unsupported)=>response.Verdict==verdict&&response.Findings.Any(f=>f.Reason==reason);
+var source=Open(Request(extra:true));var target=Open(Request());var same=Open(Request(extra:true));var superset=Open(Request(extra:true,other:true));
+var setupMutation=Experiment.Mutation;Experiment.Mutation="none";
+var view=Bridge(source,target);Experiment.Mutation=setupMutation;
+var sourceId=SchemaSourceIdentity.Create("xml-host","snapshot-7",Experiment.Hash("<M>12</M>"));
+var annotation=new SchemaNodeAnnotation(new(source,source.Type("Extra"),sourceId),source.Element("M"),false,false,false,false,false);
+var typed=new AtomicValue(XdmValue.FromInteger(12,"integer","Q{urn:c44r2}Extra"),annotation.ValueAnnotation);
+bool Match(ISchemaCompatibilityView v,SchemaNodeAnnotation a,SchemaDeclarationIdentity h)=>Experiment.Owned(()=>v.MatchesElement(a,h,default));
+
+Check("fresh same-closure sessions have distinct tokens",()=>!ReferenceEquals(source.Identity,same.Identity)&&source.Identity.Fingerprint==same.Identity.Fingerprint);
+Check("source and target universes differ",()=>source.Identity.Fingerprint!=target.Identity.Fingerprint);
+Check("same-closure different-token bridge succeeds",()=>Bridge(source,same).IsDerivedFrom(source.Type("Extra"),same.Type("Base"),default).Value);
+Check("same-session bridge remains supported",()=>Bridge(source,source).IsDerivedFrom(source.Type("Extra"),source.Type("Mid"),default).Value);
+Check("compatible superset-to-subset source-only type",()=>view.IsDerivedFrom(source.Type("Extra"),target.Type("Base"),default).Value);
+Check("compatible subset-to-superset",()=>Bridge(target,superset).IsDerivedFrom(target.Type("Mid"),superset.Type("Base"),default).Value);
+Check("compatible superset-to-other-superset",()=>Bridge(source,superset).IsDerivedFrom(source.Type("Extra"),superset.Type("Mid"),default).Value);
+Check("supported false is an ordinary derivation result",()=>view.IsDerivedFrom(source.Type("Extra"),target.Type("Other"),default).Verdict==SchemaVerdict.Supported&&!view.IsDerivedFrom(source.Type("Extra"),target.Type("Other"),default).Value);
+var rekeyed=Open(Request(extra:true,alias:"local-key:"));
+Check("semantic compatibility tolerates different opaque component keys",()=>Bridge(rekeyed,target).IsDerivedFrom(rekeyed.Type("local-key:Extra"),target.Type("Base"),default).Value);
+Check("anonymous source type derives from named target",()=>view.IsDerivedFrom(source.Type("Anon"),target.Type("Base"),default).Value);
+Check("anonymous identity has no invented QName",()=>source.Type("Anon").DisplayName is null);
+Check("same QName changed definition refuses",()=>Refused(provider.Establish(new(source,Open(Request(rootChange:"base")),profile),default),"TypeConflict",SchemaVerdict.Invalid));
+Check("transitively changed anonymous definition refuses",()=>Refused(provider.Establish(new(source,Open(Request(rootChange:"anonymous")),profile),default),"TypeConflict",SchemaVerdict.Invalid));
+Check("same declaration QName changed nillability refuses",()=>Refused(provider.Establish(new(source,Open(Request(rootChange:"declaration")),profile),default),"DeclarationConflict",SchemaVerdict.Invalid));
+var unionA=Open(Request(extra:true,slot:"unique-synthetic-slot"));var unionB=Open(Request(other:true,slot:"unique-synthetic-slot"));
+Check("individually valid fake graphs with invalid union refuse",()=>Refused(provider.Establish(new(unionA,unionB,profile),default),"UnionConstraint",SchemaVerdict.Invalid));
+var foreignProvider=new Provider();var foreign=Open(Request(extra:true),foreignProvider);
+Check("equal full fingerprints never admit unregistered provider",()=>foreign.Identity.Fingerprint==source.Identity.Fingerprint&&Refused(provider.Establish(new(foreign,source,profile),default),"ForeignProvider"));
+Check("foreign target provider refuses",()=>Refused(provider.Establish(new(source,foreign,profile),default),"ForeignProvider"));
+Check("equal names cannot replace source type endpoint",()=>Throws<Failure>(()=>view.IsDerivedFrom(same.Type("Extra"),target.Type("Base"),default),"ForeignTypeIdentity"));
+Check("equal names cannot replace target type endpoint",()=>Throws<Failure>(()=>view.IsDerivedFrom(source.Type("Extra"),same.Type("Base"),default),"ForeignTypeIdentity"));
+Check("directional view cannot be reversed",()=>Throws<Failure>(()=>view.IsDerivedFrom(target.Type("Mid"),source.Type("Base"),default),"ForeignTypeIdentity"));
+Check("original annotation matches both multi-heads",()=>Match(view,annotation,target.Element("H1"))&&Match(view,annotation,target.Element("H2")));
+Check("original source-only type matches target declared element",()=>Match(view,annotation,target.Element("H1")));
+var beforeAssessment=provider.AssessmentCalls;
+Check("handoff performs no reassessment",()=>{bool ok=Match(view,annotation,target.Element("H1"));return ok&&provider.AssessmentCalls==beforeAssessment;});
+var originalNode=new FakeNode("M","Extra","M",sourceId);
+var assessed=(FakeNode)Experiment.Owned(()=>source.Assess(new(originalNode,SchemaAssessmentMode.Strict,null,null),default)).Root;
+Check("fake source assessment succeeds without caller mutation",()=>assessed.SchemaAnnotation is not null&&originalNode.SchemaAnnotation is null&&assessed.IsSameNode(originalNode)&&originalNode.IsSameNode(assessed));
+Check("fake target reassessment explicitly differs",()=>target.Assess(new(originalNode,SchemaAssessmentMode.Strict,null,null),default).Verdict==SchemaVerdict.Invalid);
+Check("original PSVI remains usable despite target reassessment failure",()=>Match(view,assessed.SchemaAnnotation!,target.Element("H1")));
+Check("source declaration and session are retained",()=>ReferenceEquals(annotation.Declaration,source.Element("M"))&&ReferenceEquals(annotation.ValueAnnotation.Session,source));
+Check("nilled nillable member accepted",()=>Match(view,annotation with {IsNilled=true},target.Element("H2")));
+var restricted=annotation with {ValueAnnotation=new(source,source.Type("Mid"),sourceId),Declaration=source.Element("R")};
+Check("nilled non-nillable member does not match",()=>!Match(view,restricted with {IsNilled=true},target.Element("H1")));
+Check("abstract source declaration does not match",()=>!Match(view,annotation with {Declaration=source.Element("A")},target.Element("H1")));
+Check("blocked restriction does not match",()=>!Match(view,restricted with {Declaration=source.Element("BM")},target.Element("BH")));
+Check("local declaration is not a global member",()=>!Match(view,annotation with {Declaration=source.Element("Local")},target.Element("H1")));
+Check("missing governing declaration does not match",()=>!Match(view,annotation with {Declaration=null},target.Element("H1")));
+Check("wrong actual type does not satisfy declaration",()=>!Match(view,restricted with {ValueAnnotation=new(source,source.Type("Other"),sourceId)},target.Element("H1")));
+var fakeSourceId=SchemaSourceIdentity.Create("xml-host","snapshot-7",sourceId.ContentFingerprint);
+var foreignAnnotation=annotation with {ValueAnnotation=new(same,same.Type("Extra"),fakeSourceId),Declaration=same.Element("M")};
+Check("equal source descriptors remain distinct host tokens",()=>!ReferenceEquals(sourceId,fakeSourceId)&&sourceId.SnapshotKey==fakeSourceId.SnapshotKey);
+Check("storage/source ID cannot authenticate a schema annotation",()=>Throws<Failure>(()=>Match(view,foreignAnnotation,target.Element("H1")),"ForeignAnnotationSession"));
+Check("foreign declaration in owned annotation refuses",()=>Throws<Failure>(()=>Match(view,annotation with {Declaration=same.Element("M")},target.Element("H1")),"ForeignDeclarationIdentity"));
+Check("foreign target declaration refuses",()=>Throws<Failure>(()=>Match(view,annotation,same.Element("H1")),"ForeignDeclarationIdentity"));
+var bound=typed.Bind(view,target.Type("Base"),profile);
+Check("atomic handoff retains actual source type/session",()=>ReferenceEquals(bound.Annotation,typed.Annotation)&&ReferenceEquals(bound.Annotation!.Type,source.Type("Extra"))&&ReferenceEquals(bound.Annotation.Session,source));
+Check("atomic handoff retains original source token",()=>ReferenceEquals(bound.Annotation!.SourceIdentity,sourceId));
+Check("atomic handoff preserves value and public type text",()=>bound.Value.IntegerValue==12&&bound.Value.UserSchemaTypeName==typed.Value.UserSchemaTypeName);
+Check("wrong atomic expected type refuses",()=>Throws<Failure>(()=>typed.Bind(view,target.Type("Other"),profile),"XPTY0004"));
+Check("same-valued foreign atom cannot enter another view",()=>Throws<Failure>(()=>new AtomicValue(typed.Value,foreignAnnotation.ValueAnnotation).Bind(view,target.Type("Base"),profile),"ForeignAnnotationSession"));
+Check("built-in conversion explicitly removes schema provenance",()=>typed.ToBuiltIn().Annotation is null&&typed.ToBuiltIn().Value.UserSchemaTypeName is null&&typed.ToBuiltIn().Value.IntegerValue==12);
+Check("stripped atom cannot regain named authority",()=>Throws<Failure>(()=>typed.ToBuiltIn().Bind(view,target.Type("Base"),profile),"MissingIdentity"));
+var xslProfile=profile with {HostLanguage=QueryHostLanguage.Xslt,HostVersion="3.0"};var xslSession=Open(Request(query:xslProfile));
+Check("query language changes execution key without changing XSD universe",()=>xslSession.Identity.Fingerprint==target.Identity.Fingerprint&&Keys.Execution(xslSession)!=Keys.Execution(target));
+Check("cross-host schema handoff is supported with target profile",()=>Bridge(source,xslSession).IsDerivedFrom(source.Type("Extra"),xslSession.Type("Base"),default).Value);
+Check("wrong consuming profile refuses at view admission",()=>Refused(provider.Establish(new(source,xslSession,profile),default),"ExecutionProfileMismatch"));
+Check("profile change cannot reuse captured atomic binding",()=>Throws<Failure>(()=>typed.Bind(view,target.Type("Base"),xslProfile),"ExecutionProfileMismatch"));
+var changedContext=Open(Request(query:profile with {QueryStaticContextFingerprint=Experiment.Hash("different-query-context")}));
+Check("query static context changes executable key only",()=>changedContext.Identity.Fingerprint==target.Identity.Fingerprint&&Keys.Execution(changedContext)!=Keys.Execution(target));
+var xsd10=Open(Request(version:SchemaLanguageVersion.Xsd10));
+Check("XSD version changes universe identity",()=>xsd10.Identity.Fingerprint!=target.Identity.Fingerprint);
+Check("unsupported mixed schema versions are coverage refusal",()=>Refused(provider.Establish(new(source,xsd10,profile),default),"SchemaVersionCoverage"));
+Check("immutable XDM review pin and behavior profile are explicit",()=>profile.XdmRevision==Experiment.Revision&&profile.BehaviorProfile=="c44r2-fake");
+Check("unknown semantic profile refuses rather than defaults",()=>provider.OpenSession(Request(query:profile with {BehaviorProfile="unknown"}),default).Verdict==SchemaVerdict.Unsupported);
+Check("unknown host version refuses rather than infers",()=>provider.OpenSession(Request(query:profile with {HostVersion="unknown"}),default).Verdict==SchemaVerdict.Invalid);
+Check("missing explicit profile refuses",()=>provider.OpenSession(Request() with {QueryProfile=null!},default).Verdict==SchemaVerdict.Invalid);
+Check("root-only digest is insufficient for closure identity",()=>source.Identity.Fingerprint!=target.Identity.Fingerprint&&Request(extra:true).Resources[0].Content.SequenceEqual(Request().Resources[0].Content));
+var request=Request();var reordered=request with {Resources=request.Resources.Reverse().ToImmutableArray()};
+Check("resource input order does not change universe",()=>Open(request).Identity.Fingerprint==Open(reordered).Identity.Fingerprint);
+var policy=request with {ResourcePolicyFingerprint="other-policy"};
+Check("resource policy contributes to universe",()=>Open(policy).Identity.Fingerprint!=target.Identity.Fingerprint);
+Check("schema static context contributes to universe",()=>Open(request with {StaticContextFingerprint=Experiment.Hash("other-schema-context")}).Identity.Fingerprint!=target.Identity.Fingerprint);
+var bindings=request with {NamespaceBindings=[new("p","urn:one"),new("q","urn:two")]};
+Check("namespace bindings contribute to universe",()=>Open(bindings).Identity.Fingerprint!=target.Identity.Fingerprint);
+Check("binding order is canonical",()=>Open(bindings).Identity.Fingerprint==Open(bindings with {NamespaceBindings=bindings.NamespaceBindings.Reverse().ToImmutableArray()}).Identity.Fingerprint);
+Check("canonical URI spellings do not create different universes",()=>Open(request with {BaseUri=new("HTTPS://SCHEMA.EXAMPLE/root.fake")}).Identity.Fingerprint==target.Identity.Fingerprint);
+Check("duplicate canonical origins refuse",()=>provider.OpenSession(request with {Resources=request.Resources.Add(request.Resources[0] with {Origin=new("HTTPS://SCHEMA.EXAMPLE/root.fake")})},default).Verdict==SchemaVerdict.Invalid);
+Check("duplicate namespace prefixes refuse",()=>provider.OpenSession(request with {NamespaceBindings=[new("p","urn:one"),new("p","urn:two")]},default).Verdict==SchemaVerdict.Invalid);
+Check("default resource array refuses",()=>provider.OpenSession(request with {Resources=default},default).Verdict==SchemaVerdict.Invalid);
+Check("default resource bytes refuse",()=>provider.OpenSession(request with {Resources=[request.Resources[0] with {Content=default},request.Resources[1]]},default).Verdict==SchemaVerdict.Invalid);
+Check("undeclared transitive import refuses without fetch",()=>provider.OpenSession(request with {Resources=[request.Resources[0]]},default).Verdict==SchemaVerdict.Invalid);
+Check("unconsumed supplied resource refuses",()=>provider.OpenSession(request with {Resources=request.Resources.Add(new(new("https://schema.example/unconsumed.fake"),request.Resources[1].Content))},default).Verdict==SchemaVerdict.Invalid);
+Check("incomplete component coverage refuses",()=>provider.OpenSession(Request(complete:false),default).Verdict==SchemaVerdict.Unsupported);
+Check("no implicit schema version default",()=>provider.OpenSession(request with {SchemaLanguage=(SchemaLanguageVersion)99},default).Verdict==SchemaVerdict.Invalid);
+Check("URI credentials are not accepted as resource identity",()=>provider.OpenSession(request with {BaseUri=new("https://user:pass@schema.example/root.fake")},default).Verdict==SchemaVerdict.Invalid);
+Check("URI fragments are not accepted as resource identity",()=>provider.OpenSession(request with {BaseUri=new("https://schema.example/root.fake#fragment")},default).Verdict==SchemaVerdict.Invalid);
+Check("success cannot carry null reference payload",()=>Throws<ArgumentNullException>(()=>SchemaOutcome<ISchemaSession>.Supported(null!)));
+Check("unsupported cannot omit structured findings",()=>Throws<ArgumentException>(()=>SchemaOutcome<bool>.Unsupported(default)));
+Check("invalid cannot carry malformed findings",()=>Throws<ArgumentException>(()=>SchemaOutcome<bool>.Invalid([new("","",null,null)])));
+Check("owned Unsupported does not fall back",()=>Throws<Failure>(()=>Experiment.Owned(()=>Experiment.Refuse<bool>("Coverage")),"Coverage"));
+Check("owned NotApplicable is ownership loss",()=>Throws<Failure>(()=>Experiment.Owned(()=>SchemaOutcome<bool>.NotApplicable()),"OwnershipLost"));
+var providerError=new InvalidOperationException("provider sentinel");
+Check("provider faults retain original cause",()=>{try{Experiment.Owned<bool>(()=>throw providerError);return false;}catch(Failure e){return e.Message=="ProviderFault"&&ReferenceEquals(e.InnerException,providerError);}});
+Check("null provider outcome is a retained provider fault",()=>{try{Experiment.Owned<bool>(()=>null!);return false;}catch(Failure e){return e.Message=="ProviderFault"&&e.InnerException?.Message=="NullOutcome";}});
+using var cancelled=new CancellationTokenSource();cancelled.Cancel();
+Check("OpenSession preserves cancellation",()=>Throws<OperationCanceledException>(()=>provider.OpenSession(request,cancelled.Token)));
+Check("compatibility admission preserves cancellation",()=>Throws<OperationCanceledException>(()=>provider.Establish(new(source,target,profile),cancelled.Token)));
+Check("relation checks preserve cancellation",()=>Throws<OperationCanceledException>(()=>view.IsDerivedFrom(source.Type("Extra"),target.Type("Base"),cancelled.Token)));
+Check("node checks preserve cancellation",()=>Throws<OperationCanceledException>(()=>view.MatchesElement(annotation,target.Element("H1"),cancelled.Token)));
+Check("provider cancellation verdict stays cancellation",()=>Throws<OperationCanceledException>(()=>Experiment.Owned(()=>SchemaOutcome<bool>.Cancelled())));
+var xml=XElement.Parse("<M code='12'><child>12</child></M>");var originalXml=xml.ToString(SaveOptions.DisableFormatting);
+var entries=new Dictionary<string,SchemaNodeAnnotation>{{"/",annotation},{"/child",annotation},{"/@code",annotation}};
+var tree=new TreeSnapshot(xml,entries);entries.Clear();xml.SetAttributeValue("code","changed");
+Check("assessment tree retains independent caller snapshot",()=>tree.Xml==originalXml&&tree.Annotations.Count==3);
+Check("preserve copy retains root descendant and attribute annotations",()=>{var c=tree.Copy(true);return c.Annotations.Count==3&&c.Annotations.Values.All(a=>ReferenceEquals(a,annotation));});
+Check("strip copy removes every descendant and attribute annotation",()=>tree.Copy(false).Annotations.Count==0&&tree.Annotations.Count==3);
+Check("atomization retains exact actual-type provenance",()=>ReferenceEquals(tree.Atomize("/child",typed.Value).Annotation,annotation.ValueAnnotation));
+Check("copied atom binds in compatible target without owner rewrite",()=>ReferenceEquals(tree.Copy(true).Atomize("/@code",typed.Value).Bind(view,target.Type("Base"),profile).Annotation,annotation.ValueAnnotation));
+Check("stripped tree atomization cannot regain authority",()=>Throws<Failure>(()=>tree.Copy(false).Atomize("/child",XdmValue.FromInteger(12)).Bind(view,target.Type("Base"),profile),"MissingIdentity"));
+Check("element-only no-typed-value remains FOTY0012",()=>Throws<Failure>(()=>new TreeSnapshot(XElement.Parse("<M/>"),new Dictionary<string,SchemaNodeAnnotation>{{"/",annotation with {HasNoTypedValue=true}}}).Atomize("/",typed.Value),"FOTY0012"));
+Check("mixed assessment authority in one tree refuses",()=>Throws<Failure>(()=>new TreeSnapshot(XElement.Parse("<M/>"),new Dictionary<string,SchemaNodeAnnotation>{{"/",annotation},{"/child",foreignAnnotation}}),"MixedTreeAuthority"));
+Check("annotation constructor refuses a foreign actual type",()=>Throws<ArgumentException>(()=>new SchemaValueAnnotation(source,same.Type("Extra"),sourceId)));
+Check("host source token is not an edit or storage capability",()=>typeof(SchemaSourceIdentity).GetMethods(BindingFlags.Public|BindingFlags.Instance|BindingFlags.DeclaredOnly).All(m=>!m.Name.Contains("Write")&&!m.Name.Contains("Open")&&!m.Name.Contains("Dispose")));
+var host=new Registration(target);var captured=host.Capture();host.Dispose();
+Check("host disposal blocks new captures",()=>Throws<ObjectDisposedException>(()=>host.Capture()));
+Check("captured view remains usable after registration disposal",()=>ReferenceEquals(captured,view.Target)&&typed.Bind(view,target.Type("Base"),profile).Value.IntegerValue==12);
+var lease=new SourceLease();var liveNode=new FakeNode("M","Extra","M",sourceId,lease);var liveAssessed=(FakeNode)Experiment.Owned(()=>source.Assess(new(liveNode,SchemaAssessmentMode.Strict,null,null),default)).Root;
+lease.Dispose();
+Check("schema annotations do not revive disposed input snapshots",()=>Throws<ObjectDisposedException>(()=>_ = liveAssessed.TypedValue));
+Check("escaped atomic value remains independent of snapshot reads",()=>typed.Bind(view,target.Type("Base"),profile).Value.IntegerValue==12);
+Check("escaped atom strongly retains its original session",()=>Lifetimes.RetainsSession());
+Check("parallel immutable handoff does not change original provenance",()=>{int bad=0;Parallel.For(0,1024,i=>{var b=typed.Bind(view,target.Type("Base"),profile);if(!ReferenceEquals(b.Annotation,annotation.ValueAnnotation))Interlocked.Increment(ref bad);});return bad==0;});
+Check("record labels remain outside the schema component API",()=>!typeof(SchemaTypeKind).GetEnumNames().Any(n=>n.Contains("Record"))&&!typeof(SchemaCompilationRequest).GetProperties().Any(p=>p.Name=="Language"));
+Check("legacy core XdmValue has no prototype annotation channel",()=>typeof(XdmValue).GetProperty("SchemaAnnotation") is null);
+Check("legacy IXdmNode does not require compatibility methods",()=>typeof(IXdmNode).GetMethods().All(m=>!m.Name.Contains("Compatibility")));
+var api=typeof(ISchemaCompatibilityAuthority).Assembly;
+var surface=api.GetExportedTypes().OrderBy(t=>t.FullName,StringComparer.Ordinal).Select(t=>new{type=t.FullName,members=t.GetMembers(BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.DeclaredOnly).Where(m=>m.MemberType is MemberTypes.Method or MemberTypes.Property or MemberTypes.Constructor or MemberTypes.Field).Select(m=>m.ToString()).OrderBy(x=>x,StringComparer.Ordinal).ToArray()}).ToArray();
+var binaries=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name!.StartsWith("Bosak.")||a.GetName().Name!.StartsWith("C44R2.")).OrderBy(a=>a.FullName).Select(a=>new{identity=a.FullName,path=a.Location,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location)))}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new{kind="Isolated executable fake graph; not production or XSD/provider qualification",mutation=Experiment.Mutation,passed,failed,tests=results,exportedTypes=surface,references=api.GetReferencedAssemblies().Select(a=>a.Name).Order().ToArray(),binaries,limitations=new[]{"Finite descriptors and synthetic union coherence only; no XSD parser/structural validator, CTA evaluation or licensed provider.","Attribute assessment/list-union/full PSVI is unsupported; neutral API shape does not certify that coverage.","AtomicValue and TreeSnapshot are alternate experiment carriers, not production VM integration or consumer ABI tests."}},new JsonSerializerOptions{WriteIndented=true}));
+return failed==0?0:2;
+
+internal static class Lifetimes
+{
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static (AtomicValue Atom,WeakReference<ISchemaSession> Weak) Create()
+    {
+        var issuer=SchemaIdentityIssuer.Create(new("lifetime-fake",SchemaLanguageVersion.Xsd11,Experiment.Hash("lifetime")));
+        var session=new LifetimeSession(issuer.Identity);var type=issuer.InternType("type",new("urn:life","type"));issuer.Seal();
+        return (new(XdmValue.FromInteger(91),new(session,type)),new(session));
+    }
+    internal static bool RetainsSession(){var escaped=Create();GC.Collect();GC.WaitForPendingFinalizers();GC.Collect();return escaped.Weak.TryGetTarget(out var s)&&ReferenceEquals(s,escaped.Atom.Annotation!.Session)&&escaped.Atom.Value.IntegerValue==91;}
+    private sealed class LifetimeSession(SchemaSessionIdentity identity):ISchemaSession
+    {
+        public SchemaSessionIdentity Identity=>identity;
+        public QuerySemanticProfile QueryProfile=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaDeclarationIdentity> ResolveElement(SchemaName n,string s,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaDeclarationIdentity> ResolveAttribute(SchemaName n,string s,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaTypeIdentity> ResolveType(SchemaName n,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaElementDescription> DescribeElement(SchemaDeclarationIdentity n,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaTypeDescription> DescribeType(SchemaTypeIdentity n,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<bool> IsDerivedFrom(SchemaTypeIdentity a,SchemaTypeIdentity b,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<ImmutableArray<SchemaDeclarationIdentity>> GetActualMembers(SchemaDeclarationIdentity n,CancellationToken t)=>throw new NotSupportedException();
+        public SchemaOutcome<SchemaAssessment> Assess(SchemaAssessmentRequest r,CancellationToken t)=>throw new NotSupportedException();
+    }
+}

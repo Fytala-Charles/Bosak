@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "00ef44490687869998959b89e578b85fb24e7ced",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-guarded-ports-review/README.md",
+  "reviewedDossier": "braid-guarded-ports",
+  "productionChanged": false,
+  "completeProductGuard": false
+}

@@ -1,0 +1,23 @@
+{
+  "COHORT.json": "c7c737ee781f208c86f3e7d5a012ca138c3184ea662ad9cd860b70e8077a3988",
+  "evidence/bindings/44332.json": "b0614c922ee034d3138b6952202f841a4fee32aae011db2999510b869d48a3fd",
+  "evidence/EXECUTION-LAYOUT.json": "f767ba8c0925e0a599006d715986ad3acf503c122f8472a035876e5965fe9e6c",
+  "evidence/EXECUTION-LAYOUT.zip": "e6669fbb2c77a49a31a1773cd1708b19f715e60e1f193d656d760a72d00e6b51",
+  "evidence/EXECUTION-RECEIPTS.zip": "ff5a30ad77e90f406d0511d5d097273b3fc3cb5c47f8a39021489a59799fbd4b",
+  "evidence/MEASUREMENTS.json": "c82f01e27170529af4fa1804dd2e0f823e0c083abe6c4f4f15549c181ee30096",
+  "evidence/SOURCE-PINS.json": "c5fd027852b5afdbb065e54bca8e0cdc701d2583df7f1c2047936554b4b86bf6",
+  "evidence/SUMMARY.json": "1ff3c14c503d74523bc4312f55bbec0a4af9c2f239feef0b71142633474a06e3",
+  "fixtures/amounts-1.xml": "7971fbac7e8ede0fa4bfcb1d853b1600740376c5a1496d41d9c32fd91f59c702",
+  "fixtures/amounts-8.xml": "320b00d324a4455a9a1cf8e026a32390d880fa75ac6a583676ef905cd8568ca4",
+  "fixtures/schema.xsd": "1098462ac6ce030eec503d5b17b962d6e4b9676eb32d24569a02918c8350ef4a",
+  "PROTOCOL.json": "a3d3de3d48bbdece9cd2625a08a2397ea1ca760d127e138f42271865ea6d2984",
+  "README.md": "d48261c216aced951c6eca5dc2342d71583fe3f3787bc229df3382019b1ff3b7",
+  "tools/capture.py": "91c40cb9ab8697c25d4488dd5aa7f9ec556468353edbc062e14074ea65b570dd",
+  "tools/compare.py": "acfbf1ece72cf4f63fadee4363e8152567d3716e777d8ac9108782283e41cbeb",
+  "tools/prepare.py": "4ad922d9e78ace729d18903b55a9fad6ec6c718a2bcd466280452a4e39d7cfca",
+  "tools/run.py": "8f4be18951dd7b6963a52416a1147d242340144a72ffc01f3299a4bb1e36a4d9",
+  "tools/test_compare.py": "e3403264e426983a658d49920d3f48b4cdcfe9b64c6db41255e9f1361a34c715",
+  "tools/verify.py": "9a720e0149b1f04c0d9b90f95104c648fc918a11ba46f016cdee19769ec677ec",
+  "workload/Program.cs": "9d4ab608f5f2d024c263ff83ee79e1f29bb711e77d1a2a9e707bce406b034113",
+  "workload/Workload.csproj": "d1202f795ec49aa269046bc902182a3b88495cf49bea3ccdf2f03bd1b33dad0a"
+}

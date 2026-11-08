@@ -1,0 +1,22 @@
+[
+  {
+    "label": "qt3",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "D:\\Development\\Bosak\\tests\\qt3tests"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 69.62942660000408
+  },
+  {
+    "label": "qt4",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\release1263-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "D:\\Development\\Bosak\\tests\\qt4tests"
+    ],
+    "exitCode": 0,
+    "wallSeconds": 16.480847300001187
+  }
+]

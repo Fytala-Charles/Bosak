@@ -1,0 +1,5 @@
+{
+  "unchanged": true,
+  "normalizedSpanSha256": "12cad105767ed1b89acb60e5faf8911340f5dd4d7adc4421a3fe4b345145d3d1",
+  "scope": "Both existing generic ValidateTransport overloads, CR characters normalized for archived Windows line endings; metadata-only method appended separately."
+}

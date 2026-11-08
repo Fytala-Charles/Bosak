@@ -1,0 +1,1 @@
+{"Suite":"qt4","Name":"format-time-26","kind":"Failed","message":"assert failed. Expression: contains($result,\u0027AD\u0027) and contains($result,\u002712\u0027), Got: false"}

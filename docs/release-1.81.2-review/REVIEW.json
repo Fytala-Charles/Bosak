@@ -1,0 +1,97 @@
+{
+  "formatVersion": 1,
+  "sourceCommit": "1d69d059c14888c1c43264efa8668909292af858",
+  "coreVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "pins": {
+    "evidence/nuget-release-manifest.json": {
+      "path": "../release-1.81.2-final/evidence/nuget-release-manifest.json",
+      "sha256": "dfe2e32f3413fc3aae458b1ea6c4fa56b883e1296820c41046efa1eecc54c277"
+    },
+    "evidence/vsix-out/release-manifest.json": {
+      "path": "../release-1.81.2-final/evidence/vsix-out/release-manifest.json",
+      "sha256": "5362ae62c218b2bb7ca03879244ca6820aa5f14eed727b4315da456f711637e6"
+    },
+    "evidence/public-api.json": {
+      "path": "../release-1.81.2-final/evidence/public-api.json",
+      "sha256": "497b530708381741adc9b6b2f90fc09bb2cbcceab409d4151dfaa7582f400f30"
+    },
+    "evidence/RESULTS.json": {
+      "path": "../release-1.81.2-final/evidence/RESULTS.json",
+      "sha256": "c0fc227ff6ab05e7e93b2c57032b3f30b32a6ad1e54dea6f907db578ca143172"
+    },
+    "evidence/SEAL-VERIFICATION.json": {
+      "path": "../release-1.81.2-final/evidence/SEAL-VERIFICATION.json",
+      "sha256": "611d328fb480ea7ad8ffd35348e0459bc102b9cd62399dec87ca572c9b43cd77"
+    }
+  },
+  "localNugetSignatureInspection": [
+    {
+      "file": "Bosak.XPath.Api.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Compiler.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Core.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Parser.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Providers.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Providers.Database.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Runtime.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Standard.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XQuery.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.Xslt.1.81.2.nupkg",
+      "nugetSignatureEntryPresent": false
+    }
+  ],
+  "signatureInspectionMeaning": "ZIP entry presence only; no certificate, trust, Authenticode or service-side signature validation.",
+  "ownerAcceptances": {
+    "Core": null,
+    "Schema": null,
+    "XmlDb": null,
+    "Braid": null
+  },
+  "scenarioBudgetAcceptances": {
+    "PF-01": null,
+    "PF-02": null,
+    "PF-03": null,
+    "PF-04": null,
+    "PF-05": null,
+    "PF-06": null,
+    "PF-07": null,
+    "PF-08": null,
+    "PF-09": null
+  },
+  "deferredRequirementDisposition": null,
+  "apiAcceptance": null,
+  "signingProvenanceDisposition": null,
+  "hostedPreparationRuns": {
+    "nuget": null,
+    "vscode": null
+  },
+  "publicationApproval": null,
+  "messagesSent": false
+}

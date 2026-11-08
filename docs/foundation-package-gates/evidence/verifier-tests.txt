@@ -1,0 +1,13 @@
+test_changed_gate_count_refuses (test_receipts.GateReceiptTests.test_changed_gate_count_refuses) ... ok
+test_complete_qualification (test_receipts.GateReceiptTests.test_complete_qualification) ... ok
+test_false_freeze_refuses (test_receipts.GateReceiptTests.test_false_freeze_refuses) ... ok
+test_inflated_unit_total_refuses (test_receipts.GateReceiptTests.test_inflated_unit_total_refuses) ... ok
+test_missing_project_refuses (test_receipts.GateReceiptTests.test_missing_project_refuses) ... ok
+test_unknown_observer_refuses (test_receipts.GateReceiptTests.test_unknown_observer_refuses) ... ok
+test_wrong_actual_loaded_package_refuses (test_receipts.GateReceiptTests.test_wrong_actual_loaded_package_refuses) ... ok
+test_wrong_source_built_product_refuses (test_receipts.GateReceiptTests.test_wrong_source_built_product_refuses) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.404s
+
+OK

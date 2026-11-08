@@ -1,0 +1,751 @@
+[
+  {
+    "id": "enum-cast",
+    "expression": "'ready' cast as enum('ready','held')",
+    "expected": "ready",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/enum-types.md"
+  },
+  {
+    "id": "enum-castable",
+    "expression": "'READY' castable as enum('ready','held')",
+    "expected": "false",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/enum-types.md"
+  },
+  {
+    "id": "choice-cast-first",
+    "expression": "('12' cast as (xs:integer|xs:string)) instance of xs:integer",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "id": "choice-cast-reverse",
+    "expression": "('12' cast as (xs:string|xs:integer)) instance of xs:string",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "id": "choice-coerce-matches-first",
+    "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "id": "choice-nested",
+    "expression": "[1,'a'] instance of array((xs:integer|xs:string))",
+    "expected": "true",
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "id": "choice-cardinality",
+    "expression": "let $v as (xs:integer|xs:string) := (1,2) return $v",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "released-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "id": "retained-record-contract-cast-extra",
+    "expression": "(: REQ-126 record contract: cast-extra; explicit input, no external context. :)\nmap:contains(map{'a':1,'extra':2} cast as record(a as xs:integer),'extra')\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-cast-lexical",
+    "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-cast-invalid",
+    "expression": "(: REQ-126 record contract: cast-invalid; explicit input, no external context. :)\nmap{'a':'oops'} cast as record(a as xs:integer)\n",
+    "expected": null,
+    "error": "FORG0001",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-extra",
+    "expression": "(: REQ-126 record contract: coerce-extra; explicit input, no external context. :)\nfunction($r as record(a)) { $r }(map{'a':1,'extra':2})\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-string",
+    "expression": "(: REQ-126 record contract: coerce-string; explicit input, no external context. :)\nfunction($r as record(a as xs:integer)) { $r }(map{'a':'12'})\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-promote",
+    "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-nested",
+    "expression": "(: REQ-126 record contract: coerce-nested; explicit input, no external context. :)\nfunction($r as record(nested as record(a as xs:double))) { $r?nested?a instance of xs:double }(map{'nested':map{'a':1}})\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-missing-empty",
+    "expression": "(: REQ-126 record contract: missing-empty; explicit input, no external context. :)\nlet $r := map{} cast as record(note as xs:string?) return concat(map:contains($r,'note'), ':', count($r?note))\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-missing-required",
+    "expression": "(: REQ-126 record contract: missing-required; explicit input, no external context. :)\nmap{} cast as record(a as xs:integer)\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-missing",
+    "expression": "(: REQ-126 record contract: coerce-missing; explicit input, no external context. :)\nfunction($r as record(note as xs:string?)) { concat(map:contains($r,'note'), ':',count($r?note)) }(map{})\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-order",
+    "expression": "(: REQ-126 record contract: coerce-order; explicit input, no external context. :)\nmap:keys(function($r as record(b,a)) { $r }(map{'a':1,'b':2})) => string-join('|')\n",
+    "expected": "b|a",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-plain-map",
+    "expression": "(: REQ-126 record contract: plain-map; explicit input, no external context. :)\nmap{'a':1} instance of record(a)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-record-star-plain",
+    "expression": "(: REQ-126 record contract: record-star-plain; explicit input, no external context. :)\nmap{'a':1} cast as record(*)\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-record-star-assert",
+    "expression": "(: REQ-126 record contract: record-star-assert; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) cast as record(*)) instance of record(a as xs:integer)\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-castable-plain",
+    "expression": "(: REQ-126 record contract: castable-plain; explicit input, no external context. :)\nmap{'a':1} castable as record(*)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-castable-invalid",
+    "expression": "(: REQ-126 record contract: castable-invalid; explicit input, no external context. :)\nmap{'a':'oops'} castable as record(a as xs:integer)\n",
+    "expected": "false",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-lookup-unknown",
+    "expression": "(: REQ-126 record contract: lookup-unknown; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer))?missing\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-map-get-unknown",
+    "expression": "(: REQ-126 record contract: map-get-unknown; explicit input, no external context. :)\ncount(map:get((map{'a':1} cast as record(a as xs:integer)), 'missing'))\n",
+    "expected": "0",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-typed-let-promote",
+    "expression": "(: REQ-126 record contract: typed-let-promote; explicit input, no external context. :)\nlet $r as record(a as xs:double) := map{'a':1} return $r?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/typed-let-coercion.md"
+  },
+  {
+    "id": "retained-record-contract-typed-let-extra",
+    "expression": "(: REQ-126 record contract: typed-let-extra; explicit input, no external context. :)\nlet $r as record(a) := map{'a':1,'extra':2} return $r?a\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/typed-let-coercion.md"
+  },
+  {
+    "id": "retained-record-contract-coerce-original",
+    "expression": "(: REQ-126 record contract: coerce-original; explicit input, no external context. :)\nlet $raw := map{'a':1} let $r := function($x as record(a as xs:double)) {$x}($raw) return concat($raw?a instance of xs:integer,':',$r?a instance of xs:double)\n",
+    "expected": "true:true",
+    "error": null,
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-refuse31-cast-lexical",
+    "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-refuse31-coerce-promote",
+    "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-record-conversion",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/structural-records.md"
+  },
+  {
+    "id": "retained-record-contract-update-value",
+    "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+    "expected": "2",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-annotation",
+    "expression": "(: REQ-126 record contract: update-annotation; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2}) instance of record(a as xs:integer)\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-original",
+    "expression": "(: REQ-126 record contract: update-original; explicit input, no external context. :)\nlet $r := (map{'a':1} cast as record(a as xs:integer)) let $u := $r but with map{'a':2} return concat($r?a,'|',$u?a)\n",
+    "expected": "1|2",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-extra",
+    "expression": "(: REQ-126 record contract: update-extra; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'extra':2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-plain",
+    "expression": "(: REQ-126 record contract: update-plain; explicit input, no external context. :)\nmap{'a':1} but with map{'a':2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-nonmap",
+    "expression": "(: REQ-126 record contract: update-nonmap; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with 42\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-promote",
+    "expression": "(: REQ-126 record contract: update-promote; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:double)) but with map{'a':2})?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-string",
+    "expression": "(: REQ-126 record contract: update-string; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':'2'}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-decimal",
+    "expression": "(: REQ-126 record contract: update-decimal; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':2.5}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-empty-optional",
+    "expression": "(: REQ-126 record contract: update-empty-optional; explicit input, no external context. :)\nlet $r := map{'note':'x'} cast as record(note as xs:string?) let $u := $r but with map{'note':()} return concat(map:contains($u,'note'),':',count($u?note))\n",
+    "expected": "true:0",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-empty-required",
+    "expression": "(: REQ-126 record contract: update-empty-required; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{'a':()}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-order",
+    "expression": "(: REQ-126 record contract: update-order; explicit input, no external context. :)\nmap:keys((map{'a':1,'b':2} cast as record(b,a)) but with map{'a':3}) => string-join('|')\n",
+    "expected": "b|a",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-nested",
+    "expression": "(: REQ-126 record contract: update-nested; explicit input, no external context. :)\nlet $r := map{'nested':map{'a':1}} cast as record(nested as record(a as xs:double)) return ($r but with map{'nested':map{'a':2}})?nested?a instance of xs:double\n",
+    "expected": "true",
+    "error": null,
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-update-key-type",
+    "expression": "(: REQ-126 record contract: update-key-type; explicit input, no external context. :)\n(map{'a':1} cast as record(a as xs:integer)) but with map{1:2}\n",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S6-update",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "id": "retained-record-contract-refuse31-update-value",
+    "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S6-update",
+    "profiles": [
+      "XPath31"
+    ],
+    "kind": "retained-control",
+    "ticket": null,
+    "requiredPhase": null,
+    "projection": null,
+    "entry": "type-system/record-updates.md"
+  },
+  {
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null,
+    "expected": "true",
+    "id": "choice-argument-matches-first",
+    "expression": "function($v as (xs:integer|xs:string)) {$v instance of xs:string}('12')",
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  },
+  {
+    "error": null,
+    "row": "S6-types",
+    "profiles": [
+      "XPath40",
+      "XPath40Experimental"
+    ],
+    "kind": "current-draft-control",
+    "ticket": "K02-choice-matching-alternative",
+    "requiredPhase": null,
+    "expected": "true",
+    "id": "choice-return-matches-first",
+    "expression": "function() as (xs:integer|xs:string) {'12'}() instance of xs:string",
+    "projection": null,
+    "entry": "type-system/choice-types.md"
+  }
+]

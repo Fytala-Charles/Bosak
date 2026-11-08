@@ -1,0 +1,26 @@
+[
+  {
+    "project": "D:/Development/Bosak.Schema.Public",
+    "file": "docs/FEATURE_REQUESTS.md",
+    "title": "Schema O1/O2 foundation returns",
+    "beforeSha256": "b8e3b413c92ad53bf61bc1810812893f2cdc244af200528224128aec55ff2552",
+    "afterSha256": "34d56e80296d6ca5586b614fd4ce09d7e984371a9bfb6d370ab411ab505bfd0a",
+    "committed": false
+  },
+  {
+    "project": "D:/Development/Bosal.XmlDb",
+    "file": "docs/FEATURE_REQUESTS.md",
+    "title": "XmlDb membership and XDB-LIFE-01 qualification",
+    "beforeSha256": "52878468e93ca15c36a7c8dc47bafa5b41c5efbb9aa55b533eb188add88828eb",
+    "afterSha256": "af64563f4838969b1a4b70eb6840b8fb3020fe6042c5fa8531233a2bdc0ee3d5",
+    "committed": false
+  },
+  {
+    "project": "D:/Development/Bosak.Braid",
+    "file": "docs/FEATURE_REQUESTS.md",
+    "title": "Braid BCAP-01 capture review and consumer preparation",
+    "beforeSha256": "a9422490db89332924948394a56f0438251f0ae8e982cc377ecea69d1bb25273",
+    "afterSha256": "418053f966e4158ab0af835401a54377bc832b2ffdc6410e9d075424cc3c9463",
+    "committed": false
+  }
+]

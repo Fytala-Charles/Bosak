@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\xslt-explicit-context\src\Bosak.Xslt\Bosak.Xslt.csproj (in 61 ms).
+D:\Development\Bosak\.guard-tmp\xslt-explicit-context\src\Bosak.Xslt\Api\XsltExecutable.cs(113,12): error CS7036: There is no argument given that corresponds to the required parameter 'stackSize' of 'XsltExecutable.RunWithStack<T>(Func<T>, int)' [D:\Development\Bosak\.guard-tmp\xslt-explicit-context\src\Bosak.Xslt\Bosak.Xslt.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\xslt-explicit-context\src\Bosak.Xslt\Api\XsltExecutable.cs(113,12): error CS7036: There is no argument given that corresponds to the required parameter 'stackSize' of 'XsltExecutable.RunWithStack<T>(Func<T>, int)' [D:\Development\Bosak\.guard-tmp\xslt-explicit-context\src\Bosak.Xslt\Bosak.Xslt.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:03.74

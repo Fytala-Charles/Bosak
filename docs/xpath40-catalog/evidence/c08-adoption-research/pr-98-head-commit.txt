@@ -1,0 +1,24 @@
+942558cadda44b56a84e59e2c563667b32a5972b
+2026-10-09T11:54:31+02:00
+2026-10-09T11:54:31+02:00
+feat(req123): '4.0 Experimental' compatibility level + fn:scan (4.0-Exp S1)
+
+REQ-123 (owner idea 2026-10-09, first slice of the 1.1.0 track): a third
+opt-in CompileOptions.Compatibility tier above the frozen XPath40 level for
+not-yet-stabilized XPath/XSLT 4.0 draft additions.
+
+Level plumbing:
+- XPathCompatibility.XPath40Experimental = 50 (passes all >= XPath40 checks)
+- FunctionSignature.IsXPath40ExperimentalOnly + EvaluationContext flag
+- static XPST0017 at 3.1 AND frozen XPath40, call + named-function-ref forms
+- dedicated standard-function templates: experimental additions invisible to
+  fn:function-lookup/dynamic dispatch below the level (leak-proof)
+
+First experimental function: fn:scan (F&O 4.0 §2.5.15, Issue 2823) — prefix
+scan returning N+1 single-member arrays ($init first, then
+$action($acc,$item,$pos) per item); §1.8 arity truncation; sequence
+accumulators via native XdmArray sequence members.
+
+Gates: build 0 errors; unit all green (Api 293, Standard 1068); QT3
+31,142/0/679; XSLT mode smoke 162/0/26.
+

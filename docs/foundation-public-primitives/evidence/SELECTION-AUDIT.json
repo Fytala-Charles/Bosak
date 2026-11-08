@@ -1,0 +1,20 @@
+{
+  "sourceFiles": {
+    "src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs": "c511aec387bafbd8ebb31c632913d614cebc99a24b66797500197f786f55fe37"
+  },
+  "selectedKinds": [
+    "Boolean",
+    "Date",
+    "DateTime",
+    "Decimal",
+    "Double",
+    "Duration",
+    "Float",
+    "Integer",
+    "QName",
+    "String",
+    "Time"
+  ],
+  "enumOnlySelected": false,
+  "scope": "Exact explicit eleven-kind delivery whitelist; no ordinal widening or fabricated Uri/Binary factory. Structural null Duration/String and QName-field guards present. Generic reader/proof/scalar cache source unchanged by this step."
+}

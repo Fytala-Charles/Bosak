@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29",
+  "scopeOnly": true,
+  "recommendedPolicy": "reviewed pin/rebuild plus verified runtime mismatch refusal",
+  "consumerHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "coreHead": "f79596328bf25ca1c33e1fd67cfcb86f5e5f217a",
+  "freshExecution": false,
+  "productionChanged": false,
+  "requestIdAssigned": false,
+  "next": "isolated policy prototype",
+  "uncommitted": true
+}

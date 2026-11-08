@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\multi-snapshot-session\Observer\Observer.csproj (in 48 ms).
+  Observer -> D:\Development\Bosak\.guard-tmp\multi-snapshot-session\Observer\bin\Release\net10.0\Observer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.87

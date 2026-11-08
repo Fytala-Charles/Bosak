@@ -1,0 +1,28 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Bosak.Braid.Core -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Core\bin\Release\net10.0\Bosak.Braid.Core.dll
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.Braid.Application -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Application\bin\Release\net10.0\Bosak.Braid.Application.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.Braid.Infrastructure -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Infrastructure\bin\Release\net10.0\Bosak.Braid.Infrastructure.dll
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Bosak.Braid.Workbench -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Workbench\bin\Release\net10.0\Bosak.Braid.Workbench.dll
+  Bosak.Braid.Desktop -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Desktop\bin\Release\net10.0\Bosak.Braid.Desktop.dll
+  Bosak.Braid.Infrastructure.Tests -> D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\braid-baseline-followup-results\charl_CHARLES_2026-10-29_19_12_07_net10.0.trx
+
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 501 ms - Bosak.Braid.Infrastructure.Tests.dll (net10.0)

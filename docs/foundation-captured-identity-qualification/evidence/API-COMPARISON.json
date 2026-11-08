@@ -1,0 +1,17 @@
+{
+  "assemblies": 11,
+  "publicTypes": 318,
+  "declarationRows": 6465,
+  "candidateSha256": "9b4ce07e895a8443c1f52ce8a8a87b6aeceb4609364afe54c8c3199f47adaf28",
+  "baselineSha256": "e855b35790be80d3a30c261431c6abd443671f5434774b8a03ca76d77ba23016",
+  "declarationsEqual": true,
+  "identitiesEqual": true,
+  "referencesEqual": true,
+  "friendsEqual": true,
+  "valueFieldAndLayoutRowsEqual": true,
+  "changedAssemblyBytes": [
+    "Bosak.XPath.Runtime"
+  ],
+  "ownerApiFreezeAccepted": false,
+  "scope": "Observed public/protected metadata and encoded value-type field/layout rows on this platform;not universal native ABI,size or owner acceptance."
+}

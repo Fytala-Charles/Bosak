@@ -1,0 +1,181 @@
+{
+  "date": "2026-11-01",
+  "version": "1.39.0",
+  "productionSourceApplied": true,
+  "unitTests": {
+    "passed": 24341,
+    "failed": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Parser.Tests": 202,
+      "Bosak.XPath.Runtime.Tests": 317,
+      "Bosak.XPath.Api.Tests": 489,
+      "Bosak.XPath.Standard.Tests": 13797,
+      "Bosak.XPath.Compiler.Tests": 66,
+      "Bosak.Xslt.Tests": 8234,
+      "Bosak.XQuery.Tests": 804,
+      "Bosak.XPath.Providers.Tests": 223,
+      "Bosak.XPath.Providers.Database.Tests": 47
+    }
+  },
+  "newRegressionCases": [
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"listener\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"schema-import\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"resource\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"schema-set\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"static-acquisition\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"include\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"processor\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"environment-set\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"use-when\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"schema-aware\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"effective-values\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesUncapturedSourceProfile(source: \"shadow\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"static-node\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"schema-resolver\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.SchemaHostFactoryProfileTests.RefusesMutableCompilerSettings(setting: \"resolver\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.CancellationDuringBindDoesNotReadIssuer",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RechecksBindingIdentity",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RejectsInvalidLimitsBeforeBind(snapshots: -1, values: 16)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.UsesExactBorrowedBinding",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RetainsAvailabilityAndCleanupFailures",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RejectsInvalidLimitsBeforeBind(snapshots: 0, values: 16)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RevocationKeepsRawCleanupOwnership",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RejectsForeignBindingBeforeIssuerGetter",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RevocationRejectsNewAdmission",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.RejectsInvalidLimitsBeforeBind(snapshots: 4, values: 0)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests.SchemaProviderBindingTests.PreCancellationDoesNotBind",
+      "outcome": "Passed"
+    }
+  ],
+  "fnTransformControls": [
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Initial_Template",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_DenyAll_RefusesStylesheetAcquisitionWithoutFallback",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_MissingSource_RaisesFOXT0002",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_Basic_Transform",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_InheritsPolicy_AcquisitionsAuthorized",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_ResultDocumentTextContent_IsCaptured",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Limits.SliceDExecutionControlTests.D_NestedTransformInheritsSharedOperationBudget",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Stylesheet_Params",
+      "outcome": "Passed"
+    }
+  ],
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchanged": true,
+  "solutionRebuilt": true,
+  "publicDeclarationsUnchanged": true,
+  "assemblyMetadataCaptured": true,
+  "productArchiveSha256": "cd4c3b03ff34964aece383d6bfe8dda675f751da84175b468eb05027eeec9baa",
+  "published": false,
+  "publicFacadeImplemented": false,
+  "ownerAcceptance": "Pending",
+  "apiFreeze": false
+}

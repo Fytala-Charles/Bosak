@@ -1,0 +1,10 @@
+{
+  "previousPacket": "docs/foundation-captured-identity-candidate",
+  "previousManifestSha256": "4a03779eba03c60c012addd36436093459f1fc451cff00e0121a138b84adb816",
+  "sameCandidateRuntimeSha256": "5263836d9499e0d2b930adc604d8103e49a0e22ed0d1d8f81e7969af53692e90",
+  "nativeAdapterPassed": 59,
+  "nativeSchemaUnchangedBinaryPassed": 451,
+  "publicConsumerPassed": 10,
+  "reexecutedThisPacket": false,
+  "scope": "Reused TA-53 lanes on byte-identical Runtime/dependency closure;not added to fresh26342 solution count or fresh20 retained cases."
+}

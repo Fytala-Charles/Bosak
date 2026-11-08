@@ -1,0 +1,66 @@
+{
+  "src/Directory.Build.props": {
+    "sha256": "4d984d036b3d66273078e4ba07c283d265cbb64408a9b9b099a24eac6e09517a",
+    "gitObject": "e3cca6b9710930b161dc55b9e8128cf7dad6f34a"
+  },
+  "AGENTS.md": {
+    "sha256": "680183edb420cbb29501a90f62874bcb385fff5bde57eb2a50909e755eba630f",
+    "gitObject": "b164db848503bbc29e256689c01705875aaaa22f"
+  },
+  "src/Bosak.XPath.Core/Xdm/IXdmNode.cs": {
+    "sha256": "ecd3ad5db439462533537b81a5d3673249c47a6cf0c6edae8c260ff20088c8fb",
+    "gitObject": "b20e8397b591a5cd0fe9ae7e8c6c86b3a5a14c41"
+  },
+  "src/Bosak.XPath.Api/CompileOptions.cs": {
+    "sha256": "5d0f992155004935d9ae971eacfda5e7e23af423c890dbe238bb0656d9d37a65",
+    "gitObject": "bc60cc0e639a7e8b6646a89998d86cbda8e036ce"
+  },
+  "src/Bosak.XPath.Api/Xsd/IXsdValidator.cs": {
+    "sha256": "2e9e6aa74572c090f5c8b646e5a6a7d830aaee7a0944e7937d2b08952f0ea7e0",
+    "gitObject": "35d8196f57f74a4b21b13aa1657bba26137f6836"
+  },
+  "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": {
+    "sha256": "ec2847fd0fdb5dc627ab7388732f8c0c03295485e0964c6bb950b34345aab5f6",
+    "gitObject": "8b824e553e7b4c2730e77f0daab2b5f98bfbf1c5"
+  },
+  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": {
+    "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee",
+    "gitObject": "199ce928b98ddc1ebc66956d11d3dc6b31188fed"
+  },
+  "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.cs": {
+    "sha256": "ec8aa31acd70ce841d25ff2ee9a9c352ba33e60f81393eebc5599524f81540c5",
+    "gitObject": "0b30ae3a71eeeefc2f85d832c9be17eb9fc5bbf5"
+  },
+  "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.Validation.cs": {
+    "sha256": "9abb36d2a3123c5f17efa2bb3685d8e11589a57c121f110360b9d19e1c4e7c0b",
+    "gitObject": "6ee5a783e07426f5628ca8e371d6464a4fa1937a"
+  },
+  "src/Bosak.Xslt/Api/XsltCompiler.cs": {
+    "sha256": "5da9f528ce80fed32dae2cd432e387e7a53975ebd3b0442a1f566bfd1084f0bb",
+    "gitObject": "2856c44e353cd380b9beb911e3995935b20464ba"
+  },
+  "src/Bosak.Xslt/Stylesheet/SchemaImportState.cs": {
+    "sha256": "3eecfef117b988bfee821a8db154172de61445b4d0ce938a73902c34b3c935ae",
+    "gitObject": "5bb2c5a59ca62ecee2bc5e0790ced82793fc9d25"
+  },
+  "src/Bosak.Xslt/Validation/XsltValidationResult.cs": {
+    "sha256": "f1149053b1ba0ac9e16d437c3e3d7abcf5b57d82fbd511a7750c440d97482b2b",
+    "gitObject": "f9a28d512a18f951971727dccd3ef14768abc9a2"
+  },
+  "src/Bosak.XQuery/Api/XQueryContext.cs": {
+    "sha256": "91752fd51c8a8869505ba328636b5763c44d855954c87787df282d555b2c8ee0",
+    "gitObject": "139ec7cb0d563fa2289b7a44f41d9bce05b51112"
+  },
+  "tests/Bosak.Xslt.Conformance/Program.cs": {
+    "sha256": "2bca1d0e55428d4af535e1d083e9b77f43e03d19317420cf5847c6825a5452a0",
+    "gitObject": "6d6c94add07d8caf7697e373a5b1df36a4ec4853"
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+    "sha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c",
+    "gitObject": "aec258568901502508cc1d00008f9ebd2b55f4fb"
+  },
+  "src/Bosak.Xslt/Runtime/TransformEngine.cs": {
+    "sha256": "49da7315cbd5a3cda67987704a0eba5f7e4e3b46c0cda58369783d7d3aa55151",
+    "gitObject": "381bf52a46b3a54c6658cca7c960e933bcb8a949"
+  }
+}

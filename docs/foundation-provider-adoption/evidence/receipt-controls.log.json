@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python",
+    "docs/foundation-provider-qualification/tools/test_receipt_preflight.py"
+  ],
+  "exitCode": 0,
+  "failure": null,
+  "elapsedSeconds": 0.3861124000977725,
+  "qt4GateOnly": false,
+  "head": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "workingTreeStatus": " M docs/CHECKPOINT-1.81.1.md\n?? docs/foundation-owner-gap-review/\n?? docs/foundation-provider-adoption/\n?? docs/foundation-workload-1811/\n",
+  "logSha256": "adfd5c69c755db23465605a124528e961cea2b2bccfa7469da73ab052c8f62fe",
+  "qualificationAccepted": false
+}

@@ -1,0 +1,628 @@
+{
+  "date": "2026-10-31",
+  "scope": "Partial E-01/E-02 diagnostic carrier experiment; not VM/provider/ABI or performance acceptance",
+  "processRuns": 14,
+  "uniqueControlIds": 49,
+  "timedSamplesPerMeasurementPerProcess": 7,
+  "warmupsPerMeasurementPerProcess": 3,
+  "balancedRounds": 2,
+  "rows": [
+    {
+      "mode": "baseline",
+      "items": 1000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            15900,
+            15300
+          ],
+          "allocatedBytesObserved": [
+            48024
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            3200,
+            3800
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            3200,
+            3400
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            2000,
+            2200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "items": 100000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            857800,
+            1586800
+          ],
+          "allocatedBytesObserved": [
+            4800024
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 4,
+              "gen1": 4,
+              "gen2": 4
+            },
+            {
+              "gen0": 3,
+              "gen1": 3,
+              "gen2": 3
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            325500,
+            329600
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            326200,
+            338000
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            203900,
+            212200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "items": 1000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            29100,
+            30000
+          ],
+          "allocatedBytesObserved": [
+            80024
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            4700,
+            4800
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            4900,
+            5300
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            2000,
+            2000
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "overlay",
+      "items": 100000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            3833700,
+            11547300
+          ],
+          "allocatedBytesObserved": [
+            8000024,
+            8000032,
+            8000040,
+            8000048
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 5,
+              "gen1": 4,
+              "gen2": 4
+            },
+            {
+              "gen0": 5,
+              "gen1": 4,
+              "gen2": 4
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            491300,
+            476200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            535500,
+            516000
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            200200,
+            201300
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "wrapper",
+      "items": 1000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            15900,
+            14700
+          ],
+          "allocatedBytesObserved": [
+            56024
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            3200,
+            3200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            3200,
+            3200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            2100,
+            2200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "wrapper",
+      "items": 100000,
+      "controlCountPerRun": 49,
+      "intentionalNaiveAccessorFailures": 0,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": [
+        {
+          "id": "copy-create",
+          "perProcessMedianNanoseconds": [
+            2722100,
+            1902600
+          ],
+          "allocatedBytesObserved": [
+            5600024
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 4,
+              "gen1": 4,
+              "gen2": 4
+            },
+            {
+              "gen0": 4,
+              "gen1": 4,
+              "gen2": 4
+            }
+          ]
+        },
+        {
+          "id": "string-access",
+          "perProcessMedianNanoseconds": [
+            319800,
+            324200
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "plain-string-access",
+          "perProcessMedianNanoseconds": [
+            327400,
+            317700
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        },
+        {
+          "id": "integer-access",
+          "perProcessMedianNanoseconds": [
+            212600,
+            360700
+          ],
+          "allocatedBytesObserved": [
+            0
+          ],
+          "collectionTotals": [
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            },
+            {
+              "gen0": 0,
+              "gen1": 0,
+              "gen2": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "naive",
+      "items": 1000,
+      "controlCountPerRun": 21,
+      "intentionalNaiveAccessorFailures": 4,
+      "xdmValueSize": 48,
+      "wrapperSize": 56,
+      "measurements": []
+    }
+  ],
+  "productionModified": false,
+  "carrierSelected": null,
+  "apiFrozen": false,
+  "performanceBudgetsAccepted": false,
+  "E01": "Partially executed: cloned Core access/layout/allocation and pilot timing",
+  "E02": "Partially executed: direct access, XPath comparer, core containers and diagnostic list markers; full VM/cast/union/PSVI/serialization remains unqualified",
+  "E03": "NotRun",
+  "E04": "NotRun",
+  "notMeasured": [
+    "Real Schema/XmlDb/Braid operations",
+    "Provider authority or full XSD list/union semantics",
+    "VM arithmetic/casts/atomization/function dispatch",
+    "Serializer provenance policy",
+    "Peak/retained memory",
+    "Full runtime/conformance gates",
+    "Portable ABI or production performance budgets"
+  ]
+}

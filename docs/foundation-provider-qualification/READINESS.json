@@ -1,0 +1,24 @@
+{
+  "sourceVersion": "1.81.0",
+  "coreCandidate": {
+    "sourcePins": "evidence/SOURCE-AND-BINARY-PINS.json",
+    "sourcePinsSha256": "e04c42b8be0111cc4c9feed28c15734cc7b82af0a542a76a9a163507a2fdf0d6",
+    "engineArtifacts": "docs/foundation-public-primitives/evidence/ENGINE-BINARIES.zip",
+    "sourceArtifacts": "docs/foundation-public-primitives/evidence/CHANGED-SOURCE.zip",
+    "apiInventory": "docs/foundation-public-primitives/evidence/public-api.json",
+    "coreFixtureQualificationRetained": true,
+    "candidateCommitted": false
+  },
+  "nativeProviderAcceptance": false,
+  "explicitBudgetsAccepted": false,
+  "packagePreparation": {
+    "root": "Bosak.Xslt",
+    "selectedClosure": 9,
+    "scope": "PACKAGE-SCOPE.json",
+    "candidateCommit": null,
+    "previewVersion": null,
+    "packageArtifactsBuilt": false
+  },
+  "next": "PV-Q02 resolve native source/unchanged-binary artifacts and exact candidate lane before managed execution",
+  "requirementsWaived": 0
+}

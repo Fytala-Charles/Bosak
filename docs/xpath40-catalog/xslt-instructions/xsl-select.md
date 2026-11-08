@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded XPath body instruction**. CDATA is an XML authoring mechanism; complete schema/static/package/resource combinations and global static-detection mode remain unaccepted. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **xsl:select — implemented Bosak XSLT4.0 surface.** [Body-expression delivery `69a7cfd3`](https://github.com/Fytala-Charles/Bosak/commit/69a7cfd3c84e405c037be41786464950d1c06696); [current source review](../SWITCH-ARRAY-SELECT-GRAMMAR.md). This entry documents shipped behavior under REQ-126, not a new engine feature. Historical adopted specification revision is not recovered; current review pin is3230573afe246f1b502ed2e22d187ce9928155b1 section `select-instruction`.

@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-31",
+  "braidRepository": "D:\\Development\\Bosak\\.worktrees\\Bosak.Braid.ReadOnly",
+  "braidRevision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+  "sourceInputs": [
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "cb41797ab7996bbdb4dccf8eadc52eed2c1bd86593c6acc34501d23330b9eb78"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "72fa5dd41b1641452eb414c96c992dc6124140c74788f16fbf8bd011ee148335"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "1ed971e9333efaa0e530476fd15195313c4958ba889176a2d6312ffb5281439f"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerServer.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "4cf09e0e0b883e36d6d59d096f1e145d302688adf377e708e7b8e84400d8fb1c"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/WorkerProcessPreviewExecutor.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "582fcfeb2467a8ae928da5b37efdb8d47fd602378973df00ee1dc423f7c42a1f"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs",
+      "revision": "afb8e923be93f1763b42c4ec28542e7e05f2ac96",
+      "gitBlobSha256": "48d7b8c78cd967adc0da44d430583d956d1097dc5ac6a7553b17054a295dd239"
+    }
+  ],
+  "request": "Core REQ-140 / Braid REQ-122",
+  "packages": [
+    "BF140-01",
+    "BF140-02",
+    "BF140-03",
+    "BF140-04",
+    "BF140-05"
+  ],
+  "status": "Registered; not implemented or accepted",
+  "implementationAccepted": false,
+  "freezeAccepted": false,
+  "braidRegistrationDelivery": "d81f195f63a534099391220536f9885c44fddb30",
+  "braidRegistrationBranch": "feature/readonly-inspection-session"
+}

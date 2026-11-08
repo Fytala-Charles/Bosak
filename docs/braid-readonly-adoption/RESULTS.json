@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29",
+  "proposalOnly": true,
+  "firstProductionCandidateProfile": "inspection only; port-free data",
+  "draftContractBuildWarnings": 0,
+  "draftContractBuildErrors": 0,
+  "actualFactoryOrSessionImplemented": false,
+  "consumerTestsExecuted": false,
+  "productPinChanged": false,
+  "existingDefaultCompositionChanged": false,
+  "newConsumerOrCoreIdAssigned": false,
+  "next": "review checkpoint then consumer-owned implementation task/ADR",
+  "uncommitted": true
+}

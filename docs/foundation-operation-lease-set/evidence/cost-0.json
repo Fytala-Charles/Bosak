@@ -1,0 +1,23 @@
+{
+  "rows": [
+    {
+      "members": 0,
+      "bytesPerOperation": 136
+    },
+    {
+      "members": 1,
+      "bytesPerOperation": 288
+    },
+    {
+      "members": 2,
+      "bytesPerOperation": 304
+    },
+    {
+      "members": 8,
+      "bytesPerOperation": 984
+    }
+  ],
+  "iterations": 1000,
+  "runtimeSha256": "4f581d21e0d255f47d6925905d54cee127a038eca155c22e764632b6d8a37be7",
+  "scope": "Lease-set bookkeeping with prebuilt members and singleton no-op leases; excludes provider allocation, full host execution and concurrency throughput."
+}

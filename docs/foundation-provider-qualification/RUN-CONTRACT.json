@@ -1,0 +1,20 @@
+{
+  "protocol": "Candidate-bound source/unchanged-binary owner workload receipts",
+  "receiptTemplate": "OWNER-RUN.template.json",
+  "checker": "tools/receipt_preflight.py",
+  "artifactRoot": "This dossier only; import authorized reviewed artifacts under relative paths, no path escapes",
+  "requiredEvidence": [
+    "All eleven candidate engine hashes and exact source/configuration manifest digest",
+    "Exact observed engine hashes with Core/Runtime/Api required for the typed host workload",
+    "Separate source and unchanged-binary cohorts; unchanged consumer must not be rebuilt",
+    "Actual consumer source revision,baseline pin and hashed input/build/binary manifests",
+    "Fixture bytes/queries/settings/correctness and raw result receipts",
+    "OS/runtime/CPU/configuration/tool,measurement method,warmup/sample counts/metrics",
+    "Owner/scenario/candidate-bound budget receipt,explicit thresholds and nonnegative tolerance",
+    "Consumer input manifest source/candidate binding and equal hashed consumer artifact sets/bytes before and after engine replacement"
+  ],
+  "checkerCanExecuteWorkloads": false,
+  "checkerCanAuthenticateOwnerApproval": false,
+  "checkerCanAcceptQualification": false,
+  "syntheticControlsAreOwnerEvidence": false
+}

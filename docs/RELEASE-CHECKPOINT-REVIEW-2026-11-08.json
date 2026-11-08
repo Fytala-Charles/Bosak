@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-08",
+  "candidateFileCount": 1745,
+  "candidateBytes": 63977528,
+  "targetedScreeningOnly": true,
+  "credentialPatternHits": [],
+  "looseBinaries": [],
+  "filesAtLeast50MiB": [],
+  "archiveChecks": [
+    {
+      "path": "docs/release-core-vscode-candidate/vscode-bosak-0.2.6-candidate-notices.vsix",
+      "sha256": "77b03b067953ea6f5587856bc222262a45a69160fffc8c4e6e30ec9b166ffd02",
+      "files": 285
+    },
+    {
+      "path": "docs/release-core-vscode-candidate/vscode-bosak-0.2.6-candidate.vsix",
+      "sha256": "d83b9b8dfbc335d185ab729df6d9010379f53c5a2cbf368e806741664f4ca1bf",
+      "files": 284
+    },
+    {
+      "path": "docs/release-vscode-uri-fix/vscode-bosak-0.2.6-uri-fix.vsix",
+      "sha256": "2bf9e4abe17feca9319418a34cb2fef8ac6e3724f6c581892b77eefb98538f67",
+      "files": 285
+    }
+  ],
+  "privateOwnerSourceIncluded": false,
+  "publicationPerformed": false,
+  "verifiers": [
+    {
+      "script": "docs/foundation-xmldb-full-qualification/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified full Storage3572 + reused XDM47 + approved in-process Integration69; 794 Integration cases remain unqualified because automatic review rejected the process probes despite explicit user approval.\n"
+    },
+    {
+      "script": "docs/foundation-xmldb-manual-approval/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified 862 full-run passes plus one layout-corrected reopen pass; exact 863-case catalog and pinned package loads. Aggregate 4482 distinct passes across runs; original full-run failure preserved.\n"
+    },
+    {
+      "script": "docs/release-core-vscode-candidate/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified local VSIX, nine exact engines, server84, protocol3, fresh/upgrade installed content. Live editor-host qualification remains blocked; no publication.\n"
+    },
+    {
+      "script": "docs/release-vscode-editor-unblock/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified live XPath/XQuery/XSLT diagnostics and correction, installed VSIX content, normal sandbox and host exit0. No ACL or active-profile change.\n"
+    },
+    {
+      "script": "docs/release-vscode-command-smoke/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified actual commands: two passes, three URI lookup failures; deterministic URI reproduction and unchanged VSIX. Release remains blocked; no publication.\n"
+    },
+    {
+      "script": "docs/release-vscode-uri-fix/tools/verify.py",
+      "exitCode": 0,
+      "output": "Verified URI fix: solution26342 across environment retry, server90 in two lanes, commands5, live diagnostics5, exact nine engines and installed VSIX. No publication.\n"
+    }
+  ]
+}

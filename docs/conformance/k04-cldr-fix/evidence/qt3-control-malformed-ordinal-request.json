@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml", "Name": "control-malformed-ordinal", "expected": "FODF1310", "diagnostic": true}

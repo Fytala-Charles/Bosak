@@ -1,0 +1,45 @@
+{
+  "allMatchExactCandidate": true,
+  "engineObservations": 80,
+  "groups": {
+    "qt3": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "qt4": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.Xslt"
+    ],
+    "units": [
+      "Bosak.XPath.Api",
+      "Bosak.XPath.Compiler",
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Parser",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Providers.Database",
+      "Bosak.XPath.Runtime",
+      "Bosak.XPath.Standard",
+      "Bosak.XQuery",
+      "Bosak.Xslt"
+    ],
+    "units-database": [
+      "Bosak.XPath.Core",
+      "Bosak.XPath.Providers",
+      "Bosak.XPath.Providers.Database",
+      "Bosak.XPath.Runtime"
+    ]
+  }
+}

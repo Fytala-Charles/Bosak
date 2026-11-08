@@ -1,0 +1,21 @@
+{
+  "sourceVersion": "1.81.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-Q03",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-Q02",
+      "status": "ExistingNativeSourceAndUnchangedBinaryRegressionQualifiedWithin451CaseScope"
+    },
+    {
+      "id": "PV-Q03",
+      "status": "Next_ActualPublicSchemaProviderAdapterFeasibilityAndImmutableAdoption",
+      "work": "Map actual native identities,issued containers,input/origin/lifetime to public contracts before any provider adapter code;native legacy document compatibility does not qualify the new public route."
+    },
+    {
+      "id": "R4-02",
+      "status": "OwnerPerformanceBudgetsPending"
+    }
+  ]
+}

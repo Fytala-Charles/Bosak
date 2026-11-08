@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 08-11-2026     | Cover escaped command URIs and missing-document isolation.                               |
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -28,8 +29,10 @@ using Xunit;
 
 namespace Bosak.LanguageServer.Tests;
 
+/// <summary>Verifies command evaluation and open-document URI lookup.</summary>
 public class ExecuteCommandHandlerTests
 {
+    /// <summary>XPath command results are sent to the editor.</summary>
     [Fact]
     public async System.Threading.Tasks.Task ExecuteXPathCommandSendsEvaluationResultNotification()
     {
@@ -52,6 +55,7 @@ public class ExecuteCommandHandlerTests
         Assert.Null(router.Notifications[0].Params["error"]?.Value<string>());
     }
 
+    /// <summary>XQuery command results are sent to the editor.</summary>
     [Fact]
     public async System.Threading.Tasks.Task ExecuteXQueryCommandSendsEvaluationResultNotification()
     {
@@ -74,6 +78,7 @@ public class ExecuteCommandHandlerTests
         Assert.Null(router.Notifications[0].Params["error"]?.Value<string>());
     }
 
+    /// <summary>Unknown commands preserve an explicit error notification.</summary>
     [Fact]
     public async System.Threading.Tasks.Task ExecuteUnknownCommandSendsErrorEvaluationResultNotification()
     {
@@ -96,6 +101,7 @@ public class ExecuteCommandHandlerTests
         Assert.Contains("Unknown command", router.Notifications[0].Params["error"]?.Value<string>());
     }
 
+    /// <summary>Commands without a document argument preserve an explicit error.</summary>
     [Fact]
     public async System.Threading.Tasks.Task ExecuteCommandWithMissingArgumentSendsErrorEvaluationResultNotification()
     {
@@ -112,6 +118,54 @@ public class ExecuteCommandHandlerTests
         Assert.Null(router.Notifications[0].Params["language"]?.Value<string>());
         Assert.Null(router.Notifications[0].Params["result"]?.Value<string>());
         Assert.Contains("document URI", router.Notifications[0].Params["error"]?.Value<string>());
+    }
+
+    /// <summary>Equivalent escaped command URIs locate the synchronized document.</summary>
+    /// <param name="command">The registered evaluation command.</param>
+    /// <param name="commandUri">The URI supplied by the editor command.</param>
+    /// <param name="path">The synchronized document filesystem path.</param>
+    /// <returns>The asynchronous test operation.</returns>
+    [Theory]
+    [InlineData("bosak.evaluateXPath", "file:///d%3A/test/expr.xpath", "D:/test/expr.xpath")]
+    [InlineData("bosak.evaluateXQuery", "file:///d%3A/test/query.xq", "D:/test/query.xq")]
+    [InlineData("bosak.evaluateXPath", "file:///d%3A/test/a%20b%25%23%3F.xpath", "D:/test/a b%#?.xpath")]
+    [InlineData("bosak.evaluateXQuery", "file:///d%3A/test/caf%C3%A9.xq", "D:/test/caf\u00e9.xq")]
+    public async Task ExecuteCommandWithEscapedUriLocatesOpenDocument(string command, string commandUri, string path)
+    {
+        var documents = new DocumentManager();
+        documents.Update(DocumentUri.FromFileSystemPath(path).ToString(), "6 * 7");
+        var router = new FakeResponseRouter();
+        await new ExecuteCommandHandler(documents, router).Handle(new ExecuteCommandParams
+        {
+            Command = command,
+            Arguments = new JArray(commandUri)
+        }, default);
+
+        var notification = Assert.Single(router.Notifications);
+        Assert.Equal("42", notification.Params["result"]?.Value<string>());
+        Assert.Null(notification.Params["error"]?.Value<string>());
+    }
+
+    /// <summary>Decoding once does not alias a different or unopened document.</summary>
+    /// <param name="commandUri">The URI that must not resolve to the open document.</param>
+    /// <returns>The asynchronous test operation.</returns>
+    [Theory]
+    [InlineData("file:///d%3A/test/other.xpath")]
+    [InlineData("file:///d%3A/test/a%2520b.xpath")]
+    public async Task ExecuteCommandWithDifferentUriRetainsMissingDocumentError(string commandUri)
+    {
+        var documents = new DocumentManager();
+        documents.Update(DocumentUri.FromFileSystemPath("D:/test/a b.xpath").ToString(), "6 * 7");
+        var router = new FakeResponseRouter();
+        await new ExecuteCommandHandler(documents, router).Handle(new ExecuteCommandParams
+        {
+            Command = "bosak.evaluateXPath",
+            Arguments = new JArray(commandUri)
+        }, default);
+
+        var notification = Assert.Single(router.Notifications);
+        Assert.Null(notification.Params["result"]?.Value<string>());
+        Assert.Equal("Document is not open.", notification.Params["error"]?.Value<string>());
     }
 
     private sealed class FakeResponseRouter : IResponseRouter

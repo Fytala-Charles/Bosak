@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-29",
+  "allOriginalBytesPreserved": true,
+  "priorDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28,
+    "schema-optional-implementation": 49,
+    "schema-optional-review": 9,
+    "schema-repeated-children": 16,
+    "schema-repeated-implementation": 33,
+    "schema-repetition-review": 9,
+    "schema-count-assertions": 17,
+    "schema-count-implementation": 30,
+    "schema-count-review": 9
+  }
+}

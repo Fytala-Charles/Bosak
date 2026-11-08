@@ -1,0 +1,73 @@
+{
+  "status": "CoreSelectedAdditiveCompatibleObservation",
+  "signature": "public SchemaResult<ISchemaAtomicProvenance> SchemaQueryOperation.ReadAtomicProvenance(XdmValue value)",
+  "originalDraftChanged": false,
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "decisions": [
+    {
+      "id": "LP01",
+      "decision": "New operation member belongs in API; do not introduce a Core-to-API dependency or a new public type/marker factory."
+    },
+    {
+      "id": "LP02",
+      "decision": "Only the existing public compatible identity profile returns Supported; live operations in other profiles return Unsupported after callback-free engine checks."
+    },
+    {
+      "id": "LP03",
+      "decision": "An invalid/plain/foreign/rebound carrier in the selected profile raises its original argument error; current proof/availability/cancellation errors propagate rather than being recast as false."
+    },
+    {
+      "id": "LP04",
+      "decision": "The result is a borrowed guarded ISchemaAtomicProvenance, not a detached tuple, authority token, IPC payload or independent native lease."
+    },
+    {
+      "id": "LP05",
+      "decision": "Declared/actual/origin are original source metadata under the current compatible execution admission, never fabricated target authority identities."
+    },
+    {
+      "id": "LP06",
+      "decision": "Validate through the current TypedOperation issuer and exact target snapshot/cache/representation; preserve existing singleton/non-list string/boolean/integer/decimal restrictions and captured limits."
+    },
+    {
+      "id": "LP07",
+      "decision": "Each getter opens the same raw operation serialized provider-pair window, validates the carrier/episode before reading and guards delivery afterwards."
+    },
+    {
+      "id": "LP08",
+      "decision": "Use the positive proof established for this raw operation and recheck its existing current endpoints/source/authority guards; do not add a new Establish per getter or extend a proof into another raw operation."
+    },
+    {
+      "id": "LP09",
+      "decision": "Store no provenance views or old issuers in the stable payload registry. Stable scalar identity and SchemaAtomics.TryGetProvenance compatible false/null remain unchanged."
+    },
+    {
+      "id": "LP10",
+      "decision": "Raw closure/cancellation invalidates every getter; late calls must refuse before provider callbacks. Holding/dropping a view does not keep/release native admissions."
+    },
+    {
+      "id": "LP11",
+      "decision": "Actual in-flight getters retain provider/source resources through their real call tails; canceled observer waits do not release early."
+    },
+    {
+      "id": "LP12",
+      "decision": "Overlapping/reentrant getter work in one operation refuses under existing provider serialization; independent operation views never borrow each other's episode."
+    },
+    {
+      "id": "LP13",
+      "decision": "No new scalar/source slot or user workload default is selected. Measure bounded caller allocations/latency/callbacks without claiming owner budgets."
+    },
+    {
+      "id": "LP14",
+      "decision": "Existing work/release failure identity and reverse cleanup order remain unchanged; observation does not flatten or swallow provider aggregates."
+    },
+    {
+      "id": "LP15",
+      "decision": "The added signature needs owner/final manifest acceptance; 47 type names do not imply all member/semantic requirements are closed."
+    },
+    {
+      "id": "LP16",
+      "decision": "General containers, private legacy disposition, actual native/owner/performance and release gates remain explicit open work."
+    }
+  ]
+}

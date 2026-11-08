@@ -1,0 +1,17 @@
+{
+  "observations": {
+    "ordinary": {
+      "coldCallerBytes": 1232,
+      "warmReads": 2,
+      "warmCallerBytes": 1216
+    },
+    "compatible": {
+      "coldCallerBytes": 16254480,
+      "warmReads": 2,
+      "warmCallerBytes": 2144
+    }
+  },
+  "ownerBudgetAccepted": false,
+  "compatibleWarmTraceCapacityReserved": true,
+  "scope": "Caller-only fixture observations. Ordinary two-member dateTime/QName and compatible one-member dateTime. Compatible cold includes trace growth; warm trace storage pre-reserved with every callback recorded. No native/retained-output budget acceptance or cross-profile ratio claim."
+}

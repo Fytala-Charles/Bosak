@@ -1,0 +1,10 @@
+{
+  "command": [
+    "dotnet",
+    ".guard-tmp/k04-calendar-admission-mechanism/bin/Release/net10.0/Probe.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 20,
+  "observations": 16
+}

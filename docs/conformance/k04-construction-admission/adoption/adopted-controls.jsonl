@@ -1,0 +1,19 @@
+{"Name":"construction-0","Expression":"declare construction strip; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"construction-1","Expression":"declare(:outer(:nested:) :)construction strip; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"construction-2","Expression":"declare\nconstruction strip; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"construction-3","Expression":"declare construction preserve; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"construction-4","Expression":"declare(:outer(:nested:) :)construction preserve; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"construction-5","Expression":"declare\nconstruction preserve; 1","before":false,"after":true,"actual":true,"passed":true}
+{"Name":"literal-\u0022","Expression":"\u0022declare construction\u0022","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"doubled-\u0022","Expression":"\u0022a\u0022\u0022declare construction\u0022","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"literal-\u0027","Expression":"\u0027declare construction\u0027","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"doubled-\u0027","Expression":"\u0027a\u0027\u0027declare construction\u0027","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"comment","Expression":"(: declare construction strip :) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"nested-comment","Expression":"(: a (: declare construction :) a :) 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"prefix","Expression":"declareconstruction strip; 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"suffix","Expression":"declare constructional strip; 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"context-adopted","Expression":"declare context item := 1; .","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"copy-adopted","Expression":"declare copy-namespaces no-preserve, no-inherit; 1","before":true,"after":true,"actual":true,"passed":true}
+{"Name":"pragma","Expression":"(# p:x #) {1}","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"construction-pragma","Expression":"declare construction strip; (# p:x #) {1}","before":false,"after":false,"actual":false,"passed":true}
+{"Name":"mixed","Expression":"declare construction strip; declare copy-namespaces no-preserve, inherit; 1","before":false,"after":true,"actual":true,"passed":true}

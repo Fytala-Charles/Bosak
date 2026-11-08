@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited membership/cast; matching-coercion blocker**. C05-K02: six fresh controls still convert an already-matching string to an earlier integer alternative; explicit-cast success does not resolve this. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **Choice item types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; choice item type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -32,11 +34,11 @@ A legacy order identifier can be an integer or a string, but not a fractional am
 
 ## 6. Language Alignment
 
-Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 7. Applicability
 
-Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 8. Structure
 
@@ -56,9 +58,14 @@ The case combines source values, the named feature, and explicit output formatti
 
 ## 11. Consequences
 
-Benefit: Express the permitted alternatives in one item type. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Benefit: Express the permitted alternatives in one item type. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-types. Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule. K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Membership is distinct from coercion; Already-matching alternatives and ordered coercion of unmatched untyped values; 3.1 choice grammar refusal. **Boundary:** The tested integer/string alternatives do not certify every schema union, function/record alternative or error-precedence combination. Schema union/list context has separate named evidence. Ownership: T03, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

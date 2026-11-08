@@ -1,0 +1,10 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\src\Bosak.LanguageServer\Bosak.LanguageServer.csproj (in 173 ms).
+  9 of 10 projects are up-to-date for restore.
+  Bosak.LanguageServer -> D:\Development\Bosak\src\Bosak.LanguageServer\bin\Release\net10.0\Bosak.LanguageServer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.57

@@ -1,0 +1,42 @@
+{
+  "Bosak.XPath.Api.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+    "sha256": "4f58de13c85c8d2853b4254c853517af48569554d545af20ff7f5ba58097618a"
+  },
+  "Bosak.XPath.Compiler.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+    "sha256": "1235357ed0303821fa06865937da8f2eddb327a089d9d8b55cafed6790ff8688"
+  },
+  "Bosak.XPath.Core.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+    "sha256": "8e5b1176813480215138b7e81a04d4b966fa21245efb7064c643fcc79207340c"
+  },
+  "Bosak.XPath.Parser.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+    "sha256": "d6f0cc6548a488fa50c96d6f50b7b0abd7cada92b63108d29e0ea6d77ebd154e"
+  },
+  "Bosak.XPath.Providers.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+    "sha256": "e5afbac062b6dc4a82388f019850cd4ff55e0d3c0447fea494483c0e01b0c233"
+  },
+  "Bosak.XPath.Runtime.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+    "sha256": "907d1d314eb5a9bd926dc33fd7ec0bf3391dc541897112a8989d495d8438701f"
+  },
+  "Bosak.XPath.Runtime.Tests.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.Tests.dll",
+    "sha256": "8a6b42be6c65859384fa5a6d0367b062f3f52579d1d9f51b6f97b383d5d62dfa"
+  },
+  "Bosak.XPath.Standard.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+    "sha256": "9c78c9cb488ac3c04cd9c2b6c257b884992e0e00cfd8cb78aff1e568f9fa310b"
+  },
+  "Bosak.XQuery.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+    "sha256": "4ae068dbcd738ffd22b94874c48e961495fc2a845cf2b308b587d04824a21249"
+  },
+  "Bosak.Xslt.dll": {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\bcap-outcomes-v3\\Host\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+    "sha256": "32d4a08bb9867ecee5fd76bb60776143479f60af2ec0464774b09f6a5a2cbbaf"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-06",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "68466be09c5966a2703834764d2db4bea7bd7befb4334251a20b65525f9c2d65"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "f7d1a48d2fbf7baf24d785e722639bf2ffb870d035df8c675b82645fc309d141"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "6c9eef97159cd79c479803239f0d1efca9d7d151afbded66afcdc64f1e92f88c"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "33aea8b3e097a6837c4542b7f91836ac0bff0e7c772883fa2a6785abd43662f6"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "19b1d2fa923f38cbd44cdfae97e5f5f243fa8bc12ab6a6da49cbd7f411882971"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "cacfc52aad9d9d8c2e197c976c2fec5c0487dfea6387eb73c1ee61cf77e09e9c"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "88c25648479ce680fec4f1a274c3c02a2c73dce4344f18dc78cb5764f8ef8ad4"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "5d21ce5a2ea680e7cf7b486519872a53280729ba8615bb5e4c854fd1eb3a5487"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "fe43f5f466afb0cbd54db0de8aa33d23e1e92604361a503540496e34b138b943"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "43a910c9cefcef7c06633e7f1e4a3e259650bd29aa8956c78861f1bb5c57c25f"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "66face7d820e467d4b81053931f644c1815c4fbe374d9313a27b62b7ec1489a0"
+    },
+    {
+      "source": "docs/foundation-native-node-prototype/README.md",
+      "sourceSha256": "6b5d9aaf082c0b799c34dcd2c96a65bbbaff35bed62e41604e60d33d6da4fcb1"
+    }
+  ],
+  "localLinks": 3760,
+  "htmlRendered": false,
+  "scope": "Markdown source hashes/local file links only;no new HTML/screenshot/PDF verification",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91"
+}

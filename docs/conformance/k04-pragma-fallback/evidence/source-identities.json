@@ -1,0 +1,13 @@
+{
+  "src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs": "dd2c0e2631b2d9a9367432d1c75a17517d2aba76",
+  "src/Bosak.XPath.Compiler/StaticNameTestValidator.cs": "eccb552820392af1502f0aab19460d560fccea88",
+  "src/Bosak.XPath.Parser/Ast/XPathAstNode.cs": "25af12ad66568299089d06edbd06f486d3309a36",
+  "src/Bosak.XPath.Parser/Ast/XPathParser.cs": "90b9b1cca4ca4e76e58e397e75351d2b24d652a9",
+  "src/Bosak.XPath.Parser/Lexer/TokenKind.cs": "e64ad70816fe4f103f2dbc84b83465eca4828d50",
+  "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs": "1910991e1c3e18af0620a2d968ead445533cc18a",
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": "f62de68b73dce28ce1bdf85254e1d3bdedc68fc4",
+  "src/Bosak.XQuery/Compiler/ModuleVisibilityValidator.cs": "fea487565341a02652dfb226988ef4528c860103",
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": "822bb9ab0c5c48f24a34834e8ad51ad55d47bb65",
+  "src/Directory.Build.props": "963e36b8e03a9416aa4735e590bc72f4aa9fb358",
+  "tests/Bosak.XQuery.Tests/PragmaExpressionTests.cs": "a57ad0f69de5d0f1b576c4ef115e8f654f288f3e"
+}

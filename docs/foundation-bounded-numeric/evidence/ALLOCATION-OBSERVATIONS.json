@@ -1,0 +1,10 @@
+{
+  "scope": "Three warmed arithmetic capacity refusals; input coefficients already owned, exception allocation included. Not a latency/retained-memory/owner budget.",
+  "bytesPerCaughtRefusal": {
+    "oversized-input": 760,
+    "extreme-alignment": 464,
+    "scale-sum-overflow": 464
+  },
+  "regressionCeilingBytes": 16384,
+  "budgetsAccepted": false
+}

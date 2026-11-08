@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "status": "Ready for implementation",
+  "implementationStarted": false,
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "requiredReplacements": [
+    {
+      "returnId": "BCAP-O1-Schema",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O1-Schema.v2.response.json",
+      "sha256": "cfbd4a82a34386410ae0b571ab2eda9d819cf1b350d18677828a8345c5ac473e",
+      "validationReceipt": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json"
+    },
+    {
+      "returnId": "BCAP-O2-Schema",
+      "path": "docs/foundation-r2-closure/returns/BCAP-O2-Schema.v2.response.json",
+      "sha256": "e2737d309279ab23e192cc6c0de94ea75391d809bec60546067e867a9d9e4593",
+      "validationReceipt": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json"
+    }
+  ],
+  "scopedR2Closure": {
+    "path": "docs/foundation-r2-closure/CLOSURE.json",
+    "sha256": "3db9f8550693966d877cb03496e6a51a7f5acb612057b7c87e0d0ba5d67ad2e2",
+    "allSevenRoleValidationReceipt": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json"
+  },
+  "implementationCandidateCommit": null,
+  "baseline": {
+    "productionCommit": "b2ca55fc078b0cc44555545b90d31e2d7f585fd0",
+    "isolatedQualificationCommit": "2ebe366382397867e899b3663d960b103a49b53a",
+    "sourceBase": "1ed1f82c8fb18d8518f01d8280dcb741279b4303",
+    "sourceInputs": "docs/foundation-bcap-profile/evidence/SOURCE-INPUTS.json",
+    "sourceInputsSha256": "28b3e37c821c94b6274a9d9371a9e7bae958035357cb349037782b5ad9e455b6",
+    "qualificationReceipt": "docs/foundation-bcap-profile/evidence/FULL-QUALIFICATION.json",
+    "qualificationReceiptSha256": "9ea447ed168687144284c7f628c145956f693f7a1cd6ce95f9d60736e352a922"
+  },
+  "reason": "Validated versioned O1/O2 replacements and all seven scoped returns are preserved; Core recorded exact-manifest scoped R2 design closure. Immutable semantic adoption remains required before source edits.",
+  "semanticAdoptionBeforeCodeRequired": true,
+  "gateTransition": "Supersedes the immutable blocked gate snapshot in docs/schema-w1-gate-review/GATE.json; historical snapshot remains unchanged."
+}

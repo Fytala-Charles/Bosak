@@ -1,0 +1,275 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Collections.Frozen;
+using System.Collections.Immutable;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Core.Xdm;
+
+namespace C44;
+
+internal enum Verdict { NotApplicable, Supported, Invalid, Unsupported, Cancelled }
+internal sealed record Finding(string Reason, string Message);
+internal sealed record Reply<T>(Verdict Verdict, T Value, ImmutableArray<Finding> Findings)
+{
+    internal static Reply<T> Supported(T value) => new(Verdict.Supported, value, []);
+    internal static Reply<T> Other(Verdict verdict, string reason) => verdict == Verdict.Supported
+        ? throw new ArgumentException("Use the supported-value factory.") : new(verdict, default!, [new(reason, reason)]);
+}
+internal sealed class ContractFailure(string reason, Exception? inner = null, ImmutableArray<Finding> findings = default) : Exception(reason, inner)
+{
+    internal string Reason { get; } = reason;
+    internal ImmutableArray<Finding> Findings { get; } = findings.IsDefault ? [] : findings;
+}
+internal static class Router
+{
+    internal static string Mutation = "none";
+    internal static XdmValue ExportLegacy(AtomicCarrier value) => value.Annotation is null ? value.Value : throw new ContractFailure("OwnedValueNeedsSession");
+    internal static T Open<T>(Reply<T>? response, Func<T> legacy) => response is null || response.Verdict == Verdict.NotApplicable
+        ? legacy() : Owned(() => response, legacy);
+    internal static T Owned<T>(Func<Reply<T>> response, Func<T> legacy, CancellationToken cancellation = default)
+    {
+        cancellation.ThrowIfCancellationRequested();
+        Reply<T> reply;
+        try { reply = response(); }
+        catch (OperationCanceledException) { throw; }
+        catch (Exception ex) { throw new ContractFailure("ProviderFailure", ex); }
+        if (reply.Verdict == Verdict.Supported) return reply.Value;
+        if (Mutation == "fallback") return legacy();
+        if (reply.Verdict == Verdict.Cancelled) throw new OperationCanceledException();
+        throw new ContractFailure(reply.Verdict == Verdict.NotApplicable ? "OwnershipLost" : reply.Verdict.ToString(), findings: reply.Findings);
+    }
+}
+internal sealed record Resource(string Uri, string Content);
+internal static class Closure
+{
+    internal static string Key(IEnumerable<Resource> resources, string baseUri, string language, string policy, IReadOnlyDictionary<string, string> bindings, string staticContextFingerprint = "XPath31")
+    {
+        var copy = resources.OrderBy(x => x.Uri, StringComparer.Ordinal).ToArray();
+        if (copy.Select(x => x.Uri).Distinct(StringComparer.Ordinal).Count() != copy.Length) throw new ContractFailure("DuplicateResource");
+        var canonical = JsonSerializer.Serialize(new { resources = copy.Select(x => new { x.Uri, hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(x.Content))) }), baseUri, language, policy, staticContextFingerprint, bindings = bindings.OrderBy(x => x.Key, StringComparer.Ordinal).Select(x => new { x.Key, x.Value }) });
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(canonical)));
+    }
+}
+[Flags] internal enum Derivation { None = 0, Restriction = 1, Extension = 2 }
+internal sealed record TypeDef(string Name, string? Base, Derivation Method = Derivation.None, Derivation Block = Derivation.None);
+internal sealed record ElementDef(string Name, string Type, ImmutableArray<string> Affiliations, bool Abstract = false, bool Nillable = false, bool BlockSubstitution = false, Derivation Block = Derivation.None, string Scope = "global");
+internal sealed class TypeId(Session session, string name)
+{
+    internal Session Session { get; } = session;
+    internal string Name { get; } = name;
+}
+internal sealed class ElementId(Session session, ElementDef definition)
+{
+    internal Session Session { get; } = session;
+    internal ElementDef Definition { get; } = definition;
+}
+internal sealed class Annotation
+{
+    internal TypeId Type { get; }
+    internal ElementId Element { get; }
+    internal Annotation(TypeId type, ElementId element)
+    {
+        if (!ReferenceEquals(type.Session, element.Session)) throw new ContractFailure("ForeignIdentity");
+        (Type, Element) = (type, element);
+    }
+}
+internal sealed class Session
+{
+    internal string Key { get; }
+    private readonly FrozenDictionary<string, TypeDef> _types;
+    private readonly FrozenDictionary<string, TypeId> _typeIds;
+    private readonly FrozenDictionary<(string Name, string Scope), ElementId> _elements;
+    internal Session(string key, IEnumerable<TypeDef> types, IEnumerable<ElementDef> elements)
+    {
+        Key = key;
+        _types = types.ToFrozenDictionary(x => x.Name, StringComparer.Ordinal);
+        _typeIds = _types.Keys.ToFrozenDictionary(x => x, x => new TypeId(this, x), StringComparer.Ordinal);
+        _elements = elements.ToFrozenDictionary(x => (x.Name, x.Scope), x => new ElementId(this, x));
+        foreach (var e in _elements.Values)
+        {
+            if (!_types.ContainsKey(e.Definition.Type)) throw new ContractFailure("UnknownType");
+            if (e.Definition.Affiliations.Any(x => !_elements.ContainsKey((x, "global")))) throw new ContractFailure("UnknownAffiliation");
+        }
+    }
+    internal TypeId Type(string name) => _typeIds[name];
+    internal ElementId Element(string name, string scope = "global") => _elements[(name, scope)];
+    internal void Require(TypeId id) { if (!ReferenceEquals(id.Session, this) && Router.Mutation != "qname") throw new ContractFailure("ForeignIdentity"); }
+    internal void Require(ElementId id) { if (!ReferenceEquals(id.Session, this) && Router.Mutation != "qname") throw new ContractFailure("ForeignIdentity"); }
+    internal bool Derived(TypeId actual, TypeId expected)
+    {
+        Require(actual); Require(expected);
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        for (var current = actual.Name; current is not null; current = _types[current].Base)
+        {
+            if (!seen.Add(current)) throw new ContractFailure("CyclicType");
+            if (current == expected.Name) return true;
+        }
+        return false;
+    }
+    internal bool ActualMember(ElementId candidate, ElementId head)
+    {
+        Require(candidate); Require(head);
+        var c = candidate.Definition; var h = head.Definition;
+        if (c.Scope != "global" || h.Scope != "global") throw new ContractFailure("GlobalDeclarationRequired");
+        if (c.Abstract) return false;
+        if (c.Name == h.Name) return true;
+        if (h.BlockSubstitution) return false;
+        var pending = new Stack<string>(c.Affiliations); var seen = new HashSet<string>(StringComparer.Ordinal); bool affiliated = false;
+        while (pending.TryPop(out var n))
+        {
+            if (!seen.Add(n)) continue;
+            if (n == h.Name) { affiliated = true; break; }
+            foreach (var a in Element(n).Definition.Affiliations) pending.Push(a);
+        }
+        if (!affiliated || !Derived(Type(c.Type), Type(h.Type))) return false;
+        Derivation methods = Derivation.None, blocked = h.Block | _types[h.Type].Block;
+        var current = _types[c.Type];
+        while (current.Name != h.Type)
+        {
+            methods |= current.Method;
+            current = _types[current.Base!];
+            blocked |= current.Block;
+        }
+        return (methods & blocked) == 0;
+    }
+    internal ImmutableArray<ElementId> ActualMembers(ElementId head)
+    {
+        Require(head);
+        var members = _elements.Values.Where(x => x.Definition.Scope == "global" && ActualMember(x, head)).OrderBy(x => x.Definition.Name, StringComparer.Ordinal).ToImmutableArray();
+        return Router.Mutation == "partial" ? members.Where(x => x.Definition.Name != "V").ToImmutableArray() : members;
+    }
+    internal bool Subtype(ElementId actual, ElementId expected)
+    {
+        Require(actual); Require(expected);
+        return ActualMembers(actual).All(x => ActualMember(x, expected));
+    }
+    internal bool FunctionSubtype(ElementId actualParameter, char actualOccurrence, ElementId testParameter, char testOccurrence)
+        => Occurrence(testOccurrence, actualOccurrence) && Subtype(testParameter, actualParameter);
+    internal static bool Occurrence(char actual, char target) => (actual, target) switch
+    {
+        ('1', '1' or '?' or '+' or '*') => true, ('?', '?' or '*') => true, ('+', '+' or '*') => true, ('*', '*') => true, _ => false
+    };
+    internal bool Matches(string candidateName, Annotation? annotation, ElementId head, bool nilled)
+    {
+        Require(head);
+        if (annotation is null) return false;
+        Require(annotation.Type); Require(annotation.Element);
+        var candidate = Element(candidateName);
+        return ActualMember(candidate, head) && (!nilled || candidate.Definition.Nillable) && Derived(annotation.Type, Type(candidate.Definition.Type));
+    }
+}
+// Alternate six-field carrier only; never injected into the production VM.
+internal readonly struct AtomicCarrier
+{
+    private readonly XdmValueKind _kind;
+    private readonly long _integer;
+    private readonly double _double;
+    private readonly object? _reference;
+    private readonly string? _schemaTypeName;
+    private readonly string? _userSchemaTypeName;
+    private sealed record Envelope(object? Payload, Annotation Annotation);
+    private object? Payload => Router.Mutation == "unwrap" ? _reference : _reference is Envelope wrapped ? wrapped.Payload : _reference;
+    internal Annotation? Annotation => (_reference as Envelope)?.Annotation;
+    private AtomicCarrier(XdmValueKind kind, long integer, double number, object? reference, string? schema, string? user)
+        => (_kind, _integer, _double, _reference, _schemaTypeName, _userSchemaTypeName) = (kind, integer, number, reference, schema, user);
+    internal static AtomicCarrier From(XdmValue value)
+    {
+        object? reference = value.Kind switch { XdmValueKind.String => value.StringValue, XdmValueKind.Decimal => value.DecimalValue, XdmValueKind.QName => value.QNameValue, _ => null };
+        if (value.Kind is not (XdmValueKind.Boolean or XdmValueKind.Integer or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.String or XdmValueKind.Decimal or XdmValueKind.QName)) throw new ContractFailure("PrototypeAtomicKindUnsupported");
+        return new(value.Kind, value.Kind == XdmValueKind.Integer ? value.IntegerValue : value.Kind == XdmValueKind.Boolean && value.BooleanValue ? 1 : 0, value.Kind is XdmValueKind.Double or XdmValueKind.Float ? value.DoubleValue : 0, reference, value.SchemaTypeName, value.UserSchemaTypeName);
+    }
+    internal AtomicCarrier WithAnnotation(Annotation annotation)
+    {
+        if (Annotation is { } existing)
+        {
+            if (!ReferenceEquals(existing.Type.Session, annotation.Type.Session)) throw new ContractFailure("ForeignIdentity");
+            if (!ReferenceEquals(existing.Type, annotation.Type)) throw new ContractFailure("AnnotationReplacement");
+        }
+        return new(_kind, _integer, _double, new Envelope(Payload, annotation), _schemaTypeName, _userSchemaTypeName);
+    }
+    internal AtomicCarrier Strip() => new(_kind, _integer, _double, Payload, _schemaTypeName, null);
+    internal XdmValue Value => _kind switch
+    {
+        XdmValueKind.Integer => _schemaTypeName is null ? XdmValue.FromInteger(_integer) : XdmValue.FromInteger(_integer, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.Boolean => _schemaTypeName is null ? XdmValue.FromBoolean(_integer != 0) : XdmValue.FromBoolean(_integer != 0, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.Double => _schemaTypeName is null ? XdmValue.FromDouble(_double) : XdmValue.FromDouble(_double, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.Float => _schemaTypeName is null ? XdmValue.FromFloat((float)_double) : XdmValue.FromFloat((float)_double, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.String => _schemaTypeName is null ? XdmValue.FromString((string)Payload!) : XdmValue.FromString((string)Payload!, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.Decimal => _schemaTypeName is null ? XdmValue.FromDecimal((decimal)Payload!) : XdmValue.FromDecimal((decimal)Payload!, _schemaTypeName, _userSchemaTypeName),
+        XdmValueKind.QName => _schemaTypeName is null ? XdmValue.FromQName((XsQName)Payload!) : XdmValue.FromQName((XsQName)Payload!, _schemaTypeName, _userSchemaTypeName),
+        _ => throw new ContractFailure("PrototypeAtomicKindUnsupported")
+    };
+    internal AtomicCarrier Bind(Session session, TypeId expected)
+    {
+        if (Annotation is null) throw new ContractFailure("MissingIdentity");
+        if (!session.Derived(Annotation.Type, expected)) throw new ContractFailure("XPTY0004");
+        return this;
+    }
+    internal AtomicCarrier CastToBuiltInInteger() => From(XdmValue.FromInteger(Value.IntegerValue));
+}
+internal readonly struct ExtraFieldCarrier(XdmValue value, Annotation? annotation)
+{
+    internal readonly XdmValue Value = value;
+    internal readonly Annotation? Annotation = annotation;
+}
+internal sealed class TreeView
+{
+    private readonly XElement _snapshot;
+    internal FrozenDictionary<string, Annotation> Annotations { get; }
+    internal string Xml => _snapshot.ToString(SaveOptions.DisableFormatting);
+    internal TreeView(XElement source, IEnumerable<KeyValuePair<string, Annotation>> annotations)
+    {
+        _snapshot = new XElement(source);
+        Annotations = annotations.ToFrozenDictionary(x => x.Key, x => x.Value, StringComparer.Ordinal);
+        if (Annotations.Values.Select(x => x.Type.Session).Distinct().Count() > 1) throw new ContractFailure("MixedAuthorityTree");
+    }
+    internal TreeView Copy(bool preserve) => new(_snapshot, preserve ? Annotations : ImmutableDictionary<string, Annotation>.Empty);
+    internal AtomicCarrier Atomize(string path, XdmValue value) => Annotations.TryGetValue(path, out var annotation)
+        ? AtomicCarrier.From(value).WithAnnotation(annotation) : AtomicCarrier.From(value);
+}
+internal sealed class Registration(Session session) : IDisposable
+{
+    private Session? _session = session;
+    internal Session Capture() => _session ?? throw new ObjectDisposedException(nameof(Registration));
+    /// <summary>Ends registration without invalidating immutable sessions retained by values.</summary>
+    public void Dispose() => _session = null;
+}
+internal static class Fixture
+{
+    internal static Session Create(string key = "closure-A") => new(key,
+        [new("Base", null), new("RType", "Base", Derivation.Restriction), new("XType", "Base", Derivation.Extension), new("MidType", "Base", Derivation.Restriction, Derivation.Extension), new("DeepType", "MidType", Derivation.Extension)],
+        [new("H1", "Base", []), new("H2", "Base", []), new("A", "Base", ["H1", "H2"], Abstract: true), new("B", "Base", ["A"], Nillable: true), new("C", "Base", ["A"]), new("D", "Base", ["H1"], BlockSubstitution: true), new("E", "Base", ["D"]), new("R", "RType", ["H1"]), new("Hx", "Base", [], Block: Derivation.Extension), new("X", "XType", ["Hx"]), new("Mid", "MidType", ["H1"]), new("Deep", "DeepType", ["Mid"]), new("P", "Base", ["Hx"]), new("V", "XType", ["P"]), new("N", "RType", ["H1"], Nillable: true), new("HR", "Base", [], Block: Derivation.Restriction), new("RR", "RType", ["HR"]), new("A", "Base", [], Scope: "/cuckoo/A")]);
+}
+internal static class HostMapping
+{
+    internal static string Map(string host, string operation, string reason) => (host, operation, reason) switch
+    {
+        ("XQuery", "Import", "Invalid") => "XQST0012",
+        ("XQuery", "ResolveImport", "NotFound") => "XQST0059",
+        ("XQuery", "Validate", "Invalid") => "XQDY0027",
+        ("XSLT", "Validate", "Invalid") => "XTTE1510",
+        ("XSLT", "Validate", "DeclarationMissing") => "XTTE1512",
+        (_, "Atomize", "NoTypedValue") => "FOTY0012",
+        (_, "Bind", "TypeMismatch") => "XPTY0004",
+        (_, _, "Unsupported") => "SchemaCoverageFailure",
+        (_, _, "Cancelled") => "Cancelled",
+        _ => "SchemaProviderFailure"
+    };
+}

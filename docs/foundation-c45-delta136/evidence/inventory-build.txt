@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\c45-delta136\Inventory\Inventory.csproj (in 68 ms).
+  Inventory -> D:\Development\Bosak\.guard-tmp\c45-delta136\Inventory\bin\Release\net10.0\Inventory.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.18

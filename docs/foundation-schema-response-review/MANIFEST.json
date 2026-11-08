@@ -1,0 +1,17 @@
+{
+  ".gitattributes": "730a35ae3d558080083c3103d9ac8100c3f6561678092abe341701dfa331eb1d",
+  ".gitignore": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+  "evidence/DOCUMENTATION-CHECKS.json": "0d120c8ef1464d72aabca61aa095102a956924c5037ac8a25a4c959405777610",
+  "inputs/BCAP-O1-Schema.json": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+  "inputs/BCAP-O1-XmlDb.json": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+  "inputs/BCAP-O2-Schema.json": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+  "inputs/BCAP-O3-Braid.json": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+  "inputs/BCAP-O4-XmlDb.json": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "inputs/issue-468-comments.json": "9d14263463f89bd6ff03f10ca72c2442acba9a30819e4938394376776a6ba3da",
+  "inputs/Schema-submission-comment.json": "2987c441b527cdd3d347373ea178724f1f24f974fd97dbe9a4b3805c9dc14a8d",
+  "INPUTS.json": "6cc2d2d177c678dadd724392a57a940cf7b994a4ae4ab767eff3890ec4d62f80",
+  "README.md": "e0f823b8392853f06ad3031165d3e9a5963f8525d3840863340ef06f9454418e",
+  "STATUS.json": "dc423f956fe07cd6989cebe4fe73b1ad835fdbec240381a7dd9ba95efaf550bf",
+  "tools/capture.py": "74bdbb5fd8faf0ddaa33525a671dc84cabd25daf1b45931417f84e6923d51423",
+  "tools/verify.py": "d86ab31da707da47e93e8af0de3e3557186c59ff0f610eaebf29ec1c837ccf83"
+}

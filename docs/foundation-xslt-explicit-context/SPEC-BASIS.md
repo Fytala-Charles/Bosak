@@ -1,0 +1,11 @@
+# Explicit XSLT context bridge: pre-implementation basis
+
+1 November 2026. Immutable adoption source for this isolated candidate: [XSLT 3.0, REC-xslt-30-20170608](https://www.w3.org/TR/2017/REC-xslt-30-20170608/), sections 2.3.2, 2.3.3, 2.3.4, 3.5.6 and 10.1.1. Checked before candidate generation. No production adoption or general conformance acceptance is claimed.
+
+Selected interpretation: match selection and global context are independent. Named-template focus defaults to global context; matched-template focus follows the matched item. Required global context must be supplied; declared absent context stays absent. This candidate chooses to ignore supplied global input when the stylesheet declares it absent. Broader initial item sequences, atomic global context, independent named-template focus overrides and streaming remain outside this node-only bridge.
+
+Preserve the original public Transform signature and all legacy branch behavior. Add only an internal opt-in core/bridge in an isolated copy. Explicit mode must not fall back from absent global input to match input, must clear inherited dynamic focus, and must check required context against explicit global input. Preserve the existing implementation's XTDE3086 diagnostic for missing required global input; that code was not located in this immutable Recommendation and is not presented as its normative error code. Other diagnostic/adoption decisions remain separate.
+
+Compare untouched and candidate legacy outcomes on the same fixtures; run explicit document/element, named/matched, absent/required, distinct-input and contaminated-context controls. Both source and loaded binary hashes must identify the actual cohort. All negative cases are caught under scoped child process error mode. No canonical engine build or external checkout is modified.
+
+Review amendment before the second candidate build: the first element-match control reached a caught NullReferenceException. Retain that receipt and patch. Keep the selected initial-match profile restricted to document roots, explicitly refusing non-document match input in the new bridge. Element global-context input remains independently tested. This refusal is an intentional bounded API profile, not schema invalidity or a claim to repair general element-match execution.

@@ -1,0 +1,5 @@
+a83a97c93c7b6b64837b40cb909b628d11829c9d
+2026-10-10T06:21:13+02:00
+2026-10-10T06:21:13+02:00
+feat(req123): XPath 4.0 focus constructors — arity-0 xs:* constructors take the context item (PR661), arity-aware version gate, gate gains misc-FocusConstructors → 213 sets
+

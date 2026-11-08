@@ -1,0 +1,4 @@
+{
+  "assemblies": {},
+  "disposition": "PV-T05 widens the existing complete-container implementation to eleven public-factory kinds with no declaration/layout/reference/friend delta. Core scope only; owner/final manifest acceptance remains pending."
+}

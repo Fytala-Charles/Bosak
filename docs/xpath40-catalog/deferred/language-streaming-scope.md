@@ -4,6 +4,8 @@
   <p>Existing APIs — separate 4.0 language and module deltas</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited host and streaming contract**. No XQuery4/full4.0 streaming conformance or general bounded-memory guarantee. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **XQuery and streaming language boundaries — Existing support; 4.0 deltas outside the original schedule.** Reviewed engine 1.1.2 at [revision 2184e920](https://github.com/Fytala-Charles/Bosak/commit/2184e9200394ca2e06f720bb9cdb95afd927aa51) on 2026-10-12. The [REQ-118 exclusion](../../REQ-118-xpath-xslt-40.md) does not mean that XQuery FLWOR or streaming input is absent.
@@ -210,6 +212,8 @@ XQuery and portable XPath materialize parsed XML and sorting input. Streaming in
 ## 15. Known Uses
 
 The invoice report is a realistic ERP task, not a named deployment. No complete language-conformance claim follows from the 28 new fixtures or from a version="4.0" stylesheet executing successfully.
+
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [28 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [XQuery_OrderBy_WithWhere](../../../tests/Bosak.XQuery.Tests/PlaceholderTests.cs); [ApplyTemplates_Parity](../../../tests/Bosak.Xslt.Tests/StreamingTransformTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
 
 ## 16. Related Features
 

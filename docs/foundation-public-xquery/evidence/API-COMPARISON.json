@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 312,
+  "declarationRows": 6386,
+  "selectedPublicDeltaOnly": true,
+  "existingValueLayoutUnchanged": true,
+  "friendsUnchanged": true,
+  "referencesUnchanged": true,
+  "previousInventorySha256": "8fcc886b480e0361f500078676c579c292c8065cf17d9a74ede9023f55e1641c",
+  "deltaSha256": "c907991090a946808def9bea0652fd7e5ab5b63a01472ce8e7375741766abc24"
+}

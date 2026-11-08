@@ -1,0 +1,15 @@
+{
+  "changed": {
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": {
+      "beforeSha256": "8ceb98006fb7d84493464527be071d6e1eeae4d910c6591e47918a623b9b2874",
+      "afterSha256": "b9d44828bd8cfbf8e2e1d0962794009971907d1c793c4b793d7e95d56e4a03c3"
+    }
+  },
+  "added": {
+    "src/Bosak.XPath.Api/Schema/TypedIdentityPlan.cs": "68c19827a4b67826e14c2be95f7b4961332db148dbf9a02e6bb6112a8b43f33e"
+  },
+  "exportedDeclarationsUnchanged": true,
+  "activationGuardsUnchanged": true,
+  "existingInternalConstructorRetained": true,
+  "scope": "Internal typed identity compiler/candidate methods and profile descriptor only; public assessor/read and existing ordinary/numeric guards remain unchanged."
+}

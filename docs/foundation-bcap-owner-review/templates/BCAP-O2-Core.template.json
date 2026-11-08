@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O2-Core",
+  "packet": "BCAP-O2",
+  "owner": "Core",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "NotSubmitted",
+  "decision": null,
+  "sourceRevision": null,
+  "signer": null,
+  "date": null,
+  "profile": null,
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": null
+    },
+    {
+      "id": "O2-Q2",
+      "answer": null
+    },
+    {
+      "id": "O2-Q3",
+      "answer": null
+    },
+    {
+      "id": "O2-Q4",
+      "answer": null
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": null,
+  "evidence": null,
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O2-Core",
+  "reviewMode": "ExplicitUnchangedScopeCarryForward",
+  "deltaApplicability": null,
+  "originalExceptionGraphDisposition": null,
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": "460f2f8241eac8086abadc17ab48d337810f665e38f62f6efb2f6e856ea32c0f"
+}

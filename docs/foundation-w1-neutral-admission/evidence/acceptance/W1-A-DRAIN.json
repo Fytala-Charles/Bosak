@@ -1,0 +1,20 @@
+{
+  "id": "W1-A-DRAIN",
+  "status": "Passed",
+  "trxSha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e",
+  "results": [
+    {
+      "executionId": "d3ac4ee5-0e38-4f5e-846d-7187e63b0976",
+      "testId": "9e5ccbf0-ad02-7a01-80dd-112de4b39659",
+      "testName": "Bosak.XPath.Runtime.Tests.OrdinarySourceAdmissionTests.W1_A_DRAIN_ExactlyOnce",
+      "computerName": "CHARLES",
+      "duration": "00:00:00.0028231",
+      "startTime": "2026-11-03T18:06:50.1162628+01:00",
+      "endTime": "2026-11-03T18:06:50.1162628+01:00",
+      "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+      "outcome": "Passed",
+      "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+      "relativeResultsDirectory": "d3ac4ee5-0e38-4f5e-846d-7187e63b0976"
+    }
+  ]
+}

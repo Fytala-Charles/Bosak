@@ -1,0 +1,12 @@
+[
+  {
+    "entry": "type-system/choice-types.md",
+    "before": "Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.",
+    "after": "Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion."
+  },
+  {
+    "entry": "xslt-instructions/xsl-switch.md",
+    "before": "Tests are values compared with the selector, not boolean guards. The otherwise branch handles absent/unrecognized values.",
+    "after": "Tests are values compared with the selector using general comparison, not boolean guards. The otherwise branch handles absent/unrecognized values. Incomparable numeric/Boolean operands currently return empty instead of the required XPTY0004 in both hosts (C06-H02); the ordinary string-dispatch example does not cover that gap."
+  }
+]

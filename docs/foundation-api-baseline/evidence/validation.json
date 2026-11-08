@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-30",
+  "build": "Passed; 0 errors, 5 existing nullable warnings",
+  "inventoryRepeat": "Byte-identical",
+  "sourceHashAndScopeVerifier": "Passed",
+  "tamperedReceiptNegativeControl": "Rejected as expected; in-memory read substitution only",
+  "documentation": {
+    "renderedPages": 22,
+    "localLinksChecked": 2474,
+    "result": "Passed"
+  },
+  "engineSourceChanged": false,
+  "runtimeTestsRun": false,
+  "conformanceGatesRun": false,
+  "externalOwnerRepositoriesChanged": false,
+  "freezeAccepted": false
+}

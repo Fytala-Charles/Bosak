@@ -1,0 +1,25 @@
+{
+  "baselineCoreSha256": "2339fe0cef0007ef9ade7a5d39368d0d4e1a81e25e2b6e24598e2b8ef730dffb",
+  "candidateCoreSha256": "6b4eecd93a7150ae31a126e96188acb5c585526de95f9ca58cc5492caeb241b5",
+  "builds": {
+    "baseline": {
+      "expectedExitCode": 0,
+      "logSha256": "b12c8e2e9137997626cd34e4d1001e90175ba93f40a3726f3371c96f0bcc120f",
+      "receiptSha256": "c6936c06983f8c731e0157cccefd31493fe730eaea3bf64b30992d636ddf7782"
+    },
+    "candidate": {
+      "expectedExitCode": 1,
+      "logSha256": "aba286cf6f37278ca9eea7dfb8f61b7a26a5aac8f2bd02a86d3ae81515ebbda3",
+      "receiptSha256": "d90500bcc96a69800075417a1fcc3eb4b2036b8f0ab54a320b27d2a78ba39762"
+    },
+    "typed": {
+      "expectedExitCode": 0,
+      "logSha256": "ef7d8ca9809702f684e27d823e74207224931b6933e9f4308e877e9b20149f9f",
+      "receiptSha256": "0585be1e03266fddad7590782e45403d8cc2e234174497940aa65ea6b50d6ee0"
+    }
+  },
+  "existingBinarySignaturesRetained": true,
+  "sourceCompatibilityUnconditional": false,
+  "finding": "FromDecimal(default) compiled against 1.46.0 but is CS0121 ambiguous with the reviewed exact-decimal overload. FromInteger(default) remains resolved. Explicit default(decimal), default(long), default(BigInteger), default(XdmExactDecimal) compile. Actual owner source/binary adoption and final release SemVer remain pending.",
+  "migration": "Use default(decimal) for an existing CLR-decimal default call, or default(XdmExactDecimal) for the new exact representation."
+}

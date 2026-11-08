@@ -1,0 +1,13 @@
+# Actual-runtime admission experiment review — 29 October 2026
+
+The independent runtime experiment is reviewed for checkpoint. No correction was needed. Raw receipts reconcile 34 passing actual controls and nine independent worker exchanges. Final runtime/plugin source and compiled assembly identities match; snapshot ledgers match their exact artifact approvals. All twenty-six earlier dossier manifests retain their original bytes. Completed execution was not repeated for this documentation review.
+
+The demonstrated contract is a standalone approved-snapshot resolver: real XSLT loads eight engine members, deferred XQuery binds the ninth, and actual loaded identities/MVIDs match approved snapshot hashes. Disk drift revokes subsequent dispatch. The controlled postcheck replacement still binds earlier approved bytes, and actual parent/child exchanges refuse admission/output mismatches. Child transport exit zero is not automatically a successful admission.
+
+This is one viable experimental binding boundary, not actual Braid integration or proof that its default loader/typed adapters can adopt it unchanged. Snapshot stream loads have empty Assembly.Location; ledger source paths describe captured artifacts, not path-loaded runtime modules. The string-only plugin boundary, diagnostic protocol, single-threaded scope, trust assumptions and unqualified concurrency/native/unload/entitlement/history paths remain explicit in the original dossier. Earlier harness compilation/metadata failures are preserved separately from successful final results.
+
+No Braid/core/Schema source, product pin, storage/protocol format, new core API, release, C45 or native acceptance change is included. Core 1.34.1 and Schema 0.9 qualification remains inherited. The earlier actual source/binary compatibility findings also remain unchanged; this experiment does not relabel Braid's original four version failures or stale advertised runtime identity as resolved in the product.
+
+Earlier uncommitted/pending-review notices in sealed receipts describe capture-time state. [Checkpoint identities](CHECKPOINT.json) record Schema delivery; core delivery resolves through `git log -1 --format=%H -- docs/braid-runtime-review/README.md`.
+
+Next: prepare a consumer-owned Braid integration design. Compare an isolated snapshot-backed worker boundary with reviewed deployment/default-loader mismatch refusal; address typed objects, parent/worker protocol, retained results and operation admission before selecting a production slice. Keep the actual product pin unchanged until its own adoption and full acceptance gates pass.

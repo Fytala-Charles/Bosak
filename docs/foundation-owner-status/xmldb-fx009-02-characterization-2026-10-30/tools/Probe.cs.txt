@@ -1,0 +1,161 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 30 October 2026
+// PURPOSE              : Characterizes persistent XML contracts against isolated engine package cohorts.
+// SPECIAL NOTES        : Qualification helper only; owns fresh fixtures and never changes product pins or original stores.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 30-10-2026     | Emit a real JSON line terminator before qualification                                   |
+//                      | Charles Korthout | 0.1   | 30-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XmlDb.Core;
+using Bosak.XmlDb.Storage;
+using Bosak.XmlDb.Xdm;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+
+const string xml = "<root flag='2'><n>1</n><n>3</n><zero>0</zero><bad>x</bad><!--c--><?p v?></root>";
+void Seed(string path)
+{
+    if (Directory.Exists(path) || File.Exists(path)) throw new IOException("Seed requires a fresh owned path.");
+    using var input = new MemoryStream(Encoding.UTF8.GetBytes(xml));
+    XmlFragmentImporter.Import(input, path, documentUri: "https://example.test/probe.xml");
+    using var owner = EmbeddedXmlDatabase.Open(path);
+    using var initial = owner.BeginRead(cacheBytes: 0);
+    using (var transaction = owner.BeginWrite()) { transaction.ReplaceNodeValue(Target(initial), "2"); transaction.Commit(); }
+    using var current = owner.BeginRead(cacheBytes: 0); Require(current.CommitSequence == 1, "seed H=1");
+}
+if (args[0] == "seed") { Seed(args[1]); Console.WriteLine("Owned H1 fixture seeded."); return; }
+var shared = Path.GetFullPath(args[1]); var output = args[2]; var scratch = Path.GetFullPath(args[3]);
+if (Directory.Exists(scratch) || File.Exists(scratch)) throw new IOException("Qualification needs a fresh owned scratch path.");
+Directory.CreateDirectory(scratch);
+var rows = new List<object>();
+using (var owner = EmbeddedXmlDatabase.Open(shared))
+using (var read = owner.BeginRead(cacheBytes: 0))
+{
+    var document = new PersistentXdmNode(read);
+    IXdmNode memory = new XDocumentNode(XDocument.Parse(xml.Replace("<n>1</n>", "<n>2</n>", StringComparison.Ordinal), LoadOptions.PreserveWhitespace));
+    foreach (var expression in new[] {
+        "count(//*)", "count(//@*)", "count(//text())", "count(//comment())", "count(//processing-instruction())",
+        "string-join(/root/n ! string(.), ',')", "sum(/root/n)", "/root/n[1] + 1", "/root/n[1] eq 2", "/root/n[1] = 2",
+        "data(/root/n[1]) instance of xs:untypedAtomic", "data(/root/@flag) instance of xs:untypedAtomic",
+        "data(/root/n[1]/text()) instance of xs:string", "data(/root/n[1]) instance of xs:string",
+        "/root/bad + 1", "/root/n eq 2", "exists(/root/zero)", "empty(/root/missing)",
+        "count(/root/n[1]/following-sibling::*)", "count(/root/n[2]/preceding-sibling::*)",
+        "count(/root/n/ancestor::*)", "count(/root/n | /root/n)", "/root/n[1] is /root/n[1]", "/root/n[1] << /root/n[2]",
+        "string((/root/n | /root/zero)[last()])", "count(/root/n[2]/preceding::*)" })
+    {
+        var persistent = Run(document, expression); var inMemory = Run(memory, expression);
+        Require(persistent == inMemory, "differential: " + expression);
+        rows.Add(new { kind = "differential", expression, persistent, inMemory });
+    }
+    foreach (var kind in Enum.GetValues<StorageNodeKind>())
+    { var value = (int)Enum.Parse<XdmNodeKind>(kind.ToString()); Require((int)kind == value, "XML numeric kind"); rows.Add(new { kind = "numeric-kind", name = kind.ToString(), storage = (int)kind, engine = value }); }
+    Require((int)XdmNodeKind.None == 0 && (int)XdmNodeKind.All == 127, "kind defaults");
+    var n = Nodes(document.Axis(XdmAxis.Descendant)).First(node => node.LocalName == "n");
+    rows.Add(new { kind = "direct-typed-value", valueKind = n.TypedValue.Kind.ToString(), value = n.TypedValue.StringValue });
+    var next = document.Children().GetEnumerator(); Require(next.MoveNext(), "cached fetch");
+    var same = new PersistentXdmNode(read); var hash = document.GetHashCode();
+    var map = XPath31Expression.Compile("map{'node': /root/n[1]}").Evaluate(document);
+    var array = XPath31Expression.Compile("[/root/n[1]]").Evaluate(document);
+    var materialized = Nodes(document.Axis(XdmAxis.Descendant));
+    var copied = n.StringValue; var boundScalar = document.BindResult(XdmSequence.Singleton(XdmValue.FromString(copied)));
+    read.Dispose();
+    var cached = Outcome(() => { _ = next.Current; });
+    var leaf = Outcome(() => { _ = next.Current.NodeValue.StringValue; });
+    var advance = Outcome(() => next.MoveNext());
+    var start = Outcome(() => document.Children());
+    var structCreate = Outcome(() => { _ = boundScalar.GetEnumerator(); });
+    var scalarFetch = Outcome(() => boundScalar.GetEnumerator().MoveNext());
+    var mapLeaf = Outcome(() => { Single(map).MapValue.TryGetValue(XdmValue.FromString("node"), out var child); _ = Single(child).NodeValue.StringValue; });
+    var arrayLeaf = Outcome(() => { _ = Single(Single(array).ArrayValue.Get(1)).NodeValue.StringValue; });
+    var materializedLeaf = Outcome(() => { _ = materialized[0].StringValue; });
+    var defaults = !((IXdmNode)document).IsNilled && ((IXdmNode)document).SchemaTypeAnnotation is null;
+    Require(cached == "allowed" && structCreate == "allowed" && defaults && document.Equals(same) && hash == document.GetHashCode(), "non-resource cached/default identity access");
+    Require(new[] { leaf, advance, start, scalarFetch, mapLeaf, arrayLeaf, materializedLeaf }.All(s => s == nameof(ObjectDisposedException)), "disposed persistent access");
+    rows.Add(new { kind = "cached-nested-disposal", cached, leaf, advance, start, structCreate, scalarFetch, mapLeaf, arrayLeaf, materializedLeaf, constantDefaultsReadable = defaults, equalsReadable = document.Equals(same), detachedScalar = copied });
+}
+var lifetime = Path.Combine(scratch, "lifetime"); Seed(lifetime);
+var lifetimeOwner = EmbeddedXmlDatabase.Open(lifetime); var first = lifetimeOwner.BeginRead(cacheBytes: 0); var second = lifetimeOwner.BeginRead(cacheBytes: 0);
+var id = Target(first); var lease = Path.Combine(lifetime, ".transactions", "readers", 1UL.ToString("D20", System.Globalization.CultureInfo.InvariantCulture) + ".lease");
+var leaseBytes = File.ReadAllBytes(lease); Require(!Exclusive(lease), "two snapshots pin actual lease");
+lifetimeOwner.Dispose();
+using (var writer = EmbeddedXmlDatabase.Open(lifetime))
+using (var before = writer.BeginRead())
+using (var transaction = writer.BeginWrite()) { transaction.ReplaceNodeValue(id, "4"); transaction.Commit(); }
+Require(first.ReadValue(id) == "2" && second.ReadValue(id) == "2", "old snapshots survive coordinator and later commit");
+first.Dispose(); Require(!Exclusive(lease) && second.ReadValue(id) == "2", "second actual owner still holds");
+second.Dispose(); Require(Exclusive(lease) && leaseBytes.AsSpan().SequenceEqual(File.ReadAllBytes(lease)), "actual owned fixture lease released without identity rewrite");
+rows.Add(new { kind = "actual-generation-lease", originalValue = "2", laterSequence = 2, heldThroughCoordinatorDispose = true, heldThroughFirstSnapshotDispose = true, releasedAfterSecondSnapshot = true, stableLeaseBytes = true, noGlobalReaderAbsenceClaim = true });
+using (var owner = EmbeddedXmlDatabase.Open(shared))
+using (var read = owner.BeginRead(cacheBytes: 0))
+{
+    var document = new PersistentXdmNode(read);
+    var early = new ForeignSequence(Path.Combine(scratch, "foreign-early.lock"));
+    var wrapped = document.BindResult(XdmSequence.FromSource(early));
+    foreach (var item in wrapped) { _ = item; break; }
+    Require(early.Fetches == 1 && early.Closes == 0 && !Exclusive(early.Path), "break does not transfer foreign owner");
+    early.Dispose(); Require(early.Closes == 1 && Exclusive(early.Path) && document.StringValue.Length > 0, "explicit foreign cleanup leaves snapshot usable");
+    var normal = new ForeignSequence(Path.Combine(scratch, "foreign-normal.lock"));
+    foreach (var item in document.BindResult(XdmSequence.FromSource(normal))) { _ = item; }
+    Require(normal.Fetches == 3 && normal.Closes == 0, "normal traversal does not promise interface-level foreign Dispose");
+    normal.Dispose();
+    var abandoned = document.Children().GetEnumerator(); Require(abandoned.MoveNext(), "abandoned sequence fetched");
+    using var cancellation = new CancellationTokenSource(); cancellation.Cancel(); var called = false;
+    var context = new EvaluationContext().WithFocus(XdmValue.FromNode(document), 1, 1);
+    context.DocumentLoader = _ => { called = true; cancellation.Token.ThrowIfCancellationRequested(); return document; };
+    var cancellationResult = Outcome(() => { var result = XPath31Expression.Compile("doc('https://example.test/cancel.xml')/root/n").Evaluate(context); if (result.Kind == XdmValueKind.Sequence) foreach (var item in XdmSequence.FromSource(result.SequenceValue!)) { _ = item; } });
+    Require(called && cancellationResult != "allowed" && document.StringValue.Length > 0, "caller cancellation is an error, not snapshot disposal");
+    var unsupported = Outcome(() => document.Axis((XdmAxis)255).GetEnumerator().MoveNext());
+    var missing = Outcome(() => document.ResolveDocument("https://example.test/missing.xml"));
+    Require(unsupported == nameof(ArgumentOutOfRangeException) && missing == nameof(FileNotFoundException), "invalid axis and URI");
+    var activeLease = Path.Combine(shared, ".transactions", "readers", "00000000000000000001.lease"); Require(!Exclusive(activeLease), "abandonment/cancel retains explicit snapshot");
+    read.Dispose(); Require(Exclusive(activeLease), "explicit snapshot cleanup releases owned lease");
+    rows.Add(new { kind = "early-normal-cancel-ownership", earlyFetches = early.Fetches, earlyExplicitCloses = early.Closes, normalFetches = normal.Fetches, normalExplicitCloses = normal.Closes, cancellationResult, unsupported, missing, snapshotHeldUntilExplicitDispose = true });
+}
+var assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name?.StartsWith("Bosak.", StringComparison.Ordinal) == true)
+    .OrderBy(a => a.GetName().Name, StringComparer.Ordinal).Select(a => new { name = a.GetName().Name, identity = a.FullName, path = a.Location,
+        sha256 = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant(), informationalVersion = a.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion }).ToArray();
+File.WriteAllText(output, JsonSerializer.Serialize(new { observations = rows, assemblies, entryAssembly = Assembly.GetExecutingAssembly().Location, supportedScope = "Sequential ordinary XML; explicit caller ownership; no general cancellation or concurrent-disposal guarantee" }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+Console.WriteLine("Recorded " + rows.Count + " observations.");
+static void Require(bool value, string message) { if (!value) throw new InvalidOperationException("Qualification assertion: " + message); }
+static ulong Target(ImmutableXmlSnapshot read) => Enumerable.Range(1, read.NodeCount).Select(i => read.GetNode((ulong)i)).First(n => n.Kind == StorageNodeKind.Element && n.LocalName == "n").Children.Single();
+static List<IXdmNode> Nodes(XdmSequence values) { var result = new List<IXdmNode>(); foreach (var value in values) result.Add(value.NodeValue); return result; }
+static XdmValue Single(XdmValue value) { if (value.Kind != XdmValueKind.Sequence) return value; foreach (var item in XdmSequence.FromSource(value.SequenceValue!)) return item; throw new InvalidOperationException("Empty diagnostic result."); }
+static string Run(IXdmNode node, string expression) { try { var value = XPath31Expression.Compile(expression).Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(node), 1, 1)); return value.Kind + ":" + value.ToString(); } catch (Exception error) { return "error:" + error.GetType().Name + ":" + error.Message; } }
+static string Outcome(Action action) { try { action(); return "allowed"; } catch (Exception error) { return error.GetType().Name; } }
+static bool Exclusive(string path) { try { using var handle = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None); return true; } catch (IOException) { return false; } }
+
+/// <summary>Owns a fresh diagnostic resource independently of borrowed result enumerators.</summary>
+file sealed class ForeignSequence : IXdmSequence, IXdmSequenceEnumerator, IDisposable
+{
+    private readonly FileStream _stream;
+    private int _position;
+    internal ForeignSequence(string path) { Path = path; _stream = new(path, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None); }
+    internal string Path { get; }
+    internal int Fetches { get; private set; }
+    internal int Closes { get; private set; }
+    /// <inheritdoc />
+    public bool TryGetLength(out int length) { length = 0; return false; }
+    /// <inheritdoc />
+    public IXdmSequenceEnumerator GetEnumerator() => this;
+    /// <inheritdoc />
+    public XdmValue Current => XdmValue.FromInteger(_position);
+    /// <inheritdoc />
+    public bool MoveNext() { Fetches++; return ++_position <= 2; }
+    /// <inheritdoc />
+    public void Dispose() { if (Closes != 0) return; Closes++; _stream.Dispose(); }
+}

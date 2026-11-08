@@ -1,0 +1,10 @@
+{
+  "changedFiles": {
+    "src/Directory.Build.props": "be93eb3b0767e17fed6e69b408d39bf6e78f21af6622cca0c4dd927988579575",
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": "094461c70b6427f154d2344dfd56386a2647162e832e6e9acc229b99cb32d6ad",
+    "tests/Bosak.XPath.Runtime.Tests/QueryNodeFactsTests.cs": "dee4bc604432568a194e7bcb7ed766bca919d5bf4e0635929f6de68ad3b7b4b1",
+    "tests/Bosak.XPath.Runtime.Tests/CapturedIdentityTests.cs": "92b9b0ac35f9853b1ecdf41c0da3accc2de25614357e2850fd828b5960e2d6ee"
+  },
+  "qualifiedCandidateSourceSha256": "c0213cb12b517d9f1124e29ed6220b902a1c85922a13dda2466cd50a535d597c",
+  "bodyMatchesQualifiedCandidate": true
+}

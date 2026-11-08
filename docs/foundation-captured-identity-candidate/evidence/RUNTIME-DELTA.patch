@@ -1,0 +1,30 @@
+--- production/QueryNodeFacts.cs
++++ isolated-candidate/QueryNodeFacts.cs
+@@ -21,6 +21,7 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.5   | 05-11-2026     | Stage original typed values into resident scalar output (1.64.0). |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.6   | 07-11-2026     | Isolated candidate:callback-free captured issuer identity guards only.                   |
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Schema;
+ using Bosak.XPath.Core.Xdm;
+@@ -202,10 +203,17 @@
+         else for(int index=0;index<group.Cells.Length;index++)sequence.Set(index,installed.GetTransport(index));
+         installed.Check();CheckStored();return result;
+     }
++    private void CheckCapturedIdentity()
++    {
++        // Captured engine identities are callback-free, not fresh provider ownership proofs.
++        _operation.CheckObservationActive();
++        _operation.CheckRegistrationActive(_snapshot);
++        _token.ThrowIfCancellationRequested();
++    }
+     private sealed class GuardedIssuer(QueryNodeFactsReader owner) : IQueryTypedContainerIssuer
+     {
+-        SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment { get { owner.CheckStored(); return owner._environment; } }
+-        ISchemaAuthority IQueryTypedContainerIssuer.Authority { get { owner.CheckStored(); return owner._authority; } }
++        SchemaQueryEnvironment IQueryTypedContainerIssuer.Environment { get { owner.CheckCapturedIdentity(); return owner._environment; } }
++        ISchemaAuthority IQueryTypedContainerIssuer.Authority { get { owner.CheckCapturedIdentity(); return owner._authority; } }
+         void IQueryTypedContainerIssuer.ThrowIfUnavailable(CancellationToken token){token.ThrowIfCancellationRequested();owner.CheckStored();}
+         bool IQueryTypedContainerIssuer.OwnsInput(ISchemaAssessmentInput input,IQuerySourceInput current)
+         {owner.CheckStored();var result=owner._issuer.OwnsInput(input,current);owner.CheckStored();return result;}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "dotnet",
+    "publish",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-1d69d059\\src\\Bosak.LanguageServer",
+    "-c",
+    "Release",
+    "-p:UseAppHost=false",
+    "--configfile",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-final-1d69d059\\NuGet.Config",
+    "-o",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-final-1d69d059\\server",
+    "-p:SourceRevisionId=1d69d059c14888c1c43264efa8668909292af858",
+    "-p:RepositoryCommit=1d69d059c14888c1c43264efa8668909292af858",
+    "-p:ContinuousIntegrationBuild=true",
+    "-p:NuGetAudit=false"
+  ],
+  "exitCode": 0,
+  "logSha256": "f5f8cccfd5fb381685449c4bfb37867714063319d215b92fc31558b3c2701aeb"
+}

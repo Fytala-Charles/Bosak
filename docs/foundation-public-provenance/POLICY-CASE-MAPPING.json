@@ -1,0 +1,349 @@
+{
+  "policyCases": "docs/foundation-provenance-policy/IMPLEMENTATION-CASES.json",
+  "policyCasesSha256": "664c6b8c78f63b029e9d60e2244f7abdb8f1b9774d18eb7432664950aa89a86a",
+  "additionalPassedTestCount": false,
+  "pv01Complete": false,
+  "cases": [
+    {
+      "id": "POV01",
+      "trigger": "Plain primitive",
+      "tests": [
+        "PG01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV02",
+      "trigger": "Exact integer/decimal payload",
+      "tests": [
+        "PG01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV03",
+      "trigger": "Labels/QName-only value",
+      "tests": [
+        "PG01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV04",
+      "trigger": "Undefined and empty sequence",
+      "tests": [
+        "PG01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV05",
+      "trigger": "Node/map/array/function/sequence",
+      "tests": [
+        "PG01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV06",
+      "trigger": "Unknown or spoofed marker",
+      "tests": [
+        "PG02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV07",
+      "trigger": "Original string scalar",
+      "tests": [
+        "PV01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV08",
+      "trigger": "Original integer/decimal scalar",
+      "tests": [
+        "PV01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV09",
+      "trigger": "QName/date/time/binary atomic family",
+      "tests": [
+        "PV01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV10",
+      "trigger": "Originless scalar",
+      "tests": [
+        "PV02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV11",
+      "trigger": "Derived declared/actual split",
+      "tests": [
+        "PV01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV12",
+      "trigger": "Ordinary observation between operations",
+      "tests": [
+        "PV01",
+        "PV06"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV13",
+      "trigger": "Snapshot close before observation",
+      "tests": [
+        "PV03"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV14",
+      "trigger": "Session close before observation",
+      "tests": [
+        "PV03"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV15",
+      "trigger": "Retained view after close",
+      "tests": [
+        "PV03",
+        "PV07"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV16",
+      "trigger": "Payload rebound",
+      "tests": [
+        "PV04"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV17",
+      "trigger": "Unregistered/rolled-back entry",
+      "tests": [
+        "PG04",
+        "PG06"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV18",
+      "trigger": "Canceled constructed raw operation",
+      "tests": [
+        "PC02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV19",
+      "trigger": "Live constructed receipt",
+      "tests": [
+        "PC01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV20",
+      "trigger": "Completed constructed raw operation",
+      "tests": [
+        "PC01",
+        "PC03"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV21",
+      "trigger": "Forged constructed receipt",
+      "tests": [
+        "PC03",
+        "PG02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV22",
+      "trigger": "Compatible entry during live caller operation",
+      "tests": [
+        "PK01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV23",
+      "trigger": "Compatible entry after operation",
+      "tests": [
+        "PK01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV24",
+      "trigger": "Compatible entry in later proof episode",
+      "tests": [
+        "PK01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV25",
+      "trigger": "Two concurrent compatible operations",
+      "tests": [
+        "PK02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "Leased compatible operations are not qualified by context-free refusal."
+    },
+    {
+      "id": "POV26",
+      "trigger": "Private legacy kernel evidence",
+      "tests": [
+        "PG02"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV27",
+      "trigger": "Empty list",
+      "tests": [
+        "PG05"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "General public container transport remains open."
+    },
+    {
+      "id": "POV28",
+      "trigger": "Singleton list",
+      "tests": [
+        "PV02",
+        "PG05"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "General public container transport remains open."
+    },
+    {
+      "id": "POV29",
+      "trigger": "Mixed selected union members",
+      "tests": [
+        "PG05"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "General public container transport remains open."
+    },
+    {
+      "id": "POV30",
+      "trigger": "Over-limit complete container",
+      "tests": [
+        "PG07"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "General public container transport remains open."
+    },
+    {
+      "id": "POV31",
+      "trigger": "List cache warm reuse",
+      "tests": [
+        "PV06",
+        "PG05"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "General public container transport remains open."
+    },
+    {
+      "id": "POV32",
+      "trigger": "Late provider/container mutation",
+      "tests": [
+        "PV05"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV33",
+      "trigger": "Provider callback poison",
+      "tests": [
+        "PV01",
+        "PC01"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV34",
+      "trigger": "Close between observation and provenance getter",
+      "tests": [
+        "PV07"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV35",
+      "trigger": "Observation forgery reused as typed input",
+      "tests": [
+        "PV08"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    },
+    {
+      "id": "POV36",
+      "trigger": "Currentness/storage cost",
+      "tests": [
+        "PV06"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": "Owner/native retention/performance budgets remain pending."
+    },
+    {
+      "id": "POV37",
+      "trigger": "Original snapshot cancellation without disposal",
+      "tests": [
+        "PV03"
+      ],
+      "status": "QualifiedBoundedObservationOnly",
+      "remainingScope": ""
+    }
+  ]
+}

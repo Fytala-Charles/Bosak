@@ -1,0 +1,20 @@
+{
+  "artifact-controls.txt": "eca5b88ec1589703454cbd13a4af00e14cbfbcd46a83ba404f1941a82676ad50",
+  "before/.github/workflows/release.yml": "acd5eef755fa6b7d72e718f40039d5d225edfa98cfcb2a935f3751ce38305f71",
+  "before/.github/workflows/vscode-publish.yml": "e023c740c56ca1d7d77d60a2c6d0d36414bec947ad4ac7463cdd88d8b35dace5",
+  "before/src/Directory.Build.props": "be93eb3b0767e17fed6e69b408d39bf6e78f21af6622cca0c4dd927988579575",
+  "before/vscode-bosak/package-lock.json": "7d00decbcbc5dd24b2a74ca7aa7a5b6622c8f35c7faa18a6df7cc86289a86236",
+  "before/vscode-bosak/package.json": "c1fb676b5fbbc99f95a730e9a17193c7f1609c4d7740fb9a1416c71b856a1358",
+  "dirty-source-refusal.txt": "f866c10c92b7f46e59de181a4903ae325f7c385ed8a554468229c3a91d06d28c",
+  "LOCAL-CONTROLS.json": "6d5eecedfa86e7c120478c9971d2bf1f4202d3a92c83e4906cd55fca9d98dd1d",
+  "public-run-metadata-shape.json": "22c6ad0bff0d438ac0743748cfd5237ddacd7e7d7c26728a39fd644835bca646",
+  "README.md": "8bf49704a5b499a4d36002ccf5d7586c2ae0592872ff82b80bd858241c82c40f",
+  "real-artifact-controls.json": "285fe789ea2243f2bec5e5731ffcd673a49b7740aed0cdf961e97d392baeb68c",
+  "SCREENING.json": "b00352b2f6220bfd4ee62db97fdc025473f8ced642110784704b7a4e3eb946cf",
+  "SOURCE-INPUTS.json": "8dbac7a0eb8a52dfb10c416f184cef4d3a2b5cd126c4691cab28f8f1343afeb6",
+  "source-run-controls.txt": "f89b135107e60b4f20f4538880e7cc4ef3d624d63ca9ea9b1aabe0aca54954b6",
+  "STOCK-PACK-METADATA.json": "dd49a04b30b4777ef09c586fa8d04563bd7d7beac539f6eb05e67b64f3ba2bd3",
+  "TRACKED-SERVER-CORRECTION.json": "c4921297ac4c8dee87878159e48c81305423d462da4f6105bdda37a3ba11a128",
+  "yaml-controls.txt": "7f1e8768b78229fd7cf2f68bfbfe6ee40884ef680fec21480b36f685146d6231",
+  "yaml-tool-install.json": "5ddf539be136b97d67d7cfde3dd4f9aa3939ded7ce0e323efe97855c95ad9264"
+}

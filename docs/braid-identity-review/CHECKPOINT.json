@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "31d5b0ddde28f160b04d2c05644de4388cc499b7",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-identity-review/README.md",
+  "reviewedDossiers": [
+    "braid-engine-identity-policy",
+    "braid-identity-prototype"
+  ],
+  "productionChanged": false,
+  "actualRuntimeGuardImplemented": false
+}

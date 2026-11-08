@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C25",
+  "kind": "Pre-implementation semantic adoption: duplicate context declaration error",
+  "sourceBase": "98cce43eca941c702f1f488ae41efa3a6ce0fdb1",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "scope": [
+    "Report XQST0099 for a second library context-item declaration",
+    "Retain XQST0113 for library initializer/default values",
+    "Retain valid typed/untyped external declarations and public import/module-loader behavior"
+  ],
+  "limits": [
+    "No main-module context declaration implementation",
+    "No routing/dependency/admission/fixture/baseline/schema change",
+    "No release or public API change"
+  ]
+}

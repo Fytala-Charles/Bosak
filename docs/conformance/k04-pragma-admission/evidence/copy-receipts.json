@@ -1,0 +1,2256 @@
+[
+  {
+    "name": "copy-nscons-031-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-031-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3541292000445537,
+    "log": "copy-nscons-031-normal-actual.log",
+    "case": "nscons-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-031-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-031-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35400859999936074,
+    "log": "copy-nscons-031-prototype-actual.log",
+    "case": "nscons-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-032-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-032-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3526912999805063,
+    "log": "copy-nscons-032-normal-actual.log",
+    "case": "nscons-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-032-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-032-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3699718000134453,
+    "log": "copy-nscons-032-prototype-actual.log",
+    "case": "nscons-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-033-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-033-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3666860000230372,
+    "log": "copy-nscons-033-normal-actual.log",
+    "case": "nscons-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-033-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-033-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36153100000228733,
+    "log": "copy-nscons-033-prototype-actual.log",
+    "case": "nscons-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-034-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-034-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3573838999727741,
+    "log": "copy-nscons-034-normal-actual.log",
+    "case": "nscons-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-034-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-034-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34962009999435395,
+    "log": "copy-nscons-034-prototype-actual.log",
+    "case": "nscons-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-035-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-035-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3782560999970883,
+    "log": "copy-nscons-035-normal-actual.log",
+    "case": "nscons-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-035-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-035-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3686973999720067,
+    "log": "copy-nscons-035-prototype-actual.log",
+    "case": "nscons-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-036-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-036-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.38251429999945685,
+    "log": "copy-nscons-036-normal-actual.log",
+    "case": "nscons-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-036-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-036-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3684337000013329,
+    "log": "copy-nscons-036-prototype-actual.log",
+    "case": "nscons-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-037-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-037-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.37718900002073497,
+    "log": "copy-nscons-037-normal-actual.log",
+    "case": "nscons-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-037-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-037-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34597830002894625,
+    "log": "copy-nscons-037-prototype-actual.log",
+    "case": "nscons-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-038-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-038-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35125210002297536,
+    "log": "copy-nscons-038-normal-actual.log",
+    "case": "nscons-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-038-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-038-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36880230001406744,
+    "log": "copy-nscons-038-prototype-actual.log",
+    "case": "nscons-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-039-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-039-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3678014000179246,
+    "log": "copy-nscons-039-normal-actual.log",
+    "case": "nscons-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-nscons-039-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-nscons-039-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3564839999889955,
+    "log": "copy-nscons-039-prototype-actual.log",
+    "case": "nscons-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21073030005209148,
+    "log": "copy-copynamespace-1-normal-actual.log",
+    "case": "copynamespace-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20302209997316822,
+    "log": "copy-copynamespace-1-prototype-actual.log",
+    "case": "copynamespace-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3502889000228606,
+    "log": "copy-copynamespace-2-normal-actual.log",
+    "case": "copynamespace-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32440819998737425,
+    "log": "copy-copynamespace-2-prototype-actual.log",
+    "case": "copynamespace-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3485474000335671,
+    "log": "copy-copynamespace-3-normal-actual.log",
+    "case": "copynamespace-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33162389998324215,
+    "log": "copy-copynamespace-3-prototype-actual.log",
+    "case": "copynamespace-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3462115000002086,
+    "log": "copy-copynamespace-4-normal-actual.log",
+    "case": "copynamespace-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3406570000224747,
+    "log": "copy-copynamespace-4-prototype-actual.log",
+    "case": "copynamespace-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35875640000449494,
+    "log": "copy-copynamespace-5-normal-actual.log",
+    "case": "copynamespace-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36488100001588464,
+    "log": "copy-copynamespace-5-prototype-actual.log",
+    "case": "copynamespace-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-6-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-6-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34760600002482533,
+    "log": "copy-copynamespace-6-normal-actual.log",
+    "case": "copynamespace-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-6-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-6-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3675683000474237,
+    "log": "copy-copynamespace-6-prototype-actual.log",
+    "case": "copynamespace-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3607454999582842,
+    "log": "copy-copynamespace-7-normal-actual.log",
+    "case": "copynamespace-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36009229999035597,
+    "log": "copy-copynamespace-7-prototype-actual.log",
+    "case": "copynamespace-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.37504419998731464,
+    "log": "copy-copynamespace-8-normal-actual.log",
+    "case": "copynamespace-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3554971000412479,
+    "log": "copy-copynamespace-8-prototype-actual.log",
+    "case": "copynamespace-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35535189998336136,
+    "log": "copy-copynamespace-9-normal-actual.log",
+    "case": "copynamespace-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34591179998824373,
+    "log": "copy-copynamespace-9-prototype-actual.log",
+    "case": "copynamespace-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-10-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-10-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3512380000320263,
+    "log": "copy-copynamespace-10-normal-actual.log",
+    "case": "copynamespace-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-10",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-10-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-10-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.340093600039836,
+    "log": "copy-copynamespace-10-prototype-actual.log",
+    "case": "copynamespace-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-10",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-11-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-11-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3594643999822438,
+    "log": "copy-copynamespace-11-normal-actual.log",
+    "case": "copynamespace-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-11",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-11-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-11-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3525040000095032,
+    "log": "copy-copynamespace-11-prototype-actual.log",
+    "case": "copynamespace-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-11",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-12-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-12-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.355977899977006,
+    "log": "copy-copynamespace-12-normal-actual.log",
+    "case": "copynamespace-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-12",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-12-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-12-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3628231000038795,
+    "log": "copy-copynamespace-12-prototype-actual.log",
+    "case": "copynamespace-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-12",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-13-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-13-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3369768999982625,
+    "log": "copy-copynamespace-13-normal-actual.log",
+    "case": "copynamespace-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-13",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-13-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-13-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34147699997993186,
+    "log": "copy-copynamespace-13-prototype-actual.log",
+    "case": "copynamespace-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-13",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-14-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-14-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3606479999725707,
+    "log": "copy-copynamespace-14-normal-actual.log",
+    "case": "copynamespace-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-14",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-14-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-14-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3574151999782771,
+    "log": "copy-copynamespace-14-prototype-actual.log",
+    "case": "copynamespace-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-14",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-15-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-15-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35128980001900345,
+    "log": "copy-copynamespace-15-normal-actual.log",
+    "case": "copynamespace-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-15",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-15-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-15-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3579242000123486,
+    "log": "copy-copynamespace-15-prototype-actual.log",
+    "case": "copynamespace-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-15",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-16-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-16-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.357565300015267,
+    "log": "copy-copynamespace-16-normal-actual.log",
+    "case": "copynamespace-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-16-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-16-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35339540004497394,
+    "log": "copy-copynamespace-16-prototype-actual.log",
+    "case": "copynamespace-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-17-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-17-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35171230003470555,
+    "log": "copy-copynamespace-17-normal-actual.log",
+    "case": "copynamespace-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-17",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-17-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-17-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3502606999827549,
+    "log": "copy-copynamespace-17-prototype-actual.log",
+    "case": "copynamespace-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-17",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-18-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-18-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3499881000025198,
+    "log": "copy-copynamespace-18-normal-actual.log",
+    "case": "copynamespace-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-18",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-18-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-18-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35318640002515167,
+    "log": "copy-copynamespace-18-prototype-actual.log",
+    "case": "copynamespace-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-18",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-19-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-19-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3544195999857038,
+    "log": "copy-copynamespace-19-normal-actual.log",
+    "case": "copynamespace-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-19",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-19-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-19-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35277490003500134,
+    "log": "copy-copynamespace-19-prototype-actual.log",
+    "case": "copynamespace-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-19",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-20-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-20-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3576185000129044,
+    "log": "copy-copynamespace-20-normal-actual.log",
+    "case": "copynamespace-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-20",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-20-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-20-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3649367000325583,
+    "log": "copy-copynamespace-20-prototype-actual.log",
+    "case": "copynamespace-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-20",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-21-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-21-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.342199900012929,
+    "log": "copy-copynamespace-21-normal-actual.log",
+    "case": "copynamespace-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-21",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-21-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-21-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33922419999726117,
+    "log": "copy-copynamespace-21-prototype-actual.log",
+    "case": "copynamespace-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-21",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-22-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-22-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34256329998606816,
+    "log": "copy-copynamespace-22-normal-actual.log",
+    "case": "copynamespace-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-22",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-copynamespace-22-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-copynamespace-22-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33643829997163266,
+    "log": "copy-copynamespace-22-prototype-actual.log",
+    "case": "copynamespace-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-22",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20936350000556558,
+    "log": "copy-K-CopyNamespacesProlog-1-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20000179996713996,
+    "log": "copy-K-CopyNamespacesProlog-1-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2838914000312798,
+    "log": "copy-K-CopyNamespacesProlog-2-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28076530003454536,
+    "log": "copy-K-CopyNamespacesProlog-2-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2922357000061311,
+    "log": "copy-K-CopyNamespacesProlog-3-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2835874000447802,
+    "log": "copy-K-CopyNamespacesProlog-3-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21172839996870607,
+    "log": "copy-K-CopyNamespacesProlog-4-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18971279996912926,
+    "log": "copy-K-CopyNamespacesProlog-4-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1966971000074409,
+    "log": "copy-K-CopyNamespacesProlog-5-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K-CopyNamespacesProlog-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K-CopyNamespacesProlog-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1920776999904774,
+    "log": "copy-K-CopyNamespacesProlog-5-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3192171999835409,
+    "log": "copy-K2-CopyNamespacesProlog-1-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3062328000087291,
+    "log": "copy-K2-CopyNamespacesProlog-1-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30620200000703335,
+    "log": "copy-K2-CopyNamespacesProlog-4-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3176860000239685,
+    "log": "copy-K2-CopyNamespacesProlog-4-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30808749998686835,
+    "log": "copy-K2-CopyNamespacesProlog-5-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30776689999038354,
+    "log": "copy-K2-CopyNamespacesProlog-5-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3133669000235386,
+    "log": "copy-K2-CopyNamespacesProlog-7-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3096402999944985,
+    "log": "copy-K2-CopyNamespacesProlog-7-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30614299996523187,
+    "log": "copy-K2-CopyNamespacesProlog-8-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32101650000549853,
+    "log": "copy-K2-CopyNamespacesProlog-8-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3801966000464745,
+    "log": "copy-K2-CopyNamespacesProlog-9-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-K2-CopyNamespacesProlog-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-K2-CopyNamespacesProlog-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3716174999717623,
+    "log": "copy-K2-CopyNamespacesProlog-9-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-cbcl-directconelem-001-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-cbcl-directconelem-001-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.43381169997155666,
+    "log": "copy-cbcl-directconelem-001-normal-actual.log",
+    "case": "cbcl-directconelem-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-001",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-cbcl-directconelem-001-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-cbcl-directconelem-001-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.44365939998533577,
+    "log": "copy-cbcl-directconelem-001-prototype-actual.log",
+    "case": "cbcl-directconelem-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-001",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-cbcl-directconelem-002-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-cbcl-directconelem-002-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.45509130001300946,
+    "log": "copy-cbcl-directconelem-002-normal-actual.log",
+    "case": "cbcl-directconelem-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-002",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-cbcl-directconelem-002-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-cbcl-directconelem-002-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.4160672000143677,
+    "log": "copy-cbcl-directconelem-002-prototype-actual.log",
+    "case": "cbcl-directconelem-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-002",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36947949999012053,
+    "log": "copy-Constr-cont-nsmode-1-normal-actual.log",
+    "case": "Constr-cont-nsmode-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3644196999957785,
+    "log": "copy-Constr-cont-nsmode-1-prototype-actual.log",
+    "case": "Constr-cont-nsmode-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3737480000127107,
+    "log": "copy-Constr-cont-nsmode-2-normal-actual.log",
+    "case": "Constr-cont-nsmode-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36332669999683276,
+    "log": "copy-Constr-cont-nsmode-2-prototype-actual.log",
+    "case": "Constr-cont-nsmode-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34358690003864467,
+    "log": "copy-Constr-cont-nsmode-3-normal-actual.log",
+    "case": "Constr-cont-nsmode-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3365398999885656,
+    "log": "copy-Constr-cont-nsmode-3-prototype-actual.log",
+    "case": "Constr-cont-nsmode-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3406970000360161,
+    "log": "copy-Constr-cont-nsmode-4-normal-actual.log",
+    "case": "Constr-cont-nsmode-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-Constr-cont-nsmode-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-Constr-cont-nsmode-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34702459996333346,
+    "log": "copy-Constr-cont-nsmode-4-prototype-actual.log",
+    "case": "Constr-cont-nsmode-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-XQST0055-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-XQST0055-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22121280001010746,
+    "log": "copy-XQST0055-normal-actual.log",
+    "case": "XQST0055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0055",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copy-XQST0055-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\copy-XQST0055-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2013256999780424,
+    "log": "copy-XQST0055-prototype-actual.log",
+    "case": "XQST0055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0055",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

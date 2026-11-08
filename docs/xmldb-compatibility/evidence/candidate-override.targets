@@ -1,0 +1,6 @@
+<Project><ItemGroup>
+<PackageReference Remove="Bosak.XPath.Core;Bosak.XPath.Api;Bosak.XPath.Providers" />
+<ProjectReference Include="D:/Development/Bosak/src/Bosak.XPath.Core/Bosak.XPath.Core.csproj" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.Xdm'" />
+<ProjectReference Include="D:/Development/Bosak/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.Xdm.Tests'" />
+<ProjectReference Include="D:/Development/Bosak/src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj" Condition="'$(MSBuildProjectName)' == 'Bosak.XmlDb.Xdm.Tests'" />
+</ItemGroup></Project>

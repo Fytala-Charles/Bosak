@@ -1,0 +1,33 @@
+{
+  "requirementsWaived": 0,
+  "items": [
+    {
+      "id": "PV-H02",
+      "status": "CompleteBoundedCoreSelection"
+    },
+    {
+      "id": "PV-T01",
+      "status": "RequiredGeneralContainerPolicyAndImplementation"
+    },
+    {
+      "id": "PV-L01",
+      "status": "RequiredLegacyDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "ActualProviderAndBudgetAcceptancePending"
+    },
+    {
+      "id": "NU-01",
+      "status": "Open"
+    },
+    {
+      "id": "SC-01",
+      "status": "Open"
+    },
+    {
+      "id": "R4-R7",
+      "status": "Unwaived"
+    }
+  ]
+}

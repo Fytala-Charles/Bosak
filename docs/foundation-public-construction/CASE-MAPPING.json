@@ -1,0 +1,378 @@
+{
+  "implementationStatus": "BoundedPublicQualified",
+  "nativeProviderAccepted": false,
+  "cases": [
+    {
+      "id": "SC01",
+      "trigger": "Compile exact $constructed with supported explicit assessor/advisor lifetime",
+      "expected": "Distinct inactive-until-implemented profile/descriptor; actual current environment binding.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC01_SC02_SC13_SC19_Construct"
+      ]
+    },
+    {
+      "id": "SC02",
+      "trigger": "No snapshots and all source/node/facts/OwnsTypedValue getters poisoned",
+      "expected": "Construction succeeds only via real advisor admission and direct return witness; no fictional input or source cache.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC01_SC02_SC13_SC19_Construct"
+      ]
+    },
+    {
+      "id": "SC03",
+      "trigger": "Missing optional bound-advisor lifetime capability or unsupported Bind",
+      "expected": "Unsupported profile with no Enter/constructor, borrowed endpoints not disposed.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC03_UnsupportedBinding"
+      ]
+    },
+    {
+      "id": "SC04",
+      "trigger": "Invalid/missing/malformed binding outcome and acquisition rollback",
+      "expected": "Keep current binding errors and exactly-once cleanup; no output/receipt.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC04_BindingErrors"
+      ]
+    },
+    {
+      "id": "SC05",
+      "trigger": "One/multiple construction calls inside same Run/RunAsync",
+      "expected": "One successful provider admission per operation; each successful call gets fresh local receipt.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC05_SC29_RepeatedNoCache"
+      ]
+    },
+    {
+      "id": "SC06",
+      "trigger": "Run/RunAsync closes user window with in-flight provider work",
+      "expected": "LC05-LC06 safety: no late delivery, retain lease and drain through actual completion.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "SC07",
+      "trigger": "Wait cancellation versus raw cancellation/close",
+      "expected": "LC07-LC09 separate wait/request cancellation from actual resource completion.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "SC08",
+      "trigger": "Entry/registration failure and repeated close/Complete",
+      "expected": "LC03-LC04/LC14 proper retention rollback and exactly-once cleanup.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC08_AcquisitionFailure"
+      ]
+    },
+    {
+      "id": "SC09",
+      "trigger": "Provider lease/advisor/authority callback revocation, false answers and throws",
+      "expected": "Guard each callback, preserve actual exceptions and cleanup ordering.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC09_CallbackRevocation"
+      ]
+    },
+    {
+      "id": "SC10",
+      "trigger": "Reentrant/overlapping calls and two independent raw operations",
+      "expected": "LC11-LC12 serialized per-operation rule with separate real admissions.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC10_SerializedCallsAndIndependentOperations"
+      ]
+    },
+    {
+      "id": "SC11",
+      "trigger": "Real owned file/resource callback barrier",
+      "expected": "LC16 proves no premature release and actual drain completion.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "SC12",
+      "trigger": "Work/constructor/iterator and admission cleanup failures",
+      "expected": "LC13-LC14 preserve primary then cleanup objects/order; no unhandled negative caller.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC12_ConstructorAndCleanupFailures",
+        "SC12_SC37_IteratorCleanupFailures"
+      ]
+    },
+    {
+      "id": "SC13",
+      "trigger": "Plain lexical String with owned target and valid episode",
+      "expected": "Only provider constructs; no host namespace/name-based authority or numeric coercion.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC01_SC02_SC13_SC19_Construct"
+      ]
+    },
+    {
+      "id": "SC14",
+      "trigger": "Undefined/numeric/node/sequence/map/array/function/source-marked/constructed-marked input or user schema annotation",
+      "expected": "Unsupported before constructor/target/episode callbacks; no receipt/fallback.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC14_ConstructedInputRefuses",
+        "SC14_InputScreen",
+        "SC14_SC23_NullString"
+      ]
+    },
+    {
+      "id": "SC15",
+      "trigger": "Null/foreign target or missing episode",
+      "expected": "Preserve argument checks and owned component policy; no constructor use.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC15_Arguments"
+      ]
+    },
+    {
+      "id": "SC16",
+      "trigger": "Episode getters mutate/cancel/close/throw",
+      "expected": "Read once per call under lease guards, no caller getters during provider use or authority by episode identity.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC16_ProviderUsesFrozenCopy",
+        "SC16_SC17_EpisodeFailure",
+        "SC16_SC17_FrozenEpisode"
+      ]
+    },
+    {
+      "id": "SC17",
+      "trigger": "First and later episode constants in one raw operation",
+      "expected": "Immutable first copy; require exact ticks/offset and timezone constants on later calls, not instant-only equality.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC16_SC17_EpisodeFailure",
+        "SC16_SC17_FrozenEpisode"
+      ]
+    },
+    {
+      "id": "SC18",
+      "trigger": "Implicit timezone boundary and invalid values",
+      "expected": "Host-selected -840..840 inclusive; invalid argument before constructor; no ambient clock reads.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC18_Timezone"
+      ]
+    },
+    {
+      "id": "SC19",
+      "trigger": "Provider Supported one eligible String/Boolean/Integer/Decimal atom",
+      "expected": "Supported direct operation-local marked result; exact payload representation, fresh null origin.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC01_SC02_SC13_SC19_Construct"
+      ]
+    },
+    {
+      "id": "SC20",
+      "trigger": "Provider Invalid/Unsupported with poisoned Value and DiagnosticCode",
+      "expected": "Return corresponding engine outcome/diagnostic without reading either forbidden getter.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC20_Outcome"
+      ]
+    },
+    {
+      "id": "SC21",
+      "trigger": "Provider NotFound/unknown/null outcome or Supported-null value",
+      "expected": "Malformed exception; no result or registration.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC21_MalformedOutcomes"
+      ]
+    },
+    {
+      "id": "SC22",
+      "trigger": "Supported non-list empty/multi-cell or any list result",
+      "expected": "Unsupported shape, no flattening/empty success/local receipt.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC22_Shapes"
+      ]
+    },
+    {
+      "id": "SC23",
+      "trigger": "Unsupported result carrier family, nonplain/structured/default/already marked cell",
+      "expected": "Unsupported family or malformed payload as selected; no receipt.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC14_SC23_NullString",
+        "SC23_Carriers",
+        "SC23_MalformedContainers"
+      ]
+    },
+    {
+      "id": "SC24",
+      "trigger": "Result exceeds atom limit or integer/decimal digit/scale bounds",
+      "expected": "Existing capacity exception; excess before Current, cleanup once; not lexical Invalid.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC24_Capacity"
+      ]
+    },
+    {
+      "id": "SC25",
+      "trigger": "Governing/declared target aliases are authoritatively same component",
+      "expected": "Accept positive authority equality without reference interning/name comparisons.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC25_SC27_AliasesAndActualMember"
+      ]
+    },
+    {
+      "id": "SC26",
+      "trigger": "Wrong/unowned governing/declared/actual type or negative/malformed identity proof",
+      "expected": "Reject supported wrong target; Unsupported identity capability is Unsupported, not success.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC26_OwnedWrongTarget",
+        "SC26_TypeProof"
+      ]
+    },
+    {
+      "id": "SC27",
+      "trigger": "Actual atomic union member differs from requested governing type",
+      "expected": "Preserve owned actual member without substituting target or claiming numeric derivation proves union membership; provider semantic validation still required.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC25_SC27_AliasesAndActualMember"
+      ]
+    },
+    {
+      "id": "SC28",
+      "trigger": "Provider emits non-null original assessment or constructor same-type/equal-value result",
+      "expected": "Non-null origin rejects; every accepted new constructor has fresh target evidence/null original, never inherited source validation.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC28_OriginalOriginRefuses"
+      ]
+    },
+    {
+      "id": "SC29",
+      "trigger": "Repeat construction or retain many returned values",
+      "expected": "Fresh receipt per successful call; no hidden interning/cache/operation aggregate budget or reinterpreted per-snapshot ceiling.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC05_SC29_RepeatedNoCache"
+      ]
+    },
+    {
+      "id": "SC30",
+      "trigger": "All five captured limits and static options change/mutate",
+      "expected": "Distinct/frozen descriptor; source units unchanged; output limits do not claim a lexical parsing budget.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC30_FrozenDescriptor"
+      ]
+    },
+    {
+      "id": "SC31",
+      "trigger": "Evaluate current receipt through exact $constructed closed identity",
+      "expected": "Same receipt/value and representation, current lease/binding/type proof; no generic VM/source-cache fallback.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC31_NoGetterReplay"
+      ]
+    },
+    {
+      "id": "SC32",
+      "trigger": "Missing/extra/prefixed variable, focus, services or dynamic execution state",
+      "expected": "Closed capture refusal without new provider work.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC32_ClosedCapture"
+      ]
+    },
+    {
+      "id": "SC33",
+      "trigger": "Plain/source/foreign/tampered marker supplied to Evaluate",
+      "expected": "No receipt forgery through copied fields/labels; refuse before authorized consumption.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC33_Forgery"
+      ]
+    },
+    {
+      "id": "SC34",
+      "trigger": "Reuse receipt in later raw operation or another compiled session",
+      "expected": "Refuse even with same source/assessor/fingerprint; no persistent import or lifetime resurrection.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC34_SC35_NoImport"
+      ]
+    },
+    {
+      "id": "SC35",
+      "trigger": "Copy/box/store receipt-bearing payload, then raw completion/close",
+      "expected": "Copied data readable as ordinary carrier; no active admission/resource ownership or live authority retained.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC34_SC35_NoImport"
+      ]
+    },
+    {
+      "id": "SC36",
+      "trigger": "Callback revokes target/type/currentness after construction before consumption/delivery",
+      "expected": "No authorized result; every use guarded, no getter replay of immutable saved value.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC36_ConsumptionCurrentness",
+        "SC36_LateTypeRevocation"
+      ]
+    },
+    {
+      "id": "SC37",
+      "trigger": "Pure payload/result allocation boundary failure and iterator cleanup errors",
+      "expected": "No unpublished receipt/prefix escape; release actual admission through raw scope, no real OOM induced.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC12_SC37_IteratorCleanupFailures",
+        "SC37_UnpublishedFailure"
+      ]
+    },
+    {
+      "id": "SC38",
+      "trigger": "Unsupported constructor/function/cast/arithmetic/list/general grammar and existing profiles",
+      "expected": "Only exact new selector chooses this profile; no behavior/descriptor expansion of old routes.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC38_Grammar",
+        "SC38_Options"
+      ]
+    },
+    {
+      "id": "SC39",
+      "trigger": "Public signatures, required provider slots and all-host/native scope",
+      "expected": "No new public members for bounded optional capability; persistent/list/parse-budget/host gaps remain explicitly pending.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC39_NoSnapshots"
+      ]
+    },
+    {
+      "id": "SC40",
+      "trigger": "Cold/warm result consumption and full qualification",
+      "expected": "LC01-LC16, actual public Run/RunAsync, old controls, full tests/QT3/qt4 skips, API/layout/friends and exact loaded hashes. No native owner budget inference.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC40_AllocationObservation"
+      ]
+    }
+  ]
+}

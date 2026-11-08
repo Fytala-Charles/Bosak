@@ -1,0 +1,66 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/README.md.html",
+      "sha256": "c79a547e0f815297c1db313e3af6bacd2aa43a5377dbe02505d65c5b6bb7c608"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_ARCHITECTURE.md.html",
+      "sha256": "bd5a244eef347833aab586264a84012be26c61f2b9f8cee2319ee83917920900"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "c3afe889d0f841d7313796c02bb787657ea46253b5f1ed3a374c590168896093"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_INTEGRATION.md.html",
+      "sha256": "0c366c6c5c97213e6d0c10eec89e6ab568464e242ed4c48d2cf2fb60463d5f66"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "1b999a4fdf5baa9ac595ad5ad6426ab662b9f63d94a9b9441578ede343619bdb"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "f9425898eba1b262b8a98c75974cc8bb9697a4ce71a5df957ae2c306c6a103fc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "7896b87afb9831cb71b44ab20738540f5770553555d86712a31dcbeab396459e"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "5e2e2e17f07b39d8d979c40abafe9ae30c736a32cf5cdc7193a0125e64f8e485"
+    },
+    {
+      "source": "docs/conformance/k04-schema-advisor-proposal/ACCEPTANCE-MATRIX.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_conformance_k04-schema-advisor-proposal_ACCEPTANCE-MATRIX.md.html",
+      "sha256": "9ba8ef9d93e5ba9006df111d8e41eb9c1f0882f17b31f5c75d6c96a78c089d57"
+    },
+    {
+      "source": "docs/conformance/k04-schema-advisor-proposal/COMPATIBILITY-PROPOSAL.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_conformance_k04-schema-advisor-proposal_COMPATIBILITY-PROPOSAL.md.html",
+      "sha256": "ab43ccab9be7adb48572f6c5a3b2395e699ed6fcf70a3e46ecb7d70253475822"
+    },
+    {
+      "source": "docs/conformance/k04-schema-advisor-proposal/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_conformance_k04-schema-advisor-proposal_NEXT-SLICE.md.html",
+      "sha256": "33c3f4d23733eee8fb7695b4735a4ba403e82d2ce370c79cf6d3fdaebbd6ff46"
+    },
+    {
+      "source": "docs/conformance/k04-schema-advisor-proposal/README.md",
+      "html": ".guard-tmp/k04-schema-advisor-proposal-render/docs_conformance_k04-schema-advisor-proposal_README.md.html",
+      "sha256": "2ad65c3b6f174dbf9779b13e0fb633cd5317d24956e3e8f789cc65d9ba11e682"
+    }
+  ]
+}

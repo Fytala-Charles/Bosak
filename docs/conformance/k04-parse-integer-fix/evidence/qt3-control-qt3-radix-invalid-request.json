@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml", "Name": "control-qt3-radix-invalid", "category": "error", "expression": "parse-integer('10',37)", "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"}

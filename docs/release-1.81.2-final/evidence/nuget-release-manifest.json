@@ -1,0 +1,59 @@
+{
+  "artifacts": [
+    {
+      "bytes": 154285,
+      "file": "Bosak.XPath.Api.1.81.2.nupkg",
+      "sha256": "68a6b5ed64e80e17aa19b7f173756846bfd900eef2a57f2fab89f5c5c02a71bc"
+    },
+    {
+      "bytes": 130810,
+      "file": "Bosak.XPath.Compiler.1.81.2.nupkg",
+      "sha256": "c4bfc135af6f12ac1e8b6f10af3236ab220ee46dd8d5596780f94d5887a2fa88"
+    },
+    {
+      "bytes": 131256,
+      "file": "Bosak.XPath.Core.1.81.2.nupkg",
+      "sha256": "1b68cb0eb034d0772ec25a4af8d161799b92110079d2163dd67e12e39021b3ae"
+    },
+    {
+      "bytes": 160976,
+      "file": "Bosak.XPath.Parser.1.81.2.nupkg",
+      "sha256": "ff5bcfce57c55094076a7768b083457a12ff061d3888efae2ea399a566906a07"
+    },
+    {
+      "bytes": 157300,
+      "file": "Bosak.XPath.Providers.1.81.2.nupkg",
+      "sha256": "380e78e540457d3cf64aad3827462e350f57f65bbecddebaeda8f256b7c70b27"
+    },
+    {
+      "bytes": 80753,
+      "file": "Bosak.XPath.Providers.Database.1.81.2.nupkg",
+      "sha256": "e6c70470763f40732e9840e6b2f12ed4dc35c6e82abb314b5fe3aff7dd005490"
+    },
+    {
+      "bytes": 277936,
+      "file": "Bosak.XPath.Runtime.1.81.2.nupkg",
+      "sha256": "bc57d77561ac58494ee5024a63975f2c85900df9f002a05fbeb820a9d675e40b"
+    },
+    {
+      "bytes": 355341,
+      "file": "Bosak.XPath.Standard.1.81.2.nupkg",
+      "sha256": "7b7b6bb9b4be94a2a442b8890685faf5ca8b3f3a4181c75d5310924e4d880ded"
+    },
+    {
+      "bytes": 137950,
+      "file": "Bosak.XQuery.1.81.2.nupkg",
+      "sha256": "d70b0bee76c863b0e98e4613a63436e92fdc5843ec03a0a81702ce097e1ba86a"
+    },
+    {
+      "bytes": 725865,
+      "file": "Bosak.Xslt.1.81.2.nupkg",
+      "sha256": "de462e476c7a67a6fb64a6a1664c9be0b66a7185fdd1c58c72b80dc8f52c28fd"
+    }
+  ],
+  "coreVersion": "1.81.2",
+  "extensionVersion": "0.2.6",
+  "formatVersion": 1,
+  "kind": "nuget",
+  "sourceCommit": "1d69d059c14888c1c43264efa8668909292af858"
+}

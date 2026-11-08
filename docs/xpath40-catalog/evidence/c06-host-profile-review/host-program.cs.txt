@@ -1,0 +1,17 @@
+// Generated bounded C06 host profile diagnostics; no product source changes.
+using Bosak.Xslt.Api;
+using Bosak.XPath.Providers.Xml;
+using System.Xml.Linq;
+using System.Text.Json;
+XsltFunctionLibrary.RegisterXQueryModuleSource("urn:c06:m", "module namespace m='urn:c06:m'; declare function m:read(){12};");
+XsltFunctionLibrary.RegisterXQueryModuleSource("urn:c06:typed", "module namespace m='urn:c06:typed'; declare variable $m:x as xs:double external;");
+using var output=new StreamWriter(args[1]){AutoFlush=true};
+foreach(var q in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!)
+foreach(var name in q.GetProperty("profiles").EnumerateArray())
+{
+ var profile=Enum.Parse<XsltProcessorProfile>(name.GetString()!);
+ string? result=null,error=null;var phase="compile";
+ try{var executable=new XsltCompiler{ProcessorProfile=profile}.Compile(q.GetProperty("stylesheet").GetString()!);phase="evaluate";result=executable.TransformToString(new XDocumentNode(XDocument.Parse(q.GetProperty("source").GetString()!)));phase="success";}
+ catch(Exception ex){error=ex.Message;}
+ output.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),host=profile.ToString(),phase,result,error}));
+}

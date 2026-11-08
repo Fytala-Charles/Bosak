@@ -1,0 +1,111 @@
+{
+  "source": "docs/xpath40-catalog/examples/equality-contracts/README.md",
+  "gitBlob": "1e52f1e1d7579f2f19d944ca2acd2ce1a314c18e",
+  "text": "<div align=\"center\">\n<img src=\"../../../../assets/logos/fytala-logo-color-dark.svg\" width=\"100\" alt=\"Fytala Bosak Customer-reference Equality and Collation\">\n<h1>Customer-reference Equality and Collation</h1>\n<p>21 October 2026</p>\n</div>\n\n## Customer-reference matching policy\n\nA synthetic customer import needs to match the requested reference `acme`, report duplicate reference classes, retain every matching input position and identify exact `vip` tokens. This example deliberately uses HTML ASCII case-insensitive collation for these business references. Real identifiers can require case-sensitive comparison; the receiving system must choose that policy. It does not perform account linking, identity verification, address matching or external IO.\n\nComplete input, also embedded verbatim in both expressions:\n\n```xml\n<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>\n```\n\n`id` is the report identifier; `reference` is compared with `acme`; `tags` is XML-whitespace-separated text. Inputs are synthetic and assume those fields exist; the example does not validate missing/duplicate customer IDs or establish a production schema. C3 uses precomposed U+00C9; C4 uses U+0045 followed by U+0301. ASCII case folding does not remove accents or normalize Unicode.\n\n## Runnable 4.0 expression\n\nThe expression requires explicit `XPathCompatibility.XPath40` or the experimental mode. It parses the literal XML itself, so no implicit context item, host collation or network access is required. [The file](report-normal-40.xpath) uses supported keyword calls for `index-of` and `contains-token`; other calls are positional.\n\n```xquery\nlet $doc := parse-xml('<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>')/customers\nreturn let $coll := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'\nreturn let $refs := $doc/customer/@reference ! string(.)\nreturn let $positions := index-of(input := $refs,target := 'acme',collation := $coll)\nreturn let $matches := $doc/customer[compare(string(@reference),'acme',$coll) eq 0]\nreturn let $ids := $matches ! string(@id)\nreturn concat('references=',count(distinct-values($refs,$coll)),';positions=',string-join($positions,','),';ids=',string-join($ids,','),';vip=',count($matches[contains-token(value := string(@tags),token := 'vip',collation := $coll)]),';expected-order=',deep-equal($ids,('C1','C2')))\n```\n\nExact result:\n\n```text\nreferences=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true\n```\n\n`distinct-values` counts three reference equivalence classes under the explicit collation. No representative spelling or distinct-value ordering is assumed. `index-of` returns all matching one-based positions, including duplicates. `compare(...)=0` selects C1/C2 while preserving input order. `contains-token` accepts both `vip` and `VIP`, but not `vip-plus`. `deep-equal` checks that the selected ID sequence is exactly the stated two-ID sequence in that order; it is a report check, not a complete customer validation rule.\n\n## Complete XPath 3.1 baseline\n\n[The baseline](report-normal-31.xpath) supplies the same XML, policy and output. All five function names already exist in 3.1; the illustrated4.0 convenience is keyword argument syntax. Positional calls and nested `return let` bindings keep this baseline in 3.1 grammar. The broader 4.0 `compare` atomic contract and `deep-equal` options-map declaration are separate boundaries, not prerequisites for this report.\n\n```xquery\nlet $doc := parse-xml('<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>')/customers\nreturn let $coll := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'\nreturn let $refs := $doc/customer/@reference ! string(.)\nreturn let $positions := index-of($refs,'acme',$coll)\nreturn let $matches := $doc/customer[compare(string(@reference),'acme',$coll) eq 0]\nreturn let $ids := $matches ! string(@id)\nreturn concat('references=',count(distinct-values($refs,$coll)),';positions=',string-join($positions,','),';ids=',string-join($ids,','),';vip=',count($matches[contains-token(string(@tags),'vip',$coll)]),';expected-order=',deep-equal($ids,('C1','C2')))\n```\n\n## Empty and reordered inputs\n\nComplete empty input:\n\n```xml\n<customers/>\n```\n\n[3.1](report-empty-31.xpath) and [4.0](report-empty-40.xpath) both return:\n\n```text\nreferences=0;positions=;ids=;vip=0;expected-order=false\n```\n\nThe empty result is valid for this report; `false` means it does not equal the illustrative C1/C2 sequence. A receiving application that requires at least one match must enforce that rule explicitly.\n\nComplete reordered input:\n\n```xml\n<customers><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/></customers>\n```\n\n[3.1](report-reordered-31.xpath) and [4.0](report-reordered-40.xpath) both return:\n\n```text\nreferences=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false\n```\n\nMatching membership is retained, while positions and ID order refer to the supplied input. `deep-equal` is order-sensitive and does not assert set equality. No implicit sorting is performed.\n\n## Compatibility and implementation boundaries\n\nAll 58 manifest cases run through the unchanged public catalog runner. Successful common4.0 cases declare their3.1 baseline explicitly; keyword successes in experimental mode also declare their frozen 4.0 outcome. The 3.1 keyword fixtures refuse with XPST0003. Positional comparison of numeric2 and10 returns-1 in 4.0, while the 3.1 call refuses XPTY0004. This numeric comparison is a4.0 extension of an existing function, not a new name.\n\n`index-of(input,target,collation)` and `contains-token(value,token,collation)` have keyword metadata. `compare` currently accepts `comparand1`/`comparand2`, while the pinned draft declares `value1`/`value2`; the draft spellings refuse XPST0017. `distinct-values` and `deep-equal` have no keyword metadata and refuse tested keyword forms at both 4.0 levels. These observations are not recommended alternatives to the normative spellings.\n\nSource **1.23.2** corrects the explicitly empty `index-of` collation in4.0: it uses the current evaluation context default. XPath3.1 still raises XPTY0004. Positional/reference/lookup/partial/keyword paths and non-codepoint host defaults have dedicated regressions; [correction evidence](../../INDEX-OF-EMPTY-COLLATION.md). The pinned `deep-equal` third argument accepts an options map, but Bosak atomizes it as a legacy collation argument and raises FOTY0013. The deep-equal fixture retains `reviewStatus=observed-implementation-gap` and separate `normative40Expected` metadata. The index-of fixture now checks the normative result and its unchanged3.1 refusal; original observed-error evidence remains in the audit. They preserve current behavior for diagnosis; their passing tests do not certify draft conformance. Use omitted or valid string collation arguments in supported consumer examples. The index-of correction is separate from the original documentation delivery; no deep-equal implementation change is included.\n\nNaN illustrates distinct equality contracts: two NaNs yield one distinct value and are deep-equal, but `index-of` uses value equality and finds neither NaN equal to itself. Case-insensitive deep comparison of map values does not make differently spelled map keys equivalent. ASCII collation does not equate Ä/ä or normalize CAFÉ/CAFÉ. NFC normalization is an explicit, separate policy in its own fixture.\n\nTests use fresh default contexts; host-custom default collation, all UCA configurations, complete coercion/options coverage and every draft production are not certified. Unknown nonempty collation fixtures raise FOCH0002 on the stated inputs. General unused-argument error eagerness is not claimed.\n\n## Exact fixture inventory\n\n| Runnable fixture | Mode | Result/error |\n|---|---|---|\n| [distinct-codepoint](distinct-codepoint.xpath) | 40 | `2` |\n| [distinct-ascii](distinct-ascii.xpath) | 40 | `1` |\n| [distinct-empty](distinct-empty.xpath) | 40 | `0` |\n| [distinct-nan](distinct-nan.xpath) | 40 | `1` |\n| [distinct-unknown-collation](distinct-unknown-collation.xpath) | 40 | `FOCH0002` |\n| [distinct-empty-collation](distinct-empty-collation.xpath) | 40 | `2` |\n| [index-codepoint](index-codepoint.xpath) | 40 | `1,3` |\n| [index-ascii](index-ascii.xpath) | 40 | `1,2,3` |\n| [index-empty](index-empty.xpath) | 40 | `0` |\n| [index-empty-target](index-empty-target.xpath) | 40 | `XPTY0004` |\n| [index-nan](index-nan.xpath) | 40 | `0` |\n| [index-unknown-collation](index-unknown-collation.xpath) | 40 | `FOCH0002` |\n| [index-empty-collation](index-empty-collation.xpath) | 40 | `1`; XPath3.1 baseline `XPTY0004` |\n| [deep-same-order](deep-same-order.xpath) | 40 | `true` |\n| [deep-reordered](deep-reordered.xpath) | 40 | `false` |\n| [deep-nan](deep-nan.xpath) | 40 | `true` |\n| [deep-map-keys](deep-map-keys.xpath) | 40 | `false` |\n| [deep-map-values](deep-map-values.xpath) | 40 | `true` |\n| [deep-empty-collation](deep-empty-collation.xpath) | 40 | `false` |\n| [deep-options-map](deep-options-map.xpath) | 40 | `FOTY0013` (observed gap; draft expects `true`) |\n| [compare-ascii](compare-ascii.xpath) | 40 | `0` |\n| [compare-codepoint](compare-codepoint.xpath) | 40 | `-1` |\n| [compare-empty](compare-empty.xpath) | 40 | `true` |\n| [compare-numeric](compare-numeric.xpath) | 40 | `-1` |\n| [compare-unknown-collation](compare-unknown-collation.xpath) | 40 | `FOCH0002` |\n| [token-whole](token-whole.xpath) | 40 | `true` |\n| [token-substring](token-substring.xpath) | 40 | `false` |\n| [token-ascii-boundary](token-ascii-boundary.xpath) | 40 | `false` |\n| [token-empty](token-empty.xpath) | 40 | `false` |\n| [token-two-words](token-two-words.xpath) | 40 | `false` |\n| [token-unknown-collation](token-unknown-collation.xpath) | 40 | `FOCH0002` |\n| [token-empty-collation](token-empty-collation.xpath) | 40 | `false` |\n| [unicode-codepoint](unicode-codepoint.xpath) | 40 | `false` |\n| [unicode-normalized](unicode-normalized.xpath) | 40 | `true` |\n| [distinct-keyword-31](distinct-keyword-31.xpath) | 31 | `XPST0003` |\n| [distinct-keyword-40](distinct-keyword-40.xpath) | 40 | `XPST0017` |\n| [distinct-keyword-experimental](distinct-keyword-experimental.xpath) | experimental | `XPST0017` |\n| [deep-keyword-31](deep-keyword-31.xpath) | 31 | `XPST0003` |\n| [deep-keyword-40](deep-keyword-40.xpath) | 40 | `XPST0017` |\n| [deep-keyword-experimental](deep-keyword-experimental.xpath) | experimental | `XPST0017` |\n| [index-keyword-31](index-keyword-31.xpath) | 31 | `XPST0003` |\n| [index-keyword-40](index-keyword-40.xpath) | 40 | `1,2` |\n| [index-keyword-experimental](index-keyword-experimental.xpath) | experimental | `1,2` |\n| [token-keyword-31](token-keyword-31.xpath) | 31 | `XPST0003` |\n| [token-keyword-40](token-keyword-40.xpath) | 40 | `true` |\n| [token-keyword-experimental](token-keyword-experimental.xpath) | experimental | `true` |\n| [compare-implemented-keyword-31](compare-implemented-keyword-31.xpath) | 31 | `XPST0003` |\n| [compare-implemented-keyword-40](compare-implemented-keyword-40.xpath) | 40 | `0` |\n| [compare-implemented-keyword-experimental](compare-implemented-keyword-experimental.xpath) | experimental | `0` |\n| [compare-draft-keyword-31](compare-draft-keyword-31.xpath) | 31 | `XPST0003` |\n| [compare-draft-keyword-40](compare-draft-keyword-40.xpath) | 40 | `XPST0017` |\n| [compare-draft-keyword-experimental](compare-draft-keyword-experimental.xpath) | experimental | `XPST0017` |\n| [report-normal-31](report-normal-31.xpath) | 31 | `references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true` |\n| [report-normal-40](report-normal-40.xpath) | 40 | `references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true` |\n| [report-empty-31](report-empty-31.xpath) | 31 | `references=0;positions=;ids=;vip=0;expected-order=false` |\n| [report-empty-40](report-empty-40.xpath) | 40 | `references=0;positions=;ids=;vip=0;expected-order=false` |\n| [report-reordered-31](report-reordered-31.xpath) | 31 | `references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false` |\n| [report-reordered-40](report-reordered-40.xpath) | 40 | `references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false` |\n\nThe [review](../../EQUALITY-COLLATION-CONTRACT-REVIEW.md), [feature entry](../../functions/customer-reference-matching.md) and [machine-readable audit](../../audit-equality-collation-contracts.json) separate normative declarations, current observations, original failures and remaining work.\n",
+  "entry": "functions/customer-reference-matching.md",
+  "blocks": [
+    {
+      "index": 0,
+      "language": "xml",
+      "code": "<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/report-normal-31.xpath",
+        "docs/xpath40-catalog/examples/equality-contracts/report-normal-40.xpath"
+      ],
+      "expectedOutputCases": [],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 1,
+      "language": "xquery",
+      "code": "let $doc := parse-xml('<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>')/customers\nreturn let $coll := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'\nreturn let $refs := $doc/customer/@reference ! string(.)\nreturn let $positions := index-of(input := $refs,target := 'acme',collation := $coll)\nreturn let $matches := $doc/customer[compare(string(@reference),'acme',$coll) eq 0]\nreturn let $ids := $matches ! string(@id)\nreturn concat('references=',count(distinct-values($refs,$coll)),';positions=',string-join($positions,','),';ids=',string-join($ids,','),';vip=',count($matches[contains-token(value := string(@tags),token := 'vip',collation := $coll)]),';expected-order=',deep-equal($ids,('C1','C2')))",
+      "exactFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/report-normal-40.xpath"
+      ],
+      "containedInFiles": [],
+      "expectedOutputCases": [],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 2,
+      "language": "text",
+      "code": "references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/audit-equality-collation-contracts.json",
+        "docs/xpath40-catalog/examples/cases.json"
+      ],
+      "expectedOutputCases": [
+        "equality-contract-report-normal-31",
+        "equality-contract-report-normal-40"
+      ],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 3,
+      "language": "xquery",
+      "code": "let $doc := parse-xml('<customers><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/></customers>')/customers\nreturn let $coll := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'\nreturn let $refs := $doc/customer/@reference ! string(.)\nreturn let $positions := index-of($refs,'acme',$coll)\nreturn let $matches := $doc/customer[compare(string(@reference),'acme',$coll) eq 0]\nreturn let $ids := $matches ! string(@id)\nreturn concat('references=',count(distinct-values($refs,$coll)),';positions=',string-join($positions,','),';ids=',string-join($ids,','),';vip=',count($matches[contains-token(string(@tags),'vip',$coll)]),';expected-order=',deep-equal($ids,('C1','C2')))",
+      "exactFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/report-normal-31.xpath"
+      ],
+      "containedInFiles": [],
+      "expectedOutputCases": [],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 4,
+      "language": "xml",
+      "code": "<customers/>",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/report-empty-31.xpath",
+        "docs/xpath40-catalog/examples/equality-contracts/report-empty-40.xpath"
+      ],
+      "expectedOutputCases": [],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 5,
+      "language": "text",
+      "code": "references=0;positions=;ids=;vip=0;expected-order=false",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/audit-equality-collation-contracts.json",
+        "docs/xpath40-catalog/examples/cases.json"
+      ],
+      "expectedOutputCases": [
+        "equality-contract-report-empty-31",
+        "equality-contract-report-empty-40"
+      ],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 6,
+      "language": "xml",
+      "code": "<customers><customer id=\"C2\" reference=\"acme\" tags=\"VIP\"/><customer id=\"C1\" reference=\"ACME\" tags=\"priority vip\"/><customer id=\"C4\" reference=\"CAFÉ\" tags=\"vip-plus\"/><customer id=\"C3\" reference=\"CAFÉ\" tags=\"standard\"/></customers>",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/report-reordered-31.xpath",
+        "docs/xpath40-catalog/examples/equality-contracts/report-reordered-40.xpath"
+      ],
+      "expectedOutputCases": [],
+      "verbatimProbeIds": []
+    },
+    {
+      "index": 7,
+      "language": "text",
+      "code": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false",
+      "exactFiles": [],
+      "containedInFiles": [
+        "docs/xpath40-catalog/audit-equality-collation-contracts.json",
+        "docs/xpath40-catalog/examples/cases.json"
+      ],
+      "expectedOutputCases": [
+        "equality-contract-report-reordered-31",
+        "equality-contract-report-reordered-40"
+      ],
+      "verbatimProbeIds": []
+    }
+  ]
+}

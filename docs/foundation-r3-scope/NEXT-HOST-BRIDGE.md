@@ -1,0 +1,17 @@
+# AH-01: next bounded implementation
+
+Implement an engine-owned bridge from captured host compilation to the existing public SchemaQuerySession and its real QuerySourceSession operation. Production currently exposes CompileXPath only. Private SchemaHostSessionCompilation/SchemaQuerySession prove earlier host behavior using a different internal path; the reviewed isolated BCAP producer uses that path. Neither is a public session implementation.
+
+Select a private host binding/frame, not a public arbitrary Func factory or reflective cross-assembly callback. The frame must bind exact captured executable, semantic environment and public session; its methods must receive the exact current operation and complete admitted snapshot set. Reject foreign/closed/same-fingerprint operations before input getters. Use the existing raw membership, source-retention, cancellation, cleanup and drain mechanics. Do not revive a completed operation or treat a frozen descriptor as authority.
+
+Source roles stay distinct. A shared source is retained once, two different sources remain separately admitted, and source-free named-template work uses explicit empty membership. Dynamic context node ownership is exactly-one-owner before getter access. Unsupported initial sequences/streaming/services/schema/resource profiles refuse explicitly until captured and implemented. Do not infer every node access is protected against arbitrary concurrent provider mutation.
+
+Current assembly graph: XQuery and XSLT already reference XPath.Api; XPath.Api currently grants internals to XSLT and Runtime.Tests, while XQuery has no API friend grant. Determine the smallest internal bridge for both hosts and record any friend/reference delta explicitly. No new public host factory delegate or required provider method is selected by this audit. Any actual cross-assembly change needs API/friend/reference qualification; preserving original XSLT grants remains required.
+
+AH-01 proves plumbing with actual captured host execution, membership and resource tails, without claiming the full public XQuery/XSLT facade or BCAP capture is activated. AH-02/AH-03 then add the reviewed public entries/types. Avoid blanket copying from the old isolated source: its runtime/admission/evaluation files predate the current numeric, node, constructor and compatible work. Adapt its tested invariants to current source and preserve all sealed receipts.
+
+Before source or semantic edits, record fresh exact source/binary input pins and the immutable specification/profile sections actually used. For host/lifetime-only mechanics preserve the accepted R2 D01/D04-D06/D11/D12 boundary and prior isolated BCAP basis without presenting it as new normative XSLT adoption. Any broadened invocation/language behavior requires an explicit semantic record.
+
+[HC01-HC16](HOST-CASES.json) are the next acceptance cases. Qualify happy/edge/failure paths, actual input/backend resources, cross-assembly metadata and the unchanged XPath profiles, then full Release tests and exact conformance/skip/binary/configuration proof. They are NotRun; this design is not implemented or owner accepted.
+
+PV-01 remains a separate pre-freeze requirement. A TryGetProvenance helper taking only an atomic value cannot silently acquire raw-compatible permission or turn cache residency into authority. Resolve descriptive evidence, expired/closed behavior, original versus constructed provenance and any required signature disposition before adding that helper. Its absence is recorded rather than silently dropped.

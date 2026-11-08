@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "checkouts": {
+    "Core": {
+      "path": "D:\\Development\\Bosak",
+      "head": "fd4164b41a17c6530344b7d3621542c6424d1609"
+    },
+    "Braid": {
+      "path": "D:\\Development\\Bosak.Braid",
+      "head": "0f1d949e758645f7944f617f2b4613e49161a195"
+    },
+    "XmlDb": {
+      "path": "D:\\Development\\Bosal.XmlDb",
+      "head": "fbb829052f606f683aaf8620fa9401b4ba46c8e9"
+    },
+    "SchemaPublic": {
+      "path": "D:\\Development\\Bosak.Schema.Public",
+      "head": "20090180755d0427d824b091cf838e9a03ca9adc"
+    },
+    "SchemaAssessment": {
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+      "head": "c3624998eca8c83018e121fa84af611f834a0501"
+    }
+  },
+  "activeResponses": {
+    "BCAP-O1-Schema": {
+      "decision": "Revise",
+      "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "sha256": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+      "copy": "inputs/BCAP-O1-Schema.json"
+    },
+    "BCAP-O2-Schema": {
+      "decision": "Revise",
+      "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+      "sha256": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+      "copy": "inputs/BCAP-O2-Schema.json"
+    },
+    "BCAP-O1-XmlDb": {
+      "decision": "AcceptWithScope",
+      "sourceRevision": "99c8636e2f718a1804ac717c217e2158f5f70b26",
+      "sha256": "d0cf6d9c776e116ebdb5c91cb0216ea6d49c2b443bdcf189d57f7c570547e2ce",
+      "copy": "inputs/BCAP-O1-XmlDb.json"
+    },
+    "BCAP-O2-Core": {
+      "decision": "AcceptWithScope",
+      "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+      "sha256": "68833ceb38c024045197169d049ac03cc3d9caad23106140eac19852e1606017",
+      "copy": "inputs/BCAP-O2-Core.json"
+    },
+    "BCAP-O3-Braid": {
+      "decision": "AcceptWithScope",
+      "sourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "sha256": "e7b16a8488f2ca68a356739fd3105026702af6790d5fbbdc95a1df82d6a1d08c",
+      "copy": "inputs/BCAP-O3-Braid.json"
+    },
+    "BCAP-O4-Core": {
+      "decision": "AcceptWithScope",
+      "sourceRevision": "23bb194ffc5c44f44600a738b745c783414ef60d",
+      "sha256": "b6ea838ca81537b2c586089d4ddc7abbc4acdd7f853d06b81cee045d935a0f42",
+      "copy": "inputs/BCAP-O4-Core.json"
+    },
+    "BCAP-O4-XmlDb": {
+      "decision": "AcceptWithScope",
+      "sourceRevision": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+      "sha256": "f4e9b9cc9d2771b2853bd0412e205c37abab24fdfa8cfa86cdc12ee629c21b04",
+      "copy": "inputs/BCAP-O4-XmlDb.json"
+    }
+  },
+  "xmlDbFix": "0d18e91dc42db4831e50bf9e902f95fae7077d6d",
+  "xmlDbFixReviewSha256": "212d8069d3befb960d71f200873d5ff8aba0903600fa796d191c956ac3ac9737",
+  "xmlDbQualifiedSourceInputs": {
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.cs": {
+      "qualifiedWorkingSha256": "e07dd925f2c76c3aa434cee2816c4368ecb5a0ddc9b3fe6ad89c7c3a8948be5f",
+      "committedSha256": "e07dd925f2c76c3aa434cee2816c4368ecb5a0ddc9b3fe6ad89c7c3a8948be5f",
+      "gitBlob": "c949ad9bc3b1f8c751c2ee56ebc34db823369f9e",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.EnrollmentRetention.cs": {
+      "qualifiedWorkingSha256": "6a32d723dfe7d225bdb51ea594dad56d5c9affb52f182c27f15de4510f7ffef5",
+      "committedSha256": "6a32d723dfe7d225bdb51ea594dad56d5c9affb52f182c27f15de4510f7ffef5",
+      "gitBlob": "a19ab46d6f4a16cb5177f891217bc40bf5d07f32",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.RestartRetention.cs": {
+      "qualifiedWorkingSha256": "7919367cac317b0bc51316d19171f305594860b8b1978ac91c766c507a112ba6",
+      "committedSha256": "7919367cac317b0bc51316d19171f305594860b8b1978ac91c766c507a112ba6",
+      "gitBlob": "de499e42f96e29091cdd7689cb7fd4838a5ae5b7",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EpochAdmission.cs": {
+      "qualifiedWorkingSha256": "ba514be6506007edd26bb6754a1c08c5df158cffab8505d0a58cb2305f55b3c6",
+      "committedSha256": "ba514be6506007edd26bb6754a1c08c5df158cffab8505d0a58cb2305f55b3c6",
+      "gitBlob": "82532f51109166933c982cf3bab1ccc9de353f4a",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EpochEmptyCoordinator.cs": {
+      "qualifiedWorkingSha256": "23a1f5f7479671331d6ba21d55ad19085b4ccfc80e8b08a5a5b455a496d136b6",
+      "committedSha256": "23a1f5f7479671331d6ba21d55ad19085b4ccfc80e8b08a5a5b455a496d136b6",
+      "gitBlob": "5014c99f31ccb213c54383414bb86625222fb458",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EpochScalarCoordinator.cs": {
+      "qualifiedWorkingSha256": "f424ea9c1a564ad7b3ebdf92c6d42aeb1736ec18c43270f797983b270fd260e6",
+      "committedSha256": "f424ea9c1a564ad7b3ebdf92c6d42aeb1736ec18c43270f797983b270fd260e6",
+      "gitBlob": "98dc32da4b297bfae8295a49e469d96cf9ac7eab",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/EpochScalarHistory.cs": {
+      "qualifiedWorkingSha256": "75cd8b9dc0221bf283515d6722ac87dc6fcf0b9aeebebf2709e1c0a9b7058b67",
+      "committedSha256": "75cd8b9dc0221bf283515d6722ac87dc6fcf0b9aeebebf2709e1c0a9b7058b67",
+      "gitBlob": "dfd05ea19f98d2ec973ee5251921c51b6a9cc66b",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs": {
+      "qualifiedWorkingSha256": "f2085ea7839ec9d1c6a805e4f95669b191c9c4f0675e6c969cc9569026d9b946",
+      "committedSha256": "f2085ea7839ec9d1c6a805e4f95669b191c9c4f0675e6c969cc9569026d9b946",
+      "gitBlob": "207b6df4ba60d0c152dacf4d5c4085ea917a568d",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/ReadOnlyEpochDatabase.cs": {
+      "qualifiedWorkingSha256": "9543b6f91ed6cc4668baa4a20b8d2e811a2ba051241744fd885fb17b19735ba5",
+      "committedSha256": "9543b6f91ed6cc4668baa4a20b8d2e811a2ba051241744fd885fb17b19735ba5",
+      "gitBlob": "e1286a738939d3a9c7c75e32a00a527489f5ebba",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/XmlWriteTransaction.cs": {
+      "qualifiedWorkingSha256": "3f7fe176c270fefe7955723ee0c082d2cb121a10b1e34e8289e1bcef4a3d3623",
+      "committedSha256": "3f7fe176c270fefe7955723ee0c082d2cb121a10b1e34e8289e1bcef4a3d3623",
+      "gitBlob": "8de0f079cc640edaba21c325d9551a4ee60f50cf",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/SnapshotReleaseProbe.cs": {
+      "qualifiedWorkingSha256": "7fcf9cee69721ad4758f7ed6a52ad0adc66cbcc6789c84999bbe8b65af2a200e",
+      "committedSha256": "7fcf9cee69721ad4758f7ed6a52ad0adc66cbcc6789c84999bbe8b65af2a200e",
+      "gitBlob": "8a5b0423de727957379ab6b2b038d436ea5b1c11",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/SnapshotResources.cs": {
+      "qualifiedWorkingSha256": "f32ba7b41b0b8aa8f65a1c3a10dfdb228b46b448d1c65b41d672d81743ab8bf0",
+      "committedSha256": "f32ba7b41b0b8aa8f65a1c3a10dfdb228b46b448d1c65b41d672d81743ab8bf0",
+      "gitBlob": "bdd71a0823c88a2d5f870c5e5e76d99dffa1491c",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Storage/SnapshotWorkOwner.cs": {
+      "qualifiedWorkingSha256": "d3f062889c65640bad7d40fcad386eae4c9f878c8a31e5170ece09765d67389b",
+      "committedSha256": "d3f062889c65640bad7d40fcad386eae4c9f878c8a31e5170ece09765d67389b",
+      "gitBlob": "4fb9cbfe8c4f8cabb424d76c4a236d87799f3c75",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.Storage.Tests/NativeSnapshotCleanupTests.cs": {
+      "qualifiedWorkingSha256": "d635d00b7a1dfef28a31749dff7205def102e25653f01d67d783ff383ed58aae",
+      "committedSha256": "d635d00b7a1dfef28a31749dff7205def102e25653f01d67d783ff383ed58aae",
+      "gitBlob": "292eddaa33d4deeda3d476ba93646afaeb4cb922",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.IntegrationTests/CrashProbe.cs": {
+      "qualifiedWorkingSha256": "3d3de07c16d6a25e651d7b6274c2cea0c3927bd05afaf15360f9e4645fc0695e",
+      "committedSha256": "3d3de07c16d6a25e651d7b6274c2cea0c3927bd05afaf15360f9e4645fc0695e",
+      "gitBlob": "f1c403d7d2e1022325fcfddfdd366c9b37140ca4",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.IntegrationTests/CrashProbe.NativeSnapshotLifetime.cs": {
+      "qualifiedWorkingSha256": "2ef84e45581559344d23a5376e74d283210c814e90ce29f4c48a96714bba5bf7",
+      "committedSha256": "2ef84e45581559344d23a5376e74d283210c814e90ce29f4c48a96714bba5bf7",
+      "gitBlob": "49fb6f26e60ff2a4d4b76e4160e9bb2c973b00ae",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.IntegrationTests/NativeSnapshotLifetimeProcessTests.cs": {
+      "qualifiedWorkingSha256": "345e4d5ba012d1e7506142690771d8838156a2cedb9b59bc2f408308da6e1850",
+      "committedSha256": "345e4d5ba012d1e7506142690771d8838156a2cedb9b59bc2f408308da6e1850",
+      "gitBlob": "6ec778725be2bbe427e8dad442bd5efcb52767fc",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.IntegrationTests/NativeSnapshotWorkTests.cs": {
+      "qualifiedWorkingSha256": "e3b9116e92e00737dd1c2d860ae5bb735f956aeb8ad16de842c91127e937a982",
+      "committedSha256": "e3b9116e92e00737dd1c2d860ae5bb735f956aeb8ad16de842c91127e937a982",
+      "gitBlob": "c80f1914da0465bb07ea2d3a1c838ccaa7abb1e3",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs": {
+      "qualifiedWorkingSha256": "1c93aa403039da17c83fc8e123e69a638592b2ddb926ffda86429db552a559ab",
+      "committedSha256": "1c93aa403039da17c83fc8e123e69a638592b2ddb926ffda86429db552a559ab",
+      "gitBlob": "c1c3318c0f82954d74099c858a05134c60b5d206",
+      "normalizedLfEqual": true
+    },
+    "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj": {
+      "qualifiedWorkingSha256": "c9049aa69c061905f6599d2218703931fa97c7f7639eebb3373804f8a569d063",
+      "committedSha256": "c9049aa69c061905f6599d2218703931fa97c7f7639eebb3373804f8a569d063",
+      "gitBlob": "f0e116a678a79e02810d6bdf660465f179aafe2b",
+      "normalizedLfEqual": true
+    },
+    "tests/Bosak.XmlDb.Xdm.Tests/PersistentMembershipTests.cs": {
+      "qualifiedWorkingSha256": "a1cee796f0b85f8d5217c62bed9613e6b21ae737d740139e03efe53ae2d82d3c",
+      "committedSha256": "a1cee796f0b85f8d5217c62bed9613e6b21ae737d740139e03efe53ae2d82d3c",
+      "gitBlob": "86881b547bc59a0b6928afd31882c945b1621f14",
+      "normalizedLfEqual": true
+    }
+  },
+  "xmlDbTrxChecked": [
+    {
+      "platform": "Windows",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\windows-full\\charl_CHARLES_2026-11-02_17_07_40_net10.0.trx",
+      "sha256": "001e67197a0174a7f0fa0e3faccfc09224bcda7c6cfc9d8124397296317263a9",
+      "passed": 3572
+    },
+    {
+      "platform": "Windows",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\windows-full\\charl_CHARLES_2026-11-02_16_56_13_net10.0.trx",
+      "sha256": "cc6d93e0b12c500cded1b30bc07d1407c8eaa199d2b5552a5998ac24b3ddbb40",
+      "passed": 863
+    },
+    {
+      "platform": "Windows",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\windows-full\\charl_CHARLES_2026-11-02_18_07_15_net10.0.trx",
+      "sha256": "ffb4a3e5f606315858a42654ef2af2317964ad6bccb2a507454aa7bbc16d2917",
+      "passed": 47
+    },
+    {
+      "platform": "Linux",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\linux-full\\linux_net10.0_20261102165914.trx",
+      "sha256": "a32722d627bd8f88f7d0b5fc866cf63b2e2afd4a1930100bb0a1c1e21efb259f",
+      "passed": 3572
+    },
+    {
+      "platform": "Linux",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\linux-full\\linux_net10.0_20261102160141.trx",
+      "sha256": "b2c2875d1bf4a6cc870b8f9bc949bb31987097d1f86836b59e17193d21bda297",
+      "passed": 863
+    },
+    {
+      "platform": "Linux",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\linux-full\\linux_net10.0_20261102165918.trx",
+      "sha256": "43fdb1fcf346fa8727c6fe549a04f7121a2c7f8ea4e247c99c6793f9d2917cda",
+      "passed": 47
+    },
+    {
+      "platform": "Focused",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\focused-qualified\\charl_CHARLES_2026-11-02_16_52_53_net10.0.trx",
+      "sha256": "7b75f066dccbd6f9f207eed79fa3b12ac3641263a62dd840586d3e8c694e670b",
+      "passed": 139
+    },
+    {
+      "platform": "Focused",
+      "path": "D:\\Development\\Bosal.XmlDb\\.tools\\xdb-life\\focused-qualified\\charl_CHARLES_2026-11-02_16_52_42_net10.0.trx",
+      "sha256": "3d33703dabfdf162ece1405344dc5227a3fc5518e3b48e0d7e6ad3e66752b9f5",
+      "passed": 51
+    }
+  ],
+  "xmlDbPriorReviseSha256": "92cf6cf69ea4db9cc170104faaf8c2c405b5b3d82cbb098e19574e2d04d5f376",
+  "productionChanged": false,
+  "providerTestsRerun": false
+}

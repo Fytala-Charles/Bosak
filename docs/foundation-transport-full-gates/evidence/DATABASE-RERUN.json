@@ -1,0 +1,14 @@
+{
+  "name": "Bosak.XPath.Providers.Database.Tests",
+  "exitCode": 0,
+  "directory": "D:\\Development\\Bosak\\.guard-tmp\\transport-full-gates\\tests\\Bosak.XPath.Providers.Database.Tests\\bin\\Release\\net10.0",
+  "assemblies": {
+    "Bosak.XPath.Compiler.dll": "0e11840a7aacb1952c79dc88e35cb7afd0907d6b4034ebb25a3b655762c9671a",
+    "Bosak.XPath.Core.dll": "293a7e4e018ab3fd714a0737fa9b0c55c8384a7497fb9ac71a19031289485dc2",
+    "Bosak.XPath.Parser.dll": "badc9dbec722dbbbac1eb44cde621787721209bcc7b8acd7fc8d6fd4a9851d5e",
+    "Bosak.XPath.Providers.Database.dll": "7946916e32217268ac8ecb182b0613bec35a635dd5a1925b9b47145f76fa0f44",
+    "Bosak.XPath.Providers.Database.Tests.dll": "b55bfbfe46c71dd9674cba7d6e3d16be8f3173ac439c6924301a1ec8d6346bcb",
+    "Bosak.XPath.Providers.dll": "8b77be7b3098389965d3caeb5b79de8f599016f9d726883596fde712ab742a62",
+    "Bosak.XPath.Runtime.dll": "da10f85745c3dc2be28402629e865c3eba8296bef900c3ac43b84b87043239a1"
+  }
+}

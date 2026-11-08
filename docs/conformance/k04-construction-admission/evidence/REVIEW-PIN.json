@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C35",
+  "kind": "Separate construction routing admission qualification",
+  "sourceBase": "994b4e33cb7ca020666f139b5f4c333306351d70",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.6 Construction Declaration",
+      "3.9.1 Direct Element Constructors: copied-node type/name/nilled/typed-value properties",
+      "Construction-preserve namespace-sensitive values: XQTY0086"
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "scope": [
+    "Complete QT3 catalog inventory and exact construction refusal removal",
+    "87 unchanged originals, 49 copy and 43 context compatibility assertions",
+    "Fresh complete normal QT3/qt4 gates and isolated QT3 rehearsal",
+    "Prepare exact two-file adoption patch; owner approval pending"
+  ],
+  "limits": [
+    "Normal source, routing, fixtures/assertions, dependency guards, baselines, version and release unchanged",
+    "No qt4 XQuery applicability claim",
+    "Bosak.Schema retains XSD1.1 ownership; current XmlSchemaSet environment does not certify it"
+  ]
+}

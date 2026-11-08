@@ -1,0 +1,128 @@
+--- 1.63.0/src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs
++++ 1.63.1/src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs
+@@ -16,6 +16,8 @@
+ //                      | Charles Korthout | 0.2   | 05-11-2026     | Share adjacent metadata guards and avoid authority delegate allocation (1.61.1).         |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.3   | 05-11-2026     | Add explicit metadata-only NotRequested observation mode (1.62.0). |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.4   | 05-11-2026     | Share adjacent live proofs and call issuer guards directly (1.63.1). |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using Bosak.XPath.Core.Schema;
+@@ -79,22 +81,31 @@
+         _operation.RequireMember(_snapshot); _token.ThrowIfCancellationRequested(); _issuer.ThrowIfUnavailable(_token);
+         _operation.Check(); _input.ThrowIfUnavailable(_token); _operation.Check(); _issuer.ThrowIfUnavailable(_token); _token.ThrowIfCancellationRequested();
+     }
+-    private T Call<T>(Func<T> callback)
+-    { CheckLive(); var result=callback(); CheckLive(); return result; }
+     private void CheckBinding()
+     {
++        // Each post-proof also establishes the next callback's live precondition.
++        // No provider callback or cached observation occurs between these boundaries.
+         CheckLive();
+-        if(!ReferenceEquals(Call(()=>_issuer.Environment),_environment))throw new ArgumentException("Foreign facts environment.");
+-        if(!Call(()=>_issuer.OwnsInput(_input,_snapshot.Input)))throw new ArgumentException("Foreign facts input binding.");
+-        if(!Call(()=>_issuer.OwnsOrigin(_origin,_input,_snapshot.Input)))throw new ArgumentException("Foreign original assessment.");
+-        if(_authority is not null&&!ReferenceEquals(Call(()=>_issuer.Authority),_authority))throw new ArgumentException("Selected authority changed.");
++        var environment=_issuer.Environment;CheckLive();
++        if(!ReferenceEquals(environment,_environment))throw new ArgumentException("Foreign facts environment.");
++        bool inputOwned=_issuer.OwnsInput(_input,_snapshot.Input);CheckLive();
++        if(!inputOwned)throw new ArgumentException("Foreign facts input binding.");
++        bool originOwned=_issuer.OwnsOrigin(_origin,_input,_snapshot.Input);CheckLive();
++        if(!originOwned)throw new ArgumentException("Foreign original assessment.");
++        if(_authority is not null)
++        {
++            var authority=_issuer.Authority;CheckLive();
++            if(!ReferenceEquals(authority,_authority))throw new ArgumentException("Selected authority changed.");
++        }
+     }
+     private void CheckFacts()
+     {
+         CheckBinding(); _operation.RequireNodeOwner(_snapshot,_node); CheckBinding();
+-        if(!Call(()=>_issuer.OwnsFacts(_facts)))throw new ArgumentException("Unissued original facts.");
++        bool factsOwned=_issuer.OwnsFacts(_facts);CheckLive();
++        if(!factsOwned)throw new ArgumentException("Unissued original facts.");
+         CheckBinding();
+-        if(!Call(()=>_issuer.OwnsNode(_node,_facts,_input,_origin)))throw new ArgumentException("Foreign node/facts/input/origin tuple.");
++        bool tupleOwned=_issuer.OwnsNode(_node,_facts,_input,_origin);CheckLive();
++        if(!tupleOwned)throw new ArgumentException("Foreign node/facts/input/origin tuple.");
+         CheckBinding();
+     }
+     private T Read<T>(Func<T> getter)
+--- 1.63.0/src/Directory.Build.props
++++ 1.63.1/src/Directory.Build.props
+@@ -3,7 +3,7 @@
+   <PropertyGroup>
+     <IsPackable>true</IsPackable>
+     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+-    <Version>1.63.0</Version>
++    <Version>1.63.1</Version>
+     <Authors>Fytala</Authors>
+     <Company>Fytala</Company>
+     <Copyright>Copyright (c) 2026 FYTALA</Copyright>
+--- 1.63.0/tests/Bosak.XPath.Runtime.Tests/PublicOriginalNilledTests.cs
++++ 1.63.1/tests/Bosak.XPath.Runtime.Tests/PublicOriginalNilledTests.cs
+@@ -12,6 +12,8 @@
+ //                      |     Author       |Version|  Date          | Notes                                                                                    |
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.1   | 05-11-2026     | Creation; public original-node nilled controls (1.63.0).                             |
++//                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.2   | 05-11-2026     | Attribute guard fanout and qualify adjacent proof sharing (1.63.1). |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+@@ -272,7 +274,53 @@
+         using var f=new Fixture();var c=Context(XdmValue.FromNode(f.Node));f.Session.Run([f.Snapshot!],op=>{
+             for(int i=0;i<10;i++)_=op.Evaluate(c);long before=GC.GetAllocatedBytesForCurrentThread();int reads=f.Facts.Reads.Count,calls=f.Provider.Calls;
+             for(int i=0;i<100;i++)Assert.False(op.Evaluate(c).BooleanValue);long bytes=(GC.GetAllocatedBytesForCurrentThread()-before)/100;
+-            output.WriteLine($"Public nilled warm: {bytes} bytes/query; provider callbacks: {(f.Provider.Calls-calls)/100}; metadata reads: {(f.Facts.Reads.Count-reads)/100}");Assert.Equal(500,f.Facts.Reads.Count-reads);Assert.InRange(bytes,1,2000000);return 0;});
++            output.WriteLine($"Public nilled warm: {bytes} bytes/query; provider callbacks: {(f.Provider.Calls-calls)/100}; metadata reads: {(f.Facts.Reads.Count-reads)/100}");Assert.Equal(500,f.Facts.Reads.Count-reads);Assert.InRange(bytes,1,8192);Assert.InRange((f.Provider.Calls-calls)/100,1,10000);return 0;});
+         long start=GC.GetAllocatedBytesForCurrentThread();for(int i=0;i<20;i++)_=f.Evaluate();output.WriteLine($"Public nilled cold operation: {(GC.GetAllocatedBytesForCurrentThread()-start)/20} bytes/query");
+     }
++    /// <summary>Attributes public guard fanout without caching provider answers across queries.</summary>
++    [Fact] public void GuardStageAttribution()
++    {
++        using var f=new Fixture();var counts=new Dictionary<string,int>{{"endpoint",0},{"environment",0},{"authority",0},{"owns-origin",0},{"owns-facts",0},{"owns-tuple",0}};
++        f.Provider.Hook=name=>counts[name]++;var context=Context(XdmValue.FromNode(f.Node));
++        f.Session.Run([f.Snapshot!],op=>{for(int i=0;i<10;i++)_=op.Evaluate(context);foreach(var name in counts.Keys.ToArray())counts[name]=0;int calls=f.Provider.Calls;
++            for(int i=0;i<100;i++)_=op.Evaluate(context);
++            int availability=f.Provider.Calls-calls-counts.Values.Sum();
++            output.WriteLine("Public nilled stages: "+string.Join(",",counts.Select(pair=>$"{pair.Key}={pair.Value/100}"))+$",availability={availability/100}");
++            Assert.All(counts.Values,count=>Assert.True(count>0));Assert.True(availability>0);return 0;});
++    }
++    /// <summary>Shared live boundaries still stop every binding/issuance callback on revocation or cancellation.</summary>
++    /// <param name="stage">Provider callback.</param><param name="mode">Interruption or callback failure.</param>
++    [Theory]
++    [InlineData("endpoint","cancel")][InlineData("environment","cancel")][InlineData("authority","cancel")][InlineData("owns-origin","cancel")][InlineData("owns-facts","cancel")][InlineData("owns-tuple","cancel")]
++    [InlineData("endpoint","revoke")][InlineData("environment","revoke")][InlineData("authority","revoke")][InlineData("owns-origin","revoke")][InlineData("owns-facts","revoke")][InlineData("owns-tuple","revoke")]
++    [InlineData("endpoint","throw")][InlineData("environment","throw")][InlineData("authority","throw")][InlineData("owns-origin","throw")][InlineData("owns-facts","throw")][InlineData("owns-tuple","throw")]
++    [InlineData("owns-origin","false-revoke")][InlineData("owns-facts","false-revoke")][InlineData("owns-tuple","false-revoke")]
++    public void SharedBindingBoundaryInterruption(string stage,string mode)
++    {
++        using var f=new Fixture();using var cancel=new CancellationTokenSource();
++        f.Provider.Hook=name=>{if(name!=stage)return;if(mode=="throw")throw new InvalidOperationException(stage);
++            if(mode=="cancel")cancel.Cancel();else f.Provider.Available=false;
++            if(mode=="false-revoke"){if(stage=="owns-origin")f.Provider.OriginOwned=false;else if(stage=="owns-facts")f.Provider.FactsOwned=false;else f.Provider.TupleOwned=false;}};
++        f.Session.Run([f.Snapshot!],op=>{var context=Context(XdmValue.FromNode(f.Node));
++            if(mode=="cancel")Assert.Throws<OperationCanceledException>(()=>op.Evaluate(context));
++            else if(mode=="throw")Assert.Equal(stage,Assert.Throws<InvalidOperationException>(()=>op.Evaluate(context)).Message);
++            else Assert.Throws<ObjectDisposedException>(()=>op.Evaluate(context));return 0;},cancel.Token);
++        Assert.Empty(f.Facts.Reads);
++    }
++    /// <summary>Original type/declaration callbacks cannot revoke evidence inside a shared live boundary.</summary>
++    /// <param name="declaration">Target the declaration instead of type.</param><param name="mode">Revoked capability.</param>
++    [Theory][InlineData(false,"cancel")][InlineData(true,"cancel")][InlineData(false,"tuple")][InlineData(true,"tuple")]
++    [InlineData(false,"source")][InlineData(true,"source")][InlineData(false,"false-source")][InlineData(true,"false-source")]
++    public void SharedAuthorityBoundaryInterruption(bool declaration,string mode)
++    {
++        using var f=new Fixture();using var cancel=new CancellationTokenSource();var target=declaration?f.Declaration:f.Type;
++        f.Provider.Authority.OnOwn=type=>{if(!ReferenceEquals(type,target))return;
++            if(mode=="cancel")cancel.Cancel();else if(mode=="tuple")f.Provider.TupleOwned=false;
++            else{f.Input.Available=false;if(mode=="false-source")f.Provider.Authority.Types.Remove(type);}};
++        f.Session.Run([f.Snapshot!],op=>{var context=Context(XdmValue.FromNode(f.Node));
++            if(mode=="cancel")Assert.Throws<OperationCanceledException>(()=>op.Evaluate(context));
++            else if(mode=="tuple")Assert.Throws<ArgumentException>(()=>op.Evaluate(context));
++            else Assert.Throws<ObjectDisposedException>(()=>op.Evaluate(context));return 0;},cancel.Token);
++        Assert.DoesNotContain("nilled",f.Facts.Reads);
++    }
+ }

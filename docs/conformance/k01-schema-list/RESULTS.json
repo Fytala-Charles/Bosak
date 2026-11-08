@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-27",
+  "cluster": "K01",
+  "status": "Runtime correction verified; skip admission awaits baseline-policy approval",
+  "sourceBase": "7d70078dc169b5ccc1a4e474a4b38414da3fc40a",
+  "sourceCandidate": "1.26.4",
+  "publishedVersion": "1.26.3",
+  "baselineRegressions": {
+    "passed": 12,
+    "failed": 6,
+    "skipped": 0
+  },
+  "fixedRegressions": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "solutionTests": {
+    "passed": 21816,
+    "failed": 0,
+    "skipped": 0,
+    "assemblies": 10
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679,
+    "total": 31821
+  },
+  "qt4": {
+    "passed": 8436,
+    "failed": 0,
+    "skipped": 1894,
+    "total": 10330,
+    "gatedSets": 224,
+    "experimentalPasses": 11
+  },
+  "directCandidateCases": [
+    "CastAs-ListType-20",
+    "CastAs-ListType-28"
+  ],
+  "baselinePolicyApproval": null,
+  "proposedQt3AfterApproval": {
+    "passed": 31144,
+    "failed": 0,
+    "skipped": 677,
+    "total": 31821,
+    "executed": false
+  },
+  "policy": "Original fixtures/assertions, known-skip admission, dependency filters, frozen gates and all accepted REQ-126 history remain unchanged. No tag, push or publication."
+}

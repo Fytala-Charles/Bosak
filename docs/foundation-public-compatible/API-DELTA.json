@@ -1,0 +1,34 @@
+{
+  "scope": "CV-ENTRY-01 bounded Core implementation, not owner/C45/freeze acceptance",
+  "newExportedTypes": 1,
+  "newDeclarationRows": 13,
+  "requiredProviderMembersAdded": false,
+  "nullableMetadata": "Snapshot nullable context moves 1 to 2 with explicit Binding property/getter non-null annotations; effective public nullability is unchanged. All other pre-existing declarations, value layouts, references and friends are identical.",
+  "assemblies": {
+    "Bosak.XPath.Api": {
+      "added": [
+        "A Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_Decision():[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]",
+        "A Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_DiagnosticCode():",
+        "A Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_Snapshot():[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]",
+        "A Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult:[System.Runtime.CompilerServices.NullableAttribute((Byte)0)];[System.Runtime.CompilerServices.NullableContextAttribute((Byte)2)]",
+        "A Bosak.XPath.Api.Schema.SchemaQuerySession.OpenCompatibleSnapshot(Bosak.XPath.Api.Schema.SchemaQuerySnapshot sourceSnapshot:None:none:required=:optional=:attrs=,System.Threading.CancellationToken cancellationToken:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()]):",
+        "A Bosak.XPath.Api.Schema.SchemaQuerySnapshot.get_Binding():[System.Runtime.CompilerServices.CompilerGeneratedAttribute()];[System.Runtime.CompilerServices.NullableContextAttribute((Byte)1)]",
+        "A Bosak.XPath.Api.Schema.SchemaQuerySnapshot:[System.Runtime.CompilerServices.NullableAttribute((Byte)0)];[System.Runtime.CompilerServices.NullableContextAttribute((Byte)2)]",
+        "M Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_Decision:Public, HideBySig, SpecialName:Standard, HasThis:Bosak.XPath.Core.Schema.SchemaCompatibilityDecision :None:none:required=:optional=:attrs=():",
+        "M Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_DiagnosticCode:Public, HideBySig, SpecialName:Standard, HasThis:System.String :None:none:required=:optional=:attrs=():",
+        "M Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.get_Snapshot:Public, HideBySig, SpecialName:Standard, HasThis:Bosak.XPath.Api.Schema.SchemaQuerySnapshot :None:none:required=:optional=:attrs=():",
+        "M Bosak.XPath.Api.Schema.SchemaQuerySession.OpenCompatibleSnapshot:Public, HideBySig:Standard, HasThis:Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult :None:none:required=:optional=:attrs=(Bosak.XPath.Api.Schema.SchemaQuerySnapshot sourceSnapshot:None:none:required=:optional=:attrs=,System.Threading.CancellationToken cancellationToken:Optional, HasDefault:null:required=:optional=:attrs=[System.Runtime.InteropServices.OptionalAttribute()]):",
+        "P Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.Decision:Bosak.XPath.Core.Schema.SchemaCompatibilityDecision():attrs=",
+        "P Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.DiagnosticCode:System.String():attrs=",
+        "P Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult.Snapshot:Bosak.XPath.Api.Schema.SchemaQuerySnapshot():attrs=",
+        "P Bosak.XPath.Api.Schema.SchemaQuerySnapshot.Binding:Bosak.XPath.Core.Schema.ISchemaSnapshotBinding():attrs=[System.Runtime.CompilerServices.NullableAttribute((Byte)1)]",
+        "T Bosak.XPath.Api.Schema.SchemaQueryCompatibilityResult:Public, Sealed, BeforeFieldInit:layout=Auto:pack=0:sizeMetadata=0:base=System.Object:interfaces=:constraints="
+      ],
+      "removed": [
+        "A Bosak.XPath.Api.Schema.SchemaQuerySnapshot.get_Binding():[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]",
+        "A Bosak.XPath.Api.Schema.SchemaQuerySnapshot:[System.Runtime.CompilerServices.NullableAttribute((Byte)0)];[System.Runtime.CompilerServices.NullableContextAttribute((Byte)1)]",
+        "P Bosak.XPath.Api.Schema.SchemaQuerySnapshot.Binding:Bosak.XPath.Core.Schema.ISchemaSnapshotBinding():attrs="
+      ]
+    }
+  }
+}

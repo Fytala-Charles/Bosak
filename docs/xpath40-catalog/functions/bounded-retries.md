@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — precondition and postcondition loops with an attempt budget</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified finite callback contract**. No automatic delay, timeout, retry ceiling or unbounded termination guarantee. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Bounded retry state — Frozen 4.0.** [fn:while-do](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-while-do) and [fn:do-until](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-do-until).
@@ -102,6 +104,8 @@ or a predicate that terminates on its first call. Exceptions propagate; the
 functions do not automatically convert them into retryable outcomes.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Before-versus-after predicate timing and callback argument order; Whole-sequence state, one-based iteration positions and empty results; Boolean/empty predicate result, callback errors and finite example termination. **Boundaries:** No implicit timeout, retry delay or iteration ceiling; only bounded terminating examples are supplied. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile the new function calls with `CompileOptions.Compatibility40`. The default
 3.1 profile rejects them; compile the `fold-left` comparison with `Compatibility31`.

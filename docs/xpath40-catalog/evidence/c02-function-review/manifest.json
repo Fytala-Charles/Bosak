@@ -1,0 +1,134 @@
+{
+  "reviewDate": "2026-10-26",
+  "documentationBase": "5bdd5ff7687d071bbffe9c17f343cf105537dbac",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "sourceFiles": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "85383daf06921a46ff81656cce8174ad66a7ae01",
+    "src/Directory.Build.props": "4bbd3394519d40282be0d97700cd9416bde8a400",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "807c85b6a6724beafa3495135fd20260185f4fac",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "4f7681cd78f72d43406ccac47df82d16750bcec1",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "67f10a3a4252ec89e8f7389da94b5006b14fed7b",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "f97a0faf5c5b6ab0b286163dbc7eeb018c8de95c",
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+    "AGENTS.md": "f2362c6510a24b928d330b61aa2fc3d3ce034748"
+  },
+  "tools": {
+    "docs/xpath40-catalog/build-c02-review.py": "9cbca911b46548627439fa8ebea981c5fe9c9d01",
+    "docs/xpath40-catalog/build-closure-plan.py": "6a5e7e3bb9e3126df4e9a709e5121af9ae593007",
+    "docs/xpath40-catalog/C02-REVIEW-DECISIONS.json": "bc83944e9acc8b9052fc7f24b15fff3286e693fb"
+  },
+  "files": {
+    "boundary-additions.json": "833a2190e6261959bddf4125b424e9f20fec77b30d9b289b310e73bdc61840ed",
+    "build.log": "1f03df2e482dfa513ae16f32375acfe9ba299180b594c53c7749ab7370861e9d",
+    "catalog-case-inventory.json": "9d669b0ef15292b56169ba9274d3203589cc1e3ffea18dda5b95f5236e5c9f0f",
+    "catalog-tests.log": "4265be69e551f401e8269349a3fcd0cfe310b5105a781dfbe90de7e45995f51b",
+    "current-functions-framework.xml": "7634bc42bc05902bc4f82a44ab3597e881c3bc85774fd588dea772bdd7bfd01e",
+    "draft-probe-requests.json": "96bd826568f29a3bc469ca683f51446cc1aca337bbe7a4ad4b91c132e1f8cd8a",
+    "draft-probe-results.jsonl": "aa159126da8868556e5f2ea5f213421ec953557237b5e53ce44915fc7ee4ba15",
+    "entry-contract-sources.json": "86e0e97bb081cc176824fe91db57af2de4f819bb5ea5042b153b4136eb8fcb52",
+    "probe-additions.json": "815da7e33b25bad29de06cd27225860129c31c7bdf9c8b88f32a6eea73b01e46",
+    "probe-corrections.json": "16249f34a5731bc846273d0affe8b832a30cd87743236db8e7ebc94a55f59233",
+    "probe-program.cs.txt": "49f505f0a742facb61bdfbe5b02a9e4319b5fe2f46c314311bc6ba6bcc288709",
+    "probe-project.csproj.txt": "8d49bd5a88862a1b8f32f8643065c64ed5700eba35a3c24ea7d94d6795879936",
+    "probe-requests.json": "13d6993b6f51b9f37a278fcd26ff959ae9c9fc8ea3d97593ef80a6d277f02742",
+    "probe-results.jsonl": "007346a09b3c00e3ffb5b896278057b08712e5ab00fd25451d08dae2dfa7175d",
+    "render-program.cjs.txt": "f61591404878398b48925cb75e423c0117f06201acb21ba8f84b55bb140a6819",
+    "render-receipts.json": "253046be77d0a138210f6b1cdcb21cbab186116527a32f6f72ad62b5f6a8d9df",
+    "retained-checkout-incomplete-tests.log": "f1fd8928d625ea411d61a04e516fa5d1d8eb3ffa2238eddf584c2d4cff52b5aa",
+    "solution-tests.log": "c1953eebdbea208c6e1527649e328942fa16419cd37565da9f3baf5adbf2e913"
+  },
+  "outputs": {
+    "FUNCTION-OPTIONS-RECONCILIATION.json": "7ac58a0e8e341c908d2dc719f809e8c608e443c00f4e0ed699af8d2a5a3277fa",
+    "CLOSURE-PLAN.json": "374b138381b9cca2c999c3cc44dc3994f5774dc24132a9764c5db434f7eea7b9",
+    "CONFORMANCE-SKIP-TRIAGE.json": "b2b4fa5925928081caf25480530eb0ac98244ee04b2567c7d54414be18761138"
+  },
+  "localBinaryIdentities": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c02-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    }
+  ],
+  "validation": {
+    "build": {
+      "exitCode": 0,
+      "configuration": "Release",
+      "errors": 0,
+      "warnings": 2
+    },
+    "solution": {
+      "exitCode": 0,
+      "passed": 21798,
+      "failed": 0,
+      "skipped": 0,
+      "assemblies": 10
+    },
+    "catalog": {
+      "exitCode": 0,
+      "passed": 3148,
+      "failed": 0,
+      "skipped": 0
+    },
+    "initialRetainedCheckoutAttempt": {
+      "status": "Stopped; incomplete fixture checkout",
+      "missingFixtureFailures": 51,
+      "exitCode": 1,
+      "notEngineRegression": true
+    },
+    "probes": {
+      "exitCode": 0,
+      "observations": 195,
+      "expectedControls": 120,
+      "matchingControls": 118,
+      "unmetControls": 2,
+      "diagnosticObservations": 75,
+      "unmetTicket": "F08-atomic-annotation-empty"
+    },
+    "gates": {
+      "kind": "Inherited fresh C00 evidence; no rerun",
+      "qt3": [
+        31142,
+        0,
+        679
+      ],
+      "qt4": [
+        8436,
+        0,
+        1894
+      ]
+    }
+  },
+  "sourcePolicy": "Fresh solution build uses documentation HEAD 5bdd5ff7 with engine/test files unchanged from release 08fbdc31. Probe and separate catalog checks use the retained released-source binaries. No same-byte claim for the main-workspace rebuild."
+}

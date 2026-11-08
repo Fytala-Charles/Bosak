@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-xib-admission-render/README.md.html",
+      "sha256": "1c8105631f4b4754b49290273b89607021d6906a87423af769bfcf717ea93759"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "ecf9942db88202cce00547abb5b71edfa155214cfb209e2a8637aa2ee2213194"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "2ce0de1e993d36c04ea14d631f9c72a6bcc9835b3373bf871cbee1f95a9823da"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "f02dd54dd2c5d5b408b532d5c240ea5d13b987ba37283d1ce0a2ac5d07cc32c2"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "33bec9ba1b784d00f8d622191e308cf84571761846713a7bc3df8b7ffeb7392c"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "4cff7249278f1653034dc521c63e256333f6067c6a5cc3eb53da8ed773d39c05"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "1521b327b4db549c65cb8052dfae859675271ab470c03d5edf19116bab4a4346"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "c78fcbaac5441c588559525b6eab583c1c78f667dbc290446eb654e662ee8a4d"
+    },
+    {
+      "source": "docs/conformance/k04-xib-admission/README.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_conformance_k04-xib-admission_README.md.html",
+      "sha256": "232c21f96ea0009f0bf30a948bfabc2d2bb3d685179cf842c7a0d34e6dea99bd"
+    },
+    {
+      "source": "docs/conformance/k04-xib-admission/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-xib-admission-render/docs_conformance_k04-xib-admission_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "46eba4c2621f50949535b3780de68cd10595d33ddebf3b459b4bc47883dc18d1"
+    }
+  ]
+}

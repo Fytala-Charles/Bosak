@@ -1,0 +1,20 @@
+{
+  "id": "W1-07",
+  "status": "Passed",
+  "trxSha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e",
+  "results": [
+    {
+      "executionId": "346b524b-00ab-4063-9f0f-3709121ce9ef",
+      "testId": "16e79f2c-2812-20dd-2ab6-77cc60177903",
+      "testName": "Bosak.XPath.Runtime.Tests.OrdinarySourceAdmissionTests.W1_07_AmbiguousPoisonNode",
+      "computerName": "CHARLES",
+      "duration": "00:00:00.0004837",
+      "startTime": "2026-11-03T18:06:50.1111021+01:00",
+      "endTime": "2026-11-03T18:06:50.1111021+01:00",
+      "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+      "outcome": "Passed",
+      "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+      "relativeResultsDirectory": "346b524b-00ab-4063-9f0f-3709121ce9ef"
+    }
+  ]
+}

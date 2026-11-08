@@ -1,0 +1,7 @@
+{
+  "date": "2026-10-28",
+  "kind": "Scope clarification; does not replace the pre-implementation adoption pin",
+  "catalogueBoundary": "The adoption pin fixture/assertion limit refers to original frozen catalog fixtures and assertions, all unchanged.",
+  "unitTestScope": "C17 NEXT-SLICE explicitly requires correcting nine CalendarFallbackTests rows that preserve the old empty-input error, plus new real correctness regressions.",
+  "semanticBoundary": "Only existing 2/5-argument empty results and optional return metadata change; all eight arity3/4 originals remain failed until a separate slice."
+}

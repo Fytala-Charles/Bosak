@@ -1,0 +1,21 @@
+{
+  "policyCases": "docs/foundation-container-policy/IMPLEMENTATION-CASES.json",
+  "plannedCases": 32,
+  "additionalPassedTestCount": false,
+  "ordinaryCoreSlice": "TC01-TC23",
+  "compatibleRefusalControl": "TC24",
+  "compatibleCasesPending": [
+    "CTV25",
+    "CTV26",
+    "CTV27",
+    "CTV28"
+  ],
+  "limitations": [
+    "The TC names and cardinalities differ from the planned CTV groups; no blanket execution of all policy combinations is asserted.",
+    "CTV29 has an actual ordinary exclusive-file getter tail test; compatible/native resources remain pending.",
+    "CTV31 characterizes numeric/compatible refusal; broader other-profile public test combinations remain followup.",
+    "CTV16/CTV30 retain direct primary/provider cursor failure evidence and existing full-suite reader controls; not every combined public cleanup-failure combination is newly tested.",
+    "CTV07 selects four families only; wider primitive/persistent/construction/nil/no-value routes remain required."
+  ],
+  "requirementsWaived": 0
+}

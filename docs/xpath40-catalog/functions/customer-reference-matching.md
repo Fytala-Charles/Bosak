@@ -4,6 +4,8 @@
 <p>21 October 2026</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited equality/collation contracts**. C02-F01/F09: no deep-equal options maps, complete UCA/normalization, metadata or full comparator acceptance. Other three fn sets are not gated. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Customer-reference equality and collation — existing 3.1 functions with reviewed 4.0 contracts.** Covers fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token. Functions are not4.0-only names; this adds no name to the 117-name inventory. [REQ-126](../../FEATURE_REQUESTS.md) equality/collation documentation slice; [review and source pins](../EQUALITY-COLLATION-CONTRACT-REVIEW.md), source base `5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f`. Keyword syntax requires4.0. Unsupported draft forms are explicitly separated from supported calls.
@@ -59,6 +61,8 @@ parse-xml supplies controlled input; simple mapping projects strings without imp
 Explicit policy makes reports reproducible for the supplied supported collations. Case folding can collapse distinct business identifiers if chosen incorrectly. ASCII collation does not fold Ä/ä or normalize combining marks. A distinct count is deliberately used without relying on which duplicate spelling or order is returned.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Explicit collations, duplicate representatives and one-based matching positions; Sequence-order-sensitive deep equality and NaN behavior; Empty index-of collation correction and compare keyword boundary. **Boundaries:** Deep-equal map options are unsupported; supported collations do not imply normalization or complete UCA behavior. Follow-up groups: F01, F09. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Original reviewed implementation: [FunctionLibrary at the immutable source base](https://github.com/Fytala-Charles/Bosak/blob/5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f/src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs), including DistinctValues_2, IndexOf_3, DeepEqual_3, Compare_2/3 and ContainsToken. This documentation slice changes no engine code. Current compare keywords differ from the draft, two families lack metadata, empty positional index collation is corrected in source1.23.2 only at4.0 while deep-equal options maps still refuse; see the separate findings. Keyword grammar refuses at XPath31; the five positional functions remain available there, with compare's earlier string contract.
 

@@ -1,0 +1,2 @@
+# Preserve exact readiness/response evidence bytes.
+* -text whitespace=cr-at-eol

@@ -1,0 +1,18 @@
+{
+  "command": [
+    "dotnet",
+    "vstest",
+    "D:\\Development\\Bosak\\.guard-tmp\\xmldb-full-qualification\\integration-guarded\\Bosak.XmlDb.Integration.Tests.dll",
+    "--logger:trx",
+    "--logger:console;verbosity=normal",
+    "--ResultsDirectory:D:\\Development\\Bosak\\docs\\foundation-xmldb-full-qualification\\evidence\\trx\\integration"
+  ],
+  "exitCode": 1,
+  "failure": null,
+  "elapsedSeconds": 0.266998799983412,
+  "qt4GateOnly": false,
+  "head": "57865fc845c3eb081a38588cc4f73f5e11e42767",
+  "workingTreeStatus": " M docs/foundation-xmldb-full-qualification/tools/run.py\n?? docs/foundation-xmldb-full-qualification/evidence/bindings/integration/\n?? docs/foundation-xmldb-manual-approval/\n",
+  "logSha256": "8bdb297f047f8e6637b724af268d28f413b33ab141d03a07344f8d0fe049f83c",
+  "qualificationAccepted": false
+}

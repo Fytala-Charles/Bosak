@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 1,
+  "returnId": "BCAP-O2-Schema",
+  "packet": "BCAP-O2",
+  "owner": "Schema",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "signer": "Codex - Schema design reviewer acting on explicit repository-owner direction in this session; no independently authenticated human signature claimed",
+  "date": "2026-11-03",
+  "profile": "Schema R2 contract/source-feasibility only. Public base 20090180755d0427d824b091cf838e9a03ca9adc, packages 1.26.3 unchanged. Read-only native source c3624998eca8c83018e121fa84af611f834a0501 supports bounded decimal-sequence/assertion v1-v5 and never-nil element-only root/no-typed-value plus exact representable decimal leaves; not full XSD 1.1. Accept the concrete adapter design, not its implementation. Historical probes use observed Core 1.34.2.0, not documentary 1.34.1 or BCAP 1.42. Select and hash-bind the explicit BCAP dependency candidate before native R3/R4 qualification. No runtime qualification, budgets, C45, freeze, adoption, release or joint/global R2 closure.",
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": "AcceptWithScope. Retain all six intents: FromInteger(BigInteger), its schema-name overload, BigIntegerValue, FromDecimal(XdmExactDecimal), its schema-name overload and ExactDecimalValue. Accept required caller-supplied positive finite snapshot/cache/atom/digit counts, nonnegative scale, invalid default SchemaQueryLimits, explicit supplied coefficient-digit/scale capacities before normalization, and explicit formatting capacity. No implicit query/numeric workload defaults or unlimited fallback. Optional assessment diagnostic tightening with finite provider diagnostic defaults is a separate bounded policy, not a query/numeric default. Exact decimals normalize coefficient/scale and zero; ToInvariantString is not an XSD canonical serializer. Preserve wrong-kind checks: BigIntegerValue accepts integer kind and only recognized decimal-backed integer representations, not ordinary decimal; ExactDecimalValue accepts decimal kind and the specified integer-tagged decimal representation, refusing Kind.Integer. Narrowing refuses overflow/inexactness, never rounds; annotation strings confer no authority. Enforce bounds in admission/parsing/arithmetic/casts/map-key hashing/comparison/serialization before large allocations where possible; an existing caller BigInteger is not retroactively bounded. Enforcement is R3, measured workload ceilings R4. No R2 finite-policy blocker or additional required signature remains."
+    },
+    {
+      "id": "O2-Q2",
+      "answer": "AcceptWithScope. IsList is independent of atom count: empty and singleton lists remain lists, not absent/scalar. Preserve governing list/union shape and per-atomic selected actual type/provenance, including union-of-list requirements. Nilled, HasNoTypedValue and empty typed list are distinct. Original PSVI remains original; construction supplies current evidence without original assessment. Native source establishes representable exact decimal leaves and an element-only root without typed value, never-nil; general list/union/nil, wider datatypes and full XSD 1.1 are Unsupported until implemented/qualified. Their required representation stays in the contract and roadmap. No additional member is identified; transport implementation and supported/refused profile evidence remain R3/R4."
+    },
+    {
+      "id": "O2-Q3",
+      "answer": "AcceptWithScope for all N1-N8 representation. N1/N8: ISchemaAuthority/owned handles and same-component comparison authenticate components, separate from source/snapshot/origin/query/XDM/XSD identities; names/GUIDs/digests do not. N2: IsDerivedFrom/IsAffiliatedWith/GetComponentClosure return complete supported answers or Unsupported, never false/empty for missing coverage. N3/N5: node facts and typed containers retain governing/actual types, original facts, per-atomic provenance and list/union/nil/no-value distinctions. N4: ISchemaAssessor.Bind/advisor QueryEnvironment bind immutable host/version, adopted XDM revision, behavior profile and normalized static context; assessment episode fixes date/time/timezone. Wider assertion/CTA semantics stay Unsupported pending adoption/implementation. N6: directional compatibility authority/view remains represented as below. N7: lifetime/lease, exact immutable Run membership, revocation and Drain retain actual host-owned borrowed resources; cancelling a wait is not draining or disposing providers. Only complete Valid publishes ValidatedRoot; Invalid/partial/Unsupported do not become success-shaped validated roots. Known foundation needs are expressed without another required member. Provider implementation and full answers are R3/R4; broader coverage and joint freeze stay pending."
+    },
+    {
+      "id": "O2-Q4",
+      "answer": "AcceptWithScope for directional Establish(source,target,executionEnvironment) and bound compatibility views. Authenticate exact endpoint advisors and target environment; preserve original source PSVI/provenance. Compatible alone yields a view; Incompatible needs a supported complete negative proof; incomplete proof is Unsupported. View methods authenticate handles/origins and do not rewrite facts. Copy, equal QName/digest/label or independently compiled equal text is not compatibility proof. This native decimal source establishes no general cross-universe supported profile: those operations remain Unsupported pending actual implementation and positive/negative R4 proof. Required future compatibility stays represented. No additional signature or R2 blocker is identified; absent positive runtime proof remains R3/R4."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/SOURCE-PINS.json: all 22 copied files hash-verified in this review, including native source and original submitted BCAP returns."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/native/src/Bosak.Schema/Assessment/: AssessedDocument constructor/Copy/CreateDocumentCopy/CreateTypedElementCopy; XsdDocumentAssessor.Assess; SchemaDocumentAssessment original declaration/type/element state; no BCAP adapter exists."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/core/: Provider.cs.txt, QueryFacade.cs.txt, ExactNumeric.cs.txt, DECISIONS.md.txt D01-D14 and REQUIREMENTS.md.txt N1-N8; native S009-02/S009-04 fact/foundation maps."
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "../../core-disposition-inbox/2026-11-02/inputs/core/native-facts-0.json and native-facts-1.json: 14 historical-source controls reported twice, Core 1.34.2.0. Receipts reviewed, not freshly executed or BCAP qualification."
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Bosak docs/foundation-bcap-owner-review/REVIEW.md R01-R08 and manifest-bound Xslt.cs.txt/OperationLifetime.cs.txt reviewed read-only. Capture/output/error-graph applicability explicitly answered in this replacement."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "priorReturnId": "O2-Schema",
+  "reviewMode": "MissingFullReturn",
+  "deltaApplicability": "R01: Accept operation-borrowing CaptureTransform and owning RunCaptureTransform design on the exact executable/session/environment; declarations still throw and public/native SDK support is not claimed. R02: Principal/secondary bytes, URI/order, effective properties, messages, existing classifications and per-run receipts suffice for this bounded Schema scope; serialized output is not PSVI/live authority. Bytes can expose backing arrays and OutputProperties is mutable: consumers must copy bytes and snapshot permitted property values before retention/thread handoff/export; no deep immutability guarantee. No extra signature is required for this copy policy. R03: Accept separate admission/work/ordered cleanup diagnostics, capture retained through cleanup failure, unsuccessful Partial/Cancelled/error outcomes, identity deduplication and preserved provider aggregate boundaries. Rollback stays AdmissionError; cleanup uncertainty is not release success and does not justify automatic retry. R04: Invocation is sole template/mode/base-output source; duplicate options fields must be absent and RawResult refuses. Four count/byte controls are finite/nonnegative, time/operation controls finite/positive. MaxMessages bounds count, not individual message bytes; output limits do not bound compiler/tree/native allocation, single-evaluation work or worker stacks. This bounded in-process Schema design does not require an extra Core message-byte limit. Arbitrary/untrusted IPC preview or hard total-memory/deadline guarantees are outside scope and require separately qualified host policy. No workload defaults/budgets are accepted. Borrowed engine gates compose only in an explicitly sequential profile; unsupported arbitrary caller policies refuse. R05: Foreign/closed operations and source roles reject before getters. Shared/distinct/source-free inputs stay within one raw operation through serialization and cleanup; host retains resources, close blocks new admission, cancelled wait does not drain, ordinary sources need no Schema issuer. R06: Accept local-only original exception identities under the explicit exception-graph disposition, not IPC or recursively sanitized payloads. R07: Core measurements are observations, not Schema budgets/defaults or worker/native/recovery qualification; R3/R4 must qualify the chosen execution profile. R08: AcceptWithScope for exact R2 design/source feasibility only; no public/native implementation, adoption, all-owner closure, C45, freeze or publication.",
+  "originalExceptionGraphDisposition": "Exception, Data and InnerException graphs are local diagnostic references only, not immutable/detached schema evidence and not safe for IPC. Preserve object identity and aggregate boundaries for local diagnosis; do not recursively inspect provider objects, treat exception payloads as schema facts, or traverse nodes after admission revocation. Do not serialize or publish raw exception graphs. Any external diagnostic projection requires a separate owner-controlled bounded allowlist/redaction policy. Exception retention does not establish typed-value validity, authority, compatibility or successful cleanup.",
+  "acceptedPerformanceBudgets": null,
+  "priorResponseSha256": null,
+  "responseRevision": 2,
+  "nativeSourceRevision": "c3624998eca8c83018e121fa84af611f834a0501",
+  "supersedesResponse": {
+    "path": "../../core-disposition-inbox/2026-11-02/inputs/prior-returns/BCAP-O2-Schema.json",
+    "sha256": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+    "decision": "Revise"
+  },
+  "r2BlockingItems": [],
+  "remainingBlockers": [
+    {
+      "questionId": "O2-Q1",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O2-Q2",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O2-Q3",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    },
+    {
+      "questionId": "O2-Q4",
+      "stages": [
+        "R3Implementation",
+        "R4Qualification"
+      ],
+      "r2Blocker": false,
+      "closureEvidence": "Implement and execute the supported/refused controls in the corresponding answer on one hash-bound BCAP/native candidate; retain source, dependency, binary and execution receipts."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "trx": "evidence/focused-trx/charl_CHARLES_2026-11-06_13_22_26_net10.0.trx",
+  "trxSha256": "a781989c0d0266dc0f8ab8dce76f5cfb5ddd8fc6c38815a71861fc7a88cf0772",
+  "observation": "Compatible container cost: cold caller bytes 66594552; cold ticks 11290270; warm reads 2; warm caller bytes 201335152; warm ticks 20381131; frequency 10000000",
+  "archiveSha256": "ef6e0609976e9bae5237299446804eccefd8974bcbf2fa8e63ae55cfe6061036",
+  "scope": "Superseded initial 87-test implementation; two changed metadata sources and exact three dependency/test binaries retained, not a qualified eleven-engine release cohort.",
+  "budgetsAccepted": false
+}

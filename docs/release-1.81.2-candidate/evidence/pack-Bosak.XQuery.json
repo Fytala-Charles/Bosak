@@ -1,0 +1,23 @@
+{
+  "command": [
+    "dotnet",
+    "pack",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\src\\Bosak.XQuery\\Bosak.XQuery.csproj",
+    "-c",
+    "Release",
+    "--no-build",
+    "--no-restore",
+    "-o",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\feed",
+    "-p:Version=1.81.2",
+    "-p:PackageVersion=1.81.2",
+    "-p:SourceRevisionId=e992d90b0efa01d45224771a9f8e53dee05096a6",
+    "-p:RepositoryCommit=e992d90b0efa01d45224771a9f8e53dee05096a6",
+    "-p:NuGetAudit=false",
+    "-p:ContinuousIntegrationBuild=true",
+    "-p:CustomAfterMicrosoftCommonTargets=D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source\\docs\\foundation-compatible-view-policy\\packaging\\PreviewAssets.targets",
+    "-p:CandidateSourceRoot=D:\\Development\\Bosak\\.guard-tmp\\release-1812-candidate-e992d90b\\source"
+  ],
+  "exitCode": 0,
+  "logSha256": "78f0721cad6dc0114690303207b36019a0d406c76bb293f4da5df8664ff47890"
+}

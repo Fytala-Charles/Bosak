@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-08",
+  "harness": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\command-harness",
+  "harnessSha256": "20da25dab70afa21709573736d1610a4829c85ebdcb70c226f4b9e6fe12e1c7c",
+  "expectedCommands": 5,
+  "candidateManifest": "docs/release-core-vscode-candidate/VSIX-CONTENTS-NOTICES.json",
+  "activeProfileChanged": false,
+  "machineSettingsChanged": false
+}

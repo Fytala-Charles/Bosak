@@ -1,0 +1,12 @@
+{
+  "assemblies": {
+    "Bosak.XPath.Api": {
+      "added": [
+        "A Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedContainer(Bosak.XPath.Api.Schema.SchemaQuerySnapshot snapshot:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):",
+        "M Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadTypedContainer:Public, HideBySig:Standard, HasThis:Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Core.Schema.ISchemaTypedValue> :None:none:required=:optional=:attrs=(Bosak.XPath.Api.Schema.SchemaQuerySnapshot snapshot:None:none:required=:optional=:attrs=,Bosak.XPath.Core.Schema.ISchemaTypedValue value:None:none:required=:optional=:attrs=):"
+      ],
+      "removed": []
+    }
+  },
+  "disposition": "CT01 Core-selected additive ReadTypedContainer member; original draft preserved; final owner/manifest acceptance pending."
+}

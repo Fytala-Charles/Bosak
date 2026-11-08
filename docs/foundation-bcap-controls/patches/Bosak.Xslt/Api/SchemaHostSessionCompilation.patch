@@ -1,0 +1,72 @@
+--- a/src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs
++++ b/src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs
+@@ -17,6 +17,8 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.3 | 01-11-2026     | Enable composite transforms only through exact match/global source admission. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.4 | 01-11-2026 | Isolated BCAP-01 capture feasibility; not adopted. |
++//                      | Charles Korthout | 0.5 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+ using System.Globalization;
+@@ -107,6 +109,60 @@
+             provider, snapshots, values, cancellationToken, compositeEvaluation: false, compositeAdmission: SchemaHostExecution.BindXsltAdmission(match, global)); return true;
+     }
+ 
++    internal static bool TryCompileCaptureCandidate(string source, XsltCompiler compiler, string? baseUri,
++        IXdmNode? match, IXdmNode? global, string? initialTemplate, Func<IXdmNode, bool> ownsNode,
++        ISchemaSessionProvider provider, int snapshots, int values, out SchemaQuerySession? session, out Func<SchemaQuerySession.Operation, SchemaOperationInputs, IXdmNode?, IXdmNode?, string?, string?, string?, Bosak.Xslt.Capture.XsltCaptureOptions, (Bosak.Xslt.Capture.XsltCaptureResult Capture, IReadOnlyList<Bosak.XPath.Runtime.Resources.ControlledResourceReceipt> Receipts)>? capture, out string? unsupported,
++        CancellationToken cancellationToken = default)
++    {
++        SchemaProviderSessionBinding.Validate(provider, snapshots, values, cancellationToken);
++        ArgumentNullException.ThrowIfNull(compiler); ArgumentNullException.ThrowIfNull(ownsNode); session = null; capture = null; unsupported = null;
++        if (compiler.UriResolver is not null || compiler.ResourcePolicy is not null || compiler.MessageListener is not null
++            || compiler.SchemaAware || compiler.SchemaResolver is not null || compiler.SchemaSet is not null || compiler.EnvironmentSchemaSet is not null
++            || compiler.ProcessorProfile != XsltProcessorProfile.Legacy)
++        { unsupported = "Mutable resolver/schema/listener and nonlegacy processor profiles need a separate capture contract."; return false; }
++        var parameters = compiler.StaticParameters;
++        if (parameters is not null && (parameters.GetType() != typeof(Dictionary<(string, string), XdmValue>)
++            || !ReferenceEquals(parameters.Comparer, EqualityComparer<(string, string)>.Default)))
++        { unsupported = "Custom static-parameter collection semantics are not captured."; return false; }
++        var copied = parameters is null ? null : new Dictionary<(string, string), XdmValue>(parameters);
++        if (copied is not null && copied.Values.Any(v => !PlainStatic(v)))
++        { unsupported = "Only plain primitive static parameter values are captured."; return false; }
++        var document = Xml11Loader.Parse(source, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri, baseUri ?? "");
++        XNamespace xsl = "http://www.w3.org/1999/XSL/Transform";
++        if (document.Root is null || (document.Root.Name != xsl + "stylesheet" && document.Root.Name != xsl + "transform"))
++        { unsupported = "This captured profile requires a principal stylesheet or transform element."; return false; }
++        if (document.Descendants().Any(e => e.Name.Namespace == xsl && e.Name.LocalName is "include" or "import" or "use-package" or "import-schema")
++            || document.Descendants().Attributes().Any(a => !a.IsNamespaceDeclaration && (a.Name.LocalName.StartsWith("_", StringComparison.Ordinal)
++                || a.Name.LocalName == "use-when" && (a.Name.Namespace == xsl || a.Parent!.Name.Namespace == xsl))))
++        { unsupported = "External modules/schema and conditional/shadow preprocessing need a separate captured profile."; return false; }
++        var policy = SchemaProviderSessionBinding.ClosedResources();
++        var frozen = new XsltCompiler
++        {
++            ProcessorProfile = compiler.ProcessorProfile, StaticParameters = copied, ResourcePolicy = policy,
++            UriResolver = new ClosedResolver(), TreatRecoverableAmbiguousMatchAsError = compiler.TreatRecoverableAmbiguousMatchAsError,
++            PackageVersionResolutionStrategy = compiler.PackageVersionResolutionStrategy
++        };
++        XsltExecutable executable;
++        try { executable = frozen.Compile(document, baseUri); }
++        catch (ClosedCaptureException error) { unsupported = error.Message; return false; }
++        catch (Exception) when (policy.Receipts.Count != 0) { unsupported = "Static resource acquisition is outside the captured profile."; return false; }
++        if (policy.Receipts.Count != 0) { unsupported = "Static resource acquisition is outside the captured profile."; return false; }
++        var statics = executable.CaptureSchemaStaticValues();
++        if (statics.Values.Any(v => !PlainStatic(v))) { unsupported = "Effective static values require an unsupported captured representation."; return false; }
++        var namespaces = document.Root!.Attributes().Where(a => a.IsNamespaceDeclaration)
++            .ToImmutableDictionary(a => a.Name.LocalName == "xmlns" ? "" : a.Name.LocalName, a => a.Value, StringComparer.Ordinal);
++        var environment = new SchemaQueryEnvironment(namespaces, JsonSerializer.Serialize(new
++        {
++            format = SchemaQueryEnvironment.DescriptorFormat, host = "XSLT", profile = SchemaProviderSessionBinding.Profile,
++            engine = typeof(XsltExecutable).Assembly.GetName().Version!.ToString(), source, baseUri,
++            processor = (int)frozen.ProcessorProfile, frozen.TreatRecoverableAmbiguousMatchAsError, strategy = (int)frozen.PackageVersionResolutionStrategy,
++            supplied = Describe(copied), effective = Describe(statics)
++        }));
++        session = SchemaProviderSessionBinding.Create(environment, SchemaHostExecution.BindXslt(executable, match, global, initialTemplate, ownsNode),
++            provider, snapshots, values, cancellationToken, compositeEvaluation: false, compositeAdmission: SchemaHostExecution.BindXsltAdmission(match, global));
++        capture = new SchemaCaptureCandidate(session, executable).Run; return true;
++    }
++
+     private static bool PlainStatic(XdmValue value) => XdmValue.SchemaTransportMarker(value) is null
+         && value.Kind is XdmValueKind.String or XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.Boolean;
+     private static object[]? Describe(IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? values)

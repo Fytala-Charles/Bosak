@@ -1,0 +1,114 @@
+[
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_18_net10.0.trx",
+    "passed": 202,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 202,
+    "sha256": "44e03e02d5d075bd7862d7006e7aebb2e4f3a8e33aa2907a5f4e05bfc692da3b"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_18_net10.0[1].trx",
+    "passed": 66,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 66,
+    "sha256": "1671f280a094d6b8945224e440595e11f73aebb8b349df8d1d5a2944fb9a1cad"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_18_net10.0[2].trx",
+    "passed": 2,
+    "failed": 45,
+    "notExecuted": 0,
+    "total": 47,
+    "sha256": "0004d511904dbff58814d9c2115f1a2008891bf33d1bab222088260dfb80a40b"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_18_net10.0[3].trx",
+    "passed": 266,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 266,
+    "sha256": "68253cda6863541fd490c83bf5903ad89880dcbe7ee15d4d6aff251fcc94e258"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_18_net10.0[4].trx",
+    "passed": 681,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 681,
+    "sha256": "7f425b9d5ef71cb9b6f5c9a68f71c44161158f2b8deab697347b8a325f13d9dd"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_19_net10.0.trx",
+    "passed": 841,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 841,
+    "sha256": "67ecba1a82485258854499dddcf92c0022f8fc3b37e4923d7536e0062d11533b"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_19_net10.0[1].trx",
+    "passed": 223,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 223,
+    "sha256": "e8aa9814525c28796b403a2d2c3dd0d3a11508ca96db1c692164655656a428fe"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_19_net10.0[2].trx",
+    "passed": 1899,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 1899,
+    "sha256": "208854df2f49eaec3949b22a161be6362cb2095091b179e608088b8114884538"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_20_net10.0.trx",
+    "passed": 13797,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 13797,
+    "sha256": "a6cb5f0da4b54fc3b02d6670ab2c638ed920d8250205995661fb8051f7a579c4"
+  },
+  {
+    "trx": "solution-trx/charl_CHARLES_2026-11-08_09_21_22_net10.0.trx",
+    "passed": 8320,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 8320,
+    "sha256": "4d33454af523c01c753217b22103046b9398ddd2230e41e869b859b13fb5029e"
+  },
+  {
+    "trx": "database-retry-trx/charl_CHARLES_2026-11-08_09_24_51_net10.0.trx",
+    "passed": 47,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 47,
+    "sha256": "7c86e782011469504a8a4d794328d6885621367307d5f2a3577ce601204cdadd"
+  },
+  {
+    "trx": "server-tests-trx/charl_CHARLES_2026-11-08_09_20_27_net10.0.trx",
+    "passed": 90,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 90,
+    "sha256": "5f233e941780cd7b6b1d971be149a076cf9e0706068240b14646a4367e577bd1"
+  },
+  {
+    "trx": "packaged-server-trx/charl_CHARLES_2026-11-08_09_23_15_net10.0.trx",
+    "passed": 90,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 90,
+    "sha256": "fc1c6890c4c014219b3f9028f9c794cd080a603d5862d7c9c39e9c73f09d3704"
+  },
+  {
+    "trx": "checkpoint-server-trx/charl_CHARLES_2026-11-08_09_36_49_net10.0.trx",
+    "passed": 90,
+    "failed": 0,
+    "notExecuted": 0,
+    "total": 90,
+    "sha256": "22073d8bd14c2c8291e95e0989cd0963798752d16c483a825c95fb66fa9c0ea3"
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/README.md.html",
+      "sha256": "fdd732609923b5b0478b496b31e1dd070a03ee5db8ebabc75118c9be62c10004"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6b4e8429476337d72f5ee05390364aafd1590acdbd51e88ada756bd7c6daeed4"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b1f0711862d90f5bae21d64de35f111afd7acb58df6cbc0a2abad2eba8eb33d9"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "9b575a9de8eaf5921e57782f8870d2191fdb43d824abe0f0563af7cac8f362ac"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "5278927b3e5bf6cafcf3495ac901a33ef16ac883a549944f595dbd3a42a461fb"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "a008530c353459cc2b763052bb4a09445d77e3e6267a5bc5650dc321c712cedf"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "a50600a60d334c8ba60325e3272175c28fcb8cf6ee37249e66d9770334cf2c42"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "c22c22462ef8a0b2325f7d2b4ce054261fd773bfd565042b4f00434f49105987"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-fix/README.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_conformance_k04-cldr-fix_README.md.html",
+      "sha256": "066ed4b99a20139b271c407592b6af6168f714b84a63ee74c4cd01535d851f0e"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-admission/README.md",
+      "html": ".guard-tmp/k04-cldr-admission-render/docs_conformance_k04-cldr-admission_README.md.html",
+      "sha256": "efc543ee6203ef6c862af35e0f803cb48b64edaf776452763208df4ae862d5e8"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-29",
+  "counts": {
+    "xmldb.baseline": {
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "xmldb.replacement": {
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "braid.baseline": {
+      "passed": 1876,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "braid.replacement": {
+      "passed": 1872,
+      "failed": 4,
+      "skipped": 0,
+      "failures": [
+        "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)",
+        "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)",
+        "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)",
+        "Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)"
+      ]
+    }
+  },
+  "xmlDbObservations": 44,
+  "xmlDbBaselineReplacementEqual": true,
+  "sameOriginalTestIds": true,
+  "originalConsumerBinariesAndRuntimeManifestsUnchanged": true,
+  "engineDllOnlyDelta": true,
+  "baselineControlsGreen": true,
+  "actualReplacementLoadingVerified": true,
+  "braidRuntimeIdentityFinding": "Inspector/preview identity remains baseline revision while capabilities report 1.34.1",
+  "braidXQueryLoaded": false,
+  "productionFix": false,
+  "dependencyAdopted": false,
+  "uncommitted": true
+}

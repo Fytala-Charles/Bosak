@@ -1,0 +1,13 @@
+# Next slice: bounded parse-integer implementation
+
+This K04-C10 review does not register functions or adopt new semantics. Before implementing, record explicit adoption against the reviewed immutable qt4cg revision e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e and preserve separate review/fixture/history provenance.
+
+1. Register arities1/2 only at XPath4;keep3.1 calls/references unavailable and lookup empty. Add keyword metadata for value/radix with default10. Unsupported arities remain unavailable. Cover frozen and experimental profiles through the standard function dispatch.
+2. Declare optional string and integer argument types and optional integer output. Preserve empty input and default radix when omitted/empty;test node atomization,untyped conversion and numeric/fractional/multiple-item type failures. Do not replace strict typing with permissive ToIntegerValue narrowing.
+3. Strip only the pinned equivalent's XML whitespace codepoints9/10/13/32 and underscore95;accept a single optional sign and at least one case-insensitive ASCII generalized digit. Reject alternate digits,prefix0x,sign-only,embedded signs and out-of-base digits with FORG0012. Validate radix2..36 with FORG0011.
+4. Explicitly adopt an Int64 result bound. Preserve both endpoints using safe magnitude accumulation and reject out-of-range results with FOCA0003. Avoid double/decimal round trips. Review validation order for inputs violating multiple rules;record any chosen precedence/empty-value policy rather than treating an unsettled combination as an original-fixture requirement.
+5. Add happy and edge unit regressions:every base,whitespace/underscores/case/signs,empty/default radix,exact results above2^53,Int64 endpoints/overflow,typed arguments,keywords,named references,lookup and3.1 refusals. The3.1 keyword error is XPST0003,not missing-function XPST0017.
+6. Recheck all47 parse originals without changing any-of assertions. Seven cases permit FOCA0003 for implementation size limits;this is not arbitrary-precision support. Recheck format-integer-40-012 and the complete format set. Preserve the existing format-integer-042 dependency skip.
+7. Run the complete solution and frozen conformance gates. Consider set promotion only after fresh sets have zero failures and all skip names/reasons are reviewed. Report any promotion and exact gated delta concretely;do not classify exploratory exit0 as success while failures remain.
+
+This is new function functionality,so follow repository minor-version policy for the next unpublished candidate. No release,AGENTS baseline change,REQ-126 reopening,XSD1.1 backend change or upstream fixture correction is included. A wider XDM integer representation is separate work.

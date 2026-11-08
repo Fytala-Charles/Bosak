@@ -2102,7 +2102,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/decode-utf8.xpath",
-    "expected": "caf\u00e9"
+    "expected": "café"
   },
   {
     "id": "invoice-api-uris-encode-decode",
@@ -2116,14 +2116,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/malformed-escape.xpath",
-    "expected": "\ufffd!"
+    "expected": "�!"
   },
   {
     "id": "invoice-api-uris-invalid-utf8",
     "kind": "xpath",
     "mode": "40",
     "file": "invoice-api-uris/invalid-utf8.xpath",
-    "expected": "\ufffdA"
+    "expected": "�A"
   },
   {
     "id": "invoice-api-uris-decode-empty",
@@ -2228,14 +2228,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/main.xpath",
-    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; graphemes=7; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+    "expected": "label=[José  🚚]; codepoints=8; graphemes=7; export=[José  🚚..]; separator=—"
   },
   {
     "id": "customer-text-cleanup-baseline",
     "kind": "xpath",
     "mode": "31",
     "file": "customer-text-cleanup/baseline.xpath",
-    "expected": "label=[Jose\u0301  \ud83d\ude9a]; codepoints=8; export=[Jose\u0301  \ud83d\ude9a..]; separator=\u2014"
+    "expected": "label=[José  🚚]; codepoints=8; export=[José  🚚..]; separator=—"
   },
   {
     "id": "customer-text-cleanup-preserve-interior",
@@ -2326,7 +2326,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "customer-text-cleanup/entity-name.xpath",
-    "expected": "\u00e1"
+    "expected": "á"
   },
   {
     "id": "customer-text-cleanup-multi-codepoint-entity",
@@ -10902,7 +10902,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "text-contracts/char-codepoint.xpath",
-    "expected": "\u2014"
+    "expected": "—"
   },
   {
     "id": "text-contract-char-entity",
@@ -10937,7 +10937,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "text-contracts/characters-codepoints.xpath",
-    "expected": "C|a|f|e|\u0301|\ud83d\ude00"
+    "expected": "C|a|f|e|́|😀"
   },
   {
     "id": "text-contract-characters-empty",
@@ -10958,7 +10958,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "text-contracts/graphemes-clusters.xpath",
-    "expected": "C|a|f|e\u0301|\ud83d\ude00"
+    "expected": "C|a|f|é|😀"
   },
   {
     "id": "text-contract-graphemes-empty",
@@ -11287,14 +11287,14 @@
     "kind": "xpath",
     "mode": "40",
     "file": "text-contracts/import-40.xpath",
-    "expected": "label=[Cafe\u0301  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
+    "expected": "label=[Café  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
   },
   {
     "id": "text-contract-import-31",
     "kind": "xpath",
     "mode": "31",
     "file": "text-contracts/import-31.xpath",
-    "expected": "label=[Cafe\u0301  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
+    "expected": "label=[Café  Supplies.........];codepoints=15;stem=invoice.batch;extension=XML"
   },
   {
     "id": "text-contract-import-empty-40",
@@ -14614,7 +14614,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/build-uri-unicode.xpath",
-    "expected": "/caf\u00e9"
+    "expected": "/café"
   },
   {
     "id": "utility-contract-build-uri-wrong-parameters",
@@ -14656,42 +14656,42 @@
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-unicode.xpath",
-    "expected": "caf\u00e9"
+    "expected": "café"
   },
   {
     "id": "utility-contract-decode-from-uri-emoji",
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-emoji.xpath",
-    "expected": "\ud83d\udca1"
+    "expected": "💡"
   },
   {
     "id": "utility-contract-decode-from-uri-malformed",
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-malformed.xpath",
-    "expected": "\ufffd!"
+    "expected": "�!"
   },
   {
     "id": "utility-contract-decode-from-uri-incomplete",
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-incomplete.xpath",
-    "expected": "\ufffd"
+    "expected": "�"
   },
   {
     "id": "utility-contract-decode-from-uri-invalid-utf8",
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-invalid-utf8.xpath",
-    "expected": "\ufffdA"
+    "expected": "�A"
   },
   {
     "id": "utility-contract-decode-from-uri-xml-null",
     "kind": "xpath",
     "mode": "40",
     "file": "utility-contracts/decode-from-uri-xml-null.xpath",
-    "expected": "\ufffd"
+    "expected": "�"
   },
   {
     "id": "utility-contract-decode-from-uri-one-pass",
@@ -16100,7 +16100,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-date-3.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -16108,7 +16108,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-date-4.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -16132,7 +16132,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-dateTime-3.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -16140,7 +16140,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-dateTime-4.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -16196,7 +16196,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-time-3.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -16204,7 +16204,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/inventory-fn-format-time-4.xpath",
-    "expected": "0",
+    "expected": "1",
     "baselineExpected": "0"
   },
   {
@@ -17671,42 +17671,48 @@
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-date-3.xpath",
-    "error": "XPST0017"
+    "expected": "3",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-format-date-4",
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-date-4.xpath",
-    "error": "XPST0017"
+    "expected": "4",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-format-dateTime-3",
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-dateTime-3.xpath",
-    "error": "XPST0017"
+    "expected": "3",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-format-dateTime-4",
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-dateTime-4.xpath",
-    "error": "XPST0017"
+    "expected": "4",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-format-time-3",
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-time-3.xpath",
-    "error": "XPST0017"
+    "expected": "3",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-format-time-4",
     "kind": "xpath",
     "mode": "40",
     "file": "changed31-contracts/reference-fn-format-time-4.xpath",
-    "error": "XPST0017"
+    "expected": "4",
+    "baselineError": "XPST0017"
   },
   {
     "id": "changed31-contract-reference-fn-parse-xml-2",

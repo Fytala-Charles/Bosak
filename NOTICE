@@ -22,3 +22,8 @@ terms; they are not part of the Bosak source distribution.
 
 This software also embeds the JSONTestSuite test corpus
 (tests/qt3tests/misc/JSONTestSuite), which is MIT-licensed.
+
+FULLY-NORMALIZED uses derived Unicode 17.0 normalization data.
+Copyright 1991-2026 Unicode, Inc. Distributed under Unicode License V3.
+The license is embedded in Bosak.XPath.Standard and included at
+src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt.

@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.80.0",
+  "productionChanged": false,
+  "publicApiChanged": false,
+  "policySelected": true,
+  "policyDecisionCount": 18,
+  "plannedCases": 36,
+  "newTestsPassed": 0,
+  "existingCharacterizationTestsPassed": 451,
+  "retainedUnitTestsPassed": 26236,
+  "freshFullRun": false,
+  "widerPrimitiveImplementationActivated": false,
+  "pv01Complete": false,
+  "ownerAccepted": false,
+  "requirementsWaived": 0,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "packagesBuilt": false,
+  "pushPerformed": false,
+  "nextSlice": "PV-T05"
+}

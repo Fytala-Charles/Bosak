@@ -1,0 +1,98 @@
+[
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-one"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-one"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-zero"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-zero"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-two"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-two"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-ten"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-ten"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-original"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-original"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-negative"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-negative"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-recognized-circled"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-recognized-circled"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-recognized-arabic"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-sequence-admission/evidence/control-fixtures.xml",
+    "Name": "control-recognized-arabic"
+  }
+]

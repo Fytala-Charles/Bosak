@@ -943,5 +943,11 @@
     }
   ],
   "reviewedSpecificationRevision": "a014e1b408baf5614a11401d3570a04498ab76be",
-  "sourceCorrectionVersion": "1.1.2 (published)"
+  "sourceCorrectionVersion": "1.1.2 (published)",
+  "currentReview": {
+    "reviewDate": "2026-10-26",
+    "inventory": "CURRENT-FUNCTION-INVENTORY.json",
+    "report": "FUNCTION-INVENTORY-REFRESH.md",
+    "policy": "Original dated fields and rows remain historical; current live scope is 119 registered 4.0-only names and 197 existing names, not semantic acceptance."
+  }
 }

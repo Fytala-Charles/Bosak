@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-07",
+  "status": "UnfilledOwnerProposal_NotAcceptance",
+  "scenarios": [
+    {
+      "id": "PF-01",
+      "owners": "Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-02",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-03",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-04",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-05",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-06",
+      "owners": "Braid + Core + Schema + XmlDb",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-07",
+      "owners": "Braid + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-08",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-09",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    }
+  ],
+  "suggestedBudgetFields": [
+    {
+      "metric": "whole-cycle latency",
+      "unit": "milliseconds/cycle",
+      "threshold": null
+    },
+    {
+      "metric": "allocated bytes",
+      "unit": "bytes/cycle and bytes/decimal-cell",
+      "threshold": null
+    },
+    {
+      "metric": "retained resource observations",
+      "unit": "named object/resource counts after defined release interval",
+      "threshold": null
+    }
+  ],
+  "requirementsWaived": 0
+}

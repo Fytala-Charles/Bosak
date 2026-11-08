@@ -1,0 +1,18 @@
+[
+  {
+    "uri": "file:///d%3A/bosak-commands/probe.xpath",
+    "notification": {
+      "language": null,
+      "result": null,
+      "error": "Document is not open."
+    }
+  },
+  {
+    "uri": "file:///d:/bosak-commands/probe.xpath",
+    "notification": {
+      "language": "XPath",
+      "result": "6",
+      "error": null
+    }
+  }
+]

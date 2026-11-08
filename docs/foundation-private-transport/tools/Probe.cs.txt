@@ -1,0 +1,153 @@
+// Generated isolated friend-test integration; not a public provider SDK or production carrier.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+try {
+ var mode=args.Single();var checks=new List<object>();
+ void Check(string id,bool pass){checks.Add(new{id,passed=pass});if(!pass)throw new Exception(id);}
+ void Refuses<T>(string id,Action action) where T:Exception{bool seen=false;try{action();}catch(T){seen=true;}Check(id,seen);}
+ const string schema="""
+ <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.1"><xs:element name="invoice"><xs:complexType><xs:sequence>
+ <xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="2"/><xs:element name="tax" type="xs:decimal" minOccurs="0"/>
+ </xs:sequence><xs:assert test="count(amount) eq 2 and empty(tax)"/></xs:complexType></xs:element></xs:schema>
+ """;
+ var compiled=AssessmentProfileParser.Compile(XDocument.Parse(schema));Check("N01-native-supported",compiled.IsSupported&&compiled.Profile=="decimal-sequence-assertions-v5");
+ var callerXml=XDocument.Parse("<?before x?><invoice xmlns:p='urn:p'><!--root--><amount> 10.00 </amount><?inside x?><amount>5</amount></invoice>");
+ var result=compiled.Assess(callerXml);Check("N02-native-valid",result.Outcome==SchemaAssessmentOutcome.Valid&&result.Document is not null);
+ var issuer=new NativeIssuer(compiled);var view=issuer.Open(result.Document!);var copy=issuer.Copy(view);
+ Check("N03-original-local-declaration",ReferenceEquals(view.Document.Elements[1].Declaration,compiled.ChildDeclarations[0])&&ReferenceEquals(view.Document.Elements[2].Declaration,compiled.ChildDeclarations[0]));
+ Check("N04-shared-decimal-type",ReferenceEquals(view.Document.Elements[1].Declaration.Type,view.Document.Elements[2].Declaration.Type));
+ Check("N05-distinct-occurrences",!ReferenceEquals(view.Document.Elements[1],view.Document.Elements[2]));
+ Check("N06-anonymous-root",view.Document.Elements[0].Declaration.Type.Name is null&&view.Document.Elements[0].HasNoTypedValue);
+ Check("N07-copy-identities",copy.Document.SnapshotIdentity!=view.Document.SnapshotIdentity&&copy.Document.AssessmentIdentity==view.Document.AssessmentIdentity&&ReferenceEquals(copy.Origin,view.Origin)&&ReferenceEquals(copy.Document.Elements[1],view.Document.Elements[1]));
+ callerXml.Root!.RemoveAll();Check("N08-owned-snapshot",view.Document.CreateDocumentCopy(false).Root!.Elements().Count()==2);
+ var invalid=compiled.Assess(XDocument.Parse("<invoice><amount>bad</amount><amount>5</amount></invoice>"));Check("N09-invalid-no-document",invalid.Outcome==SchemaAssessmentOutcome.Invalid&&invalid.Document is null);
+ var unsupported=compiled.Assess(XDocument.Parse("<invoice xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'/>"));Check("N10-unsupported-no-document",unsupported.Outcome==SchemaAssessmentOutcome.Unsupported&&unsupported.Document is null);
+ var otherCompiled=AssessmentProfileParser.Compile(XDocument.Parse(schema));Refuses<ArgumentException>("N11-foreign-native-universe",()=>issuer.Open(otherCompiled.Assess(view.Document.CreateDocumentCopy(false)).Document!));
+ var observations=new List<object>();
+ foreach(var test in new(string id,string expr,string[] values,bool evidence)[]{
+  ("identity","$v",new[]{"10"},true),("let","let $x := $v return $x",new[]{"10"},true),("array","[$v](1)",new[]{"10"},true),("map","map{'a':$v}?a",new[]{"10"},true),("function","(function($x){$x})($v)",new[]{"10"},true),
+  ("child","data($d/invoice/amount)",new[]{"10","5"},true),("descendant","data($d//amount)",new[]{"10","5"},true),("sibling","data($a/following-sibling::amount[1])",new[]{"5"},true),("parent","data($a/parent::invoice/amount[2])",new[]{"5"},true),("reverse","data($b/preceding-sibling::amount[1])",new[]{"10"},true),
+  ("sum","sum($d/invoice/amount)",new[]{"15"},false),("arithmetic","$v+1",new[]{"11"},false),("integer-raw","xs:integer($v)",new[]{"10"},false),("decimal-raw","xs:decimal($v)",new[]{"10"},true)}){
+  using var session=issuer.Compile(test.expr);using var snapshot=session.OpenSnapshot(session.Environment,view,view.Origin,()=>{});
+  var entries=session.Run(session.Environment,snapshot,op=>{
+   var tree=new NativeTree(issuer,view,session,op);var first=(NativeNode)tree.Element(1);var second=(NativeNode)tree.Element(2);
+   var v=op.ReadValue(issuer.Scalar(view,1));
+   var values=Items(op.Evaluate(new EvaluationContext().WithVariable("v",v).WithVariable("d",XdmValue.FromNode(tree.Root)).WithVariable("a",XdmValue.FromNode(first)).WithVariable("b",XdmValue.FromNode(second))));
+   Check("VM-value-"+test.id,values.Select(x=>x.ToString()).SequenceEqual(test.values));
+   var metadata=values.Select(x=>session.ReadEvidence(x)).ToArray();
+   Check("VM-origin-"+test.id,metadata.All(x=>ReferenceEquals(x?.OriginalAssessment,view.Origin)==(test.evidence)));
+   Check("VM-type-"+test.id,metadata.All(x=>ReferenceEquals(x?.ActualType,compiled.ChildDeclarations[0].Type)==(test.evidence)));
+   Check("VM-clr-"+test.id,values.All(x=>x.Equals(XdmValue.WithoutSchemaEvidence(x))&&XdmValue.WithoutSchemaEvidence(x).Equals(x)&&x.GetHashCode()==XdmValue.WithoutSchemaEvidence(x).GetHashCode()));
+   Check("VM-facts-"+test.id,ReferenceEquals(first.State!.Declaration,compiled.ChildDeclarations[0]));
+   return values.Select(x=>new{value=x.ToString(),kind=x.Kind.ToString(),origin=session.ReadEvidence(x) is not null}).ToArray();
+  });observations.Add(new{test.id,test.expr,entries});
+ }
+ using(var session=issuer.Compile("data($d/invoice)")){
+  using var snapshot=session.OpenSnapshot(session.Environment,view,view.Origin,()=>{});
+  bool seen=false;try{session.Run(session.Environment,snapshot,op=>Items(op.Evaluate(new EvaluationContext().WithVariable("d",XdmValue.FromNode(new NativeTree(issuer,view,session,op).Root)))));}catch(Exception error){seen=error.Message.Contains("FOTY0012",StringComparison.Ordinal);}Check("N12-real-root-FOTY0012",seen);
+ }
+ foreach(var target in new[]{Target.Decimal,Target.Integer}){
+  using var session=issuer.Compile(target==Target.Decimal?"xs:decimal($input)":"xs:integer($input)");var snapshot=session.OpenSnapshot(session.Environment,view,view.Origin,()=>{});
+  SchemaEvidenceKernel.Evidence? source=null,constructed=null;XdmValue tagged=default;
+  session.Run(session.Environment,snapshot,op=>{
+   var input=op.ReadValue(issuer.Scalar(view,1));source=session.ReadEvidence(input);
+   var raw=Items(op.Evaluate(new EvaluationContext().WithVariable("input",input))).Single();
+   tagged=op.AdmitConversionValue(input,issuer.Construct(target,XdmValue.WithoutSchemaEvidence(raw)));constructed=session.ReadEvidence(tagged) ?? throw new Exception("Missing constructor evidence");
+   Check("Ctor-value-"+target,tagged.ToString()=="10");
+   Check("Ctor-origin-"+target,target==Target.Decimal?ReferenceEquals(constructed,source):constructed.OriginalAssessment is null);
+   Check("Ctor-type-"+target,ReferenceEquals(constructed.ActualType,target==Target.Decimal?compiled.ChildDeclarations[0].Type:issuer.IntegerType));return 0;
+  });
+  snapshot.Dispose();
+  if(target==Target.Decimal){Refuses<ObjectDisposedException>("Ctor-noop-scope-closes",()=>session.ReadEvidence(tagged));Refuses<ObjectDisposedException>("Ctor-noop-marker-closes",()=>session.ReadEvidence(tagged));}
+  else{session.ReadEvidence(tagged);Check("Ctor-detached-after-close",tagged.IntegerValue==10&&(session.ReadEvidence(tagged)?.OriginalAssessment is null));session.Dispose();Refuses<ObjectDisposedException>("P11-detached-session-close",()=>session.ReadEvidence(tagged));Refuses<ObjectDisposedException>("P12-plain-read-session-close",()=>session.ReadEvidence(XdmValue.FromInteger(10)));}
+ }
+ using(var session=issuer.Compile("$input")){
+  using var snapshot=session.OpenSnapshot(session.Environment,view,view.Origin,()=>{});using var copyScope=session.OpenSnapshot(session.Environment,copy,copy.Origin,()=>{});
+  var original=session.Run(session.Environment,snapshot,op=>op.Read(issuer.Scalar(view,1)));
+  var copiedValue=session.Run(session.Environment,copyScope,op=>op.ReadValue(issuer.Scalar(copy,1)));var copied=session.ReadEvidence(copiedValue)!;
+  SchemaQuerySession.Operation? expired=null;
+  session.Run(session.Environment,snapshot,op=>{
+   expired=op;
+   Refuses<ArgumentException>("P01-plain-conversion-source",()=>op.AdmitConversionValue(XdmValue.FromDecimal(10m),issuer.Construct(Target.Integer,XdmValue.FromInteger(10))));
+   Refuses<ArgumentException>("P02-other-snapshot-conversion",()=>op.AdmitConversionValue(copiedValue,issuer.Construct(Target.Integer,XdmValue.FromInteger(10))));
+   Refuses<ArgumentException>("P03-marked-issued-payload",()=>op.AdmitConversionValue(op.ReadValue(issuer.Scalar(view,1)),issuer.Construct(Target.Decimal,copiedValue)));
+   return 0;
+  });
+  Refuses<ObjectDisposedException>("P04-expired-operation-read",()=>expired!.ReadValue(issuer.Scalar(view,1)));
+  Refuses<ObjectDisposedException>("P05-expired-operation-convert",()=>expired!.AdmitConversionValue(copiedValue,issuer.Construct(Target.Integer,XdmValue.FromInteger(10))));
+  Check("P06-no-public-diagnostic-helpers",!typeof(XdmValue).GetMethods(BindingFlags.Public|BindingFlags.Static).Any(m=>m.Name.Contains("Prototype")||m.Name.Contains("SchemaTransport")||m.Name=="WithoutSchemaEvidence"));
+  Check("P07-layout48",System.Runtime.CompilerServices.Unsafe.SizeOf<XdmValue>()==48);
+  Check("P08-plain-read-no-evidence",session.ReadEvidence(XdmValue.FromDecimal(10m)) is null);
+  var forged=new SchemaEvidenceKernel.Evidence(new object(),XdmValue.FromDecimal(10m),compiled.ChildDeclarations[0].Type,compiled.ChildDeclarations[0].Type,view.Origin,null);
+  Refuses<ArgumentException>("P09-forged-evidence-seal",()=>session.ReadEvidence(XdmValue.SchemaTransportAttach(XdmValue.FromDecimal(10m),forged)));
+
+  Check("K01-real-copy-original-type",ReferenceEquals(original.ActualType,copied.ActualType)&&ReferenceEquals(original.OriginalAssessment,copied.OriginalAssessment));
+  copyScope.Dispose();session.ReadEvidence(session.Run(session.Environment,snapshot,op=>op.ReadValue(issuer.Scalar(view,1))));Refuses<ObjectDisposedException>("K02-copy-scope-is-independent",()=>session.ReadEvidence(copiedValue));
+  var trap=new Trap();session.Run(session.Environment,snapshot,op=>{Refuses<ArgumentException>("K03-production-container-admission",()=>op.Read(trap));Refuses<ArgumentException>("P10-direct-unissued-container",()=>op.ReadValue(trap));return 0;});Check("K04-no-untrusted-getters",trap.Reads==0);
+  using var otherSession=issuer.Compile("$input");Check("K05-equal-descriptor",session.Environment.Fingerprint==otherSession.Environment.Fingerprint);Refuses<ArgumentException>("K06-real-environment-instance",()=>session.OpenSnapshot(otherSession.Environment,new object(),view.Origin,()=>{}));
+  NativeNode? escaped=null;session.Run(session.Environment,snapshot,op=>{escaped=(NativeNode)new NativeTree(issuer,view,session,op).Element(1);return 0;});Refuses<ObjectDisposedException>("K07-node-operation-escape",()=>{_=escaped!.TypedValue;});
+  var value=session.Run(session.Environment,snapshot,op=>op.ReadValue(issuer.Scalar(view,1)));var marker=XdmValue.SchemaTransportMarker(value)!;
+  Refuses<ArgumentException>("K08-rebound-payload",()=>session.ReadEvidence(XdmValue.SchemaTransportAttach(XdmValue.FromDecimal(11m),marker)));
+  Refuses<ArgumentException>("K09-rebound-type",()=>session.ReadEvidence(XdmValue.SchemaTransportAttach(XdmValue.FromDecimal(10m,"unsignedLong"),marker)));
+  Refuses<ArgumentException>("K10-foreign-session-marker",()=>otherSession.ReadEvidence(value));
+  Refuses<ArgumentException>("K11-unknown-marker-refused",()=>session.ReadEvidence(XdmValue.SchemaTransportAttach(XdmValue.FromDecimal(10m),new object())));
+ }
+ using(var session=issuer.Compile("data($d/invoice/amount)")){
+  int releases=0;var snapshot=session.OpenSnapshot(session.Environment,view,view.Origin,()=>releases++);
+  var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+  XdmSequence.Enumerator late=default;XdmValue retained=default;
+  var raw=session.RunAsync(session.Environment,snapshot,async op=>{
+   var tree=new NativeTree(issuer,view,session,op);late=tree.Element(1).Axis(XdmAxis.Self).GetEnumerator();Check("L01-initial-lazy-node",late.MoveNext());
+   var values=Items(op.Evaluate(new EvaluationContext().WithVariable("d",XdmValue.FromNode(tree.Root))));retained=values[0];var detached=values.Select(v=>v.DecimalValue).ToArray();entered.SetResult();await resume.Task;return detached;
+  });
+  try{entered.Task.WaitAsync(TimeSpan.FromSeconds(10)).GetAwaiter().GetResult();using var cancel=new CancellationTokenSource();cancel.Cancel();Refuses<OperationCanceledException>("L02-canceled-wait",()=>raw.WaitAsync(cancel.Token).GetAwaiter().GetResult());snapshot.Dispose();Check("L03-actual-raw-operation-retains",releases==0&&!raw.IsCompleted);Refuses<ObjectDisposedException>("L04-closed-cached-node-content",()=>{_=late.Current.NodeValue!.TypedValue;});Refuses<ObjectDisposedException>("L05-closed-carrier-evidence",()=>session.ReadEvidence(retained));}
+  finally{resume.TrySetResult();}
+  Check("L06-raw-drained-result",raw.WaitAsync(TimeSpan.FromSeconds(10)).GetAwaiter().GetResult().SequenceEqual(new[]{10m,5m}));Check("L07-release-once",releases==1);
+ }
+ var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.XPath.")==true&&a.GetName().Name!="Bosak.XPath.Runtime.Tests").OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant(),context=System.Runtime.Loader.AssemblyLoadContext.GetLoadContext(a)?.Name,collectible=a.IsCollectible}).ToArray();
+ Console.WriteLine(JsonSerializer.Serialize(new{mode,scope="Isolated friend host: unchanged production kernel/native source; direct internal Core/Runtime transport; no public provider API or automatic constructor hook",checkCount=checks.Count,checks,observations,bindings},new JsonSerializerOptions{WriteIndented=true}));
+} catch(Exception error){Console.Error.WriteLine(error);Environment.ExitCode=1;}
+static XdmValue[] Items(XdmValue value){if(value.IsSequence){var result=new List<XdmValue>();foreach(var item in XdmSequence.FromSource(value.SequenceValue!))result.Add(item);return result.ToArray();}return value.IsUndefined?Array.Empty<XdmValue>():new[]{value};}
+enum Target {Decimal,Integer}
+sealed record View(AssessedDocument Document,object Origin);
+sealed class NativeIssuer(XsdDocumentAssessor compiled):ISchemaEvidenceIssuer {
+ internal object IntegerType{get;}=new object();readonly HashSet<View> views=new(ReferenceEqualityComparer.Instance);readonly Dictionary<(View,int),ISchemaIssuedScalar> scalars=new();readonly HashSet<ISchemaIssuedScalar> issued=new(ReferenceEqualityComparer.Instance);
+ internal View Open(AssessedDocument doc){if(!ReferenceEquals(doc.Schema,compiled))throw new ArgumentException("Foreign native universe");var view=new View(doc,new object());views.Add(view);return view;}
+ internal View Copy(View original){if(!views.Contains(original))throw new ArgumentException("Unissued view");var view=new View(original.Document.Copy(),original.Origin);views.Add(view);return view;}
+ internal SchemaQuerySession Compile(string source){if(!SchemaSessionCompilation.TryCompile(source,new CompileOptions(),this,2,16,out var session,out var reason))throw new InvalidOperationException(reason);return session!;}
+ internal ISchemaIssuedScalar Scalar(View view,int index){if(!views.Contains(view))throw new ArgumentException("Unissued view");if(!scalars.TryGetValue((view,index),out var scalar)){var state=view.Document.Elements[index];if(state.TypedValue is not {} value)throw new InvalidOperationException("No typed value");scalar=new ScalarValue(value,state.Declaration.Type,state.Declaration.Type,view.Origin);issued.Add(scalar);scalars.Add((view,index),scalar);}return scalar;}
+ internal ISchemaIssuedScalar Construct(Target target,XdmValue value){object type;if(target==Target.Decimal&&value.Kind==XdmValueKind.Decimal)type=compiled.ChildDeclarations[0].Type;else if(target==Target.Integer&&value.Kind==XdmValueKind.Integer)type=IntegerType;else throw new ArgumentException("Unsupported constructor result");var scalar=new ScalarValue(value,type,type,null);issued.Add(scalar);return scalar;}
+ bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar value)=>issued.Contains(value);
+ bool ISchemaEvidenceIssuer.OwnsType(object type)=>ReferenceEquals(type,IntegerType)||ReferenceEquals(type,compiled.RootDeclaration?.Type)||compiled.ChildDeclarations.Any(d=>ReferenceEquals(d.Type,type));
+ bool ISchemaEvidenceIssuer.OwnsAssessment(object assessment)=>views.Any(v=>ReferenceEquals(v.Origin,assessment));
+ bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+ sealed record ScalarValue(XdmValue Value,object DeclaredType,object ActualType,object? OriginalAssessment):ISchemaIssuedScalar;
+}
+sealed class Trap:ISchemaIssuedScalar {internal int Reads;XdmValue ISchemaIssuedScalar.Value{get{Reads++;throw new Exception("Untrusted value");}}object ISchemaIssuedScalar.DeclaredType{get{Reads++;throw new Exception("Untrusted type");}}object ISchemaIssuedScalar.ActualType{get{Reads++;throw new Exception("Untrusted type");}}object? ISchemaIssuedScalar.OriginalAssessment{get{Reads++;throw new Exception("Untrusted origin");}}}
+sealed class NativeTree {
+ readonly NativeIssuer issuer;readonly View view;readonly SchemaQuerySession session;readonly SchemaQuerySession.Operation operation;readonly XDocument xml;readonly Dictionary<XObject,NativeNode> nodes=new(ReferenceEqualityComparer.Instance);readonly Dictionary<XElement,int> states=new(ReferenceEqualityComparer.Instance);readonly Dictionary<(XObject,string,string),NativeNode> namespaces=new();readonly XElement[] elements;
+ internal NativeTree(NativeIssuer issuer,View view,SchemaQuerySession session,SchemaQuerySession.Operation operation){this.issuer=issuer;this.view=view;this.session=session;this.operation=operation;xml=view.Document.CreateDocumentCopy(true);elements=xml.Root!.DescendantsAndSelf().ToArray();if(elements.Length!=view.Document.Elements.Count)throw new Exception("State mapping");for(int i=0;i<elements.Length;i++){if(elements[i].Name!=view.Document.Elements[i].Declaration.Name)throw new Exception("Declaration mapping");states.Add(elements[i],i);}}
+ internal void Check()=>operation.ValidateAccess();internal IXdmNode Root=>Wrap(XDocumentNode.Wrap(xml));internal IXdmNode Element(int index)=>Wrap(XDocumentNode.Wrap(elements[index]));
+ internal NativeNode Wrap(IXdmNode node){Check();if(node is not XDocumentNode inner)throw new ArgumentException("Unexpected provider");var item=inner.UnderlyingObject;if(node.NodeKind==XdmNodeKind.Namespace){var parent=(XDocumentNode)node.Parent!;if(!ReferenceEquals(parent.UnderlyingObject.Document,xml))throw new ArgumentException("Foreign namespace");var key=(parent.UnderlyingObject,node.LocalName,node.StringValue);if(!namespaces.TryGetValue(key,out var ns)){ns=new NativeNode(this,inner,null);namespaces.Add(key,ns);}return ns;}
+  if(!ReferenceEquals(item,xml)&&!ReferenceEquals(item.Document,xml))throw new ArgumentException("Foreign snapshot");if(!nodes.TryGetValue(item,out var wrapped)){wrapped=new NativeNode(this,inner,item is XElement e&&states.TryGetValue(e,out var index)?index:null);nodes.Add(item,wrapped);}return wrapped;}
+ internal AssessedElement? State(int? index)=>index is {} i?view.Document.Elements[i]:null;
+ internal XdmValue Typed(int? index,IXdmNode inner){Check();if(index is not {} i)return inner.TypedValue;if(view.Document.Elements[i].HasNoTypedValue)return XdmValue.Undefined;return operation.ReadValue(issuer.Scalar(view,i));}
+ internal IXdmNode? Optional(IXdmNode? node)=>node is null?null:Wrap(node);
+ internal XdmSequence Project(XdmSequence sequence){Check();var list=new List<XdmValue>();foreach(var item in sequence)list.Add(XdmValue.FromNode(Wrap(item.NodeValue!)));return XdmSequence.FromSource(new Values(list.ToArray(),Check));}
+ sealed class Values(XdmValue[] items,Action check):IXdmSequence{public bool TryGetLength(out int length){check();length=items.Length;return true;}public IXdmSequenceEnumerator GetEnumerator(){check();return new Cursor(items,check);}sealed class Cursor(XdmValue[] items,Action check):IXdmSequenceEnumerator{int index=-1;public XdmValue Current{get{check();return items[index];}}public bool MoveNext(){check();return ++index<items.Length;}}}
+}
+sealed class NativeNode(NativeTree tree,XDocumentNode inner,int? index):IXdmNode {
+ internal AssessedElement? State=>tree.State(index);public XdmNodeKind NodeKind=>inner.NodeKind;public string LocalName=>inner.LocalName;public string NamespaceUri=>inner.NamespaceUri;public string Prefix=>inner.Prefix;public string StringValue{get{tree.Check();return inner.StringValue;}}public XdmValue TypedValue=>tree.Typed(index,inner);public bool HasNoTypedValue=>State?.HasNoTypedValue??inner.HasNoTypedValue;public bool IsComplexType=>State?.HasNoTypedValue??inner.IsComplexType;public (string NamespaceUri,string LocalName)? SchemaTypeAnnotation=>inner.SchemaTypeAnnotation;
+ public IXdmNode? Parent{get{tree.Check();return tree.Optional(inner.Parent);}}public IXdmNode? Document{get{tree.Check();return tree.Optional(inner.Document);}}public long DocumentOrder=>inner.DocumentOrder;public string BaseUri=>inner.BaseUri;public string DocumentUri=>inner.DocumentUri;
+ public XdmSequence Children(XdmNodeKind kind=XdmNodeKind.All){tree.Check();return tree.Project(inner.Children(kind));}public XdmSequence Attributes(string? localName=null,string? namespaceUri=null){tree.Check();return tree.Project(inner.Attributes(localName,namespaceUri));}public XdmSequence Axis(XdmAxis axis){tree.Check();return tree.Project(inner.Axis(axis));}public bool IsSameNode(IXdmNode other)=>other is NativeNode node&&ReferenceEquals(tree,node.Tree)&&inner.IsSameNode(node.Inner);internal NativeTree Tree=>tree;internal XDocumentNode Inner=>inner;public string ToXmlString(){tree.Check();return inner.ToXmlString();}
+}

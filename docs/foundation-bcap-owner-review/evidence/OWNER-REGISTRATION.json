@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-02",
+  "proposalManifestSha256": "ff475d712f6ef6aa5033113cc39afb887ae4cbad24705098c5c9cb2097641688",
+  "localFilesUpdated": [
+    {
+      "project": "D:/Development/Bosak.Braid",
+      "file": "docs/FEATURE_REQUESTS.md",
+      "beforeSha256": "418053f966e4158ab0af835401a54377bc832b2ffdc6410e9d075424cc3c9463",
+      "afterSha256": "7ad0de51cea511f3e0bd670ffabbe7334bb7293687154857d8ff3279e73a7934",
+      "scope": "BCAP-O3-Braid: review the capture delta and R01-R08, including message-size/immutability needs, local original exceptions, raw cleanup outcome and limits. BCAP-01 remains Revise until this exact disposition is recorded.",
+      "committed": false
+    },
+    {
+      "project": "D:/Development/Bosak.Schema.Public",
+      "file": "docs/FEATURE_REQUESTS.md",
+      "beforeSha256": "34d56e80296d6ca5586b614fd4ce09d7e984371a9bfb6d370ab411ab505bfd0a",
+      "afterSha256": "0a7dfd7cb96ea65948f8881a6308eac16cbf552958ebe72932946f79a7a528e1",
+      "scope": "BCAP-O1-Schema and BCAP-O2-Schema: the full source-specific O1/O2 dispositions remain missing; answer the original questions against this exact revised draft and state capture/error-graph applicability. No unrelated numeric/backend implementation is requested solely to answer design review.",
+      "committed": false
+    },
+    {
+      "project": "D:/Development/Bosal.XmlDb",
+      "file": "docs/FEATURE_REQUESTS.md",
+      "beforeSha256": "0dc0e608d6daa2e04fdd395b8a7f5f72fe6396628c763302e6b0b996dfc79656",
+      "afterSha256": "777548bf8bcc451ebcc0be667ac6b2a1f80b1fe992acc8eec6605bfddb68c386",
+      "scope": "BCAP-O4-XmlDb: address capture/drain delta plus the existing native failure/profile revision. BCAP-O1-XmlDb: explicitly carry forward unchanged ordinary-input scope using the pinned original return. Core synthetic release tests do not fix native cleanup masking or prove worker handoff.",
+      "committed": false
+    },
+    {
+      "project": "D:/Development/Bosak.Braid",
+      "file": "docs/INTEGRATION.md",
+      "beforeSha256": "b6ce5912a6e218973d07403f4d8b172acbf13f5e6c96bf2f97ac2d474675a0a9",
+      "afterSha256": "d96a046ceb2332434b50a87e9259d0b24bfe8c788029e55bc07c2cb9690fa2e5",
+      "scope": "Synchronize the exact review pointer with the owner feature registry; no product adoption",
+      "committed": false
+    },
+    {
+      "project": "D:/Development/Bosak.Schema.Public",
+      "file": "docs/INTEGRATION.md",
+      "beforeSha256": "0d54e277eb696d284942b0c835160d7d319947a467c5658e0cbd0b537917b7a1",
+      "afterSha256": "926b67efcb32693da79b4e5bda66a20b53233444f8b68463db295ed81d572564",
+      "scope": "Synchronize the exact review pointer with the owner feature registry; no product adoption",
+      "committed": false
+    },
+    {
+      "project": "D:/Development/Bosal.XmlDb",
+      "file": "docs/INTEGRATION.md",
+      "beforeSha256": "e84afd6c746f5f66d21392bb48ae3bec9941eeaf92ad999b6e90e312e6186ea9",
+      "afterSha256": "6275b276160e27951e1b2e2eb475fd38c8c4f58a061e19fd86a6aea888faf0d0",
+      "scope": "Synchronize the exact review pointer with the owner feature registry; no product adoption",
+      "committed": false
+    }
+  ],
+  "messagesSent": false,
+  "ownerAcceptance": false
+}

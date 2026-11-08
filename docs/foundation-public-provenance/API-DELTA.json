@@ -1,0 +1,14 @@
+{
+  "assemblies": {
+    "Bosak.XPath.Core": {
+      "added": [
+        "A Bosak.XPath.Core.Schema.SchemaAtomics.TryGetProvenance(Bosak.XPath.Core.Xdm.XdmValue& value:In:none:required=:optional=:attrs=[System.Runtime.CompilerServices.IsReadOnlyAttribute()];[System.Runtime.InteropServices.InAttribute()],Bosak.XPath.Core.Schema.ISchemaAtomicProvenance& provenance:Out:none:required=:optional=:attrs=[System.Runtime.InteropServices.OutAttribute()]):[System.Runtime.CompilerServices.NullableContextAttribute((Byte)2)]",
+        "A Bosak.XPath.Core.Schema.SchemaAtomics:",
+        "M Bosak.XPath.Core.Schema.SchemaAtomics.TryGetProvenance:Public, Static, HideBySig:Standard:System.Boolean :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmValue& value:In:none:required=:optional=:attrs=[System.Runtime.CompilerServices.IsReadOnlyAttribute()];[System.Runtime.InteropServices.InAttribute()],Bosak.XPath.Core.Schema.ISchemaAtomicProvenance& provenance:Out:none:required=:optional=:attrs=[System.Runtime.InteropServices.OutAttribute()]):",
+        "T Bosak.XPath.Core.Schema.SchemaAtomics:Public, Abstract, Sealed, BeforeFieldInit:layout=Auto:pack=0:sizeMetadata=0:base=System.Object:interfaces=:constraints="
+      ],
+      "removed": []
+    }
+  },
+  "scope": "Only the reviewed SchemaAtomics type and TryGetProvenance signature; prior declarations/layout/friends/references unchanged."
+}

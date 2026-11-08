@@ -1,0 +1,621 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e57f4d93-d50e-4c10-a0aa-8a3ed5dca461" name="charl@CHARLES 2026-10-29 05:52:43" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-29T05:52:43.5842975+01:00" queuing="2026-10-29T05:52:43.5842979+01:00" start="2026-10-29T05:52:42.9312053+01:00" finish="2026-10-29T05:52:43.6419042+01:00" />
+  <TestSettings name="default" id="b619ea85-4e4f-4f46-bbb8-8cf8949f3a6e">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-29_05_52_43" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c5642aac-e8f0-4aa5-9fbf-c6f0031c5cd8" testId="8acedf46-a153-38a8-adb3-05f40b38fbdc" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;G&gt;&lt;date&gt;2012-10-10&lt;/date&gt;&lt;/G&gt;&quot;, head: &quot;G&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0004559" startTime="2026-10-29T05:52:43.5732005+01:00" endTime="2026-10-29T05:52:43.5732300+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c5642aac-e8f0-4aa5-9fbf-c6f0031c5cd8" />
+    <UnitTestResult executionId="684eb4d5-56e5-4ec2-a244-3fc4a20ee124" testId="97cc5bd9-c597-c24d-9431-0de23ee81abb" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;A/&gt;&quot;, head: &quot;A&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0003214" startTime="2026-10-29T05:52:43.5716833+01:00" endTime="2026-10-29T05:52:43.5717624+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="684eb4d5-56e5-4ec2-a244-3fc4a20ee124">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 145&#xD;
+   at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ef968b92-a730-4c78-9027-2894dbf824ee" testId="4af85546-4d98-a2e5-e21e-a21e28a115f7" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:H&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0365515" startTime="2026-10-29T05:52:43.5738668+01:00" endTime="2026-10-29T05:52:43.5869583+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef968b92-a730-4c78-9027-2894dbf824ee" />
+    <UnitTestResult executionId="1659e0fe-b912-490a-8338-c3a1ecb2ab45" testId="29c50d11-345f-f841-1408-9a0c20534948" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;B/&gt;&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0005708" startTime="2026-10-29T05:52:43.5440436+01:00" endTime="2026-10-29T05:52:43.5440849+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1659e0fe-b912-490a-8338-c3a1ecb2ab45" />
+    <UnitTestResult executionId="8e20053d-9d6e-4551-9f18-8f02900a80e2" testId="8372d83c-01a8-ed0c-1687-371cb5362c02" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;D/&gt;&quot;, head: &quot;D&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0022494" startTime="2026-10-29T05:52:43.5439653+01:00" endTime="2026-10-29T05:52:43.5439912+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e20053d-9d6e-4551-9f18-8f02900a80e2" />
+    <UnitTestResult executionId="683ec97c-e7bd-4f93-9717-b3c42d4d6f5b" testId="99236d69-d96b-2b90-2060-c252b9c7fb93" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H*&quot;, testedParameter: &quot;s:A+&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002702" startTime="2026-10-29T05:52:43.5924840+01:00" endTime="2026-10-29T05:52:43.5925803+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="683ec97c-e7bd-4f93-9717-b3c42d4d6f5b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cdd0ae20-46b8-4f5a-b498-3c5532083f69" testId="c516518a-e515-dcba-337d-8fca3ae24f1b" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;V&quot;, head: &quot;Q&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004327" startTime="2026-10-29T05:52:43.5426749+01:00" endTime="2026-10-29T05:52:43.5427154+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cdd0ae20-46b8-4f5a-b498-3c5532083f69">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 203&#xD;
+   at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d011dd8e-65db-4039-be28-e2c9f2d10435" testId="8a8d0f6d-ecb0-966e-a2f7-9261cae705f1" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;D/&gt;&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0003228" startTime="2026-10-29T05:52:43.5720032+01:00" endTime="2026-10-29T05:52:43.5720238+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d011dd8e-65db-4039-be28-e2c9f2d10435" />
+    <UnitTestResult executionId="e8575337-a6c9-4fa1-821c-9e0264f5eb8e" testId="fb04681a-c0a4-c1cf-1809-3728ed8bdec1" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:F&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002828" startTime="2026-10-29T05:52:43.5911837+01:00" endTime="2026-10-29T05:52:43.5914739+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8575337-a6c9-4fa1-821c-9e0264f5eb8e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3ac3f5a4-5335-4762-a058-e3b9d7e13cce" testId="5894e925-d40a-5a74-cb10-0266a10372fb" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;X&quot;, head: &quot;HX&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0002717" startTime="2026-10-29T05:52:43.5432688+01:00" endTime="2026-10-29T05:52:43.5432922+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ac3f5a4-5335-4762-a058-e3b9d7e13cce">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 203&#xD;
+   at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c69d798c-01ef-4ac9-90ad-d23f686f8ee4" testId="7bafee70-d132-ce41-ab7b-c57d4ed21314" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H?&quot;, testedParameter: &quot;s:A&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0003271" startTime="2026-10-29T05:52:43.5879787+01:00" endTime="2026-10-29T05:52:43.5883064+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c69d798c-01ef-4ac9-90ad-d23f686f8ee4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="18a95442-92a8-4be1-9b80-f6f5875945b6" testId="7abbeb1a-5e21-35c5-a4b9-9febb6d4e227" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;A/&gt;&quot;, head: &quot;H&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0003458" startTime="2026-10-29T05:52:43.5732765+01:00" endTime="2026-10-29T05:52:43.5732935+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18a95442-92a8-4be1-9b80-f6f5875945b6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 145&#xD;
+   at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3649f5ce-61a7-4cbc-b707-adbb9ee2c18f" testId="1461e069-c696-4971-9138-76ae99c7b68d" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H?&quot;, testedParameter: &quot;s:A*&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0009105" startTime="2026-10-29T05:52:43.5870771+01:00" endTime="2026-10-29T05:52:43.5879002+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3649f5ce-61a7-4cbc-b707-adbb9ee2c18f" />
+    <UnitTestResult executionId="74a8aeba-cf37-4be3-8496-8a88d8b05508" testId="925ff37e-2740-2e8b-03ea-c48faf1e41e5" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;t:H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002902" startTime="2026-10-29T05:52:43.5886135+01:00" endTime="2026-10-29T05:52:43.5886332+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="74a8aeba-cf37-4be3-8496-8a88d8b05508">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a17bc3ff-2e61-4506-912a-a643ff83e8c9" testId="73ecbde9-4611-3bf2-bea2-a53d65f4e520" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;V&quot;, head: &quot;P&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.1477937" startTime="2026-10-29T05:52:43.3805290+01:00" endTime="2026-10-29T05:52:43.5329196+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a17bc3ff-2e61-4506-912a-a643ff83e8c9" />
+    <UnitTestResult executionId="91edaad8-4f00-428f-9483-8bf63c51e52f" testId="1a483c84-3215-a684-f3b8-0e503c816499" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.UntypedCandidate_RemainsUnmatched" computerName="CHARLES" duration="00:00:00.0003468" startTime="2026-10-29T05:52:43.5938576+01:00" endTime="2026-10-29T05:52:43.5941287+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="91edaad8-4f00-428f-9483-8bf63c51e52f" />
+    <UnitTestResult executionId="1bd6ee5c-dd65-48fa-bbb7-7644b116be99" testId="fa1498bd-a47c-3e49-8e6e-5d7f8e45b3aa" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:D&quot;, testedParameter: &quot;s:E&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004637" startTime="2026-10-29T05:52:43.5917108+01:00" endTime="2026-10-29T05:52:43.5919566+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1bd6ee5c-dd65-48fa-bbb7-7644b116be99" />
+    <UnitTestResult executionId="40696c20-42a5-4242-af5f-6e4e037f177f" testId="3e0bb46e-cd91-ceed-39f8-766312b2723f" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.NilledConcreteMember_CanMatchAbstractHead" computerName="CHARLES" duration="00:00:00.0004145" startTime="2026-10-29T05:52:43.5933586+01:00" endTime="2026-10-29T05:52:43.5937613+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40696c20-42a5-4242-af5f-6e4e037f177f" />
+    <UnitTestResult executionId="cbf2355c-1457-4d2c-80fc-7cb3e706a186" testId="21b927aa-fb16-2332-984e-5ab2a6bd8bfe" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;E/&gt;&quot;, head: &quot;D&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0003728" startTime="2026-10-29T05:52:43.5710473+01:00" endTime="2026-10-29T05:52:43.5710725+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cbf2355c-1457-4d2c-80fc-7cb3e706a186">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 145&#xD;
+   at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4594f11b-4923-489f-a3a1-5b0e89e24a75" testId="865f6587-ac33-c314-33d7-c81084272ba8" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:A?&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004453" startTime="2026-10-29T05:52:43.5898208+01:00" endTime="2026-10-29T05:52:43.5898985+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4594f11b-4923-489f-a3a1-5b0e89e24a75" />
+    <UnitTestResult executionId="28c41a3d-5fb5-4917-96e6-d58fe52e92d4" testId="cf2fe46c-3619-ffbb-62e3-7edb016384f9" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;B/&gt;&quot;, head: &quot;A&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0003962" startTime="2026-10-29T05:52:43.5721020+01:00" endTime="2026-10-29T05:52:43.5721175+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28c41a3d-5fb5-4917-96e6-d58fe52e92d4" />
+    <UnitTestResult executionId="b2cd241d-f4a5-4e90-aacd-43715f24e7a5" testId="4e9276a5-59ec-a5f8-1262-dbff3693e7db" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: False)" computerName="CHARLES" duration="00:00:00.0004482" startTime="2026-10-29T05:52:43.5736970+01:00" endTime="2026-10-29T05:52:43.5737131+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2cd241d-f4a5-4e90-aacd-43715f24e7a5">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Boolean nilled) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 218&#xD;
+   at InvokeStub_SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="af8b8e4d-19a3-4cda-85b4-4e778b0f8287" testId="03be9991-1234-49e1-2342-bf022424d0a5" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:B&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002709" startTime="2026-10-29T05:52:43.5920078+01:00" endTime="2026-10-29T05:52:43.5922695+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af8b8e4d-19a3-4cda-85b4-4e778b0f8287">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cf84436b-d88b-44ac-aa73-a5fd77e49681" testId="0b96bf7b-1c49-3b3f-ed86-62bfb5a08853" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: True)" computerName="CHARLES" duration="00:00:00.0008146" startTime="2026-10-29T05:52:43.5735275+01:00" endTime="2026-10-29T05:52:43.5735475+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf84436b-d88b-44ac-aa73-a5fd77e49681">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Boolean nilled) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 218&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="293424e8-87a8-46c6-8838-4204e0dea3ac" testId="e90ac0f2-9ca3-fd7f-fa4f-c70fd7344c2f" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;R&quot;, head: &quot;HR&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0002920" startTime="2026-10-29T05:52:43.5430553+01:00" endTime="2026-10-29T05:52:43.5430783+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="293424e8-87a8-46c6-8838-4204e0dea3ac">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 203&#xD;
+   at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a51facda-6257-45a0-87c9-f3646afd5385" testId="7a8827aa-708d-fd49-2106-df3e6cc82f40" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;F&gt;&lt;string&gt;s&lt;/string&gt;&lt;decimal&gt;12.7&lt;/decimal&gt;&lt;/F&gt;&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0005691" startTime="2026-10-29T05:52:43.5651308+01:00" endTime="2026-10-29T05:52:43.5708368+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a51facda-6257-45a0-87c9-f3646afd5385" />
+    <UnitTestResult executionId="3a7227b3-e312-4f59-8494-f378112c13b3" testId="43a36f84-a3ae-cd67-a226-8f55074301be" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:G&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004436" startTime="2026-10-29T05:52:43.5907701+01:00" endTime="2026-10-29T05:52:43.5911367+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3a7227b3-e312-4f59-8494-f378112c13b3" />
+    <UnitTestResult executionId="487e0cf8-d618-461a-9b70-dbde73adfa3d" testId="db2beedf-68f6-4231-16fb-04bbaaf39f27" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;E/&gt;&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0003122" startTime="2026-10-29T05:52:43.5720572+01:00" endTime="2026-10-29T05:52:43.5720747+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="487e0cf8-d618-461a-9b70-dbde73adfa3d" />
+    <UnitTestResult executionId="8ba2a27a-f7a4-4f97-8bea-3d6f0a5032a2" testId="ec17dd0f-4143-670b-1fa0-8fe20ba31f1d" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;C xmlns:xsi='http://www.w3.org/2001/XMLSchema-ins&quot;···, head: &quot;H&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004533" startTime="2026-10-29T05:52:43.5723096+01:00" endTime="2026-10-29T05:52:43.5723264+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ba2a27a-f7a4-4f97-8bea-3d6f0a5032a2" />
+    <UnitTestResult executionId="1b504643-beec-4706-9fc6-880f9e031e6f" testId="a62dcfd9-698c-1cee-49fc-408d0b83f458" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;Deep&quot;, head: &quot;H&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0012567" startTime="2026-10-29T05:52:43.5390353+01:00" endTime="2026-10-29T05:52:43.5398662+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1b504643-beec-4706-9fc6-880f9e031e6f">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 203&#xD;
+   at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="dc30f454-c4b5-4a32-82ed-c8ab72a023b0" testId="5fa1586a-ed79-2592-f762-aad47e9b5eab" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:D?&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004445" startTime="2026-10-29T05:52:43.5904107+01:00" endTime="2026-10-29T05:52:43.5906834+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dc30f454-c4b5-4a32-82ed-c8ab72a023b0" />
+    <UnitTestResult executionId="b6742499-34ac-48a1-9418-813599ecdad8" testId="3f74ab90-8482-d52a-2710-ff7d22afcfc7" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;R&quot;, head: &quot;R&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0006348" startTime="2026-10-29T05:52:43.5386187+01:00" endTime="2026-10-29T05:52:43.5386717+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6742499-34ac-48a1-9418-813599ecdad8" />
+    <UnitTestResult executionId="bd1ea2e4-5124-4330-aca6-42a689fa341e" testId="2e4aadd8-ce61-ff6e-2b45-b74647865e7f" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;C/&gt;&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0003649" startTime="2026-10-29T05:52:43.5723556+01:00" endTime="2026-10-29T05:52:43.5723712+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bd1ea2e4-5124-4330-aca6-42a689fa341e" />
+    <UnitTestResult executionId="8b833e55-b35e-48dd-8dd3-f5959551393e" testId="4f36a674-2f29-f78a-b127-7d41aec88d6e" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;G&gt;&lt;date&gt;2012-10-10&lt;/date&gt;&lt;/G&gt;&quot;, head: &quot;H&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004846" startTime="2026-10-29T05:52:43.5721437+01:00" endTime="2026-10-29T05:52:43.5721600+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b833e55-b35e-48dd-8dd3-f5959551393e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: False&#xD;
+Actual:   True</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 145&#xD;
+   at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="367e4c2d-60a8-4e76-8b2d-05bfdef83a90" testId="fddae5b5-0d6b-2647-9647-635150e1473d" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:A&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002652" startTime="2026-10-29T05:52:43.5896112+01:00" endTime="2026-10-29T05:52:43.5896368+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="367e4c2d-60a8-4e76-8b2d-05bfdef83a90">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="900e8199-2260-4c1d-90db-1ade23aaf2b1" testId="c87e5c6d-2226-a688-58b1-2839017bc5cd" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_CheckAllMembersBeyondTheHeadChain" computerName="CHARLES" duration="00:00:00.0006885" startTime="2026-10-29T05:52:43.5932159+01:00" endTime="2026-10-29T05:52:43.5932962+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="900e8199-2260-4c1d-90db-1ade23aaf2b1" />
+    <UnitTestResult executionId="4d7062f6-1e08-429b-ae3c-50ff41c568d1" testId="8d5d5165-b1cc-c861-6dd3-0dfed3280166" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:D&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002702" startTime="2026-10-29T05:52:43.5899469+01:00" endTime="2026-10-29T05:52:43.5902107+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4d7062f6-1e08-429b-ae3c-50ff41c568d1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected) in D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs:line 179&#xD;
+   at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="73bd8efb-1b6d-4605-9718-1bbeffa47b16" testId="c7883d73-a3e0-f75d-d9a0-2abaccdcdfde" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;Mid&quot;, head: &quot;H&quot;, expected: True)" computerName="CHARLES" duration="00:00:00.0002915" startTime="2026-10-29T05:52:43.5429836+01:00" endTime="2026-10-29T05:52:43.5430099+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="73bd8efb-1b6d-4605-9718-1bbeffa47b16" />
+    <UnitTestResult executionId="bedbfa1b-5589-415c-9b94-953bf8854034" testId="79bdef90-a19c-34a4-e3fa-68309449213f" testName="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H+&quot;, testedParameter: &quot;s:A*&quot;, expected: False)" computerName="CHARLES" duration="00:00:00.0004630" startTime="2026-10-29T05:52:43.5887727+01:00" endTime="2026-10-29T05:52:43.5891291+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bedbfa1b-5589-415c-9b94-953bf8854034" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;D/&gt;&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="8a8d0f6d-ecb0-966e-a2f7-9261cae705f1">
+      <Execution id="d011dd8e-65db-4039-be28-e2c9f2d10435" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="4e9276a5-59ec-a5f8-1262-dbff3693e7db">
+      <Execution id="b2cd241d-f4a5-4e90-aacd-43715f24e7a5" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="CandidateType_IsCheckedAgainstMemberDeclaration" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;X&quot;, head: &quot;HX&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="5894e925-d40a-5a74-cb10-0266a10372fb">
+      <Execution id="3ac3f5a4-5335-4762-a058-e3b9d7e13cce" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.NilledConcreteMember_CanMatchAbstractHead" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="3e0bb46e-cd91-ceed-39f8-766312b2723f">
+      <Execution id="40696c20-42a5-4242-af5f-6e4e037f177f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="NilledConcreteMember_CanMatchAbstractHead" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;F&gt;&lt;string&gt;s&lt;/string&gt;&lt;decimal&gt;12.7&lt;/decimal&gt;&lt;/F&gt;&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="7a8827aa-708d-fd49-2106-df3e6cc82f40">
+      <Execution id="a51facda-6257-45a0-87c9-f3646afd5385" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:D?&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="5fa1586a-ed79-2592-f762-aad47e9b5eab">
+      <Execution id="dc30f454-c4b5-4a32-82ed-c8ab72a023b0" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:D&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="8d5d5165-b1cc-c861-6dd3-0dfed3280166">
+      <Execution id="4d7062f6-1e08-429b-ae3c-50ff41c568d1" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;D/&gt;&quot;, head: &quot;D&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="8372d83c-01a8-ed0c-1687-371cb5362c02">
+      <Execution id="8e20053d-9d6e-4551-9f18-8f02900a80e2" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H*&quot;, testedParameter: &quot;s:A+&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="99236d69-d96b-2b90-2060-c252b9c7fb93">
+      <Execution id="683ec97c-e7bd-4f93-9717-b3c42d4d6f5b" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;V&quot;, head: &quot;Q&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="c516518a-e515-dcba-337d-8fca3ae24f1b">
+      <Execution id="cdd0ae20-46b8-4f5a-b498-3c5532083f69" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.UntypedCandidate_RemainsUnmatched" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="1a483c84-3215-a684-f3b8-0e503c816499">
+      <Execution id="91edaad8-4f00-428f-9483-8bf63c51e52f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="UntypedCandidate_RemainsUnmatched" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;Deep&quot;, head: &quot;H&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="a62dcfd9-698c-1cee-49fc-408d0b83f458">
+      <Execution id="1b504643-beec-4706-9fc6-880f9e031e6f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;B/&gt;&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="29c50d11-345f-f841-1408-9a0c20534948">
+      <Execution id="1659e0fe-b912-490a-8338-c3a1ecb2ab45" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;R&quot;, head: &quot;HR&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="e90ac0f2-9ca3-fd7f-fa4f-c70fd7344c2f">
+      <Execution id="293424e8-87a8-46c6-8838-4204e0dea3ac" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;G&gt;&lt;date&gt;2012-10-10&lt;/date&gt;&lt;/G&gt;&quot;, head: &quot;H&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="4f36a674-2f29-f78a-b127-7d41aec88d6e">
+      <Execution id="8b833e55-b35e-48dd-8dd3-f5959551393e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;A/&gt;&quot;, head: &quot;A&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="97cc5bd9-c597-c24d-9431-0de23ee81abb">
+      <Execution id="684eb4d5-56e5-4ec2-a244-3fc4a20ee124" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;G&gt;&lt;date&gt;2012-10-10&lt;/date&gt;&lt;/G&gt;&quot;, head: &quot;G&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="8acedf46-a153-38a8-adb3-05f40b38fbdc">
+      <Execution id="c5642aac-e8f0-4aa5-9fbf-c6f0031c5cd8" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:F&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="fb04681a-c0a4-c1cf-1809-3728ed8bdec1">
+      <Execution id="e8575337-a6c9-4fa1-821c-9e0264f5eb8e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H?&quot;, testedParameter: &quot;s:A&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="7bafee70-d132-ce41-ab7b-c57d4ed21314">
+      <Execution id="c69d798c-01ef-4ac9-90ad-d23f686f8ee4" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:A&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="fddae5b5-0d6b-2647-9647-635150e1473d">
+      <Execution id="367e4c2d-60a8-4e76-8b2d-05bfdef83a90" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H?&quot;, testedParameter: &quot;s:A*&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="1461e069-c696-4971-9138-76ae99c7b68d">
+      <Execution id="3649f5ce-61a7-4cbc-b707-adbb9ee2c18f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;t:H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="925ff37e-2740-2e8b-03ea-c48faf1e41e5">
+      <Execution id="74a8aeba-cf37-4be3-8496-8a88d8b05508" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:B&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="03be9991-1234-49e1-2342-bf022424d0a5">
+      <Execution id="af8b8e4d-19a3-4cda-85b4-4e778b0f8287" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:D&quot;, testedParameter: &quot;s:E&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="fa1498bd-a47c-3e49-8e6e-5d7f8e45b3aa">
+      <Execution id="1bd6ee5c-dd65-48fa-bbb7-7644b116be99" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;B/&gt;&quot;, head: &quot;A&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="cf2fe46c-3619-ffbb-62e3-7edb016384f9">
+      <Execution id="28c41a3d-5fb5-4917-96e6-d58fe52e92d4" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;E/&gt;&quot;, head: &quot;D&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="21b927aa-fb16-2332-984e-5ab2a6bd8bfe">
+      <Execution id="cbf2355c-1457-4d2c-80fc-7cb3e706a186" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_CheckAllMembersBeyondTheHeadChain" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="c87e5c6d-2226-a688-58b1-2839017bc5cd">
+      <Execution id="900e8199-2260-4c1d-90db-1ade23aaf2b1" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_CheckAllMembersBeyondTheHeadChain" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;R&quot;, head: &quot;R&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="3f74ab90-8482-d52a-2710-ff7d22afcfc7">
+      <Execution id="b6742499-34ac-48a1-9418-813599ecdad8" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;V&quot;, head: &quot;P&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="73ecbde9-4611-3bf2-bea2-a53d65f4e520">
+      <Execution id="a17bc3ff-2e61-4506-912a-a643ff83e8c9" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="0b96bf7b-1c49-3b3f-ed86-62bfb5a08853">
+      <Execution id="cf84436b-d88b-44ac-aa73-a5fd77e49681" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="CandidateType_IsCheckedAgainstMemberDeclaration" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;A/&gt;&quot;, head: &quot;H&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="7abbeb1a-5e21-35c5-a4b9-9febb6d4e227">
+      <Execution id="18a95442-92a8-4be1-9b80-f6f5875945b6" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;E/&gt;&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="db2beedf-68f6-4231-16fb-04bbaaf39f27">
+      <Execution id="487e0cf8-d618-461a-9b70-dbde73adfa3d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:A&quot;, testedParameter: &quot;s:H&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="4af85546-4d98-a2e5-e21e-a21e28a115f7">
+      <Execution id="ef968b92-a730-4c78-9027-2894dbf824ee" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;C/&gt;&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="2e4aadd8-ce61-ff6e-2b45-b74647865e7f">
+      <Execution id="bd1ea2e4-5124-4330-aca6-42a689fa341e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:A?&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="865f6587-ac33-c314-33d7-c81084272ba8">
+      <Execution id="4594f11b-4923-489f-a3a1-5b0e89e24a75" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H+&quot;, testedParameter: &quot;s:A*&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="79bdef90-a19c-34a4-e3fa-68309449213f">
+      <Execution id="bedbfa1b-5589-415c-9b94-953bf8854034" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: &quot;Mid&quot;, head: &quot;H&quot;, expected: True)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="c7883d73-a3e0-f75d-d9a0-2abaccdcdfde">
+      <Execution id="73bd8efb-1b6d-4605-9718-1bbeffa47b16" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="DerivationBlocks_RespectCompiledComponents" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: &quot;s:H&quot;, testedParameter: &quot;s:G&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="43a36f84-a3ae-cd67-a226-8f55074301be">
+      <Execution id="3a7227b3-e312-4f59-8494-f378112c13b3" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="FunctionParameters_UseMemberContainment" />
+    </UnitTest>
+    <UnitTest name="Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: &quot;&lt;C xmlns:xsi='http://www.w3.org/2001/XMLSchema-ins&quot;···, head: &quot;H&quot;, expected: False)" storage="d:\development\bosak\.guard-tmp\k04-schema-element-baseline\bin\release\net10.0\baseline.dll" id="ec17dd0f-4143-670b-1fa0-8fe20ba31f1d">
+      <Execution id="8ba2a27a-f7a4-4f97-8bea-3d6f0a5032a2" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\bin\Release\net10.0\Baseline.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.XQuery.Tests.SchemaElementMembershipTests" name="LocalCandidates_RespectAbstractBlockingAndNillability" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8acedf46-a153-38a8-adb3-05f40b38fbdc" executionId="c5642aac-e8f0-4aa5-9fbf-c6f0031c5cd8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="97cc5bd9-c597-c24d-9431-0de23ee81abb" executionId="684eb4d5-56e5-4ec2-a244-3fc4a20ee124" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4af85546-4d98-a2e5-e21e-a21e28a115f7" executionId="ef968b92-a730-4c78-9027-2894dbf824ee" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="29c50d11-345f-f841-1408-9a0c20534948" executionId="1659e0fe-b912-490a-8338-c3a1ecb2ab45" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8372d83c-01a8-ed0c-1687-371cb5362c02" executionId="8e20053d-9d6e-4551-9f18-8f02900a80e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="99236d69-d96b-2b90-2060-c252b9c7fb93" executionId="683ec97c-e7bd-4f93-9717-b3c42d4d6f5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c516518a-e515-dcba-337d-8fca3ae24f1b" executionId="cdd0ae20-46b8-4f5a-b498-3c5532083f69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a8d0f6d-ecb0-966e-a2f7-9261cae705f1" executionId="d011dd8e-65db-4039-be28-e2c9f2d10435" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fb04681a-c0a4-c1cf-1809-3728ed8bdec1" executionId="e8575337-a6c9-4fa1-821c-9e0264f5eb8e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5894e925-d40a-5a74-cb10-0266a10372fb" executionId="3ac3f5a4-5335-4762-a058-e3b9d7e13cce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7bafee70-d132-ce41-ab7b-c57d4ed21314" executionId="c69d798c-01ef-4ac9-90ad-d23f686f8ee4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7abbeb1a-5e21-35c5-a4b9-9febb6d4e227" executionId="18a95442-92a8-4be1-9b80-f6f5875945b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1461e069-c696-4971-9138-76ae99c7b68d" executionId="3649f5ce-61a7-4cbc-b707-adbb9ee2c18f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="925ff37e-2740-2e8b-03ea-c48faf1e41e5" executionId="74a8aeba-cf37-4be3-8496-8a88d8b05508" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73ecbde9-4611-3bf2-bea2-a53d65f4e520" executionId="a17bc3ff-2e61-4506-912a-a643ff83e8c9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a483c84-3215-a684-f3b8-0e503c816499" executionId="91edaad8-4f00-428f-9483-8bf63c51e52f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fa1498bd-a47c-3e49-8e6e-5d7f8e45b3aa" executionId="1bd6ee5c-dd65-48fa-bbb7-7644b116be99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3e0bb46e-cd91-ceed-39f8-766312b2723f" executionId="40696c20-42a5-4242-af5f-6e4e037f177f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21b927aa-fb16-2332-984e-5ab2a6bd8bfe" executionId="cbf2355c-1457-4d2c-80fc-7cb3e706a186" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="865f6587-ac33-c314-33d7-c81084272ba8" executionId="4594f11b-4923-489f-a3a1-5b0e89e24a75" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cf2fe46c-3619-ffbb-62e3-7edb016384f9" executionId="28c41a3d-5fb5-4917-96e6-d58fe52e92d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e9276a5-59ec-a5f8-1262-dbff3693e7db" executionId="b2cd241d-f4a5-4e90-aacd-43715f24e7a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="03be9991-1234-49e1-2342-bf022424d0a5" executionId="af8b8e4d-19a3-4cda-85b4-4e778b0f8287" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b96bf7b-1c49-3b3f-ed86-62bfb5a08853" executionId="cf84436b-d88b-44ac-aa73-a5fd77e49681" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e90ac0f2-9ca3-fd7f-fa4f-c70fd7344c2f" executionId="293424e8-87a8-46c6-8838-4204e0dea3ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a8827aa-708d-fd49-2106-df3e6cc82f40" executionId="a51facda-6257-45a0-87c9-f3646afd5385" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43a36f84-a3ae-cd67-a226-8f55074301be" executionId="3a7227b3-e312-4f59-8494-f378112c13b3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db2beedf-68f6-4231-16fb-04bbaaf39f27" executionId="487e0cf8-d618-461a-9b70-dbde73adfa3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec17dd0f-4143-670b-1fa0-8fe20ba31f1d" executionId="8ba2a27a-f7a4-4f97-8bea-3d6f0a5032a2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a62dcfd9-698c-1cee-49fc-408d0b83f458" executionId="1b504643-beec-4706-9fc6-880f9e031e6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5fa1586a-ed79-2592-f762-aad47e9b5eab" executionId="dc30f454-c4b5-4a32-82ed-c8ab72a023b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f74ab90-8482-d52a-2710-ff7d22afcfc7" executionId="b6742499-34ac-48a1-9418-813599ecdad8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2e4aadd8-ce61-ff6e-2b45-b74647865e7f" executionId="bd1ea2e4-5124-4330-aca6-42a689fa341e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4f36a674-2f29-f78a-b127-7d41aec88d6e" executionId="8b833e55-b35e-48dd-8dd3-f5959551393e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fddae5b5-0d6b-2647-9647-635150e1473d" executionId="367e4c2d-60a8-4e76-8b2d-05bfdef83a90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c87e5c6d-2226-a688-58b1-2839017bc5cd" executionId="900e8199-2260-4c1d-90db-1ade23aaf2b1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d5d5165-b1cc-c861-6dd3-0dfed3280166" executionId="4d7062f6-1e08-429b-ae3c-50ff41c568d1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7883d73-a3e0-f75d-d9a0-2abaccdcdfde" executionId="73bd8efb-1b6d-4605-9718-1bbeffa47b16" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79bdef90-a19c-34a4-e3fa-68309449213f" executionId="bedbfa1b-5589-415c-9b94-953bf8854034" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="39" executed="39" passed="22" failed="17" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.05]   Discovering: Baseline&#xD;
+[xUnit.net 00:00:00.09]   Discovered:  Baseline&#xD;
+[xUnit.net 00:00:00.11]   Starting:    Baseline&#xD;
+[xUnit.net 00:00:00.28]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.28]       Expected: False&#xD;
+[xUnit.net 00:00:00.28]       Actual:   True&#xD;
+[xUnit.net 00:00:00.28]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.28]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(203,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.28]            at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.28]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.28]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.28]       Expected: False&#xD;
+[xUnit.net 00:00:00.28]       Actual:   True&#xD;
+[xUnit.net 00:00:00.28]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.28]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(203,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.28]            at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.28]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.28]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.28]       Expected: False&#xD;
+[xUnit.net 00:00:00.28]       Actual:   True&#xD;
+[xUnit.net 00:00:00.28]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.28]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(203,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.28]            at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.28]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.28]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.28]       Expected: False&#xD;
+[xUnit.net 00:00:00.28]       Actual:   True&#xD;
+[xUnit.net 00:00:00.28]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.28]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(203,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(String member, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.28]            at InvokeStub_SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.28]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.31]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(145,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.31]            at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.31]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(145,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.31]            at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.31]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(145,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.31]            at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.31]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(145,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(String xml, String head, Boolean expected)&#xD;
+[xUnit.net 00:00:00.31]            at InvokeStub_SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.31]       Assert.False() Failure&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(218,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Boolean nilled)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.31]       Assert.False() Failure&#xD;
+[xUnit.net 00:00:00.31]       Expected: False&#xD;
+[xUnit.net 00:00:00.31]       Actual:   True&#xD;
+[xUnit.net 00:00:00.31]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.31]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(218,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Boolean nilled)&#xD;
+[xUnit.net 00:00:00.31]            at InvokeStub_SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.31]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.33]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.33]       Expected: True&#xD;
+[xUnit.net 00:00:00.33]       Actual:   False&#xD;
+[xUnit.net 00:00:00.33]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.33]         D:\Development\Bosak\.guard-tmp\k04-schema-element-baseline\SchemaElementMembershipTests.cs(179,0): at Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(String parameter, String testedParameter, Boolean expected)&#xD;
+[xUnit.net 00:00:00.33]            at InvokeStub_SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.33]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.34]   Finished:    Baseline&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5416245+01:00">
+        <Text>[xUnit.net 00:00:00.28]     Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: "Deep", head: "H", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5429272+01:00">
+        <Text>[xUnit.net 00:00:00.28]     Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: "V", head: "Q", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5431763+01:00">
+        <Text>[xUnit.net 00:00:00.28]     Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: "R", head: "HR", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5434025+01:00">
+        <Text>[xUnit.net 00:00:00.28]     Bosak.XQuery.Tests.SchemaElementMembershipTests.DerivationBlocks_RespectCompiledComponents(member: "X", head: "HX", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5891337+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: "&lt;E/&gt;", head: "D", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5891677+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: "&lt;A/&gt;", head: "A", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5891924+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: "&lt;G&gt;&lt;date&gt;2012-10-10&lt;/date&gt;&lt;/G&gt;", head: "H", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5897329+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.LocalCandidates_RespectAbstractBlockingAndNillability(xml: "&lt;A/&gt;", head: "H", expected: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5897614+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5897876+01:00">
+        <Text>[xUnit.net 00:00:00.31]     Bosak.XQuery.Tests.SchemaElementMembershipTests.CandidateType_IsCheckedAgainstMemberDeclaration(nilled: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5898116+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H?", testedParameter: "s:A", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5898401+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H", testedParameter: "t:H", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5907953+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H", testedParameter: "s:A", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5908202+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:A", testedParameter: "s:D", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5916196+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H", testedParameter: "s:F", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5923795+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H", testedParameter: "s:B", expected: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T05:52:43.5926812+01:00">
+        <Text>[xUnit.net 00:00:00.33]     Bosak.XQuery.Tests.SchemaElementMembershipTests.FunctionParameters_UseMemberContainment(parameter: "s:H*", testedParameter: "s:A+", expected: True) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

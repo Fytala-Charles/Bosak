@@ -1,0 +1,9 @@
+{
+  "signature": "SchemaQueryOperation.ReadTypedContainer(SchemaQuerySnapshot, ISchemaTypedValue): SchemaResult<ISchemaTypedValue>",
+  "originalDraftModified": false,
+  "existingMembersModified": false,
+  "implementationPresent": false,
+  "newPublicTypesSelected": 0,
+  "ownerAccepted": false,
+  "finalManifestAccepted": false
+}

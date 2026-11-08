@@ -1,0 +1,185 @@
+{
+  "implementationStatus": "InternalPrerequisiteQualified",
+  "publicCompatibilityActivated": false,
+  "cases": [
+    {
+      "id": "MC01",
+      "trigger": "Two distinct exact advisors",
+      "expected": "Acquire once each in deterministic order; reverse cleanup.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC01_MC02_OrderedPair"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC02",
+      "trigger": "Identical endpoint references",
+      "expected": "Deduplicate to one successful real admission; no fabricated lease.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC01_MC02_OrderedPair"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC03",
+      "trigger": "First/second Enter throws or returns null",
+      "expected": "No phantom admission; reverse rollback and original primary ordering.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC03_AcquisitionRollback",
+        "MC03_FailedPairCannotBeReopened"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC04",
+      "trigger": "Close/cancel while either Enter is blocked",
+      "expected": "Revoke delivery; retain actual call and clean returned lease once.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC05",
+      "trigger": "Callback completion during first/second acquisition",
+      "expected": "Raw task and drain wait for actual entry/cleanup.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC06",
+      "trigger": "Callback completion during source/target/proof callback",
+      "expected": "No late delivery; retain both resources until true exit.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail",
+        "MC06_MC12_MC15_PairAndRetainerCompose"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC07",
+      "trigger": "Canceled drain/wait only",
+      "expected": "No actual work cancellation or premature release.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC08",
+      "trigger": "Source versus target session/snapshot revocation",
+      "expected": "Refuse new/resumed work; retain original owned handles until tails end.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail",
+        "MC08_EitherEndpointRevocation",
+        "MC08_GuardBetweenLeaseCallbacks",
+        "MC08_MC12_MC15_RawWorkRetainsOriginalFile",
+        "MC08_MC15_SourceCloseRevokesWithoutEarlyRelease",
+        "MC08_TargetClosePreservesOriginalOwner"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC09",
+      "trigger": "Second acquisition or retention failure plus cleanup failures",
+      "expected": "Attempt every cleanup; preserve exception identities/order/aggregate boundaries.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC09_MC15_FailedAdmissionCleanup",
+        "MC09_RetentionFailureAndRollbackErrors",
+        "MC09_WorkAndCleanupOrdering"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC10",
+      "trigger": "Overlap/reentry across endpoint callbacks",
+      "expected": "Refuse before second provider work; no callbacks under state gates.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC10_InvalidArgumentsDoNotEnter",
+        "MC10_ReentryAndOverlap"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC11",
+      "trigger": "Independent raw operations",
+      "expected": "Separate admissions and proof windows; no native parallelism promise.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC11_IndependentOperations"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC12",
+      "trigger": "Real separate source and target files/streams",
+      "expected": "Both remain open while provider is on stack and close through original lease paths.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC04_MC05_MC06_MC07_MC08_MC12_ActualTail",
+        "MC06_MC12_MC15_PairAndRetainerCompose",
+        "MC08_MC12_MC15_RawWorkRetainsOriginalFile"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC13",
+      "trigger": "Retain operation/proof objects after completion",
+      "expected": "No active admission or revived authorization.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC13_RetainedOperationRefuses"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC14",
+      "trigger": "Repeated close/Complete/drain and blocked cleanup",
+      "expected": "Release each successful obligation once; drain includes cleanup completion/failure.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC14_BlockedCleanupAndRepeatedCompletion"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC15",
+      "trigger": "Source snapshot retain and target admission transaction races",
+      "expected": "No orphan source obligation or incorrectly published target snapshot/slot.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC06_MC12_MC15_PairAndRetainerCompose",
+        "MC08_MC12_MC15_RawWorkRetainsOriginalFile",
+        "MC08_MC15_SourceCloseRevokesWithoutEarlyRelease",
+        "MC09_MC15_FailedAdmissionCleanup",
+        "MC15_EarlyValidation",
+        "MC15_MembershipAndQuota",
+        "MC15_OpeningCallbackRetainsActualResource",
+        "MC15_RollbackAndQuotaRefund"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    },
+    {
+      "id": "MC16",
+      "trigger": "Regression of existing constructor single-provider rule",
+      "expected": "No accidental multi-provider expansion of TA-19/TA-20 routes.",
+      "status": "QualifiedInternalPrerequisite",
+      "tests": [
+        "MC16_ImmutableModeAndMembership"
+      ],
+      "scope": "Pair/neutral retained-source mechanics only; public proof/admission integration unrun."
+    }
+  ]
+}

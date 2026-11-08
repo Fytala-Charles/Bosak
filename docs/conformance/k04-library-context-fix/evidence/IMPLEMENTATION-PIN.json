@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C28",
+  "kind": "Pre-implementation adoption: library context-type declaration identity",
+  "sourceBase": "93c564dae9a7d5ef343cd48f34f95dfc7320c85c",
+  "xquery31": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "functions31": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+    "sections": [
+      "func-normalize-unicode"
+    ],
+    "scope": "fn:load-xquery-module target context-item mismatch FOQM0005; static module error FOQM0003; dynamic evaluation errors retain their codes"
+  },
+  "scope": [
+    "Each loaded library constraint retains its declaring namespaces/default element-type namespace",
+    "All module constraints apply; no bare lexical type-name deduplication",
+    "Canonicalize atomic type aliases within parsed ItemType text, preserving node-name/literal roles and namespace/name case",
+    "Validate module-loader target context after its schema environment is prepared, retaining FOQM0005",
+    "Preserve importer namespace/default context on match success and failure"
+  ],
+  "limits": [
+    "No shared runtime type matcher, schema backend, routing or admission change",
+    "No fixture/assertion, KnownSkips, GatedSets or AGENTS baseline update",
+    "Imported-module dynamic constraint errors retain existing XPTY0004 propagation; target mismatches retain FOQM0005",
+    "Bosak.Schema retains XSD1.1 ownership",
+    "No release/publication"
+  ]
+}

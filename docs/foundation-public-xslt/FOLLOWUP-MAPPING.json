@@ -1,0 +1,113 @@
+{
+  "historicalCases": "docs/foundation-r2-consolidation/FOLLOWUP-CASES.json",
+  "historicalSha256": "554d16934f03f3f375fe73c3de1ce9b0324ab49067eb435c4a06bde5bfa237dd",
+  "additionalPassedTestCount": false,
+  "cases": [
+    {
+      "id": "C01",
+      "expected": "Capture is bound to the exact executable/environment; foreign/closed operations refuse before source getters.",
+      "tests": [
+        "PX12",
+        "PX13",
+        "PX26",
+        "PX27"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C02",
+      "expected": "Separate match/global roles, unique admission leasing and source-free named templates retain correct context during capture.",
+      "tests": [
+        "PX01",
+        "PX03",
+        "PX04",
+        "PX05"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C03",
+      "expected": "Detached managed serialized bytes, URIs/properties and production order match the supported capture contract; no filesystem output.",
+      "tests": [
+        "PX16",
+        "PX22"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C04",
+      "expected": "Message count, secondary count, per-output and total-byte bounds apply at production with expected classified outcomes; no total-memory claim.",
+      "tests": [
+        "PX08",
+        "PX09",
+        "PX10"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C05",
+      "expected": "Completed outputs survive subsequent transform/serialization failure with correct failure classification; principal-only serialization is insufficient.",
+      "tests": [
+        "PX17",
+        "PX29"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C06",
+      "expected": "Raw cancellation/operation/time controls compose explicitly and preserve Cancelled/Partial/Failed semantics; compilation and between-checkpoint limits remain documented.",
+      "tests": [
+        "PX11",
+        "PX20"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C07",
+      "expected": "Actual per-run denial/unsupported-route receipts remain attributable and isolated across runs; state/test redaction before publication/IPC.",
+      "tests": [
+        "PX19"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C08",
+      "expected": "Actual admitted resources stay held until all captured output/result consumption completes; canceling a wait does not release early.",
+      "tests": [
+        "PX21"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C09",
+      "expected": "Mutable options are copied/refused under selected profile; invocation/context precedence, raw-result exclusions and unsupported fields never silently fall back.",
+      "tests": [
+        "PX07",
+        "PX08",
+        "PX18"
+      ],
+      "status": "QualifiedBoundedCoreProfile",
+      "exclusions": "Native/worker/IPC and owner budget/acceptance remain pending."
+    },
+    {
+      "id": "C10",
+      "expected": "Capture/serialization plus multiple cleanup failures preserve all objects/order; measure warm/cold allocations/latency under identified fixtures without claiming owner budgets.",
+      "tests": [
+        "PX17",
+        "PX21",
+        "PX30",
+        "PX31"
+      ],
+      "status": "CoreErrorsQualified_CallerCostObserved",
+      "exclusions": "Caller allocations only; transform/serializer worker allocations and representative owner budgets remain pending."
+    }
+  ]
+}

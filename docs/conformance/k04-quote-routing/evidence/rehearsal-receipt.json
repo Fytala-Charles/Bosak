@@ -1,0 +1,13 @@
+{
+  "command": [
+    "dotnet",
+    ".guard-tmp/k04-quote-harness/bin/Release/net10.0/Bosak.XPath.Conformance.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 300,
+  "wallSeconds": 62.64349390001735,
+  "log": "rehearsal-full-run.log",
+  "skipDump": "rehearsal-skips.txt",
+  "mode": "Isolated copied complete harness with quote predicate corrected; normal tracked source unchanged"
+}

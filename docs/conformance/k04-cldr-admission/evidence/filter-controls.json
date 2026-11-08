@@ -1,0 +1,2844 @@
+[
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XP31+ XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-spec-XQ40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-en-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-en-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-fr-CA-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-default-language-fr-CA-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-unknown-k04-control-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unknown-k04-control",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-feature-unknown-k04-control-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unknown-k04-control",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xsd-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-xml-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-unicode-version-15.0-True",
+    "dependencies": [
+      {
+        "type": "unicode-version",
+        "value": "15.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-unicode-version-15.0-False",
+    "dependencies": [
+      {
+        "type": "unicode-version",
+        "value": "15.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-contradiction-XQ31+",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-contradiction-XP31+",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-contradiction-fr-CA",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      },
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XP31+ XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+ XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ40+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-spec-XQ40+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-en-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-en-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "en",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-fr-CA-True",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-default-language-fr-CA-False",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-unknown-k04-control-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unknown-k04-control",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-feature-unknown-k04-control-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unknown-k04-control",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xsd-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.1-True",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-xml-version-1.1-False",
+    "dependencies": [
+      {
+        "type": "xml-version",
+        "value": "1.1",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-unicode-version-15.0-True",
+    "dependencies": [
+      {
+        "type": "unicode-version",
+        "value": "15.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-unicode-version-15.0-False",
+    "dependencies": [
+      {
+        "type": "unicode-version",
+        "value": "15.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-contradiction-XQ31+",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-contradiction-XP31+",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-contradiction-fr-CA",
+    "dependencies": [
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      },
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3--True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3--False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3- serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": " serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3- serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": " serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-SCHEMAVALIDATION-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "SCHEMAVALIDATION",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-SCHEMAVALIDATION-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "SCHEMAVALIDATION",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-STATIC-TYPING-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "STATIC-TYPING",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-STATIC-TYPING-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "STATIC-TYPING",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-advanced-uca-fallback-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "advanced-uca-fallback",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-advanced-uca-fallback-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "advanced-uca-fallback",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-arbitraryPrecisionDecimal-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "arbitraryPrecisionDecimal",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-arbitraryPrecisionDecimal-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "arbitraryPrecisionDecimal",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-collection-stability-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "collection-stability",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-collection-stability-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "collection-stability",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-directory-as-collection-uri-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "directory-as-collection-uri",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-directory-as-collection-uri-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "directory-as-collection-uri",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-expath-file-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "expath-file",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-expath-file-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "expath-file",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-format-integer-CLDR-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-format-integer-CLDR-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-load-xquery-module-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-load-xquery-module-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-transform-XSLT-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-transform-XSLT-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-transform-XSLT30-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT30",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-fn-transform-XSLT30-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT30",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-future-bosak-feature-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-future-bosak-feature-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-future-bosak-feature-2-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature-2",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-future-bosak-feature-2-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature-2",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-higherOrderFunction-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunction",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-higherOrderFunction-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunction",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-higherOrderFunctions-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-higherOrderFunctions-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-infoset-dtd-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "infoset-dtd",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-infoset-dtd-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "infoset-dtd",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-moduleImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "moduleImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-moduleImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "moduleImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-namespace-axis-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "namespace-axis",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-namespace-axis-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "namespace-axis",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-non_empty_sequence_collection-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_empty_sequence_collection",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-non_empty_sequence_collection-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_empty_sequence_collection",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-non_unicode_codepoint_collation-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-non_unicode_codepoint_collation-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-olson-timezone-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "olson-timezone",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-olson-timezone-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "olson-timezone",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-remote_http-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "remote_http",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-remote_http-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "remote_http",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schema-location-hint-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schema-location-hint",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schema-location-hint-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schema-location-hint",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schemaImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schemaImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schemaValidation-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaValidation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-schemaValidation-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaValidation",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-simple-uca-fallback-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "simple-uca-fallback",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-simple-uca-fallback-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "simple-uca-fallback",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-staticTyping-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-staticTyping-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-typedData-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-typedData-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-xpath-1.0-compatibility-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "xpath-1.0-compatibility",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "feature-qt3-xpath-1.0-compatibility-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "xpath-1.0-compatibility",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-unknown-and-known",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-known-contradiction",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4--True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4--False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4- serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": " serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4- serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": " serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-SCHEMAVALIDATION-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "SCHEMAVALIDATION",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-SCHEMAVALIDATION-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "SCHEMAVALIDATION",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-STATIC-TYPING-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "STATIC-TYPING",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-STATIC-TYPING-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "STATIC-TYPING",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-XQUpdate-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "XQUpdate",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-XQUpdate-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "XQUpdate",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-advanced-uca-fallback-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "advanced-uca-fallback",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-advanced-uca-fallback-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "advanced-uca-fallback",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-arbitraryPrecisionDecimal-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "arbitraryPrecisionDecimal",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-arbitraryPrecisionDecimal-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "arbitraryPrecisionDecimal",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-binary-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "binary",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-binary-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "binary",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-collection-stability-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "collection-stability",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-collection-stability-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "collection-stability",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-directory-as-collection-uri-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "directory-as-collection-uri",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-directory-as-collection-uri-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "directory-as-collection-uri",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-expath-file-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "expath-file",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-expath-file-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "expath-file",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-format-integer-CLDR-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-format-integer-CLDR-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-load-xquery-module-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-load-xquery-module-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-load-xquery-module",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-transform-XSLT-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-transform-XSLT-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-transform-XSLT30-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT30",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fn-transform-XSLT30-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-transform-XSLT30",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-defaults-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-defaults",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-defaults-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-defaults",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-ignore-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-ignore",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-ignore-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-ignore",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-units-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-units",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-fullText-units-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fullText-units",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-future-bosak-feature-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-future-bosak-feature-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-future-bosak-feature-2-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature-2",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-future-bosak-feature-2-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature-2",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-higherOrderFunction-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunction",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-higherOrderFunction-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunction",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-higherOrderFunctions-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-higherOrderFunctions-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "higherOrderFunctions",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-infoset-dtd-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "infoset-dtd",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-infoset-dtd-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "infoset-dtd",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-moduleImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "moduleImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-moduleImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "moduleImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-namespace-axis-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "namespace-axis",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-namespace-axis-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "namespace-axis",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-non_empty_sequence_collection-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_empty_sequence_collection",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-non_empty_sequence_collection-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_empty_sequence_collection",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-non_unicode_codepoint_collation-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-non_unicode_codepoint_collation-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "non_unicode_codepoint_collation",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-olson-timezone-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "olson-timezone",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-olson-timezone-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "olson-timezone",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-remote_http-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "remote_http",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-remote_http-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "remote_http",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schema-location-hint-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schema-location-hint",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schema-location-hint-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schema-location-hint",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schemaImport-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schemaImport-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaImport",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schemaValidation-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaValidation",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-schemaValidation-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "schemaValidation",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-serialization-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-serialization-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-simple-uca-fallback-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "simple-uca-fallback",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-simple-uca-fallback-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "simple-uca-fallback",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-static-typing-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-static-typing-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "static-typing",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-staticTyping-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-staticTyping-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-typedData-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-typedData-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-xpath-1.0-compatibility-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "xpath-1.0-compatibility",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "feature-qt4-xpath-1.0-compatibility-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "xpath-1.0-compatibility",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-unknown-and-known",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "future-bosak-feature",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-known-contradiction",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-format-integer-065-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-format-integer-065-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-format-integer-066-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "it",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-format-integer-066-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "it",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-065-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-065-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-066-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "it",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-066-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "it",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-076-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-076-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-077-full",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-format-integer-077-without-feature",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "language",
+        "value": "de",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-cldr-with-spec-XQ40+",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-cldr-with-default-language-fr-CA",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-cldr-with-feature-typedData",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-cldr-with-feature-future-cldr-control",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "future-cldr-control",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-cldr-with-spec-XQ40+",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-cldr-with-default-language-fr-CA",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "default-language",
+        "value": "fr-CA",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-cldr-with-feature-typedData",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "typedData",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-cldr-with-feature-future-cldr-control",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "fn-format-integer-CLDR",
+        "satisfied": true
+      },
+      {
+        "type": "feature",
+        "value": "future-cldr-control",
+        "satisfied": true
+      }
+    ]
+  }
+]

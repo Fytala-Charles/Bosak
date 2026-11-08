@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "priorManifest": "docs/foundation-node-atomization-policy/MANIFEST.json",
+  "priorManifestSha256": "4b649125f84cbacfd13fdb763eee11dec1c5f377498e48f10be43fbf7f80dc51",
+  "priorCandidateUncommitted": true,
+  "priorSourceVersion": "1.63.1",
+  "sourceVersion": "1.64.0"
+}

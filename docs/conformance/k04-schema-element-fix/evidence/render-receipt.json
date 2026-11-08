@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/README.md.html",
+      "sha256": "9bd23b25bca313a55eb16c12cb4b0d8dacd01adc5f1059e68117d73528afc952"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "c81e07cdff9a2b725aa48feb0985c20f36656b278aa6c2ec56673fa92cf4fdbc"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b1741f005d63e138021e162519c511f522df1df1b759e80d63f3e7ebcec79dbf"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "b89673dbf36b2bf693d557b585a5f971fc783a611ba8335134cc9bd7f64273a7"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "350d2334d475533b85b4cea944bac3723d18c2754f8d18873483c17062be2045"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "9fde36a6f2cb9d7a5cbec71ec338969990d228220dced5d654bd3c8daf649305"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "fb1551dda3648cb270dd09d5bf179a2dfacac10550335a7f059c56b95cbc0d0a"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "be5a3f05e9ee5f959e2a540380a092af30f9af0a3bb7e2bc5553f644eebc31f3"
+    },
+    {
+      "source": "docs/conformance/k04-schema-element-fix/README.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_conformance_k04-schema-element-fix_README.md.html",
+      "sha256": "f0618a2b18dd414adc164b80911be9ab506d67a8deeb3d392188c529d9430807"
+    },
+    {
+      "source": "docs/conformance/k04-schema-element-fix/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-schema-element-fix-render/docs_conformance_k04-schema-element-fix_NEXT-SLICE.md.html",
+      "sha256": "5d2f40c3c668d1717470b260dd8e1f7a99a9dec0b0853b75365ac468163d1968"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+﻿from pathlib import Path
+import json,subprocess,shutil
+E=Path('docs/xpath40-catalog/evidence/c08-adoption-research');delivery=json.loads((E/'delivery-research.json').read_text(encoding='utf-8'))['records'];heads=json.loads((E/'head-research.json').read_text(encoding='utf-8'));pattern='qtspecs|qt4cg.org/specifications|adoptedSpec|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in|[Cc]ommit|[Hh]ash)';records=[]
+for kind,values,field in [('delivery',delivery,'bosakRevision'),('head',heads,'headRevision')]:
+ for v in values:
+  result=subprocess.run(['git','grep','-n','-I','-E',pattern,v[field],'--','docs','src','tests'],capture_output=True);assert result.returncode in [0,1]
+  records.append(dict(kind=kind,revision=v[field],exitCode=result.returncode,output=result.stdout.decode('utf-8')))
+(E/'expanded-source-search.json').write_text(json.dumps(dict(pattern=pattern,scope=['docs','src','tests'],records=records),indent=2)+'\n',encoding='utf-8')
+args=['git','log','--all',*[v['headRevision'] for v in heads],'--before=2026-10-11T00:00:00+02:00','--format=%H %aI %s','-G','qtspecs|adoptedSpecRevision|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in|[Cc]ommit|[Hh]ash)','--','docs','src','tests'];r=subprocess.run(args,capture_output=True);assert r.returncode==0;(E/'preledger-all-head-history.txt').write_bytes(r.stdout);(E/'history-search-command.json').write_text(json.dumps(dict(arguments=args,exitCode=r.returncode),indent=2)+'\n',encoding='utf-8');shutil.copyfile('.guard-tmp/c08-preledger-pin-search.txt',E/'preledger-ref-history.txt');print('Expanded',len(records),'tree searches; historical matching commits',len(r.stdout.splitlines()))

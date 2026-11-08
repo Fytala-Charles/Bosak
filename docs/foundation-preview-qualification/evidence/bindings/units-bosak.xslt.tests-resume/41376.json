@@ -1,0 +1,97 @@
+{
+  "processId": 41376,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Api",
+      "identity": "Bosak.XPath.Api, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Api.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "0fa4de7d4432a24e0a049301c1192de2b21e9bf09adde5feacce4816fd374359"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "dd1ef817340dc210425fe570dc230f42b83903f17a9d353c86d28287c31e01f1"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "cab08b8c38f32b3d602b3e29e3dd36affc3a5853a813de96a1a0162ef02ffd43"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "2a169b8a894ce78ffbb754bfa0a8a540b093fcd5e8024076a4c9372467aefe72"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "identity": "Bosak.XPath.Providers, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Providers.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "09425c35455d20a777b285fcbfe8a960d4dd397972f1beb84704e7f3356775d8"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "identity": "Bosak.XPath.Runtime, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Runtime.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "e155763ce56c746e3d6916398ba0b317e72780008b3a8d4be2e7787a003c2151"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "identity": "Bosak.XPath.Standard, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XPath.Standard.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "0814065371bc088de8cee39e764babab5a03dc46ceaa0edd0bf3e563569b0d02"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "identity": "Bosak.XQuery, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.XQuery.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "9e6d351a7bf8d6aa6cf47c170f7a2b3ec214ce530b843d2c4933bf47d2fb8b07"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "identity": "Bosak.Xslt, Version=1.81.1.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.Xslt.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.1-preview.c0b926de\u002Bc0b926de34824ceb2010d5f814a4450b28b31dcc",
+      "sha256": "383c794cf44b86244368990d2b49a7dfac708e5020969606f7a08ecfce3119cc"
+    },
+    {
+      "name": "Bosak.Xslt.Tests",
+      "identity": "Bosak.Xslt.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\Bosak.Xslt.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.0.0\u002Bec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+      "sha256": "8db5713ef6b7f6f2d57881ecac2a458de70dab0dcaa3912dfd45f91e350a7e12"
+    }
+  ],
+  "captureErrors": []
+}

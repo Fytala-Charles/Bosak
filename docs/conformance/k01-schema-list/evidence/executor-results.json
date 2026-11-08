@@ -1,0 +1,86 @@
+[
+  {
+    "binary": "released",
+    "name": "CastAs-ListType-20",
+    "command": [
+      "dotnet",
+      ".guard-tmp/closure-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k01-schema-list\\evidence\\CastAs-ListType-20-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 1.5062192999903345,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-20",
+      "kind": "Failed",
+      "message": "Expected error XPST0051, got: XPTY0004: Value does not match the declared type 'xs:NMTOKENS'."
+    },
+    "policy": "Direct executor invocation bypasses normal known-skip admission solely for this bounded diagnostic; not included in gate accounting."
+  },
+  {
+    "binary": "released",
+    "name": "CastAs-ListType-28",
+    "command": [
+      "dotnet",
+      ".guard-tmp/closure-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k01-schema-list\\evidence\\CastAs-ListType-28-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2756824999960372,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-28",
+      "kind": "Passed",
+      "message": null
+    },
+    "policy": "Direct executor invocation bypasses normal known-skip admission solely for this bounded diagnostic; not included in gate accounting."
+  },
+  {
+    "binary": "candidate",
+    "name": "CastAs-ListType-20",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k01-schema-list\\evidence\\CastAs-ListType-20-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33102189999772236,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-20",
+      "kind": "Passed",
+      "message": null
+    },
+    "policy": "Direct executor invocation bypasses normal known-skip admission solely for this bounded diagnostic; not included in gate accounting."
+  },
+  {
+    "binary": "candidate",
+    "name": "CastAs-ListType-28",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k01-reflection/bin/Release/net10.0/Probe.dll",
+      "probe",
+      "docs\\conformance\\k01-schema-list\\evidence\\CastAs-ListType-28-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2766535999980988,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-28",
+      "kind": "Passed",
+      "message": null
+    },
+    "policy": "Direct executor invocation bypasses normal known-skip admission solely for this bounded diagnostic; not included in gate accounting."
+  }
+]

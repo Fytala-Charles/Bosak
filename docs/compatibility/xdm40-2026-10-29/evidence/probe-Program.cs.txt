@@ -1,0 +1,52 @@
+// Generated review-only diagnostic. No production or fixture changes.
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using System.Text.Json;
+using System.Reflection;
+using System.Security.Cryptography;
+var expressions = new (string Id, string Source)[] {
+ ("numeric-eq", "xs:double('1.1') eq xs:decimal('1.1')"),
+ ("numeric-atomic-equal", "atomic-equal(xs:double('1.1'), xs:decimal('1.1'))"),
+ ("numeric-compare", "compare(xs:double('1.1'), xs:decimal('1.1'))"),
+ ("numeric-map-keys", "map:size(map{xs:double('1.1'):1, xs:decimal('1.1'):2})"),
+ ("duration-order", "xs:duration('P1M') lt xs:duration('P1000D')"),
+ ("duration-compare", "compare(xs:duration('P1M'), xs:duration('P1000D'))"),
+ ("binary-atomic-equal", "atomic-equal(xs:hexBinary('01'), xs:base64Binary('AQ=='))"),
+ ("binary-map-keys", "map:size(map{xs:hexBinary('01'):1, xs:base64Binary('AQ=='):2})"),
+ ("map-replace-order", "string-join(map:keys(map:put(map{'a':1,'b':2}, 'a', 3)), ',')"),
+ ("map-reinsert-order", "string-join(map:keys(map:put(map:remove(map{'a':1,'b':2}, 'a'), 'a', 3)), ',')"),
+ ("map-json-order", "serialize(map{'b':2,'a':1}, map{'method':'json'})"),
+ ("simple-record-match", "map{'a':1} instance of record(a as xs:integer)"),
+ ("simple-record-extra", "map{'a':1,'b':2} instance of record(a as xs:integer)"),
+ ("simple-record-wrong-type", "map{'a':'x'} instance of record(a as xs:integer)"),
+ ("simple-record-cast", "(map{'a':1} cast as record(a)) instance of record(*)"),
+ ("jnode-root-identity", "let $j := jtree(map{'a':1}) return $j is $j"),
+ ("jnode-child-identity", "let $j := jtree(map{'a':1}) return ($j/child::*) is ($j/child::*)"),
+ ("jnode-order", "let $j := jtree(map{'a':1,'b':2}) return ($j/child::*)[1] << ($j/child::*)[2]"),
+ ("jnode-key", "jkey((jtree(map{'a':1})/child::*)[1])"),
+ ("jnode-value", "jvalue((jtree(map{'a':1})/child::*)[1])"),
+ ("jnode-parent", "count(jtree(map{'a':1})/child::*/parent::*)"),
+ ("jnode-root-refusal", "jtree(1)"),
+ ("xml11-control", "string-join(string-to-codepoints(codepoints-to-string(1)) ! string(.), ',')"),
+ ("null-character", "string-to-codepoints(codepoints-to-string(0))"),
+ ("surrogate-character", "codepoints-to-string(55296)"),
+ ("year-zero", "year-from-date(xs:date('0000-01-01'))"),
+ ("plus-inf", "xs:double('+INF')"),
+ ("extended-year", "year-from-date(xs:date('10000-01-01'))"),
+ ("year-zero-construction", "string(xs:date('0000-01-01'))"),
+ ("extended-year-construction", "string(xs:date('10000-01-01'))"),
+ ("cross-document-total-order", "let $a := parse-xml('<a/>'), $b := parse-xml('<b/>') return ($a << $b) or ($a >> $b) or ($a is $b)")
+};
+var observations = new List<object>();
+foreach (var profile in new[]{XPathCompatibility.XPath31, XPathCompatibility.XPath40})
+foreach(var row in expressions) {
+ try {
+  var value=XPath31Expression.Compile(row.Source,new CompileOptions{Compatibility=profile}).Evaluate(new EvaluationContext());
+  observations.Add(new {row.Id,row.Source,Profile=profile.ToString(),Result=value.ToString(),Kind=value.Kind.ToString(),Error=(string?)null});
+ } catch(Exception ex) {
+  observations.Add(new {row.Id,row.Source,Profile=profile.ToString(),Result=(string?)null,Kind=(string?)null,Error=ex.GetType().Name+": "+ex.Message});
+ }
+}
+var assemblies=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name!.StartsWith("Bosak.")).OrderBy(a=>a.GetName().Name).Select(a=>new{Identity=a.FullName,Path=a.Location,Sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location)))}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new{Kind="Bounded observations; not conformance or consumer acceptance",Observations=observations,Assemblies=assemblies},new JsonSerializerOptions{WriteIndented=true}));

@@ -1,0 +1,42 @@
+// Generated bounded driver for the actual default-off QT3 schema diagnostic mode.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Xml.Linq;
+var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Static|BindingFlags.Instance;
+var directory=Path.GetFullPath("tests/Bosak.XPath.Conformance/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(context,name)=>{var file=Path.Combine(directory,name.Name+".dll");return File.Exists(file)?Assembly.LoadFrom(file):null;};
+var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Conformance.dll"));
+Type T(string name)=>assembly.GetType("Bosak.XPath.Conformance."+name,true)!;
+object? Call(Type type,string name,object? target,params object?[] arguments)=>type.GetMethod(name,flags)!.Invoke(target,arguments);
+object Dependencies(IEnumerable<XElement> elements){var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;foreach(var e in elements)list.GetType().GetMethod("Add")!.Invoke(list,new[]{Call(T("Dependency"),"FromElement",null,e)});return list;}
+object? Property(object value,string name)=>value.GetType().GetProperty(name,flags)!.GetValue(value);
+var q=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement.EnumerateArray().Single(x=>x.GetProperty("id").GetString()==args[1]);var mode=args[2];
+if(mode is not("current" or "guarded"))throw new ArgumentException("Only actual supported diagnostic modes may be selected.");
+XNamespace ns="http://www.w3.org/2010/09/qt-fots-catalog";var suite=Path.GetFullPath("tests/qt3tests");object test;object? env=null;
+if(q.GetProperty("kind").GetString()=="original"){
+ var path=q.GetProperty("setFile").GetString()!;var doc=XDocument.Load(path,LoadOptions.PreserveWhitespace);var element=doc.Descendants(ns+"test-case").Single(e=>(string?)e.Attribute("name")==q.GetProperty("name").GetString());
+ test=Call(T("TestCase"),"FromElement",null,element,ns,Dependencies(doc.Root!.Elements(ns+"dependency")),Path.GetDirectoryName(path))!;
+ var reference=element.Element(ns+"environment");var name=(string?)reference?.Attribute("ref");var definition=name is null?reference:doc.Descendants(ns+"environment").FirstOrDefault(e=>(string?)e.Attribute("name")==name);
+ if(definition is null&&name is not null){definition=XDocument.Load(Path.Combine(suite,"catalog.xml")).Descendants(ns+"environment").FirstOrDefault(e=>(string?)e.Attribute("name")==name);if(definition is not null)env=Call(T("TestEnvironment"),"FromElement",null,definition,suite,suite);}
+ if(env is null&&definition is not null)env=Call(T("TestEnvironment"),"FromElement",null,definition,suite,Path.GetDirectoryName(path));
+}else{
+ var element=new XElement(ns+"test-case",new XAttribute("name",q.GetProperty("id").GetString()!),new XElement(ns+"dependency",new XAttribute("type","spec"),new XAttribute("value",q.GetProperty("dependency").GetString()!)),new XElement(ns+"test",q.GetProperty("expression").GetString()),XElement.Parse("<result xmlns='"+ns+"'>"+q.GetProperty("result").GetString()+"</result>"));
+ if(q.TryGetProperty("xsdVersion",out var version))element.Add(new XElement(ns+"dependency",new XAttribute("type","xsd-version"),new XAttribute("value",version.GetString()!)));
+ if(q.TryGetProperty("module",out var module)&&module.GetBoolean())element.Add(new XElement(ns+"module",new XAttribute("uri","urn:module"),new XAttribute("file","not-loaded.xq")));
+ var folder=Path.GetFullPath(".guard-tmp/k02-loader/fixtures");test=Call(T("TestCase"),"FromElement",null,element,ns,Dependencies(Array.Empty<XElement>()),folder)!;
+ env=Call(T("TestEnvironment"),"FromElement",null,XElement.Parse("<environment xmlns='"+ns+"'>"+q.GetProperty("environment").GetString()+"</environment>"),suite,folder);
+}
+env??=Activator.CreateInstance(T("TestEnvironment"),true)!;
+var executor=Activator.CreateInstance(T("TestExecutor"),true)!;executor.GetType().GetProperty("UseQueryOwnedSchemasForDiagnostics",flags)!.SetValue(executor,mode=="guarded");
+string kind,message;string? exceptionType=null;
+try{var result=Call(T("TestExecutor"),"Execute",executor,test,env)!;kind=Property(result,"Kind")!.ToString()!;message=(string?)Property(result,"Message")??"";}
+catch(Exception error){while(error is TargetInvocationException&&error.InnerException is not null)error=error.InnerException;kind="HarnessException";message=error.Message;exceptionType=error.GetType().FullName;}
+var deferred=(bool)Property(executor,"DeferredEnvironmentSchemas")!;var decision=(string)Property(executor,"SchemaInitializationDecision")!;
+object? reuse=null;
+if(q.TryGetProperty("reuse",out var check)&&check.GetBoolean()){
+ var element=new XElement(ns+"test-case",new XAttribute("name","reuse-no-environment"),new XElement(ns+"dependency",new XAttribute("type","spec"),new XAttribute("value","XQ31")),new XElement(ns+"test","7"),new XElement(ns+"result",new XElement(ns+"assert-eq","7")));
+ var second=Call(T("TestCase"),"FromElement",null,element,ns,Dependencies(Array.Empty<XElement>()),Path.GetFullPath(".guard-tmp/k02-loader/fixtures"))!;
+ var result=Call(T("TestExecutor"),"Execute",executor,second,null)!;reuse=new{kind=Property(result,"Kind")!.ToString(),deferred=(bool)Property(executor,"DeferredEnvironmentSchemas")!,decision=(string)Property(executor,"SchemaInitializationDecision")!};
+}
+Console.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),mode,kind,message,exceptionType,deferred,decision,expression=(string)Property(test,"Expression")!,assertion=((XElement)Property(test,"ResultElement")!).ToString(SaveOptions.DisableFormatting),reuse}));

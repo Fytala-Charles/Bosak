@@ -1,0 +1,1 @@
+module namespace m='urn:c27:lib'; declare context item as xs:integer external; declare variable $m:v := .;

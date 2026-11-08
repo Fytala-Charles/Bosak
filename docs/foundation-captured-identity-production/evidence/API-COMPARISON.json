@@ -1,0 +1,13 @@
+{
+  "assemblies": 11,
+  "publicTypes": 318,
+  "declarationRows": 6465,
+  "candidateSha256": "1efd086c9871c069af385299ce5194a5ec7332774159639e9755ee09d84c1af5",
+  "baselineSha256": "9b4ce07e895a8443c1f52ce8a8a87b6aeceb4609364afe54c8c3199f47adaf28",
+  "publicProtectedDeclarationsEqual": true,
+  "referencesEqual": true,
+  "friendAssembliesEqual": true,
+  "encodedValueLayoutsEqual": true,
+  "allowedIdentityChange": "Version=1.81.0.0 -> Version=1.81.1.0 only",
+  "scope": "Observed managed metadata on this platform,not universal ABI or owner freeze acceptance."
+}

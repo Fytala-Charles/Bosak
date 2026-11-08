@@ -1,0 +1,24 @@
+{
+  "failedOriginals": [
+    "contextDecl-056",
+    "contextDecl-057"
+  ],
+  "originalReason": "XPST0081: library prefix u resolved outside its declaring module",
+  "correctedByDiagnosticImporterBinding": [
+    "contextDecl-056",
+    "contextDecl-057"
+  ],
+  "failedControls": [
+    "C27-library-alias-only",
+    "C27-matching-importer-alias",
+    "C27-conflicting-importer-alias",
+    "C27-colliding-union-type-contexts"
+  ],
+  "confirmedConstraintLoss": "C27-colliding-union-type-contexts expects XPTY0004 but succeeds; distinct-prefix control raises expected error; positive first-union witness passes",
+  "codePath": [
+    "XQueryCompiler retains only ContextItemTypeName strings and Distinct(StringComparer.Ordinal)",
+    "XQueryExecutable validates those strings against the importing runtime context"
+  ],
+  "admissionReady": false,
+  "next": "Preserve each library constraint with its declaring namespace/default-type context and resolve aliases correctly before admission"
+}

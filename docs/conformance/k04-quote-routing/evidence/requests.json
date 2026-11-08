@@ -1,0 +1,561 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "base-URI-12",
+    "Set": "prod-BaseURIDecl",
+    "SetFile": "tests/qt3tests/prod/BaseURIDecl.xml",
+    "SetSha256": "bd63ce79511fda553f98e25d967a0f8f00f6d2a64718a5cd268d59356de506aa",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "declare base-uri \"http://www.example.com/abc\"\"\"; fn:string(fn:static-base-uri())",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "base-URI-12",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-attr-syntax-5",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "<elem attr=\"\"\"\"/>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Constr-attr-syntax-5",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "DirectConElemAttr-1",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "<shoe name=\" \"\"\"\" \"/>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "DirectConElemAttr-1",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "DirectConElemNamespace-3",
+    "Set": "prod-DirElemContent.namespace",
+    "SetFile": "tests/qt3tests/prod/DirElemContent.namespace.xml",
+    "SetSha256": "b7492ed36f079565c1db83ea078bbdefc9f6a7ef4fc50aa96e650434f45350d2",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "namespace-uri(<p:e xmlns:p=\"http://ns.example.com/ns?val=\"\"\"\"\"\"asd\"/>)",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "DirectConElemNamespace-3",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElem-47",
+    "Set": "prod-DirElemConstructor",
+    "SetFile": "tests/qt3tests/prod/DirElemConstructor.xml",
+    "SetSha256": "bfec6c33916858fadce56e0e03a8c2865824f4e7b0181228c849435bee943889",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "let $in := <r> <e xmlns=\"http://example.com/&lt;&gt;&quot;&apos;\"\"\"/> <e xmlns='http://example.com/&lt;&gt;&quot;&apos;'''/> <p:e xmlns:p=\"http://example.com/&lt;&gt;&quot;&apos;\"\"\"/> <p:e xmlns:p='http://example.com/&lt;&gt;&quot;&apos;'''/> </r> return <r>{for $n in $in/*/namespace-uri(.) return <e ns=\"{$n}\"/>}</r>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElem-47",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        },
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemAttr-29",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "string(<foo attr=\"\"\"\"/>/@attr)",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-29",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemAttr-40",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "<elem attr1=\"\"\"\" attr2='''' attr3=\"''\" attr4='\"\"' attr5=\"'\" attr6='\"'/>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-40",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemAttr-8",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "<foo attr=\"\"\"/>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemContent-28",
+    "Set": "prod-DirElemContent",
+    "SetFile": "tests/qt3tests/prod/DirElemContent.xml",
+    "SetSha256": "25dd6f0c63d83a996ef319d94e2c59765a000387ba0ac2a62ebd5aa07826c8a6",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "string(<elem><![CDATA[con<<< ]] >\"\"'*\"*\">>tent]]&#00;&#x12;&amp;&quot;&notrecognized;&apos]]></elem>) eq \"con&lt;&lt;&lt; ]] &gt;\"\"\"\"'*\"\"*\"\"&gt;&gt;tent]]&amp;#00;&amp;#x12;&amp;amp;&amp;quot;&amp;notrecognized;&amp;apos\"",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemContent-28",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemWhitespace-9",
+    "Set": "prod-DirElemContent.whitespace",
+    "SetFile": "tests/qt3tests/prod/DirElemContent.whitespace.xml",
+    "SetSha256": "fd31da2ef914f7d738a27fc872170cbdc607c93516aeee1072abc3725b487dfb",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "string(<e>'a''a'''a\"a\"\"a\"\"\"a\"</e>) eq \"'a''a'''a\"\"a\"\"\"\"a\"\"\"\"\"\"a\"\"\"",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemWhitespace-9",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConOther-1",
+    "Set": "prod-DirectConstructor",
+    "SetFile": "tests/qt3tests/prod/DirectConstructor.xml",
+    "SetSha256": "65610546096d5115c2bc4c25be066e19d1c150fa3b7b2ad441651d6de355de99",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "string(<?target \"\"''content&amp;amp;ss&amp;#00; &amp;#x2014;?>) eq \"\"\"\"\"''content&amp;amp;amp;ss&amp;amp;#00; &amp;amp;#x2014;\"",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConOther-1",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Literals069",
+    "Set": "prod-Literal",
+    "SetFile": "tests/qt3tests/prod/Literal.xml",
+    "SetSha256": "28eb18bd67db3b2bc956fc7175fba63440b9560e759fd9ff935be59bbe2d9a9a",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "text{ \"He said, \"\"I don't like it.\"\"\" }",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Serialization-adaptive-32",
+    "Set": "method-adaptive",
+    "SetFile": "tests/qt3tests/ser/method-adaptive.xml",
+    "SetSha256": "325e79f570e070dc10a481c6fb8b922f91955d03dfac4dd57366cce0d9d6255c",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n \n     \tdeclare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"adaptive\";\n        \n        map{ \"O'Neil says \"\"no\"\"\": 1 }\n\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-32",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Serialization-adaptive-33",
+    "Set": "method-adaptive",
+    "SetFile": "tests/qt3tests/ser/method-adaptive.xml",
+    "SetSha256": "325e79f570e070dc10a481c6fb8b922f91955d03dfac4dd57366cce0d9d6255c",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n \n     \tdeclare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"adaptive\";\n        \n        map{ 1:\"O'Neil says \"\"no\"\"\" }\n\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Serialization-adaptive-33",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Serialization-json-41",
+    "Set": "method-json",
+    "SetFile": "tests/qt3tests/ser/method-json.xml",
+    "SetSha256": "942498ee793b42e9f3952522b20f8629138c913029cacbeb68ccf49397788158",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n \n        declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"json\";\n        \n        map { \"\"\"\" : \"\\\n\"}\n\n      ",
+    "Dependencies": [
+      {
+        "Type": "feature",
+        "Value": "serialization",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Serialization-json-41",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "string-constructor-021",
+    "Set": "prod-StringConstructor",
+    "SetFile": "tests/qt3tests/prod/StringConstructor.xml",
+    "SetSha256": "80a2e4758284cd0d4cdf105dc56607071e6a171e2b8e8a0b773342418d7a309c",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        matches(\"\"\"\", ``[[\"']]``)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "string-constructor-021",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  }
+]

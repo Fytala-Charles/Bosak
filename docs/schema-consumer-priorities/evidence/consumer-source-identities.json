@@ -1,0 +1,86 @@
+{
+  "date": "2026-10-29",
+  "method": "Read-only local source inspection; no consumer execution, dependency adoption or source copying",
+  "repositories": {
+    "XmlDb": {
+      "head": "3f722daf6ae38f0a5b67de1c678f3175768b28dd",
+      "status": [
+        " M AGENTS.md",
+        " M M2_STATUS.md",
+        " M README.md",
+        " M ROADMAP.md",
+        " M docs/AGENT_HANDOVER.md",
+        " M docs/ARCHITECTURE.md",
+        " M docs/FEATURE_REQUESTS.md",
+        " M docs/INTEGRATION.md",
+        " M docs/implementation/M2_APPLICATION_AUTHORITY_FORMAT_V1.md",
+        " M src/Bosak.XmlDb.Storage/EmbeddedXmlDatabase.Cutover.cs",
+        " M src/Bosak.XmlDb.Storage/MigrationCutoverSession.cs",
+        " M src/Bosak.XmlDb.Storage/MigrationCutoverValidation.cs",
+        "?? docs/ADR-032-owner-bound-first-enrollment-preparation.md",
+        "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_PREPARATION.md",
+        "?? docs/implementation/M2_APPLICATION_AUTHORITY_ENROLLMENT_VALIDATION.md",
+        "?? src/Bosak.XmlDb.Storage/ApplicationAuthorityEnrollment.cs",
+        "?? tests/Bosak.XmlDb.Storage.Tests/ApplicationAuthorityEnrollmentTests.cs"
+      ],
+      "files": [
+        {
+          "path": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+          "sha256": "ade4e0c6255d89442d02c4b1a5b2ed756983ab38c5829763dd60b29418f9e590"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj",
+          "sha256": "357bff44834dd357c2d0dd090120df73dd686d329d74b24fba2b58cd3f08cc5c"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+          "sha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b"
+        },
+        {
+          "path": "docs/implementation/M2_XDM40_COMPATIBILITY_ASSESSMENT.md",
+          "sha256": "05b191e66f8f6dbf946bb148f5e07f6eb398eedcfecc0135e6d63f59b4534e7b"
+        }
+      ]
+    },
+    "Braid": {
+      "head": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "status": [],
+      "files": [
+        {
+          "path": "src/Bosak.Braid.Infrastructure/Bosak.Braid.Infrastructure.csproj",
+          "sha256": "ae20a99c207b7247ed74fc45163623a8da968ef689b34c9395830312b196eddf"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+          "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+          "sha256": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2"
+        },
+        {
+          "path": "eng/Bosak.Dependency.props",
+          "sha256": "70d7f31e049da218c2468ef056ccd8648f4fd188745a0cf98e23f037bdce28d6"
+        }
+      ]
+    },
+    "SchemaCandidate": {
+      "head": "4f71de9d3f2e878683d25c0dfb1f1fc6f83f8bbd",
+      "status": [],
+      "files": [
+        {
+          "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+          "sha256": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d"
+        },
+        {
+          "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+          "sha256": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed"
+        },
+        {
+          "path": "src/Bosak.Schema/Bosak.Schema.csproj",
+          "sha256": "a1bade5fe569dfb0b2480edcac9102a043345a5bd02468e573b7adcd52ee724d"
+        }
+      ]
+    }
+  }
+}

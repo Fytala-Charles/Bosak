@@ -1,0 +1,29 @@
+{
+  "slice": "K04-C35",
+  "base": "994b4e33",
+  "ownerApproval": "pending",
+  "catalogCases": 31821,
+  "catalogSets": 428,
+  "affectedOriginals": 87,
+  "eligibleRemovals": 83,
+  "excludedOriginals": 4,
+  "qt3Normal": [
+    31257,
+    0,
+    564
+  ],
+  "qt3Isolated": [
+    31340,
+    0,
+    481
+  ],
+  "qt4Normal": [
+    8939,
+    0,
+    1920
+  ],
+  "processes": 450,
+  "inheritedSolutionPasses": 24082,
+  "normalBaselineChanged": false,
+  "releaseApproved": false
+}

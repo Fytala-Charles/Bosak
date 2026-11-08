@@ -1,0 +1,77 @@
+{
+  "passed": 24960,
+  "failed": 0,
+  "projects": [
+    {
+      "project": "Bosak.XPath.Parser.Tests",
+      "passed": 202,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_07_net10.0.trx",
+      "sha256": "fa2c9e35c4225413acecfd04ce439151e5425af3fddc6e95a39b6e9f658e3ac7"
+    },
+    {
+      "project": "Bosak.XPath.Compiler.Tests",
+      "passed": 66,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_07_net10.0[1].trx",
+      "sha256": "fee4f729e3de833a831335212748bf5579f4dc90ae0db8d906a9021719d9ccc8"
+    },
+    {
+      "project": "Bosak.XPath.Runtime.Tests",
+      "passed": 640,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_07_net10.0[2].trx",
+      "sha256": "4586559c26a7f7f06e0bb826715ad4064548e90fb77dbc1b9668ada80e3fd2a5"
+    },
+    {
+      "project": "Bosak.XPath.Core.Tests",
+      "passed": 266,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_07_net10.0[3].trx",
+      "sha256": "af4f7636fcf30f33072a5648b695c266490f871da40790d149b0a2bdee5ac603"
+    },
+    {
+      "project": "Bosak.XPath.Api.Tests",
+      "passed": 681,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_07_net10.0[4].trx",
+      "sha256": "4890048a1bc6353a4370f96040c6c429c654fef2d85d7ed7aed022ccbf0369b4"
+    },
+    {
+      "project": "Bosak.XQuery.Tests",
+      "passed": 804,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_08_net10.0.trx",
+      "sha256": "05cba898aeeb45f14b3748f1469a951c34cb3d5be0839bd6ef394a0a076b2d64"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Database.Tests",
+      "passed": 47,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_08_net10.0[1].trx",
+      "sha256": "cda853ad6eb24b86150fbf4d529692daba37d3c9f0d6046aa12d231b74a85e5a"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Tests",
+      "passed": 223,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_08_net10.0[2].trx",
+      "sha256": "08542f422b1e21ae8c15e0a5d2ff3453a5c9fbf61bf7a5f733d0c3505b1505f4"
+    },
+    {
+      "project": "Bosak.XPath.Standard.Tests",
+      "passed": 13797,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_09_net10.0.trx",
+      "sha256": "df08ffee1296436dbef23bda1f1926c359157416cbbbf6dd1cad20e1bae06e00"
+    },
+    {
+      "project": "Bosak.Xslt.Tests",
+      "passed": 8234,
+      "failed": 0,
+      "trx": "advisor-adapter-unit-trx/charl_CHARLES_2026-11-04_17_17_10_net10.0.trx",
+      "sha256": "b387f45f1ca844f8b444436c01c51abf0179747013f9a69060627ccc176f0f61"
+    }
+  ],
+  "scope": "Full solution, Database loopback permission and normal-layout XSLT"
+}

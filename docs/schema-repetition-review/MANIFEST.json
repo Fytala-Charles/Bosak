@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed repetition implementation checkpoint",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 752,
+      "sha256": "e7ebebbadae7f447481125aef60bd8a88cccd9649dbfbb49409790dea2a3de04"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 3594,
+      "sha256": "8bda0b2af3895aaab7531123347704ee7312c77f01244887228ca60811c8d1be"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "evidence/schema-review.trx",
+      "bytes": 497865,
+      "sha256": "7d0319ba0c734dfb5ffcf90058e66b27fdf39179deb9c5160013d65b29f59b5a"
+    },
+    {
+      "path": "evidence/schema-review.txt",
+      "bytes": 934,
+      "sha256": "48282ffcdc3c1300c9f20182ef1b2fe79ec7baf6c929e6ffa088e5553f845da2"
+    },
+    {
+      "path": "evidence/tested-source-check.json",
+      "bytes": 1130,
+      "sha256": "6f430b38ae0e6db4fd5e1144cd0ced918864c598e2d7bed4797f8efa72a747be"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3032,
+      "sha256": "f4161eef64b97ffd529c9cc6dd26d3ba7a6ee19f578fbb0c4cd640375cf88abe"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 754,
+      "sha256": "73f78bca0706d123b45a0b92fbf47b6fc14c30edaf87d8f5a913a21c5c57d7e6"
+    }
+  ]
+}

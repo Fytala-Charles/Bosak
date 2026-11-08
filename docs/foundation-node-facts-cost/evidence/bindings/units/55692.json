@@ -1,0 +1,34 @@
+{
+  "processId": 55692,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.Tests.dll",
+      "sha256": "983231d72b857345c5f0730cec1b64ae4d19039b2bc7d9b6b68bc9a0a34fb5cf",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "b2b1609c051933a3a5ced8a3ec286adf6292f9ef445db6ff5dd0602c94416639",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "cd23b3a676b90ac63d8f73b276054a7fad23596352088dfc37a4bdee8e95e6e9",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "path": "D:\\Development\\Bosak\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "4a93f95fa61e299658e17ad2aa2fe032e2dc5fd9555105b56bc5291757bb5107",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,21 @@
+{
+  "qt3": {
+    "retainedNamesAndReasons": 656,
+    "removed": {
+      "cbcl-fn-normalize-unicode-006": "Upstream defect: expected value has an artifactual leading space"
+    },
+    "added": {}
+  },
+  "qt4": {
+    "retainedNamesAndReasons": 1914,
+    "removed": {},
+    "added": {
+      "fn-normalize-unicode-11-6-2": "Unsupported dependency",
+      "fn-normalize-unicode2args-5": "Unsupported dependency",
+      "fn-normalize-unicode-11-6-0": "Unsupported dependency",
+      "fn-normalize-unicode-11": "Unsupported dependency",
+      "cbcl-fn-normalize-unicode-001a": "Unsupported dependency",
+      "cbcl-fn-normalize-unicode-006a": "Unsupported dependency"
+    }
+  }
+}

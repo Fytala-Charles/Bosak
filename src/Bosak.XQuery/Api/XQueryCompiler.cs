@@ -62,6 +62,13 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.5   | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.5   | 28-10-2026     | Compile main context initializers with complete prolog visibility (1.30.0).              |
+//                      | Charles Korthout | 3.6   | 28-10-2026     | Retain every library context constraint with its declaring type namespace (1.30.1).      |
+//                      | Charles Korthout | 3.7   | 28-10-2026     | Compile module-local namespace-copy modes for bodies, initializers and functions (1.31.0). |
+//                      | Charles Korthout | 3.8   | 28-10-2026     | Compile declaring-module construction modes for bodies and declarations (1.32.0). |
+//                      | Charles Korthout | 3.9  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
+//                      | Charles Korthout | 3.10  | 01-11-2026     | Freeze private registered modules and namespace settings before binding. |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -73,6 +80,8 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XQuery.Compiler;
+
+using System.Text.Json;
 
 namespace Bosak.XQuery.Api;
 
@@ -206,20 +215,54 @@ public sealed class XQueryCompiler
         }
 
         // 5. Lower to IR.
-        var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) };
+        var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast), PreserveNamespaces = parseResult.StaticContext.PreserveNamespaces ?? true, InheritNamespaces = parseResult.StaticContext.InheritNamespaces ?? true, ConstructionMode = parseResult.StaticContext.ConstructionMode ?? XdmConstructionMode.Preserve };
         var module = lowerer.Lower(optimized);
 
         // The context item type declared by each loaded library module constrains the
         // initial context item at evaluation time (XQuery 3.1 §4.14; contextDecl-054).
         var libraryModuleContextItemTypes = moduleGraph.Values
             .SelectMany(modules => modules)
-            .Select(m => m.StaticContext.ContextItemTypeName)
-            .Where(t => t is not null)
-            .Distinct(StringComparer.Ordinal)
-            .Cast<string>()
+            .Where(m => m.StaticContext.ContextItemTypeName is not null)
+            .Select(m => new LibraryContextItemConstraint(m.StaticContext))
             .ToList();
 
-        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames);
+        IrModule? contextInitializer = null;
+        if (parseResult.StaticContext.ContextDeclaration?.Initializer is { } initializer)
+        {
+            var resolvedInitializer = ResolveFunctionNamespaces(initializer, parseResult.StaticContext);
+            StaticNameTestValidator.Validate(resolvedInitializer, prefix =>
+                parseResult.StaticContext.Namespaces.TryGetValue(prefix, out var uri) ? uri : null);
+            unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
+                resolvedInitializer, parseResult.StaticContext, moduleNamespaces,
+                mainVisibility.Functions, mainVisibility.Variables));
+            contextInitializer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast), PreserveNamespaces = parseResult.StaticContext.PreserveNamespaces ?? true, InheritNamespaces = parseResult.StaticContext.InheritNamespaces ?? true, ConstructionMode = parseResult.StaticContext.ConstructionMode ?? XdmConstructionMode.Preserve }
+                .Lower(optimizer.Optimize(resolvedInitializer));
+        }
+
+        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames, contextInitializer);
+    }
+
+    internal bool TryCaptureSchemaCompilation(string query, bool xml11LineEndings, out XQueryExecutable? executable,
+        out SchemaQueryEnvironment? environment, out string? unsupported)
+    {
+        executable = null; environment = null; unsupported = null;
+        var modules = _moduleSources.ToArray();
+        var namespaces = _externalNamespaces.ToArray();
+        if (XQueryParser.Parse(query, xml11LineEndings).StaticContext.ImportedSchemas.Count != 0
+            || modules.Any(m => XQueryParser.Parse(m.Source, xml11LineEndings).StaticContext.ImportedSchemas.Count != 0))
+        { unsupported = "Schema imports need a separate immutable provider capture profile."; return false; }
+        var frozen = new XQueryCompiler();
+        foreach (var pair in namespaces) frozen._externalNamespaces.Add(pair.Key, pair.Value);
+        // Registered records already contain normalized URIs; do not normalize them twice.
+        frozen._moduleSources.AddRange(modules);
+        executable = frozen.Compile(query, xml11LineEndings);
+        environment = executable.CaptureSchemaEnvironment(JsonSerializer.Serialize(new
+        {
+            query, xml11LineEndings,
+            namespaces = namespaces.OrderBy(p => p.Key, StringComparer.Ordinal).Select(p => new[] { p.Key, p.Value }).ToArray(),
+            modules = modules.Select(m => new { m.Uri, m.Location, m.Source }).ToArray()
+        }));
+        return true;
     }
 
     private static EmptyOrder? ToEmptyOrder(bool? least)
@@ -391,10 +434,11 @@ public sealed class XQueryCompiler
         foreach (var fn in context.UserFunctions)
         {
             var fnBodyAst = ResolveFunctionNamespaces(fn.Body, context);
+            StaticNameTestValidator.ValidatePragmas(fnBodyAst, prefix => context.Namespaces.TryGetValue(prefix, out var uri) ? uri : null);
             unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                 fnBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
                 fn.Parameters.Select(p => p.Name)));
-            var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+            var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast), PreserveNamespaces = context.PreserveNamespaces ?? true, InheritNamespaces = context.InheritNamespaces ?? true, ConstructionMode = context.ConstructionMode ?? XdmConstructionMode.Preserve }
                 .Lower(optimizer.Optimize(fnBodyAst));
             userFunctions.Add(new CompiledUserFunction(
                 fn.LocalName,
@@ -416,12 +460,13 @@ public sealed class XQueryCompiler
             if (v.Body is not null)
             {
                 var varBodyAst = ResolveFunctionNamespaces(v.Body, context);
+                StaticNameTestValidator.ValidatePragmas(varBodyAst, prefix => context.Namespaces.TryGetValue(prefix, out var uri) ? uri : null);
                 // A variable is not in scope within its own initializer (XPST0008,
                 // K-InternalVariablesWith-15b).
                 unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                     varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
                     excludeVariable: (v.LocalName, v.NamespaceUri)));
-                varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+                varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast), PreserveNamespaces = context.PreserveNamespaces ?? true, InheritNamespaces = context.InheritNamespaces ?? true, ConstructionMode = context.ConstructionMode ?? XdmConstructionMode.Preserve }
                     .Lower(optimizer.Optimize(varBodyAst));
                 // A declared type is enforced strictly on the initializer: atomization plus
                 // an instance check — no casts or promotions (XPTY0004, K2-ExternalVariablesWith-12..19).
@@ -510,6 +555,7 @@ public sealed class XQueryCompiler
                 Clauses = tc.Clauses.Select(c => c with { Expression = ResolveFunctionNamespaces(c.Expression, context) }).ToList()
             },
             ValidateExpressionNode v => v with { Expression = ResolveFunctionNamespaces(v.Expression, context) },
+            ExtensionExpressionNode e => e with { Expression = ResolveFunctionNamespaces(e.Expression, context) },
             StringConstructorNode sc => sc with { Parts = sc.Parts.Select(p => ResolveFunctionNamespaces(p, context)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, context), Key = ResolveFunctionNamespaces(lookup.Key, context) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, context) },

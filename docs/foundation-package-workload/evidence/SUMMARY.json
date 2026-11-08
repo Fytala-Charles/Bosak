@@ -1,0 +1,52 @@
+{
+  "sourceVersion": "1.81.1",
+  "previewVersion": "1.81.1-preview.c0b926de",
+  "role": "candidate",
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "selectedBaseline": null,
+  "comparisonRatio": null,
+  "methodFieldsUnchanged": true,
+  "measuredCycles": 30,
+  "measuredDecimalReads": 135,
+  "workloads": [
+    {
+      "id": "native-decimal-1",
+      "repetitionMediansMs": [
+        69.3763,
+        72.437,
+        65.7549
+      ],
+      "medianOfMediansMs": 69.3763,
+      "allocatedBytesPerCycle": [
+        149971.2,
+        149918.4,
+        149918.4
+      ],
+      "outputRootsAliveAfterForcedGc": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "native-decimal-8",
+      "repetitionMediansMs": [
+        519.0024,
+        517.8453,
+        515.9092
+      ],
+      "medianOfMediansMs": 517.8453,
+      "allocatedBytesPerCycle": [
+        208057.6,
+        205062.4,
+        204854.4
+      ],
+      "outputRootsAliveAfterForcedGc": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

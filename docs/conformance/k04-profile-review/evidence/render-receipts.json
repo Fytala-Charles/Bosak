@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-profile-render/README.md.html",
+      "sha256": "d6673b1e678c0e9413cb94ad85fe9396142f9c41f57c79272559f710a43ebcd2"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-profile-render/docs_ARCHITECTURE.md.html",
+      "sha256": "18a92b2086245c60eded8bdba48cc2c0cc26a1bea48beb152a627268ddf3a6a9"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-profile-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b238e398cd4189e52f886d400950d09906e18e3b0b17b5a67313e6250762fd29"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-profile-render/docs_INTEGRATION.md.html",
+      "sha256": "ae1bdb97a44502a3995928685ab055c4dc0338b6c61e2502036dbcbc445a92fa"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-profile-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "98b97f1fb86475887ebd6aa958d60eba539dd2617204b1cafe7adadee1cd1efa"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-profile-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "4f8d4f9de6bb2a27bb6ed937058d16dc40b0a7e6e540e746329dee70bc621be6"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-profile-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "80f83c7589a0357321cf9e78279f47a4851f546fcf75c4c788706982ecb69592"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-profile-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "7ef4216c3599ef4f17c6dce9ee436842d72d8047d04eca2426dcc045c6018d28"
+    },
+    {
+      "source": "docs/conformance/k04-quote-routing/README.md",
+      "html": ".guard-tmp/k04-profile-render/docs_conformance_k04-quote-routing_README.md.html",
+      "sha256": "daf2ecb15958c7aa59eeea8d9aedc0b52f4c3e1fa57aae9923ba215c44002fca"
+    },
+    {
+      "source": "docs/conformance/k04-profile-review/README.md",
+      "html": ".guard-tmp/k04-profile-render/docs_conformance_k04-profile-review_README.md.html",
+      "sha256": "32c2a9b652f2264b7f29f6c8456e69f945a6eff4caaeb3a7fecb45bdc6cf610a"
+    }
+  ]
+}

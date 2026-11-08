@@ -1,0 +1,32 @@
+[
+  {
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      "tests/Bosak.XPath.Conformance/bin/Release/net10.0",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\normal",
+      "normal",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\lexical-controls.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.6696506000007503
+  },
+  {
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-pragma-admission-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      ".guard-tmp/k04-pragma-admission-harness/bin/Release/net10.0",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\prototype",
+      "prototype",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-pragma-admission\\evidence\\lexical-controls.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.8365756000275724
+  }
+]

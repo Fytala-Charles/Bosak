@@ -4,6 +4,8 @@
   <p>Deferred in Bosak XPath — use the appropriate XML construction host</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified refusal and host alternative**. No XPath constructor adoption or full XQuery4 grammar. XQuery and XPath parser host flags remain distinct. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Computed XPath node constructors — Deferred.** [REQ-118 tier-2 decision](../../REQ-118-xpath-xslt-40.md) records the original deferral: February-2026 draft movement and overlap with existing XQuery construction.

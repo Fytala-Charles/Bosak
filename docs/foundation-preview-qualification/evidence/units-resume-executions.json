@@ -1,0 +1,66 @@
+[
+  {
+    "key": "units/bosak.xpath.runtime.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.runtime.tests-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\retry\\tests\\bosak.xpath.runtime.tests\\bin\\Release\\net10.0\\bosak.xpath.runtime.tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\units-bosak.xpath.runtime.tests-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\units-bosak.xpath.runtime.tests-resume"
+  },
+  {
+    "key": "units/bosak.xquery.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xquery.tests-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\retry\\tests\\bosak.xquery.tests\\bin\\Release\\net10.0\\bosak.xquery.tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\units-bosak.xquery.tests-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\units-bosak.xquery.tests-resume"
+  },
+  {
+    "key": "units/bosak.xpath.standard.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xpath.standard.tests-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\retry\\tests\\bosak.xpath.standard.tests\\bin\\Release\\net10.0\\bosak.xpath.standard.tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\units-bosak.xpath.standard.tests-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\units-bosak.xpath.standard.tests-resume"
+  },
+  {
+    "key": "units/bosak.xslt.tests",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-units-bosak.xslt.tests-resume.log",
+    "binary": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakPreview1811Xslt-qrftsuyi\\bosak.xslt.tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\units-bosak.xslt.tests-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\units-bosak.xslt.tests-resume"
+  },
+  {
+    "key": "languageServer",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-languageServer-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\languageServer\\Bosak.LanguageServer.Tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\languageServer-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\languageServer-resume"
+  },
+  {
+    "key": "native451",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-native451-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\native451\\Bosak.Schema.Tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\native451-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\native451-resume"
+  },
+  {
+    "key": "nativeAdapter",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-nativeAdapter-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\nativeAdapter\\Bosak.Schema.ImmutableGuard.Regression.Tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\nativeAdapter-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\nativeAdapter-resume"
+  },
+  {
+    "key": "consumer",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-consumer-resume.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\consumer\\Bosak.Schema.PublicConsumer.Tests.dll",
+    "trxDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\trx\\consumer-resume",
+    "bindingsDirectory": "D:\\Development\\Bosak\\docs\\foundation-preview-qualification\\evidence\\bindings\\consumer-resume"
+  }
+]

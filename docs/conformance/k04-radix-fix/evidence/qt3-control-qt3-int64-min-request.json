@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-radix-fix/evidence/control-fixtures.xml", "Name": "control-qt3-int64-min", "case": "int64-min", "expression": "format-integer(-9223372036854775808,'16^x')", "boundary": true, "expected": "FODF1310"}

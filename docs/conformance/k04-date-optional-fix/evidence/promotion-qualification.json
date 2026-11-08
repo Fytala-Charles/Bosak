@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-28",
+  "sets": [
+    {
+      "name": "fn-format-date",
+      "passed": 135,
+      "failed": 0,
+      "skipped": 3
+    },
+    {
+      "name": "fn-format-dateTime",
+      "passed": 79,
+      "failed": 0,
+      "skipped": 15
+    },
+    {
+      "name": "fn-format-time",
+      "passed": 94,
+      "failed": 0,
+      "skipped": 4
+    }
+  ],
+  "policy": "Complete normal sets: zero failures and at least one pass; retain existing dependency skips",
+  "beforeGatedSets": 226,
+  "afterGatedSets": 229
+}

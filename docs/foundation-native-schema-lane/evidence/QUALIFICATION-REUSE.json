@@ -1,0 +1,27 @@
+{
+  "priorDossier": "docs/foundation-public-primitives",
+  "priorFiles": {
+    "MANIFEST.json": "5b4bda148a8ca95e9440b0bdd6ae6a616a8545b25402f6563c68a9498c3b4437",
+    "evidence/SOURCE-AND-BINARY-PINS.json": "e04c42b8be0111cc4c9feed28c15734cc7b82af0a542a76a9a163507a2fdf0d6",
+    "evidence/UNIT-RESULTS.json": "b2d541c6b38f01dc142eedd71065412e07404e7350e5a26186df9f2efcc74b6b",
+    "evidence/public-api.json": "e855b35790be80d3a30c261431c6abd443671f5434774b8a03ca76d77ba23016",
+    "evidence/API-COMPARISON.json": "ee6ceff49bf83e81b6a1f2631a8aa4ad0dae2b4bb3c1ebed332cdb48bf52dd0d",
+    "evidence/EXECUTION-RECEIPTS.zip": "bba532ab57959d7da0e2e7a6fccacb1b8aa571a2a1878be3ffc527dc4f40e989",
+    "evidence/PACKAGE-PREFLIGHT.json": "1e2ae48d7ef9933e20a4cbb6aef5f3c5ef4869f239a428d3b4360163b095b99c"
+  },
+  "sourceVersion": "1.81.0",
+  "sourceBinaryConfigurationUnchanged": true,
+  "priorFullTestsReexecuted": false,
+  "retainedUnitTestsPassed": 26338,
+  "retainedQt3": [
+    31397,
+    0,
+    424
+  ],
+  "retainedQt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "scope": "Core engine fixture qualification retained unchanged;native451 lanes are fresh separate executions."
+}

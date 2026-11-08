@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-31",
+  "productVersion": "1.35.0",
+  "scope": "Internal production scalar evidence admission, private immutable XPath context and whole-operation lifetime; no carrier or public schema API",
+  "unitTests": {
+    "passed": 24245,
+    "failed": 0,
+    "skipped": 0,
+    "projects": {
+      "Bosak.XPath.Compiler.Tests.dll": 66,
+      "Bosak.XPath.Parser.Tests.dll": 202,
+      "Bosak.XPath.Runtime.Tests.dll": 278,
+      "Bosak.XPath.Api.Tests.dll": 489,
+      "Bosak.XPath.Core.Tests.dll": 143,
+      "Bosak.XQuery.Tests.dll": 804,
+      "Bosak.XPath.Standard.Tests.dll": 13797,
+      "Bosak.XPath.Providers.Database.Tests.dll": 47,
+      "Bosak.XPath.Providers.Tests.dll": 223,
+      "Bosak.Xslt.Tests.dll": 8196
+    },
+    "newTests": 20,
+    "databaseTests": "Initial sandbox blocked local HttpListener; final parallel suite had two fixture port-reservation collisions; complete serial project rerun47/0.",
+    "finalEvidence": "Final full solution run plus complete 47-case serial database rerun; no failing tests remain.",
+    "parallelDatabaseStartupFailures": 2
+  },
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchangedIgnoringLineEndings": true,
+  "retainedCaller": {
+    "passed": 20,
+    "failed": 0,
+    "unchangedBytes": true,
+    "sameObservations": true
+  },
+  "publicMetadata": {
+    "exportedTypes": 78,
+    "declaredReflectionMembers": 1199,
+    "unchanged": true,
+    "xdmValueSizeX64": 48
+  },
+  "build": {
+    "errors": 0,
+    "finalIncrementalWarnings": 0,
+    "earlierFullBuildWarningsInUnchangedFiles": 5
+  },
+  "atomicVmTransportImplemented": false,
+  "publicV5Promoted": false,
+  "consumerQualificationComplete": false,
+  "apiFreezeAccepted": false,
+  "conformanceCorpus": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  }
+}

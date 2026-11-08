@@ -1,0 +1,32 @@
+{
+  "arguments": [
+    "git",
+    "log",
+    "--all",
+    "2041d6550a1c74338398ea0af8196904aa7876fb",
+    "45627161e291747e77dc60f779c020dcffc96938",
+    "cc6f7871d18c5ea99bdfa409f8997fd0393690a2",
+    "a83a97c93c7b6b64837b40cb909b628d11829c9d",
+    "031d72c9549af7094fcb6d103c48edbd0e77e809",
+    "cd824d31b2fa6c410ef574d6cb0c67770019cc02",
+    "37f3ac7bad503446fc8f4e157e1cd7bd8212ef71",
+    "740fde6492042084d8a1386ad90138e7f84563f1",
+    "cff06616ceaf5fe659ec0d836994e4fd580b3b44",
+    "dd872bb895900fc3cca9c76c2229d9f27f97de0c",
+    "44391d067b07788a91573d0cc6f2d6e5a9912b86",
+    "1b9cb58279d71c041907387a41102375f2ac1bff",
+    "310ab3a50c8457cecf0a24fded8da3007ed4cac1",
+    "dbd17d337012438762922c11fbb8d88312ff59f8",
+    "7327d310b2f5d1f3d22b406dbc0a84b2f826ceff",
+    "942558cadda44b56a84e59e2c563667b32a5972b",
+    "--before=2026-10-11T00:00:00+02:00",
+    "--format=%H %aI %s",
+    "-G",
+    "qtspecs|adoptedSpecRevision|[Ss]pec.{0,40}([Rr]evision|[Ss]napshot|[Pp]in|[Cc]ommit|[Hh]ash)",
+    "--",
+    "docs",
+    "src",
+    "tests"
+  ],
+  "exitCode": 0
+}

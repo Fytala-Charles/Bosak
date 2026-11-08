@@ -1,0 +1,17 @@
+{
+  "file": "tests/qt3tests/prod/CastExpr.schema.xml",
+  "sha256": "e6026600a71657bd2dda67a8d64834ff2be594dbf82566811272941aa503bdd4",
+  "revision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "cases": {
+    "CastAs-ListType-20": {
+      "xml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\" name=\"CastAs-ListType-20\" covers-30=\"cast-to-list\">\n       <ns0:description>Cannot use a list type name in a sequence type</ns0:description>\n       <ns0:created by=\"Michael Kay\" on=\"2012-05-28\" />\n       <ns0:modified by=\"O'Neil Delpratt\" on=\"2012-05-29\" change=\"fix bug 17230\" />\n       <ns0:dependency type=\"spec\" value=\"XQ30+\" />\n       <ns0:test>\n         let $v as xs:NMTOKENS := xs:NMTOKENS(\"a b c\")\n         return count($v)\n       </ns0:test>\n       <ns0:result>\n         <ns0:error code=\"XPST0051\" />\n       </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "expression": "let $v as xs:NMTOKENS := xs:NMTOKENS(\"a b c\")\n         return count($v)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"XPST0051\" />\n       </ns0:result>\n   "
+    },
+    "CastAs-ListType-28": {
+      "xml": "<ns0:test-case xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\" name=\"CastAs-ListType-28\" covers-30=\"cast-to-list\">\n       <ns0:description>Castable to list: true</ns0:description>\n       <ns0:created by=\"Michael Kay\" on=\"2012-05-28\" />\n       <ns0:dependency type=\"spec\" value=\"XQ30+\" />\n       <ns0:test>\n         \"a b c\" castable as xs:NMTOKENS\n       </ns0:test>\n       <ns0:result>\n         <ns0:assert-true />\n       </ns0:result>\n   </ns0:test-case>\n   \n   ",
+      "expression": "\"a b c\" castable as xs:NMTOKENS",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n       </ns0:result>\n   "
+    }
+  }
+}

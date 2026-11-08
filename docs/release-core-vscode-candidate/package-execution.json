@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "C:\\Users\\charl\\AppData\\Local\\npm-cache\\_npx\\66fbc91407e86cd3\\node_modules\\@vscode\\vsce\\vsce",
+    "package",
+    "--out",
+    "D:\\Development\\Bosak\\docs\\release-core-vscode-candidate\\vscode-bosak-0.2.6-candidate.vsix"
+  ],
+  "cwd": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-candidate-20261108\\extension",
+  "exitCode": 0,
+  "logSha256": "c058d433fb88a4aa7bab19c3c1b0bc66c09a1f62b3144decae0a3135b9fedfa8"
+}

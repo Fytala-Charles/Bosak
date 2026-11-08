@@ -1,0 +1,22 @@
+{
+  "qt3": {
+    "totals": [
+      31162,
+      0,
+      659
+    ],
+    "retainedNamesAndReasons": 659,
+    "added": {},
+    "removed": {}
+  },
+  "qt4": {
+    "totals": [
+      8587,
+      0,
+      1892
+    ],
+    "retainedNamesAndReasons": 1892,
+    "added": {},
+    "removed": {}
+  }
+}

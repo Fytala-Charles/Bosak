@@ -1,0 +1,11 @@
+// Generated metadata-only draft inspection; not production behavior qualification.
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using Bosak.XPath.Core.Xdm;
+using C13901.Draft;
+var a = typeof(ISchemaAuthority).Assembly;
+var types = a.GetExportedTypes().OrderBy(t => t.FullName).Select(t => new {type=t.FullName, members=t.GetMembers(BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static|BindingFlags.DeclaredOnly).Select(m=>m.ToString()).Order().ToArray()}).ToArray();
+var core = typeof(XdmValue).Assembly;
+Console.WriteLine(JsonSerializer.Serialize(new { scope="Declaration compilation and current-carrier metadata only; not runtime contract/performance acceptance", pointerSize=IntPtr.Size, currentXdmValueSize=Unsafe.SizeOf<XdmValue>(), currentXdmValueFields=typeof(XdmValue).GetFields(BindingFlags.NonPublic|BindingFlags.Instance).Select(f=>new {name=f.Name,type=f.FieldType.FullName}), loadedCoreSha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(core.Location))).ToLowerInvariant(),types},new JsonSerializerOptions {WriteIndented=true}));

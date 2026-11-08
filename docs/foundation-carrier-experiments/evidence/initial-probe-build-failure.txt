@@ -1,0 +1,25 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Core\Core.csproj (in 55 ms).
+  Restored D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj (in 61 ms).
+  Core -> D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,624): error CS1513: } expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1026: ) expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1002: ; expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,735): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,782): error CS1002: ; expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,782): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+
+Build FAILED.
+
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,624): error CS1513: } expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1026: ) expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1002: ; expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,734): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,735): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,782): error CS1002: ; expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Program.cs(85,782): error CS1022: Type or namespace definition, or end-of-file expected [D:\Development\Bosak\.guard-tmp\carrier-experiments\baseline\Runner\Probe.csproj]
+    0 Warning(s)
+    7 Error(s)
+
+Time Elapsed 00:00:01.19

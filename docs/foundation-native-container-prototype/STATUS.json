@@ -1,0 +1,22 @@
+{
+  "checkpoint": "TA-46",
+  "sourceVersion": "1.81.0",
+  "slice": "PV-Q03a preassessed-container vertical prototype",
+  "testsPassed": 19,
+  "buildWarnings": 0,
+  "buildErrors": 0,
+  "nativeContainerPublicTransportQualifiedWithinScope": true,
+  "publicDocumentAssessmentImplemented": false,
+  "publicNodeFactsProjectionImplemented": false,
+  "productionChanged": false,
+  "publicApiChanged": false,
+  "freshCoreFullSuiteRun": false,
+  "native451SuiteRerun": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "packagesBuilt": false,
+  "pushPerformed": false,
+  "requirementsWaived": 0,
+  "nextSlice": "PV-Q03b guarded public original-node facts projection; then public strict assessment requests with separate immutable adoption and qualification."
+}

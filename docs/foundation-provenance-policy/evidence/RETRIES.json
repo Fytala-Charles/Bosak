@@ -1,0 +1,16 @@
+{
+  "productionChanged": false,
+  "retries": [
+    {
+      "stage": "Initial evidence capture",
+      "receipt": "provenance-policy-capture.log.json",
+      "failure": "Case-sensitive comparison of retained lowercase testAssembly name caused StopIteration before STATUS was written.",
+      "correction": "Compare assembly names case-insensitively while requiring exact test DLL SHA-256."
+    },
+    {
+      "stage": "Initial documentation rendering",
+      "failure": "STATUS.json was absent because initial evidence capture refused; renderer correctly refused the missing local link.",
+      "correction": "Generate verified evidence/status first, then rerun link/render checks."
+    }
+  ]
+}

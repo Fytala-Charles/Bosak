@@ -1,0 +1,11 @@
+    public void NormalizeUnicode_FullyNormalized()
+    {
+        // Fully-normalized input passes through unchanged...
+        Assert.Equal("blah", EvalStr("normalize-unicode('blah', 'FULLY-NORMALIZED')"));
+        Assert.Equal("1", EvalStr("count(normalize-unicode(codepoints-to-string(2494), 'FULLY-NORMALIZED'))"));
+        // ...input not in NFC raises FOCH0003.
+        var ex = Assert.Throws<InvalidOperationException>(() =>
+            Evaluate("normalize-unicode(codepoints-to-string((65, 775)), 'FULLY-NORMALIZED')"));
+        Assert.Contains("FOCH0003", ex.Message);
+    }
+

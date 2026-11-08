@@ -1,0 +1,1318 @@
+{
+  "scope": "Source-pinned inventory of direct legacy numeric getter references, including any comments. All remain checked legacy consumers; this is not a claim that wider numeric host semantics have been migrated.",
+  "references": 192,
+  "files": [
+    {
+      "path": "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs",
+      "sha256": "047132f57b5411ee510f62ad3f50a5e3b0fee5c2be33c6c24b1bd41a84cd98c4",
+      "references": 2,
+      "matches": [
+        {
+          "line": 153,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue.ToString(CultureInfo.InvariantCulture),"
+        },
+        {
+          "line": 154,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => CanonicalDecimalString(value.DecimalValue),"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee",
+      "references": 45,
+      "matches": [
+        {
+          "line": 2706,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "if (entryKey.Kind == XdmValueKind.Integer && entryKey.IntegerValue == index)"
+        },
+        {
+          "line": 2772,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long index = keyValue.IntegerValue;"
+        },
+        {
+          "line": 3751,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "registers[instr.RegisterA] = XdmValue.FromDecimal(total.DecimalValue / items.Count);"
+        },
+        {
+          "line": 8029,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long l = left.IntegerValue;"
+        },
+        {
+          "line": 8030,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long r = right.IntegerValue;"
+        },
+        {
+          "line": 8485,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long i = value.IntegerValue;"
+        },
+        {
+          "line": 8490,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal d = value.DecimalValue;"
+        },
+        {
+          "line": 8815,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "singleOther = other.IntegerValue;"
+        },
+        {
+          "line": 8827,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "? (set is null ? atom.IntegerValue == singleOther : set.Contains(atom.IntegerValue))"
+        },
+        {
+          "line": 8828,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": ": (set is null ? atom.IntegerValue != singleOther : set.Count > 1 || !set.Contains(atom.IntegerValue));"
+        },
+        {
+          "line": 8849,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "set.Add(atom.IntegerValue);"
+        },
+        {
+          "line": 8911,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 8912,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 8962,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = atomized.IntegerValue;"
+        },
+        {
+          "line": 8967,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal d = atomized.DecimalValue;"
+        },
+        {
+          "line": 9596,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "if (value.IntegerValue < 0) return false;"
+        },
+        {
+          "line": 9597,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromInteger(value.IntegerValue, normalized);"
+        },
+        {
+          "line": 9603,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal d = decimal.Truncate(value.DecimalValue);"
+        },
+        {
+          "line": 9654,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "if (!IsIntegerInRange(value.IntegerValue, normalized))"
+        },
+        {
+          "line": 9656,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromInteger(value.IntegerValue, normalized);"
+        },
+        {
+          "line": 9661,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "long lVal = (long)value.DecimalValue;"
+        },
+        {
+          "line": 9708,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromDecimal(value.IntegerValue);"
+        },
+        {
+          "line": 9753,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromDouble(value.IntegerValue);"
+        },
+        {
+          "line": 9758,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "result = XdmValue.FromDouble((double)value.DecimalValue);"
+        },
+        {
+          "line": 9786,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromFloat(value.IntegerValue);"
+        },
+        {
+          "line": 9791,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "result = XdmValue.FromFloat((float)value.DecimalValue);"
+        },
+        {
+          "line": 9854,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromBoolean(value.IntegerValue != 0);"
+        },
+        {
+          "line": 9859,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "result = XdmValue.FromBoolean(value.DecimalValue != 0m);"
+        },
+        {
+          "line": 12075,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => FormatXsdCanonicalDecimal(value.DecimalValue),"
+        },
+        {
+          "line": 14891,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "if (!IsIntegerInRange(value.IntegerValue, t))"
+        },
+        {
+          "line": 14893,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = XdmValue.FromInteger(value.IntegerValue, t);"
+        },
+        {
+          "line": 14897,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal d = value.DecimalValue;"
+        },
+        {
+          "line": 15930,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 15931,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 15943,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 15944,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue,"
+        },
+        {
+          "line": 15955,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 15956,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (long)value.DecimalValue,"
+        },
+        {
+          "line": 15967,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 15968,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (float)value.DecimalValue,"
+        },
+        {
+          "line": 16099,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "idx = akey.IntegerValue;"
+        },
+        {
+          "line": 16850,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "return left.IntegerValue.CompareTo(right.IntegerValue);"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Runtime/Xdm/XdmValueComparer.cs",
+      "sha256": "3887b8017ef5109420896041f9f0b50784367e59b678a539cf24347169c2e120",
+      "references": 8,
+      "matches": [
+        {
+          "line": 110,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "1 => a.IntegerValue.CompareTo(b.IntegerValue),"
+        },
+        {
+          "line": 218,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 219,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 227,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 228,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (float)value.DecimalValue,"
+        },
+        {
+          "line": 235,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 236,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue,"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/Csv.cs",
+      "sha256": "4e5ab4d8b83b3f21460a0bd74eaa4789d9569b10d4181b9bcb1e385d6e767a11",
+      "references": 5,
+      "matches": [
+        {
+          "line": 376,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "col = position.IntegerValue;"
+        },
+        {
+          "line": 501,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => atom.IntegerValue,"
+        },
+        {
+          "line": 502,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (long)atom.DecimalValue,"
+        },
+        {
+          "line": 530,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => atom.IntegerValue,"
+        },
+        {
+          "line": 531,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (long)atom.DecimalValue,"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FormatNumberEngine.cs",
+      "sha256": "116a883b6e951028008b8514288eb446148e9bd162bfa35e0e42a68e7faf1b53",
+      "references": 6,
+      "matches": [
+        {
+          "line": 106,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 107,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 132,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue < 0,"
+        },
+        {
+          "line": 133,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue < 0,"
+        },
+        {
+          "line": 667,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 668,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue,"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+      "sha256": "4af2760bf9d69c8552ad4a808ed746120b28e3a95eb2f5ce091ba4107cf10ee0",
+      "references": 97,
+      "matches": [
+        {
+          "line": 5831,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long index = key.IntegerValue;"
+        },
+        {
+          "line": 7025,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "int cp = (int)item.IntegerValue;"
+        },
+        {
+          "line": 7529,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result = value.IntegerValue;"
+        },
+        {
+          "line": 7532,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "result = (double)value.DecimalValue;"
+        },
+        {
+          "line": 9782,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "int arity = (int)args[1].IntegerValue;"
+        },
+        {
+          "line": 11180,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => seedValue.IntegerValue,"
+        },
+        {
+          "line": 11181,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (long)seedValue.DecimalValue,"
+        },
+        {
+          "line": 11719,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long pos = args[1].IntegerValue;"
+        },
+        {
+          "line": 11902,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return atomized.IntegerValue;"
+        },
+        {
+          "line": 11962,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "positions.Add(atomized.IntegerValue);"
+        },
+        {
+          "line": 11966,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal d = atomized.DecimalValue;"
+        },
+        {
+          "line": 12445,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long cmp = VmEngine.ApplyFunctionConversion(r, \"xs:integer\", ctx).IntegerValue;"
+        },
+        {
+          "line": 13101,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long cp = atomized.IntegerValue;"
+        },
+        {
+          "line": 13358,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "return a.IntegerValue == b.IntegerValue;"
+        },
+        {
+          "line": 13375,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,"
+        },
+        {
+          "line": 13376,
+          "accessors": [
+            "DecimalValue",
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,"
+        },
+        {
+          "line": 13568,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => XdmValue.FromDecimal((decimal)total.IntegerValue / items.Count),"
+        },
+        {
+          "line": 13569,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => XdmValue.FromDecimal(total.DecimalValue / items.Count),"
+        },
+        {
+          "line": 13827,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long idx = args[1].IntegerValue;"
+        },
+        {
+          "line": 13847,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long idx = args[1].IntegerValue;"
+        },
+        {
+          "line": 13880,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long pos = posVal.IntegerValue;"
+        },
+        {
+          "line": 14095,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "=> ArraySubarray(ctx, args[0].ArrayValue, args[1].IntegerValue, null);"
+        },
+        {
+          "line": 14098,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "=> ArraySubarray(ctx, args[0].ArrayValue, args[1].IntegerValue, args[2].IntegerValue);"
+        },
+        {
+          "line": 14278,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long pos = args[1].IntegerValue;"
+        },
+        {
+          "line": 14353,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "result.Add(arr.Get((int)posValue.IntegerValue));"
+        },
+        {
+          "line": 14500,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return atomized.IntegerValue;"
+        },
+        {
+          "line": 14513,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "return (long)atomized.DecimalValue;"
+        },
+        {
+          "line": 14517,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return atomized.IntegerValue;"
+        },
+        {
+          "line": 14658,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 14659,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 14671,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 14672,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 14687,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 14688,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue,"
+        },
+        {
+          "line": 14699,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 14700,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (long)value.DecimalValue,"
+        },
+        {
+          "line": 14796,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "intSum += a.IntegerValue;"
+        },
+        {
+          "line": 14801,
+          "accessors": [
+            "IntegerValue",
+            "DecimalValue"
+          ],
+          "source": "decSum += a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DecimalValue;"
+        },
+        {
+          "line": 15050,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => arg.IntegerValue == long.MinValue"
+        },
+        {
+          "line": 15051,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "? XdmValue.FromDecimal(-(decimal)arg.IntegerValue, \"integer\")"
+        },
+        {
+          "line": 15052,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": ": XdmValue.FromInteger(Math.Abs(arg.IntegerValue)),"
+        },
+        {
+          "line": 15054,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "? XdmValue.FromDecimal(Math.Abs(arg.DecimalValue), \"integer\")"
+        },
+        {
+          "line": 15055,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": ": XdmValue.FromDecimal(Math.Abs(arg.DecimalValue)),"
+        },
+        {
+          "line": 15072,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Floor(arg.DecimalValue)),"
+        },
+        {
+          "line": 15089,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Ceiling(arg.DecimalValue)),"
+        },
+        {
+          "line": 15104,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 15105,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 15137,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return precision.IntegerValue;"
+        },
+        {
+          "line": 15140,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal value = precision.DecimalValue;"
+        },
+        {
+          "line": 15210,
+          "accessors": [
+            "IntegerValue",
+            "DecimalValue"
+          ],
+          "source": "decimal value = arg.Kind == XdmValueKind.Integer ? arg.IntegerValue : arg.DecimalValue;"
+        },
+        {
+          "line": 15789,
+          "accessors": [
+            "IntegerValue",
+            "DecimalValue"
+          ],
+          "source": "? supplied.IntegerValue : supplied.DecimalValue;"
+        },
+        {
+          "line": 16844,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal seconds = decimalValue.DecimalValue;"
+        },
+        {
+          "line": 16979,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long y = year!.Value.IntegerValue;"
+        },
+        {
+          "line": 16980,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "int mo = (int)month!.Value.IntegerValue, d = (int)day!.Value.IntegerValue;"
+        },
+        {
+          "line": 16981,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "int h = (int)hours!.Value.IntegerValue, mi = (int)minutes!.Value.IntegerValue;"
+        },
+        {
+          "line": 16984,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "lexical = $\"{BuildDateTimeYear(y)}-{mo:00}-{d:00}T{h:00}:{mi:00}:{BuildDateTimeSeconds(seconds!.Value.DecimalValue)}{timezoneLexical}\";"
+        },
+        {
+          "line": 16989,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "long y = year!.Value.IntegerValue;"
+        },
+        {
+          "line": 16990,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "int mo = (int)month!.Value.IntegerValue, d = (int)day!.Value.IntegerValue;"
+        },
+        {
+          "line": 16995,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "lexical = $\"{BuildDateTimeYear(year!.Value.IntegerValue)}-{(int)month!.Value.IntegerValue:00}{timezoneLexical}\";"
+        },
+        {
+          "line": 16998,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "lexical = $\"{BuildDateTimeYear(year!.Value.IntegerValue)}{timezoneLexical}\";"
+        },
+        {
+          "line": 17001,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "lexical = $\"--{(int)month!.Value.IntegerValue:00}-{(int)day!.Value.IntegerValue:00}{timezoneLexical}\";"
+        },
+        {
+          "line": 17004,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "lexical = $\"--{(int)month!.Value.IntegerValue:00}{timezoneLexical}\";"
+        },
+        {
+          "line": 17007,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "lexical = $\"---{(int)day!.Value.IntegerValue:00}{timezoneLexical}\";"
+        },
+        {
+          "line": 17011,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "int h = (int)hours!.Value.IntegerValue, mi = (int)minutes!.Value.IntegerValue;"
+        },
+        {
+          "line": 17014,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "lexical = $\"{h:00}:{mi:00}:{BuildDateTimeSeconds(seconds!.Value.DecimalValue)}{timezoneLexical}\";"
+        },
+        {
+          "line": 17035,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "milliseconds = value.IntegerValue;"
+        },
+        {
+          "line": 17039,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "decimal integerMilliseconds = value.DecimalValue;"
+        },
+        {
+          "line": 17047,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "milliseconds = (long)VmEngine.Cast(value, ctx.IsXPath40Experimental ? \"integer\" : \"nonNegativeInteger\").IntegerValue;"
+        },
+        {
+          "line": 17174,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "double da = a.Kind == XdmValueKind.Integer ? a.IntegerValue :"
+        },
+        {
+          "line": 17175,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "a.Kind == XdmValueKind.Decimal ? (double)a.DecimalValue :"
+        },
+        {
+          "line": 17177,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "double db = b.Kind == XdmValueKind.Integer ? b.IntegerValue :"
+        },
+        {
+          "line": 17178,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "b.Kind == XdmValueKind.Decimal ? (double)b.DecimalValue :"
+        },
+        {
+          "line": 17186,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "float fa = a.Kind == XdmValueKind.Integer ? a.IntegerValue :"
+        },
+        {
+          "line": 17187,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "a.Kind == XdmValueKind.Decimal ? (float)a.DecimalValue : (float)a.DoubleValue;"
+        },
+        {
+          "line": 17188,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "float fb = b.Kind == XdmValueKind.Integer ? b.IntegerValue :"
+        },
+        {
+          "line": 17189,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "b.Kind == XdmValueKind.Decimal ? (float)b.DecimalValue : (float)b.DoubleValue;"
+        },
+        {
+          "line": 17194,
+          "accessors": [
+            "IntegerValue",
+            "DecimalValue"
+          ],
+          "source": "decimal ma = a.Kind == XdmValueKind.Integer ? a.IntegerValue : a.DecimalValue;"
+        },
+        {
+          "line": 17195,
+          "accessors": [
+            "IntegerValue",
+            "DecimalValue"
+          ],
+          "source": "decimal mb = b.Kind == XdmValueKind.Integer ? b.IntegerValue : b.DecimalValue;"
+        },
+        {
+          "line": 17223,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => a.IntegerValue == b.IntegerValue,"
+        },
+        {
+          "line": 17224,
+          "accessors": [
+            "DecimalValue",
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => a.DecimalValue == b.DecimalValue,"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/XdmSerializer.cs",
+      "sha256": "21fc6ebd4ac3f56340fcd575775db90c0154b6dcb877f4647d09d0b0d60915c3",
+      "references": 2,
+      "matches": [
+        {
+          "line": 477,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "return value.DecimalValue;"
+        },
+        {
+          "line": 479,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return value.IntegerValue;"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/SchemaHostSessionCompilation.cs",
+      "sha256": "26ebe054f88cc4682b0df6d9617e2881f9f60216f878b6e3912053aff4d7de15",
+      "references": 2,
+      "matches": [
+        {
+          "line": 118,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => p.Value.IntegerValue.ToString(CultureInfo.InvariantCulture),"
+        },
+        {
+          "line": 119,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => string.Join(\",\", decimal.GetBits(p.Value.DecimalValue).Select(v => v.ToString(CultureInfo.InvariantCulture))),"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs",
+      "sha256": "b5a4f83be404c1cd6e62902437729a8b32b5b1dfa939c0978149dbb35d94622b",
+      "references": 2,
+      "matches": [
+        {
+          "line": 1159,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "return (double)first.DecimalValue;"
+        },
+        {
+          "line": 1161,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return first.IntegerValue;"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+      "sha256": "c4c966e9ca283aa0d7c9b8a475022a2bd6c926f6e796bd6cc98fd05b12ee918f",
+      "references": 2,
+      "matches": [
+        {
+          "line": 1236,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "if (result.IntegerValue != 1)"
+        },
+        {
+          "line": 1242,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "if (result.DecimalValue != 1m)"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/KeyIndex.cs",
+      "sha256": "649ad8f909dfe9f205986a9c307b2caa9535be21ecce54e788752531f5183490",
+      "references": 4,
+      "matches": [
+        {
+          "line": 229,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => a.IntegerValue,"
+        },
+        {
+          "line": 230,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)a.DecimalValue,"
+        },
+        {
+          "line": 235,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => b.IntegerValue,"
+        },
+        {
+          "line": 236,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)b.DecimalValue,"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Runtime/TransformEngine.cs",
+      "sha256": "2634549b9e49f871b44ea6584a334787229c651c2a1dae4680b1ecf7760859d2",
+      "references": 15,
+      "matches": [
+        {
+          "line": 15654,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => item.IntegerValue,"
+        },
+        {
+          "line": 15655,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)item.DecimalValue,"
+        },
+        {
+          "line": 16125,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 16126,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (double)value.DecimalValue,"
+        },
+        {
+          "line": 16134,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 16135,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => (float)value.DecimalValue,"
+        },
+        {
+          "line": 16143,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue,"
+        },
+        {
+          "line": 16144,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue,"
+        },
+        {
+          "line": 16176,
+          "accessors": [
+            "IntegerValue",
+            "IntegerValue"
+          ],
+          "source": "return a.IntegerValue == b.IntegerValue;"
+        },
+        {
+          "line": 16258,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return d == other.IntegerValue;"
+        },
+        {
+          "line": 21319,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => value.IntegerValue < 0,"
+        },
+        {
+          "line": 21320,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => value.DecimalValue < 0,"
+        },
+        {
+          "line": 21342,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "XdmValueKind.Integer => new BigInteger(value.IntegerValue),"
+        },
+        {
+          "line": 21343,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "XdmValueKind.Decimal => BigInteger.Parse(Math.Round(value.DecimalValue, MidpointRounding.AwayFromZero).ToString(\"0\", CultureInfo.InvariantCulture)),"
+        }
+      ]
+    },
+    {
+      "path": "src/Bosak.Xslt/Stylesheet/OutputProperties.cs",
+      "sha256": "a08b131724eba16926d8919a42b7fa4738d69a08abd74c0ecb6aa85223075c6d",
+      "references": 2,
+      "matches": [
+        {
+          "line": 1176,
+          "accessors": [
+            "DecimalValue"
+          ],
+          "source": "return value.DecimalValue;"
+        },
+        {
+          "line": 1178,
+          "accessors": [
+            "IntegerValue"
+          ],
+          "source": "return value.IntegerValue;"
+        }
+      ]
+    }
+  ],
+  "directXdmValueFields": "All numeric _integer/_reference reads in XdmValue reviewed: legacy access, EBV, formatting, CLR equality/hash, representation binding and marker attachment/stripping. No instance fields added.",
+  "pendingRoutes": [
+    "VM arithmetic/aggregation/indexing/casts",
+    "Standard numeric functions, date/time constructors, CSV and number formatting",
+    "Runtime comparison and Core numeric map keys",
+    "XSLT transform/sort/key/pattern/output/invocation conversion",
+    "XML/JSON/adaptive serialization and explicit exact output budgets"
+  ],
+  "queryNumericProfileEnabled": false
+}

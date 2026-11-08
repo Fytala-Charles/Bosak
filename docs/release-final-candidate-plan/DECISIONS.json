@@ -1,0 +1,163 @@
+{
+  "date": "2026-11-08",
+  "status": "SelectedForLocalPreparation",
+  "sourceCheckpoint": "e992d90b0efa01d45224771a9f8e53dee05096a6",
+  "inputs": {
+    "src/Directory.Build.props": "be93eb3b0767e17fed6e69b408d39bf6e78f21af6622cca0c4dd927988579575",
+    "vscode-bosak/package.json": "c1fb676b5fbbc99f95a730e9a17193c7f1609c4d7740fb9a1416c71b856a1358",
+    "vscode-bosak/package-lock.json": "7d00decbcbc5dd24b2a74ca7aa7a5b6622c8f35c7faa18a6df7cc86289a86236",
+    ".github/workflows/release.yml": "acd5eef755fa6b7d72e718f40039d5d225edfa98cfcb2a935f3751ce38305f71",
+    ".github/workflows/vscode-publish.yml": "e023c740c56ca1d7d77d60a2c6d0d36414bec947ad4ac7463cdd88d8b35dace5",
+    "src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj": "c0c83968a463c096330f3e18247a25c226a9e2025e8b56ccdf4d6f4f71363a61",
+    "docs/foundation-package-workload/OWNER-REVIEW.json": "a00593fd5a3ab98e0f194e3ae0fcc50f3f9eda8c111603195b9503c6d16af4e1",
+    "docs/release-vscode-uri-fix/RESULTS.json": "530fbe46a7a8094d465363f953b0d07ee53e5f7940b8cb71ffe2140b4a1783bc",
+    "docs/release-vscode-uri-fix/VSIX-CONTENTS.json": "37ee592e036db0d2d3f7291e7467592679e650d528273321913b02d61eb1651a"
+  },
+  "proposedVersions": {
+    "core": "1.81.2",
+    "languageServer": "1.81.2",
+    "extension": "0.2.6"
+  },
+  "versionsApproved": true,
+  "selectedPreviewPackages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt"
+  ],
+  "databasePackage": {
+    "id": "Bosak.XPath.Providers.Database",
+    "currentReleaseContract": "Packable and explicitly scheduled to ship with the next Core tag in its csproj.",
+    "recommendedDisposition": "Include existing REST-loader package as tenth NuGet library, distinct from proprietary XmlDb production adapter.",
+    "dispositionApproved": true,
+    "qualifiedFinalPackage": false,
+    "selectedDisposition": "Include as tenth NuGet package"
+  },
+  "ownerAcceptance": {
+    "Core": {
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false
+    },
+    "Schema": {
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false
+    },
+    "XmlDb": {
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false
+    },
+    "Braid": {
+      "decision": null,
+      "ownerIdentity": null,
+      "decisionDate": null,
+      "workloadApproved": false,
+      "baselineApproved": false,
+      "budgetApproved": false
+    }
+  },
+  "scenarios": [
+    {
+      "id": "PF-01",
+      "owners": "Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-02",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-03",
+      "owners": "Core + Schema",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-04",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-05",
+      "owners": "XmlDb + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-06",
+      "owners": "Braid + Core + Schema + XmlDb",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-07",
+      "owners": "Braid + Core",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-08",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    },
+    {
+      "id": "PF-09",
+      "owners": "All owners",
+      "ownerWorkloadAccepted": false,
+      "ownerBudget": null,
+      "baselineAccepted": false,
+      "candidateAccepted": false
+    }
+  ],
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "currentReceiptsAreFinalArtifactAcceptance": false,
+  "warnings": [
+    "Registry availability is an observation, not a reservation.",
+    "Final rebuilt versioned bytes require new manifests/qualification.",
+    "Version and shipping-scope choices do not accept missing workload or API evidence."
+  ],
+  "userDecision": {
+    "date": "2026-11-08",
+    "versionAnswer": "Core and language server 1.81.2; extension 0.2.6 (recommended)",
+    "packageAnswer": "Include it as the tenth NuGet package (recommended)",
+    "scope": "Local candidate versions and shipping set only; owner/API acceptance and publication remain separate."
+  }
+}

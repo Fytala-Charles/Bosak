@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C15",
+  "sourceBase": "548d18a90064e92a3444757fa5ad5cfce05730c2",
+  "candidateVersion": "1.28.1",
+  "publishedVersion": "1.26.3",
+  "buildExitCode": 0,
+  "solutionExitCode": 0,
+  "solutionProjects": 10,
+  "solutionPassed": 22579,
+  "xsltPassed": 8196,
+  "regressionRows": 381,
+  "calendarRegressions": 240,
+  "preservedEmptyValueErrorControls": 9,
+  "originalAndControlDiagnostics": 58,
+  "originalCases": 4,
+  "diagnosticTimeoutsFinal": 0,
+  "qt3ExitCode": 0,
+  "qt4ExitCode": 0,
+  "qt3": [
+    31162,
+    0,
+    659
+  ],
+  "qt4": [
+    8587,
+    0,
+    1892
+  ],
+  "gatedSets": 226,
+  "experimentalPasses": 11,
+  "skipMapsUnchanged": true,
+  "admissionChanged": false,
+  "releaseApproved": false
+}

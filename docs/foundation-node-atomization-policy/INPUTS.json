@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "sourceVersion": "1.63.1",
+  "priorManifest": "docs/foundation-public-nilled-cost/MANIFEST.json",
+  "priorManifestSha256": "6682e83bede25fd02a88655821e3d75d80cac5c00a471001c71a426042becd6b",
+  "reviewInputs": {
+    "docs/foundation-typed-cache-policy/POLICY.md": "abfc77fdff69871ce7f0ba2865e6402b2e7b23d4e78eed377a2c22e5a07f5df7",
+    "docs/foundation-provenance-lifetime/PROPOSED-LAWS.json": "c2f6bee61a2542a7f8bdbded89465ecf8fac9a305ca106919c72e262505fc810",
+    "docs/foundation-owner-reconciliation/README.md": "6d788c2c23db5d1e8aaa88f5c7421e9614cef943088ed168ef79ecacff1bc365",
+    "docs/foundation-owner-reconciliation/inputs/schema-provider-facts.md": "7f183f9a3704eea8cf0ad8a0c7590b379f8f02f97cb3023da2f121867b5d67bb",
+    "docs/foundation-owner-reconciliation/inputs/xmldb-requirements.md": "7b11b30387aade3bc031d3cd39140c7682ee8bfad2520d78fbeeabbf92d51ce4",
+    "docs/foundation-node-query-profile/PROFILE.md": "a36223dfbc8e6bc5e64f25d1d176c5df9df7a7138372e08af48500588df11fc0",
+    "docs/foundation-public-nilled-cost/evidence/SOURCE-AND-BINARY-PINS.json": "c516c6a896f5533940ee2ffefcdcebb1afe287abe972f2791db477b2ecdb6e30"
+  },
+  "priorCandidateUncommitted": true,
+  "scope": "Core policy selection using exact current candidate and historical owner requirements; no new owner disposition or native acceptance."
+}

@@ -1,0 +1,20 @@
+{
+  "sourceVersion": "1.81.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-L01",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-T06",
+      "status": "CoreDispositionCompleteWithScope"
+    },
+    {
+      "id": "PV-L01",
+      "status": "Next_PrivateLegacyEvidenceDisposition"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "RequiredActualProviderBudgetAcceptance"
+    }
+  ]
+}

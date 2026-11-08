@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O3-Braid",
+  "packet": "O3",
+  "owner": "Braid",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "Submitted",
+  "decision": "Revise",
+  "sourceRevision": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "signer": "Codex - Braid consumer source review requested by repository owner; not a human acceptance signature",
+  "date": "2026-11-01",
+  "profile": "Design/source review of compiled draft 0890592eaf79ccb462f9635dd33e7536862685bb. Current product is ordinary principal-only document-root XSLT preview on Bosak 1.26.2 / 6a3372fc3b91e733b71a426cf40f26feaaeb3bcb. No typed/persistent integration or owner acceptance claimed.",
+  "answers": [
+    {
+      "id": "O3-Q1",
+      "answer": "Current BosakPreviewExecutor validates and uses CaptureTransform(new XDocumentNode(input), XsltCaptureOptions), retaining principal/secondary serialized bytes, messages, failures and denied resource receipts. Proposed SchemaXsltExecutable.Transform(operation, invocation, context) represents document-root matching and distinct global input; admit both roles in the same operation, once per unique snapshot. Source-free initialTemplate uses an empty admission array unless dynamic context adds node inputs. CompileXPath/Evaluate and SchemaXQueryCompiler.Compile/Evaluate map future diagnostic query previews; neither is a current Braid product command. No demonstrated current requirement for arbitrary initial sequences, streaming or selectable initial modes; unsupported profiles must refuse explicitly. Required gap: show the supported bounded capture route from the proposed operation-based Transform to existing XSLT capture semantics. XdmValue alone does not demonstrate capture of all outputs/messages/resource receipts or serialization limits. Core must map a supported existing route or supply a public operation-bound capture capability; Braid does not prescribe its API design."
+    },
+    {
+      "id": "O3-Q2",
+      "answer": "Typed/persistent route explicitly remains open. Worker-local authorized reopen is a candidate, subject to actual Schema/XmlDb authorization and version retention; no broker or in-process fallback is selected or implicitly approved. Current worker-v1 transports retained bytes, not live provider handles. A new profile/protocol must bind authorized immutable store/snapshot version, provider/schema environment, source/fixture/configuration identities and exact engine identity, reject unavailable or changed versions, and recheck currentness before publication. Never serialize authority objects, leases or credentials as descriptive JSON identities. Protocol/profile changes invalidate old evidence. No demonstrated new Core transport signature is requested: transport and acquisition policy belong to Braid/provider owners."
+    },
+    {
+      "id": "O3-Q3",
+      "answer": "Require acquisition rollback; foreign/missing snapshot refusal before getters; distinct match/global memberships; duplicate admission single-lease accounting; deferred result enumeration and serialization inside Run/RunAsync; cancellation before admission, during raw work and during drain; close/revocation with outstanding work; concurrent-close and reentry refusal within the explicitly qualified profile; and original failure plus reverse-order cleanup failures. A canceled wait must not release resources while raw work runs. Current parent cancellation/deadline kills and awaits the worker process tree; unsent results are discarded. Typed/persistent implementation must additionally prove reader/generation retention through raw completion or confirmed process termination and actual provider recovery. Session close/drain contracts appear to represent these needs; no additional lifetime signature is demonstrated by source review. Detached immutable output bytes may cross IPC; borrowed result graphs may not escape as live authority. Keep all late results subject to source/fixture/configuration/entitlement freshness checks."
+    },
+    {
+      "id": "O3-Q4",
+      "answer": "Proposed future fixtures, not measured results: ordinary current preview baseline; original assessed decimal/list/union/nil/no-typed-value with preserve/strip and copied/foreign evidence controls; persistent two-version reader held while generation changes; distinct match/global documents and source-free named template; lazy nested result consumed during cancellation/close; timeout/kill followed by authorized reopen. Initial experiment limits: two admitted snapshots, 1024 cached values/snapshot, 10000 atoms/value, 1024 numeric digits and scale 128, with boundary/refusal controls. Retain current 8 MiB input/style bounds, 64 MiB frame bound, 30-second post-launch deadline and configured output/step/message limits; these do not bound memory or compilation. These are proposed experiment ceilings, not Core defaults or performance acceptance. Measure cold/warm compile/admission/execute/consume/cleanup, peak memory and cancellation latency on identified hardware; PF-01-09 performance budgets and actual typed/persistent candidate pins remain open. Product pin is 1.26.2/6a3372fc and Braid source is 0f1d949e; no proposal assembly reference, store upgrade, D01 extension, R4/C45 or native acceptance is claimed."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [
+    "Required bounded XSLT capture capability: establish an operation-bound supported route preserving principal/secondary serialized output, messages, failures, resource receipts and finite capture limits. The reviewed Transform returns SchemaResult<XdmValue>; source mapping to current CaptureTransform behavior is not supplied. Existing route proof may close this without adding a signature."
+  ],
+  "evidence": [
+    {
+      "kind": "SourceMapping",
+      "reference": "Braid 0f1d949e: src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs; WorkerProcessPreviewExecutor.cs; PreviewWorkerProtocol.cs; src/Bosak.Braid.Application/Testing/PreviewExecutionSession.cs; PreviewRunConfiguration.cs"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "Bosak exact R2 draft proposal/QueryFacade.cs.txt, Xslt.cs.txt, XQuery.cs.txt; DECISIONS.md D04-D07,D12,D14"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "Braid docs/CONTROLLED_PREVIEW.md, docs/RUN_PROVENANCE.md, docs/BOSAK-1.26.2-ADOPTION.md. Proposed fixtures/budgets above are unqualified planning, not runtime evidence."
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

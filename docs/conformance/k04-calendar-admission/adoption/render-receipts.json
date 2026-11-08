@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/README.md.html",
+      "sha256": "58b020cc860a722517d8b58deb8a1d0cb3c1d65ab8530c1359228f3f7e154531"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_ARCHITECTURE.md.html",
+      "sha256": "c1d52680c258aa1fa669162f320e71fef5297f1e740e6a5585f56b527dbbd106"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "11659b5e73d01605c82df99691ec03da55a2979335d7a771e4f5f8f666b4e89c"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_INTEGRATION.md.html",
+      "sha256": "92d3ead30e64ef945e9d650665bf6795d723c65055f2a37281d1d16cd8ab223d"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "a2bdbe390836e6d512f5e9725c6701e2e98bc38ce3650eefb2ed179b9873b186"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "be9a76fe9d6b178b900c2f31e2c7d6d834d6768ed791242317d83d3671e0b031"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "378040406b672056b0ba2cc1a845a8fa0f160f00e31ccc24087ba85021ea5847"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "311953496ddfe801c13b7380ae2cc6e6bcf9da8c4a1622063dfafccffb5c82c5"
+    },
+    {
+      "source": "docs/conformance/k04-calendar-admission/README.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_conformance_k04-calendar-admission_README.md.html",
+      "sha256": "54cba3b22204364142a29a55de5d4c60d8b387d2603e40de8ddef02fcb324a7e"
+    },
+    {
+      "source": "docs/conformance/k04-calendar-admission/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_conformance_k04-calendar-admission_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "ff757afe2091fb145b100b178485007a1c21255e007f3f620c03c316a6fa4f96"
+    },
+    {
+      "source": "docs/conformance/k04-calendar-admission/adoption/BASELINE-ADOPTION.md",
+      "html": ".guard-tmp/k04-calendar-adoption-render/docs_conformance_k04-calendar-admission_adoption_BASELINE-ADOPTION.md.html",
+      "sha256": "1db2e6c3cb4b94f97ead46d0189f266c0b983eb3d6d42c640feb2fe71129c533"
+    }
+  ]
+}

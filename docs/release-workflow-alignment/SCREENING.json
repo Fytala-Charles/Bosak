@@ -1,0 +1,14 @@
+{
+  "scope": "Targeted source/evidence screening, not a full security audit",
+  "filesReviewed": 226,
+  "strongCredentialPatternHits": [],
+  "archivesChecked": [
+    "docs/release-1.81.2-candidate/evidence/EXECUTION-RECEIPTS-before-final-tests.zip",
+    "docs/release-1.81.2-candidate/evidence/EXECUTION-RECEIPTS.zip",
+    "docs/release-1.81.2-candidate/evidence/NUGet-PACKAGES-1.81.2.zip",
+    "docs/release-1.81.2-candidate/evidence/vscode-bosak-0.2.6-engine-1.81.2.vsix"
+  ],
+  "looseDllPdbExe": 0,
+  "filesAtLeast50MiB": 0,
+  "publicationPerformed": false
+}

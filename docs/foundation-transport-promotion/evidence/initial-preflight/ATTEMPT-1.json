@@ -1,0 +1,35 @@
+{
+  "reason": "Initial strict raw-byte assertion stopped after successful git apply because repository attributes materialized CRLF; no build/test process launched.",
+  "files": {
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+      "materializedSha256": "a2b1a460cd7fe03a833d9dd3d1f603e96d286fed48328f2999154507d921927c",
+      "lfSha256": "9add10cab7a6f8240ac89388b33a3872cac4a33a2b8479a961b8158d3f5b8490",
+      "expectedLfSha256": "9add10cab7a6f8240ac89388b33a3872cac4a33a2b8479a961b8158d3f5b8490"
+    },
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": {
+      "materializedSha256": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+      "lfSha256": "a143845618d0020fb63fc0b2bb2099463249d81e50acbc5d295afef8a8dfb06d",
+      "expectedLfSha256": "a143845618d0020fb63fc0b2bb2099463249d81e50acbc5d295afef8a8dfb06d"
+    },
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": {
+      "materializedSha256": "7574bc8ecaf1c4529f8ca1a83f0c04a718f173eba3bd3203de3e57bd49cef8d4",
+      "lfSha256": "9550849d4ee630de863e0250d3aca33cde40635acf33f0509ae682c29a582818",
+      "expectedLfSha256": "9550849d4ee630de863e0250d3aca33cde40635acf33f0509ae682c29a582818"
+    },
+    "src/Directory.Build.props": {
+      "materializedSha256": "6e6b8033c79bb2c5051632158e23374e7d92990c12383fbb994aa7e8e86d4161",
+      "lfSha256": "f4b6fad3f15497268ad38b85a02b28b508cdaa3f289ba7ff8c7f989040cdc52e",
+      "expectedLfSha256": "f4b6fad3f15497268ad38b85a02b28b508cdaa3f289ba7ff8c7f989040cdc52e"
+    },
+    "tests/Bosak.XPath.Core.Tests/SchemaValueTransportTests.cs": {
+      "materializedSha256": "8ee9614e72d5c6627e100347767457376ac204c9e7b4392213188da9a02c9993",
+      "lfSha256": "2d3a01cb3495b31c1e3a405a4f2fc2c7b1922d3f41cfb78dc541a31f622cb348",
+      "expectedLfSha256": "2d3a01cb3495b31c1e3a405a4f2fc2c7b1922d3f41cfb78dc541a31f622cb348"
+    },
+    "tests/Bosak.XPath.Runtime.Tests/SchemaValueTransportTests.cs": {
+      "materializedSha256": "33fc8d8d18487b59251a6746e0cc616fbc0641d7bce049f89e63bcfd03faaa86",
+      "lfSha256": "a0fb0dbed27f20d1e29729afc31618ebf0f47b81207617030b6180bec2f2a162",
+      "expectedLfSha256": "a0fb0dbed27f20d1e29729afc31618ebf0f47b81207617030b6180bec2f2a162"
+    }
+  }
+}

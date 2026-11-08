@@ -1,0 +1,239 @@
+{
+  "rows": {
+    "S4-iteration": {
+      "productions": [
+        "ForExpr",
+        "ForClause",
+        "ForBinding",
+        "ForItemBinding",
+        "ForMemberBinding",
+        "ForEntryBinding",
+        "ForEntryKeyBinding",
+        "ForEntryValueBinding"
+      ],
+      "sections": [
+        "id-for-expressions",
+        "id-binding-rules"
+      ],
+      "xsltSections": [],
+      "assessment": "Members and map-entry values remain whole sequences, positions continue across container sequences, empty collections bind nothing, and invalid container items refuse XPTY0141. Container iteration preserves containing focus.",
+      "remaining": "Do not flatten member boundaries or infer portable map entry order. Complete typed iteration combinations and host bindings remain outside bounded controls.",
+      "tickets": [
+        "K05-remaining-combinations"
+      ]
+    },
+    "S6-types": {
+      "productions": [
+        "ItemType",
+        "SequenceType",
+        "EnumerationType",
+        "ChoiceItemType"
+      ],
+      "sections": [
+        "id-choice-item-types",
+        "id-enumeration-types",
+        "id-item-coercion-rules"
+      ],
+      "xsltSections": [
+        "named-item-types"
+      ],
+      "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+      "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+      "tickets": [
+        "K02-choice-matching-alternative",
+        "K04-host-context"
+      ]
+    },
+    "S6-record-conversion": {
+      "productions": [
+        "CastExpr",
+        "CastableExpr",
+        "RecordType",
+        "AnyRecordType",
+        "TypedRecordType"
+      ],
+      "sections": [
+        "id-structural-record-types",
+        "casting-to-record",
+        "id-item-coercion-rules"
+      ],
+      "xsltSections": [
+        "named-record-types"
+      ],
+      "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+      "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+      "tickets": [
+        "K04-host-context",
+        "K05-remaining-combinations"
+      ]
+    },
+    "S6-update": {
+      "productions": [
+        "ButWithExpr"
+      ],
+      "sections": [
+        "id-with-expression"
+      ],
+      "xsltSections": [
+        "named-record-types"
+      ],
+      "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+      "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+      "tickets": [
+        "K04-host-context",
+        "K05-remaining-combinations"
+      ]
+    },
+    "S8-patterns": {
+      "productions": [
+        "Pattern",
+        "SimplePattern",
+        "ItemPattern",
+        "AnyItemPattern",
+        "AtomicPattern",
+        "RecordPattern",
+        "MapPattern",
+        "MapEntryPattern",
+        "MapEntryKey",
+        "ArrayPattern",
+        "SequencePattern",
+        "PredicatePattern"
+      ],
+      "sections": [],
+      "xsltSections": [
+        "named-item-types",
+        "named-record-types",
+        "pattern-syntax",
+        "id-map-patterns",
+        "id-record-patterns",
+        "id-array-patterns"
+      ],
+      "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+      "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+      "tickets": [
+        "K04-host-context",
+        "K05-remaining-combinations"
+      ]
+    },
+    "S8-compound": {
+      "productions": [
+        "Pattern",
+        "XNodePattern",
+        "ParenthesizedPattern",
+        "BracedURILiteral"
+      ],
+      "sections": [],
+      "xsltSections": [
+        "node-patterns",
+        "xnode-pattern-matching-process",
+        "default-priority-for-xnode-patterns",
+        "pattern-errors"
+      ],
+      "assessment": "Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical.",
+      "remaining": "Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance.",
+      "tickets": [
+        "K04-host-context",
+        "K05-remaining-combinations"
+      ]
+    },
+    "REQ123-constructors": {
+      "productions": [
+        "FunctionCall",
+        "NamedFunctionRef",
+        "ArgumentList"
+      ],
+      "sections": [
+        "id-constructor-functions"
+      ],
+      "xsltSections": [],
+      "assessment": "C03 supplies all 49 zero-arity constructor names and 1,127 representative observations. C05 spot checks keep direct/reference/missing/empty and lower-profile boundaries distinct from focus-function syntax.",
+      "remaining": "No arbitrary-precision, complete facet/schema or universal focus/host conversion support is inferred.",
+      "tickets": [
+        "K05-remaining-combinations"
+      ]
+    },
+    "REQ123-destructuring": {
+      "productions": [
+        "LetExpr",
+        "LetClause",
+        "LetBinding",
+        "LetValueBinding",
+        "LetSequenceBinding",
+        "LetArrayBinding",
+        "LetMapBinding"
+      ],
+      "sections": [
+        "id-let-expressions",
+        "id-binding-rules"
+      ],
+      "xsltSections": [],
+      "assessment": "Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured.",
+      "remaining": "K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract.",
+      "tickets": [
+        "K03-record-destructuring-lookup",
+        "K05-remaining-combinations"
+      ]
+    },
+    "REQ123-jnode": {
+      "productions": [
+        "JNodeType",
+        "GNodeType",
+        "XNodeType",
+        "NodeTest",
+        "JNodePattern",
+        "JNodePatternSelector"
+      ],
+      "sections": [
+        "id-jnode-types",
+        "effect-of-slash-with-jnodes"
+      ],
+      "xsltSections": [
+        "id-jnode-patterns",
+        "id-default-priority-jnode-patterns"
+      ],
+      "assessment": "Navigation, key/root/value type checks and array:members/array:of-members preserve member boundaries and empty/nested values. Generic node(), xnode() and is contracts remain unsupported model scope. Explicit jnode-pattern matching refuses XTSE0340 in both named hosts.",
+      "remaining": "The six generic-model unmet controls are retained known boundaries, not a new full-model adoption or template-rule certification.",
+      "tickets": [
+        "K01-generic-jnode-model",
+        "K04-host-context"
+      ]
+    }
+  },
+  "tickets": {
+    "K01-generic-jnode-model": {
+      "status": "Known unsupported model boundary; no promotion",
+      "owner": "Bosak XDM/model maintainer and C13 owner disposition",
+      "required": "The current generic model includes JNodes in node(), supports xnode() for XML and node identity.",
+      "observed": "JNode node() is false; xnode() raises XPST0051; JNode is raises XPTY0004. Navigation/member wrappers remain supported. A current-draft jnode pattern refuses XTSE0340 at compilation in both tested hosts.",
+      "exitCriteria": "Choose any full-model adoption explicitly with XDM/identity/order/provider/host/template tests. Do not substitute wrapper navigation or roundtrip equality for identity."
+    },
+    "K02-choice-matching-alternative": {
+      "status": "Reproduced current-draft coercion mismatch; not fixed",
+      "owner": "Bosak runtime/type maintainer",
+      "required": "If an input already matches an alternative, coerce to the first alternative it matches before trying conversions to other alternatives.",
+      "observed": "Typed let/argument/return (xs:integer|xs:string) convert the string '12' to integer. An explicit cast has a different in-order conversion contract.",
+      "exitCriteria": "Separate coercion from explicit cast. Preserve already-matching alternatives, retain ordered fallback for untyped/unmatched items and test nested/schema/function/record alternatives before an engine fix; run both frozen gates."
+    },
+    "K03-record-destructuring-lookup": {
+      "status": "Reproduced current-draft lookup mismatch; not fixed",
+      "owner": "Bosak parser/compiler/runtime maintainer",
+      "required": "Map/record destructuring uses lookup semantics; an undeclared field on an annotated record raises XPTY0004.",
+      "observed": "let ${$missing} := (map{'a':1} cast as record(a)) return $missing binds empty instead.",
+      "exitCriteria": "Use annotation-aware lookup for destructured fields while retaining empty binding for ordinary missing map keys, single RHS evaluation, typing and scope restoration. Add focused regressions and run both frozen gates for an engine fix."
+    },
+    "K04-host-context": {
+      "status": "Bounded supported forms and explicit remaining ownership",
+      "owner": "C06 and C09-C12 final evidence review",
+      "required": "Host, effective version, type context and declaration/package evidence must match the claimed contract.",
+      "observed": "Both named hosts pass the bounded version-4 pattern stylesheets. This does not accept every package, alias, recursive type, JNode template or earlier-version combination.",
+      "exitCriteria": "Retain named tests and accurate scope; C06 reviews host/declaration profiles and C13 records acceptance. No historical adoption pin is reconstructed."
+    },
+    "K05-remaining-combinations": {
+      "status": "Unaccepted combinations retained explicitly",
+      "owner": "C09-C12/C13 and relevant engine maintainer if corrected",
+      "required": "Per-production/current-contract evidence remains necessary; supported examples are not universal conversion or grammar proofs.",
+      "observed": "Cardinality, scope, empty/member boundaries and delivered corrections have bounded controls. Remaining facet, composite, callback, error-order and identity combinations remain unclaimed.",
+      "exitCriteria": "Review each entry contract under the applicable-evidence policy, fix or accurately disposition failures, and retain previous correction receipts; no automatic implementation commitment for every proposal."
+    }
+  }
+}

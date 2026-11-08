@@ -1,0 +1,240 @@
+{
+  "reviewDate": "2026-10-26",
+  "documentationBase": "2d8a7005da271148b8d1e88378ca92c84ce71367",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "specRevision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "specFiles": {
+    "current-expressions.xml": "1fa994d200e67ff986d4a4787a0ac46b6ee545f4eb5613192cfafc3cde3dabd7",
+    "current-xpath-grammar.xml": "55122f68f6dd89ac5c577205fabf003de66f2d100c758774d27bcc756e2c27bd",
+    "current-xslt.xml": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8"
+  },
+  "sourceFiles": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "85383daf06921a46ff81656cce8174ad66a7ae01",
+    "src/Directory.Build.props": "4bbd3394519d40282be0d97700cd9416bde8a400",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "807c85b6a6724beafa3495135fd20260185f4fac",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "4f7681cd78f72d43406ccac47df82d16750bcec1",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "67f10a3a4252ec89e8f7389da94b5006b14fed7b",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "f97a0faf5c5b6ab0b286163dbc7eeb018c8de95c",
+    "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+    "tests/Bosak.XPath.Conformance40/TestExecutor40.cs": "479253d5b01555546a3a765c6a1ddcc0a667a146",
+    "AGENTS.md": "f2362c6510a24b928d330b61aa2fc3d3ce034748",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaListUnionTests.cs": "05a9af36ef1ec9f785ba3c77ccf1b9a743678156",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaTypedValueTests.cs": "24ac681bf63cf32cf106ee524ad131eb8dcfd2c9",
+    "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs": "de6a918cb4a4e4fbd56c48da0c3c56d3d447f6e2",
+    "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs": "29a556aa648f365db75ff1f70f36d982561143c8",
+    "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs": "41cbb0fd50f6f334d449b244434db4ef059e9767",
+    "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs": "392ee66e2cdc428c12d74f131e23084693649ef3",
+    "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+    "tests/Bosak.XPath.Parser.Tests/ParserTests.cs": "b8ee6e21626828fbbd423505d134284469e5b8e2",
+    "tests/Bosak.XPath.Parser.Tests/LexerTests.cs": "a950cfb2f6968e3ef0927faf81d428488b7a64b6",
+    "tests/Bosak.XPath.Parser.Tests/InlineFunctionParserTests.cs": "e4de258475bbc0985325557aecc7be5273ff000e",
+    "tests/Bosak.XPath.Api.Tests/FocusConstructorTests.cs": "45aa71a2e5802be0eaf23bd81afc9ff47af6e4ba",
+    "tests/Bosak.XPath.Standard.Tests/ArrayMemberFunctionTests.cs": "9a103e7fc1af4f255e7a67a2b35cecc1711601ad",
+    "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs": "b613b6d4290091933750b208105b982cf8b0106a",
+    "tests/Bosak.XPath.Standard.Tests/JNodeSumTests.cs": "39da79d7214bb7b341ef8923c4eac2884997f36e",
+    "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs": "13aebfad0fc72b27eb484796f5533f94e2466a2d",
+    "tests/Bosak.Xslt.Tests/PatternCompilerPredicateTests.cs": "14d81054ea9e75b7c269bc5e86109db4c9b73bcb",
+    "tests/Bosak.Xslt.Tests/Xslt40AliasCastTests.cs": "3c3a58eb5676567468f4151bd5d90a223acac5ef",
+    "tests/Bosak.Xslt.Tests/Xslt40AliasExpressionTests.cs": "152f2bd4bec9f218544c95ad3d765ff29aef7405",
+    "tests/Bosak.Xslt.Tests/Xslt40ArrayAliasBindingTests.cs": "5ea316dd26791949991d08e69feb08ccea1deb61",
+    "tests/Bosak.Xslt.Tests/Xslt40ArrayMemberSumTests.cs": "72326d329f83c4b3131059ac6119498150da4d3f",
+    "tests/Bosak.Xslt.Tests/Xslt40ArrayPatternTests.cs": "4fb204aa0e57aeb89316fb23a1d97c1bae27e295",
+    "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs": "495cb9309dc003d6239a71377968397d356aef05",
+    "tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs": "2f9bed9d8747a0ed448b4de616e3e0cf5d5b589c",
+    "tests/Bosak.Xslt.Tests/Xslt40ChoiceCastValidationTests.cs": "d45643e35b17901be5d199e6018a02f19d9d11b0",
+    "tests/Bosak.Xslt.Tests/Xslt40EnumerationBindingTests.cs": "56066b536e09d4783da246c8d682dfbede4065fe",
+    "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs": "75b39914d6ccbcbb6e075991b765a4f9734489f9",
+    "tests/Bosak.Xslt.Tests/Xslt40FixedTypeNamespaceTests.cs": "f53218ae9e90e4f375f6e3d81de919fd10dfc946",
+    "tests/Bosak.Xslt.Tests/Xslt40ForwardAxisPriorityTests.cs": "8d5c51a9e102040bb846d2efc719ec27fda9f236",
+    "tests/Bosak.Xslt.Tests/Xslt40FunctionChoiceAliasTests.cs": "7325cbafa8dfee6f55110ce176353d24a6896224",
+    "tests/Bosak.Xslt.Tests/Xslt40InlineAliasContractTests.cs": "edfb8f25b5f9da87dc8532f8788957ac6a2f5110",
+    "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs": "80c05a40cf69633862f4493cda507a2da3e56c0f",
+    "tests/Bosak.Xslt.Tests/Xslt40MapAliasTests.cs": "6c87a981d324354c8e0be08b08cc870bd63eade9",
+    "tests/Bosak.Xslt.Tests/Xslt40MapEntryPatternTests.cs": "10de8512e7a5c1e94e94692e92d48f44cebadcd1",
+    "tests/Bosak.Xslt.Tests/Xslt40NamedRecordCastTests.cs": "43d74b8610748b769915263784a50df259132732",
+    "tests/Bosak.Xslt.Tests/Xslt40NodeKindAliasTests.cs": "ca35dde9c86ee83521903d2127f96bb5d8ccaf8e",
+    "tests/Bosak.Xslt.Tests/Xslt40NominativeRecordCoercionTests.cs": "55e033486939906b7632d3153714457c0c7f5b6d",
+    "tests/Bosak.Xslt.Tests/Xslt40PackageTypeTests.cs": "214cc452eec67fd7fb8d542ee3a323e4dee4a6f3",
+    "tests/Bosak.Xslt.Tests/Xslt40ParenthesizedFilterPathTests.cs": "5f3811b3c5dbfb8619d66e5ea5db08a71757a4f5",
+    "tests/Bosak.Xslt.Tests/Xslt40ParenthesizedItemPatternTests.cs": "52cb53e79b568f898f55a39c0d8838fcfb16becd",
+    "tests/Bosak.Xslt.Tests/Xslt40PatternFixedNamespaceTests.cs": "2308b77ec115502b21091e41c32ad531fc01d25e",
+    "tests/Bosak.Xslt.Tests/Xslt40PatternPrefixDiagnosticTests.cs": "dda858a338e3c3b501adb2bdd14ff0278a0fa777",
+    "tests/Bosak.Xslt.Tests/Xslt40RecordConstructorTests.cs": "21d4cf577e6991734d14408cccb1eb8fc176580f",
+    "tests/Bosak.Xslt.Tests/Xslt40RecursiveContainerCastTests.cs": "de6b0e2dfeeb3a0a54d6a8f5c408fa8ff863e0dc",
+    "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs": "2f1fa063937e21653ace204a2ccf2e3a06b3d1d8",
+    "tests/Bosak.Xslt.Tests/Xslt40SetPatternAssociativityTests.cs": "1748717013d7c46d9c1fd67c4573a64f6bc0549a",
+    "tests/Bosak.Xslt.Tests/Xslt40SetPatternAxisFocusTests.cs": "a4e19170d896a741bebcf0c2e6e2e18bdf926266",
+    "tests/Bosak.Xslt.Tests/Xslt40SetPatternPriorityTests.cs": "635ad3953ea77c81d5e46720815f895e590c5075",
+    "tests/Bosak.Xslt.Tests/Xslt40StaticNamedTypeTests.cs": "f4eb7bf3829bcbd39f5292deabd0d8617945bd40",
+    "tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs": "1eabb25de32d4594317bd5adffa8f06be3aef055",
+    "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordAliasTests.cs": "ed061a8e84861027a390f28d1daa65da9f16a731",
+    "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordBindingTests.cs": "1c9059b1be4a05a5f781058d10fb470e1688c885",
+    "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs": "ed65625c1e6d72c25ce5212cd839919b4d267c33",
+    "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs": "4521e6e960596bb55a9e5aaaa8db3bc25475562d",
+    "tests/Bosak.Xslt.Tests/Xslt40UnionPatternTests.cs": "71cc1d2fe4976b2c2bd29666c10eaa07758a3368",
+    "tests/Bosak.Xslt.Tests/Xslt40WildcardNodePatternTests.cs": "ff6ba43762f0c5be94ea0f59f5d1d311e500e346",
+    "tests/Bosak.Xslt.Tests/XsltPatternDelimiterTests.cs": "7ff30f20d33f4c729403d47390fabcab8a2e5599",
+    "tests/Bosak.Xslt.Tests/XsltPatternOperatorTests.cs": "b944589783333e4a28d884ea73de74ffd895b52a"
+  },
+  "tools": {
+    "docs/xpath40-catalog/build-c05-review.py": "fbb2ec6632b0a0748e9050ce1dbfe0ce83417fcc",
+    "docs/xpath40-catalog/build-closure-plan.py": "3b2a2732ed9e00d478cbfd233878952d9249946d",
+    "docs/xpath40-catalog/C05-REVIEW-DECISIONS.json": "8f5c40bd9759a9ac91b255f891a9b9dbb9e16ba2"
+  },
+  "files": {
+    "api-tests.log": "6eb5b8e4d796ac2a146e89550dd1c2ec09d8ac167345b94315cae9d7056c77e3",
+    "authoring-corrections.json": "d1866be46198ac3ec432d6b6494d15f8eabc6d2ee3149e288a424ec5b0ff5b86",
+    "entry-sources.json": "1cb2ad3378fc26f6c416c70292679c4c16b77f77cc076800c465820e83e58694",
+    "host-program.cs.txt": "884974ac340154182cca55867b61bf7bb36d701d5ca14c518ee7fdc76d8b8b56",
+    "host-project.csproj.txt": "85c18afc14606e162492b6ad31ac4300f109aca51e477454f0f606d59da50232",
+    "host-requests.json": "de4a1b47d09c63d220113f441ce4ad64fe5de54799feb4b5e20c2dd1975ef693",
+    "host-results.jsonl": "0296a8390b60d5fa42a795d2d054aa5a3156e300456667f23586e8fb53f9cbb5",
+    "initial-probe-requests.json": "64e18e1d1e884d5401accf4f4fc5bb1fab85f20c28bcee0e613e27514120a87c",
+    "initial-probe-results.jsonl": "c2d15275a39b78ec4482837606342edc5e8ce4d62b4633666d97d2a18fe036cd",
+    "jnode-tests.log": "cf5d8510ac98cfba57722843d5c52f2c0c98a7f727573192db2d59e1f44bf4f4",
+    "named-test-evidence.json": "0004534c3e6af64b7530d5a0ed8fa670db5f0c9f9b4808d997dca83e9c649801",
+    "pattern-tests.log": "07413f8862dde1ce16151f4690357d30dadbffb4cd463213c257c4d10f0ae1a7",
+    "probe-program.cs.txt": "479bb3d1e06ac2fcb272cc3ea357bbb120144a4793bba3b655eedef04dfd843c",
+    "probe-project.csproj.txt": "8d49bd5a88862a1b8f32f8643065c64ed5700eba35a3c24ea7d94d6795879936",
+    "probe-requests.json": "f6130d356705cfc508de728d61dcf9cc6767df884436993abe89d5c929a1c7bb",
+    "probe-results.jsonl": "3721b6699f231bb718b93a15b5217e9643f519b97e2d16172875ca3093c07f48",
+    "production-sources.json": "dcfe7e717fe0f840717f7f1454ba5a51cae86f9b1839f98a0ea7c0fd0e19a91f",
+    "render-program.cjs.txt": "02a115af1b276d3ed288548c54c65926936c6471beb87437d601dcd139e67f33",
+    "render-receipts.json": "9413b1e7627aa6ecb694791620ce296b9acd0aa3d5996280aa68bf1cfd487a95"
+  },
+  "outputs": {
+    "TYPE-COLLECTION-PATTERN-RECONCILIATION.json": "7108780c52816897ee7dcd06adb1979076a062dc51e2011a5e1d65b33e84d61b",
+    "CLOSURE-PLAN.json": "1210dd354fd3d12fdc20c8323bd918c82d563c24860299f1b1e2b53473266203",
+    "CONFORMANCE-SKIP-TRIAGE.json": "b2b4fa5925928081caf25480530eb0ac98244ee04b2567c7d54414be18761138",
+    "GRAMMAR-COVERAGE-MATRIX.json": "4266e7b71a3aaddd1e7263f0c8783218c258fd498312fdd086b49767b17e6e9b"
+  },
+  "localBinaryIdentities": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "sha256": "2e3b7612523a40b3f8a3a95cc0d8f3cd49611272bc8e6a69542122c57f485fca",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "sha256": "a970225aec66426711c65887581e31b4a873308599f4257723c394d2d9edf1f5",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "5049ea5163a434319a692ba05b3a04aa123f6a8b13e3470a9f013ffd3fe369eb",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "sha256": "574ba510f7039b5173a6f4259b8f3bb92ffe5fe3eddd23f749716c9060bd74ab",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "sha256": "730c4f33db6c2b279def71dbb608061cdbf5a4fd83961f6016f03d452e9263d8",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "sha256": "09299f2cc0144ea9e21406993bdf65c021d62fea9ebcec54284fa57fc24fdb7d",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "sha256": "9403c429c3e4626169062e5763b45bb0267f7d27e3b47dfac0a5b50912838610",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+      "sha256": "f6098101b6f71785d50deb2a6c9f1e96d9d083df87ce538e4efb64e46e8344df",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\c05-host\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+      "sha256": "5446c39647a6eb4af23ff3f741cbc0d7124a37005a745769d8bb2c0d80af385e",
+      "publishedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f"
+    }
+  ],
+  "validation": {
+    "probes": {
+      "xpathExpressions": 111,
+      "xpathObservations": 219,
+      "hostStylesheets": 28,
+      "hostObservations": 56,
+      "assertedControls": 275,
+      "matchingControls": 259,
+      "unmetControls": 16,
+      "knownGenericModelControls": 8,
+      "choiceCoercionControls": 6,
+      "recordDestructuringControls": 2
+    },
+    "focusedTests": {
+      "api": 323,
+      "jnode": 89,
+      "patterns": 2045,
+      "total": 2457,
+      "failed": 0,
+      "skipped": 0
+    },
+    "inheritedSolution": {
+      "evidence": "../c02-function-review/manifest.json",
+      "passed": 21798,
+      "failed": 0,
+      "skipped": 0
+    },
+    "inheritedCatalog": {
+      "evidence": "../c02-function-review/catalog-tests.log",
+      "passed": 3148
+    },
+    "inheritedGates": {
+      "evidence": "../closure-triage/gate-receipts.json",
+      "qt3": [
+        31142,
+        0,
+        679
+      ],
+      "qt4": [
+        8436,
+        0,
+        1894
+      ]
+    }
+  },
+  "policy": "No engine/test/executable example/profile/gate change. Keep all 16 unmet current-draft controls independent; eight reflect known generic-model scope. Fifteen bounded grammar row reviews are not acceptance or full grammar coverage."
+}

@@ -1,0 +1,98 @@
+{
+  "hostAssemblySha256": "a4518cf849d5f7b43467ead76227e5ed4954a4e985bf614ada59fe87df91364d",
+  "hostAssemblyPath": "D:\\Development\\Bosak\\.guard-tmp\\bcap-cost\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.Tests.dll",
+  "runs": [
+    {
+      "profile": "source-free",
+      "repetition": 0,
+      "receipt": "source-free-0.json",
+      "sha256": "0f9ee88c2b41250381fdeefcc98986778e7e46d40dc9ebbb2017cce689ff744d"
+    },
+    {
+      "profile": "source-free",
+      "repetition": 1,
+      "receipt": "source-free-1.json",
+      "sha256": "b2dfd4f09b2c83eb444a90f38889a9b467e48a5fb78f5154ab5f60607c899174"
+    },
+    {
+      "profile": "source-free",
+      "repetition": 2,
+      "receipt": "source-free-2.json",
+      "sha256": "f96543a78837597d5e7b9203b42ecaec85f89386e6c7d49773793ff30d667f8c"
+    },
+    {
+      "profile": "shared",
+      "repetition": 0,
+      "receipt": "shared-0.json",
+      "sha256": "e45140427cfdf958a554c0148567a9b229e1d56b9128552eb79c6cc3835b79d6"
+    },
+    {
+      "profile": "shared",
+      "repetition": 1,
+      "receipt": "shared-1.json",
+      "sha256": "01ed99ab0bc82f841bac68e9bbcab5ad7a585b8d58dd5137babfe33774b5789f"
+    },
+    {
+      "profile": "shared",
+      "repetition": 2,
+      "receipt": "shared-2.json",
+      "sha256": "8d8add951341bd94879798bc75171e1660d37bd15958ffe80acbba6381c65367"
+    },
+    {
+      "profile": "distinct-matched",
+      "repetition": 0,
+      "receipt": "distinct-matched-0.json",
+      "sha256": "2053ec1a6aa81a65cc1cd00450911aa4803c57b28ba91011dfa9fbae5a34a75b"
+    },
+    {
+      "profile": "distinct-matched",
+      "repetition": 1,
+      "receipt": "distinct-matched-1.json",
+      "sha256": "a0e4934aab70935f1f6d0c50dde426e1c6178469d08dd46fa5b32834f5ebad05"
+    },
+    {
+      "profile": "distinct-matched",
+      "repetition": 2,
+      "receipt": "distinct-matched-2.json",
+      "sha256": "eebab8da71b7dbe060bca0eb4aacc144bf1f49dd2853744684a9cada7506d530"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 0,
+      "receipt": "distinct-0.json",
+      "sha256": "e4af8c84ae15ec853d1132c8c337c6af76e5102e570f8fc783f7fb2444f49a22"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 1,
+      "receipt": "distinct-1.json",
+      "sha256": "b9e4d306117f9749a446d96f896a0fdbebbfc415e5dc824469bf9e73d9747ced"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 2,
+      "receipt": "distinct-2.json",
+      "sha256": "866eead1f5bfba12ee6bebda63d6e5c02b5933c808271dc5561663bf4456e279"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 0,
+      "receipt": "cancellation-0.json",
+      "sha256": "b6e8b6ba1fcce7edaef134d1174aaa83d9baf859542d3281c3d1dd4eeada980f"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 1,
+      "receipt": "cancellation-1.json",
+      "sha256": "cd13ad7308103ba85b6fbd8d1a31d96bf23cd56c888184dae54d8c3acb833e22"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 2,
+      "receipt": "cancellation-2.json",
+      "sha256": "db0252b4a27e3ab6b3c466461cb706669649cc56612bcd5189b7e432e451a544"
+    }
+  ],
+  "engineRebuild": false,
+  "budgetsAccepted": false
+}

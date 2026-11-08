@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — a changed existing-function contract</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Exact positional comparison; keyword mismatch remains**. Do not substitute this comparator for engineering tolerance, generalized numeric conversion or automatic unit normalization. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
 
 
@@ -103,6 +105,8 @@ mixed numeric boundary results. NaN's equality inside this function also does no
 make `NaN eq NaN` true.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Exact cross-numeric comparison, NaN ordering and empty comparands; Atomic family comparison and incomparable-family error; Default/explicit collation and released versus draft keyword labels. **Boundaries:** Do not substitute this comparator for engineering tolerance, generalized numeric conversion or automatic unit normalization. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Run expanded atomic comparison with `CompileOptions.Compatibility40`; the
 earlier-version report uses `Compatibility31`. Default 3.1 still supports ordinary

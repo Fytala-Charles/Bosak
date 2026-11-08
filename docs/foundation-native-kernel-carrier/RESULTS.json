@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-31",
+  "productionModified": false,
+  "controlChecksPerRun": 103,
+  "carrierChecksPerRun": 109,
+  "runsPerMode": 2,
+  "vmExpressionsPerRun": 14,
+  "legacyReplays": 2,
+  "legacyPassedPerReplay": 20,
+  "legacyFailed": 0,
+  "isolatedBuilds": 5,
+  "warnings": 0,
+  "errors": 0,
+  "publicApiAccepted": false
+}

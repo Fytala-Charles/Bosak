@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-01",
+  "coreRevision": "9e4699c90ece7d0f13cc05dbf8d5311efb95f78a",
+  "productionChanged": false,
+  "files": {
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "0251bca924aa3979e9ec7cb650bdcbcc0e0aa8139a383b12cd71b505b7fae099",
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "aa9789ef5ca4e320f4cee85338d923c89e64ae80931debfd99a3d578977e1d99",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "539c82586a99c9e2e08a2319eb9dbe0e2f23fd824bed67ca221e1ba9fc0f316d",
+    "docs/foundation-r2-ledger/LEDGER.json": "798663d22026b070cbc5d74eabaa6f60330f4c031b60983e4b1bca773d092d35",
+    "docs/foundation-r2-core-returns/INDEX.json": "1272d8a25fdecde6cf7b531bb53fa668d3f9033eac51b65ba7eb20f046b24108",
+    "docs/foundation-r2-core-returns/returns/O4-Core.json": "48ec1cb1f07470c8bf7f7a7366e7350b52fd80954cf88eb9b27f246c757bac26",
+    "docs/foundation-r2-owner-review/PACKETS.json": "6ca6b7418d401c6bed7772bda907b7a74d02eb38b28f40accb430af0734895c9"
+  },
+  "localReturnSearch": {
+    "pattern": "foundation-r2|0890592e|O1-Schema|O1-XmlDb|O2-Schema|O3-Braid|O4-XmlDb",
+    "scope": "Local documentation only; no remote issue/message check or delivery",
+    "repositories": [
+      {
+        "name": "schema-assessment",
+        "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+        "revision": "c3624998eca8c83018e121fa84af611f834a0501",
+        "observedStatus": "clean",
+        "matchingLocalDocuments": []
+      },
+      {
+        "name": "schema-public",
+        "root": "D:\\Development\\Bosak.Schema.Public",
+        "revision": "20090180755d0427d824b091cf838e9a03ca9adc",
+        "observedStatus": "clean",
+        "matchingLocalDocuments": []
+      },
+      {
+        "name": "xmldb",
+        "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.XmlDb.Foundation",
+        "revision": "080859542786d514150d74f7ac9dd1ef56c6399a",
+        "observedStatus": "clean",
+        "matchingLocalDocuments": []
+      },
+      {
+        "name": "braid",
+        "root": "D:\\Development\\Bosak\\.worktrees\\Bosak.Braid.ReadOnly",
+        "revision": "d81f195f63a534099391220536f9885c44fddb30",
+        "observedStatus": "clean",
+        "matchingLocalDocuments": []
+      },
+      {
+        "name": "braid-active",
+        "root": "D:\\Development\\Bosak.Braid",
+        "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+        "observedStatus": "clean",
+        "matchingLocalDocuments": []
+      }
+    ]
+  }
+}

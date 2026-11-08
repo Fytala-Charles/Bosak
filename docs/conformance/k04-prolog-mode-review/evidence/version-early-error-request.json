@@ -1,0 +1,5 @@
+{
+  "Name": "C30-version-declaration-005-early-error",
+  "Source": "\n        xquery version \"1.0\"; \n        declare boundary-space preserve; \n        declare default collation \"xspanish\"; \n        declare base-uri \"http://www.base-uri.com/\"; \n        declare construction strip; declare ordering unordered; \n        declare default order empty greatest; \n        import schema default element namespace \"http://comment\"; \n        declare namespace foo = \"http://foo.org\"; \n        declare default function namespace \"http://example.org/math-functions\"; \n        declare namespace bar = \"http://bar.org\"; \n        declare variable $x as xs:integer := 7; \n        declare function local:sumOf1toN($i) as xs:integer { if ($i = 1) then $i else $i + local:sumOf1toN($i - 1) }; \n        declare option foo:strip-comments \"true\"; \n        local:sumOf1toN(5)",
+  "ExpectedCode": "XQST0038"
+}

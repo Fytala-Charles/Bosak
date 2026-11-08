@@ -1,0 +1,60 @@
+
+ // Generated measurement methods injected into the existing isolated probe class.
+ // COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+ // SPDX-License-Identifier: Apache-2.0
+ internal static async Task Measure(string[] args)
+ {
+  if(args.Length!=1)throw new ArgumentException("Expected source-free, shared, distinct or cancellation");
+  if(args[0]=="cancellation"){await CancellationCosts();return;}
+  int count=args[0] switch{"source-free"=>0,"shared"=>1,"distinct"=>2,"distinct-matched"=>2,_=>throw new ArgumentException("Unknown profile")};
+  int size=args[0]=="distinct-matched"?16384:count==0?16:count==1?16384:65536;
+  string payload=new('x',size);
+  string body=count==0?"": "<xsl:variable name='g' select='string(/*)'/>";
+  string outputs=count==0?"": "<xsl:result-document href='one.txt' method='text'>"+payload+"</xsl:result-document><xsl:result-document href='two.txt' method='text'>"+payload+"</xsl:result-document>";
+  string prefix=count==0?"":"<xsl:value-of select=\"concat(string(/*),'|',$g)\"/>";
+  string sheet=Head+body+"<xsl:template match='/' name='main'>"+outputs+prefix+payload+"</xsl:template>"+Tail;
+  var watch=new System.Diagnostics.Stopwatch();long before=GC.GetTotalAllocatedBytes(true);watch.Start();var(s,run,p)=CompileOwned(sheet);watch.Stop();var compile=new{milliseconds=watch.Elapsed.TotalMilliseconds,managedAllocatedBytes=GC.GetTotalAllocatedBytes(true)-before};
+  using(s){
+   int releases=0;using var a=count==0?null:s.OpenSnapshot(s.Environment,new object(),p.A,()=>releases++);using var b=count==2?s.OpenSnapshot(s.Environment,new object(),p.B,()=>releases++):null;
+   IXdmNode? match=count==0?null:new XDocumentNode(XDocument.Parse("<n>A</n>"));IXdmNode? global=count==2?new XDocumentNode(XDocument.Parse("<n>B</n>")):match;
+   ImmutableArray<SchemaEvidenceKernel.Snapshot> members=count==0?[]:count==1?[a!]:[a!,b!];var context=new EvaluationContext();
+   Func<SchemaEvidenceKernel.Snapshot,IXdmNode,bool> owns=(snap,node)=>ReferenceEquals(snap,a)?ReferenceEquals(node,match):ReferenceEquals(snap,b)&&ReferenceEquals(node,global);
+   var options=new XsltCaptureOptions{MaxSecondaryOutputCount=2,MaxBytesPerOutput=size+128,MaxTotalBytes=3L*(size+128),MaxMessages=0,MaxEngineOperations=10000,TimeLimit=TimeSpan.FromSeconds(5)};
+   long expected=count==0?size:3L*size+3;
+   void Capture(){var r=run(members,context,owns,match,global,count==0?"main":null,null,"https://example.test/out/main.txt",options,default);if(!r.IsSuccess||r.Capture is null)throw new Exception("Measurement capture failed");long bytes=(r.Capture.Principal?.Bytes.Count??0)+r.Capture.SecondaryOutputs.Sum(x=>(long)x.Bytes.Count);if(bytes!=expected||r.Receipts.Count!=0||releases!=0)throw new Exception("Workload output/ownership mismatch");}
+   watch.Restart();before=GC.GetTotalAllocatedBytes(true);Capture();watch.Stop();var first=new{milliseconds=watch.Elapsed.TotalMilliseconds,managedAllocatedBytes=GC.GetTotalAllocatedBytes(true)-before};
+   for(int n=0;n<20;n++)Capture();
+   var timings=new double[80];watch.Reset();before=GC.GetTotalAllocatedBytes(true);
+   for(int n=0;n<timings.Length;n++){long start=System.Diagnostics.Stopwatch.GetTimestamp();Capture();timings[n]=System.Diagnostics.Stopwatch.GetElapsedTime(start).TotalMilliseconds;}
+   long allocated=GC.GetTotalAllocatedBytes(true)-before;
+   a?.Dispose();b?.Dispose();if(releases!=count)throw new Exception("Provider release observation mismatch");
+   PrintMeasurement(new{profile=args[0],members=count,bytesPerCapture=expected,compile,firstCapture=first,warmupCaptures=20,warmCaptures=80,warmManagedAllocatedBytes=allocated,warmManagedBytesPerCapture=allocated/80.0,warmMilliseconds=timings,providerReleases=releases,scope="Compiler excludes host stylesheet preparation/process launch; capture uses preopened synthetic inputs and includes copied inputs, raw operation, dedicated worker, serialization, validation and receipt/error outcome; managed process-wide allocation excludes native/stack/peak retained memory"});
+  }
+ }
+ static void PrintMeasurement(object data)
+ {
+  var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+  Console.WriteLine(JsonSerializer.Serialize(new{passed=true,data,bindings,runtime=System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription,os=System.Runtime.InteropServices.RuntimeInformation.OSDescription,processorCount=Environment.ProcessorCount,stopwatchFrequency=System.Diagnostics.Stopwatch.Frequency,serverGC=System.Runtime.GCSettings.IsServerGC},new JsonSerializerOptions{WriteIndented=true}));
+ }
+ static async Task CancellationCosts()
+ {
+  string payload=new('x',65536);string sheet=Head+"<xsl:template name='main'><xsl:result-document href='one.txt' method='text'>first</xsl:result-document><xsl:result-document href='two.txt' method='text'>"+payload+"</xsl:result-document>main</xsl:template>"+Tail;
+  var(s,run,p)=CompileOwned(sheet);using(s){var rows=new List<object>();
+   foreach(string channel in new[]{"capture","operation","inherited"})for(int repetition=0;repetition<12;repetition++){
+    using var cancel=new CancellationTokenSource();using var entered=new ManualResetEventSlim();using var resume=new ManualResetEventSlim();
+    int calls=0,releases=0;long releaseTick=0;using var a=s.OpenSnapshot(s.Environment,new object(),p.A,()=>{Interlocked.Increment(ref releases);Interlocked.Exchange(ref releaseTick,System.Diagnostics.Stopwatch.GetTimestamp());});using var b=s.OpenSnapshot(s.Environment,new object(),p.B,()=>{Interlocked.Increment(ref releases);Interlocked.Exchange(ref releaseTick,System.Diagnostics.Stopwatch.GetTimestamp());});
+    var context=new EvaluationContext();if(channel=="inherited")context.ExecutionGate=ExecutionGate.Create(cancel.Token,null,10000);
+    var options=new XsltCaptureOptions{MaxSecondaryOutputCount=2,MaxBytesPerOutput=70000,MaxTotalBytes=140000,MaxMessages=0,MaxEngineOperations=10000,TimeLimit=TimeSpan.FromSeconds(5)};if(channel=="capture")options.CancellationToken=cancel.Token;
+    Observe(n=>{if(n>5&&Interlocked.Increment(ref calls)==1){entered.Set();if(!resume.Wait(TimeSpan.FromSeconds(10)))throw new TimeoutException("Cancellation measurement pause");}});
+    try{
+     var raw=Task.Run(()=>run([a,b],context,(_,_)=>false,null,null,"main",null,"https://example.test/main.txt",options,channel=="operation"?cancel.Token:default));
+     if(!await Task.Run(()=>entered.Wait(TimeSpan.FromSeconds(10))))throw new TimeoutException("No serializer pause");
+     a.Dispose();b.Dispose();if(releases!=0||raw.IsCompleted)throw new Exception("Premature release");
+     long request=System.Diagnostics.Stopwatch.GetTimestamp();cancel.Cancel();resume.Set();var result=await raw;long completed=System.Diagnostics.Stopwatch.GetTimestamp();
+     if(result.IsSuccess||result.Capture?.Outcome!=XsltCaptureOutcome.Cancelled||result.Capture.SecondaryOutputs.Count!=1||releases!=2||result.CleanupErrors.Count!=0)throw new Exception("Cancellation outcome mismatch");
+     rows.Add(new{channel,repetition,requestToRawOutcomeMilliseconds=System.Diagnostics.Stopwatch.GetElapsedTime(request,completed).TotalMilliseconds,requestToLastReleaseMilliseconds=System.Diagnostics.Stopwatch.GetElapsedTime(request,releaseTick).TotalMilliseconds,releaseBeforeOutcome=releaseTick<=completed,completedSecondaryBytes=result.Capture.SecondaryOutputs[0].Bytes.Count});
+    }finally{resume.Set();Observe(null);}
+   }
+   PrintMeasurement(new{profile="cancellation",rows,scope="Request during a controlled pause inside actual second-output serialization; includes cancellation, serializer unpause/unwind, two synthetic admission releases and caller scheduling; not a bound for expressions between checkpoints, native cleanup or process termination"});
+  }
+ }

@@ -1,0 +1,65 @@
+{
+  "status": "PlannedNotExecuted",
+  "cases": [
+    {
+      "id": "T01",
+      "trigger": "Valid decimal document",
+      "expected": "Exact root/declaration/type and singleton decimal survive public complete read."
+    },
+    {
+      "id": "T02",
+      "trigger": "Element-only root",
+      "expected": "No-typed-value facts retained; atomization reports FOTY0012, never empty list."
+    },
+    {
+      "id": "T03",
+      "trigger": "Optional child absent and repeated children",
+      "expected": "No placeholder; repeated instances have distinct node membership and ordered values."
+    },
+    {
+      "id": "T04",
+      "trigger": "Independent compile with same schema text",
+      "expected": "Equal names/digest cannot authorize foreign handles."
+    },
+    {
+      "id": "T05",
+      "trigger": "Copied GUIDs and public wrapper fields",
+      "expected": "Foreign origin/facts/container fail issuance before reading contents."
+    },
+    {
+      "id": "T06",
+      "trigger": "Node/facts swap",
+      "expected": "Same-name node from another snapshot or unrelated facts refuses."
+    },
+    {
+      "id": "T07",
+      "trigger": "Assessment copy",
+      "expected": "Original components/assessment retained; snapshot and node associations fresh."
+    },
+    {
+      "id": "T08",
+      "trigger": "Mutation of export or original input",
+      "expected": "Privately captured result unchanged; stale mutable view never admitted."
+    },
+    {
+      "id": "T09",
+      "trigger": "Cancellation and lease expiry",
+      "expected": "No partial validated root; metadata/cursor reads refuse after raw completion."
+    },
+    {
+      "id": "T10",
+      "trigger": "Invalid and unsupported request",
+      "expected": "No validated root for either; unsupported mode/environment explicit."
+    },
+    {
+      "id": "T11",
+      "trigger": "Diagnostics and failure rollback",
+      "expected": "Caller-tightened limits enforced and truncation flagged; failed issuance retains no partial registry."
+    },
+    {
+      "id": "T12",
+      "trigger": "Scope exclusions",
+      "expected": "No list/union/nil/construction/compatible/persistent coverage inferred from singleton decimal success."
+    }
+  ]
+}

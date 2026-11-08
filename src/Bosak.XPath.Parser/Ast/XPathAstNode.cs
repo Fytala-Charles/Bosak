@@ -73,6 +73,8 @@
 //                      |                  |       |                | QuantifiedBinding (XPath 4.0 let $(...)/$[...]/${...} bindings)                         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 14-10-2026     | Represent omitted host arguments independently of empty sequence.                        |
+//                      | Charles Korthout | 1.27  | 28-10-2026     | Retain lexical child-markup origin through immutable AST rewrites (1.31.0). |
+//                      | Charles Korthout | 1.28  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -403,7 +405,11 @@ internal sealed record DirectElementConstructorNode(
     string TagName,
     string? Prefix,
     IReadOnlyList<DirectAttributeNode> Attributes,
-    IReadOnlyList<XPathAstNode> Content) : XPathAstNode;
+    IReadOnlyList<XPathAstNode> Content) : XPathAstNode
+{
+    /// <summary>Whether this element is lexical child markup rather than an enclosed expression.</summary>
+    public bool IsLiteralChild { get; init; }
+}
 
 /// <summary>A direct attribute constructor: <c>name="literal {expr} literal"</c>.</summary>
 /// <param name="Name">The local name of the attribute.</param>
@@ -613,6 +619,11 @@ internal sealed record TryCatchNode(XPathAstNode TryExpression, IReadOnlyList<Tr
 /// <param name="TypeName">The local name of the target type for <c>validate type QName</c>, or null.</param>
 /// <param name="TypePrefix">The namespace prefix of the target type, or null.</param>
 internal sealed record ValidateExpressionNode(XPathAstNode Expression, string? Mode = null, string? TypeName = null, string? TypePrefix = null) : XPathAstNode;
+
+/// <summary>An XQuery extension whose pragmas are ignored after static namespace validation.</summary>
+/// <param name="Pragmas">The pragma EQNames, without implementation-defined contents.</param>
+/// <param name="Expression">The required associated fallback expression.</param>
+internal sealed record ExtensionExpressionNode(IReadOnlyList<QNameLiteralNode> Pragmas, XPathAstNode Expression) : XPathAstNode;
 
 /// <summary>One catch clause of a try/catch expression: <c>catch PatternList { Expr }</c>; first matching clause wins.</summary>
 /// <param name="Patterns">The error-code name-test patterns selecting this clause.</param>

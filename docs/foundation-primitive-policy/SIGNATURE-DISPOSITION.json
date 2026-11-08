@@ -1,0 +1,9 @@
+{
+  "existing": "SchemaQueryOperation.ReadTypedContainer(SchemaQuerySnapshot, ISchemaTypedValue): SchemaResult<ISchemaTypedValue>",
+  "newSignatureSelected": false,
+  "publicApiChanged": false,
+  "widerImplementationPresent": false,
+  "originalDraftModified": false,
+  "ownerAccepted": false,
+  "finalManifestAccepted": false
+}

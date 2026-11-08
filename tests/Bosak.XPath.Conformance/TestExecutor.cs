@@ -54,6 +54,12 @@
 //                      | Charles Korthout | 0.25  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.26  | 03-10-2026     | Run schema-aware (QT3 schemaImport admitted): json-to-xml validate uses built-in schema |
+//                      | Charles Korthout | 0.27  | 27-10-2026     | Add default-off guarded query-owned schema initialization for bounded diagnostics.         |
+//                      | Charles Korthout | 0.28  | 27-10-2026     | Apply owner-approved quote-aware XQuery routing without broadening other guards.       |
+//                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
+//                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
+//                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
+//                      | Charles Korthout | 0.32  | 28-10-2026     | Admit qualified ignored-pragma fallback; retain all independent dependency guards.|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -66,13 +72,25 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.XQuery.Api;
+using Bosak.XQuery.Compiler;
 
 namespace Bosak.XPath.Conformance;
 
 internal sealed class TestExecutor
 {
+    /// <summary>Gets whether bounded diagnostics delegate eligible schemas to declared query imports.</summary>
+    internal bool UseQueryOwnedSchemasForDiagnostics { get; init; }
+
+    /// <summary>Gets whether the last diagnostic deferred environment schema compilation.</summary>
+    internal bool DeferredEnvironmentSchemas { get; private set; }
+
+    /// <summary>Gets the guarded initialization decision for the last executed diagnostic.</summary>
+    internal string SchemaInitializationDecision { get; private set; } = "NoEnvironment";
+
     public TestOutcome Execute(TestCase testCase, TestEnvironment? environment)
     {
+        DeferredEnvironmentSchemas = false;
+        SchemaInitializationDecision = "NoEnvironment";
         string expr = testCase.Expression.Trim();
         bool xquerySyntax = LooksLikeXQuery(expr);
         bool hasXqDeps = DependencyFilter.HasXQueryOnlySpecDependency(testCase.Dependencies);
@@ -129,7 +147,10 @@ internal sealed class TestExecutor
 
         if (environment is not null)
         {
-            ctx = environment.ApplyTo(ctx);
+            var schemaDecision = DecideSchemaInitialization(routeXQuery, testCase, environment, expr);
+            DeferredEnvironmentSchemas = schemaDecision.Defer;
+            SchemaInitializationDecision = schemaDecision.Reason;
+            ctx = environment.ApplyTo(ctx, schemaDecision.Defer);
 
             // Bind external variables: evaluate each <param select="..."> in the prepared
             // context (namespaces, sources, and $var sources are already applied).
@@ -218,34 +239,55 @@ internal sealed class TestExecutor
         return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory, ctx.StaticOutputParameters);
     }
 
-    /// <summary>
-    /// True when the expression uses only XQuery constructs the Bosak.XQuery pipeline
-    /// supports today: prolog-less queries, the basic prolog declarations (namespace,
-    /// default element/function namespace, default collation, version), and full FLWOR
-    /// (for/let/where/order by/count/group by/window). Queries using constructors,
-    /// switch/typeswitch, try, unordered/ordered, or unsupported prolog forms
-    /// stay skipped. String literals and comments are stripped before matching.
-    /// </summary>
-    internal static bool CanHandleAsXQuery(string expr)
+    private (bool Defer, string Reason) DecideSchemaInitialization(bool xquery, TestCase test,
+        TestEnvironment environment, string expression)
     {
-        var stripped = StripLiteralsAndComments(expr).TrimStart();
-
-        // """...""" string constructors are not supported (checked on the raw text:
-        // stripping removes string literals and (: :) comments).
-        if (expr.Contains("\"\"\""))
-            return false;
-
-        if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
-            return false;
-
-        // The prolog gate matches a comment-tolerant form in which comments collapse to a
-        // single space, so keyword phrases stay detectable ('declare(::)default(::)order'
-        // must stay gated even though the supported prolog forms handle comments inline).
-        if (UnsupportedPrologRegex.IsMatch(StripLiteralsNormalizeComments(expr)))
-            return false;
-
-        return true;
+        if (!UseQueryOwnedSchemasForDiagnostics) return (false, "CurrentMode");
+        if (!xquery) return (false, "XPathPath");
+        if (test.Dependencies.Any(d => d.Type == "xsd-version")
+            || environment.Schemas.Any(s => s.XsdVersion is not null))
+            return (false, "DeclaredXsdProfileNotReviewed");
+        if (environment.Sources.Any(s => !string.IsNullOrEmpty(s.Validation)))
+            return (false, "DeclaredSourceValidation");
+        if (environment.Parameters.Count != 0) return (false, "EnvironmentParameters");
+        if (!string.IsNullOrEmpty(environment.ContextItemSelect)) return (false, "InlineContext");
+        if (environment.CollectionQueries.Count != 0) return (false, "CollectionQueries");
+        if (test.Modules.Count != 0) return (false, "ModulesNotReviewed");
+        if (environment.Schemas.Count == 0) return (false, "NoEnvironmentSchemas");
+        if (environment.Schemas.Any(s => string.IsNullOrEmpty(s.Uri)))
+            return (false, "NoNamespaceAssociation");
+        if (environment.Schemas.Any(s => !File.Exists(s.FilePath)))
+            return (false, "MissingSchemaFile");
+        if (environment.Schemas.GroupBy(s => s.Uri).Any(g => g.Count() != 1))
+            return (false, "MultiplePhysicalComponents");
+        try
+        {
+            // Inspect the parsed main module before compilation can load module files.
+            var parsed = XQueryParser.Parse(expression);
+            if (parsed.IsLibraryModule || parsed.StaticContext.ImportedModules.Count != 0)
+                return (false, "ModulesNotReviewed");
+            var compiler = new XQueryCompiler();
+            foreach (var ns in environment.Namespaces) compiler.WithNamespace(ns.Prefix, ns.Uri);
+            var namespaces = compiler.Compile(expression).ConformanceSchemaImports
+                .Select(import => import.NamespaceUri ?? "").ToHashSet(StringComparer.Ordinal);
+            if (namespaces.Count == 0) return (false, "NoQueryImports");
+            if (environment.Schemas.Any(s => !namespaces.Contains(s.Uri!)))
+                return (false, "UnownedEnvironmentNamespace");
+            return (true, "QueryOwnedImportSubset");
+        }
+        catch (Exception error)
+        {
+            // A diagnostic decision must not replace the normal compilation/error path.
+            return (false, "CompileMetadataUnavailable:" + error.GetType().Name);
+        }
     }
+
+    /// <summary>
+    /// Indicates whether an expression may enter XQuery routing. The bounded grammar
+    /// refusal set is empty after qualified pragma adoption; dependency admission stays
+    /// separate and invalid syntax is reported by the parser.
+    /// </summary>
+    internal static bool CanHandleAsXQuery(string expr) => true;
 
     /// <summary>
     /// Heuristic: the expression uses XQuery-only grammar that our XPath parser cannot
@@ -320,20 +362,6 @@ internal sealed class TestExecutor
         @"|\bunordered\s*\{|\bvalidate\s" +
         @"|\b(sliding|tumbling)\s+window\b",
         RegexOptions.Compiled);
-
-    // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
-    // keep their "XQuery syntax not supported" skip instead of being routed.
-    private static readonly Regex UnsupportedXQueryConstructRegex = new(
-        @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
-        RegexOptions.Compiled);
-
-    // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, default order empty, ordering, boundary-space,
-    // decimal-format, base-uri, option, variable, function, module import, schema import,
-    // and version declarations are supported).
-    private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(copy-namespaces|context|construction)\b",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>
     /// Removes string literals (with doubled-quote escapes) like

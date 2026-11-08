@@ -1,0 +1,61 @@
+# XSD 1.1 Gap Matrix (S0)
+
+> **REQ-009 · Phase S0 deliverable** — produced 2026-10-27 from the [source audit](./XSD11_SOURCE_AUDIT.md).  
+> **Platform baseline:** the entire current seam is typed against `System.Xml.Schema.XmlSchemaSet`, which is XSD **1.0** only. There is no XSD 1.1 capability anywhere in the current stack; every row below is greenfield add-on work unless stated otherwise.
+
+**Legend — Existing support:** ✅ works through the seam today (XSD 1.0) · ❌ not supported (XSD 1.0-only platform, no representation possible) · ⚠️ partial/adjacent.
+
+---
+
+## 1. XSD 1.1 Structures (W3C XML Schema Part 1)
+
+| # | Feature | Existing support | Missing work | Phase | Test references |
+|---|---------|------------------|--------------|-------|-----------------|
+| 1.1 | `xs:assert` on complex types | ❌ (`XmlSchemaSet` cannot represent it) | Compiled assertion model; W3C-constrained XPath static context; evaluator over typed XDM nodes; error semantics (cvc-assertion) | **S2** | W3C `xs:assert` cases in the core harness's 28 documented skips (exact IDs to be pulled from the core repo during S2 planning); add-on acceptance: positive/negative, namespaces, decimals, invalid XPath, multi-assert |
+| 1.2 | `xs:alternative` (conditional type assignment) | ❌ | Recording done in **S4a**; applicability evaluation done in **S4b** (governing-type computation: `xsi:type` pre-emption, document-order CTA, default catch-all, `BSK-XSD-015`; assertion filtering by governing type; in-transform PSVI recording remains S4c behind the ADR-006 engine seam; complex-type derivation checks need the full component model, S5) | S4 | W3C `xs:alternative` cases among the 28 skips; CTA + PSVI tests |
+| 1.3 | `xs:openContent` / `defaultOpenContent` | ❌ | Compile/model + composition-rule validation done in **S5a** (`OpenContents`/`DefaultOpenContents`, `BSK-XSD-011`); structural interleave/suffix validation (Part 1 §3.4.4.3) remains | S5 | Conformance matrix |
+| 1.4 | `xs:override` (incl. deprecated `xs:redefine` semantics) | ⚠️ 1.0 `xs:redefine` exists in `XmlSchemaSet` | 1.1 override component replacement rules | S5 | Conformance matrix |
+| 1.5 | `xs:all` composability (nested `all`, `maxOccurs` > 1, mixed with sequence/choice) | ❌ 1.0 `all` restrictions apply | Relaxed all-model validation | S5 | Conformance matrix |
+| 1.6 | Default attributes (`xs:defaultAttributes`, `defaultAttributesApply`) | ❌ | Compile/model recording done in **S5b** (`DefaultAttributeReferences`/`DefaultAttributeOptOuts`, `BSK-XSD-012`); per-type attribute-use computation/injection (Part 1 §3.4.2.4) remains | S5 | Conformance matrix |
+| 1.7 | Wildcard `notNamespace` / `notQName` (`##defined`, `##definedSibling`) | ❌ (1.0 `namespace`/`processContents` only) | Negative wildcard matching | S5 | Conformance matrix |
+| 1.8 | Conditional inclusion (`xpath` attribute on include-family elements) | ❌ | Version-controlled inclusion evaluation | S5 | Conformance matrix |
+| 1.9 | Identity constraint selectors/fields in restricted XPath 2.0 | ⚠️ 1.0 subset exists | Wider 1.1 restricted-XPath subset | S5 | Conformance matrix |
+| 1.10 | Relaxed QName/NOTATION derivation and restriction subsumption rules | ❌ 1.0 rules enforced | 1.1 subsumption algorithm | S5 | Conformance matrix |
+| 1.11 | Element defaults (`fixed`/default on any element declaration use contexts) | ⚠️ partial via 1.0 | 1.1 completeness | S5 | Conformance matrix |
+| 1.12 | Explicit `vc:` versioning constructs | ❌ | Version-control attribute handling | S5 | Conformance matrix |
+
+## 2. XSD 1.1 Datatypes (W3C XML Schema Part 2)
+
+| # | Feature | Existing support | Missing work | Phase | Test references |
+|---|---------|------------------|--------------|-------|-----------------|
+| 2.1 | `xs:assertion` facet on simple types | ❌ | Facet model + evaluation against typed value (`$value` context) | **S3** | Facet conformance subset |
+| 2.2 | New datatypes: `xs:dateTimeStamp`, `xs:precisionDecimal` | ❌ | Type definitions + lexical/semantic mapping onto XDM (`Bosak.XPath.Core.Xdm` values) | S5 | Datatype conformance cases |
+| 2.3 | `explicitTimezone` facet | ❌ | Facet implementation | S5 | Datatype cases |
+| 2.4 | `pattern` on `xs:QName`/`xs:NOTATION`; relaxed facet applicability rules | ❌ 1.0 rules | 1.1 facet applicability | S5 | Datatype cases |
+| 2.5 | Union of lists; list/union facet inheritance cleanups | ⚠️ 1.0 lists/unions exist | 1.1 composability rules | S5 | Datatype cases |
+
+## 3. Engine / Integration Gaps (cross-cutting)
+
+| # | Gap | Existing support | Missing work | Phase |
+|---|-----|------------------|--------------|-------|
+| 3.1 | XSD 1.1 component model | ❌ — seam is `XmlSchemaSet`-typed (audit §4) | Immutable compiled 1.1 model with stable digest; **new core seam abstraction is a public Bosak API change → separate compatibility ADR + approval required before S1/S2 freeze** | **S1** |
+| 3.2 | Secure schema resolution | ⚠️ resolver delegate exists; no security policy | Default-deny network/DTD/external entities, import depth/count limits, allowlists | **S1** |
+| 3.3 | Assertion XPath evaluation | ⚠️ unrestricted XPath 3.1 compiler exists; `RegisterFunction` seam exists | W3C-constrained static context + function restrictions; assertion cache keyed by schema digest + static context | **S2** |
+| 3.4 | PSVI for 1.1-typed nodes | ⚠️ 1.0 `IXmlSchemaInfo` annotation side table exists | Annotation lifetime strategy (immutable annotated view vs snapshot side table) for 1.1 types | S2/S4 |
+| 3.5 | XmlDb schema adapter | ❌ none | Optional adapter: transaction-time validation against pinned schema digest, replay semantics, typed-index metadata | **S6** |
+| 3.6 | Caching / incremental validation | ❌ | Assertion/schema compile caches; conservative whole-document validation first, dependency-based incremental as later optimization | **S7** |
+
+## 4. W3C Conformance Skip Mapping (confirmed 2026-10-27)
+
+The core harness (REQ-112, `tests/Bosak.Xslt.Conformance/Program.cs`) skips XSD 1.1 tests via three triggers: (1) the principal stylesheet inlines `xs:assert`/`xs:alternative`, (2) an environment schema pins `xsd-version != "1.0"`, (3) an environment schema file's raw text matches `xs:assert`/`xs:alternative` (books.xsd is wrongly pinned `1.0`, so pins alone are not authoritative). **Harness-confirmed on current core main: 30 skips** (run per affected test set in `--schema-aware` mode, 2026-10-27; a faithful static port of the same rules found 31 — the extra one, `catalog-005b`, is skipped earlier by another harness mechanism; `validation-1301` declares its `xs:alternative` inline but has no principal stylesheet file, so it skips before the inline check). The REQ-112-era note of "28" was the FAIL→SKIP *delta* measured 2026-09-30; the current authoritative count is **30**.
+
+| Skip family | Confirmed IDs | Closing phase |
+|-------------|---------------|---------------|
+| `xs:assert` — streaming source-document (`books.xsd`) | `stream-101`…`stream-109`, `non-stream-101`…`non-stream-109` (18) | **S2** |
+| `xs:assert` — merge (`books.xsd`) | `merge-049`…`merge-054` (6) | **S2** |
+| `xs:assert` — misc | `accumulator-073`, `si-apply-templates-007`, `si-apply-templates-012` (3) | **S2** |
+| `xsd-version="1.1"` pins | `catalog-005`, `catalog-009`, `strip-space-009` (3) | **S2** (assert-bearing environments) |
+
+Notes: all 30 run through environments that carry assertion-bearing schemas (`books.xsd` uses `xs:assert`); the `xs:alternative` family (`validation-1301` et al.) is currently unreachable in the harness for structural reasons and must be exercised via add-on acceptance tests until S4. Simple-type `xs:assertion` cases (S3) are not represented in the XSLT 3.0 catalog's skip set; they will be covered by add-on facet tests plus the W3C XSD 1.1 test suite during S3.
+
+**Gate reminder:** none of the above phases may start until (a) this audit + matrix are accepted, (b) the core repoint decision is made — **done 2026-10-27: 0.12.1-beta → 1.26.3, verified build 0/0 + 214/214 green** (see `XSD11_SOURCE_AUDIT.md` §2/§3.5), and (c) the S1 ADR ([ADR-005](./ADR-005-xsd11-compiled-model-and-validation.md)) is approved — **done 2026-10-27 (owner-accepted); S1 implementation started**.

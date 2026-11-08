@@ -1,0 +1,16 @@
+{
+  "sourceVersion": "1.81.0",
+  "nextCoreTask": "PV-01",
+  "nextSlice": "PV-Q01",
+  "noRequirementWaivers": true,
+  "work": [
+    {
+      "id": "PV-L01",
+      "status": "CoreDispositionCompleteWithScope"
+    },
+    {
+      "id": "PV-Q01",
+      "status": "Next_ExactCandidateActualProviderBudgetQualificationAndGapAudit"
+    }
+  ]
+}

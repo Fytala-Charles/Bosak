@@ -1,0 +1,152 @@
+# XSD 1.1 S4 Design Prep (REQ-009)
+
+> **Status:** `Draft` — add-side preparation for the S4 design freeze; **blocked on owner acceptance of [ADR-006](./ADR-006-xsd11-engine-seam-compatibility.md)** (filed in the core repo as REQ-139) before S4c may start.  
+> **Date:** 2026-10-27 · **Phase owner:** Kimi (drafting)  
+> **Prerequisites read first:** [ADR-005](./ADR-005-xsd11-compiled-model-and-validation.md) (Accepted), [ADR-006](./ADR-006-xsd11-engine-seam-compatibility.md) (Proposed), [`XSD11_SOURCE_AUDIT.md`](./XSD11_SOURCE_AUDIT.md) §3–4, [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) §1/§4, design handover §PSVI/scope-gate.
+
+---
+
+## 1. What S4 Is
+
+S4 delivers **`xs:alternative` conditional type assignment** and, through it, **in-transform typing of 1.1-validated nodes**: `instance of element(*, T)` and pattern matching must see 1.1 types *during* engine assessment, not only in add-side document validation. Per ADR-006 this requires one additive, opt-in core seam (the *schema typing advisor*); per ADR-005 decision 4 no shared engine node is ever mutated by the add-on.
+
+This document pre-solves everything that does **not** depend on the core seam, so that owner acceptance of ADR-006 starts a design freeze with the add-side work already specified. It contains zero core API commitments beyond ADR-006 itself; the advisor contract in §4 is a *proposal for the core-repo design* (REQ-139), deliberately abstraction-friendly per the ADR-006 alternatives table.
+
+## 2. Sub-step Split and Gates
+
+| Sub-step | Content | Gate |
+|----------|---------|------|
+| **S4a** — alternative model + compile | Revise `TypeAlternativeDefinition` recording (owner context, static context, resolved type); alternative-test compilation + plan cache; compile-time alternative-set checks with new diagnostics | **Done 2026-10-27** — owner/static context + resolved type recorded, `BSK-XSD-013/014` emitted, `ValidateAlternativeTests` compiles CTA tests through the shared plan cache (13 `AlternativeCompileTests`, 294/294 green) |
+| **S4b** — applicability engine + typed view | Declaration-driven governing-type computation; W3C CTA evaluation order; `xsi:type` interaction; typed candidate view extended to user-defined complex types | **Done 2026-10-27** (add-side scope) — governing-type computation with `xsi:type` pre-emption + document-order CTA + `BSK-XSD-015`; assertion filtering by `OwningTypeName`/`OwningElementName`; typed view v2 resolves user-defined *simple* types through restriction chains. Synthetic complex-type facade deferred to S4c pending the §9.2 identity-channel decision; complex-type derivation checks deferred to S5 (11 `AlternativeApplicabilityTests`, 305/305 green) |
+| **S4c** — advisor + conformance closure | Implement the ADR-006 advisor contract over S4a/S4b; register through the core seam; close the 30 W3C skips via the test-only conformance dependency | **Blocked** — owner acceptance of ADR-006 + core release with the seam (REQ-139) |
+
+Sequencing rationale: S4a/S4b are exactly the "recorded, not evaluated" debt already flagged in the S1/S5a/S5b decision-log rows; they de-risk the S4c freeze because the only unknown left at freeze time is the seam contract itself. S4a/S4b change no existing behavior (alternatives are currently dead data) and remain behind the license gate.
+
+## 3. S4a — Alternative Model and Compilation (add-side)
+
+### 3.1 Model revision (current gap)
+
+`TypeAlternativeDefinition` (`src/Bosak.Schema/Model/AssertionDefinition.cs:60`) today records only:
+
+```csharp
+public sealed record TypeAlternativeDefinition(string? TestExpression, string? TypeName, string? NodePath);
+```
+
+Missing for CTA evaluation, per W3C XML Schema 1.1 Part 1 §3.4.2.4 / §3.4.6:
+
+- **Owning element declaration** — applicability is per element declaration; the current record carries no owner (recorded at `SchemaCompiler.cs:205-216` with no context).
+- **Captured static context** — the `test` attribute is an XPath expression evaluated in a W3C-constrained environment; `AssertionDefinition` already captures `NamespaceBindings` + `XPathDefaultNamespace` and `TypeAlternativeDefinition` must do the same (same capture site, same in-scope-namespace rules).
+- **Resolved type name** — `TypeName` is a raw lexical QName; record the resolved `{namespace}local` pair (same resolution rule as S3 simple types: unprefixed type names = target namespace).
+
+Proposed revised record (proposal for the S4a design freeze):
+
+```csharp
+public sealed record TypeAlternativeDefinition(
+    string? TestExpression,                       // null = default alternative
+    string? TypeName,                             // raw lexical, for diagnostics
+    XName? ResolvedTypeName,                      // new: resolved {ns}local or null
+    string OwnerElementName,                      // new: owning element declaration (raw lexical)
+    XName? OwnerElementResolvedName,              // new: resolved owner declaration
+    IReadOnlyDictionary<string, string>? NamespaceBindings,
+    string? XPathDefaultNamespace,
+    string? NodePath);
+```
+
+### 3.2 Compile-time checks (new diagnostics)
+
+Next free codes after `BSK-XSD-012` (`src/Bosak.Schema/Model/SchemaDiagnostic.cs:43`):
+
+| Code | Proposed constant | Trigger |
+|------|-------------------|---------|
+| `BSK-XSD-013` | `AlternativeTypeUnresolved` | alternative `type` QName does not resolve in the compiled schema set (never silent, per house posture) |
+| `BSK-XSD-014` | `InvalidAlternativeSet` | alternatives on one declaration violate the CTA rules: more than one default alternative, or a non-final default alternative (Part 1 §3.4.2.4) |
+
+Recorded-at-compile (not thrown), consistent with the existing diagnostic model.
+
+### 3.3 Test compilation and plan cache
+
+Alternative tests are compiled nowhere today; assertions are (`XsdValidationService.CompileAssertion`, lexical pre-screen + `XPath31Expression.Compile` under `Compatibility = XPath20`, per-plan cache keyed by (expression, default namespace, bindings)). S4a reuses that exact pattern for CTA tests — the pre-screen and constrained-compile rules are identical because the W3C XPath environment for CTA tests is the same constrained environment as for `xs:assert`. Cache key continues to use expression text + static context (not schema digest), which remains safe under the same argument as the assertion cache.
+
+## 4. S4b — Applicability Engine and Typed View (add-side)
+
+### 4.1 Governing-type computation
+
+`IXsdValidationService.Validate` today applies **all** recorded assertions to any candidate; declaration/type matching is explicitly deferred (file-header note in `XsdValidationService.cs`). S4b introduces the governing-type computation that S4c will expose through the advisor:
+
+1. Resolve the element declaration for the candidate (by expanded name against `ElementDeclarations`, honoring `elementFormDefault` per the S2 rules).
+2. If the declaration carries alternatives (S4a owner context), evaluate them **in document order** with the element as context item and `$value` semantics identical to `xs:assert` (S2 machinery reused): the first alternative whose `test` is true selects its type; a `test`-less default alternative must be final and matches when no earlier test is true. Evaluation failure → `BSK-XSD-008`; a set with no matching alternative is a validity violation (CTA default applies: the declaration's base type only if specified — otherwise cvc-complex-type style failure, diagnostic TBD at freeze).
+3. `xsi:type` interaction per Part 1 §3.4.6: an explicit `xsi:type` is assessed **before** alternatives; if it names a type the alternative-selected type is not validly derived from, that is a validity error, not a different type assignment.
+4. Assertion applicability then filters by governing type: only assertions owned by the governing type (or its base chain) run — replacing today's apply-all placeholder.
+
+### 4.2 Typed candidate view v2
+
+S2's typed view (`BuildContextItem`) annotates only elements whose declared type resolves to a **built-in simple type**, via deep clone + engine `XdmSchemaAnnotator.Annotate` + a minimal `IXmlSchemaInfo`. S4b extends the map to user-defined complex types: the clone's matching elements get annotated with an add-side `IXmlSchemaInfo` whose `SchemaType` reports the 1.1 governing type identity. This stays inside ADR-005 decision 4 (immutable add-on-owned view; caller's tree never mutated) and is the dress rehearsal for the S4c in-transform annotation strategy: whatever identity representation S4b needs on the clone is what the advisor must be able to hand the engine.
+
+**Resolution (S4b, 2026-10-27):** the typed view now resolves user-defined *simple* types through their recorded S3 restriction chains to the ultimate built-in base (bounded, cycle-guarded) — numeric comparisons in assertions are typed, not lexical, and this is directly testable. The synthetic complex-type facade was **deferred to S4c**: it is hostage to the §9.2 decision (synthetic 1.0 facade vs. opaque identity channel in the seam), and building it before that decision risks throwaway work. Complex-type derivation checks (`xsi:type` vs. alternative-selected type) are deferred to S5 with the full component model.
+
+## 5. Advisor Contract Proposal (input to core REQ-139 design)
+
+Abstraction-friendly by construction — no `System.Xml.Schema` types cross the contract, so a future version-neutral component model (the option rejected for S4/S5 in ADR-006) can promote the same contract without a second breaking change:
+
+```csharp
+// Proposal for the core repo (exact naming/signature owned by the core design).
+public interface ISchemaTypingAdvisor
+{
+    // Is this advisor responsible for elements in this namespace (1.1-marked schemas)?
+    bool HandlesNamespace(string namespaceUri);
+
+    // Type lookup by expanded name → opaque, engine-opaque type identity.
+    bool TryGetType(string namespaceUri, string localName, out Xsd11TypeIdentity type);
+
+    // CTA applicability: given an element's name and attribute map (engine supplies),
+    // return the selected type identity + applicability outcome.
+    Xsd11TypeAssessment AssessElementType(Xsd11ElementShape element);
+
+    // Assertion consultation for validation-relevant operations.
+    Xsd11AssertionVerdict ConsultAssertions(Xsd11ElementShape element, Xsd11TypeIdentity governingType);
+}
+```
+
+- `Xsd11TypeIdentity` = opaque handle (interned per compiled-schema digest); the engine never inspects it, only compares identities and carries them. Type display names come via a companion `Describe(Xsd11TypeIdentity)` for diagnostics.
+- Verdicts are explicit: `Typed`, `Untyped` (advisor not responsible → engine's current 1.0 path, bit-identical), `Refused`/`Unsupported` (advisor responsible but cannot answer → engine reports in the established `Refused`/`UnsupportedCoverage` diagnostic posture; never silent acceptance — ADR-006 decision 3).
+- Registration is a single host-settable slot on the compiler/runtime context (e.g. `EvaluationContext.SchemaTypingAdvisor`), null by default; unlicensed Bosak.Schema never registers, preserving the REQ-001 inert-before-activation boundary.
+
+**Core touch points to consult the advisor** (from the audit §3.2–3.4 inventory — for the REQ-139 implementation plan): `XsltCompiler`/`EvaluationContext` schema-type lookups (`GetSchemaElement`/`GetSchemaType` equivalents), element assessment during validation-on-construction (`xsl:copy-of validation='strict'`, literal result elements with `@type`), and the XQuery `SchemaImport` path. Every consultation is gated on a non-null advisor; the default null path is a single branch, so the no-advisor cost is one null check.
+
+## 6. Dual-Authority Interaction Rules (must be pinned at the S4c freeze)
+
+For documents mixing 1.0 `XmlSchemaSet` schemas and 1.1 advisor schemas (ADR-006 negative consequence):
+
+1. **Advisor-wins-on-1.1-marked:** an element whose governing declaration the advisor owns (`HandlesNamespace` + declaration match) is typed exclusively by the advisor; the `XmlSchemaSet` path is not consulted for that element.
+2. **XmlSchemaSet-only otherwise:** elements outside advisor responsibility use today's 1.0 path unchanged.
+3. **No double validation:** an element typed by the advisor is not re-assessed against 1.0 components; the engine picks exactly one authority per element and records which in the diagnostic stream.
+4. These rules get dedicated conformance tests (mixed document: 1.1-typed branch + 1.0-typed branch in one tree).
+
+## 7. Conformance Closure Mapping
+
+| Skip family (gap matrix §4) | Count | Closes when |
+|-----------------------------|-------|-------------|
+| `xs:assert` source-document (stream/non-stream 101–109) | 18 | S4c — advisor assertion consultation, harness runs with advisor registered |
+| `xs:assert` merge (049–054) | 6 | S4c — same |
+| `xs:assert` misc (accumulator-073, si-apply-templates-007/012) | 3 | S4c — same |
+| `xsd-version="1.1"` pins (catalog-005/009, strip-space-009) | 3 | S4c — same (assert-bearing environments) |
+| `xs:alternative` family (validation-1301 et al.) | (unreachable in harness) | Add-on acceptance tests (S4a/S4b/S4c) — the harness cannot exercise CTA for structural reasons; closure is claimed with exact IDs from the W3C XSD 1.1 test suite run add-side, not via harness skip removal |
+
+Skip removal from the harness is gated on advisor-registered runs staying green (ADR-006 decision 4); removal lands as its own core commit after S4c acceptance.
+
+## 8. Test Plan
+
+- **S4a:** revised record capture (owner, bindings, resolved name) positive/negative; `BSK-XSD-013` (unresolvable `type`); `BSK-XSD-014` (two defaults, non-final default); alternative-test compile cache hits; Xsd10 compile still rejects `xs:alternative` with `BSK-XSD-002`.
+- **S4b:** governing-type selection order (first true test wins; default catches the rest); `$value` binding parity with `xs:assert`; `xsi:type` pre-emption and invalid-derivation failure; assertion filtering by governing type (replacing apply-all); typed-view annotation of user-defined complex types on the clone only (source tree untouched — assert byte/reference independence).
+- **S4c:** advisor registered vs. absent (bit-identical default); `Refused`/`Unsupported` verdict surfaces as engine diagnostic, never silent; the four dual-authority rules (§6); harness green with advisor; exact W3C IDs cited in the closure claim.
+
+## 9. Open Questions for the Owner / Core Design
+
+1. ADR-006 acceptance (the only hard gate) — is the additive callback seam approved as filed in REQ-139?
+2. `IXmlSchemaInfo` channel for 1.1 type identities (§4.2): synthetic 1.0 facade acceptable for S4c, or does the seam grow an opaque identity channel immediately?
+3. Advisor lifetime/threading contract: is a single advisor instance shared across compile + runtime contexts, or registered per-context?
+4. Diagnostic plumbing: does the core surface advisor verdicts through the existing `XsltValidation` `Refused`/`UnsupportedCoverage` model, or a new channel?
+
+---
+
+*Prepared 2026-10-27 by Kimi as REQ-009 S4 design prep. Next action: owner review; upon ADR-006 acceptance, S4a implementation starts (unblocked add-side slice).*

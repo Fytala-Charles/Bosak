@@ -1,0 +1,70 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "recordedBeforeProductionEdits": true,
+  "bosakBaseRevision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+  "sources": [
+    {
+      "role": "normative language specification",
+      "repository": "dotnet/csharpstandard",
+      "revision": "58e33cd745b9bcd92011e8afeff11c8c821ae480",
+      "path": "standard/statements.md",
+      "sections": [
+        "13.10.6 The throw statement",
+        "13.11 The try statement"
+      ],
+      "sha256": "90402d423cb76b83bffd011548dd43c0d323a8424641626404488cd5a466a786",
+      "immutableUrl": "https://github.com/dotnet/csharpstandard/blob/58e33cd745b9bcd92011e8afeff11c8c821ae480/standard/statements.md"
+    },
+    {
+      "role": "supporting .NET implementation source, not a new language/XPath adoption",
+      "repository": "dotnet/runtime",
+      "revision": "60629d14374c56f1cb51819049ad1fa529307f8d",
+      "tag": "v10.0.0",
+      "path": "src/libraries/System.Private.Xml/src/System/Xml/Core/XmlReader.cs",
+      "sections": [
+        "Dispose()",
+        "Dispose(bool)",
+        "Close() contract"
+      ],
+      "sha256": "7cb6339ea7710ffe3ba785967d91e74f42fcd94a7f030f65ea219b6d1672cf72",
+      "immutableUrl": "https://github.com/dotnet/runtime/blob/60629d14374c56f1cb51819049ad1fa529307f8d/src/libraries/System.Private.Xml/src/System/Xml/Core/XmlReader.cs"
+    },
+    {
+      "role": "supporting .NET implementation source",
+      "repository": "dotnet/runtime",
+      "revision": "60629d14374c56f1cb51819049ad1fa529307f8d",
+      "path": "src/libraries/System.Private.Xml/src/System/Xml/Core/XmlReaderSettings.cs",
+      "sections": [
+        "CloseInput"
+      ],
+      "sha256": "141307c44c62c9230df37f8cb0691ce3dcbf8eb9d78461386ce7be4f12b60771",
+      "immutableUrl": "https://github.com/dotnet/runtime/blob/60629d14374c56f1cb51819049ad1fa529307f8d/src/libraries/System.Private.Xml/src/System/Xml/Core/XmlReaderSettings.cs"
+    }
+  ],
+  "ownerContractPins": [
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSource.cs",
+      "revision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+      "sha256": "8da2b5e75cc58415a443e163c80b4bf782a8e4a869a0b519e953bca1d3519b57"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/XmlStreamingProvider.cs",
+      "revision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+      "sha256": "1e52582d2b16228e368379c2ccc73dd1839a8d12e304b2a41489e99dba542996"
+    },
+    {
+      "path": "src/Bosak.XPath.Providers/Streaming/IStreamingDocument.cs",
+      "revision": "4fc353f8fbbc770cdef2618d2d56b59cfa601420",
+      "sha256": "2435a3896e28ad25137f8004a249f39ac6b227b2be28215d28efaf214d56bb19"
+    }
+  ],
+  "adoptedScope": "Always attempt owned reader disposal when completing the root pump, including a throwing completion callback; preserve supplied reader ownership and CloseInput behavior.",
+  "intentionalPolicy": "Callback-only and disposal-only faults preserve their original exception. Dual failure produces AggregateException with original callback first and disposal second, retaining both rather than allowing finally to discard the callback.",
+  "notAdopted": [
+    "No early-abandonment, record callback failure or initial-load cleanup redesign",
+    "No new disposal/cancellation interface, scope, layout or W3C error identity",
+    "No full consumer lifetime qualification or API freeze",
+    "No normative XPath/XSD semantic change"
+  ]
+}

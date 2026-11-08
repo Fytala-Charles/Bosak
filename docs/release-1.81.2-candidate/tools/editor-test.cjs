@@ -1,0 +1,1 @@
+exports.run=async()=>{await require('./commands.cjs').run();await require('./diagnostics.cjs').run();};

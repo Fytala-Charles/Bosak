@@ -1,0 +1,29 @@
+{
+  "priorDossier": "docs/foundation-compatible-container",
+  "priorFiles": {
+    "MANIFEST.json": "0d59471c635ab1d1c5726d77a60461a105afa969dac8a26baba106e9f1a854af",
+    "evidence/SOURCE-AND-BINARY-PINS.json": "9618b3ffa97fe898a80a3fad29589e014bb248f408a507273bf34fc9a4353861",
+    "evidence/UNIT-RESULTS.json": "6a1e38da4b6c1e7a1bb8116d718ed09f0f18ab8cb7d8e3a74f3681ed3a458640",
+    "evidence/public-api.json": "af857b80e9fb2b8311b813e95f1f59c945f80b9f170c7738342dfde34c033ce3",
+    "evidence/API-COMPARISON.json": "ee6ceff49bf83e81b6a1f2631a8aa4ad0dae2b4bb3c1ebed332cdb48bf52dd0d",
+    "evidence/EXECUTION-RECEIPTS.zip": "6e25d88914126cc08a07307c343dff86720feb4f9347f54650356fb8efdb616b",
+    "evidence/PACKAGE-PREFLIGHT.json": "0bb2879df1bbaca07fb5b3e1c9d5215fed6e1d640e035baef22ca71b1aec04e0"
+  },
+  "sourceVersion": "1.80.0",
+  "sourceBinaryConfigurationUnchanged": true,
+  "priorFullTestsReexecuted": false,
+  "retainedUnitTestsPassed": 26236,
+  "retainedQt3": [
+    31397,
+    0,
+    424
+  ],
+  "retainedQt4Gated": [
+    8941,
+    0,
+    1918
+  ],
+  "retainedApiTypes": 318,
+  "retainedApiRows": 6465,
+  "selectedPackages": 9
+}

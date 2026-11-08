@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-08",
+  "kind": "Existing editor protocol bug repair; no XPath semantic adoption",
+  "repository": "https://github.com/microsoft/language-server-protocol",
+  "revision": "440d8b03d784cf0bd3769b1abb33aacc24b586a6",
+  "sources": {
+    "_specifications/lsp/3.17/textDocument/didOpen.md": {
+      "url": "https://github.com/microsoft/language-server-protocol/blob/440d8b03d784cf0bd3769b1abb33aacc24b586a6/_specifications/lsp/3.17/textDocument/didOpen.md",
+      "sha256": "1f5f8b46933cb483a2f69d387deabb923fb53dd7cffc2f887793ed93132e4de4"
+    },
+    "_specifications/lsp/3.17/workspace/executeCommand.md": {
+      "url": "https://github.com/microsoft/language-server-protocol/blob/440d8b03d784cf0bd3769b1abb33aacc24b586a6/_specifications/lsp/3.17/workspace/executeCommand.md",
+      "sha256": "5475e7a36708a7e625fd5949554289ee3361dcac263f7567d3905a0234f85d09"
+    }
+  },
+  "affectedSections": [
+    "URI and DocumentUri",
+    "workspace/executeCommand arguments",
+    "textDocument/didOpen document identity"
+  ],
+  "intent": "Interpret URI-valued command arguments with the existing DocumentUri parser before the open-document lookup, matching synchronization.",
+  "intentionalDeviations": "Existing custom commands still take document URI as first argument; no general protocol or language coverage expansion. Existing missing/foreign-document errors remain."
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O1-Schema",
+  "packet": "O1",
+  "owner": "Schema",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "NotSubmitted",
+  "decision": null,
+  "sourceRevision": null,
+  "signer": null,
+  "date": null,
+  "profile": null,
+  "answers": [
+    {
+      "id": "O1-Q1",
+      "answer": null
+    },
+    {
+      "id": "O1-Q2",
+      "answer": null
+    },
+    {
+      "id": "O1-Q3",
+      "answer": null
+    },
+    {
+      "id": "O1-Q4",
+      "answer": null
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": null,
+  "evidence": null,
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

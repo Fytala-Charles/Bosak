@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-07",
+  "pages": [
+    {
+      "source": "README.md",
+      "sourceSha256": "68466be09c5966a2703834764d2db4bea7bd7befb4334251a20b65525f9c2d65"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sourceSha256": "3d1ea67a2d5163b2a8cb13eef576da3bef9d61317ea3fd98f06cc2cd8b67513b"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sourceSha256": "e95dbe6056b8c32e032ac2fb1aa8740bd056d449a1286a91d86764489697a418"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "a1ebbd32c1f77d76d70d8226b1a3cdc86d44828d7c8f528d87b62090e8cd420b"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sourceSha256": "4d68a14271876f1b917fbb79048accb72ace57f92132750ea3ccfce5f82106e1"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "fae89ae55f438eb1348945d2e90299695bd61402c91753ca91475dd2860e1f2d"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "56955b83699b01ba6facb184ee72d9854238a73b722c8abcaf8574722cd0c7d6"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "d6eb8a912536d9b6e82c5fcc87721b545af7b829adb2722cf850eecffbc0b228"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "17523150531532774a5d36109af4dc45ec1132e6a592930e6fd1b7f9889a2945"
+    },
+    {
+      "source": "docs/foundation-r2-consolidation/README.md",
+      "sourceSha256": "4388e8002d6552ce74f934b5c156daead53bf0d0c630943e4913dea78f9d3858"
+    },
+    {
+      "source": "docs/release-planning/README.md",
+      "sourceSha256": "d8f142fd2f531bbeb0ef86dbe2628238929daa21df8e5a0cef4f3e2c7560a384"
+    },
+    {
+      "source": "docs/foundation-native-consumer-handoff/README.md",
+      "sourceSha256": "2142620af535efa75c2da9efdc0b848230f974c04973bb28238300da5c030491"
+    }
+  ],
+  "localLinks": 3780,
+  "htmlRendered": false,
+  "scope": "Markdown source hashes/local file links only;no new HTML/screenshot/PDF verification",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91"
+}

@@ -1,0 +1,19 @@
+{
+  "id": "CV-ENTRY-01",
+  "date": "2026-11-05",
+  "coreDisposition": "ImplementedBoundedCoreSelection",
+  "publicShape": "OpenCompatibleSnapshot(SchemaQuerySnapshot,CancellationToken) -> sealed immutable SchemaQueryCompatibilityResult with Decision/Snapshot/DiagnosticCode; internal constructor.",
+  "reason": "Preserve Compatible/Incompatible/Unsupported, exact engine-issued source lineage and no raw-view authority factory.",
+  "requiredProviderMembersAdded": false,
+  "ownerAcceptance": false,
+  "c45Acceptance": false,
+  "apiFrozen": false,
+  "publicDeclarationsAdded": true,
+  "implementationOrder": [
+    "Authenticated private proof/admission transaction and fresh raw reproof",
+    "CV-CACHE-01 stable resident payload identity with operation-specific proof authorization",
+    "Public entry/result and bounded identity activation with CV01-CV32 qualification"
+  ],
+  "newInternalRequirement": "CV-CACHE-01 qualified privately; CV-ENTRY-01 public handoff and bounded CV01-CV32 now implemented/qualified. External owner/C45/freeze disposition pending.",
+  "historicalR2ClosureUnchanged": true
+}

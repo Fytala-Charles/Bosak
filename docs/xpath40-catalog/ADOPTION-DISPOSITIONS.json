@@ -1,0 +1,319 @@
+{
+  "date": "2026-10-26",
+  "ownerApproval": "evidence/c08-adoption-research/owner-approval.json",
+  "originalLedger": "provenance.json",
+  "originalLedgerUnchanged": true,
+  "recoveredAdoptionPins": 0,
+  "legacyExceptions": 26,
+  "nonAdoptions": 2,
+  "entries": [
+    {
+      "entry": "operators-and-syntax/array-member-iteration.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/destructuring-let.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/focus-functions.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/keyword-arguments.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/map-entry-iteration.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/mapping-arrow.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Non-adoption; implementation-adoption pin not applicable",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/otherwise-operator.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/pipeline-operator.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "operators-and-syntax/string-templates.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "functions/atomic-equal.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "functions/csv-parsing.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "functions/element-to-map.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "functions/map-to-element.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "functions/sort-with.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "type-system/choice-types.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "type-system/enum-types.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "type-system/structural-records.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "type-system/typed-let-coercion.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "data-model/jnode-navigation.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/instruction-separators.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-array.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-if.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-map.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-note.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "xslt-instructions/xsl-switch.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "experimental/fn-scan.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Legacy provenance exception; retain null and require pinned semantic review",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    },
+    {
+      "entry": "rejected/mapping-arrow-gtgt.md",
+      "adoptedSpecRevision": null,
+      "disposition": "Non-adoption; implementation-adoption pin not applicable",
+      "conditions": [
+        "Keep all original adoptedSpecRevision fields null.",
+        "Do not substitute later review, fixture, publication or feature-origin pins.",
+        "Preserve semantic/applicable-evidence review and all engine defects.",
+        "Require immutable source pins for future implementations and semantic changes."
+      ]
+    }
+  ]
+}

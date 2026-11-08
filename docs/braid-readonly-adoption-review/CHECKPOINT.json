@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "7e498a1922dbda4ae14005acc4b13a049896c75a",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/braid-readonly-adoption-review/README.md",
+  "reviewedDossier": "braid-readonly-adoption",
+  "productionChanged": false,
+  "actualProductImplementation": false
+}

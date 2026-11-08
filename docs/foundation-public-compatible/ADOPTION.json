@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.69.0",
+  "candidateVersion": "1.70.0",
+  "beforeHashes": {
+    "docs/foundation-compatible-cache/MANIFEST.json": "d7021b658b4ca4c132ef6678a5223f51f99567b1f6241e6326a819b9b424fff6",
+    "docs/foundation-compatible-cache/DISPOSITION.json": "c13c38953df35de7675b426e081a86e01e1581145760a3295d6227c59165e0b9",
+    "docs/foundation-compatible-view-policy/POLICY.md": "a9e45402ff3f132bb7fd3ccf558c6522c613ccdcd8d98f0cffb07bbd3dde6d24",
+    "docs/foundation-compatible-view-policy/SIGNATURE-PROPOSAL.md": "d45ea498a73b7c7e2033abf0c0abadb1cad67845118ea85c2d1c081ceffeb678",
+    "docs/foundation-compatible-view-policy/ACCEPTANCE-CASES.json": "b48da88812ae3cc1dbf1d19acae39f291e53eb0fa48974b8c0f95393fb22ab44",
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "7ae63877b51baf47a5c6fe3173f8c993101ce88d6a6a9b81fb9a5da4247c743d",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "8ad7068aae7fc9e2ea66bc959049cbcf79400e5b4e49465e2dd6f6fa336fea66",
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "d7bdb72e0cab3d16d0cf924de38f9d501247dcb63493424c4e54e501021a79b9",
+    "tests/Bosak.XPath.Runtime.Tests/CompatibleAdmissionTests.cs": "647ba5c7217a5d142e3b93184760ce6f228387a3fe6c3fe21a2098d3a9323546",
+    "src/Directory.Build.props": "ead5a88c93dad47584161641613cad29cd65b62bc1b9157e2476a56ea57a37b0"
+  },
+  "priorSourcePins": "docs/foundation-compatible-cache/evidence/SOURCE-AND-BINARY-PINS.json",
+  "semanticScope": "CV01-CV32 bounded compatible singleton identity, exact source representation/provenance. Immutable XDM 3.1 REC 21 March 2017 https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/ sections 2.7.1 and 2.7.4 as already adopted; engine handoff/proof/lifetime is host policy rather than new language semantics.",
+  "publicDeltaDisposition": "Core-selected bounded CV-ENTRY-01 implementation; add only proposed handoff and sealed immutable three-decision result. Historical R2, external owner/C45 acceptance and API freeze unchanged.",
+  "exclusions": "No raw-view bypass, reassessment/target relabel, transitive/list/general compatible predicates/numeric/node/all-host/native activation, owner budgets or package/publication acceptance."
+}

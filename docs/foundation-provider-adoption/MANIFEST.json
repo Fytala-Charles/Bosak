@@ -1,0 +1,15 @@
+{
+  "evidence/receipt-controls.log": "adfd5c69c755db23465605a124528e961cea2b2bccfa7469da73ab052c8f62fe",
+  "evidence/receipt-controls.log.json": "f68c77871d328a48e7c05731cbabde09c63289b3e9390cd6fbeebd9bdd360ba9",
+  "evidence/TEMPLATE-REFUSALS.json": "95466b1d4385ff5ded70ba7f74bbb31e832afb337d9cad744575aa6194ae2811",
+  "INPUTS.json": "cbe6df6c1d6c824b27111ca649dd1e06e79689a11f2bc45de36f386beb300cfd",
+  "README.md": "e22beb8fbc653f71e3e1c574b9776c0085dd24d60dfeec86f2b6ad5a120b5f23",
+  "returns/Braid.template.json": "a13ebd575012b1b0c501b2382d72f12ef11cc6b45714aa17ae7311156a3794f0",
+  "returns/Core.template.json": "20435ff067eec490d2f1697a99cfa1bb1f2d59aa352cdb7e27296d05d8e420a2",
+  "returns/Schema.template.json": "7fde03b609708e070e0f833c80eae9cbe400ebaef548b8c19111458475f67b41",
+  "returns/XmlDb.template.json": "a9bfb7b1d35432d12924b232af94a8751e37970b250cdf48ceb85a24d2157e7e",
+  "SCHEMA-ADOPTION.md": "8a0b0e29e7ba09f16fe64a8f25d4ba99049511f989c36545be46894194f14115",
+  "tools/preflight.py": "93bd0b9eea0b7625891f8b26dd59fe67b46b8502f369c1b92b0b5f55c328b491",
+  "tools/prepare.py": "87ac97f8e0bc243d749ab5a9a0fe8f0c8d86ef5454746babf0b737e41eea0af5",
+  "tools/verify.py": "0db25df6154b4e68afbc0c1e678c2ff704bb7709ec04a9cfb070ef028557c078"
+}

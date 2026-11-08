@@ -1,0 +1,18 @@
+{
+  "baseRevision": "444e4ff070d2bfa400c361b6739ad11756986a1a",
+  "hashPolicy": "SHA-256 of source bytes normalized from CRLF to LF; qualifications built before delivery commit. Informational revisions may name the base, not the subsequently committed source.",
+  "files": {
+    "src/Directory.Build.props": "df241d603c2b37e9d0bec79c87d2138efac06437f22c53eec581f3d008fe381a",
+    "src/Bosak.XPath.Core/Bosak.XPath.Core.csproj": "9e8b08cceab657f668622d88ece84093e7f720c7910caa3d92d15f84a70479aa",
+    "src/Bosak.XPath.Core/Xdm/SchemaEvidenceKernel.cs": "34832ea2d3d82f365c257792eda885d5010fa5caec42cd97545944dc37344623",
+    "src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs": "274cc044f6181bcef3adc8ecbcdc4e6d05ab05d85476bc898a4ef8f01368bca4",
+    "src/Bosak.XPath.Api/Bosak.XPath.Api.csproj": "949c48d2652b617ed928409d8ef2fe24a9008146b527eb136e5784f10930d137",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "41a2ef03d78e9a2a217396ee2219f895e2aae3ec701970598a3f8f01fc5e18e0",
+    "src/Bosak.XPath.Api/SchemaSessionCompilation.cs": "19d4953f2abf03f9e504e0f1853c3ef1134b00f76e191c5c16f49694f97feb2b",
+    "tests/Bosak.XPath.Core.Tests/SchemaEvidenceKernelTests.cs": "8bf5af22e030e255f193a83eb1ce64292decb77c225a72ef214d52bf0a4e6105",
+    "tests/Bosak.XPath.Runtime.Tests/SchemaQuerySessionTests.cs": "49efbb6899d856f80af7db87eec7e6bb7b3a39cca9756af6ba246365fb43f479",
+    "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "d213cdd9be7434a8e86d70504a59b5673d520c70d4cab0a1c88418373e65fd22"
+  },
+  "archive": "source-overlay.zip",
+  "archiveSha256": "b5f6a385b9ceaa88ca3428bc3d45f9afa3bd5fe3f0e2b4cccf988251d75d30c0"
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/1.81.2/bosak.xpath.api.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/1.81.2/bosak.xpath.compiler.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/1.81.2/bosak.xpath.core.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/1.81.2/bosak.xpath.parser.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/1.81.2/bosak.xpath.providers.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Providers.Database",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/1.81.2/bosak.xpath.providers.database.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/1.81.2/bosak.xpath.runtime.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/1.81.2/bosak.xpath.standard.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.XQuery",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/1.81.2/bosak.xquery.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  },
+  {
+    "id": "Bosak.Xslt",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/1.81.2/bosak.xslt.1.81.2.nupkg",
+    "downloaded": false,
+    "httpStatus": 404
+  }
+]

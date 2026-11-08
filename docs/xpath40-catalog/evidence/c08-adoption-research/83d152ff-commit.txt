@@ -1,0 +1,37 @@
+83d152ffdba55fe160f33366fa14ed2922fa2f9d
+2026-10-08T16:54:00+02:00
+2026-10-08T16:54:00+02:00
+feat(xpath40): REQ-118 4.0-S6a — enum + choice item types (#89)
+
+* feat(xpath40): REQ-118 4.0-S6a — enum types + choice item types
+
+XPath 4.0 §3.2.6 enumeration types (enum("a","b") — structural over
+xs:string, codepoint membership, instances not re-annotated) and §3.2.5
+choice item types ((xs:date|xs:dateTime) — any-alternative match, valid
+cast target when all-atomic) behind the xpath40 parser flag; XPST0003
+in 3.1 mode. Casts/coercion try choice alternatives in declaration order
+(§3.4.2 rule 02 — matching alternative unchanged, first coercion wins,
+all fail → FORG0001 / XPTY0004); untypedAtomic/anyURI coerce via
+xs:string for enum targets. String-based type-text branches in the
+parser + VmEngine matcher — no XDM changes. Structural records stay
+deferred to 4.0-S6b.
+
+* test(xpath40): REQ-118 4.0-S6a — enum/choice type tests + 3.1 XPST0003 gates
+
+16 new VersionGateTests methods: 3.1 rejection of enum(...) and
+parenthesized choices (instance-of and cast), enum instance-of
+membership/codepoint case-sensitivity/untypedAtomic exclusion/occurrence
+indicators, cast/castable (member pass, FORG0001 non-member, non-string
+atom via xs:string), choice instance-of (mixed atomic, map|array),
+choice cast in-order semantics (xs:string first per the fn:char
+example; FORG0001 when no alternative succeeds), function
+parameter/return coercion (XPTY0004 on mismatch, in-order coercion
+yields xs:string, node pass-through for all-node-kind choices).
+
+* docs: REQ-118 4.0-S6a — registry, integration, dossier, handover
+
+* docs: record 4.0-S6a commit hashes in handover
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

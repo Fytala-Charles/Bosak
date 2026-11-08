@@ -1,0 +1,32 @@
+[
+  {
+    "profile": "final-fresh",
+    "installedPayloadMatches": true,
+    "exceptions": {
+      "extension/package.json": {
+        "installedSha256": "749f58a077a6ff14036b50a32eeb95771834e87456c77a6fe29199336e3c847d",
+        "difference": "VS Code-added __metadata only",
+        "metadata": {
+          "installedTimestamp": 1794124505159,
+          "targetPlatform": "undefined",
+          "size": 12895521
+        }
+      }
+    }
+  },
+  {
+    "profile": "final-upgrade",
+    "installedPayloadMatches": true,
+    "exceptions": {
+      "extension/package.json": {
+        "installedSha256": "e675611a7c8648cac844759967cf50a1160cb4bd19f123e62005913595d1f840",
+        "difference": "VS Code-added __metadata only",
+        "metadata": {
+          "installedTimestamp": 1794124517646,
+          "targetPlatform": "undefined",
+          "size": 12895521
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,66 @@
+{
+  "kind": "Read-only archive inspection; not a trust assessment",
+  "packages": [
+    {
+      "file": "Bosak.XPath.Api.1.81.2.nupkg",
+      "sha256": "87f3d003df3d3570e48d03f0fc444b22c838500a67b151e8f7a9dfa7d2229ec2",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Compiler.1.81.2.nupkg",
+      "sha256": "b7225f43ad8e06c92599ee93f025fe1643922889d1cc2cfa24385447395bbeb8",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Core.1.81.2.nupkg",
+      "sha256": "d70a55e12677a081959f52c7bd5e2acd9b00e638c4196e07f443bfa4ba6151f1",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Parser.1.81.2.nupkg",
+      "sha256": "d7d9a790b7912222afa855155efb314e667edf3a65869a906648fe5299c399bd",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Providers.1.81.2.nupkg",
+      "sha256": "f527b2fdab249f26e2dc4a07b7d1b1e76510f1bbb6c0404b53146ff0008844a6",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Providers.Database.1.81.2.nupkg",
+      "sha256": "b1e89e1c1e9e9d5c9e16ee87078008fd49b0612aec941eca83ab5aa250bbc873",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Runtime.1.81.2.nupkg",
+      "sha256": "5f9f4ae2dc73d07a815921d5a8c7f4243f83e762cb2a0a4668060baa27741e3d",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XPath.Standard.1.81.2.nupkg",
+      "sha256": "d938f8235d2af503db48a386a5df9f8164af9419c7a6cfc7ae1014c6106c0f58",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.XQuery.1.81.2.nupkg",
+      "sha256": "ca93683660fd61bb6b5576b52d4f9c9f0b1201a590aea8a1e64744f1a25fe56d",
+      "nugetSignatureEntryPresent": false
+    },
+    {
+      "file": "Bosak.Xslt.1.81.2.nupkg",
+      "sha256": "9a5c98aaf22687f8db57173b26b9c621fc6fbeb3b1ea83d6ea78556eb557aad8",
+      "nugetSignatureEntryPresent": false
+    }
+  ],
+  "manifests": "Retained SHA-256 JSON manifests; no manifest signature is claimed.",
+  "workflowEvidence": "Successful producer run/job/artifact API metadata and skipped publisher jobs retained in hosted dossier.",
+  "notEstablished": [
+    "Certificate trust",
+    "NuGet author signing",
+    "Service-side repository/Marketplace signatures",
+    "Cryptographic build attestation",
+    "Publisher authentication",
+    "Owner signing/provenance policy acceptance"
+  ],
+  "policyDecision": null
+}

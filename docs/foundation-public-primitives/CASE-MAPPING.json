@@ -1,0 +1,268 @@
+{
+  "total": 102,
+  "focusedTotal": 189,
+  "existingRegressions": 87,
+  "ordinaryNew": 50,
+  "compatibleNew": 52,
+  "cases": [
+    {
+      "id": "PublicTypedIdentityTests.PW01",
+      "count": 11,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 10)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 7)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 5)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 8)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW01_Factories(kind: 9)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW02",
+      "count": 8,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 5)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 7)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW02_FloatBits(example: 3)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW03",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW03_QNameFields(example: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW03_QNameFields(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW03_QNameFields(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW03_QNameFields(example: 1)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW04",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW04_MalformedQName(example: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW04_MalformedQName(example: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW04_MalformedQName(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW04_MalformedQName(example: 0)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW05",
+      "count": 6,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 2, year: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 2, year: 10000)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 0, year: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 0, year: 10000)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 1, year: 10000)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW05_Temporal(kind: 1, year: 0)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW06",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW06_Duration(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW06_Duration(example: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW06_Duration(example: 2)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW07",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW07_NullDuration"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW08",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW08_MixedEleven"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW09",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW09_AnnotatedString(annotation: \"hexBinary\")",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW09_AnnotatedString(annotation: \"base64Binary\")",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW09_AnnotatedString(annotation: \"anyURI\")"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW10",
+      "count": 7,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 7)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 5)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 8)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 10)",
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW10_Escape(kind: 9)"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW11",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW11_MixedLimits"
+      ]
+    },
+    {
+      "id": "PublicTypedIdentityTests.PW12",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicTypedIdentityTests.PW12_Cost"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW01",
+      "count": 11,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 8)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 5)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 10)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 9)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW01_Factories(kind: 7)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW02",
+      "count": 8,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 7)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW02_FloatBits(example: 5)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW03",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW03_QNameFields(example: 1)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW03_QNameFields(example: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW03_QNameFields(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW03_QNameFields(example: 0)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW04",
+      "count": 4,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW04_MalformedQName(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW04_MalformedQName(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW04_MalformedQName(example: 3)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW04_MalformedQName(example: 1)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW05",
+      "count": 6,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 0, year: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 1, year: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 2, year: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 0, year: 10000)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 2, year: 10000)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW05_Temporal(kind: 1, year: 10000)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW06",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW06_Duration(example: 0)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW06_Duration(example: 2)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW06_Duration(example: 1)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW07",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW07_NullDuration"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW08",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW08_MixedEleven"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW09",
+      "count": 3,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW09_AnnotatedString(annotation: \"base64Binary\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW09_AnnotatedString(annotation: \"hexBinary\")",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW09_AnnotatedString(annotation: \"anyURI\")"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW10",
+      "count": 7,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 6)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 5)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 4)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 7)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 10)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 9)",
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW10_Escape(kind: 8)"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW11",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW11_MixedLimits"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW12",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW12_Cost"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW13",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW13_ScalarProfileUnchanged"
+      ]
+    },
+    {
+      "id": "PublicCompatibleTests.PW14",
+      "count": 1,
+      "tests": [
+        "Bosak.XPath.Runtime.Tests.PublicCompatibleTests.PW14_CurrentOwnership"
+      ]
+    }
+  ],
+  "scope": "PW cases are new. TC04/CC05 are existing controls updated from valid Double refusal to supported complete transport, not additional new cases."
+}

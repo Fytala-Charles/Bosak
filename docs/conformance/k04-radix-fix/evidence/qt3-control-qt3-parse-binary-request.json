@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "docs/conformance/k04-radix-fix/evidence/control-fixtures.xml", "Name": "control-qt3-parse-binary", "case": "parse-binary", "expression": "parse-integer('101',2)", "boundary": "parse", "expected": "XPST0017"}

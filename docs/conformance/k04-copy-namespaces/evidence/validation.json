@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "checksBeforeManifest": 7224,
+  "qualifiedRegressions": 76,
+  "oldEngineFailed": 67,
+  "solutionPassed": 24010,
+  "originalsPassed": 49,
+  "normalQt3": [
+    31208,
+    0,
+    613
+  ],
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "admissionUnchanged": true,
+  "release": false
+}

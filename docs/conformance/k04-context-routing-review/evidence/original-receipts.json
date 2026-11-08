@@ -1,0 +1,3260 @@
+[
+  {
+    "name": "contextDecl-014-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-014-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5271625000168569,
+    "log": "contextDecl-014-normal-resources.log",
+    "case": "contextDecl-014",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-015-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-015-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5211255000322126,
+    "log": "contextDecl-015-normal-resources.log",
+    "case": "contextDecl-015",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-016-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-016-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5209806999773718,
+    "log": "contextDecl-016-normal-resources.log",
+    "case": "contextDecl-016",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-017-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-017-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11875030002556741,
+    "log": "contextDecl-017-normal-resources.log",
+    "case": "contextDecl-017",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-018-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-018-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12311649997718632,
+    "log": "contextDecl-018-normal-resources.log",
+    "case": "contextDecl-018",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-019-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-019-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1146426000050269,
+    "log": "contextDecl-019-normal-resources.log",
+    "case": "contextDecl-019",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-020-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-020-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11803800001507625,
+    "log": "contextDecl-020-normal-resources.log",
+    "case": "contextDecl-020",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "'London'",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-021-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-021-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12582080002175644,
+    "log": "contextDecl-021-normal-resources.log",
+    "case": "contextDecl-021",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-022-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-022-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1394978000316769,
+    "log": "contextDecl-022-normal-resources.log",
+    "case": "contextDecl-022",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-023-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-023-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1333648000145331,
+    "log": "contextDecl-023-normal-resources.log",
+    "case": "contextDecl-023",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-028-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-028-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1289198999875225,
+    "log": "contextDecl-028-normal-resources.log",
+    "case": "contextDecl-028",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-029-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-029-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13327590003609657,
+    "log": "contextDecl-029-normal-resources.log",
+    "case": "contextDecl-029",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-030-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-030-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13264909997815266,
+    "log": "contextDecl-030-normal-resources.log",
+    "case": "contextDecl-030",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-031-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-031-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13846020004712045,
+    "log": "contextDecl-031-normal-resources.log",
+    "case": "contextDecl-031",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-032-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-032-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1335403000121005,
+    "log": "contextDecl-032-normal-resources.log",
+    "case": "contextDecl-032",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-033-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-033-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.111781699990388,
+    "log": "contextDecl-033-normal-resources.log",
+    "case": "contextDecl-033",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-034-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-034-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12084430002141744,
+    "log": "contextDecl-034-normal-resources.log",
+    "case": "contextDecl-034",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-035-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-035-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10841129999607801,
+    "log": "contextDecl-035-normal-resources.log",
+    "case": "contextDecl-035",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-036-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-036-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10550440003862604,
+    "log": "contextDecl-036-normal-resources.log",
+    "case": "contextDecl-036",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-037-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-037-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11149700003443286,
+    "log": "contextDecl-037-normal-resources.log",
+    "case": "contextDecl-037",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-038-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-038-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1010600000154227,
+    "log": "contextDecl-038-normal-resources.log",
+    "case": "contextDecl-038",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-039-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-039-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1084629999822937,
+    "log": "contextDecl-039-normal-resources.log",
+    "case": "contextDecl-039",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-040-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-040-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10432859999127686,
+    "log": "contextDecl-040-normal-resources.log",
+    "case": "contextDecl-040",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-041-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-041-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10680369997862726,
+    "log": "contextDecl-041-normal-resources.log",
+    "case": "contextDecl-041",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-042-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-042-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10317869996652007,
+    "log": "contextDecl-042-normal-resources.log",
+    "case": "contextDecl-042",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-043-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-043-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10715890000574291,
+    "log": "contextDecl-043-normal-resources.log",
+    "case": "contextDecl-043",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-044-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-044-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10025150002911687,
+    "log": "contextDecl-044-normal-resources.log",
+    "case": "contextDecl-044",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-045-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-045-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1254027000395581,
+    "log": "contextDecl-045-normal-resources.log",
+    "case": "contextDecl-045",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-046-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-046-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11309069994604215,
+    "log": "contextDecl-046-normal-resources.log",
+    "case": "contextDecl-046",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-049-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-049-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11166610004147515,
+    "log": "contextDecl-049-normal-resources.log",
+    "case": "contextDecl-049",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-050-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-050-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10798369999974966,
+    "log": "contextDecl-050-normal-resources.log",
+    "case": "contextDecl-050",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-051-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-051-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1069254000321962,
+    "log": "contextDecl-051-normal-resources.log",
+    "case": "contextDecl-051",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-053-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-053-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09865240001818165,
+    "log": "contextDecl-053-normal-resources.log",
+    "case": "contextDecl-053",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-055-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-055-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10864290001336485,
+    "log": "contextDecl-055-normal-resources.log",
+    "case": "contextDecl-055",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-056-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-056-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10445240000262856,
+    "log": "contextDecl-056-normal-resources.log",
+    "case": "contextDecl-056",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/unionListDefined",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "4",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule4",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-4.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-057-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-057-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11509789997944608,
+    "log": "contextDecl-057-normal-resources.log",
+    "case": "contextDecl-057",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/unionListDefined",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "current-date()",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule4",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-4.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-058-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-058-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10660830000415444,
+    "log": "contextDecl-058-normal-resources.log",
+    "case": "contextDecl-058",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "['blue', 'green']",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule5",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-5.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-059-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-059-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09823380003217608,
+    "log": "contextDecl-059-normal-resources.log",
+    "case": "contextDecl-059",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-060-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-060-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10606299998471513,
+    "log": "contextDecl-060-normal-resources.log",
+    "case": "contextDecl-060",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-061-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-061-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10361709998687729,
+    "log": "contextDecl-061-normal-resources.log",
+    "case": "contextDecl-061",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extvardef-015-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-015-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09833870001602918,
+    "log": "extvardef-015-normal-resources.log",
+    "case": "extvardef-015",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-015",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/VarDefaultValue.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extvardef-016a-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016a-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11160559998825192,
+    "log": "extvardef-016a-normal-resources.log",
+    "case": "extvardef-016a",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/VarDefaultValue.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "extvardef-016b-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016b-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11080289998790249,
+    "log": "extvardef-016b-normal-resources.log",
+    "case": "extvardef-016b",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016b",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/VarDefaultValue.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-014-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-014-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.39023329998599365,
+    "log": "contextDecl-014-normal-actual.log",
+    "case": "contextDecl-014",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-014-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-014-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5373025999870151,
+    "log": "contextDecl-014-prototype-actual.log",
+    "case": "contextDecl-014",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-015-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-015-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27201429998967797,
+    "log": "contextDecl-015-normal-actual.log",
+    "case": "contextDecl-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-015-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-015-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28419250005390495,
+    "log": "contextDecl-015-prototype-actual.log",
+    "case": "contextDecl-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-016-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-016-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19523180002579466,
+    "log": "contextDecl-016-normal-actual.log",
+    "case": "contextDecl-016",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-016-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-016-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3119993000291288,
+    "log": "contextDecl-016-prototype-actual.log",
+    "case": "contextDecl-016",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-017-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-017-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19167249999009073,
+    "log": "contextDecl-017-normal-actual.log",
+    "case": "contextDecl-017",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-017-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-017-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3009434000123292,
+    "log": "contextDecl-017-prototype-actual.log",
+    "case": "contextDecl-017",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-018-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-018-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1858191000064835,
+    "log": "contextDecl-018-normal-actual.log",
+    "case": "contextDecl-018",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-018-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-018-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28225380001822487,
+    "log": "contextDecl-018-prototype-actual.log",
+    "case": "contextDecl-018",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-019-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-019-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1972671000403352,
+    "log": "contextDecl-019-normal-actual.log",
+    "case": "contextDecl-019",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-019-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-019-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27955589996417984,
+    "log": "contextDecl-019-prototype-actual.log",
+    "case": "contextDecl-019",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-020-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-020-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2520762999774888,
+    "log": "contextDecl-020-normal-actual.log",
+    "case": "contextDecl-020",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-020-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-020-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2804819000302814,
+    "log": "contextDecl-020-prototype-actual.log",
+    "case": "contextDecl-020",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-021-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-021-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1921726000146009,
+    "log": "contextDecl-021-normal-actual.log",
+    "case": "contextDecl-021",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-021-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-021-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27239019999979064,
+    "log": "contextDecl-021-prototype-actual.log",
+    "case": "contextDecl-021",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-022-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-022-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18962800002191216,
+    "log": "contextDecl-022-normal-actual.log",
+    "case": "contextDecl-022",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-022-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-022-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2725720999878831,
+    "log": "contextDecl-022-prototype-actual.log",
+    "case": "contextDecl-022",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-023-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-023-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1990465999697335,
+    "log": "contextDecl-023-normal-actual.log",
+    "case": "contextDecl-023",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-023-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-023-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19327419996261597,
+    "log": "contextDecl-023-prototype-actual.log",
+    "case": "contextDecl-023",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-028-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-028-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18953059997875243,
+    "log": "contextDecl-028-normal-actual.log",
+    "case": "contextDecl-028",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-028-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-028-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2876940999994986,
+    "log": "contextDecl-028-prototype-actual.log",
+    "case": "contextDecl-028",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-029-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-029-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1790785999619402,
+    "log": "contextDecl-029-normal-actual.log",
+    "case": "contextDecl-029",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-029-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-029-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29859050002414733,
+    "log": "contextDecl-029-prototype-actual.log",
+    "case": "contextDecl-029",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-030-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-030-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18836470000678673,
+    "log": "contextDecl-030-normal-actual.log",
+    "case": "contextDecl-030",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-030-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-030-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2977152999956161,
+    "log": "contextDecl-030-prototype-actual.log",
+    "case": "contextDecl-030",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-031-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-031-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1880644999910146,
+    "log": "contextDecl-031-normal-actual.log",
+    "case": "contextDecl-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-031-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-031-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2783051999867894,
+    "log": "contextDecl-031-prototype-actual.log",
+    "case": "contextDecl-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-032-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-032-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18146779999369755,
+    "log": "contextDecl-032-normal-actual.log",
+    "case": "contextDecl-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-032-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-032-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.268347300007008,
+    "log": "contextDecl-032-prototype-actual.log",
+    "case": "contextDecl-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-033-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-033-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18807090003974736,
+    "log": "contextDecl-033-normal-actual.log",
+    "case": "contextDecl-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-033-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-033-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28289309999672696,
+    "log": "contextDecl-033-prototype-actual.log",
+    "case": "contextDecl-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-034-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-034-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19247429998358712,
+    "log": "contextDecl-034-normal-actual.log",
+    "case": "contextDecl-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-034-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-034-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2869930000160821,
+    "log": "contextDecl-034-prototype-actual.log",
+    "case": "contextDecl-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-035-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-035-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18865000002551824,
+    "log": "contextDecl-035-normal-actual.log",
+    "case": "contextDecl-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-035-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-035-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.286752299987711,
+    "log": "contextDecl-035-prototype-actual.log",
+    "case": "contextDecl-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-036-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-036-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1856209000106901,
+    "log": "contextDecl-036-normal-actual.log",
+    "case": "contextDecl-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-036-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-036-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2817632000078447,
+    "log": "contextDecl-036-prototype-actual.log",
+    "case": "contextDecl-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-037-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-037-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1875546000082977,
+    "log": "contextDecl-037-normal-actual.log",
+    "case": "contextDecl-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-037-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-037-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29650659998878837,
+    "log": "contextDecl-037-prototype-actual.log",
+    "case": "contextDecl-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-038-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-038-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19806809996953234,
+    "log": "contextDecl-038-normal-actual.log",
+    "case": "contextDecl-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-038-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-038-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.294665299996268,
+    "log": "contextDecl-038-prototype-actual.log",
+    "case": "contextDecl-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-039-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-039-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19452580000506714,
+    "log": "contextDecl-039-normal-actual.log",
+    "case": "contextDecl-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-039-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-039-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2811150000197813,
+    "log": "contextDecl-039-prototype-actual.log",
+    "case": "contextDecl-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-040-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-040-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20900040003471076,
+    "log": "contextDecl-040-normal-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-040-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-040-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.289695399987977,
+    "log": "contextDecl-040-prototype-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-041-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-041-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19865209999261424,
+    "log": "contextDecl-041-normal-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-041-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-041-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29103089997079223,
+    "log": "contextDecl-041-prototype-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-042-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-042-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18354969995561987,
+    "log": "contextDecl-042-normal-actual.log",
+    "case": "contextDecl-042",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-042-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-042-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2713159999693744,
+    "log": "contextDecl-042-prototype-actual.log",
+    "case": "contextDecl-042",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-043-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-043-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18421199999284,
+    "log": "contextDecl-043-normal-actual.log",
+    "case": "contextDecl-043",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-043-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-043-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26760750001994893,
+    "log": "contextDecl-043-prototype-actual.log",
+    "case": "contextDecl-043",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-044-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-044-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18692010000813752,
+    "log": "contextDecl-044-normal-actual.log",
+    "case": "contextDecl-044",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-044-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-044-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27520840003853664,
+    "log": "contextDecl-044-prototype-actual.log",
+    "case": "contextDecl-044",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-045-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-045-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18706729996483773,
+    "log": "contextDecl-045-normal-actual.log",
+    "case": "contextDecl-045",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-045-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-045-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26601429999573156,
+    "log": "contextDecl-045-prototype-actual.log",
+    "case": "contextDecl-045",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-046-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-046-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20074950001435354,
+    "log": "contextDecl-046-normal-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-046-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-046-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2076441000099294,
+    "log": "contextDecl-046-prototype-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-049-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-049-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1901808999828063,
+    "log": "contextDecl-049-normal-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-049-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-049-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30487300001550466,
+    "log": "contextDecl-049-prototype-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-050-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-050-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19544049998512492,
+    "log": "contextDecl-050-normal-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-050-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-050-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2847808999940753,
+    "log": "contextDecl-050-prototype-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-051-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-051-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19481859996449202,
+    "log": "contextDecl-051-normal-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-051-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-051-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23402590001933277,
+    "log": "contextDecl-051-prototype-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-053-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-053-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18532129999948665,
+    "log": "contextDecl-053-normal-actual.log",
+    "case": "contextDecl-053",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-053-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-053-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2831097000162117,
+    "log": "contextDecl-053-prototype-actual.log",
+    "case": "contextDecl-053",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-055-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-055-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19188449997454882,
+    "log": "contextDecl-055-normal-actual.log",
+    "case": "contextDecl-055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-055-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-055-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31032129999948665,
+    "log": "contextDecl-055-prototype-actual.log",
+    "case": "contextDecl-055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-056-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-056-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26460539997788146,
+    "log": "contextDecl-056-normal-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-056-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-056-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29428790003294125,
+    "log": "contextDecl-056-prototype-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-057-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-057-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26347539998823777,
+    "log": "contextDecl-057-normal-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-057-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-057-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2972025999915786,
+    "log": "contextDecl-057-prototype-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-058-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-058-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2515267999842763,
+    "log": "contextDecl-058-normal-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-058-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-058-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30803840002045035,
+    "log": "contextDecl-058-prototype-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-059-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-059-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1941274999990128,
+    "log": "contextDecl-059-normal-actual.log",
+    "case": "contextDecl-059",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-059-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-059-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26352940005017444,
+    "log": "contextDecl-059-prototype-actual.log",
+    "case": "contextDecl-059",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-060-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-060-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1940224000136368,
+    "log": "contextDecl-060-normal-actual.log",
+    "case": "contextDecl-060",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-060-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-060-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2668303000391461,
+    "log": "contextDecl-060-prototype-actual.log",
+    "case": "contextDecl-060",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-061-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-061-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18902029999298975,
+    "log": "contextDecl-061-normal-actual.log",
+    "case": "contextDecl-061",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-061-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\contextDecl-061-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29370829998515546,
+    "log": "contextDecl-061-prototype-actual.log",
+    "case": "contextDecl-061",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "extvardef-015-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-015-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19089100003475323,
+    "log": "extvardef-015-normal-actual.log",
+    "case": "extvardef-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-015",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extvardef-015-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-015-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27351039997301996,
+    "log": "extvardef-015-prototype-actual.log",
+    "case": "extvardef-015",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-015",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "extvardef-016a-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016a-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19525370001792908,
+    "log": "extvardef-016a-normal-actual.log",
+    "case": "extvardef-016a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016a",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extvardef-016a-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016a-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30659360002027825,
+    "log": "extvardef-016a-prototype-actual.log",
+    "case": "extvardef-016a",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016a",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "extvardef-016b-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016b-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18816080002579838,
+    "log": "extvardef-016b-normal-actual.log",
+    "case": "extvardef-016b",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016b",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "extvardef-016b-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-routing-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-routing-review\\evidence\\extvardef-016b-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31204789999173954,
+    "log": "extvardef-016b-prototype-actual.log",
+    "case": "extvardef-016b",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "extvardef-016b",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

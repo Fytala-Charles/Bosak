@@ -1,0 +1,14 @@
+{
+  ".gitattributes": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8",
+  ".gitignore": "6252093f8103b25bf77e3171bfc9952ba9c964480ae8f326dc9c4bb12e6aea28",
+  "DELIVERY.json": "acb126dfa89a80e2b1955a43493e474bf27213150cd833c6703e8f34595b2c7d",
+  "drafts/BCAP-O1-Schema.2026-11-03.draft.json": "c76df55b83488e9f5c5959383014e52cc1bb579cadd44c1ef8ab5581d733a678",
+  "drafts/BCAP-O2-Schema.2026-11-03.draft.json": "5d37db4d05cfebf6ac9b4dfc567608ce37ba6e4b9008a778196e4824f2559582",
+  "evidence/DOCUMENTATION-CHECKS.json": "37a08d40a87314596bea168db39dc9b05f7b1cf2ceb314d33a676421adcda868",
+  "inputs/BCAP-O1-Schema.previous.response.json": "8429185da9635c3249df13fa379b2a5fc49d16efbb4ecbddcc1fbb0b8c1da7cf",
+  "inputs/BCAP-O2-Schema.previous.response.json": "d549acdb5444e5afa613af8d482d31c71f51e108ec4c431e0dc6ac8ce88b2a2a",
+  "inputs/Schema-owner-prose.txt": "f41f74ed53270f5e11b66c332eec5f986c5f88a5d71f731529e2afee640a0853",
+  "R3-W1.md": "f4cd8d06dc92e9adf8671f46f9707676a4e7dfcf1c939b4188f5124a60055d63",
+  "README.md": "45281573f0ec438e7dbf11d090e79758cc17fa413361688e01796d982cfd25c0",
+  "tools/verify.py": "fa07463f59dfbae828ab5c88e939c6a4735c9905dc66f0574532c9e72de60017"
+}

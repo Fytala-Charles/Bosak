@@ -1,0 +1,19 @@
+// Generated C11 verbatim sample and independent contract diagnostics.
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XQuery.Api;
+using System.Text.Json;
+using var output=new StreamWriter(args[1]){AutoFlush=true};
+foreach(var q in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!)
+foreach(var p in q.GetProperty("profiles").EnumerateArray()){
+ string? result=null,error=null,errorCode=null;var phase="compile";
+ try{
+ XdmValue value;
+ if(p.GetString()=="XQuery31"){var query=new XQueryCompiler().Compile(q.GetProperty("expression").GetString()!);phase="evaluate";value=query.Evaluate(new XQueryContext());}
+ else{var expr=XPath31Expression.Compile(q.GetProperty("expression").GetString()!,new CompileOptions{Compatibility=Enum.Parse<XPathCompatibility>(p.GetString()!)});phase="evaluate";value=expr.Evaluate(new EvaluationContext());}
+ if(q.GetProperty("projection").ValueKind==JsonValueKind.String)value=XPath31Expression.Compile(q.GetProperty("projection").GetString()!).Evaluate(new EvaluationContext().WithVariable("value",value));
+ result=value.ToString();phase="success";
+ }catch(Exception ex){error=ex.Message;errorCode=ex is XPathErrorException typed?typed.CodeLocalName:null;}
+ output.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),profile=p.GetString(),phase,result,error,errorCode}));
+}

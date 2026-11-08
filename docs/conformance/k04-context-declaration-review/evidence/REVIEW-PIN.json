@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C24",
+  "kind": "Review only; no semantic adoption or guard change",
+  "sourceBase": "bf73246818afa76ef111f980f6767c609010f162",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.17 Context Item Declaration",
+      "4.16 Variable Declaration (dependency cycles)",
+      "2.1.2 Dynamic Context (singleton focus)"
+    ]
+  },
+  "scope": "QT3 main-module context declarations; inventory both ContextItemDecl sets but no qt4 XQuery applicability claim",
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "limits": [
+    "Resource-free no-module QT3 originals only through public XQuery",
+    "Retain routing/dependency guards and every original assertion",
+    "No engine, harness, fixture, baseline, version, release or upstream change"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "processId": 63128,
+  "processName": "testhost",
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Compiler",
+      "identity": "Bosak.XPath.Compiler, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Bf0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+      "sha256": "8b6617897df5c69457042dbe797a9096dcb64b739e5837d94578ce73761a91b1"
+    },
+    {
+      "name": "Bosak.XPath.Compiler.Tests",
+      "identity": "Bosak.XPath.Compiler.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.Tests.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.0.0\u002Bf0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+      "sha256": "7feeb03520b52b40df171e552b5b66caf8cfb08436c69eb27c9d5d34e4903e49"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "identity": "Bosak.XPath.Core, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Bf0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+      "sha256": "2718ada5351a5203a728bf865f3d1b2bd2513b5ed7283e67e386e3f08faaa944"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "identity": "Bosak.XPath.Parser, Version=1.81.2.0, Culture=neutral, PublicKeyToken=null",
+      "path": "D:\\Development\\Bosak\\.worktrees\\Bosak.Release.1.81.2-f0f3e9c8\\tests\\Bosak.XPath.Compiler.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "context": "Default",
+      "collectible": "False",
+      "informationalVersion": "1.81.2\u002Bf0f3e9c892fb9afb6b6b6417e4d707ebf338d599",
+      "sha256": "77a1dfcddf0b09440a1f8b5544931136cc14f61a102e2d085514f93686ca31bf"
+    }
+  ],
+  "captureErrors": []
+}

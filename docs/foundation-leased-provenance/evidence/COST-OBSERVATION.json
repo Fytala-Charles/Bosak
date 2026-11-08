@@ -1,0 +1,13 @@
+{
+  "observation": {
+    "coldCallerBytes": 2016,
+    "coldTicks": 464888,
+    "warmReads": 8,
+    "warmCallerBytes": 10560,
+    "warmTicks": 2770636,
+    "callbacks": 958080,
+    "frequency": 10000000
+  },
+  "ownerBudgetAccepted": false,
+  "scope": "Tracing fixture, caller allocations only; no native or retained-memory budget acceptance."
+}

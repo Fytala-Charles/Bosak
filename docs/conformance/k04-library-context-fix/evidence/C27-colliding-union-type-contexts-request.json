@@ -1,0 +1,1 @@
+{"Suite": "qt3", "Name": "C27-colliding-union-type-contexts", "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests", "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml", "Purpose": "Both modules constrain the same item: decimal/string accepts integer4, date/time rejects it; distinguish declaration contexts"}

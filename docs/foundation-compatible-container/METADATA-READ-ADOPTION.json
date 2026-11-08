@@ -1,0 +1,9 @@
+{
+  "date": "2026-11-06",
+  "beforeHashes": {
+    "src/Bosak.XPath.Api/Schema/CompatibleAdmissionPlan.cs": "6e4a33b97649c585ac6cc1fd07135b744527191a6aa7c25b856532bbf15e032f",
+    "src/Bosak.XPath.Api/Schema/CompleteTypedContainer.cs": "79febf06f2060bece47e1c787c166e78ef6fab48adb9da07b3dfa801f15b1be3"
+  },
+  "scope": "Keep the existing complete uncached reader for full initial validation, then revalidate immutable captured metadata using one explicit live source/input/origin/container/governing/member ownership layer inside the existing paired proof window. Captured primitive/numeric bounds remain validated at initial admission; generic reader unchanged. Select evidence fields inside that same window after one complete check, avoiding repeated generic view traversal. No owner/native budget acceptance.",
+  "selectedPolicy": "docs/foundation-container-policy/POLICY.json"
+}

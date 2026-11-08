@@ -1,0 +1,153 @@
+{
+  "implementationStatus": "BoundedPublicQualified",
+  "nativeProviderAccepted": false,
+  "cases": [
+    {
+      "id": "LC01",
+      "trigger": "First and repeated calls in one raw operation",
+      "expected": "One successful real advisor Enter, guarded reuse and one admission Dispose; no provider ownership transfer.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC05_SC29_RepeatedNoCache"
+      ]
+    },
+    {
+      "id": "LC02",
+      "trigger": "Bound advisor lacks IQueryOperationLifetime",
+      "expected": "Profile unsupported; no fabricated input/no-op lifetime or constructor call.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC03_UnsupportedBinding"
+      ]
+    },
+    {
+      "id": "LC03",
+      "trigger": "Enter throws or returns null",
+      "expected": "Preserve failure, no phantom retained lease/receipt; actual in-flight work drains.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC08_AcquisitionFailure"
+      ]
+    },
+    {
+      "id": "LC04",
+      "trigger": "Enter returns an admission while callback closes/cancels operation",
+      "expected": "No delivery; returned admission cleaned exactly once with correct raw lifetime accounting.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC05",
+      "trigger": "Raw user callback/task completes while Enter is blocked",
+      "expected": "No new work/receipt; session drain/cleanup waits for callback to return and any admission cleanup.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC06",
+      "trigger": "Raw user callback/task completes while constructor/evidence callback is blocked",
+      "expected": "Revoke delivery immediately; keep lease until actual provider call and cleanup complete.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC07",
+      "trigger": "Cancel only a DrainAsync/other wait",
+      "expected": "Actual provider work/admission remains until real completion; no premature release.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC08",
+      "trigger": "Raw cancellation while provider temporarily ignores token",
+      "expected": "Stop further guarded work after callback resumes; retain resource through its true completion.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC09",
+      "trigger": "Session/operation close while a provider call is active",
+      "expected": "Reject new calls and keep actual owned handle alive until call exit; no double release.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    },
+    {
+      "id": "LC10",
+      "trigger": "Provider lease/advisor revocation at any callback including false ownership",
+      "expected": "No result; availability failure precedence and proper eventual cleanup.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC09_CallbackRevocation"
+      ]
+    },
+    {
+      "id": "LC11",
+      "trigger": "Overlapping/reentrant provider-touching calls in one operation",
+      "expected": "Refuse second call before Enter/provider work; no callbacks under state gate.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC10_SerializedCallsAndIndependentOperations"
+      ]
+    },
+    {
+      "id": "LC12",
+      "trigger": "Independent raw operations on same supported bound advisor",
+      "expected": "Separate real admissions; no cross-operation receipt/admission reuse or hidden native-threading claim.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC10_SerializedCallsAndIndependentOperations"
+      ]
+    },
+    {
+      "id": "LC13",
+      "trigger": "Work failure plus lease Dispose failure",
+      "expected": "Original work exception first, cleanup failures in existing order; no swallowed background cleanup.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC12_ConstructorAndCleanupFailures",
+        "LC13_OriginalAggregateBoundaries"
+      ]
+    },
+    {
+      "id": "LC14",
+      "trigger": "Multiple Complete/close/drain paths and cleanup-only failure",
+      "expected": "Dispose admission once, preserve sole cleanup exception, settle drain once.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "LC14_RepeatedCompletionAndForeignAdmission",
+        "LC13_LC14_DrainIncludesBlockedCleanupFailure",
+        "SC08_AcquisitionFailure"
+      ]
+    },
+    {
+      "id": "LC15",
+      "trigger": "Retain operation/receipt/copied value after raw completion",
+      "expected": "No active lease extension; new provider/authorization use refuses, copied payload readability is separate.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC34_SC35_NoImport"
+      ]
+    },
+    {
+      "id": "LC16",
+      "trigger": "Acquisition/close races with actual temporary resource handle",
+      "expected": "Real file/stream remains open while provider on stack, closes through original owner/admission path; no counter-only qualification.",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "SC06_SC07_SC11_ActualProviderTail"
+      ]
+    }
+  ]
+}

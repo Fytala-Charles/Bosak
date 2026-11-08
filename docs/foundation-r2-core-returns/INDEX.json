@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "author": "Codex acting on the Core engineering task; no human or external owner impersonated",
+  "kind": "ScopedCoreDesignReturns",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "ownerPacketIndexSha256": "6ca6b7418d401c6bed7772bda907b7a74d02eb38b28f40accb430af0734895c9",
+  "returns": [
+    {
+      "returnId": "O2-Core",
+      "file": "returns/O2-Core.json",
+      "decision": "AcceptWithScope",
+      "scope": "Core design only"
+    },
+    {
+      "returnId": "O4-Core",
+      "file": "returns/O4-Core.json",
+      "decision": "AcceptWithScope",
+      "scope": "Core design only"
+    }
+  ],
+  "externalReturnsPending": [
+    "O1-Schema",
+    "O1-XmlDb",
+    "O2-Schema",
+    "O3-Braid",
+    "O4-XmlDb"
+  ],
+  "r2Complete": false,
+  "runtimeQualified": false,
+  "c45Accepted": false,
+  "apiFrozen": false,
+  "productionVersion": "1.42.0"
+}

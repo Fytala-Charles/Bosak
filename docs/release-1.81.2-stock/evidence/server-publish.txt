@@ -1,0 +1,14 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.LanguageServer\Bosak.LanguageServer.csproj (in 155 ms).
+  9 of 10 projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.LanguageServer -> D:\Development\Bosak\.worktrees\Bosak.Release.1.81.2-f0f3e9c8\src\Bosak.LanguageServer\bin\Release\net10.0\Bosak.LanguageServer.dll
+  Bosak.LanguageServer -> D:\Development\Bosak\.guard-tmp\release-1812-stock-f0f3e9c8\server\

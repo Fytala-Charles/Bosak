@@ -1,0 +1,10 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-framework-probe\\bin\\Release\\net10.0\\Probe.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 0.1202356000430882
+}

@@ -1,0 +1,20 @@
+{
+  "reviewPins": {
+    "src/Bosak.XPath.Api/Schema/SchemaAdvisorBinding.cs": "23139a2daca89ab1f836941314bb523f797c0a7d52fe4111bce2fb0e5ca78109",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "52ed9b5eb06b7810ed47009364747d1ff133552b437e35b3ae2acc65aeda850a",
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": "d732c8bd6f42ee807303ba95ccfddb537eb8f6c56be57ac19ef9b15443545dba",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "90f15cc396eb142328469249ddad94c37f0f063da3c845d0d31aad94f6d4a18b",
+    "src/Bosak.XPath.Runtime/Vm/SchemaOperationLeaseSet.cs": "1ed7a59e35cadbbd2d7537fc1db73723aafb10c6409dc0df4a610d39b7581bea"
+  },
+  "path": [
+    "QueryNodeFactsReader.Read/Atomize -> CheckFacts/CheckStored",
+    "CheckFacts -> CheckBinding + RequireNodeOwner + OwnsFacts + exact tuple proof",
+    "CheckBinding -> CheckLive around each issuer identity callback",
+    "CheckLive -> Operation.RequireMember/Check + issuer.ThrowIfUnavailable + input availability",
+    "Operation.Check -> SchemaOperationLeaseSet.Check -> admitted members snapshot/source checks",
+    "API InputAdmission.Check -> borrowed lease and input availability + source/snapshot binding checks",
+    "Issuer.ThrowIfUnavailable -> SchemaAdvisorBinding.Check -> advisor/assessor/environment/authority callbacks with session guards"
+  ],
+  "interpretation": "Nested full validations repeatedly re-enter provider boundary checks. Counts localize amplification;not exclusive CPU profiling or authorization to skip live/source/issuer checks."
+}

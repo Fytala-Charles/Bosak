@@ -1,0 +1,320 @@
+[
+  {
+    "suite": "qt3",
+    "name": "base-URI-12",
+    "setFile": "tests/qt3tests/prod/BaseURIDecl.xml",
+    "expression": "declare base-uri \"http://www.example.com/abc\"\"\"; fn:string(fn:static-base-uri())",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "Constr-attr-syntax-5",
+    "setFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "expression": "<elem attr=\"\"\"\"/>",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "DirectConElemAttr-1",
+    "setFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "expression": "<shoe name=\" \"\"\"\" \"/>",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "DirectConElemNamespace-3",
+    "setFile": "tests/qt3tests/prod/DirElemContent.namespace.xml",
+    "expression": "namespace-uri(<p:e xmlns:p=\"http://ns.example.com/ns?val=\"\"\"\"\"\"asd\"/>)",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElem-47",
+    "setFile": "tests/qt3tests/prod/DirElemConstructor.xml",
+    "expression": "let $in := <r> <e xmlns=\"http://example.com/&lt;&gt;&quot;&apos;\"\"\"/> <e xmlns='http://example.com/&lt;&gt;&quot;&apos;'''/> <p:e xmlns:p=\"http://example.com/&lt;&gt;&quot;&apos;\"\"\"/> <p:e xmlns:p='http://example.com/&lt;&gt;&quot;&apos;'''/> </r> return <r>{for $n in $in/*/namespace-uri(.) return <e ns=\"{$n}\"/>}</r>",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElemAttr-29",
+    "setFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "expression": "string(<foo attr=\"\"\"\"/>/@attr)",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElemAttr-40",
+    "setFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "expression": "<elem attr1=\"\"\"\" attr2='''' attr3=\"''\" attr4='\"\"' attr5=\"'\" attr6='\"'/>",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElemAttr-8",
+    "setFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "expression": "<foo attr=\"\"\"/>",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElemContent-28",
+    "setFile": "tests/qt3tests/prod/DirElemContent.xml",
+    "expression": "string(<elem><![CDATA[con<<< ]] >\"\"'*\"*\">>tent]]&#00;&#x12;&amp;&quot;&notrecognized;&apos]]></elem>) eq \"con&lt;&lt;&lt; ]] &gt;\"\"\"\"'*\"\"*\"\"&gt;&gt;tent]]&amp;#00;&amp;#x12;&amp;amp;&amp;quot;&amp;notrecognized;&amp;apos\"",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConElemWhitespace-9",
+    "setFile": "tests/qt3tests/prod/DirElemContent.whitespace.xml",
+    "expression": "string(<e>'a''a'''a\"a\"\"a\"\"\"a\"</e>) eq \"'a''a'''a\"\"a\"\"\"\"a\"\"\"\"\"\"a\"\"\"",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "K2-DirectConOther-1",
+    "setFile": "tests/qt3tests/prod/DirectConstructor.xml",
+    "expression": "string(<?target \"\"''content&amp;amp;ss&amp;#00; &amp;#x2014;?>) eq \"\"\"\"\"''content&amp;amp;amp;ss&amp;amp;#00; &amp;amp;#x2014;\"",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "Literals069",
+    "setFile": "tests/qt3tests/prod/Literal.xml",
+    "expression": "text{ \"He said, \"\"I don't like it.\"\"\" }",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ10+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "Serialization-adaptive-32",
+    "setFile": "tests/qt3tests/ser/method-adaptive.xml",
+    "expression": "\n \n     \tdeclare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"adaptive\";\n        \n        map{ \"O'Neil says \"\"no\"\"\": 1 }\n\n      ",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "Serialization-adaptive-33",
+    "setFile": "tests/qt3tests/ser/method-adaptive.xml",
+    "expression": "\n \n     \tdeclare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"adaptive\";\n        \n        map{ 1:\"O'Neil says \"\"no\"\"\" }\n\n      ",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "Serialization-json-41",
+    "setFile": "tests/qt3tests/ser/method-json.xml",
+    "expression": "\n \n        declare namespace output = \"http://www.w3.org/2010/xslt-xquery-serialization\";\n        declare option output:method \"json\";\n        \n        map { \"\"\"\" : \"\\\n\"}\n\n      ",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "feature",
+        "value": "serialization",
+        "satisfied": true,
+        "xpath": true,
+        "xquery": true
+      },
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  },
+  {
+    "suite": "qt3",
+    "name": "string-constructor-021",
+    "setFile": "tests/qt3tests/prod/StringConstructor.xml",
+    "expression": "\n        matches(\"\"\"\", ``[[\"']]``)\n      ",
+    "xpathSupported": false,
+    "xquerySupported": true,
+    "xquerySyntaxEligible": false,
+    "normalAdmitted": false,
+    "assessments": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true,
+        "xpath": false,
+        "xquery": true
+      }
+    ]
+  }
+]

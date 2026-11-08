@@ -1,0 +1,113 @@
+[
+  {
+    "project": "bosak.xpath.parser.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.parser.tests\\bin\\Release\\net10.0\\bosak.xpath.parser.tests.dll",
+    "expected": 202,
+    "baselineTestSha256": "53a4bad835203922aa2f5ef0a51851ff2c42466cde46ae979f0fdfb283b7cbfe",
+    "testSha256": "53a4bad835203922aa2f5ef0a51851ff2c42466cde46ae979f0fdfb283b7cbfe",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.parser.tests\\bin\\Release\\net10.0\\bosak.xpath.parser.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.parser.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.parser.tests"
+  },
+  {
+    "project": "bosak.xpath.compiler.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.compiler.tests\\bin\\Release\\net10.0\\bosak.xpath.compiler.tests.dll",
+    "expected": 66,
+    "baselineTestSha256": "3b2dbda03490041c1137b5c1dbd2919ca76a540ff6d9fb0721f4779d80743ffe",
+    "testSha256": "3b2dbda03490041c1137b5c1dbd2919ca76a540ff6d9fb0721f4779d80743ffe",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.compiler.tests\\bin\\Release\\net10.0\\bosak.xpath.compiler.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.compiler.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.compiler.tests"
+  },
+  {
+    "project": "bosak.xpath.api.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.api.tests\\bin\\Release\\net10.0\\bosak.xpath.api.tests.dll",
+    "expected": 681,
+    "baselineTestSha256": "a57ccb8cafc1253bfe66a161114ad6d7b02ddcc2674e6828b6440c6d57f4c77e",
+    "testSha256": "a57ccb8cafc1253bfe66a161114ad6d7b02ddcc2674e6828b6440c6d57f4c77e",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.api.tests\\bin\\Release\\net10.0\\bosak.xpath.api.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.api.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.api.tests"
+  },
+  {
+    "project": "bosak.xpath.core.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.core.tests\\bin\\Release\\net10.0\\bosak.xpath.core.tests.dll",
+    "expected": 266,
+    "baselineTestSha256": "df9af91093308eace98313d0c56fba952329c00b35bc1ed7d7af3331a58405f8",
+    "testSha256": "df9af91093308eace98313d0c56fba952329c00b35bc1ed7d7af3331a58405f8",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.core.tests\\bin\\Release\\net10.0\\bosak.xpath.core.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.core.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.core.tests"
+  },
+  {
+    "project": "bosak.xpath.providers.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.tests\\bin\\Release\\net10.0\\bosak.xpath.providers.tests.dll",
+    "expected": 223,
+    "baselineTestSha256": "9e9c6c8f20192e536e0b5240b0ad9c82030fa1540cf7fa6e091f15d1325e4919",
+    "testSha256": "9e9c6c8f20192e536e0b5240b0ad9c82030fa1540cf7fa6e091f15d1325e4919",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.tests\\bin\\Release\\net10.0\\bosak.xpath.providers.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.providers.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.providers.tests"
+  },
+  {
+    "project": "bosak.xpath.runtime.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.runtime.tests\\bin\\Release\\net10.0\\bosak.xpath.runtime.tests.dll",
+    "expected": 1899,
+    "baselineTestSha256": "d358b6a2dbcfe11ec1b9419af820b658fcf2730c87c311c889cf798ba0a7633d",
+    "testSha256": "e997b4c18a7d104d30971eee9894921aa87c250e92dab13f628371b11d25ecf1",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.runtime.tests\\bin\\Release\\net10.0\\bosak.xpath.runtime.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.runtime.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.runtime.tests"
+  },
+  {
+    "project": "bosak.xquery.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xquery.tests\\bin\\Release\\net10.0\\bosak.xquery.tests.dll",
+    "expected": 841,
+    "baselineTestSha256": "e454df2f7077323f4b68df2e0519a3abd211958aa9349daf0c4a12c542ce94a6",
+    "testSha256": "e454df2f7077323f4b68df2e0519a3abd211958aa9349daf0c4a12c542ce94a6",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xquery.tests\\bin\\Release\\net10.0\\bosak.xquery.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xquery.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xquery.tests"
+  },
+  {
+    "project": "bosak.xpath.providers.database.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\bosak.xpath.providers.database.tests.dll",
+    "expected": 47,
+    "baselineTestSha256": "7dc21fb240bb6779053baab64ad3e2f031e06db9de1cac56c0c5985eff298203",
+    "testSha256": "7dc21fb240bb6779053baab64ad3e2f031e06db9de1cac56c0c5985eff298203",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.providers.database.tests\\bin\\Release\\net10.0\\bosak.xpath.providers.database.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-database-localhost.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\database-fixed-trx",
+    "localHttpAuthorization": true
+  },
+  {
+    "project": "bosak.xpath.standard.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.standard.tests\\bin\\Release\\net10.0\\bosak.xpath.standard.tests.dll",
+    "expected": 13797,
+    "baselineTestSha256": "4f64ea06ea2b60d8a10cd4066c0a16326ccc05d7585394c45e5f6e31b9befeee",
+    "testSha256": "4f64ea06ea2b60d8a10cd4066c0a16326ccc05d7585394c45e5f6e31b9befeee",
+    "launchedBinary": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xpath.standard.tests\\bin\\Release\\net10.0\\bosak.xpath.standard.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xpath.standard.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xpath.standard.tests"
+  },
+  {
+    "project": "bosak.xslt.tests",
+    "dll": "D:\\Development\\Bosak\\.guard-tmp\\captured-identity-qualification\\tests\\bosak.xslt.tests\\bin\\Release\\net10.0\\bosak.xslt.tests.dll",
+    "expected": 8320,
+    "baselineTestSha256": "33909854352ceff7b85e88b8c3381ec2643a620953e6689a621fa9453dfebbb8",
+    "testSha256": "33909854352ceff7b85e88b8c3381ec2643a620953e6689a621fa9453dfebbb8",
+    "launchedBinary": "C:\\Users\\charl\\AppData\\Local\\Temp\\BosakCapturedIdentityXslt-oc0wbamq\\bosak.xslt.tests.dll",
+    "log": "docs/foundation-r2-closure/evidence/execution/captured-qualification-unit-bosak.xslt.tests.log",
+    "exitCode": 0,
+    "resultsDirectory": "D:\\Development\\Bosak\\docs\\foundation-captured-identity-qualification\\evidence\\unit-trx\\bosak.xslt.tests"
+  }
+]

@@ -1,0 +1,134 @@
+// Generated isolated host/operation model; no production API or authenticated leases.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+
+try { await Experiment.Run(); }
+catch(Exception error) { Console.Error.WriteLine(error);Environment.ExitCode=1; }
+
+sealed class Snapshot(Session owner,IXdmNode root):IDisposable {
+ internal readonly Session Owner=owner;
+ internal readonly IXdmNode Root=root;
+ internal bool Closed;
+ internal int Leases;
+ public void Dispose()=>Closed=true;
+}
+sealed class Operation(Session owner,Snapshot[] inputs):IDisposable {
+ bool active=true;
+ internal void Check(Session expected){if(!active||!ReferenceEquals(owner,expected))throw new InvalidOperationException("Foreign or ended operation");}
+ internal IXdmNode Root(Snapshot input){Check(owner);if(!inputs.Contains(input))throw new InvalidOperationException("Unadmitted input");return input.Root;}
+ public void Dispose()=>active=false;
+}
+sealed class Session:IDisposable {
+ bool closed;
+ int running;
+ TaskCompletionSource drained=new(TaskCreationOptions.RunContinuationsAsynchronously);
+ internal Snapshot Admit(IXdmNode input){if(closed)throw new ObjectDisposedException(nameof(Session));return new(this,input);}
+ internal async Task<T> Run<T>(Snapshot[] inputs,Func<Operation,Task<T>> work) {
+  if(closed)throw new ObjectDisposedException(nameof(Session));
+  if(inputs.Distinct().Count()!=inputs.Length||inputs.Any(s=>s.Closed||!ReferenceEquals(s.Owner,this)))throw new InvalidOperationException("Bad admission set");
+  foreach(var input in inputs)input.Leases++;
+  if(running++==0)drained=new(TaskCreationOptions.RunContinuationsAsynchronously);
+  using var op=new Operation(this,inputs);
+  try{return await work(op);}finally{foreach(var input in inputs)input.Leases--;if(--running==0)drained.TrySetResult();}
+ }
+ internal Task Drain(CancellationToken cancellation=default)=>(running==0?Task.CompletedTask:drained.Task).WaitAsync(cancellation);
+ public void Dispose(){closed=true;if(running==0)drained.TrySetResult();}
+}
+sealed class TransformAdapter(Session session,XsltExecutable executable) {
+ internal static readonly MethodInfo Bridge=typeof(XsltExecutable).GetMethods(BindingFlags.Instance|BindingFlags.NonPublic).Single(m=>m.Name=="TransformCaptured"&&m.GetParameters().Length==10);
+ internal XdmValue Run(Operation operation,Snapshot? match=null,Snapshot? global=null,string? template=null,bool unsupportedSelection=false) {
+  operation.Check(session);
+  if(unsupportedSelection)throw new NotSupportedException("Bounded root-only profile");
+  if(match is not null&&global is null)throw new NotSupportedException("Legacy bridge cannot guarantee absent global context with a match input");
+  object?[] args={match is null?null:operation.Root(match),null,null,template,null,"raw",null,null,global is null?null:operation.Root(global),null};
+  try{return (XdmValue)Bridge.Invoke(executable,args)!;}catch(TargetInvocationException e)when(e.InnerException!=null){throw e.InnerException;}
+ }
+}
+static class Experiment {
+ static readonly List<object> results=new();
+ static void Check(string id,bool ok){if(!ok)throw new Exception(id);results.Add(new{id,passed=true});}
+ static async Task Refuse<T>(string id,Func<Task> action)where T:Exception {try{await action();}catch(T){Check(id,true);return;}throw new Exception("Expected "+typeof(T).Name+" "+id);}
+ static IXdmNode Doc(string value)=>new XDocumentNode(XDocument.Parse("<n>"+value+"</n>"));
+ static string Text(XdmValue value)=>string.Join("|",Items(value).Select(v=>v.ToString()));
+ static XdmValue[] Items(XdmValue v){if(!v.IsSequence)return v.IsUndefined?Array.Empty<XdmValue>():new[]{v};var list=new List<XdmValue>();foreach(var item in XdmSequence.FromSource(v.SequenceValue!)){if(list.Count==16)throw new Exception("Result capacity");list.Add(item);}return list.ToArray();}
+ static string Sheet(string template,string extra="")=>"<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'>"+extra+template+"</xsl:stylesheet>";
+ internal static async Task Run() {
+  using var session=new Session();var a=session.Admit(Doc("A"));var b=session.Admit(Doc("B"));var typed=session.Admit(new TypedNode(new XDocumentNode(XElement.Parse("<n>999</n>"))));
+  var ns=new Dictionary<string,string>{{"p","urn:before"}};
+  var xpath=XPath31Expression.Compile("namespace-uri-from-QName(xs:QName('p:x'))",new CompileOptions{Namespaces=new Dictionary<string,string>(ns)});ns["p"]="urn:after";
+  Check("xpath-captured-options",Text(xpath.Evaluate(new EvaluationContext()))=="urn:before");
+  var queryCompiler=new XQueryCompiler().WithNamespace("p","urn:caller");
+  var query=queryCompiler.Compile("declare namespace p='urn:prolog';namespace-uri-from-QName(xs:QName('p:x'))");queryCompiler.WithNamespace("p","urn:after");
+  Check("xquery-effective-prolog",Text(query.Evaluate(new XQueryContext()))=="urn:prolog");
+  var seededCompiler=new XQueryCompiler().WithNamespace("p","urn:seed");var seeded=seededCompiler.Compile("namespace-uri-from-QName(xs:QName('p:x'))");seededCompiler.WithNamespace("p","urn:changed");
+  Check("xquery-seeded-namespace-capture",Text(seeded.Evaluate(new XQueryContext()))=="urn:seed");
+  var staticParameters=new Dictionary<(string LocalName,string NamespaceUri),XdmValue>{{("v",""),XdmValue.FromInteger(7)}};
+  var compiler=new XsltCompiler{StaticParameters=new(staticParameters)};
+  var staticExecutable=compiler.Compile(Sheet("<xsl:template name='main'><xsl:sequence select='$v'/></xsl:template>","<xsl:param name='v' static='yes' select='0'/>"));
+  compiler.StaticParameters![("v","")]=XdmValue.FromInteger(9);
+  Check("xslt-static-parameter-capture",Text(staticExecutable.Transform(null,initialTemplate:"main",rawResult:true))=="7");
+  foreach(var host in new[]{"XPath","XQuery","XSLT"})await session.Run(new[]{typed},op=>{
+   var node=op.Root(typed);XdmValue value=host switch{
+    "XPath"=>XPath31Expression.Compile("data($n)").Evaluate(new EvaluationContext().WithVariable("n",XdmValue.FromNode(node))),
+    "XQuery"=>new XQueryCompiler().Compile("declare variable $n external;data($n)").Evaluate(new XQueryContext().WithVariable("n",XdmValue.FromNode(node))),
+    _=>new XsltCompiler().Compile(Sheet("<xsl:template name='main'><xsl:sequence select='data($n)'/></xsl:template>","<xsl:param name='n'/>" )).Transform(null,new EvaluationContext().WithVariable("n",XdmValue.FromNode(node)),initialTemplate:"main",rawResult:true)};
+   Check(host+"-typed-raw-consumption",Items(value).Single().DecimalValue==10m);return Task.FromResult(0);
+  });
+  var transform=new TransformAdapter(session,new XsltCompiler().Compile(Sheet("<xsl:template match='/'><xsl:sequence select=\"concat(string(/*),'|',$g)\"/></xsl:template><xsl:template name='main'><xsl:sequence select='$g'/></xsl:template>","<xsl:variable name='g' select='string(/*)'/>")));
+  await session.Run(new[]{a,b},op=>{Check("xslt-distinct-match-global",Text(transform.Run(op,a,b))=="A|B");Check("xslt-global-only-template",Text(transform.Run(op,global:b,template:"main"))=="B");return Task.FromResult(0);});
+  var noSource=new TransformAdapter(session,new XsltCompiler().Compile(Sheet("<xsl:template name='main'><xsl:sequence select='42'/></xsl:template>")));
+  await session.Run(Array.Empty<Snapshot>(),op=>{Check("xslt-source-free",Text(noSource.Run(op,template:"main"))=="42");return Task.FromResult(0);});
+  var missingExecutable=new XsltCompiler().Compile(Sheet("<xsl:template name='main'><xsl:sequence select='data(.)'/></xsl:template>"));
+  var missing=new TransformAdapter(session,missingExecutable);
+  Check("xslt-public-document-template-focus-A",Text(missingExecutable.Transform(a.Root,initialTemplate:"main",rawResult:true))=="A");
+  bool publicAbsent=false;try{missingExecutable.Transform(new XDocumentNode(XElement.Parse("<n>A</n>")),initialTemplate:"main",rawResult:true);}catch(Exception error)when(error.Message.Contains("XPDY0002",StringComparison.Ordinal)){publicAbsent=true;}
+  Check("xslt-public-element-template-focus-absent",publicAbsent);
+  object?[] diagnosticArgs={a.Root,null,null,"main",null,"raw",null,null,null,null};
+  var internalMatchOnly=Text((XdmValue)TransformAdapter.Bridge.Invoke(missingExecutable,diagnosticArgs)!);
+  Check("xslt-internal-match-only-template-focus-A",internalMatchOnly=="A");
+  bool absent=false;try{await session.Run(Array.Empty<Snapshot>(),op=>Task.FromResult(missing.Run(op,template:"main")));}catch(Exception error)when(error.Message.Contains("XPDY0002",StringComparison.Ordinal)){absent=true;}
+  Check("xslt-source-free-absent-focus",absent);
+  await Refuse<NotSupportedException>("xslt-match-without-explicit-global-refused",()=>session.Run(new[]{a},op=>Task.FromResult(missing.Run(op,match:a,template:"main"))));
+  await Refuse<NotSupportedException>("unsupported-selection",()=>session.Run(Array.Empty<Snapshot>(),op=>Task.FromResult(noSource.Run(op,unsupportedSelection:true))));
+  await Refuse<InvalidOperationException>("unadmitted-root",()=>session.Run(new[]{a},op=>Task.FromResult(transform.Run(op,a,b))));
+  using var other=new Session();var foreign=other.Admit(Doc("X"));
+  await Refuse<InvalidOperationException>("foreign-snapshot",()=>session.Run(new[]{foreign},op=>Task.FromResult(0)));
+  await Refuse<InvalidOperationException>("foreign-operation",()=>other.Run(Array.Empty<Snapshot>(),op=>Task.FromResult(noSource.Run(op,template:"main"))));
+  await Refuse<InvalidOperationException>("duplicate-snapshot",()=>session.Run(new[]{a,a},op=>Task.FromResult(0)));
+  Operation? escaped=null;await session.Run(Array.Empty<Snapshot>(),op=>{escaped=op;return Task.FromResult(0);});
+  await Refuse<InvalidOperationException>("ended-operation",()=>Task.FromResult(noSource.Run(escaped!,template:"main")));
+  var closed=session.Admit(Doc("closed"));closed.Dispose();
+  await Refuse<InvalidOperationException>("closed-snapshot",()=>session.Run(new[]{closed},op=>Task.FromResult(0)));
+  Check("refusals-leave-zero-leases",a.Leases==0&&b.Leases==0&&foreign.Leases==0);
+  using var live=new Session();var input=live.Admit(Doc("live"));var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var release=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+  var pending=live.Run(new[]{input},async op=>{entered.SetResult();await release.Task;Check("raw-work-after-close",Text(XPath31Expression.Compile("string(/*)").Evaluate(new EvaluationContext().WithFocus(XdmValue.FromNode(op.Root(input)),1,1)))=="live");return 1;});
+  await entered.Task;Check("lease-held",input.Leases==1);input.Dispose();live.Dispose();
+  using var cancel=new CancellationTokenSource();cancel.Cancel();
+  await Refuse<OperationCanceledException>("drain-wait-cancel",()=>live.Drain(cancel.Token));
+  Check("canceled-wait-retains-raw-work",!pending.IsCompleted&&input.Leases==1);
+  await Refuse<ObjectDisposedException>("closed-session-new-work",()=>live.Run(Array.Empty<Snapshot>(),op=>Task.FromResult(0)));
+  release.SetResult();await pending.WaitAsync(TimeSpan.FromSeconds(10));await live.Drain().WaitAsync(TimeSpan.FromSeconds(10));
+  Check("drained-releases-lease",input.Leases==0);
+  await Refuse<ApplicationException>("callback-failure",()=>session.Run<int>(new[]{a},op=>throw new ApplicationException("caught callback")));
+  Check("callback-failure-releases",a.Leases==0);
+  for(int cycle=0;cycle<2;cycle++){
+   var gate=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var work=session.Run(new[]{a},async op=>{await gate.Task;return op.Root(a);});var wait=session.Drain();
+   Check("open-session-drain-waits-"+cycle,!wait.IsCompleted&&a.Leases==1);
+   gate.SetResult();await work.WaitAsync(TimeSpan.FromSeconds(10));await wait.WaitAsync(TimeSpan.FromSeconds(10));
+   Check("open-session-drain-completes-"+cycle,a.Leases==0);
+  }
+  var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(x=>x.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(x=>x.GetName().Name).Select(x=>new{name=x.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(x.Location))).ToLowerInvariant()}).ToArray();
+  Console.WriteLine(JsonSerializer.Serialize(new{checks=results.Count,results,bindings,bridge=TransformAdapter.Bridge.ToString(),scope="Isolated admission model and actual legacy host execution; no authenticated production facade or private-kernel integration."},new JsonSerializerOptions{WriteIndented=true}));
+ }
+}

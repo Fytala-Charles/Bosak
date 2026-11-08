@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "tests/Bosak.XPath.Providers.Database.Tests",
+    "-c",
+    "Release",
+    "--no-build",
+    "--logger:trx",
+    "--results-directory",
+    "D:\\Development\\Bosak\\docs\\release-vscode-uri-fix\\database-retry-trx"
+  ],
+  "exitCode": 0
+}

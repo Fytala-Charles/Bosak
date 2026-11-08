@@ -1,0 +1,870 @@
+{
+  "date": "2026-10-31",
+  "status": "Bounded synthetic E-03 return; scope/API choices proposed only",
+  "runs": 3,
+  "distinctControls": 38,
+  "groupsPerRun": 33,
+  "timedSamplesPerGroup": 7,
+  "warmupsPerGroup": 3,
+  "rows": [
+    {
+      "size": 64,
+      "mode": "scalar-full",
+      "result": {
+        "Sum": 2080,
+        "Count": 64,
+        "Complete": true,
+        "Found": 64
+      },
+      "providerCalls": [
+        64
+      ],
+      "nodeReads": [
+        64
+      ],
+      "allocatedBytes": [
+        4688
+      ],
+      "perProcessMedianNanoseconds": [
+        4300,
+        4100,
+        3300
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "bulk-cold-full",
+      "result": {
+        "Sum": 2080,
+        "Count": 64,
+        "Complete": true,
+        "Found": 64
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        64
+      ],
+      "allocatedBytes": [
+        4688
+      ],
+      "perProcessMedianNanoseconds": [
+        1800,
+        3800,
+        1800
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "bulk-cached-full",
+      "result": {
+        "Sum": 2080,
+        "Count": 64,
+        "Complete": true,
+        "Found": 64
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        0
+      ],
+      "perProcessMedianNanoseconds": [
+        100,
+        100,
+        100
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-preflight-full",
+      "result": {
+        "Sum": 2080,
+        "Count": 64,
+        "Complete": true,
+        "Found": 64
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        128
+      ],
+      "allocatedBytes": [
+        6568
+      ],
+      "perProcessMedianNanoseconds": [
+        5400,
+        6700,
+        8900
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-full",
+      "result": {
+        "Sum": 2080,
+        "Count": 64,
+        "Complete": true,
+        "Found": 64
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        64
+      ],
+      "allocatedBytes": [
+        3544
+      ],
+      "perProcessMedianNanoseconds": [
+        1600,
+        1200,
+        1700
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-prefix-1",
+      "result": {
+        "Sum": 1,
+        "Count": 1,
+        "Complete": false,
+        "Found": 1
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        1
+      ],
+      "allocatedBytes": [
+        416
+      ],
+      "perProcessMedianNanoseconds": [
+        100,
+        100,
+        200
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "cursor-certified-prefix-8",
+      "result": {
+        "Sum": 102,
+        "Count": 8,
+        "Complete": false,
+        "Found": 8
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        8
+      ],
+      "allocatedBytes": [
+        968
+      ],
+      "perProcessMedianNanoseconds": [
+        400,
+        300,
+        400
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-scalar-diverse",
+      "result": {
+        "Sum": 1848,
+        "Count": 64,
+        "Complete": true,
+        "Found": 56
+      },
+      "providerCalls": [
+        64
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048
+      ],
+      "perProcessMedianNanoseconds": [
+        1300,
+        900,
+        1500
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-batch-diverse",
+      "result": {
+        "Sum": 1848,
+        "Count": 64,
+        "Complete": true,
+        "Found": 56
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048
+      ],
+      "perProcessMedianNanoseconds": [
+        1200,
+        800,
+        1400
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-scalar-repeated",
+      "result": {
+        "Sum": 504,
+        "Count": 64,
+        "Complete": true,
+        "Found": 56
+      },
+      "providerCalls": [
+        64
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048
+      ],
+      "perProcessMedianNanoseconds": [
+        1300,
+        900,
+        1500
+      ]
+    },
+    {
+      "size": 64,
+      "mode": "lookup-batch-repeated",
+      "result": {
+        "Sum": 504,
+        "Count": 64,
+        "Complete": true,
+        "Found": 56
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048
+      ],
+      "perProcessMedianNanoseconds": [
+        1200,
+        800,
+        1400
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "scalar-full",
+      "result": {
+        "Sum": 8390656,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 4096
+      },
+      "providerCalls": [
+        4096
+      ],
+      "nodeReads": [
+        4096
+      ],
+      "allocatedBytes": [
+        357504
+      ],
+      "perProcessMedianNanoseconds": [
+        204800,
+        129600,
+        211100
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "bulk-cold-full",
+      "result": {
+        "Sum": 8390656,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 4096
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        4096
+      ],
+      "allocatedBytes": [
+        357504
+      ],
+      "perProcessMedianNanoseconds": [
+        167700,
+        110700,
+        180000
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "bulk-cached-full",
+      "result": {
+        "Sum": 8390656,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 4096
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        0
+      ],
+      "perProcessMedianNanoseconds": [
+        2400,
+        2400,
+        3100
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-preflight-full",
+      "result": {
+        "Sum": 8390656,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 4096
+      },
+      "providerCalls": [
+        65
+      ],
+      "nodeReads": [
+        8192
+      ],
+      "allocatedBytes": [
+        518232
+      ],
+      "perProcessMedianNanoseconds": [
+        303500,
+        295700,
+        243400
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-full",
+      "result": {
+        "Sum": 8390656,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 4096
+      },
+      "providerCalls": [
+        65
+      ],
+      "nodeReads": [
+        4096
+      ],
+      "allocatedBytes": [
+        259304
+      ],
+      "perProcessMedianNanoseconds": [
+        139100,
+        184400,
+        110100
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-prefix-1",
+      "result": {
+        "Sum": 1,
+        "Count": 1,
+        "Complete": false,
+        "Found": 1
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        1
+      ],
+      "allocatedBytes": [
+        416
+      ],
+      "perProcessMedianNanoseconds": [
+        200,
+        100,
+        100
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "cursor-certified-prefix-8",
+      "result": {
+        "Sum": 102,
+        "Count": 8,
+        "Complete": false,
+        "Found": 8
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        8
+      ],
+      "allocatedBytes": [
+        968
+      ],
+      "perProcessMedianNanoseconds": [
+        500,
+        400,
+        400
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-scalar-diverse",
+      "result": {
+        "Sum": 7343616,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 3584
+      },
+      "providerCalls": [
+        4096
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        65560
+      ],
+      "perProcessMedianNanoseconds": [
+        154400,
+        118300,
+        116900
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-batch-diverse",
+      "result": {
+        "Sum": 7343616,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 3584
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        65560
+      ],
+      "perProcessMedianNanoseconds": [
+        143200,
+        116800,
+        104700
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-scalar-repeated",
+      "result": {
+        "Sum": 32256,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 3584
+      },
+      "providerCalls": [
+        4096
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        65560
+      ],
+      "perProcessMedianNanoseconds": [
+        135700,
+        75700,
+        79700
+      ]
+    },
+    {
+      "size": 4096,
+      "mode": "lookup-batch-repeated",
+      "result": {
+        "Sum": 32256,
+        "Count": 4096,
+        "Complete": true,
+        "Found": 3584
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        65560
+      ],
+      "perProcessMedianNanoseconds": [
+        81700,
+        71800,
+        88200
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "scalar-full",
+      "result": {
+        "Sum": 2147516416,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 65536
+      },
+      "providerCalls": [
+        65536
+      ],
+      "nodeReads": [
+        65536
+      ],
+      "allocatedBytes": [
+        3901176,
+        3908064,
+        3908648
+      ],
+      "perProcessMedianNanoseconds": [
+        3250300,
+        3088100,
+        2797300
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "bulk-cold-full",
+      "result": {
+        "Sum": 2147516416,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 65536
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        65536
+      ],
+      "allocatedBytes": [
+        3901176,
+        3901624,
+        3905032
+      ],
+      "perProcessMedianNanoseconds": [
+        3168900,
+        2523400,
+        3177900
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "bulk-cached-full",
+      "result": {
+        "Sum": 2147516416,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 65536
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        0
+      ],
+      "perProcessMedianNanoseconds": [
+        60600,
+        46500,
+        47400
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-preflight-full",
+      "result": {
+        "Sum": 2147516416,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 65536
+      },
+      "providerCalls": [
+        1025
+      ],
+      "nodeReads": [
+        131072
+      ],
+      "allocatedBytes": [
+        4656264
+      ],
+      "perProcessMedianNanoseconds": [
+        4755300,
+        4053100,
+        4638400
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-full",
+      "result": {
+        "Sum": 2147516416,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 65536
+      },
+      "providerCalls": [
+        1025
+      ],
+      "nodeReads": [
+        65536
+      ],
+      "allocatedBytes": [
+        2328320,
+        2331344
+      ],
+      "perProcessMedianNanoseconds": [
+        2939900,
+        2132800,
+        2881600
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-prefix-1",
+      "result": {
+        "Sum": 1,
+        "Count": 1,
+        "Complete": false,
+        "Found": 1
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        1
+      ],
+      "allocatedBytes": [
+        416
+      ],
+      "perProcessMedianNanoseconds": [
+        100,
+        100,
+        100
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "cursor-certified-prefix-8",
+      "result": {
+        "Sum": 102,
+        "Count": 8,
+        "Complete": false,
+        "Found": 8
+      },
+      "providerCalls": [
+        2
+      ],
+      "nodeReads": [
+        8
+      ],
+      "allocatedBytes": [
+        968
+      ],
+      "perProcessMedianNanoseconds": [
+        300,
+        400,
+        300
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-scalar-diverse",
+      "result": {
+        "Sum": 1879105536,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 57344
+      },
+      "providerCalls": [
+        65536
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048600,
+        1048640,
+        1056712
+      ],
+      "perProcessMedianNanoseconds": [
+        4917300,
+        4695600,
+        3966300
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-batch-diverse",
+      "result": {
+        "Sum": 1879105536,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 57344
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048600,
+        1048640,
+        1056712
+      ],
+      "perProcessMedianNanoseconds": [
+        4587600,
+        4232400,
+        4261700
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-scalar-repeated",
+      "result": {
+        "Sum": 516096,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 57344
+      },
+      "providerCalls": [
+        65536
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048600,
+        1048640,
+        1056536
+      ],
+      "perProcessMedianNanoseconds": [
+        1811000,
+        1997300,
+        1593000
+      ]
+    },
+    {
+      "size": 65536,
+      "mode": "lookup-batch-repeated",
+      "result": {
+        "Sum": 516096,
+        "Count": 65536,
+        "Complete": true,
+        "Found": 57344
+      },
+      "providerCalls": [
+        1
+      ],
+      "nodeReads": [
+        0
+      ],
+      "allocatedBytes": [
+        1048600,
+        1056536,
+        1056768
+      ],
+      "perProcessMedianNanoseconds": [
+        1702200,
+        1608000,
+        1998300
+      ]
+    }
+  ],
+  "allRootsReferenceProjectionBytes": 34359738368,
+  "projectionIsMeasuredAllocation": false,
+  "protocolReplayChecks": 54,
+  "coreCandidateTypes": 33,
+  "choices": [
+    "Keep complete bulk closure as candidate",
+    "Do not add public scalar-dependency, batch lookup or cursor APIs from synthetic data alone",
+    "Prefer bounded immutable metadata reuse internally where actual authority/lifetime permits",
+    "Keep raw-operation controller types out of this Core candidate"
+  ],
+  "performanceBudgetsAccepted": false,
+  "apiAccepted": false,
+  "productionModified": false,
+  "E03CompleteForRealProviders": false,
+  "checkIds": [
+    "G01-full-equivalence-chain",
+    "G02-complete-no-duplicates-chain",
+    "G01-full-equivalence-cycle",
+    "G02-complete-no-duplicates-cycle",
+    "G01-full-equivalence-diamond",
+    "G02-complete-no-duplicates-diamond",
+    "G03-equal-digest-not-identity",
+    "G04-foreign-root",
+    "G05-forged-root",
+    "G06-forged-proof-fields",
+    "G07-proof-wrong-root",
+    "G08-proof-wrong-universe",
+    "G09-prefix-not-enumeration-complete",
+    "G10-frame-dispose-not-authority-close",
+    "G11-disposed-cursor",
+    "G12-empty-buffer-refused",
+    "G13-pre-cancel-before-read",
+    "G14-pre-cancel-no-dispatch",
+    "G15-unsupported-bulk-no-value",
+    "G16-unsupported-scalar-no-value",
+    "G17-unsupported-certificate-no-value",
+    "G18-naive-prefix-before-proof",
+    "G19-naive-later-unsupported",
+    "G20-stale-proof-refused",
+    "G21-stale-cursor-refused",
+    "G22-cancel-during-full-closure",
+    "G23-cancel-stops-traversal",
+    "G24-cache-entry-bound",
+    "G25-cache-reference-bound",
+    "G26-cache-reuses-immutable-result",
+    "G27-lookup-status-order-identity",
+    "G28-lookup-actual-owner",
+    "G29-all-lookup-entries-64-diverse",
+    "G29-all-lookup-entries-64-repeated",
+    "G29-all-lookup-entries-4096-diverse",
+    "G29-all-lookup-entries-4096-repeated",
+    "G29-all-lookup-entries-65536-diverse",
+    "G29-all-lookup-entries-65536-repeated"
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "schemaVersion": 1,
+  "coreReviewRevision": "0890592eaf79ccb462f9635dd33e7536862685bb",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "ledgerSha256": "798663d22026b070cbc5d74eabaa6f60330f4c031b60983e4b1bca773d092d35",
+  "deliveryConfirmed": false,
+  "ownerAcceptance": false,
+  "packets": [
+    {
+      "id": "O1",
+      "title": "Source membership and original evidence",
+      "owners": [
+        "Schema",
+        "XmlDb"
+      ],
+      "decisions": [
+        "D01",
+        "D02",
+        "D03",
+        "D05"
+      ],
+      "requirements": [
+        "N1",
+        "N3",
+        "N5",
+        "N7",
+        "N8",
+        "FXR-07",
+        "FXR-10",
+        "FXG-02",
+        "FXG-03"
+      ],
+      "questions": [
+        {
+          "id": "O1-Q1",
+          "prompt": "Map ISchemaAssessmentInput.OwnsNode to actual native/persistent source ownership, without reading purported foreign node getters or eagerly copying the graph. Name the exact source methods and supported profile."
+        },
+        {
+          "id": "O1-Q2",
+          "prompt": "Schema: explain exact node/facts/input/origin association, including preserve/strip copies, stale edits and independently compiled components. XmlDb: explicitly state which checks are ordinary source membership and do not issue Schema authority."
+        },
+        {
+          "id": "O1-Q3",
+          "prompt": "Map snapshot-specific ReadTypedValue and revised OwnsTypedValue issuance checks. For XmlDb ordinary XML, confirm absent assessor/origin rather than fabricated assessment; schema-issued checks may be explicitly not applicable."
+        },
+        {
+          "id": "O1-Q4",
+          "prompt": "Supply positive, foreign, copied and revoked-input cases or a concrete feasibility plan against pinned source. State any exact missing or infeasible signature before accepting the draft."
+        }
+      ],
+      "prepared": true,
+      "deliveryConfirmed": false,
+      "acceptance": "Pending"
+    },
+    {
+      "id": "O2",
+      "title": "Typed values, numeric policy and compatible views",
+      "owners": [
+        "Schema",
+        "Core"
+      ],
+      "decisions": [
+        "D03",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D12"
+      ],
+      "requirements": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5",
+        "N6",
+        "N8"
+      ],
+      "questions": [
+        {
+          "id": "O2-Q1",
+          "prompt": "Disposition all six numeric member intents and XdmExactDecimal: exact representation, wrong-kind checks, narrowing refusal, quotas, parsing/arithmetic/map-key/serialization impact. Separate API intent from unimplemented runtime support."
+        },
+        {
+          "id": "O2-Q2",
+          "prompt": "Confirm empty/singleton list boundaries, per-atomic union member and original PSVI versus fresh construction. Identify any missing required type/member, including backend features currently Unsupported."
+        },
+        {
+          "id": "O2-Q3",
+          "prompt": "Disposition authority/closure, advisor/episode and immutable effective-context needs against N1\u2013N8. Name any additional required context/member instead of accepting only the existing decimal example."
+        },
+        {
+          "id": "O2-Q4",
+          "prompt": "State supported/refused directional compatibility and preserve/copy semantics without QName/digest shortcuts. Distinguish proposed signature acceptance from actual positive runtime proof still required in R4."
+        }
+      ],
+      "prepared": true,
+      "deliveryConfirmed": false,
+      "acceptance": "Pending"
+    },
+    {
+      "id": "O3",
+      "title": "Braid invocation and worker requirements",
+      "owners": [
+        "Braid"
+      ],
+      "decisions": [
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D12",
+        "D14"
+      ],
+      "requirements": [
+        "BF140-01",
+        "BF140-02",
+        "BF140-03",
+        "BF140-04",
+        "BF140-05"
+      ],
+      "questions": [
+        {
+          "id": "O3-Q1",
+          "prompt": "Map required previews to XPath/XQuery Evaluate and XSLT Transform, separate match/global document admissions and source-free named templates. Identify exact missing signatures for initial sequences, modes or other required invocation profiles."
+        },
+        {
+          "id": "O3-Q2",
+          "prompt": "Select or explicitly leave open worker-local authorized reopen, broker or controlled in-process routing. State protocol/version/currentness implications without serializing live authority/leases."
+        },
+        {
+          "id": "O3-Q3",
+          "prompt": "Define required ownership/cancellation/timeout/kill/deferred-result cases and whether any known required Core signature is missing. Backend/process implementation can remain pending with the contract need represented."
+        },
+        {
+          "id": "O3-Q4",
+          "prompt": "Name representative typed/persistent workload fixtures and proposed budgets. State actual source/package pin; old ordinary XML upgrades and D01 are not R2/C45 acceptance."
+        }
+      ],
+      "prepared": true,
+      "deliveryConfirmed": false,
+      "acceptance": "Pending"
+    },
+    {
+      "id": "O4",
+      "title": "Acquisition failures and actual resource lifetime",
+      "owners": [
+        "XmlDb",
+        "Core"
+      ],
+      "decisions": [
+        "D01",
+        "D05",
+        "D11",
+        "D13",
+        "D14"
+      ],
+      "requirements": [
+        "FXR-08",
+        "FXR-09",
+        "FXR-10",
+        "FXR-14",
+        "FXG-02",
+        "FXG-03",
+        "FXG-05",
+        "FXG-06"
+      ],
+      "questions": [
+        {
+          "id": "O4-Q1",
+          "prompt": "Map BeginRead/OpenPinnedSnapshot, snapshot-owned reader/generation leases and rejection-before-admission cleanup to the qualified host lifecycle. Distinguish coordinator, snapshot and operation ownership."
+        },
+        {
+          "id": "O4-Q2",
+          "prompt": "Disposition source-level cleanup masking in OpenPinnedSnapshot and OpenAdmittedEpoch/EpochSnapshotLifetime. Return actual fault-injection evidence, a fix pin or an explicit supported limit; do not infer failure preservation from the synthetic host tests."
+        },
+        {
+          "id": "O4-Q3",
+          "prompt": "Select finite sequential/cancellation/reentry/concurrent-close guarantees and raw completion rules. State limits on cached Current, nested graphs, detached scalars and disposal; no universal all-access guard or new required node Dispose is assumed."
+        },
+        {
+          "id": "O4-Q4",
+          "prompt": "Identify an exact missing Core signature only if actual resource semantics demonstrate it. State current implementation/pin and the candidate-specific follow-up tests needed before R4 acceptance."
+        }
+      ],
+      "prepared": true,
+      "deliveryConfirmed": false,
+      "acceptance": "Pending"
+    }
+  ]
+}

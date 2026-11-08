@@ -1,0 +1,12 @@
+{
+  "control": {
+    "path": ".tools/fx009-02/results/windows-frozen-control.zip",
+    "sha256": "bd1644426d1103afa83b7172bef5b3c73da7eacef34583a188eb26292230cbe8",
+    "bytes": 4892439
+  },
+  "replacement": {
+    "path": ".tools/fx009-02/results/windows-frozen-replacement.zip",
+    "sha256": "9300a34fa660a4b307a7861167a2b112ad9d04ca3a3cc3fda06db3a0c7088665",
+    "bytes": 4961471
+  }
+}

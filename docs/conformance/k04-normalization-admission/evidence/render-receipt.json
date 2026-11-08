@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/README.md.html",
+      "sha256": "d8499dfb75a34230fa162e509c8f8c77dafa282a8745ee932cd341a9e3a7ff7a"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "10547e8dcf229166a4326a3aa05fa012e5f64598313b3f7cc5bc14fa19547d38"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "f42e7149272dd77ba357c986023fbbb90df87cc729c8d48225f66424906ed33a"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "eeb62e4409aa69f50db41778c765dc70dde2cebb041347c69750bbeb81340fdc"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "71ea8f2845e37de0116722ce93e6dc2ff49ad7d72708cbdd08715c01fdb5db7f"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "48c734a388aa505b7cd6a016fb5b55e0951d1abafc41200e9c185c7cfac95d1e"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "523b1c332be35e8f91361f9aaed59d6b3904d12ec42fc4e1c9fd7f60f95f9579"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "c8b710404980103a7ddf8e1eb07d405896df8adc49f849f23175a0f3eb1b722b"
+    },
+    {
+      "source": "docs/conformance/k04-normalization-admission/README.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_conformance_k04-normalization-admission_README.md.html",
+      "sha256": "427984112082714ecc18e704e1103d083371222ae71185519bd286859056106c"
+    },
+    {
+      "source": "docs/conformance/k04-normalization-admission/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-normalization-admission-render/docs_conformance_k04-normalization-admission_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "2fbc4728ca6650dffc41211f8fd15d9fd5ed4e6692657ed35ad26992fc9bdf84"
+    }
+  ]
+}

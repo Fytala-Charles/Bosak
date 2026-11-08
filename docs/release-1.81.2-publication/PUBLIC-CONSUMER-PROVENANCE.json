@@ -1,0 +1,70 @@
+{
+  "source": "Fresh private cache, nuget.org-only restore; no ProjectReference/HintPath/local feed",
+  "libraryCount": 10,
+  "libraries": [
+    "Bosak.XPath.Api/1.81.2",
+    "Bosak.XPath.Compiler/1.81.2",
+    "Bosak.XPath.Core/1.81.2",
+    "Bosak.XPath.Parser/1.81.2",
+    "Bosak.XPath.Providers.Database/1.81.2",
+    "Bosak.XPath.Providers/1.81.2",
+    "Bosak.XPath.Runtime/1.81.2",
+    "Bosak.XPath.Standard/1.81.2",
+    "Bosak.XQuery/1.81.2",
+    "Bosak.Xslt/1.81.2"
+  ],
+  "outputAssemblyChecks": [
+    {
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Providers.Database.dll",
+      "sha256": "486bb66204fcec8553cc3458bc3d36fb98dd6124b1b244de886c9971690d040f",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd",
+      "matchesApprovedHostedPackage": true
+    },
+    {
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98",
+      "matchesApprovedHostedPackage": true
+    }
+  ],
+  "diagnosticFlags": "The unchanged smoke caller does not grant owner or publication approval; its false approval fields are diagnostic scope, not a revocation of the separate user release approval.",
+  "vulnerabilityAuditPerformed": false
+}

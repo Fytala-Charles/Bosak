@@ -1,0 +1,78 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 30 October 2026
+// PURPOSE              : Observes package bindings without retaining assemblies or their load contexts.
+// SPECIAL NOTES        : Qualification-only startup observer; records identities and hashes, never provider state.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 30-10-2026     | Creation; isolated package binding observation                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Collections.Concurrent;
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Security.Cryptography;
+using System.Text.Json;
+
+/// <summary>Observes package bindings without retaining assemblies or their load contexts.</summary>
+public static class StartupHook
+{
+    private static readonly ConcurrentDictionary<string, Dictionary<string, string>> Rows = new(StringComparer.Ordinal);
+    private static readonly ConcurrentQueue<string> Errors = new();
+    private static readonly object ReportGate = new();
+    private static string? ReportDirectory;
+
+    /// <summary>Installs metadata-only binding observation for this qualification process.</summary>
+    public static void Initialize()
+    {
+        ReportDirectory = Environment.GetEnvironmentVariable("BOSAK_PACKAGE_BINDING_REPORT_DIRECTORY");
+        AppDomain.CurrentDomain.AssemblyLoad += (_, args) => Capture(args.LoadedAssembly);
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) Capture(assembly);
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => Write();
+    }
+
+    private static void Capture(Assembly assembly)
+    {
+        try
+        {
+            if (assembly.IsDynamic || assembly.GetName().Name is not { } name || !name.StartsWith("Bosak.", StringComparison.Ordinal)) return;
+            var context = AssemblyLoadContext.GetLoadContext(assembly);
+            var row = new Dictionary<string, string>
+            {
+                ["name"] = name, ["identity"] = assembly.FullName ?? name,
+                ["path"] = assembly.Location, ["context"] = context?.Name ?? "<unnamed>",
+                ["collectible"] = (context?.IsCollectible ?? false).ToString(),
+                ["informationalVersion"] = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? ""
+            };
+            try { row["sha256"] = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(row["path"]))).ToLowerInvariant(); }
+            catch (Exception error) { row["fileHashError"] = error.GetType().FullName ?? "hash-error"; }
+            Rows[name + "|" + row["path"] + "|" + row["context"]] = row;
+            Write();
+        }
+        catch (Exception error) { Errors.Enqueue(error.GetType().FullName ?? "capture-error"); }
+    }
+
+    private static void Write()
+    {
+        var directory = ReportDirectory;
+        if (string.IsNullOrEmpty(directory)) return;
+        try
+        {
+            lock (ReportGate)
+            {
+            Directory.CreateDirectory(directory);
+            var report = new { processId = Environment.ProcessId, processName = System.Diagnostics.Process.GetCurrentProcess().ProcessName,
+                assemblies = Rows.Values.OrderBy(r => r["name"], StringComparer.Ordinal).ThenBy(r => r["path"], StringComparer.Ordinal).ToArray(), captureErrors = Errors.ToArray() };
+            File.WriteAllText(Path.Combine(directory, Environment.ProcessId + ".json"), JsonSerializer.Serialize(report, new JsonSerializerOptions { WriteIndented = true }) + "\n");
+            }
+        }
+        catch { /* Missing/unreadable reports fail the external verifier, never alter test behavior. */ }
+    }
+}

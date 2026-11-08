@@ -1,0 +1,20 @@
+{
+  "id": "W1-13",
+  "status": "Passed",
+  "trxSha256": "df0714df99eb10803871b19fb3c11e97ce29304e271478bf0ea00c9eb60b740e",
+  "results": [
+    {
+      "executionId": "d7dbf68a-d5b1-47bc-88cb-e7ae6de125bf",
+      "testId": "7c110366-59ac-bafa-c535-bce2c80b3396",
+      "testName": "Bosak.XPath.Runtime.Tests.OrdinarySourceAdmissionTests.W1_13_PartialAcquisition",
+      "computerName": "CHARLES",
+      "duration": "00:00:00.0003336",
+      "startTime": "2026-11-03T18:06:50.1227311+01:00",
+      "endTime": "2026-11-03T18:06:50.1227312+01:00",
+      "testType": "13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b",
+      "outcome": "Passed",
+      "testListId": "8c84fa94-04c1-424b-9868-57a2d4851a1d",
+      "relativeResultsDirectory": "d7dbf68a-d5b1-47bc-88cb-e7ae6de125bf"
+    }
+  ]
+}

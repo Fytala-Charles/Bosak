@@ -1,0 +1,107 @@
+{
+  "cases": [
+    {
+      "id": "C45-01",
+      "title": "Identity and environment issuance",
+      "requirements": "N1,N8,BF140-01",
+      "requiredEvidence": "Reject forged/default/foreign handles and equal descriptive fingerprints before getters; admit only exact producer/authority endpoints.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-02",
+      "title": "Authority completeness",
+      "requirements": "N2",
+      "requiredEvidence": "Lookup NotFound, Unsupported and supported false/empty stay distinct; complete derivation, affiliation and closure never truncate.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-03",
+      "title": "Typed values and precision",
+      "requirements": "N3,N5",
+      "requiredEvidence": "Issued-container admission before getters; ordered empty/singleton lists and actual union member evidence; nil/no-typed-value distinct; no silent precision loss.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-04",
+      "title": "Assessment and context",
+      "requirements": "N4",
+      "requiredEvidence": "Actual captured host context; assessment constants; complete Valid alone publishes a root; Invalid/Unsupported/cancellation never masquerade as Valid.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-05",
+      "title": "Copy and provenance",
+      "requirements": "N5",
+      "requiredEvidence": "Copies preserve original PSVI/type/declaration facts but change current snapshot identity; strip/refusal are explicit.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-06",
+      "title": "Compatible views",
+      "requirements": "N6",
+      "requiredEvidence": "Directional source/target/environment proof preserves original assessment; foreign view or original facts refuse.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-07",
+      "title": "Lifetime and deferred work",
+      "requirements": "N7,FXG-02,FXG-03,FXG-05",
+      "requiredEvidence": "Cached Current, nested graphs, prefix/abandoned/fault/canceled consumption, reentry and close schedules; all actual leases retained/released once.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-08",
+      "title": "Composite admission",
+      "requirements": "N7,BF140-03",
+      "requiredEvidence": "Default/duplicate/foreign snapshot sets reject before work; partial acquisition releases all prior leases while preserving failures; empty set only for source-free work.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-09",
+      "title": "Construction and dual routing",
+      "requirements": "N3,N4",
+      "requiredEvidence": "Explicit construction keeps result representation; exact no-op retention; fresh type evidence does not fabricate original PSVI. Define nested constructor dispatch and reject ambiguous legacy/native coexistence.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-10",
+      "title": "Limits and diagnostics",
+      "requirements": "N4,PF-01,PF-09",
+      "requiredEvidence": "Positive explicit limits, invalid default limits, lazy per-consumption bounds, source/snapshot-bound truthful ranges, independent truncation/completeness and cancellation.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-11",
+      "title": "Legacy and consumers",
+      "requirements": "FXR-01\u201315,BF140-01\u201305",
+      "requiredEvidence": "Refresh actual source/package/unchanged-binary and provider/worker cases against the selected exact manifest; keep persisted enums/defaults/layout and old pins/history.",
+      "status": "NotRun",
+      "receipt": null
+    },
+    {
+      "id": "C45-12",
+      "title": "All query hosts",
+      "requirements": "N4,BF140-02,BF140-05",
+      "requiredEvidence": "Select exact XQuery/XSLT opt-in host adapters and typed transform boundaries, then prove actual Braid typed/persistent previews. XPath-only shape is insufficient.",
+      "status": "NotRun",
+      "receipt": null
+    }
+  ],
+  "allPassed": false,
+  "ownerDispositions": {
+    "Core": "Pending",
+    "Schema": "Pending",
+    "XmlDb": "Pending",
+    "Braid": "Pending"
+  }
+}

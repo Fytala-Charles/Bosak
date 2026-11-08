@@ -1,0 +1,5 @@
+# Isolated capture control/fault basis
+
+Recorded 1 November 2026 before this candidate. Source base c4580b3b, inheriting the immutable XSLT REC-xslt-30-20170608 invocation basis and serializer profile recorded in [the first runtime cohort](../foundation-bcap-runtime/SPEC-BASIS.md). This experiment changes private host control composition, not XPath/XSLT language semantics. Both inherited and local execution controls must remain effective without resetting inherited deadlines or remaining budgets.
+
+Only an explicit internal opt-in may retain the engine-owned execution gate when bounded inputs are copied. Ordinary input capture still refuses gates. Borrowed gates require sequential use; concurrent/reentrant sharing is unsupported. Resource policy replacement remains refused. A test-only production observer uses the existing bounded serializer observation seam to pause/cancel or throw; it conveys no production callback capability. Native provider failure behavior, full qualification and public API acceptance remain separate.

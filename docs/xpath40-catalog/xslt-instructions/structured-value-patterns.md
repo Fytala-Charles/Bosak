@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded structured matching**. C05-K01 generic model/JNode and complete nested schema/nominal pattern combinations remain limited; no universal generic-node promotion. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **Compound-pattern follow-up supplied — 21 October 2026:** [New bounded mapping](../COMPOUND-PATTERN-GRAMMAR.md) now covers set/union grouping, priority and rule identity, with a separately labelled current-draft union-priority gap. Original counts/queues below describe their earlier checkpoint.
 
 
@@ -52,6 +54,9 @@ Use named aliases for type tests, explicit conversion at bindings, and explicit 
 A closed map pattern rejects extra keys unless opened; optional entry values still require the key. Member occurrence indicators constrain each sequence, not array size. Empty arrays can satisfy universal member constraints; business nonempty checks remain explicit.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-patterns. Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms. No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 New manifest checks use default Legacy host and effective version4.0, hence frozen XPath40. Legacy3.0 declaration/pattern refusals are explicit. Host selection, module/package identity, imports and authoring contexts need their own applicable tests; no exhaustive cross-context claim follows. No engine behavior changes.
 

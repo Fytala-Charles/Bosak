@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"C24-internal","mode":"public-xquery","kind":"Passed","message":null,"expression":"declare context item := 3; .\u002B4","assertion":"\u003Cns0:result xmlns:ns0=\u0022http://www.w3.org/2010/09/qt-fots-catalog\u0022\u003E\r\n  \u003Cns0:assert-eq\u003E7\u003C/ns0:assert-eq\u003E\r\n\u003C/ns0:result\u003E","exceptionType":null,"error":null}

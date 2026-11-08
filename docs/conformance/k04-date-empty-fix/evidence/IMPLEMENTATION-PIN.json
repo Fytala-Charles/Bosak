@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-28",
+  "kind": "Pre-implementation semantic adoption: shared date-formatting empty result",
+  "sourceBase": "15bb2312dd1b07a28179dd2700587debe9fa6b64",
+  "specifications": [
+    {
+      "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "revision": "REC-xpath-functions-31-20170321",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "sections": [
+        "rules-for-datetime-formatting",
+        "func-format-date",
+        "func-format-dateTime",
+        "func-format-time"
+      ],
+      "scope": "Existing two/five argument signatures and shared empty-result requirement"
+    },
+    {
+      "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+      "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/xpath-functions.xml",
+      "sha256": "029dad6fca522956ae9c19fc3c7a890a3285dcb3fc5681081b797c5be6d4d675",
+      "sections": [
+        "rules-for-datetime-formatting"
+      ],
+      "commonRulesSha256": "d5b08e811c0d6877c6f03264ac5b745fd420e548dcfedb2826145061568a0f2e"
+    }
+  ],
+  "scope": "Existing arities 2/5 for format-date, format-dateTime and format-time in all profiles and shared XSLT mode",
+  "policy": {
+    "emptyRepresentations": [
+      "Undefined",
+      "zero-item sequence wrapper"
+    ],
+    "returnValue": "Canonical XDM empty result, not zero-length string",
+    "returnMetadata": "xs:string? on all six existing registrations",
+    "evaluationOrder": "Existing typed argument conversion and OptionalStringArg validation remain before the helper. For well-typed arguments, empty value bypasses picture/calendar semantic parsing.",
+    "intentionalLimits": [
+      "Arity3/4 and keyword metadata remain unavailable",
+      "No calendar or language admission change",
+      "No general argument-conversion rewrite",
+      "No fixture, assertion, GatedSets or exact baseline change"
+    ]
+  }
+}

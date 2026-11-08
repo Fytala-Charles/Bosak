@@ -1,0 +1,22 @@
+{
+  "qt3": {
+    "removed": [
+      "format-date-en151",
+      "format-dateTime-en151"
+    ],
+    "added": [],
+    "retained": 424,
+    "retainedReasonsUnchanged": true,
+    "matchesQualifiedRehearsal": true
+  },
+  "qt4": {
+    "removed": [
+      "format-date-en151",
+      "format-dateTime-en151"
+    ],
+    "added": [],
+    "retained": 1918,
+    "retainedReasonsUnchanged": true,
+    "matchesQualifiedRehearsal": true
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "profile": "final-fresh",
+    "payloadVerified": true,
+    "manifestException": "VS Code-added __metadata only"
+  },
+  {
+    "profile": "upgrade",
+    "payloadVerified": true,
+    "manifestException": "VS Code-added __metadata only"
+  }
+]

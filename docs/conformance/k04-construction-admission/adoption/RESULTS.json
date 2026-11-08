@@ -1,0 +1,22 @@
+{
+  "slice": "K04-C35 adoption",
+  "proposalCommit": "7c0fc78c",
+  "ownerApproval": "approved exact 83-case adoption",
+  "solutionPassed": 24082,
+  "qt3Normal": [
+    31340,
+    0,
+    481
+  ],
+  "qt4Normal": [
+    8939,
+    0,
+    1920
+  ],
+  "removedSkips": 83,
+  "retainedReasonsUnchanged": true,
+  "candidate": "1.32.0",
+  "published": "1.26.3",
+  "releaseApproved": false,
+  "next": "C36 remaining-skip and pragma boundary review"
+}

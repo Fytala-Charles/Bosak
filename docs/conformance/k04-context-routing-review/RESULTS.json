@@ -1,0 +1,33 @@
+{
+  "slice": "K04-C29",
+  "status": "exact admission qualified; owner approval pending",
+  "catalogCases": 31821,
+  "catalogSets": 428,
+  "changedPredicates": 43,
+  "affectedSets": {
+    "prod-ContextItemDecl": 40,
+    "prod-VarDefaultValue": 3
+  },
+  "normalQt3": [
+    31165,
+    0,
+    656
+  ],
+  "prototypeQt3": [
+    31208,
+    0,
+    613
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "lexicalControls": 30,
+  "originalPrototypePassed": 43,
+  "retainedSkipReasonsUnchanged": true,
+  "normalSourceChanged": false,
+  "baselineChanged": false,
+  "releaseApproved": false,
+  "unitEvidence": "Inherited C28: 23934 solution and 112 focused; not rerun in read-only review"
+}

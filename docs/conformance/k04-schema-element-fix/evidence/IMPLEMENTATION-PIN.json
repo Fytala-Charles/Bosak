@@ -1,0 +1,39 @@
+{
+  "kind": "Semantic implementation adoption recorded before C42 source edits",
+  "recordedUtc": "2026-10-29T04:47:57.285833+00:00",
+  "baseCommit": "2e364d66b1ea14779a3824f86c184ed89c25db5a",
+  "sources": [
+    {
+      "revision": "REC-xpath-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+      "sections": [
+        "2.5.5.4",
+        "2.5.6"
+      ],
+      "adoption": "Actual substitution membership, candidate declaration N abstract/type/nillability checks; actual member-set containment and function parameter contravariance."
+    },
+    {
+      "revision": "REC-xmlschema-1-20041028",
+      "url": "https://www.w3.org/TR/2004/REC-xmlschema-1-20041028/",
+      "sections": [
+        "3.3.6 Substitution Group OK (Transitive)",
+        "3.3.6 Element Declaration Properties Correct"
+      ],
+      "adoption": "Existing compiled XSD 1.0 single-affiliation component path, including head element blocking and head/intermediate complex-type prohibited substitutions."
+    }
+  ],
+  "scope": "Existing XPath 3.1 schema-element matching/subtyping correction; no new public API or schema backend.",
+  "defaults": "Keep all profile/dependency guards, GatedSets, KnownSkips, normal gate totals, construction and namespace policies unchanged.",
+  "intentionalBoundaries": [
+    "XmlSchemaSet single-head XSD 1.0 component model remains; no XSD 1.1 multi-affiliation support claim.",
+    "Bosak.Schema owns XSD 1.1. ADR-006 Proposed / REQ-139 Pending remain unchanged.",
+    "Preserve existing anonymous-type annotation fallback; no new node-provider contract.",
+    "All 37 legacy profile exclusions and six preparation errors remain separately excluded.",
+    "No release, upstream submission, sibling repository change or Braid action."
+  ],
+  "candidateVersion": "1.33.1",
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  }
+}

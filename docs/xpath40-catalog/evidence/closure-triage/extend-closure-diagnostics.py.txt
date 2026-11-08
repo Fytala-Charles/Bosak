@@ -1,0 +1,11 @@
+from pathlib import Path
+import json
+e=Path('D:/Development/Bosak/docs/xpath40-catalog/evidence/closure-triage');rows=json.loads((e/'skip-cases.json').read_text());selected=json.loads((e/'diagnostic-selection.json').read_text());seen=set()
+route=[r for r in rows if r['Suite']=='qt3' and r.get('FilterAssessment',{}).get('xqueryDependenciesSupported') and not r['FilterAssessment']['canRouteXquery']]
+for row in sorted(route,key=lambda x:len(x['Expression'])):
+ if row['Set'] in seen:continue
+ seen.add(row['Set']);selected.append(row)
+ if len(seen)==8:break
+for row in rows:
+ if row['Suite']=='qt3' and row.get('FilterAssessment') and any(not d['Satisfied'] and d['Type'] in ['unicode-normalization-form','language','calendar','feature'] and d['Value'] in ['FULLY-NORMALIZED','xib','CB','collection-stability'] for d in row['FilterAssessment']['rejectedDependencies']):selected.append(row)
+dedup={(x['Suite'],x['Name']):x for x in selected};(e/'diagnostic-selection.json').write_text(json.dumps(list(dedup.values()),indent=2)+'\n',encoding='utf-8');print(f'{len(dedup)} total bounded diagnostic selections; prior results retained without rerun.')

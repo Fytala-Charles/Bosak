@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-07",
+  "sourceVersion": "1.81.1",
+  "recordedBeforeImplementation": true,
+  "scope": "PV-Q04f production adoption of exact qualified captured-identity getter change with patch1.81.1 and fresh build/qualification. No broader proof coalescing or API additions.",
+  "nativeHead": "c3624998eca8c83018e121fa84af611f834a0501",
+  "nativeRoot": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Assessment",
+  "beforeFiles": {
+    "src/Directory.Build.props": "82a165f83469a4caab1180eed5dacbd521586299bb30222194d1f55fd009bdca",
+    "src/Bosak.XPath.Runtime/Vm/QueryNodeFacts.cs": "d732c8bd6f42ee807303ba95ccfddb537eb8f6c56be57ac19ef9b15443545dba",
+    "tests/Bosak.XPath.Runtime.Tests/QueryNodeFactsTests.cs": "1c5211090408a040bad0ce23368e85acb73a182a74a9f4e91c346d903082f062",
+    "docs/foundation-captured-identity-qualification/MANIFEST.json": "4253b092385df1d79921e5a2f905dff6e070c0f44574d4488fddf4d97c3c0c77",
+    "docs/foundation-public-primitives/evidence/SOURCE-AND-BINARY-PINS.json": "e04c42b8be0111cc4c9feed28c15734cc7b82af0a542a76a9a163507a2fdf0d6"
+  },
+  "nativeFiles": {
+    "src/Bosak.Schema/Assessment/AssessedDocument.cs": "83b9a7519aa1dbd2d647c3a6ef48b630d8b0031d43428565e69ac4570ec78d6b",
+    "src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "6b5b13884112772645135853e42fd7fe0d8b50de5b45a694a8818ad6bb4a8610",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "docs/DOCUMENT-ASSESSMENT.md": "d73ff0f9f906bb449ca62837ea02c67a6e6e4d0a7045efc887d289b65b7ebf91",
+    "AGENTS.md": "095293df131025a5c786b8fab4e30946b8d19c8bfeeac858cdcab8f1b81fb1f7",
+    "docs/ASSESSMENT-ADOPTION-2026-10-29.md": "eabfc9e14742cba83ee0517fd7ec266c8ae5b72bed04a027c63a6bf150efd5a2"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "sections": [
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ],
+      "source": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/"
+    },
+    {
+      "revision": "REC-xmlschema11-2-20120405",
+      "sections": [
+        "3.3.3"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/"
+    },
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.8",
+        "3.13"
+      ],
+      "source": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/"
+    }
+  ],
+  "intentionalDeviations": "Same host-policy rule as qualified TA-53/54:only two callback-free engine-captured identity getters use raw/member/cancellation guards;provider-facing proofs remain. Source bodies match the qualified candidate. Versioned production binaries require fresh test/gate/API/binary qualification;old hashes/results are not substituted. Owner workload/API-freeze/publication acceptance remains pending.",
+  "implementationLocation": "Core dossier prototype test project only;production and sibling sources unchanged",
+  "previousSourceVersion": "1.81.0"
+}

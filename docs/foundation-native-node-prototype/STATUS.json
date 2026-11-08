@@ -1,0 +1,22 @@
+{
+  "checkpoint": "TA-47",
+  "sourceVersion": "1.81.0",
+  "slice": "PV-Q03b preassessed native original-node projection",
+  "testsPassed": 34,
+  "buildWarnings": 0,
+  "buildErrors": 0,
+  "nativeContainerPublicTransportQualifiedWithinScope": true,
+  "publicNodeFactsProjectionImplemented": true,
+  "publicDocumentAssessmentImplemented": false,
+  "productionChanged": false,
+  "publicApiChanged": false,
+  "freshCoreFullSuiteRun": false,
+  "native451SuiteRerun": false,
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "packagesBuilt": false,
+  "pushPerformed": false,
+  "requirementsWaived": 0,
+  "nextSlice": "PV-Q03c strict public assessment request/result integration after refreshed immutable adoption;owner/performance qualification remains separate."
+}

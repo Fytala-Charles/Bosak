@@ -1,0 +1,1 @@
+{"id":"platform-983040","kind":"platform","detail":{"verifyError":"Name cannot begin with the \u0027\uDB80\uDC00\u0027 character, hexadecimal value 0xF0000.","xnameError":"Name cannot begin with the \u0027\uDB80\uDC00\u0027 character, hexadecimal value 0xF0000."},"error":null,"exceptionType":null,"stack":null}

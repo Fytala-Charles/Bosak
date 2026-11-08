@@ -1,0 +1,158 @@
+[
+  {
+    "Name": "construction0",
+    "Expression": "declare construction preserve; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction1",
+    "Expression": "declare(:outer(:nested:) :)construction preserve; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction2",
+    "Expression": "declare construction strip; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction3",
+    "Expression": "declare(:outer(:nested:) :)construction strip; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces4",
+    "Expression": "declare copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces5",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces6",
+    "Expression": "declare copy-namespaces no-preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces7",
+    "Expression": "declare(:outer(:nested:) :)copy-namespaces no-preserve, no-inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "construction\"",
+    "Expression": "\"declare construction\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "constructiondouble\"",
+    "Expression": "\"a\"\"declare construction\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "construction'",
+    "Expression": "'declare construction'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "constructiondouble'",
+    "Expression": "'a''declare construction'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "constructioncomment",
+    "Expression": "(: declare construction :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "constructionpragma",
+    "Expression": "declare construction preserve; (# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "copy-namespaces\"",
+    "Expression": "\"declare copy-namespaces\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-namespacesdouble\"",
+    "Expression": "\"a\"\"declare copy-namespaces\"",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-namespaces'",
+    "Expression": "'declare copy-namespaces'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-namespacesdouble'",
+    "Expression": "'a''declare copy-namespaces'",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-namespacescomment",
+    "Expression": "(: declare copy-namespaces :) 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-namespacespragma",
+    "Expression": "declare copy-namespaces preserve; (# p:x #) {1}",
+    "Before": false,
+    "After": false
+  },
+  {
+    "Name": "both",
+    "Expression": "declare construction strip; declare copy-namespaces no-preserve, inherit; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "current-context-admission",
+    "Expression": "declare context item := 1; .",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "construction-prefix",
+    "Expression": "declare constructional := 1; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "copy-prefix",
+    "Expression": "declare copy-namespacesx preserve, inherit; 1",
+    "Before": true,
+    "After": true
+  },
+  {
+    "Name": "uppercase",
+    "Expression": "DECLARE CONSTRUCTION PRESERVE; 1",
+    "Before": false,
+    "After": true
+  },
+  {
+    "Name": "pragma-only",
+    "Expression": "(# p:x #) {1}",
+    "Before": false,
+    "After": false
+  }
+]

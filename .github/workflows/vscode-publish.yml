@@ -1,76 +1,126 @@
 name: VS Code extension publish
 
-# Publishes the vscode-bosak extension to the VS Code Marketplace.
-#
-# Trigger: push a tag `vscode-v*` after bumping `version` in
-# vscode-bosak/package.json (the version is NOT derived from the tag — same
-# pinned-version rule as the NuGet pin in src/Directory.Build.props), or run
-# manually via workflow_dispatch.
-#
-# PREREQUISITE (owner, once): create a Marketplace PAT (Azure DevOps, scope
-# Marketplace > Acquire + Manage, org fytala) and store it as the repo secret
-# VCSE_PAT. Until the secret exists, the publish step fails — packaging still
-# runs, so the workflow can be validated end-to-end by downloading the artifact.
-
+# Tags prepare a VSIX only. Explicit publication reuses a reviewed prior artifact.
+# Preserve the existing repository secret name VCSE_PAT; expose it only as VSCE_PAT.
 on:
   push:
     tags: ['vscode-v*']
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish previously reviewed artifacts (preparation is the default)
+        type: boolean
+        default: false
+      source_run_id:
+        description: Successful preparation run ID; required for publication
+        type: string
+        default: ''
+      expected_manifest_sha256:
+        description: Reviewed release-manifest.json SHA-256; required for publication
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
-  publish:
+  prepare:
+    if: github.event_name != 'workflow_dispatch' || !inputs.publish
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup .NET 10 (language-server bundle)
-        uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '10.0.x'
-
-      # The server/ directory is gitignored; CI rebuilds it exactly like the
-      # manual release flow (framework-dependent, win-x64 apphost mirroring
-      # the local packaging used for 0.1.4/0.1.5).
-      - name: Publish language server & stage into extension
-        run: |
-          dotnet publish src/Bosak.LanguageServer -c Release -p:UseAppHost=false -o .guard-tmp/vscode-server
-          rm -rf vscode-bosak/server
-          cp -r .guard-tmp/vscode-server vscode-bosak/server
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+          dotnet-version: '10.0.301'
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24.16.0'
           cache: npm
           cache-dependency-path: vscode-bosak/package-lock.json
-
-      - name: Install & compile
+      - name: Check pinned tag/version
+        env:
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+        run: python3 .github/scripts/release_artifacts.py check-tag vscode --ref-type "$REF_TYPE" --ref-name "$REF_NAME"
+      - name: Publish the framework-dependent server and stage legal assets
+        run: |
+          dotnet publish src/Bosak.LanguageServer -c Release -p:UseAppHost=false -p:ContinuousIntegrationBuild=true -p:SourceRevisionId="$GITHUB_SHA" -p:RepositoryCommit="$GITHUB_SHA" -o vscode-bosak/server
+          cp NOTICE vscode-bosak/NOTICE
+          mkdir -p vscode-bosak/licenses
+          cp src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt vscode-bosak/licenses/Unicode17-LICENSE.txt
+      - name: Install, compile and test the extension
         working-directory: vscode-bosak
         run: |
           npm ci
           npm run compile
           npm test
-
       - name: Verify language-server diagnostics
-        run: dotnet test tests/Bosak.LanguageServer.Tests -c Release
-
-      - name: Package VSIX
+        run: dotnet test tests/Bosak.LanguageServer.Tests -c Release -p:ContinuousIntegrationBuild=true -p:SourceRevisionId="$GITHUB_SHA" -p:RepositoryCommit="$GITHUB_SHA" --logger:trx --results-directory "$RUNNER_TEMP/server-test-results"
+      - name: Package the VSIX with the pinned packager
         working-directory: vscode-bosak
-        run: npx --yes @vscode/vsce package --out vscode-bosak.vsix
+        run: |
+          mkdir -p "$RUNNER_TEMP/vsix-out"
+          version=$(python3 ../.github/scripts/release_artifacts.py version vscode)
+          npx --yes @vscode/vsce@4.0.0 package --out "$RUNNER_TEMP/vsix-out/vscode-bosak-$version.vsix"
+      - name: Seal the VSIX manifest
+        run: python3 .github/scripts/release_artifacts.py seal vscode "$RUNNER_TEMP/vsix-out" | tee "$RUNNER_TEMP/vsix-manifest-sha256.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vscode-${{ github.sha }}
+          path: ${{ runner.temp }}/vsix-out/
+          if-no-files-found: error
 
-      - name: Upload VSIX artifact (always available, even before the secret exists)
+      - name: Retain server test receipts even on failure
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vscode-bosak-vsix
-          path: vscode-bosak/vscode-bosak.vsix
+          name: vscode-qualification-${{ github.sha }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/server-test-results/
+          if-no-files-found: warn
 
-      - name: Publish to marketplace
-        # NOTE: the repo secret is named VCSE_PAT (owner-created 2026-10-08;
-        # letters transposed from the usual vsce acronym) — do not "fix" the
-        # name here without recreating the secret, or this step silently
-        # publishes nothing (-p with an empty value).
-        working-directory: vscode-bosak
-        run: npx --yes @vscode/vsce publish -p ${{ secrets.VCSE_PAT }}
+  publish:
+    if: github.event_name == 'workflow_dispatch' && inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate preparation run
+        id: source
+        uses: actions/github-script@v7
+        env:
+          SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+          EXPECTED_MANIFEST_SHA256: ${{ inputs.expected_manifest_sha256 }}
+          EXPECTED_WORKFLOW: .github/workflows/vscode-publish.yml
+        with:
+          script: |
+            await require(process.env.GITHUB_WORKSPACE + '/.github/scripts/source-run.cjs')({ github, context, core });
+      - uses: actions/download-artifact@v4
+        with:
+          name: vscode-${{ steps.source.outputs.sha }}
+          path: ${{ runner.temp }}/release-input
+          run-id: ${{ inputs.source_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout the artifact's source commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.source.outputs.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.16.0'
+      - name: Verify the exact reviewed VSIX
+        env:
+          REVIEWED_SHA256: ${{ inputs.expected_manifest_sha256 }}
+        run: python3 .github/scripts/release_artifacts.py verify vscode "$RUNNER_TEMP/release-input" --expected-sha "$REVIEWED_SHA256"
+      - name: Publish the verified VSIX without rebuilding
+        env:
+          VSCE_PAT: ${{ secrets.VCSE_PAT }}
+        run: |
+          test -n "$VSCE_PAT"
+          version=$(python3 .github/scripts/release_artifacts.py version vscode)
+          npx --yes @vscode/vsce@4.0.0 publish --packagePath "$RUNNER_TEMP/release-input/vscode-bosak-$version.vsix"

@@ -1,0 +1,2 @@
+warning: in the working copy of 'vscode-bosak/NOTICE', LF will be replaced by CRLF the next time Git touches it
+5362ae62c218b2bb7ca03879244ca6820aa5f14eed727b4315da456f711637e6

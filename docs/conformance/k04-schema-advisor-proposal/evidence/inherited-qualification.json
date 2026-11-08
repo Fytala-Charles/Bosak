@@ -1,0 +1,8 @@
+{
+  "source": "docs/conformance/k04-schema-element-fix/evidence/solution-receipt.json",
+  "sha256": "b237bcfcab50bfb2f5e68697d9be78b2e4767f473be9bfe4a3e605aebb4573ff",
+  "solutionPassed": 24203,
+  "regressionsPassed": 39,
+  "controlsPassed": 11,
+  "disposition": "Full solution and engine qualification inherited from C42; source and binaries remain unchanged. Fresh normal gates and bounded XSLT mapping run separately."
+}

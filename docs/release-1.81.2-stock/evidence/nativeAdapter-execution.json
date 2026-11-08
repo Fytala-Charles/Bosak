@@ -1,0 +1,11 @@
+{
+  "command": [
+    "dotnet",
+    "vstest",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1812-stock-f0f3e9c8\\native\\nativeAdapter\\Bosak.Schema.ImmutableGuard.Regression.Tests.dll",
+    "--logger:trx",
+    "--ResultsDirectory:D:\\Development\\Bosak\\docs\\release-1.81.2-stock\\evidence\\native-trx\\nativeAdapter"
+  ],
+  "exitCode": 0,
+  "log": "docs/foundation-r2-closure/evidence/execution/stock-1812-nativeAdapter.log"
+}

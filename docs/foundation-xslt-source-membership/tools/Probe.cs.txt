@@ -1,0 +1,215 @@
+// Generated bounded real-kernel integration fixture; no production authority or facade.
+// COPYRIGHT: Fytala; LICENSE: license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+using System.Collections;
+using System.Collections.Immutable;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+
+try { await Fixture.Run(); }
+catch(Exception error) { Console.Error.WriteLine(error);Environment.ExitCode=1; }
+
+sealed class Issuer:ISchemaEvidenceIssuer,ISchemaSessionProvider {
+ internal readonly object Origin=new();internal bool Available=true;internal int Binds,IssuerReads;
+ public bool OwnsValue(ISchemaIssuedScalar value)=>false;public bool OwnsType(object type)=>false;
+ public bool OwnsAssessment(object origin)=>ReferenceEquals(origin,Origin);public bool IsSameType(object a,object b)=>ReferenceEquals(a,b);
+ sealed class Binding(Issuer owner,SchemaQueryEnvironment environment):ISchemaSessionBinding {
+  public SchemaQueryEnvironment Environment=>environment;
+  public ISchemaEvidenceIssuer Issuer {get{owner.IssuerReads++;return owner;}}
+  public void ThrowIfUnavailable(){if(!owner.Available)throw new ObjectDisposedException("provider");}
+ }
+ public ISchemaSessionBinding Bind(SchemaQueryEnvironment environment){Binds++;return new Binding(this,environment);}
+}
+sealed class Bundle {
+ internal readonly IXdmNode Match=new XDocumentNode(XDocument.Parse("<n>A</n>"));
+ internal readonly IXdmNode Global=new XDocumentNode(XDocument.Parse("<n>B</n>"));
+ internal readonly IXdmNode Typed=new TypedNode(new XDocumentNode(XElement.Parse("<n>999</n>")));
+ internal bool Owns(IXdmNode node)=>ReferenceEquals(node,Match)||ReferenceEquals(node,Global)||ReferenceEquals(node,Typed);
+}
+sealed class BaselineInputs {
+ internal static readonly FieldInfo[] Fields=typeof(EvaluationContext).GetFields(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic).OrderBy(f=>f.Name,StringComparer.Ordinal).ToArray();
+ static readonly HashSet<string> Copied=new(){"_contextItem","_contextPosition","_contextSize","_variables","_namespaces","<BaseUri>k__BackingField","<DefaultElementNamespace>k__BackingField","<DefiningElementDefaultNamespace>k__BackingField","<DefaultCollation>k__BackingField"};
+ readonly XdmValue focus;readonly int position,size;
+ readonly ImmutableDictionary<(string LocalName,string NamespaceUri),XdmValue> variables;
+ readonly ImmutableDictionary<string,string> namespaces;
+ readonly string? baseUri,defaultNamespace,definingNamespace;readonly string collation;
+ internal BaselineInputs(EvaluationContext caller,Bundle bundle) {
+  var baseline=new EvaluationContext();
+  foreach(var field in Fields)if(!Copied.Contains(field.Name)&&Shape(field.GetValue(caller))!=Shape(field.GetValue(baseline)))throw new NotSupportedException("Nondefault context field: "+field.Name);
+  focus=caller.ContextItem;position=caller.ContextPosition;size=caller.ContextSize;
+  if(focus.IsNode&&!bundle.Owns(focus.NodeValue!))throw new NotSupportedException("Unadmitted focus");
+  if(!focus.IsNode&&!focus.IsUndefined)throw new NotSupportedException("Node focus profile");
+  variables=caller.SnapshotVariables().ToImmutableDictionary();
+  foreach(var value in variables.Values) {
+   if(value.IsNode){if(!bundle.Owns(value.NodeValue!))throw new NotSupportedException("Unadmitted variable node");}
+   else if(value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float or XdmValueKind.Boolean or XdmValueKind.String))throw new NotSupportedException("Scalar binding profile");
+  }
+  namespaces=caller.SnapshotNamespaces().ToImmutableDictionary(StringComparer.Ordinal);
+  baseUri=caller.BaseUri;defaultNamespace=caller.DefaultElementNamespace;definingNamespace=caller.DefiningElementDefaultNamespace;collation=caller.DefaultCollation;
+ }
+ internal EvaluationContext Create() {var c=new EvaluationContext{BaseUri=baseUri,DefaultElementNamespace=defaultNamespace,DefiningElementDefaultNamespace=definingNamespace,DefaultCollation=collation};Fill(c);return c;}
+ internal static XQueryContext CreateQuery(EvaluationContext input) {var c=new XQueryContext();var target=c.EvaluationContext;target.BaseUri=input.BaseUri;target.DefaultElementNamespace=input.DefaultElementNamespace;target.DefiningElementDefaultNamespace=input.DefiningElementDefaultNamespace;target.DefaultCollation=input.DefaultCollation;target.WithFocus(input.ContextItem,input.ContextPosition,input.ContextSize);foreach(var v in input.SnapshotVariables())target.WithVariable(v.Key.LocalName,v.Value,v.Key.NamespaceUri);foreach(var n in input.SnapshotNamespaces())target.WithNamespace(n.Key,n.Value);return c;}
+ void Fill(EvaluationContext c) {c.WithFocus(focus,position,size);foreach(var v in variables)c.WithVariable(v.Key.LocalName,v.Value,v.Key.NamespaceUri);foreach(var n in namespaces)c.WithNamespace(n.Key,n.Value);}
+ internal static string Shape(object? value) {
+  if(value is null)return "null";
+  if(value is XdmValue x)return x.IsNode?"node:"+RuntimeHelpers.GetHashCode(x.NodeValue!):x.Kind+":"+x.ToString();
+  if(value is DecimalFormat f)return JsonSerializer.Serialize(f);
+  if(value is string s)return "string:"+s;
+  if(value is Delegate d)return "delegate:"+RuntimeHelpers.GetHashCode(d);
+  if(value is IEnumerable values){var items=new List<string>();foreach(var v in values)items.Add(v is DictionaryEntry pair?Shape(pair.Key)+"="+Shape(pair.Value):v?.ToString()??"null");return value.GetType().FullName+":"+string.Join(";",items.OrderBy(s=>s,StringComparer.Ordinal));}
+  if(value.GetType().IsValueType)return value.GetType().FullName+":"+value;
+  return value.GetType().FullName+":"+RuntimeHelpers.GetHashCode(value);
+ }
+ internal static string Observe(EvaluationContext c)=>string.Join("\n",Fields.Select(f=>f.Name+"="+Shape(f.GetValue(c))));
+ internal static object[] Policy=>Fields.Select(f=>(object)new{name=f.Name,type=f.FieldType.FullName,policy=Copied.Contains(f.Name)?"Copied bounded input":"Must match fresh-context default"}).ToArray();
+}
+sealed class Inputs {
+ internal readonly SchemaOperationInputs Value;
+ internal Inputs(EvaluationContext caller,Bundle bundle){Value=caller.CaptureSchemaInputs(bundle.Owns,16,16);}
+ internal Inputs(SchemaOperationInputs value){Value=value;}
+ internal EvaluationContext Create()=>Value.CreateContext();
+ internal static string Observe(EvaluationContext caller)=>BaselineInputs.Observe(caller);
+ internal static object[] Policy=>BaselineInputs.Policy;
+}
+sealed class Result(SchemaAtomicResult result) {
+ internal string Drain(){var values=new List<string>();result.ForEachAtomic(v=>values.Add(v.ToString()));return string.Join("|",values);}
+}
+static class Fixture {
+ static readonly List<object> rows=new();
+
+ static EvaluationContext? contextSink;
+ static XQueryContext? querySink;
+ static long Cost(Action action){for(int n=0;n<100;n++)action();long before=GC.GetAllocatedBytesForCurrentThread();for(int n=0;n<1000;n++)action();return (GC.GetAllocatedBytesForCurrentThread()-before)/1000;}
+ delegate bool XPathFactory(string source,CompileOptions options,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation);
+ delegate bool XQueryFactory(string source,XQueryCompiler compiler,bool xml11,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation);
+ delegate bool XsltFactory(string source,XsltCompiler compiler,string? baseUri,IXdmNode? match,IXdmNode? global,string? template,Func<IXdmNode,bool> owns,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation);
+ static readonly Type HostBridge=typeof(XsltExecutable).Assembly.GetType("Bosak.Xslt.Api.SchemaHostSessionCompilation")!;
+ static readonly MethodInfo Bridge=HostBridge.GetMethod("TryCompileXslt",BindingFlags.Static|BindingFlags.NonPublic)!;
+ static readonly XPathFactory CompileXPath=HostBridge.GetMethod("TryCompileXPath",BindingFlags.Static|BindingFlags.NonPublic)!.CreateDelegate<XPathFactory>();
+ static readonly XQueryFactory CompileXQuery=HostBridge.GetMethod("TryCompileXQuery",BindingFlags.Static|BindingFlags.NonPublic)!.CreateDelegate<XQueryFactory>();
+ static readonly XsltFactory CompileXslt=Bridge.CreateDelegate<XsltFactory>();
+ static Bosak.XPath.Runtime.Resources.ControlledResourcePolicy? resourceSink;
+ static SchemaOperationInputs? typedSink;
+ static void Check(string id,bool passed){if(!passed)throw new Exception(id);rows.Add(new{id,passed});}
+ static async Task Refuse<T>(string id,Func<Task> action)where T:Exception{try{await action();}catch(T){Check(id,true);return;}throw new Exception("Expected "+typeof(T).Name+": "+id);}
+ static string Sheet(string expression)=>"<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:param name='v'/><xsl:param name='n'/><xsl:variable name='g' select='string(/*)'/><xsl:template name='main'><xsl:sequence select=\""+expression+"\"/></xsl:template></xsl:stylesheet>";
+ static SchemaQuerySession Compile(string host,Issuer issuer,Bundle bundle,bool failure=false,bool structured=false) {
+  SchemaQuerySession? session;string? reason;bool supported;
+  if(host=="XPath")supported=CompileXPath(failure?"error()":structured?"$n":"($v,data($n),string(/*))",new CompileOptions(),issuer,4,16,out session,out reason,default);
+  else if(host=="XQuery")supported=CompileXQuery("declare variable $v external;declare variable $n external;"+(failure?"error()":structured?"$n":"($v,data($n),string(/*))"),new XQueryCompiler(),false,issuer,4,16,out session,out reason,default);
+  else supported=CompileXslt(Sheet(failure?"error()":structured?"$n":"($v,data($n),string(/*),$g)"),new XsltCompiler(),null,bundle.Match,bundle.Global,"main",bundle.Owns,issuer,4,16,out session,out reason,default);
+  if(!supported)throw new Exception("Unexpected factory refusal: "+reason);return session!;
+ }
+ static string Read(SchemaQuerySession session,Issuer issuer){using var snapshot=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{});return session.Run(session.Environment,snapshot,op=>{var result=new Result(op.EvaluateAtomic(op.CaptureInputs(new EvaluationContext(),_=>false,16,16),16));return result.Drain();});}
+ internal static async Task Run() {
+  foreach(var host in new[]{"XPath","XQuery","XSLT"}) {
+   var prefix=host+":";var bundle=new Bundle();var caller=new EvaluationContext{BaseUri="urn:caller",DefaultElementNamespace="urn:caller-default"}.WithFocus(XdmValue.FromNode(bundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(bundle.Typed)).WithNamespace("p","urn:before");
+   var issuer=new Issuer();using var session=Compile(host,issuer,bundle);int releases=0;using var snapshot=session.OpenSnapshot(session.Environment,bundle,issuer.Origin,()=>Interlocked.Increment(ref releases));
+   var admitted=session.Run(session.Environment,snapshot,op=>new Inputs(op.CaptureInputs(caller,bundle.Owns,16,16)));caller.WithVariable("v",XdmValue.FromInteger(99));caller.WithNamespace("p","urn:after");var before=Inputs.Observe(caller);
+   string expected=host=="XSLT"?"42|10|B|B":"42|10|A";
+   var answer=session.Run(session.Environment,snapshot,op=>new Result(op.EvaluateAtomic(admitted.Value,16)).Drain());Check(prefix+"actual-host-and-captured-inputs",answer==expected);Check(prefix+"caller-preserved-success",Inputs.Observe(caller)==before);await Refuse<NotSupportedException>(prefix+"factory-raw-context-refused",()=>Task.FromResult(session.Run(session.Environment,snapshot,op=>op.Evaluate(new EvaluationContext()))));
+   using(var failed=Compile(host,issuer,bundle,true)){using var s=failed.OpenSnapshot(failed.Environment,new object(),issuer.Origin,()=>{});await Refuse<InvalidOperationException>(prefix+"host-error",()=>Task.FromResult(failed.Run(failed.Environment,s,op=>op.EvaluateAtomic(op.CaptureInputs(admitted.Create(),bundle.Owns,16,16),16))));}Check(prefix+"caller-preserved-error",Inputs.Observe(caller)==before);
+   Result? escaped=null;session.Run(session.Environment,snapshot,op=>{escaped=new Result(op.EvaluateAtomic(admitted.Value,16));return 0;});await Refuse<ObjectDisposedException>(prefix+"deferred-after-callback-refused",()=>Task.FromResult(escaped!.Drain()));
+   using(var foreign=Compile(host,issuer,bundle)){using var other=foreign.OpenSnapshot(foreign.Environment,new object(),issuer.Origin,()=>{});await Refuse<ArgumentException>(prefix+"foreign-snapshot",()=>Task.FromResult(session.Run(session.Environment,other,_=>0)));await Refuse<ArgumentException>(prefix+"foreign-session-input-capture",()=>Task.FromResult(foreign.Run(foreign.Environment,other,op=>op.EvaluateAtomic(admitted.Value,16))));}
+   await Refuse<ArgumentException>(prefix+"foreign-environment",()=>Task.FromResult(session.Run(new SchemaQueryEnvironment(ImmutableDictionary<string,string>.Empty,"foreign"),snapshot,_=>0)));using(var second=session.OpenSnapshot(session.Environment,new object(),issuer.Origin,()=>{})){await Refuse<ArgumentException>(prefix+"foreign-snapshot-input-capture",()=>Task.FromResult(session.Run(session.Environment,second,op=>op.EvaluateAtomic(admitted.Value,16))));}
+   using(var structured=Compile(host,issuer,bundle,structured:true)){using var nodeSnapshot=structured.OpenSnapshot(structured.Environment,new object(),issuer.Origin,()=>{});await Refuse<NotSupportedException>(prefix+"structured-result-refused",()=>Task.FromResult(structured.Run(structured.Environment,nodeSnapshot,op=>new Result(op.EvaluateAtomic(op.CaptureInputs(admitted.Create(),bundle.Owns,16,16),16)).Drain())));}
+   using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Refuse<OperationCanceledException>(prefix+"cancel-before-entry",()=>session.RunAsync(session.Environment,snapshot,_=>Task.FromResult(0),cancel.Token));}
+   var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var raw=session.RunAsync(session.Environment,snapshot,async op=>{var result=new Result(op.EvaluateAtomic(admitted.Value,16));entered.SetResult();await resume.Task;return result.Drain();});
+   await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Refuse<OperationCanceledException>(prefix+"cancel-wait",()=>raw.WaitAsync(cancel.Token));}
+   Check(prefix+"wait-cancel-retains-raw-ownership",!raw.IsCompleted&&releases==0);resume.SetResult();Check(prefix+"deferred-consumed-inside-raw-task",await raw.WaitAsync(TimeSpan.FromSeconds(10))==expected);Check(prefix+"caller-preserved-async",Inputs.Observe(caller)==before);
+   var enterClose=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resumeClose=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var closing=session.RunAsync(session.Environment,snapshot,async op=>{var result=new Result(op.EvaluateAtomic(admitted.Value,16));enterClose.SetResult();await resumeClose.Task;await Refuse<ObjectDisposedException>(prefix+"close-rejects-existing-operation-access",()=>Task.FromResult(result.Drain()));return 0;});
+   await enterClose.Task.WaitAsync(TimeSpan.FromSeconds(10));snapshot.Dispose();session.Dispose();Check(prefix+"close-defers-owner-release",releases==0);await Refuse<ObjectDisposedException>(prefix+"close-rejects-new-work",()=>session.RunAsync(session.Environment,snapshot,_=>Task.FromResult(0)));resumeClose.SetResult();await closing.WaitAsync(TimeSpan.FromSeconds(10));Check(prefix+"raw-completion-releases-once",releases==1);snapshot.Dispose();session.Dispose();Check(prefix+"repeat-close-no-double-release",releases==1);
+   using(var cleanupSession=Compile(host,issuer,bundle)){var cleanup=cleanupSession.OpenSnapshot(cleanupSession.Environment,new object(),issuer.Origin,()=>throw new ApplicationException("cleanup"));var primary=new InvalidOperationException("callback");bool both=false;try{cleanupSession.Run<int>(cleanupSession.Environment,cleanup,op=>{_ = new Result(op.EvaluateAtomic(op.CaptureInputs(admitted.Create(),bundle.Owns,16,16),16)).Drain();cleanup.Dispose();throw primary;});}catch(AggregateException error){both=error.InnerExceptions.Count==2&&ReferenceEquals(error.InnerExceptions[0],primary)&&error.InnerExceptions[1].Message=="cleanup";}Check(prefix+"callback-and-cleanup-retained",both);}
+   caller.DocumentLoader=_=>throw new Exception("Must not invoke");var advancedBefore=Inputs.Observe(caller);await Refuse<NotSupportedException>(prefix+"advanced-caller-state-refused",()=>Task.FromResult(new Inputs(caller,bundle)));Check(prefix+"unsupported-caller-preserved",Inputs.Observe(caller)==advancedBefore);caller.DocumentLoader=null;
+   caller.WithDecimalFormat(null,new DecimalFormat{DecimalSeparator=","});var decimalBefore=Inputs.Observe(caller);await Refuse<NotSupportedException>(prefix+"mutable-decimal-format-refused",()=>Task.FromResult(new Inputs(caller,bundle)));Check(prefix+"decimal-format-refusal-preserves-caller",Inputs.Observe(caller)==decimalBefore);caller.WithDecimalFormat(null,new DecimalFormat());
+   caller.WithVariable("v",XdmValue.FromSequence(XdmSequence.Empty));await Refuse<NotSupportedException>(prefix+"sequence-input-refused",()=>Task.FromResult(new Inputs(caller,bundle)));caller.WithVariable("v",XdmValue.FromInteger(99));
+   caller.WithVariable("n",XdmValue.FromNode(new XDocumentNode(XElement.Parse("<foreign/>"))));await Refuse<NotSupportedException>(prefix+"foreign-node-input-refused",()=>Task.FromResult(new Inputs(caller,bundle)));
+  }
+  {
+   var provider=new Issuer();var namespaces=new Dictionary<string,string>{{"p","urn:before"}};
+   if(!CompileXPath("namespace-uri-from-QName(xs:QName('p:x'))",new CompileOptions{Namespaces=namespaces},provider,4,16,out var session,out var reason,default))throw new Exception(reason);
+   using(session!){namespaces["p"]="urn:after";Check("capture:XPath-namespace-freeze",Read(session!,provider)=="urn:before"&&session!.Environment.Namespaces["p"]=="urn:before");}
+  }
+  {
+   const string query="declare namespace p='urn:prolog';import module namespace m='urn:m';(m:f(),namespace-uri-from-QName(xs:QName('p:x')))";
+   const string module="module namespace m='urn:m';declare function m:f(){7};";
+   var compiler=new XQueryCompiler().WithNamespace("p","urn:caller").WithModule("urn:m",module);var provider=new Issuer();
+   if(!CompileXQuery(query,compiler,false,provider,4,16,out var session,out var reason,default))throw new Exception(reason);
+   using(session!){compiler.WithNamespace("p","urn:after").WithModule("urn:m","module namespace m='urn:m';declare function m:f(){9};");Check("capture:XQuery-module-prolog-freeze",Read(session!,provider)=="7|urn:prolog"&&session!.Environment.Namespaces["p"]=="urn:prolog");
+    if(!CompileXQuery(query,new XQueryCompiler().WithNamespace("p","urn:caller").WithModule("urn:m",module),false,provider,4,16,out var same,out reason,default))throw new Exception(reason);
+    using(same!){Check("capture:equal-descriptors-distinct-identities",same!.Environment.Fingerprint==session!.Environment.Fingerprint&&!ReferenceEquals(same.Environment,session.Environment));using var snapshot=session.OpenSnapshot(session.Environment,new object(),provider.Origin,()=>{});await Refuse<ArgumentException>("capture:equal-fingerprint-cannot-admit",()=>Task.FromResult(session.Run(same.Environment,snapshot,_=>0)));}
+   }
+  }
+  {
+   const string style="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:param name='v' static='yes' select='0'/><xsl:template name='main'><xsl:sequence select='$v'/></xsl:template></xsl:stylesheet>";
+   var provider=new Issuer();var values=new Dictionary<(string,string),XdmValue>{{("v",""),XdmValue.FromInteger(7)}};var compiler=new XsltCompiler{StaticParameters=values};
+   if(!CompileXslt(style,compiler,null,null,null,"main",_=>false,provider,4,16,out var session,out var reason,default))throw new Exception(reason);
+   using(session!){values[("v","")]=XdmValue.FromInteger(9);compiler.SchemaAware=true;Check("capture:XSLT-static-freeze",Read(session!,provider)=="7");}
+   var negative=new XsltCompiler{StaticParameters=new(){{("v",""),XdmValue.FromDouble(-0.0)}}};var positive=new XsltCompiler{StaticParameters=new(){{("v",""),XdmValue.FromDouble(0.0)}}};
+   if(!CompileXslt(style,negative,null,null,null,"main",_=>false,provider,4,16,out var minus,out reason,default)||!CompileXslt(style,positive,null,null,null,"main",_=>false,provider,4,16,out var plus,out reason,default))throw new Exception(reason);
+   using(minus!)using(plus!)Check("capture:static-double-sign-descriptor",minus!.Environment.Fingerprint!=plus!.Environment.Fingerprint);
+  }
+  {
+   var provider=new Issuer();bool supported=CompileXPath("1",new CompileOptions{SchemaSet=new System.Xml.Schema.XmlSchemaSet()},provider,4,16,out var session,out var reason,default);Check("refusal:XPath-schema-before-bind",!supported&&session is null&&!string.IsNullOrEmpty(reason)&&provider.Binds==0);
+   supported=CompileXQuery("import schema namespace s='urn:s';1",new XQueryCompiler(),false,provider,4,16,out session,out reason,default);Check("refusal:XQuery-schema-before-bind",!supported&&session is null&&!string.IsNullOrEmpty(reason)&&provider.Binds==0);
+   supported=CompileXslt("<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='main' use-when='true()'/></xsl:stylesheet>",new XsltCompiler(),null,null,null,"main",_=>false,provider,4,16,out session,out reason,default);Check("refusal:XSLT-static-profile-before-bind",!supported&&session is null&&!string.IsNullOrEmpty(reason)&&provider.Binds==0);
+   bool failed=false;try{CompileXPath("(",new CompileOptions(),provider,4,16,out session,out reason,default);}catch{failed=true;}Check("refusal:compile-error-before-bind",failed&&provider.Binds==0);
+  }
+  foreach(var host in new[]{"XPath","XQuery","XSLT"}){
+   var provider=new Issuer();var bundle=new Bundle();using var session=Compile(host,provider,bundle);int releases=0;using var snapshot=session.OpenSnapshot(session.Environment,new object(),provider.Origin,()=>releases++);
+   var caller=new EvaluationContext().WithFocus(XdmValue.FromNode(bundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(bundle.Typed));
+   var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var raw=session.RunAsync(session.Environment,snapshot,async op=>{var result=new Result(op.EvaluateAtomic(op.CaptureInputs(caller,bundle.Owns,16,16),16));entered.SetResult();await resume.Task;await Refuse<ObjectDisposedException>("owner:"+host+":revoked-result",()=>Task.FromResult(result.Drain()));return 0;});
+   await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));provider.Available=false;Check("owner:"+host+":raw-ownership-held",!raw.IsCompleted&&releases==0);resume.SetResult();await raw.WaitAsync(TimeSpan.FromSeconds(10));session.Dispose();Check("owner:"+host+":cleanup-with-revoked-provider",releases==1);
+  }
+
+  foreach(var host in new[]{"XPath","XQuery","XSLT"}){
+   var prefix="independent:"+host+":";var a=new Issuer();var b=new Issuer();var ba=new Bundle();var bb=new Bundle();
+   using var sa=Compile(host,a,ba);using var sb=Compile(host,b,bb);int ar=0,br=0,rejected=0;
+   var identity=new object();var xa=sa.OpenSnapshot(sa.Environment,identity,a.Origin,()=>ar++);using var xb=sb.OpenSnapshot(sb.Environment,identity,b.Origin,()=>br++);
+   Check(prefix+"identity-is-session-local",!ReferenceEquals(sa.Environment,sb.Environment)&&!ReferenceEquals(a.Origin,b.Origin)&&!ReferenceEquals(ba.Match,bb.Match));
+   EvaluationContext Caller(Bundle bundle)=>new EvaluationContext().WithFocus(XdmValue.FromNode(bundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(bundle.Typed));
+   var ia=sa.Run(sa.Environment,xa,op=>op.CaptureInputs(Caller(ba),ba.Owns,16,16));var ib=sb.Run(sb.Environment,xb,op=>op.CaptureInputs(Caller(bb),bb.Owns,16,16));
+   string Drain(SchemaQuerySession session,SchemaEvidenceKernel.Snapshot snapshot,SchemaOperationInputs inputs)=>session.Run(session.Environment,snapshot,op=>new Result(op.EvaluateAtomic(inputs,16)).Drain());
+   var expected=host=="XSLT"?"42|10|B|B":"42|10|A";
+   Check(prefix+"independent-success",Drain(sa,xa,ia)==expected&&Drain(sb,xb,ib)==expected);
+   await Refuse<ArgumentException>(prefix+"foreign-assessment",()=>Task.FromResult(sa.OpenSnapshot(sa.Environment,new object(),b.Origin,()=>rejected++)));
+   await Refuse<ArgumentException>(prefix+"duplicate-identity",()=>Task.FromResult(sa.OpenSnapshot(sa.Environment,identity,a.Origin,()=>rejected++)));
+   using(var cancel=new CancellationTokenSource()){cancel.Cancel();await Refuse<OperationCanceledException>(prefix+"canceled-acquisition",()=>Task.FromResult(sa.OpenSnapshot(sa.Environment,new object(),a.Origin,()=>rejected++,cancel.Token)));}
+   Check(prefix+"rejected-acquisitions-retain-caller-cleanup",rejected==0&&ar==0&&br==0);
+   await Refuse<ArgumentException>(prefix+"cross-owner-snapshot",()=>Task.FromResult(sa.Run(sa.Environment,xb,_=>0)));
+   await Refuse<ArgumentException>(prefix+"cross-owner-inputs",()=>Task.FromResult(Drain(sb,xb,ia)));
+   await Refuse<NotSupportedException>(prefix+"foreign-node-capture",()=>Task.FromResult(sb.Run(sb.Environment,xb,op=>op.CaptureInputs(Caller(ba),bb.Owns,16,16))));
+   var entered=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);var resume=new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+   var raw=sa.RunAsync(sa.Environment,xa,async op=>{var result=new Result(op.EvaluateAtomic(ia,16));entered.SetResult();await resume.Task;await Refuse<ObjectDisposedException>(prefix+"revoked-raw-result",()=>Task.FromResult(result.Drain()));return 0;});
+   await entered.Task.WaitAsync(TimeSpan.FromSeconds(10));a.Available=false;sa.Dispose();Check(prefix+"revoked-owner-retains-raw-lease",ar==0&&!raw.IsCompleted);
+   Check(prefix+"other-owner-survives-revocation",Drain(sb,xb,ib)==expected&&br==0);
+   resume.SetResult();await raw.WaitAsync(TimeSpan.FromSeconds(10));xa.Dispose();sa.Dispose();Check(prefix+"revoked-owner-released-once",ar==1);
+   var fail=sb.OpenSnapshot(sb.Environment,new object(),b.Origin,()=>throw new ApplicationException("independent-cleanup"));
+   await Refuse<ApplicationException>(prefix+"cleanup-failure",()=>{fail.Dispose();return Task.CompletedTask;});fail.Dispose();
+   Check(prefix+"other-snapshot-survives-cleanup-failure",Drain(sb,xb,ib)==expected&&br==0);
+   xb.Dispose();sb.Dispose();Check(prefix+"second-owner-released-once",br==1);
+  }
+  var costBundle=new Bundle();var costCaller=new EvaluationContext().WithFocus(XdmValue.FromNode(costBundle.Match),1,1).WithVariable("v",XdmValue.FromInteger(42)).WithVariable("n",XdmValue.FromNode(costBundle.Typed));var captured=new Inputs(costCaller,costBundle);var child=captured.Create();
+  Func<IXdmNode,bool> costOwner=costBundle.Owns;
+  BaselineInputs? baselineSink=null;
+  var bytesPerOperation=new Dictionary<string,long>{["fixture-reflective-input-capture"]=Cost(()=>baselineSink=new BaselineInputs(costCaller,costBundle)),["typed-production-input-capture"]=Cost(()=>typedSink=costCaller.CaptureSchemaInputs(costOwner,16,16)),["fresh-evaluation-context"]=Cost(()=>contextSink=captured.Create()),["old-xquery-context-wrapper-copy"]=Cost(()=>querySink=BaselineInputs.CreateQuery(child))};
+  var costIssuer=new Issuer();if(!CompileXPath("$v",new CompileOptions(),costIssuer,2,16,out var costSession,out var why,default))throw new Exception(why);
+  using(costSession!){using var costSnapshot=costSession!.OpenSnapshot(costSession.Environment,new object(),costIssuer.Origin,()=>{});costSession.Run(costSession.Environment,costSnapshot,op=>{bytesPerOperation["typed-production-operation-capture"]=Cost(()=>typedSink=op.CaptureInputs(costCaller,costOwner,16,16));var result=op.EvaluateAtomic(op.CaptureInputs(costCaller,costOwner,16,16),16);bytesPerOperation["guarded-single-atomic-visitation"]=Cost(()=>result.ForEachAtomic(static _=>{}));return 0;});}
+  bytesPerOperation["closed-resource-policy-per-evaluation"]=Cost(()=>resourceSink=SchemaProviderSessionBinding.ClosedResources());GC.KeepAlive(resourceSink);GC.KeepAlive(baselineSink);
+  var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+  Console.WriteLine(JsonSerializer.Serialize(new{checks=rows.Count,rows,fieldPolicy=Inputs.Policy,bytesPerOperation,allocationIterations=1000,bindings,bridge=Bridge.ToString(),scope="Actual factories with independent provider/session/node/snapshot ownership; test issuers, no joint multi-source operation or native assessment."},new JsonSerializerOptions{WriteIndented=true}));
+  GC.KeepAlive(typedSink);GC.KeepAlive(contextSink);GC.KeepAlive(querySink);
+ }
+}

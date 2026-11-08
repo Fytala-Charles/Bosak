@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="e50e1c3b-0626-460c-8a90-2b5cc425c1fc" name="charl@CHARLES 2026-11-05 20:15:59" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-05T20:15:59.3473157+01:00" queuing="2026-11-05T20:15:59.3473158+01:00" start="2026-11-05T20:15:58.7525920+01:00" finish="2026-11-05T20:15:59.3795035+01:00" />
+  <TestSettings name="default" id="198767c2-d1c5-4d3b-9bcf-733695b1b9f7">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-05_20_15_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="a92547bc-72f2-40b8-8e13-90f2537d34ec" testId="74eeb0cf-a04b-1902-f6b6-1a378ba1f508" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;length&quot;)" computerName="CHARLES" duration="00:00:00.0001078" startTime="2026-11-05T20:15:59.3147210+01:00" endTime="2026-11-05T20:15:59.3147211+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a92547bc-72f2-40b8-8e13-90f2537d34ec" />
+    <UnitTestResult executionId="8cb8f334-e95f-47ee-b7d6-f65eb39bb8d5" testId="d63d0ba0-c96c-b5be-7aae-27f70365800b" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: False, known: True)" computerName="CHARLES" duration="00:00:00.0000215" startTime="2026-11-05T20:15:59.3145370+01:00" endTime="2026-11-05T20:15:59.3145370+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8cb8f334-e95f-47ee-b7d6-f65eb39bb8d5" />
+    <UnitTestResult executionId="82729be9-0dc1-43fb-a77d-8fa36486e14b" testId="b11e2230-1027-cace-b8fd-251d82bb3163" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;current&quot;)" computerName="CHARLES" duration="00:00:00.0007638" startTime="2026-11-05T20:15:59.3145702+01:00" endTime="2026-11-05T20:15:59.3145702+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="82729be9-0dc1-43fb-a77d-8fa36486e14b" />
+    <UnitTestResult executionId="67d4ca80-5b11-4a8f-9a27-04c713dc7884" testId="5605a8f8-4d21-7647-c20e-ac9587edf220" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: True, known: True)" computerName="CHARLES" duration="00:00:00.0003992" startTime="2026-11-05T20:15:59.3141542+01:00" endTime="2026-11-05T20:15:59.3141543+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67d4ca80-5b11-4a8f-9a27-04c713dc7884" />
+    <UnitTestResult executionId="ef01cff3-a958-4b62-b9c8-8473347e79f2" testId="dfd0e1ad-8c47-6575-2db7-965b0dabf479" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: False, known: False)" computerName="CHARLES" duration="00:00:00.0000390" startTime="2026-11-05T20:15:59.3145210+01:00" endTime="2026-11-05T20:15:59.3145210+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ef01cff3-a958-4b62-b9c8-8473347e79f2" />
+    <UnitTestResult executionId="59edb0f6-b3b0-4446-a6c2-48311524370f" testId="71c9b285-3b9f-4aee-f7da-5f142a83aa56" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ28_ContinuationReentry" computerName="CHARLES" duration="00:00:00.0003516" startTime="2026-11-05T20:15:59.3343206+01:00" endTime="2026-11-05T20:15:59.3343206+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="59edb0f6-b3b0-4446-a6c2-48311524370f" />
+    <UnitTestResult executionId="c7aef4db-badf-4c26-bde9-5179cacde350" testId="444df2ac-498b-4da0-4b47-2749749966ef" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 0)" computerName="CHARLES" duration="00:00:00.0003377" startTime="2026-11-05T20:15:59.3341319+01:00" endTime="2026-11-05T20:15:59.3341320+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7aef4db-badf-4c26-bde9-5179cacde350">
+      <Output>
+        <ErrorInfo>
+          <Message>System.ArgumentException : Atomic values only (Parameter 'value')</Message>
+          <StackTrace>   at Bosak.XPath.Core.Xdm.XdmValue.SchemaTransportAttach(XdmValue value, Object marker) in D:\Development\Bosak\src\Bosak.XPath.Core\Xdm\XdmValue.cs:line 1049&#xD;
+   at Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(Int32 mode) in D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedQueryResultTests.cs:line 71&#xD;
+   at InvokeStub_CapturedQueryResultTests.XQ27_MarkedCellsRefuse(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a0d6e501-3fc8-436d-bbc8-60edaf374a13" testId="3d00a8f2-d089-90ef-2ac4-eb6794ed7a48" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 2)" computerName="CHARLES" duration="00:00:00.0001519" startTime="2026-11-05T20:15:59.3342837+01:00" endTime="2026-11-05T20:15:59.3342837+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a0d6e501-3fc8-436d-bbc8-60edaf374a13" />
+    <UnitTestResult executionId="9fcf3bb4-00b9-48d6-94c6-97d7f0221abf" testId="ddf0ee5a-ffed-2728-eae5-3391775daab3" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ29_DeferredTailDrain" computerName="CHARLES" duration="00:00:00.0046796" startTime="2026-11-05T20:15:59.3342990+01:00" endTime="2026-11-05T20:15:59.3342990+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9fcf3bb4-00b9-48d6-94c6-97d7f0221abf" />
+    <UnitTestResult executionId="d7d1491e-70d6-488a-a9e8-6d0a2301f2cd" testId="9475cd35-0c58-e64d-d85f-91ac2a477871" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ31_RevocationBeforeCurrent(cancel: False)" computerName="CHARLES" duration="00:00:00.0003372" startTime="2026-11-05T20:15:59.3347604+01:00" endTime="2026-11-05T20:15:59.3347605+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d7d1491e-70d6-488a-a9e8-6d0a2301f2cd" />
+    <UnitTestResult executionId="ce7dc1ee-51cb-451a-91be-8426edc70bbe" testId="5da4f431-491e-6121-fafb-a4f010fcdc38" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ30_ExactEvaluatorTarget" computerName="CHARLES" duration="00:00:00.0003218" startTime="2026-11-05T20:15:59.3150908+01:00" endTime="2026-11-05T20:15:59.3150909+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ce7dc1ee-51cb-451a-91be-8426edc70bbe" />
+    <UnitTestResult executionId="706d1c28-7b92-46dd-86be-b978b259fe5a" testId="6b874046-5ed2-8946-a00c-12bcf2c5d263" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 1)" computerName="CHARLES" duration="00:00:00.0005361" startTime="2026-11-05T20:15:59.3311037+01:00" endTime="2026-11-05T20:15:59.3311037+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="706d1c28-7b92-46dd-86be-b978b259fe5a" />
+    <UnitTestResult executionId="13fc1268-17ad-4519-811e-71fe99e5bda7" testId="e6140712-8519-3777-fd8d-667ca8cbd20b" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ31_RevocationBeforeCurrent(cancel: True)" computerName="CHARLES" duration="00:00:00.0009531" startTime="2026-11-05T20:15:59.3343983+01:00" endTime="2026-11-05T20:15:59.3343984+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="13fc1268-17ad-4519-811e-71fe99e5bda7" />
+    <UnitTestResult executionId="2da46809-f6f4-44e3-b27a-655d6b39d4f8" testId="10e09162-3c5a-22ac-e710-8e9f8c45a0af" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;move&quot;)" computerName="CHARLES" duration="00:00:00.0000417" startTime="2026-11-05T20:15:59.3147484+01:00" endTime="2026-11-05T20:15:59.3147484+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2da46809-f6f4-44e3-b27a-655d6b39d4f8" />
+    <UnitTestResult executionId="5257dd09-e45b-4748-8ed4-f91502152403" testId="d149da30-e01c-b5a2-f41b-9f8b9795524c" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;enumerator&quot;)" computerName="CHARLES" duration="00:00:00.0012861" startTime="2026-11-05T20:15:59.3145599+01:00" endTime="2026-11-05T20:15:59.3145600+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5257dd09-e45b-4748-8ed4-f91502152403" />
+    <UnitTestResult executionId="9170743e-6902-43da-9f0a-1715cf032f2b" testId="e782b17d-d01b-efb3-e071-916b221502b6" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: True, known: False)" computerName="CHARLES" duration="00:00:00.0351677" startTime="2026-11-05T20:15:59.3122593+01:00" endTime="2026-11-05T20:15:59.3122736+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9170743e-6902-43da-9f0a-1715cf032f2b" />
+    <UnitTestResult executionId="bdb183a9-b41a-4542-a277-458843ad07a8" testId="b3416c07-5543-96e5-e243-0dfc151072c7" testName="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ24_NoExpiredCallbackReplay" computerName="CHARLES" duration="00:00:00.0023522" startTime="2026-11-05T20:15:59.3343091+01:00" endTime="2026-11-05T20:15:59.3343092+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdb183a9-b41a-4542-a277-458843ad07a8" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ24_NoExpiredCallbackReplay" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="b3416c07-5543-96e5-e243-0dfc151072c7">
+      <Execution id="bdb183a9-b41a-4542-a277-458843ad07a8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ24_NoExpiredCallbackReplay" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: False, known: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="d63d0ba0-c96c-b5be-7aae-27f70365800b">
+      <Execution id="8cb8f334-e95f-47ee-b7d6-f65eb39bb8d5" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ25_LengthAndSinglePass" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: True, known: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="e782b17d-d01b-efb3-e071-916b221502b6">
+      <Execution id="9170743e-6902-43da-9f0a-1715cf032f2b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ25_LengthAndSinglePass" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ30_ExactEvaluatorTarget" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="5da4f431-491e-6121-fafb-a4f010fcdc38">
+      <Execution id="ce7dc1ee-51cb-451a-91be-8426edc70bbe" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ30_ExactEvaluatorTarget" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 2)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="3d00a8f2-d089-90ef-2ac4-eb6794ed7a48">
+      <Execution id="a0d6e501-3fc8-436d-bbc8-60edaf374a13" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ27_MarkedCellsRefuse" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ28_ContinuationReentry" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="71c9b285-3b9f-4aee-f7da-5f142a83aa56">
+      <Execution id="59edb0f6-b3b0-4446-a6c2-48311524370f" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ28_ContinuationReentry" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 0)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="444df2ac-498b-4da0-4b47-2749749966ef">
+      <Execution id="c7aef4db-badf-4c26-bde9-5179cacde350" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ27_MarkedCellsRefuse" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ31_RevocationBeforeCurrent(cancel: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="e6140712-8519-3777-fd8d-667ca8cbd20b">
+      <Execution id="13fc1268-17ad-4519-811e-71fe99e5bda7" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ31_RevocationBeforeCurrent" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;move&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="10e09162-3c5a-22ac-e710-8e9f8c45a0af">
+      <Execution id="2da46809-f6f4-44e3-b27a-655d6b39d4f8" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ26_DeferredErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;enumerator&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="d149da30-e01c-b5a2-f41b-9f8b9795524c">
+      <Execution id="5257dd09-e45b-4748-8ed4-f91502152403" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ26_DeferredErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ29_DeferredTailDrain" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="ddf0ee5a-ffed-2728-eae5-3391775daab3">
+      <Execution id="9fcf3bb4-00b9-48d6-94c6-97d7f0221abf" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ29_DeferredTailDrain" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: False, known: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="dfd0e1ad-8c47-6575-2db7-965b0dabf479">
+      <Execution id="ef01cff3-a958-4b62-b9c8-8473347e79f2" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ25_LengthAndSinglePass" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;length&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="74eeb0cf-a04b-1902-f6b6-1a378ba1f508">
+      <Execution id="a92547bc-72f2-40b8-8e13-90f2537d34ec" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ26_DeferredErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 1)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="6b874046-5ed2-8946-a00c-12bcf2c5d263">
+      <Execution id="706d1c28-7b92-46dd-86be-b978b259fe5a" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ27_MarkedCellsRefuse" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ25_LengthAndSinglePass(single: True, known: True)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="5605a8f8-4d21-7647-c20e-ac9587edf220">
+      <Execution id="67d4ca80-5b11-4a8f-9a27-04c713dc7884" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ25_LengthAndSinglePass" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ26_DeferredErrors(stage: &quot;current&quot;)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="b11e2230-1027-cace-b8fd-251d82bb3163">
+      <Execution id="82729be9-0dc1-43fb-a77d-8fa36486e14b" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ26_DeferredErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ31_RevocationBeforeCurrent(cancel: False)" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="9475cd35-0c58-e64d-d85f-91ac2a477871">
+      <Execution id="d7d1491e-70d6-488a-a9e8-6d0a2301f2cd" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.CapturedQueryResultTests" name="XQ31_RevocationBeforeCurrent" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="74eeb0cf-a04b-1902-f6b6-1a378ba1f508" executionId="a92547bc-72f2-40b8-8e13-90f2537d34ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d63d0ba0-c96c-b5be-7aae-27f70365800b" executionId="8cb8f334-e95f-47ee-b7d6-f65eb39bb8d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b11e2230-1027-cace-b8fd-251d82bb3163" executionId="82729be9-0dc1-43fb-a77d-8fa36486e14b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5605a8f8-4d21-7647-c20e-ac9587edf220" executionId="67d4ca80-5b11-4a8f-9a27-04c713dc7884" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dfd0e1ad-8c47-6575-2db7-965b0dabf479" executionId="ef01cff3-a958-4b62-b9c8-8473347e79f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="71c9b285-3b9f-4aee-f7da-5f142a83aa56" executionId="59edb0f6-b3b0-4446-a6c2-48311524370f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="444df2ac-498b-4da0-4b47-2749749966ef" executionId="c7aef4db-badf-4c26-bde9-5179cacde350" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d00a8f2-d089-90ef-2ac4-eb6794ed7a48" executionId="a0d6e501-3fc8-436d-bbc8-60edaf374a13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ddf0ee5a-ffed-2728-eae5-3391775daab3" executionId="9fcf3bb4-00b9-48d6-94c6-97d7f0221abf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9475cd35-0c58-e64d-d85f-91ac2a477871" executionId="d7d1491e-70d6-488a-a9e8-6d0a2301f2cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5da4f431-491e-6121-fafb-a4f010fcdc38" executionId="ce7dc1ee-51cb-451a-91be-8426edc70bbe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6b874046-5ed2-8946-a00c-12bcf2c5d263" executionId="706d1c28-7b92-46dd-86be-b978b259fe5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6140712-8519-3777-fd8d-667ca8cbd20b" executionId="13fc1268-17ad-4519-811e-71fe99e5bda7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="10e09162-3c5a-22ac-e710-8e9f8c45a0af" executionId="2da46809-f6f4-44e3-b27a-655d6b39d4f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d149da30-e01c-b5a2-f41b-9f8b9795524c" executionId="5257dd09-e45b-4748-8ed4-f91502152403" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e782b17d-d01b-efb3-e071-916b221502b6" executionId="9170743e-6902-43da-9f0a-1715cf032f2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b3416c07-5543-96e5-e243-0dfc151072c7" executionId="bdb183a9-b41a-4542-a277-458843ad07a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="17" executed="17" passed="16" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.13]   Discovering: Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.24]   Discovered:  Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.24]   Starting:    Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.32]       System.ArgumentException : Atomic values only (Parameter 'value')&#xD;
+[xUnit.net 00:00:00.32]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.32]         D:\Development\Bosak\src\Bosak.XPath.Core\Xdm\XdmValue.cs(1049,0): at Bosak.XPath.Core.Xdm.XdmValue.SchemaTransportAttach(XdmValue value, Object marker)&#xD;
+[xUnit.net 00:00:00.32]         D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\CapturedQueryResultTests.cs(71,0): at Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(Int32 mode)&#xD;
+[xUnit.net 00:00:00.32]            at InvokeStub_CapturedQueryResultTests.XQ27_MarkedCellsRefuse(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.32]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.32]   Finished:    Bosak.XPath.Runtime.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-11-05T20:15:59.3515078+01:00">
+        <Text>[xUnit.net 00:00:00.32]     Bosak.XPath.Runtime.Tests.CapturedQueryResultTests.XQ27_MarkedCellsRefuse(mode: 0) [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

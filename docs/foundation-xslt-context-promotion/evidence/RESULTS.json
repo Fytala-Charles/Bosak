@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-01",
+  "version": "1.37.0",
+  "productionSourceApplied": true,
+  "unitTests": {
+    "passed": 24284,
+    "failed": 0,
+    "projects": {
+      "Bosak.XPath.Core.Tests": 162,
+      "Bosak.XPath.Parser.Tests": 202,
+      "Bosak.XPath.Runtime.Tests": 281,
+      "Bosak.XPath.Api.Tests": 489,
+      "Bosak.XPath.Standard.Tests": 13797,
+      "Bosak.XPath.Compiler.Tests": 66,
+      "Bosak.Xslt.Tests": 8213,
+      "Bosak.XQuery.Tests": 804,
+      "Bosak.XPath.Providers.Tests": 223,
+      "Bosak.XPath.Providers.Database.Tests": 47
+    }
+  },
+  "newRegressionCases": [
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"named-with-match\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"declared-absent\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"template-absent\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"match-only\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.LegacyNamedTemplateRetainsSourceKindBehavior(document: True)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"required-match-only\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"stale-dynamic-focus\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.LegacyNamedTemplateRetainsSourceKindBehavior(document: False)",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"element-global\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"missing-global-reference\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"missing-named-focus\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"required-global-only\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"element-match-refusal\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"named-default-global\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"global-only\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"source-free\")",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.ExplicitContextTransformTests.ExplicitInvocationPreservesSelectedContextPolicy(scenario: \"distinct-documents\")",
+      "outcome": "Passed"
+    }
+  ],
+  "fnTransformControls": [
+    {
+      "name": "Bosak.Xslt.Tests.Limits.SliceDExecutionControlTests.D_NestedTransformInheritsSharedOperationBudget",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_MissingSource_RaisesFOXT0002",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Initial_Template",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_With_Stylesheet_Params",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_DenyAll_RefusesStylesheetAcquisitionWithoutFallback",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_ResultDocumentTextContent_IsCaptured",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.StylesheetTests.FnTransform_Basic_Transform",
+      "outcome": "Passed"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.ControlledResourceRouteTests.FnTransform_NestedTransform_InheritsPolicy_AcquisitionsAuthorized",
+      "outcome": "Passed"
+    }
+  ],
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "qt4Gated": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918,
+    "experimentalPasses": 11
+  },
+  "skipMapsUnchanged": true,
+  "solutionRebuilt": true,
+  "publicDeclarationsUnchanged": true,
+  "assemblyMetadataCaptured": true,
+  "productArchiveSha256": "63871e83e4ac076ce502c1395a18f366f16f2348374264f128bde56586335e6c",
+  "published": false,
+  "publicFacadeImplemented": false,
+  "ownerAcceptance": "Pending",
+  "apiFreeze": false
+}

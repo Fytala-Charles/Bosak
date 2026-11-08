@@ -1,0 +1,91 @@
+{
+  "status": "CoreSelectedContainerPolicy_ImplementationPending",
+  "sourceVersion": "1.78.0",
+  "signature": "public SchemaResult<ISchemaTypedValue> SchemaQueryOperation.ReadTypedContainer(SchemaQuerySnapshot snapshot, ISchemaTypedValue value)",
+  "originalDraftModified": false,
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "requirementsWaived": 0,
+  "decisions": [
+    {
+      "id": "CT01",
+      "title": "Separate boundary",
+      "decision": "Select public SchemaResult<ISchemaTypedValue> SchemaQueryOperation.ReadTypedContainer(SchemaQuerySnapshot snapshot, ISchemaTypedValue value). Keep ReadTypedValue and scalar identity descriptors unchanged. This additive member is not in the original draft; final owner/manifest acceptance remains pending."
+    },
+    {
+      "id": "CT02",
+      "title": "Delivery contract",
+      "decision": "Return an engine-created borrowed ISchemaTypedValue adapter containing complete copied plain cells and engine-guarded separate ISchemaAtomicProvenance. Existing public interface and SchemaAtomicItem layout suffice; add no public factory, marker, type or Core-to-API reference."
+    },
+    {
+      "id": "CT03",
+      "title": "Shape",
+      "decision": "Retain GoverningType by reference and IsList independently of cardinality. Represent zero and one member lists, empty non-lists and multi-member lists/non-lists without reclassification. Empty is Supported and is not nil, absent typed value, Invalid or Unsupported."
+    },
+    {
+      "id": "CT04",
+      "title": "Selected members",
+      "decision": "Preserve ordered Value, DeclaredType, ActualType and optional OriginalAssessment per cell by exact reference. Do not derive union selection from primitive payload or rewrite all members to the governing type or compatible target handles."
+    },
+    {
+      "id": "CT05",
+      "title": "Initial payload scope",
+      "decision": "Select complete containers whose cells are string, boolean, integer or decimal, under captured numeric bounds; empty containers need no cell family. Any other valid family makes the entire result Unsupported. Invalid/default/non-atomic/already-marked/null-string cells remain errors. Wider factory families are a required subsequent scope, not implicitly supported."
+    },
+    {
+      "id": "CT06",
+      "title": "Ordinary source admission",
+      "decision": "First implementation PV-T02 uses the existing public typed-identity profile, exact admitted snapshot/input/origin and current issuer. Authenticate container ownership before every provider getter and validate all governing and per-cell type ownership before delivery."
+    },
+    {
+      "id": "CT07",
+      "title": "Compatible admission",
+      "decision": "PV-T03 applies the same boundary in the public compatible profile under its serialized paired provider window and established exact raw proof. Every later metadata/enumerator/evidence access uses that operation window and live source/target/type/container validation. No ambient/latest proof, no Establish per getter, no stable-cache issuer retention."
+    },
+    {
+      "id": "CT08",
+      "title": "No prefix publication",
+      "decision": "Materialize and validate the complete ordered input before a Supported result is exposed. Enforce MaxTypedValueAtoms before reading an excess Current, MaxNumericDigits and MaxDecimalScale; preserve acquisition, enumeration and cleanup failure ordering. Unsupported shape/family and all errors leave no registered scalar/quota prefix."
+    },
+    {
+      "id": "CT09",
+      "title": "Uncached complete transport",
+      "decision": "Use the existing uncached complete reader rather than the scalar registry for this new boundary. Each call materializes at most the captured atom bound; it creates no scalar slots or persistent empty-group cache entries. Repeat calls need fresh admission and may allocate fresh adapters. Retained output count and bytes across repeated calls are not bounded by MaxCachedValuesPerSnapshot; owner retained-memory budgets remain open."
+    },
+    {
+      "id": "CT10",
+      "title": "Borrowed operation lifetime",
+      "decision": "All container getters, enumerable acquisition, GetEnumerator, MoveNext, Current, TryGetSingleAtomic and evidence getters check exact originating raw liveness before any provider callback, then apply matching live admission checks. Raw completion/cancel/source close revokes access. In-flight work retains existing admissions through completion; no independently acquired lease or IDisposable container."
+    },
+    {
+      "id": "CT11",
+      "title": "Enumeration contract",
+      "decision": "Expose a reusable ordered enumerable with independent cursor per enumeration. Current requires a positioned, live cursor; MoveNext returns false at end only while live. Reset is unsupported after liveness check. Enumerator Dispose is idempotent callback-free cleanup, allowed after expiry. Dispose closes the cursor only. TryGetSingleAtomic is true exactly for one member, including singleton lists; IsList remains authoritative. False supplies default out item."
+    },
+    {
+      "id": "CT12",
+      "title": "Plain escape",
+      "decision": "A previously copied SchemaAtomicItem.Value is plain and remains usable after expiry, like any unmarked XdmValue. Its TypeEvidence is guarded and expires. Never promise that reading an already-copied struct Value invokes a guard; no public layout change or hidden marker is selected."
+    },
+    {
+      "id": "CT13",
+      "title": "No authority round trip",
+      "decision": "The adapter is engine delivery, not a newly provider-issued container. Passing it back to ReadTypedValue/ReadTypedContainer must still satisfy provider ownership and ordinarily refuses before getters. Wrapping public cells/evidence cannot forge issuer identity, scalar marker or compatibility authority."
+    },
+    {
+      "id": "CT14",
+      "title": "Observation relation",
+      "decision": "SchemaAtomics on delivered plain values remains false. ReadAtomicProvenance remains the existing registered compatible scalar route; container item TypeEvidence supplies guarded metadata. This step does not attach scalar markers or broaden typed arithmetic/casts/map keys/serialization."
+    },
+    {
+      "id": "CT15",
+      "title": "Other profiles and failures",
+      "decision": "Other live profiles return Unsupported after membership/liveness validation without reading provider container content. Invalid arguments/membership/ownership, disposal, cancellation, overlap and original provider failures retain their classifications; do not flatten them into Unsupported."
+    },
+    {
+      "id": "CT16",
+      "title": "Required followup",
+      "decision": "PV-T02 ordinary and PV-T03 compatible implementations and positive/negative tests remain mandatory. Persistent/copied node facts, nil/no-value dispatch, general construction and wider families remain explicit required followup. PV-L01, PV-Q01, NU-01/SC-01, actual providers/budgets and R4-R7 are unwaived. Core design selection does not imply owner acceptance or API freeze."
+    }
+  ]
+}

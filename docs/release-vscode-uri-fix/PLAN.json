@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-08",
+  "work": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108",
+  "extension": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\extension",
+  "project": "D:\\Development\\Bosak\\.guard-tmp\\core-vscode-uri-fix-20261108\\source\\src\\Bosak.LanguageServer\\Bosak.LanguageServer.csproj",
+  "sourceCandidate": "c0b926de34824ceb2010d5f814a4450b28b31dcc.uri-fix-4cd0bbf9a92e",
+  "coreVersion": "1.81.1-preview.c0b926de",
+  "extensionVersion": "0.2.6",
+  "extensionVersionScope": "Unpublished local diagnostic candidate; tracked manifest remains 0.2.5.",
+  "sourceFiles": {
+    "src/Bosak.LanguageServer/Bosak.LanguageServer.csproj": "cf11995381ad0289d2104aa5d19bd33ca970256fbdd7cf397cf1d0b294ff093e",
+    "src/Bosak.LanguageServer/CodeActionHandler.cs": "62d22a38c77747f2bb2be99eade440e3e2b8a5a9469361f263cd122dc0a0226d",
+    "src/Bosak.LanguageServer/CodeLensHandler.cs": "5a2bed75f82a36df0654f48e830713e387c0c65e567f2ae21987e06ce5067402",
+    "src/Bosak.LanguageServer/CompletionHandler.cs": "87bce660ac9110c299a5a59993706db825acf7dce056f18ed8c5d9cd8045fa64",
+    "src/Bosak.LanguageServer/DefinitionHandler.cs": "46e0e4d48eb7a445a0014cc89112dc0c48d27771f122f632cda2f34d45cee8d3",
+    "src/Bosak.LanguageServer/DiagnosticsHandler.cs": "90911080573389cf044ef6df3144caf5a21f07ed6e5ebb8af336359edd6ca951",
+    "src/Bosak.LanguageServer/DocumentManager.cs": "a5b1791c1cfe6681a6eef609e8669db2b34f43cb315b5b4f62acb2b855f334ed",
+    "src/Bosak.LanguageServer/DocumentSymbolHandler.cs": "ef538c2715a7d71a143032d4d37b1ceab213d122c65f84c90fc0759e60c32fc9",
+    "src/Bosak.LanguageServer/EvaluationHandler.cs": "c6fda20270a2d6cc76e046f7ad39b5e1b462d2b74f9970b349494391763e6a1c",
+    "src/Bosak.LanguageServer/ExecuteCommandHandler.cs": "eed3b97fb5025ea1cbba0e304d28ddd76166204727706411698a384b84febcbf",
+    "src/Bosak.LanguageServer/HoverHandler.cs": "6d745a20bdb4ce0a67b2ef139f0c28744c06b4938c2a90d387c42c6ae87d135a",
+    "src/Bosak.LanguageServer/Program.cs": "c008f0a14e87fab8b68a831c8f221c8cf5d3da956c3ab099fc12bdafb816ce03",
+    "src/Bosak.LanguageServer/SemanticTokensHandler.cs": "2fd9905aed354e1d0a9d962942aafd41b7630995356cb73d7272081a65d546ab",
+    "src/Bosak.LanguageServer/SerializableDiagnosticReport.cs": "3e394cb111a66a36064306a7cdc47bb9539e0beac0d3f716606aa5140611748b",
+    "src/Bosak.LanguageServer/TextDocumentSyncHandler.cs": "f7c4674b24daf9502413b1780d22081189dea71e70c9d33e61ededd9d2a683f0"
+  },
+  "derivedProjectSha256": "d8ad35228b4721136c342d2b0a29dcb148c4aded167814c13e8c2d5d8050f709",
+  "engines": {
+    "Bosak.XPath.Api": "0fa4de7d4432a24e0a049301c1192de2b21e9bf09adde5feacce4816fd374359",
+    "Bosak.XPath.Compiler": "dd1ef817340dc210425fe570dc230f42b83903f17a9d353c86d28287c31e01f1",
+    "Bosak.XPath.Core": "cab08b8c38f32b3d602b3e29e3dd36affc3a5853a813de96a1a0162ef02ffd43",
+    "Bosak.XPath.Parser": "2a169b8a894ce78ffbb754bfa0a8a540b093fcd5e8024076a4c9372467aefe72",
+    "Bosak.XPath.Providers": "09425c35455d20a777b285fcbfe8a960d4dd397972f1beb84704e7f3356775d8",
+    "Bosak.XPath.Runtime": "e155763ce56c746e3d6916398ba0b317e72780008b3a8d4be2e7787a003c2151",
+    "Bosak.XPath.Standard": "0814065371bc088de8cee39e764babab5a03dc46ceaa0edd0bf3e563569b0d02",
+    "Bosak.XQuery": "9e6d351a7bf8d6aa6cf47c170f7a2b3ec214ce530b843d2c4933bf47d2fb8b07",
+    "Bosak.Xslt": "383c794cf44b86244368990d2b49a7dfac708e5020969606f7a08ecfce3119cc"
+  },
+  "packager": {
+    "version": "4.0.0",
+    "path": "C:\\Users\\charl\\AppData\\Local\\npm-cache\\_npx\\66fbc91407e86cd3\\node_modules\\@vscode\\vsce\\vsce",
+    "packageJsonSha256": "578509ac7ec727cb2fc105be03e750da82be07a31c6298862422d65a1008bd1b"
+  },
+  "publicationAuthorized": false,
+  "sourceBase": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "serverIdentityScope": "Modified diagnostic language server: base C0 plus hash-pinned URI fix; not an immutable source commit or approved public version.",
+  "engineVersion": "1.81.1-preview.c0b926de",
+  "fixedSourceSha256": "4cd0bbf9a92e7b72e091369f27d030c7849c4356481526bd63653dadfd6b0493",
+  "serverVersion": "1.81.2-preview.urifix1"
+}

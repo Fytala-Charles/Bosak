@@ -1,0 +1,5 @@
+  Determining projects to restore...
+  Restored /work/baseline/source/src/Bosak.XmlDb.Storage/Bosak.XmlDb.Storage.csproj (in 97 ms).
+  Restored /work/baseline/source/src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj (in 97 ms).
+  Restored /work/baseline/source/src/Bosak.XmlDb.Core/Bosak.XmlDb.Core.csproj (in 97 ms).
+  Restored /work/baseline/source/qualification/Probe/Fx009Probe.csproj (in 97 ms).

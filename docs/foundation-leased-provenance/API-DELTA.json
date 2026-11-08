@@ -1,0 +1,12 @@
+{
+  "assemblies": {
+    "Bosak.XPath.Api": {
+      "added": [
+        "A Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadAtomicProvenance(Bosak.XPath.Core.Xdm.XdmValue value:None:none:required=:optional=:attrs=):",
+        "M Bosak.XPath.Api.Schema.SchemaQueryOperation.ReadAtomicProvenance:Public, HideBySig:Standard, HasThis:Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Core.Schema.ISchemaAtomicProvenance> :None:none:required=:optional=:attrs=(Bosak.XPath.Core.Xdm.XdmValue value:None:none:required=:optional=:attrs=):"
+      ],
+      "removed": []
+    }
+  },
+  "disposition": "Core-selected additive operation member for PV-H02; not in original throwing draft. Final owner/manifest acceptance pending."
+}

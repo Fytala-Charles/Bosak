@@ -1,0 +1,8 @@
+=== 6 skipped: Unsupported dependency ===
+cbcl-fn-normalize-unicode-001a
+cbcl-fn-normalize-unicode-006a
+fn-normalize-unicode-11
+fn-normalize-unicode-11-6-0
+fn-normalize-unicode-11-6-2
+fn-normalize-unicode2args-5
+

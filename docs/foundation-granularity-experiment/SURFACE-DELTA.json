@@ -1,0 +1,14 @@
+{
+  "parent": "V3",
+  "candidate": "V4 Core candidate only",
+  "parentTypes": 35,
+  "candidateTypes": 33,
+  "removedFromCoreCandidate": [
+    "C13901.Draft.IQueryOperationLease",
+    "C13901.Draft.IQueryOperationLifetime"
+  ],
+  "added": [],
+  "retainedMembersUnchanged": true,
+  "reason": "Host/provider operation orchestration remains a requirement, but these unused optional host interfaces need not be stable Core API; actual need could be reviewed separately.",
+  "accepted": false
+}

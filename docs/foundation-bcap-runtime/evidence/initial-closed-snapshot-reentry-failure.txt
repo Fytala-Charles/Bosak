@@ -1,0 +1,18 @@
+System.ObjectDisposedException: Cannot access a disposed object.
+Object name: 'Bosak.XPath.Core.Xdm.SchemaEvidenceKernel+Snapshot'.
+   at Bosak.XPath.Core.Xdm.SchemaEvidenceKernel.Snapshot.Check() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Core\Xdm\SchemaEvidenceKernel.cs:line 283
+   at Bosak.XPath.Core.Xdm.SchemaEvidenceKernel.CheckSnapshot(Snapshot snapshot) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Core\Xdm\SchemaEvidenceKernel.cs:line 236
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.<>c__DisplayClass16_1.<OpenOperation>b__2() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 129
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Check() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaOperationLeaseSet.cs:line 84
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Check() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 217
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.RequireOwner(SchemaQuerySession owner) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 226
+   at Bosak.Xslt.Api.SchemaCaptureCandidate.Run(Operation operation, SchemaOperationInputs inputs, IXdmNode match, IXdmNode global, String template, String mode, String outputBase, XsltCaptureOptions options) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.Xslt\Api\SchemaCaptureCandidate.cs:line 16
+   at Probe.<>c__DisplayClass10_7.<<Run>b__25>d.MoveNext() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 53
+--- End of stack trace from previous location ---
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.RunAsync[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 149
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Release(IDisposable[] leases, Int32 count, Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaOperationLeaseSet.cs:line 108
+   at Bosak.XPath.Runtime.Vm.SchemaOperationLeaseSet.Complete(Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaOperationLeaseSet.cs:line 93
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.Operation.Complete(Exception primary) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 278
+   at Bosak.XPath.Runtime.Vm.SchemaQuerySession.RunAsync[T](SchemaQueryEnvironment environment, ImmutableArray`1 snapshots, Func`2 work, CancellationToken cancellationToken) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\src\Bosak.XPath.Runtime\Vm\SchemaQuerySession.cs:line 150
+   at Probe.Run() in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 53
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\bcap-runtime-v3\Host\Program.cs:line 16

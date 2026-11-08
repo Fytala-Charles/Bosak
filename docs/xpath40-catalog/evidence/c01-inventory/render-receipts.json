@@ -1,0 +1,66 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/c01-render/README.md.html",
+      "sha256": "d41c9d27b3190d2f91e972f269bd5b179dd00ad6dfc5e6baa289c7ac6736f867"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/c01-render/docs_ARCHITECTURE.md.html",
+      "sha256": "77e438ad5a203195fc5b66483ce5caf41e9fbd606b80bbceeb3f6851f995675f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/c01-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "213cee40f6d1a7060f7d75450d9c19f29566f7356655e15fdad9973294672e73"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/c01-render/docs_INTEGRATION.md.html",
+      "sha256": "a80120d41e87f2551111d40810d0697a1773a1aaa8cd0b7dfd734a607216f440"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/c01-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "2c2cbbe3c94d13d34e4a86545f6105672dbf586698767c9469ef207579a252e8"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/c01-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "26165a5dd0accf2175bc0f5fc4d49c65cfe7768aff9b84cdcc655f5f4aca333b"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "160b000df4dd024a904630bff30c2cef9ad15d290e909bbf4fe84eb7b9875f65"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "d23ef2fb71ee7a8beb0ad9433fcd8b98a298fc742156ca4f630587b0b695d235"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "7bcd24f7194614aaa405ccf1cf7028bbf03e2a185258ffceabc9355f380eb693"
+    },
+    {
+      "source": "docs/xpath40-catalog/SIGNATURE-CONTRACT-AUDIT.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_SIGNATURE-CONTRACT-AUDIT.md.html",
+      "sha256": "ef39c0cfa66b6fd64c1b6160804131f2cc5b275a7a71390762f09a2344f00945"
+    },
+    {
+      "source": "docs/xpath40-catalog/CHANGED-31-CONTRACT-INVENTORY.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_CHANGED-31-CONTRACT-INVENTORY.md.html",
+      "sha256": "7358ba9e32edbd1caedb8f680f02d666d2b5cf62b7052db7f49a95d08e965613"
+    },
+    {
+      "source": "docs/xpath40-catalog/FUNCTION-INVENTORY-REFRESH.md",
+      "html": ".guard-tmp/c01-render/docs_xpath40-catalog_FUNCTION-INVENTORY-REFRESH.md.html",
+      "sha256": "724534d4e8a2ae7967c4808c647527a77e0a41900befaf5bb32af5ff5a6697b6"
+    }
+  ]
+}

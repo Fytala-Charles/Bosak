@@ -1,0 +1,84 @@
+// Generated standalone host qualification under an existing test identity.
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 01 November 2026
+// PURPOSE              : Checks compiled host factories against composite input membership.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 01-11-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Collections.Immutable;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XQuery.Api;
+using Bosak.Xslt.Api;
+using System.Text.Json;
+using System.Security.Cryptography;
+var fixture=new SchemaCompositeHostTests();fixture.TwoSourceCompiledEvaluation(false);fixture.TwoSourceCompiledEvaluation(true);fixture.XsltCompositeDispatchRefuses();
+var bindings=AppDomain.CurrentDomain.GetAssemblies().Where(a=>a.GetName().Name?.StartsWith("Bosak.")==true).OrderBy(a=>a.GetName().Name).Select(a=>new{name=a.GetName().Name,sha256=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(a.Location))).ToLowerInvariant()}).ToArray();
+Console.WriteLine(JsonSerializer.Serialize(new{checks=3,assertions=Assert.Count,passed=true,bindings},new JsonSerializerOptions{WriteIndented=true}));
+/// <summary>Checks actual compiled XPath/XQuery and explicit XSLT composite refusal.</summary>
+public sealed class SchemaCompositeHostTests
+{
+    private sealed class Provider : ISchemaSessionProvider, ISchemaEvidenceIssuer
+    {
+        internal readonly object A=new(),B=new();
+        private sealed class Binding(Provider owner,SchemaQueryEnvironment environment):ISchemaSessionBinding
+        {SchemaQueryEnvironment ISchemaSessionBinding.Environment=>environment;ISchemaEvidenceIssuer ISchemaSessionBinding.Issuer=>owner;void ISchemaSessionBinding.ThrowIfUnavailable(){} }
+        ISchemaSessionBinding ISchemaSessionProvider.Bind(SchemaQueryEnvironment e)=>new Binding(this,e);
+        bool ISchemaEvidenceIssuer.OwnsAssessment(object a)=>ReferenceEquals(a,A)||ReferenceEquals(a,B);
+        bool ISchemaEvidenceIssuer.OwnsValue(ISchemaIssuedScalar v)=>false;
+        bool ISchemaEvidenceIssuer.OwnsType(object t)=>false;
+        bool ISchemaEvidenceIssuer.IsSameType(object a,object b)=>ReferenceEquals(a,b);
+    }
+    /// <summary>Executes real compiled hosts over two independent source admissions.</summary>
+    /// <param name="query">Whether to compile XQuery instead of XPath.</param>
+
+    public void TwoSourceCompiledEvaluation(bool query)
+    {
+        var p=new Provider();SchemaQuerySession? session;string? reason;
+        bool ok=query?HostFactories.Query("declare variable $a external;declare variable $b external;number($a)+number($b)",new XQueryCompiler(),false,p,4,16,out session,out reason):HostFactories.XPath("number($a)+number($b)",new CompileOptions(),p,4,16,out session,out reason);
+        Assert.True(ok,reason);using var owned=session!;int releases=0;
+        using var a=owned.OpenSnapshot(owned.Environment,new object(),p.A,()=>releases++);using var b=owned.OpenSnapshot(owned.Environment,new object(),p.B,()=>releases++);
+        var na=new XDocumentNode(XElement.Parse("<n>2</n>"));var nb=new XDocumentNode(XElement.Parse("<n>3</n>"));
+        var caller=new EvaluationContext().WithVariable("a",XdmValue.FromNode(na)).WithVariable("b",XdmValue.FromNode(nb));
+        owned.Run(owned.Environment,[a,b],op=>{var input=op.CaptureInputs(caller,(snapshot,node)=>ReferenceEquals(snapshot,a)?ReferenceEquals(node,na):ReferenceEquals(node,nb),16,16);double result=0;op.EvaluateAtomic(input,16).ForEachAtomic(v=>result=v.DoubleValue);Assert.Equal(5,result);Assert.Equal(0,releases);return 0;});
+        Assert.Throws<NotSupportedException>(()=>owned.Run(owned.Environment,[a],op=>op.CaptureInputs(caller,(_,node)=>ReferenceEquals(node,na),16,16)));
+    }
+    /// <summary>XSLT refuses composite dispatch until match/global roles are operation-admitted.</summary>
+     public void XsltCompositeDispatchRefuses()
+    {
+        var p=new Provider();const string sheet="<xsl:stylesheet version='3.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'><xsl:template name='main'><xsl:sequence select='42'/></xsl:template></xsl:stylesheet>";
+        Assert.True(HostFactories.Xslt(sheet,new XsltCompiler(),null,null,null,"main",_=>false,p,4,16,out var session,out var reason),reason);
+        using var owned=session!;owned.Run(owned.Environment,ImmutableArray<SchemaEvidenceKernel.Snapshot>.Empty,op=>{var input=op.CaptureInputs(new EvaluationContext(),(_,_)=>false,16,16);Assert.Throws<NotSupportedException>(()=>op.EvaluateAtomic(input,16));return 0;});
+        using var snapshot=owned.OpenSnapshot(owned.Environment,new object(),p.A,()=>{});owned.Run(owned.Environment,snapshot,op=>{long answer=0;op.EvaluateAtomic(op.CaptureInputs(new EvaluationContext(),_=>false,16,16),16).ForEachAtomic(v=>answer=v.IntegerValue);Assert.Equal(42,answer);return 0;});
+    }
+}
+
+static class Assert {
+ internal static int Count;
+ internal static void True(bool value,string? reason=null){Count++;if(!value)throw new Exception(reason);}
+ internal static void Equal<T>(T expected,T actual){Count++;if(!EqualityComparer<T>.Default.Equals(expected,actual))throw new Exception($"Expected {expected}; got {actual}");}
+ internal static void Throws<T>(Action action)where T:Exception{Count++;try{action();}catch(T){return;}throw new Exception("Expected "+typeof(T).Name);}
+}
+static class HostFactories {
+ internal delegate bool XPathFactory(string source,CompileOptions options,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ internal delegate bool XQueryFactory(string source,XQueryCompiler compiler,bool xml11,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ internal delegate bool XsltFactory(string source,XsltCompiler compiler,string? baseUri,IXdmNode? match,IXdmNode? global,string? template,Func<IXdmNode,bool> owns,ISchemaSessionProvider provider,int snapshots,int values,out SchemaQuerySession? session,out string? unsupported,CancellationToken cancellation=default);
+ static readonly Type Host=typeof(XsltExecutable).Assembly.GetType("Bosak.Xslt.Api.SchemaHostSessionCompilation")!;
+ const System.Reflection.BindingFlags Flags=System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic;
+ internal static readonly XPathFactory XPath=Host.GetMethod("TryCompileXPath",Flags)!.CreateDelegate<XPathFactory>();
+ internal static readonly XQueryFactory Query=Host.GetMethod("TryCompileXQuery",Flags)!.CreateDelegate<XQueryFactory>();
+ internal static readonly XsltFactory Xslt=Host.GetMethod("TryCompileXslt",Flags)!.CreateDelegate<XsltFactory>();
+}

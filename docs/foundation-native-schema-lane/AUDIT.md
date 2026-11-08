@@ -1,0 +1,11 @@
+# Findings and qualification limits
+
+The current native assessment worktree is the public feature candidate at the exact recorded source head. Its existing source and fixtures compile unchanged against the qualified 1.81.0 engine DLLs in an isolated wrapper. The451 source case identities match the passing frozen baseline and unchanged-binary candidate exactly. All three lanes pass without native or Core production changes.
+
+The unchanged-binary experiment preserves the original Schema library and test assembly, not a candidate-rebuilt consumer. Only Bosak.XPath.Core, Parser, Compiler, Runtime, Standard, Providers, Api, Bosak.XQuery and Bosak.Xslt DLLs change. Full non-engine file hashes and actual nine-assembly loading prove the executed lane. The source lane is a rebuild diagnostic with explicit wrapper settings; it is a separate cohort and does not imply unchanged-binary behavior by itself.
+
+The baseline output's declared 1.34.2 dependency lane is recorded as observed, not retroactively labeled as the historical1.34.1 documentation. The initial restore failure and command-scoped offline retry remain separate receipts. Core's exact production hashes, API inventory, qualified full 26,338 tests and frozen gates remain unchanged and inherited. No extra full Core/gate execution is claimed.
+
+This is actual existing native regression execution, not synthetic public-provider fixture evidence. Its scope remains the currently implemented native assessment/document routes, including the suite's exact supported/refused/copy/typing behavior. It does not implement ISchemaAssessor/ISchemaAssessmentAdvisor binding to the new public session, complete-container provenance or public raw paired-provider route. PV-Q03 must map actual identities, issued containers, source facts and lifetimes before adapter implementation. No public authority can be invented by casting legacy opaque fields.
+
+These fast correctness regressions are not representative PF baselines, latency distributions, retained-memory/I/O/IPC measurements or accepted budgets. Owner/native general acceptance, C45/API freeze, R3 numeric/assessment/persistent/construction/nil/no-value coverage and R4-R7 remain open. No consumer pin, Schema product version, dependency graph, stored format, tag, push or publication changed.

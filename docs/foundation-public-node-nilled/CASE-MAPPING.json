@@ -1,0 +1,231 @@
+{
+  "implementationStatus": "BoundedPublicQualified",
+  "cases": [
+    {
+      "id": "NP01",
+      "trigger": "nilled($node) with original nilled element",
+      "expected": "plain true; no typed value/container/atomic reads",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP01_NP02_"
+      ]
+    },
+    {
+      "id": "NP02",
+      "trigger": "fn:nilled($node) original non-nilled element",
+      "expected": "plain false; same canonical operation descriptor",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP01_NP02_",
+        "NP18_"
+      ]
+    },
+    {
+      "id": "NP03",
+      "trigger": "explicitly bound Undefined, empty snapshot set",
+      "expected": "Undefined; current advisor/raw operation checked; no node/facts access",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP03_",
+        "NP03_NP04_"
+      ]
+    },
+    {
+      "id": "NP04",
+      "trigger": "owned attribute/document/text/comment/PI/namespace",
+      "expected": "Undefined after membership and NodeKind only; poisoned annotated channel untouched",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP04_",
+        "NP03_NP04_"
+      ]
+    },
+    {
+      "id": "NP05",
+      "trigger": "missing variable or extra/prefixed variable",
+      "expected": "NotSupportedException before node/facts getters",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP05_NP07_"
+      ]
+    },
+    {
+      "id": "NP06",
+      "trigger": "sequence wrapper, atomic or structured operand",
+      "expected": "NotSupportedException; no arbitrary sequence enumeration",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP05_NP07_"
+      ]
+    },
+    {
+      "id": "NP07",
+      "trigger": "focus/services/populated state/dynamic namespaces",
+      "expected": "capture refusal before node/facts getters",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP05_NP07_"
+      ]
+    },
+    {
+      "id": "NP08",
+      "trigger": "foreign or ambiguously owned node",
+      "expected": "ArgumentException before even NodeKind/OriginalSchemaFacts",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP08_"
+      ]
+    },
+    {
+      "id": "NP09",
+      "trigger": "element without annotated channel or original assessment",
+      "expected": "NotSupportedException; never guess untyped false",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP09_"
+      ]
+    },
+    {
+      "id": "NP10",
+      "trigger": "null/unissued facts or copied facts on different node/input",
+      "expected": "ArgumentException before facts properties",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP10_"
+      ]
+    },
+    {
+      "id": "NP11",
+      "trigger": "foreign type/declaration/origin or changed authority/environment",
+      "expected": "ArgumentException; no delivery",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP11_"
+      ]
+    },
+    {
+      "id": "NP12",
+      "trigger": "revocation/cancellation during NodeKind/OriginalSchemaFacts/metadata getters",
+      "expected": "stop after triggering getter; no later getters",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP12_NP13_",
+        "NP12_Getter"
+      ]
+    },
+    {
+      "id": "NP13",
+      "trigger": "close or cancel during ownership and false ownership callbacks",
+      "expected": "no delivery; raw cleanup drains once",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP12_NP13_"
+      ]
+    },
+    {
+      "id": "NP14",
+      "trigger": "IsNilled query with typed getter/iterator/authority lookup poison",
+      "expected": "query succeeds from authenticated metadata without typed reads or type-family lookups",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP14_"
+      ]
+    },
+    {
+      "id": "NP15",
+      "trigger": "new metadata-only reader mode",
+      "expected": "NotRequested distinct from Absent/Unsupported/Supported; existing full reader unchanged",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP15_",
+        "QueryNodeFactsTests.MetadataOnly",
+        "QueryNodeFactsTests.SupportedShapes"
+      ]
+    },
+    {
+      "id": "NP16",
+      "trigger": "syntax nilled(), nilled(.), data($node), paths/operators/aliases",
+      "expected": "Unsupported compile outcome before assessor Bind for new assessor-bound grammar",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP16_NP17_NP24_"
+      ]
+    },
+    {
+      "id": "NP17",
+      "trigger": "fn prefix mapped to foreign namespace",
+      "expected": "Unsupported before Bind; no textual builtin bypass",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP16_NP17_NP24_"
+      ]
+    },
+    {
+      "id": "NP18",
+      "trigger": "captured options/each limit differs or caller mutates options",
+      "expected": "descriptor separation or stable frozen snapshot as applicable",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP18_"
+      ]
+    },
+    {
+      "id": "NP19",
+      "trigger": "retained copied Boolean/empty result",
+      "expected": "plain data remains readable; no retained provider view/authority",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP19_"
+      ]
+    },
+    {
+      "id": "NP20",
+      "trigger": "advisor binding Unsupported/null/malformed/error and acquisition rollback",
+      "expected": "preserve established binding outcome and cleanup behavior",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP20_"
+      ]
+    },
+    {
+      "id": "NP21",
+      "trigger": "metadata consistency absent+nilled true or invalid node kind",
+      "expected": "reject malformed supported facts; never read typed value to repair",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP21_"
+      ]
+    },
+    {
+      "id": "NP22",
+      "trigger": "existing ordinary, identity and numeric grammar/descriptors",
+      "expected": "unchanged results/refusals; no scope expansion of old profiles",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP22_",
+        "PublicTypedIdentityTests.",
+        "PublicTypedNumericTests.",
+        "PublicOrdinarySessionTests."
+      ]
+    },
+    {
+      "id": "NP23",
+      "trigger": "cold/warm repeated nilled query",
+      "expected": "record allocations/callbacks/no getter replay policy; no facts cache or accepted owner budget",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP23_"
+      ]
+    },
+    {
+      "id": "NP24",
+      "trigger": "data atomization/no-typed-value requirement",
+      "expected": "new nilled grammar refuses data; FOTY0012 remains explicit future mapping, no absent-to-empty conversion",
+      "status": "QualifiedBoundedPublicScope",
+      "tests": [
+        "NP16_NP17_NP24_"
+      ]
+    }
+  ],
+  "nativeProviderAccepted": false
+}

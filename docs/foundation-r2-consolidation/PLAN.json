@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "nextCoreTask": "P09",
+  "parallelOwnerTasks": [
+    "P07"
+  ],
+  "openItems": [
+    {
+      "id": "BCAP-01",
+      "owner": "Core with Braid review",
+      "kind": "Required Core capability/route or signature decision",
+      "state": "ClosedForBoundedDesign",
+      "resolvedBy": [
+        "P02",
+        "P03",
+        "P04"
+      ],
+      "implementationPending": true,
+      "evidence": "docs/foundation-bcap-response-review/STATUS.json"
+    },
+    {
+      "id": "XDB-LIFE-01",
+      "owner": "XmlDb with Core profile review",
+      "kind": "Provider implementation/failure-profile issue; no additional Core signature demonstrated",
+      "state": "ResolvedWithinQualifiedCurrentPinProviderScope",
+      "resolvedBy": [
+        "P06"
+      ],
+      "evidence": "docs/foundation-ecosystem-status/README.md",
+      "candidateIntegrationPending": true
+    },
+    {
+      "id": "CV-ENTRY-01",
+      "owner": "Core with scoped contract review",
+      "kind": "Proposed public engine-issued compatible admission/result; no new mandatory provider slot",
+      "state": "CoreImplementedBoundedPublicProfile",
+      "resolvedBy": [],
+      "implementationPending": false,
+      "evidence": "docs/foundation-public-compatible/DISPOSITION.json",
+      "coreDisposition": "ImplementedBoundedCoreSelection",
+      "ownerAcceptancePending": true
+    },
+    {
+      "id": "CV-CACHE-01",
+      "owner": "Core",
+      "kind": "Internal payload residency/current authorization separation; no new public/provider signature selected",
+      "state": "CompleteInternalPrerequisite",
+      "resolvedBy": [],
+      "implementationPending": false,
+      "evidence": "docs/foundation-compatible-cache/STATUS.json",
+      "status": "CompleteInternalPrerequisite"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "P01",
+      "owner": "Core",
+      "status": "CompleteSourceAudit",
+      "dependsOn": [],
+      "canPrepareBeforeR2Closure": true,
+      "title": "BCAP-01 source-route audit",
+      "work": "Existing public capture has outputs/messages/failures; R2 raw Transform and separate policy receipts do not establish the complete operation-bound route.",
+      "exitEvidence": "Pinned source audit in prior response review; gap remains open."
+    },
+    {
+      "id": "P02",
+      "owner": "Core",
+      "status": "CompleteIsolatedDeclaration",
+      "dependsOn": [
+        "P01"
+      ],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Prepare minimal capture route/declaration candidate",
+      "work": "Demonstrate a supported same-executable composition or compile the smallest operation-bound capture entry and receipt handoff. Reuse existing capture machinery/options/results where valid.",
+      "exitEvidence": "Exact route/signature delta, invocation/context precedence, bounds, raw ownership and receipt contract; no production promotion.",
+      "evidence": "docs/foundation-bcap-candidate/README.md"
+    },
+    {
+      "id": "P03",
+      "owner": "Core",
+      "status": "CompleteBoundedCoreFeasibility",
+      "dependsOn": [
+        "P02"
+      ],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Qualify the named capture feasibility gap",
+      "work": "Execute targeted isolated capture controls on the exact candidate; test outputs/messages/failures/receipts and leases, not another generic lifetime model.",
+      "exitEvidence": "C01\u2013C10 receipts, allocation/cancellation observations and immutable source/binary pins; unsupported cases explicit.",
+      "evidence": "docs/foundation-bcap-cost/evidence/SUMMARY.json",
+      "progress": "83 controls/full isolated qualification plus 12 first-use, 960 warm and 108 controlled cancellation observations on unchanged DLLs. Complete only in bounded synthetic-provider profile; native/accepted budgets and public SDK remain separate."
+    },
+    {
+      "id": "P04",
+      "owner": "Braid",
+      "status": "BraidScopedDesignAccepted",
+      "dependsOn": [
+        "P02",
+        "P03"
+      ],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Review BCAP-01 resolution",
+      "work": "Review route evidence or exact declaration change and confirm required preview capture is represented.",
+      "exitEvidence": "Updated O3 disposition on the exact reviewed draft; proposed ceilings remain unqualified budgets.",
+      "coreCoordinationNext": "All seven exact roles validated; scoped R2 closure recorded.",
+      "evidence": "docs/foundation-bcap-response-review/README.md"
+    },
+    {
+      "id": "P05",
+      "owner": "Schema",
+      "status": "SchemaScopedDesignAccepted",
+      "dependsOn": [],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Complete O1/O2 formal dispositions",
+      "work": "Use the eight checklist work items and actual pinned provider facts; answer every Q with supported/refused scope and precise gaps.",
+      "exitEvidence": "O1-Schema and O2-Schema forms with source revision, authorship/date, gap list and evidence; no inferred acceptance from the comment.",
+      "evidence": "docs/foundation-r2-closure/ALL-SEVEN-VALIDATION.json",
+      "remaining": "Actual adapter/numeric/wider profile R3/R4 implementation and qualification remain pending",
+      "coreFollowup": "docs/foundation-schema-reconciliation/RECONCILIATION.md",
+      "localizedDecisionRequest": "docs/schema-precise-disposition/REQUEST.md",
+      "ownerAnswerPending": false,
+      "formalReplacementPending": false,
+      "latestSchemaDesignDisposition": "Submitted v2 AcceptWithScope 2026-11-03",
+      "completionPreparation": "docs/schema-acceptance-preparation/README.md"
+    },
+    {
+      "id": "P06",
+      "owner": "XmlDb",
+      "status": "ProviderFixScopedAccepted",
+      "dependsOn": [],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Resolve XDB-LIFE-01 in owner source/profile",
+      "work": "Preserve primary and all cleanup failures, establish fault state despite cleanup errors and qualify actual release uncertainty and sequential/reentry/close scope.",
+      "exitEvidence": "Updated O4 disposition tied to actual fix/profile and targeted X01\u2013X08 evidence; no Core API addition inferred.",
+      "evidence": "docs/foundation-ecosystem-status/README.md",
+      "remaining": "Actual implemented Core/BCAP/XSLT adapter and R4 integration remain separate; do not reopen current-pin fix without new evidence."
+    },
+    {
+      "id": "P07",
+      "owner": "XmlDb",
+      "status": "OwnerPreparation",
+      "dependsOn": [],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Prepare provider-local membership bridge",
+      "work": "Implement or concretely map same-snapshot membership before foreign getters; no required IXdmNode member or eager graph copy. Final R2 interface binding follows the accepted candidate.",
+      "exitEvidence": "Actual root/child/attribute/namespace, foreign/same-label/different-snapshot and disposed controls; product/store pins unchanged unless separately selected.",
+      "progress": "Internal membership is committed in 0d18e91; actual public candidate binding remains pending R3/R4."
+    },
+    {
+      "id": "P08",
+      "owner": "Core with Schema/XmlDb/Braid",
+      "status": "ClosedWithScope",
+      "dependsOn": [
+        "P04",
+        "P05",
+        "P06"
+      ],
+      "canPrepareBeforeR2Closure": true,
+      "title": "Close R2 accepted implementation scope",
+      "work": "Reconcile all known gaps and any revised declaration manifest. Rebind impacted owner returns explicitly; never silently carry old hash-bound acceptance to a changed draft.",
+      "exitEvidence": "Seven explicit role dispositions, complete requirement ledger and finite supported/refused implementation scope; R2 close recorded.",
+      "evidence": "docs/foundation-r2-closure/CLOSURE.json"
+    },
+    {
+      "id": "P09",
+      "owner": "Core",
+      "status": "InProgress",
+      "dependsOn": [
+        "P08"
+      ],
+      "canPrepareBeforeR2Closure": false,
+      "title": "Implement accepted W1\u2013W6 production slices",
+      "work": "Neutral source admission, authority/facts, numeric/list/union, advisor/compatibility and public all-host/capture implementation under selected scope.",
+      "exitEvidence": "Happy/error/edge/lifetime tests; unchanged ordinary APIs; full source/API/ABI/conformance and package provenance.",
+      "gateStatus": "R2 closed; internal W1-A and bounded W1-B qualified",
+      "preparation": "docs/foundation-typed-container/README.md",
+      "progress": "TA-55 production patch1.81.1 freshly qualifies26342 solution+84 language-server tests,exact frozen gates/API version-only delta,native451/adapter59/consumer10/retained20. Owner workloads/budgets/adoption/freeze remain pending.",
+      "divisionPreparation": "docs/foundation-decimal-division-policy/IMPLEMENTATION.md",
+      "typedAdmissionPreparation": "docs/foundation-typed-admission-plan/IMPLEMENTATION.md",
+      "typedCachePreparation": "docs/foundation-typed-cache-policy/IMPLEMENTATION.md",
+      "typedScalarCacheQualification": "docs/foundation-typed-scalar-cache/STATUS.json",
+      "typedEvidenceQualification": "docs/foundation-typed-evidence/STATUS.json",
+      "advisorAdapterQualification": "docs/foundation-advisor-adapter/STATUS.json",
+      "typedIdentityQualification": "docs/foundation-typed-identity/STATUS.json",
+      "performanceFollowup": "Local registry-copy attribution/reduction complete. Continue representative native/owner latency, retained-memory and PF-01-09 budget qualification; no owner budgets accepted.",
+      "typedIdentityCostQualification": "docs/foundation-typed-identity-cost/STATUS.json",
+      "publicTypedIdentityQualification": "docs/foundation-public-typed-identity/STATUS.json",
+      "typedNumericProjectionQualification": "docs/foundation-typed-numeric-projection/STATUS.json",
+      "publicTypedNumericQualification": "docs/foundation-public-typed-numeric/STATUS.json",
+      "nodeFactsPreparation": "docs/foundation-node-facts-plan/IMPLEMENTATION.md",
+      "nodeFactsQualification": "docs/foundation-node-facts-reader/STATUS.json",
+      "nodeFactsCostQualification": "docs/foundation-node-facts-cost/STATUS.json",
+      "nodeQueryProfilePreparation": "docs/foundation-node-query-profile/IMPLEMENTATION.md",
+      "nodeMetadataQualification": "docs/foundation-node-metadata-reader/STATUS.json",
+      "publicNodeNilledQualification": "docs/foundation-public-node-nilled/STATUS.json",
+      "publicNilledCostFollowup": "Bounded synthetic reduction qualified: warm 31848 to 1448 bytes/query and 15257 to 8607 callbacks, identical origin/facts/tuple and metadata counts. Actual native workloads/owner budgets remain pending.",
+      "publicNilledCostQualification": "docs/foundation-public-nilled-cost/STATUS.json",
+      "nodeAtomizationPolicy": "docs/foundation-node-atomization-policy/IMPLEMENTATION.md",
+      "nodeAtomizationPolicySelected": true,
+      "publicDataActivated": true,
+      "publicNodeDataQualification": "docs/foundation-public-node-data/STATUS.json",
+      "sourcefreeConstructionPolicy": "docs/foundation-sourcefree-construction-policy/IMPLEMENTATION.md",
+      "sourcefreeConstructionPolicySelected": true,
+      "sourcefreeConstructorActivated": true,
+      "providerOperationLifetime": "docs/foundation-provider-operation-lifetime/README.md",
+      "providerOperationAdmissionImplemented": true,
+      "nextImplementation": "PV-Q05 exact1.81.1 owner workload/budget and public-provider adoption gap review",
+      "publicConstructionQualification": "docs/foundation-public-construction/README.md",
+      "compatibleViewPolicy": "docs/foundation-compatible-view-policy/POLICY.md",
+      "compatibleViewActivated": true,
+      "compatibleSignatureNeed": "CV-ENTRY-01",
+      "compatibleSignatureAdopted": false,
+      "previewRecipe": "docs/foundation-compatible-view-policy/packaging/RECIPE.md",
+      "previewPackagesBuilt": false,
+      "pairedProviderPrerequisite": "docs/foundation-paired-provider-lifetime/README.md",
+      "multiAdvisorPrerequisiteImplemented": true,
+      "previewMetadata": "docs/foundation-captured-identity-production/evidence/PACKAGE-PREFLIGHT.json",
+      "compatibleAdmissionQualification": "docs/foundation-compatible-admission/README.md",
+      "compatiblePublicCoreDisposition": "ImplementedBoundedCoreSelection",
+      "compatibleCacheRequirement": "CV-CACHE-01",
+      "compatibleIdentityCacheImplemented": true,
+      "compatibleCacheQualification": "docs/foundation-compatible-cache/STATUS.json",
+      "publicCompatibleQualification": "docs/foundation-public-compatible/STATUS.json",
+      "compatibleSignatureCoreImplemented": true,
+      "compatibleSignatureDisposition": "ImplementedBoundedCoreSelection; external owner acceptance pending",
+      "remainingScopeAudit": "docs/foundation-r3-scope/STATUS.json",
+      "remainingScopePlan": "docs/foundation-r3-scope/PLAN.json",
+      "nextBoundedImplementation": "PV-Q05 exact1.81.1 owner workload/budget and public-provider adoption gap review",
+      "currentScopeFollowup": "docs/foundation-captured-identity-production/STATUS.json",
+      "hostOperationBridgeQualification": "docs/foundation-host-operation-bridge/STATUS.json",
+      "publicXQueryQualification": "docs/foundation-public-xquery/STATUS.json",
+      "xsltAdmissionQualification": "docs/foundation-xslt-admission/STATUS.json",
+      "xsltCompletionQualification": "docs/foundation-xslt-completion/STATUS.json",
+      "hostOutcomeQualification": "docs/foundation-host-outcome/STATUS.json",
+      "publicXsltQualification": "docs/foundation-public-xslt/STATUS.json",
+      "provenancePolicy": "docs/foundation-provenance-policy/POLICY.json",
+      "publicProvenanceQualification": "docs/foundation-public-provenance/STATUS.json",
+      "leasedProvenanceQualification": "docs/foundation-leased-provenance/STATUS.json"
+    },
+    {
+      "id": "P10",
+      "owner": "Core/Schema/XmlDb/Braid",
+      "status": "Gated",
+      "dependsOn": [
+        "P09",
+        "P07"
+      ],
+      "canPrepareBeforeR2Closure": false,
+      "title": "R4 acceptance, freeze and publication",
+      "work": "Qualify actual source/unchanged binaries and PF-01\u201309 budgets on one immutable candidate, obtain four-owner freeze, then build/review/publish release packages.",
+      "exitEvidence": "R4\u2013R7 gates individually evidenced; no automatic product pin upgrade, release version or date commitment."
+    }
+  ],
+  "ownerRequestsRegistered": "docs/foundation-bcap-candidate/evidence/owner-registration.json",
+  "schemaRevisions": [],
+  "sourceVersion": "1.81.1",
+  "containerTransportPolicy": "docs/foundation-container-policy/STATUS.json",
+  "publicContainerQualification": "docs/foundation-public-container/STATUS.json",
+  "compatibleContainerQualification": "docs/foundation-compatible-container/STATUS.json",
+  "widerPrimitivePolicy": "docs/foundation-primitive-policy/STATUS.json",
+  "publicPrimitivesQualification": "docs/foundation-public-primitives/STATUS.json",
+  "uriBinaryDisposition": "docs/foundation-uri-binary-disposition/STATUS.json",
+  "legacyEvidenceDisposition": "docs/foundation-legacy-disposition/STATUS.json",
+  "providerQualificationReadiness": "docs/foundation-provider-qualification/STATUS.json",
+  "nativeSchemaLaneQualification": "docs/foundation-native-schema-lane/STATUS.json"
+}

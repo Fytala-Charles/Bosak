@@ -8,6 +8,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
 # Build results
+# Generated Python bytecode is local tooling output.
+__pycache__/
+*.py[cod]
+
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -86,6 +90,7 @@ vscode-bosak/*.vsix
 # Local scratch/debug directories (never commit)
 /.Temp/
 /.guard-tmp/
+/.worktrees/
 tmp/
 tmpdebug/
 mult/
@@ -93,3 +98,19 @@ mult/
 
 # BenchmarkDotNet artifacts
 BenchmarkDotNet.Artifacts/
+# Retain the explicitly manifested synthetic receipt-checker output.
+!docs/foundation-provider-adoption/evidence/receipt-controls.log
+
+# Retained exact-action approval and Integration execution receipts.
+!docs/foundation-xmldb-manual-approval/*.log
+
+!docs/release-core-vscode-candidate/*.vsix
+
+!docs/release-vscode-uri-fix/*.vsix
+
+!docs/release-1.81.2-candidate/evidence/*.vsix
+
+# Generated extension server bundle is rebuilt from the pinned source.
+/vscode-bosak/server/
+
+!docs/release-1.81.2-final/evidence/vsix-out/*.vsix

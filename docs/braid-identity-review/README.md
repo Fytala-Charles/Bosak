@@ -1,0 +1,11 @@
+# Braid identity-policy prototype review — 29 October 2026
+
+The consumer policy scope and independent prototype are reviewed for checkpoint. No correction was needed. Raw receipts confirm 47 passing contract controls, six detected enforcement mutants and 18 matching real assembly metadata/hash observations. The final tested source/project/compiled assembly identities match; all twenty-four earlier dossier manifests retain their exact bytes. Review rechecked inputs and receipts without rerunning completed suites.
+
+The prototype qualifies a data-model policy and explicit refusal rules. It does not implement Braid runtime admission, actual worker handshake enforcement or a trusted loaded-closure capability. Stable-binding/layout flags and worker envelopes remain modeled. The recorded earlier Braid trace observes eight of nine engine members; XQuery was not observed. A whole-closure gate requiring all nine to be already loaded would refuse that valid lazy workflow. This remains an open design boundary, not a product defect or a reason to force arbitrary loading.
+
+Recommended policy remains reviewed rebuild at an explicit pin plus runtime mismatch refusal. Actual Braid stays unchanged at its original pin. No protocol/storage format, core API, product dependency, release, C45 or native acceptance change is included. Core 1.34.1/Schema 0.9 source and previous full-unit/conformance qualification are unchanged and inherited. Earlier binary findings remain exact, including Braid's four version failures and stale advertised runtime identity under deliberate DLL replacement.
+
+Earlier uncommitted/pending-review statements in sealed scope/prototype dossiers describe original capture. [Checkpoint identities](CHECKPOINT.json) record Schema delivery; core delivery resolves through `git log -1 --format=%H -- docs/braid-identity-review/README.md`.
+
+Next: design and demonstrate a bounded actual-runtime observation/admission experiment in isolation. Compare operation-specific closure checks with an approved resolver/lazy-load binding contract; require actual loaded paths/hashes, deferred member use, restart, post-initial-check replacement and parent/worker mismatch evidence. Keep real runtime results distinct from modeled checks. No Braid production integration should precede that proof and its consumer-owned design/acceptance work.

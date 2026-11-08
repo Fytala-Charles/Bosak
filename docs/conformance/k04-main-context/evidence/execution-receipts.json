@@ -1,0 +1,2167 @@
+[
+  {
+    "name": "original-qt3-contextDecl-014-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-014-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2201206000172533,
+    "log": "original-qt3-contextDecl-014-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-014",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-014-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-014-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32347309999749996,
+    "log": "original-qt3-contextDecl-014-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-014",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-014",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare variable $x := . + 5;\n        declare context item := 17;\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>22</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-015-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-015-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2110781999945175,
+    "log": "original-qt3-contextDecl-015-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-015",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-015-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-015-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29982439999002963,
+    "log": "original-qt3-contextDecl-015-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-015",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-015",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare variable $y := /works/employee;\n        declare context item := $y[9];\n        declare variable $x external := if (./*) then fn:position() else 0;\n        ($x, $y)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XQDY0054: Circular dependency involving the initial context item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-016-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-016-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22302450001006946,
+    "log": "original-qt3-contextDecl-016-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-016",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-016-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-016-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32751219999045134,
+    "log": "original-qt3-contextDecl-016-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-016",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-016",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare variable $y := (<a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a>);\n        declare context item := $y[3];\n        declare variable $x external := fn:position();\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-017-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-017-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20721670001512393,
+    "log": "original-qt3-contextDecl-017-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-017",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-017-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-017-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3226041999878362,
+    "log": "original-qt3-contextDecl-017-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-017",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-017",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare variable $y := <root><a>1</a>,<a>2</a>,<a>3</a>,<a>4</a>,<a>5</a>,<a>6</a>,<a>7</a>,<a>8</a>,<a>9</a>,<a>10</a></root>;\n        declare context item := $y;\n        declare variable $x external := fn:last();\n        $x\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-018-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-018-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2107030999904964,
+    "log": "original-qt3-contextDecl-018-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-018",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-018-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-018-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.292434900009539,
+    "log": "original-qt3-contextDecl-018-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-018",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item := last() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XQDY0054: Circular dependency involving the initial context item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-019-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-019-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20450950000667945,
+    "log": "original-qt3-contextDecl-019-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-019",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-019-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-019-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27696950000245124,
+    "log": "original-qt3-contextDecl-019-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-019",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item := position() + 1; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <assert-eq>2</assert-eq>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XQDY0054: Circular dependency involving the initial context item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-020-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-020-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27753359999042004,
+    "log": "original-qt3-contextDecl-020-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-020",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-020-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-020-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2991032999998424,
+    "log": "original-qt3-contextDecl-020-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-020",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item as xs:integer external; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-021-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-021-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20518449999508448,
+    "log": "original-qt3-contextDecl-021-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-021",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-021-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-021-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31570059998193756,
+    "log": "original-qt3-contextDecl-021-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-021",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item as xs:integer := 'London'; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-022-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-022-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20557800002279691,
+    "log": "original-qt3-contextDecl-022-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-022",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-022-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-022-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30304259998956695,
+    "log": "original-qt3-contextDecl-022-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-022",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item as xs:string := 2; . ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPTY0004\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:string'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-023-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-023-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23231950000626966,
+    "log": "original-qt3-contextDecl-023-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-023",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-023-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-023-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22107669999240898,
+    "log": "original-qt3-contextDecl-023-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-023",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-023",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer+ := (1 to 17)[position() = 5];\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 43: XPST0003: Expected ':='."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-028-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-028-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2463108999945689,
+    "log": "original-qt3-contextDecl-028-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-028",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-028-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-028-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3523678000201471,
+    "log": "original-qt3-contextDecl-028-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-028",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item := 3; . + 4 ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-029-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-029-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22228790001827292,
+    "log": "original-qt3-contextDecl-029-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-029",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-029-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-029-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.385123999993084,
+    "log": "original-qt3-contextDecl-029-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-029",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-029",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item := <a>bananas</a>;\n        string-length()\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>7</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-030-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-030-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.265485300013097,
+    "log": "original-qt3-contextDecl-030-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-030",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-030-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-030-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34573670002282597,
+    "log": "original-qt3-contextDecl-030-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-030",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-030",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item := <a id=\"qwerty\">bananas</a>;\n        string-length(@id)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>6</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-031-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-031-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22721429998637177,
+    "log": "original-qt3-contextDecl-031-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-031",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-031-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-031-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3146294000034686,
+    "log": "original-qt3-contextDecl-031-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-031",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-031",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item := contains(?, \"e\");\n        .(\"raspberry\")\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-032-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-032-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21665570000186563,
+    "log": "original-qt3-contextDecl-032-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-032",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-032-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-032-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2911553999874741,
+    "log": "original-qt3-contextDecl-032-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-032",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := (1 to 17)[20]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-033-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-033-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21571609997772612,
+    "log": "original-qt3-contextDecl-033-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-033",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-033-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-033-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29313490001368336,
+    "log": "original-qt3-contextDecl-033-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-033",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-033",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := (1 to 17)[position() gt 5]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-034-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-034-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21771939998143353,
+    "log": "original-qt3-contextDecl-034-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-034",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-034-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-034-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3119509000098333,
+    "log": "original-qt3-contextDecl-034-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-034",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-034",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item as xs:integer := (1 to 17)[position() = 5]; .",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>5</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-035-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-035-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21347349998541176,
+    "log": "original-qt3-contextDecl-035-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-035",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-035-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-035-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3098730999918189,
+    "log": "original-qt3-contextDecl-035-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-035",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-035",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer := (1 to 17)[position() = 5];\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>5</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-036-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-036-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21613169999909587,
+    "log": "original-qt3-contextDecl-036-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-036",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-036-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-036-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29809779999777675,
+    "log": "original-qt3-contextDecl-036-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-036",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-036",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer := current-date();\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-037-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-037-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20487109999521635,
+    "log": "original-qt3-contextDecl-037-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-037",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-037-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-037-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3146639999758918,
+    "log": "original-qt3-contextDecl-037-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-037",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-037",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer := <a>23</a>;\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-038-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-038-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22857820001081564,
+    "log": "original-qt3-contextDecl-038-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-038",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-038-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-038-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31191979997674935,
+    "log": "original-qt3-contextDecl-038-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-038",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-038",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:anyURI := \"http://www.w3.org/\";\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:anyURI'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-039-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-039-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21720949999871664,
+    "log": "original-qt3-contextDecl-039-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-039",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-039-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-039-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32139480000478216,
+    "log": "original-qt3-contextDecl-039-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-039",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-039",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:double := 1.234;\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:double'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-042-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-042-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19721759998355992,
+    "log": "original-qt3-contextDecl-042-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-042",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-042-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-042-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3005694999883417,
+    "log": "original-qt3-contextDecl-042-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-042",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-042",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item external := 17;\n        . = 17\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-043-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-043-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21038160001626238,
+    "log": "original-qt3-contextDecl-043-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-043",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-043-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-043-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28490939998300746,
+    "log": "original-qt3-contextDecl-043-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-043",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-043",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare context item as xs:integer external := 17;\n        . = 17\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-true />\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-044-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-044-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21736130001954734,
+    "log": "original-qt3-contextDecl-044-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-044",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-044-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-044-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3066926999890711,
+    "log": "original-qt3-contextDecl-044-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-044",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-044",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item as xs:double external := 17; . = 17",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:double'."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-045-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-045-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2148041999898851,
+    "log": "original-qt3-contextDecl-045-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-045",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-045-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-045-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30450510000810027,
+    "log": "original-qt3-contextDecl-045-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-045",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-045",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": " declare context item as xs:double external; . = 17",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPDY0002\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPDY0002: The context item is absent."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-053-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-053-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21089079999364913,
+    "log": "original-qt3-contextDecl-053-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-053",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-053-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-053-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30892409998341464,
+    "log": "original-qt3-contextDecl-053-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-053",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-053",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n        declare variable $p := \"base-uri\";\n        declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n        declare context item := $f();\n        .\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <any-of>\r\n    <error code=\"XPDY0002\" />\r\n    <error code=\"XQDY0054\" />\r\n  </any-of>\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XQDY0054: Circular dependency involving the initial context item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-055-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-055-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19533070002216846,
+    "log": "original-qt3-contextDecl-055-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-055",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-055-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-055-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.348654000001261,
+    "log": "original-qt3-contextDecl-055-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-055",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-055",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n      declare variable $f := function-lookup(xs:QName(\"fn:\"||$p), 0);\n      declare context item := <e/>;\n      declare variable $p := \"local-name\";\n      $f()\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>\"e\"</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-059-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-059-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.21233340000617318,
+    "log": "original-qt3-contextDecl-059-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-059",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-059-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-059-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29710419999901205,
+    "log": "original-qt3-contextDecl-059-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-059",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-059",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n      declare context item := 15 to 25;\n      . = 17\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-060-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-060-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20855260000098497,
+    "log": "original-qt3-contextDecl-060-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-060",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-060-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-060-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28827849999652244,
+    "log": "original-qt3-contextDecl-060-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-060",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-060",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n      declare context item := ();\n      . = 17\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPTY0004\" />\r\n</result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-061-actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-061-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20267120000789873,
+    "log": "original-qt3-contextDecl-061-actual.log",
+    "kind": "original",
+    "mode": "actual",
+    "suite": "qt3",
+    "case": "contextDecl-061",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "original-qt3-contextDecl-061-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\original-qt3-contextDecl-061-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3052046000084374,
+    "log": "original-qt3-contextDecl-061-public-xquery.log",
+    "kind": "original",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "contextDecl-061",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-061",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "\n      declare context item := 'x';\n      declare variable $a := .;\n      1[$a]\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-arithmetic-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-baseline-arithmetic-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2958431000006385,
+    "log": "control-qt3-C24-baseline-arithmetic-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-arithmetic",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-arithmetic",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "3 + 4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-variable-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-baseline-variable-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28639570000814274,
+    "log": "control-qt3-C24-baseline-variable-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-variable",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-variable",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare variable $x := 3; $x+4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-baseline-external-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-baseline-external-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29588990000775084,
+    "log": "control-qt3-C24-baseline-external-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-baseline-external-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-baseline-external-focus",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": ".",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30820699999458157,
+    "log": "control-qt3-C24-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-internal",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := 3; .+4",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-typed-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-typed-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3192137999867555,
+    "log": "control-qt3-C24-typed-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-typed-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-typed-internal",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item as xs:integer := 3; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>3</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-default-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-external-default-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30483450001338497,
+    "log": "control-qt3-C24-external-default-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-default",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-default",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item external := 5; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>5</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-supplied-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-external-supplied-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3156351999787148,
+    "log": "control-qt3-C24-external-supplied-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-supplied",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-supplied",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item as xs:integer external; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-external-overrides-default-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-external-overrides-default-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3113348000042606,
+    "log": "control-qt3-C24-external-overrides-default-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-external-overrides-default",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-external-overrides-default",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item external := 5; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>27</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-wrong-internal-type-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-wrong-internal-type-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3033141999912914,
+    "log": "control-qt3-C24-wrong-internal-type-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-wrong-internal-type",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-wrong-internal-type",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item as xs:integer := 'London'; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "control-qt3-C24-wrong-external-type-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-wrong-external-type-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3156271000043489,
+    "log": "control-qt3-C24-wrong-external-type-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-wrong-external-type",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-wrong-external-type",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item as xs:integer external; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: Initial context item does not match 'xs:integer'."
+    }
+  },
+  {
+    "name": "control-qt3-C24-empty-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-empty-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.29135309997946024,
+    "log": "control-qt3-C24-empty-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-empty-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-empty-internal",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := (); .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "control-qt3-C24-plural-internal-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-plural-internal-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30146320001222193,
+    "log": "control-qt3-C24-plural-internal-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-plural-internal",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-plural-internal",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := (1,2); .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XPTY0004\" />\r\n</ns0:result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XPTY0004: The initial context must be a single item."
+    }
+  },
+  {
+    "name": "control-qt3-C24-duplicate-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-duplicate-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2148919000173919,
+    "log": "control-qt3-C24-duplicate-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-duplicate",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-duplicate",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := 1; declare context item := 2; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XQST0099\" />\r\n</ns0:result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 53: XQST0099: More than one context item declaration in a module."
+    }
+  },
+  {
+    "name": "control-qt3-C24-singleton-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-singleton-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30525040000793524,
+    "log": "control-qt3-C24-singleton-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-singleton-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-singleton-focus",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := 3; concat(position(), \":\",last())",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-string-value>1:1</ns0:assert-string-value>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-forward-variable-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-forward-variable-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3179721999913454,
+    "log": "control-qt3-C24-forward-variable-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-forward-variable",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-forward-variable",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare context item := $x; declare variable $x := 7; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>7</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-variable-uses-focus-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-variable-uses-focus-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3266528000240214,
+    "log": "control-qt3-C24-variable-uses-focus-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-variable-uses-focus",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-variable-uses-focus",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare variable $x := . + 5; declare context item := 17; $x",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>22</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  },
+  {
+    "name": "control-qt3-C24-cycle-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-cycle-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3059689000074286,
+    "log": "control-qt3-C24-cycle-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-cycle",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-cycle",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare variable $x := .; declare context item := $x; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:error code=\"XQDY0054\" />\r\n</ns0:result>",
+      "exceptionType": "InvalidOperationException",
+      "error": "XQDY0054: Circular dependency involving the initial context item."
+    }
+  },
+  {
+    "name": "control-qt3-C24-comments-public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-main-context-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-main-context\\evidence\\control-qt3-C24-comments-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32166010001674294,
+    "log": "control-qt3-C24-comments-public-xquery.log",
+    "kind": "control",
+    "mode": "public-xquery",
+    "suite": "qt3",
+    "case": "C24-comments",
+    "result": {
+      "Suite": "qt3",
+      "Name": "C24-comments",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare (:c:) context (:c:) item := 3; .",
+      "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <ns0:assert-eq>3</ns0:assert-eq>\r\n</ns0:result>",
+      "exceptionType": null,
+      "error": null
+    }
+  }
+]

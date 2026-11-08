@@ -1,0 +1,13 @@
+test_changed_observation_refuses (test_receipts.PackageEvidenceTests.test_changed_observation_refuses) ... ok
+test_complete_candidate (test_receipts.PackageEvidenceTests.test_complete_candidate) ... ok
+test_extra_restore_dependency_refuses (test_receipts.PackageEvidenceTests.test_extra_restore_dependency_refuses) ... ok
+test_package_hash_mismatch_refuses (test_receipts.PackageEvidenceTests.test_package_hash_mismatch_refuses) ... ok
+test_restore_hash_mismatch_refuses (test_receipts.PackageEvidenceTests.test_restore_hash_mismatch_refuses) ... ok
+test_second_package_source_refuses (test_receipts.PackageEvidenceTests.test_second_package_source_refuses) ... ok
+test_stale_loaded_source_revision_refuses (test_receipts.PackageEvidenceTests.test_stale_loaded_source_revision_refuses) ... ok
+test_wrong_package_commit_refuses (test_receipts.PackageEvidenceTests.test_wrong_package_commit_refuses) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.057s
+
+OK

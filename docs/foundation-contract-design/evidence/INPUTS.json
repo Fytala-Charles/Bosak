@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-31",
+  "feedSha256": "03bb793d3cd69d7e819e1568ab11eff98bd2cec356a963098b3d5f738b15dc39",
+  "corePackageSha256": "79514e70900806183f70fbe5420f1052c3f211f15e6ec36d4f5df987111b95af",
+  "coreAssemblySha256": "bcd14bcf8f11b23a48fd7f4a0db9786dc75100748fed67e488b5eec60221c2fa",
+  "proposalNamespace": "C13901.Draft",
+  "productionImplementation": false,
+  "draftSourceSha256": "4964fc4f78292adab81115ec816d042c59afee142785134bc567bb89216886ad",
+  "draftProjectSha256": "240cedad722819e32b8a4343522caffc1525c3fabaa67d4015110f567dc63661",
+  "sdk": "10.0.301",
+  "buildConfiguration": "Release",
+  "restoreSources": "Cleared; direct package-extracted Core reference",
+  "compileOutcome": "Succeeded; zero warnings/errors",
+  "inspection": "Metadata/Unsafe.SizeOf only; no draft method executed",
+  "productionTestsRerun": false
+}

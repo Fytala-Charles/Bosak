@@ -1,0 +1,7 @@
+{
+  "decisionId": "K04-quote-routing-adoption-v1",
+  "proposalCommit": "d0ca0741e88069ca58eb24db57fa914ef42caaa0",
+  "date": "2026-10-27",
+  "answer": "Approve exact 16-case adoption (Recommended)",
+  "scope": "Apply exact proposed routing/AGENTS baseline patch;fresh complete normal QT3 gate;no release"
+}

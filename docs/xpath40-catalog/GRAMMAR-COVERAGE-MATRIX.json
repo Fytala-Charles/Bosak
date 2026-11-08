@@ -50,7 +50,19 @@
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
         "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+        "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+        "tickets": [
+          "H01",
+          "H03",
+          "H04"
+        ]
+      }
     },
     {
       "key": "S1-S2-S5",
@@ -69,7 +81,15 @@
       "source": [
         "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Function-call/ref/dynamic forms and HOF/profile controls are mapped. C01-C03 remain the signature/default/option/type evidence, not a new grammar-completeness proof.",
+        "remaining": "C02 F01-F14 and C03 T01-T05 retain function-specific conversion/options/host limits. Registration count and a passing HOF example do not accept every call contract.",
+        "tickets": []
+      }
     },
     {
       "key": "S3-otherwise",
@@ -93,7 +113,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Released ?? preserves empty-versus-present, whole-sequence value, precedence, containing focus and guarded dynamic-error controls. Current draft spells the operator otherwise and is not accepted by either 4.0 profile.",
+        "remaining": "Do not advertise ?? as the pinned normative spelling. Closed-host static binding needs its own review; the public API accepts runtime variable/function context.",
+        "tickets": [
+          "G01-otherwise-spelling",
+          "G04-late-binding-boundary"
+        ]
+      }
     },
     {
       "key": "S3-keywords",
@@ -117,7 +148,17 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Reordered/mixed keywords, empty/default, Q{} EQNames and static rejection controls pass. Keyword partial application with ? fails parsing; positional partial application is a working alternative.",
+        "remaining": "Per-function metadata and spelling drift remain C02 F01. Dynamic calls have positional argument grammar; their rejection is not evidence of a missing universal keyword facility.",
+        "tickets": [
+          "G03-keyword-placeholders"
+        ]
+      }
     },
     {
       "key": "S3-lexical",
@@ -145,7 +186,17 @@
         "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Radix/separator token boundaries, template escaping/nesting/comment/atomization and old-profile/static-error cases are mapped. C03 retains numeric representation limits.",
+        "remaining": "Do not infer arbitrary precision, every adjacency/Unicode digit case, XML/XQuery string constructors or AVT/host behavior from these lexical probes.",
+        "tickets": [
+          "G05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S4-focus",
@@ -180,7 +231,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus.",
+        "remaining": "Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06.",
+        "tickets": [
+          "G02-mapping-containing-focus",
+          "G05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S4-iteration",
@@ -206,7 +268,17 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Members and map-entry values remain whole sequences, positions continue across container sequences, empty collections bind nothing, and invalid container items refuse XPTY0141. Container iteration preserves containing focus.",
+        "remaining": "Do not flatten member boundaries or infer portable map entry order. Complete typed iteration combinations and host bindings remain outside bounded controls.",
+        "tickets": [
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S6-types",
@@ -232,7 +304,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Membership, explicit casts and coercion are separate. Cast alternatives are attempted in order; already-matching choice coercion currently converts a string to an earlier integer alternative, contrary to the current matched-alternative rule.",
+        "remaining": "K02 retains typed let/argument/return failures with independent expectations. Namespace/type aliases are host-defined, not standalone global registrations.",
+        "tickets": [
+          "K02-choice-matching-alternative",
+          "K04-host-context"
+        ]
+      }
     },
     {
       "key": "S6-record-conversion",
@@ -269,7 +352,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "C03 cast/coercion/lookup boundaries remain: casts filter surplus fields, coercion rejects them, optional keys become present empty entries, and ordinary maps are not annotated records.",
+        "remaining": "Full composite/nominal/static/default/package and error-eagerness combinations remain unaccepted; bounded nominal defaults from C03 remain supported.",
+        "tickets": [
+          "K04-host-context",
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S6-update",
@@ -298,7 +392,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence.",
+        "remaining": "Do not generalize structural updates to all nominal/static/package/recursive record combinations.",
+        "tickets": [
+          "K04-host-context",
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S7",
@@ -319,7 +424,17 @@
       "source": [
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+        "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+        "tickets": [
+          "H04"
+        ]
+      }
     },
     {
       "key": "S8-dispatch",
@@ -341,7 +456,18 @@
       "source": [
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Array per-item versus whole-sequence member boundaries, empty members, switch general-comparison matching and selected-empty termination, and select text/coercion/node identity are verified. The numeric/boolean switch comparison silently misses where direct XPath = raises XPTY0004.",
+        "remaining": "H02 comparison mismatch remains unfixed. Native/fallback, streaming, collation and arbitrary structured item combinations are limited to named evidence; no full instruction/model acceptance.",
+        "tickets": [
+          "H02",
+          "H04"
+        ]
+      }
     },
     {
       "key": "S8-patterns",
@@ -364,7 +490,18 @@
         "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms.",
+        "remaining": "No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion.",
+        "tickets": [
+          "K04-host-context",
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S8-compound",
@@ -389,7 +526,18 @@
         "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
         "src/Bosak.Xslt/Stylesheet/TemplateRule.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical.",
+        "remaining": "Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance.",
+        "tickets": [
+          "K04-host-context",
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "REQ123-constructors",
@@ -407,7 +555,17 @@
       "source": [
         "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "C03 supplies all 49 zero-arity constructor names and 1,127 representative observations. C05 spot checks keep direct/reference/missing/empty and lower-profile boundaries distinct from focus-function syntax.",
+        "remaining": "No arbitrary-precision, complete facet/schema or universal focus/host conversion support is inferred.",
+        "tickets": [
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "REQ123-destructuring",
@@ -432,7 +590,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured.",
+        "remaining": "K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract.",
+        "tickets": [
+          "K03-record-destructuring-lookup",
+          "K05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "REQ123-jnode",
@@ -451,7 +620,18 @@
       "source": [
         "src/Bosak.XPath.Core/Xdm/XdmJNode.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C05 bounded review complete; not accepted",
+        "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.json",
+        "assessment": "Navigation, key/root/value type checks and array:members/array:of-members preserve member boundaries and empty/nested values. Generic node(), xnode() and is contracts remain unsupported model scope. Explicit jnode-pattern matching refuses XTSE0340 in both named hosts.",
+        "remaining": "The six generic-model unmet controls are retained known boundaries, not a new full-model adoption or template-rule certification.",
+        "tickets": [
+          "K01-generic-jnode-model",
+          "K04-host-context"
+        ]
+      }
     },
     {
       "key": "REQ123-scan",
@@ -473,7 +653,43 @@
       "source": [
         "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "scan is Experimental-only in calls and lookup, with N+1 single-member-array states and empty input retaining the seed. Its existing gate retry is not frozen API promotion.",
+        "remaining": "No new function syntax or frozen promotion. C02 callback semantics and C06 host/profile ownership remain distinct from membership in GatedSets.",
+        "tickets": []
+      }
     }
-  ]
+  ],
+  "currentReview": {
+    "date": "2026-10-26",
+    "report": "HOST-PROFILE-RECONCILIATION.md",
+    "previousReport": "TYPE-COLLECTION-PATTERN-RECONCILIATION.md",
+    "reviewedRows": [
+      "S1-S2-S5",
+      "S3-otherwise",
+      "S3-keywords",
+      "S3-lexical",
+      "S4-focus",
+      "REQ123-scan",
+      "S4-iteration",
+      "S6-types",
+      "S6-record-conversion",
+      "S6-update",
+      "S8-patterns",
+      "S8-compound",
+      "REQ123-constructors",
+      "REQ123-destructuring",
+      "REQ123-jnode",
+      "S0",
+      "S7",
+      "S8-dispatch"
+    ],
+    "reviewedRowCount": 18,
+    "otherRows": 0,
+    "policy": "C04-C06 bounded reconciliation only. Original baseline and earlier row annotations remain unchanged; no exhaustive grammar coverage or acceptance."
+  }
 }

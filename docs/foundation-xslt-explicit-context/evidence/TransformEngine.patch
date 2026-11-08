@@ -1,0 +1,52 @@
+--- a/src/Bosak.Xslt/Runtime/TransformEngine.cs
++++ b/src/Bosak.Xslt/Runtime/TransformEngine.cs
+@@ -1,3 +1,4 @@
++// Generated isolated context-policy candidate; original license/history retained below.
+ // ===========================================================================================================================================================
+ // AUTHOR               : Charles Korthout
+ // CREATE DATE          : 25 mei 2026
+@@ -1218,6 +1219,9 @@
+     /// <param name="globalContextItem">Optional explicit global context item for the transformation.</param>
+     /// <returns>The result of the transformation as an XDM value.</returns>
+     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
++        => TransformCore(source, initialTemplate, initialMode, rawResult, baseOutputUri, initialMatchSelection, captureResultDocuments, rawTransformResult, globalContextItem, true);
++
++    internal XdmValue TransformCore(IXdmNode? source, string? initialTemplate, string? initialMode, bool rawResult, string? baseOutputUri, XdmValue? initialMatchSelection, bool captureResultDocuments, bool rawTransformResult, IXdmNode? globalContextItem, bool useSourceAsGlobalContext)
+     {
+         _staticRecordFieldValues.Clear();
+         _evaluatingRecordFields.Clear();
+@@ -1246,7 +1250,7 @@
+             throw new InvalidOperationException("XTDE0040: Named template 'xsl:initial-template' not found (no source document or entry point was supplied).");
+ 
+         // XTDE3086: a required global context item must be supplied.
+-        if (_stylesheet.GlobalContextItemUse == "required" && source == null)
++        if (_stylesheet.GlobalContextItemUse == "required" && (useSourceAsGlobalContext ? source == null : globalContextItem == null))
+             throw new InvalidOperationException("XTDE3086: A global context item is required but none was supplied.");
+ 
+         // Ensure xsl:function registrations are present (re-entrant transforms)
+@@ -1318,7 +1322,9 @@
+         // the value explicitly or supplies a wrapper document for non-document nodes.
+         // When called directly without an explicit global context item, the source
+         // node serves as the global context item for backward compatibility.
+-        var effectiveGlobalContextItem = globalContextItem ?? source;
++        var effectiveGlobalContextItem = useSourceAsGlobalContext ? globalContextItem ?? source : globalContextItem;
++        if (!useSourceAsGlobalContext)
++            _context.WithFocus(XdmValue.Undefined, 0, 0);
+ 
+         // xsl:global-context-item use="absent": the transformation runs with an absent
+         // global context item even when a source is supplied (glob-cxt-item-003).
+@@ -1427,11 +1433,12 @@
+             _isExecutingInitialTemplate = true;
+             try
+             {
+-                if (entryRule.CompiledMatch != null && source != null)
++                if (useSourceAsGlobalContext && entryRule.CompiledMatch != null && source != null)
+                     ExecuteTemplate(entryRule, source, callParams: initCallParams, incomingTunnelParams: initTunnelParams, setCurrentRule: true);
+                 else
+                 {
+-                    var initialContextItem = source != null ? XdmValue.FromNode(source) : XdmValue.Undefined;
++                    var namedContext = useSourceAsGlobalContext ? source : effectiveGlobalContextItem;
++                    var initialContextItem = namedContext != null ? XdmValue.FromNode(namedContext) : XdmValue.Undefined;
+                     CallTemplate(templateKey, initialContextItem, initCallParams, initTunnelParams);
+                 }
+             }

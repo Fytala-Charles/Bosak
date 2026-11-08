@@ -1,0 +1,442 @@
+[
+  {
+    "name": "qt3-control-cardinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-cardinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3459312999912072,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-cardinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-cardinal-basic.log"
+  },
+  {
+    "name": "qt4-control-cardinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-cardinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3230311000079382,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-cardinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-cardinal-basic.log"
+  },
+  {
+    "name": "qt3-control-cardinal-named",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-cardinal-named-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35345900000538677,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-cardinal-named",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-cardinal-named.log"
+  },
+  {
+    "name": "qt4-control-cardinal-named",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-cardinal-named-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3364309000025969,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-cardinal-named",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-cardinal-named.log"
+  },
+  {
+    "name": "qt3-control-ordinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3549721000017598,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-basic.log"
+  },
+  {
+    "name": "qt4-control-ordinal-basic",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-basic-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33736799997859634,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-basic",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-basic.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-named-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35112870001466945,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-s",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-named-s.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-s",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-named-s-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3199435999849811,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-s",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-named-s.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-es",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-explicit-es-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.36526650001178496,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-es",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-explicit-es.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-es",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-explicit-es-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3181975000188686,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-es",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-explicit-es.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-named-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3382596999872476,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-r",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-named-r.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-r",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-named-r-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33485749998362735,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-r",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-named-r.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-er",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-explicit-er-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3331391999963671,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-er",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-explicit-er.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-er",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-explicit-er-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3130486999871209,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-er",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-explicit-er.log"
+  },
+  {
+    "name": "qt3-control-ordinal-named-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-named-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3272468000068329,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-named-n",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-named-n.log"
+  },
+  {
+    "name": "qt4-control-ordinal-named-n",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-named-n-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30912269998225383,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-named-n",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-named-n.log"
+  },
+  {
+    "name": "qt3-control-ordinal-explicit-en",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-ordinal-explicit-en-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34224639998865314,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-ordinal-explicit-en",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-ordinal-explicit-en.log"
+  },
+  {
+    "name": "qt4-control-ordinal-explicit-en",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-ordinal-explicit-en-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32154289999743924,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ordinal-explicit-en",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-ordinal-explicit-en.log"
+  },
+  {
+    "name": "qt3-control-malformed-cardinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-malformed-cardinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35112219999427907,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-malformed-cardinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-malformed-cardinal.log"
+  },
+  {
+    "name": "qt4-control-malformed-cardinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-malformed-cardinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3301144999859389,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-malformed-cardinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-malformed-cardinal.log"
+  },
+  {
+    "name": "qt3-control-malformed-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt3-control-malformed-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3525648000068031,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-malformed-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-malformed-ordinal.log"
+  },
+  {
+    "name": "qt4-control-malformed-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-cldr-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-cldr-fix\\evidence\\qt4-control-malformed-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30597430001944304,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-malformed-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-malformed-ordinal.log"
+  }
+]

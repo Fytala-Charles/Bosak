@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.71.0",
+  "candidateVersion": "1.72.0",
+  "priorSourcePins": "docs/foundation-host-operation-bridge/evidence/SOURCE-AND-BINARY-PINS.json",
+  "beforeHashes": {
+    "docs/foundation-host-operation-bridge/MANIFEST.json": "fbe74711b5205ef8a717397eb79bc8f5f84aa316e18a13d48c2c8456315af58e",
+    "docs/foundation-host-operation-bridge/PLAN.json": "1381d14cde36d9262da1ddc76e6df97242f8b8791c83755d1af83bc617f0714b",
+    "docs/foundation-bcap-owner-review/inputs/proposal/XQuery.cs.txt": "9c22a8d957f51f49d4214eaee760c498e95bb5cce00a0b3d7ad12ab26d5c00aa",
+    "docs/foundation-bcap-owner-review/inputs/proposal/QueryFacade.cs.txt": "c6f42f6629fe30874495625fcb48cc6129a53dfeb02e5547cad332660a7a9f37",
+    "src/Bosak.XPath.Api/Schema/CapturedHostBinding.cs": "764d10f944a291302b1b8559b300940fc617b4d5ef4866ab2cfc755618892284",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "4dfd1b73e6fa5beec08bfd669e1d661a9972edf2126dfeb9772ee373e570ecbc",
+    "src/Bosak.XQuery/Api/CapturedQueryHost.cs": "ebf7571440089bdcf274272801b8feaca93c10f16d89041dbc003c33d679946a",
+    "src/Bosak.XQuery/Api/XQueryExecutable.cs": "092eca4328f24a9ca6daf9f5f344ccdc48e6f78e37d143bfecde8295658617e1",
+    "src/Directory.Build.props": "acb8b5121476d3c60756ba7d8b59d41e863116bfd2ddcfdb4a6a098ed5548fa1"
+  },
+  "semanticScope": "AH-02 bounded public ordinary XQuery shared-session compile/evaluate. Adopt immutable XQuery REC https://www.w3.org/TR/2017/REC-xquery-31-20170321/ sections 2.1, 2.1.1, 2.1.2, 2.2.3 and 2.3 for captured effective module/expression contexts, dynamic evaluation and original error propagation; XDM REC https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/ existing ordinary node/atomic/sequence representation. No blanket language conformance or exact numeric pipeline adoption.",
+  "hostPolicy": "Preserve R2 D01/D04-D06/D11-D13. Compile reviewed SchemaXQueryCompiler signature with frozen effective prolog/registered-module/namespace closure. Optional assessor returns Unsupported without touching it; schema imports and unsupported context services/shapes refuse. Public profile is distinct from AH-01 private candidate.",
+  "capturePolicy": "Dynamic context copying uses its actual binding/namespace cardinalities rechecked by existing capture, not fabricated public workload defaults or new cache/typed-atom quota units. No concurrent caller mutation guarantee or aggregate byte/time/parse budget.",
+  "resultPolicy": "Permit empty, atomic and node results and flat outer sequences of these. Refuse maps/arrays/functions/external/JNode/nested sequence cells in this bounded profile, at evaluation or cell delivery. Lazy outer acquisition/advance/current/length use guarded serialized continuation windows on the exact raw operation; cached XdmSequence.Current and already-returned nodes/scalars are not recursively guarded or detached. Prefixes may be observed before a later error/refusal. No new mandatory sequence disposal slot.",
+  "ownedContext": "Public evaluation owns a fresh child for the complete deferred result lifetime and preserves its effective compiled static context. Existing public legacy XQuery Evaluate and AH-01 isolated evaluator retain restoration behavior.",
+  "exclusions": "No public XSLT/BCAP, schema-aware/typed-host binding, structured/nested result profile, native provider/worker/budget/freeze/owner/package/publication acceptance; PV-01/NU-01/SC-01 and remaining accepted requirements unwaived."
+}

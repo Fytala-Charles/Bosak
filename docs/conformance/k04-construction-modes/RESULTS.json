@@ -1,0 +1,31 @@
+{
+  "slice": "K04-C34",
+  "base": "11bb1c1e",
+  "candidate": "1.32.0",
+  "published": "1.26.3",
+  "solutionPassed": 24082,
+  "regressions": {
+    "afterPassed": 73,
+    "beforeFailed": 67,
+    "beforePassed": 6
+  },
+  "originalsPassed": 87,
+  "qt3Normal": [
+    31257,
+    0,
+    564
+  ],
+  "qt3Isolated": [
+    31340,
+    0,
+    481
+  ],
+  "qt4Normal": [
+    8939,
+    0,
+    1920
+  ],
+  "next": "C35 separate construction admission qualification",
+  "normalBaselineChanged": false,
+  "releaseApproved": false
+}

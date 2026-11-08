@@ -1,0 +1,80 @@
+{
+  "status": "SelectedForImplementation",
+  "activated": false,
+  "behaviorProfile": "bosak-constructed-atomic-v1",
+  "descriptorFormat": "bosak-constructed-atomic-descriptor-v1",
+  "acceptedTrimmedSource": [
+    "$constructed"
+  ],
+  "compileEntry": "SchemaQuerySession.CompileXPath with explicit supported assessor",
+  "constructionEntry": "Existing SchemaQueryOperation.ConstructSimpleValue",
+  "providerAdmission": "Exact bound advisor must implement existing IQueryOperationLifetime",
+  "sourceSnapshotsAllowed": false,
+  "fabricatedInputAllowed": false,
+  "ownsTypedValueWithNullInputAllowed": false,
+  "input": {
+    "kind": "Unmarked lexical String",
+    "sourceOrConstructedMarkersAllowed": false,
+    "userSchemaTypeAnnotationAllowed": false
+  },
+  "output": {
+    "shape": "Exactly one non-list atomic",
+    "families": [
+      "String",
+      "Boolean",
+      "Integer",
+      "Decimal"
+    ],
+    "originalAssessment": "MustBeNull",
+    "targetAndDeclaredIdentity": "Owned positive IsSameComponent, not handle interning",
+    "actualType": "Owned provider-issued actual member",
+    "receiptScope": "Issuing raw operation only"
+  },
+  "episode": {
+    "firstCallFixesRawEpisode": true,
+    "exactDateTimeOffsetRepresentation": true,
+    "timezoneMinutesMin": -840,
+    "timezoneMinutesMax": 840,
+    "ambientClock": false,
+    "callerObjectRetained": false
+  },
+  "lifetime": {
+    "successfulProviderAdmissionsPerRawOperation": 1,
+    "admissionAcquiredLazily": true,
+    "providerCallsUnderGate": false,
+    "overlappingProviderCallsPerOperation": "Refused",
+    "tailCallsDelayCleanupAndDrain": true,
+    "callbackWindowEndRevokesDelivery": true,
+    "disposeProviderResources": false,
+    "waitCancellationReleasesRawWork": false
+  },
+  "quotas": {
+    "MaxOpenSnapshots": "Unchanged source admission units",
+    "MaxCachedValuesPerSnapshot": "Unchanged per-source-snapshot scalar entries; not used for constructor receipts",
+    "MaxTypedValueAtoms": "Existing per-result consumption limit",
+    "MaxNumericDigits": "Accepted carrier digits",
+    "MaxDecimalScale": "Accepted carrier scale",
+    "sourceCacheSlotsConsumed": 0,
+    "persistentReceiptRegistry": false,
+    "aggregateCallOrByteBudgetPromised": false,
+    "providerLexicalParseBudgetPromised": false
+  },
+  "consumer": {
+    "variable": "constructed",
+    "namespace": "",
+    "scope": "Same raw operation and exact receipt/representation",
+    "plainSourceForeignStaleValuesAllowed": false,
+    "genericVmFallback": false
+  },
+  "errors": {
+    "providerInvalid": "Invalid result with fixed engine diagnostic; no provider Value/Diagnostic getter",
+    "providerUnsupported": "Unsupported; no provider Value/Diagnostic getter",
+    "capacity": "NotSupportedException",
+    "malformed": "Argument/malformed evidence exception",
+    "cleanup": "Existing original primary then cleanup ordering"
+  },
+  "publicSignaturesAdded": false,
+  "newRequiredProviderMembers": false,
+  "broaderPersistentSignatureNeedsClosed": false,
+  "requiresProviderOperationAdmissionPrerequisite": true
+}

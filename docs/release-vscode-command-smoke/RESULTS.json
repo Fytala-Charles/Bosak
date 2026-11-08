@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-08",
+  "status": "CommandQualificationFailed_UriLookupDefect",
+  "candidateSha256": "77b03b067953ea6f5587856bc222262a45a69160fffc8c4e6e30ec9b166ffd02",
+  "checks": 5,
+  "passed": 2,
+  "failed": 3,
+  "passedCommands": [
+    "bosak.transformXslt",
+    "bosak.runInitialTemplate"
+  ],
+  "failedCommands": [
+    "bosak.evaluateXPath",
+    "bosak.runXQuery",
+    "bosak.evaluateXQuery"
+  ],
+  "commandsReceiptSha256": "e3b38239bd2e5c24478ebfe3e2e8b275f14c45083b38cd9b96efc6df50ecba55",
+  "completeHarnessSha256": "07c2202b5bc60113ea39e727fee7a0fb9a3253dbcede5b83a4216585ad94eafa",
+  "rootCause": "URI-valued executeCommand arguments are looked up as raw strings while didOpen parses DocumentUri. Escaped Windows drive colon differs from stored representation.",
+  "reproduction": "Same open XPath document: file:///d%3A/... argument returns Document is not open; file:///d:/... returns6.",
+  "testEnvironment": "Installed0.2.6 candidate, default bundled server, disposable final-fresh profile, normal sandbox.",
+  "activeProfileChanged": false,
+  "machineSettingsChanged": false,
+  "productionVersionChanged": false,
+  "publicationPerformed": false,
+  "productionSourceChanged": false,
+  "fixApplied": false,
+  "nextFix": "Parse the command URI with the same DocumentUri representation as synchronization, retain missing/foreign-document errors, add URI escaping regressions, build a separate changed-server VSIX and repeat real command/editor qualification.",
+  "limitations": "Transformation source-path and named-template arguments supplied programmatically to registered UI commands; interactive file-picker/cancel behavior not tested. Host exit0 means harness completed, not command acceptance."
+}

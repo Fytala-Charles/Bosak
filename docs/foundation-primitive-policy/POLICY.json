@@ -1,0 +1,100 @@
+{
+  "status": "CoreSelectedWiderPrimitivePolicy_ImplementationPending",
+  "sourceVersion": "1.80.0",
+  "requirementsWaived": 0,
+  "ownerAccepted": false,
+  "apiFrozen": false,
+  "publicApiChanged": false,
+  "decisions": [
+    {
+      "id": "PP01",
+      "title": "Existing boundary only",
+      "decision": "PV-T05 will widen ReadTypedContainer in the existing ordinary and compatible typed-identity profiles from four to eleven publicly constructible atomic kinds. No new public member/type/factory, value layout, reference/friend grant or scalar evaluation/profile descriptor change is selected. Current1.80.0 remains four-family only."
+    },
+    {
+      "id": "PP02",
+      "title": "Exact kind set",
+      "decision": "Select String,Integer,Decimal,Double,Float,Boolean,Date,Time,DateTime,Duration,QName after complete structural validation. Enumerate this set explicitly; never widen by ordinal-range acceptance of all enum values. Uri and Binary enum kinds have no public factories and remain explicit Unsupported under this public route pending separate representation/API disposition."
+    },
+    {
+      "id": "PP03",
+      "title": "Immutable representation",
+      "decision": "Current public payloads are readonly scalar fields, immutable strings, boxed readonly XsQName, exact numeric payloads and readonly DateTimeWrapper/XPathDateTime. Copy the existing plain XdmValue without parsing, serialization, rebuilding, conversion or deep cloning. No native buffer/byte-array or independent resource lease is introduced."
+    },
+    {
+      "id": "PP04",
+      "title": "Floating representation",
+      "decision": "Transport Double/Float including NaN,infinities and negative zero without arithmetic or normalization. Preserve captured stored bits and schema/user annotations; factory float-to-double storage predates this boundary and is not a claim to recover discarded input bits."
+    },
+    {
+      "id": "PP05",
+      "title": "QName identity",
+      "decision": "Preserve LocalName,NamespaceUri and Prefix, QName/NOTATION schema annotation and user type annotation exactly. QName semantic equality ignores prefix, so test all three fields explicitly. Do not resolve a prefix against target namespaces, stringify/reparse, or substitute target-owned type handles."
+    },
+    {
+      "id": "PP06",
+      "title": "Temporal identity",
+      "decision": "Retain existing kind, all XPathDateTime fields, extended year, milliseconds, offset and both recorded timezone flags without conversion to DateTimeOffset or timezone normalization. This is transport of supplied state, not support for every extended-year/date arithmetic operation or sub-millisecond precision absent from the carrier."
+    },
+    {
+      "id": "PP07",
+      "title": "Lexical representations",
+      "decision": "Duration retains its non-null lexical string and derived annotation without reparse/canonicalization. Public anyURI/hexBinary/base64Binary strings remain String-kind annotated lexical carriers, which current four-family containers can already transport. Preserve their strings/tags; do not invent byte buffers or fabricate Uri/Binary-kind values."
+    },
+    {
+      "id": "PP08",
+      "title": "Structural refusal",
+      "decision": "Reject default/non-atomic/already-marked cells, missing evidence, null String/Duration payloads and QName cells with null/empty LocalName or null NamespaceUri/Prefix. Namespace URI and prefix may be empty strings. Carrier shape checks must not become a new full NCName, calendar, duration, binary, URI or XML Schema facet validator."
+    },
+    {
+      "id": "PP09",
+      "title": "Validity ownership",
+      "decision": "The issuing provider remains responsible for the lexical/schema/calendar correctness of its assessed values and immutable or version-guarded issuance. Owned handles plus transport do not independently revalidate a value or establish every restriction. Preserve supplied temporal fields, including extended years, without making a new validity claim for arbitrary XPathDateTime inputs."
+    },
+    {
+      "id": "PP10",
+      "title": "Annotations versus authority",
+      "decision": "SchemaTypeName/UserSchemaTypeName remain descriptive tags, not ownership evidence or a source of inferred actual types. Governing,declared,selected actual handles and optional original origin must still be separately authenticated and retained by reference per ordered cell."
+    },
+    {
+      "id": "PP11",
+      "title": "Whole admission",
+      "decision": "Read and validate the entire ordered container, including malformed tails after unsupported kinds, before publishing Supported. Preserve list/union/empty boundaries and captured atom/digit/scale ceilings. No prefix publication, silent conversion, scalar registration or partial quota mutation."
+    },
+    {
+      "id": "PP12",
+      "title": "Lifetime unchanged",
+      "decision": "Every metadata/evidence/cursor operation remains bound to its exact raw operation. Compatible access uses its existing serialized paired window and established proof with live source/input/origin/container/types. No new Establish per getter, ambient/latest proof, stable-cache issuer, independent lease or revival through another raw operation."
+    },
+    {
+      "id": "PP13",
+      "title": "Plain escape unchanged",
+      "decision": "A copied plain payload remains usable after raw expiry while its TypeEvidence expires. That is safe for selected immutable representations and does not preserve provider authority. Engine delivery and public tuples cannot mint new provider issuance or scalar markers on a round trip."
+    },
+    {
+      "id": "PP14",
+      "title": "No numeric/execution expansion",
+      "decision": "Wider complete transport does not widen compatible scalar identity/evaluation, ReadTypedValue, construction, numeric operators/casts/map keys/serialization, node data/nilled routing or full host profiles. Existing explicit refusals remain until separately adopted and implemented; no NU-01/SC-01 waiver."
+    },
+    {
+      "id": "PP15",
+      "title": "Capacity boundary",
+      "decision": "MaxTypedValueAtoms/MaxNumericDigits/MaxDecimalScale still apply. They do not bound string/QName/lexical payload length or aggregate caller-retained outputs. No new byte/text/retained-memory budget is selected; actual owner/native PF budgets remain required."
+    },
+    {
+      "id": "PP16",
+      "title": "Engine implementation location",
+      "decision": "Implement structural/family selection at the complete public delivery boundary shared by ordinary/compatible routes. Keep generic internal reader and scalar registry behavior unchanged; ensure the initial complete validation visits malformed tails before Unsupported. Existing API XML docs/guides must state the eleven-kind scope without promising full schema validity."
+    },
+    {
+      "id": "PP17",
+      "title": "Enum/internal representation disposition",
+      "decision": "Do not construct Uri/Binary enum carriers by reflection, private constructors or new test-only factories to claim public support. Public annotated String transport is a distinct present representation. Required future native binary/URI carrier shape, validation and lifetime acceptance remains open; record that gap rather than reporting all thirteen enum kinds supported."
+    },
+    {
+      "id": "PP18",
+      "title": "Qualification and acceptance",
+      "decision": "PV-T04 selects Core policy only. PV-T05 requires happy/edge/mixed-list/invalid-tail/bit-prefix-timezone/lifetime/quota/ordinary-compatible regression tests and fresh full build/tests/frozen gates/API/binary qualification. PV-L01 legacy, persistent/construction/nil/no-value scope, actual providers/budgets and R4-R7 remain unwaived; owner/final manifest/freeze/publication acceptance is pending."
+    }
+  ]
+}

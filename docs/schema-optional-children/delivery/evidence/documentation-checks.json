@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "4da5d5b6cdbe631030881a819760a0af7d52fb3b5b68af16f10d365f9f93c045"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "3cd919c617d62483adbca6daf58576d4cedafa83a118adc2d77f2b79d938e1ec"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "7b341bf47afdd96f244b115e8c151596ea0c4d501eb4a3dc3cd2500d1c826504"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "7edb666d65663c54a04692805cf785d54c6aed1c3c1cc4dec6024ac553aecc80"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "05d67c18780af9da067e5c762026e60a1d9be8b79e170916720afd739ff2c940"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "58aecc994c9623d2f6097763a64024d32b0fa54bed31735bd50e317d436afb3d"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "69baaed0fe1d2e5a6ff69aaff9bd0fcf057e1bf6df2bc93f0244dd25046c27d9"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "6d794bf223102649a9a1db7d500e6200be1a14e519264d5e72a7da392497a349"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-optional-children/README.md",
+      "htmlSha256": "1ae60e15f1a6d6e643819046e611697b4f81cf71882e2f4c52d0dfae8d2acbdc"
+    },
+    {
+      "source": "docs/schema-optional-children/OPTIONAL-DECIMAL-ADOPTION-2026-10-29.md",
+      "htmlSha256": "b32fdd2677abf364fa32e9d3b6a1c731b2a59a499af56ad5996c6bb3bdf7de31"
+    },
+    {
+      "source": "docs/schema-optional-children/OPTIONAL-DECIMAL-PLAN.md",
+      "htmlSha256": "cd5f5ca9ba973ddc2bba54051a5f44b98af009225e5acb98cf68584712be251c"
+    },
+    {
+      "source": "docs/schema-optional-children/delivery/README.md",
+      "htmlSha256": "926fe69facd41c2cbb01955fb6f55effd440b11262816702c59360e012172530"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "cdedb37d5fd23c0b9fdf3a5b47df1ce6046bada84698b0e5203c0653dd90a6b8"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "e145314e656f6e3f607d69b7cfa7ea8ffbff9c943c293e46086473de0876c441"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "7012d98ec7f5045f42aa6e253bde0689b4cf4153dec7d4f60cd8349fb6d144ab"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "d44eaee9a7ce04efd14da8b16fd62faf71bf108ac3a0027c85eb99d209a98100"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "2e2c5908f2e75a996b393bccb428acafc56e35702635e27ce1d8885c4aa0b265"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "99c9551417de3403082b45edbc2df62123f1b13e4110afc8667827b2513a0276"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "31d0e5e20746eb9930037158dabb1d761a4ea549744b7898576f55d73ffb5d07"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "c4c57c7d366961f5a2729434f0f8d2dc6fad56e78d7674f949c2b33b87c568da"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/OPTIONAL-DECIMAL-ADOPTION-2026-10-29.md",
+      "htmlSha256": "b32fdd2677abf364fa32e9d3b6a1c731b2a59a499af56ad5996c6bb3bdf7de31"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/OPTIONAL-DECIMAL-PLAN.md",
+      "htmlSha256": "cd5f5ca9ba973ddc2bba54051a5f44b98af009225e5acb98cf68584712be251c"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/OPTIONAL-DECIMAL-CHECKPOINT.md",
+      "htmlSha256": "ae39d49768a6e3b4d0619860214ad892d9228d3a30f7a30885acc1053d042eee"
+    }
+  ],
+  "localLinks": 1938,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

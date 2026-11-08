@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-31",
+  "cohorts": {
+    "baseline": {
+      "runs": 2,
+      "controlsPerRun": 162,
+      "changedPackageDlls": []
+    },
+    "holder": {
+      "runs": 2,
+      "controlsPerRun": 162,
+      "changedPackageDlls": [
+        "Bosak.XPath.Core.dll"
+      ]
+    },
+    "kernel": {
+      "runs": 2,
+      "controlsPerRun": 205,
+      "changedPackageDlls": [
+        "Bosak.XPath.Core.dll",
+        "Bosak.XPath.Runtime.dll"
+      ]
+    }
+  },
+  "successfulControlEvaluations": 1058,
+  "newKernelControls": 43,
+  "buildWarnings": 0,
+  "productionChanged": false,
+  "v5PublicSurfaceChanged": false,
+  "fullProductGatesRun": false,
+  "productionApiFreezeAccepted": false,
+  "scope": "Private harness kernel and bounded native constructor bridge via diagnostic Core/Runtime shims; not a production kernel or full admitted advisor integration."
+}

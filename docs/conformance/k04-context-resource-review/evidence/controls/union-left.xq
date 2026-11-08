@@ -1,0 +1,1 @@
+module namespace a='urn:c27:module-left'; import schema namespace t='urn:c27:union-left'; declare context item as t:choice external; declare variable $a:v := .;

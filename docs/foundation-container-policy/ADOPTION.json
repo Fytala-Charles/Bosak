@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-06",
+  "sourceVersion": "1.78.0",
+  "policyBeforeImplementation": true,
+  "productionChanged": false,
+  "beforeHashes": {
+    "docs/foundation-leased-provenance/MANIFEST.json": "e756476c084d30e29ddee45d6b0377cd884d787b85abc71e1421f734793bd9c7",
+    "docs/foundation-provenance-policy/POLICY.json": "012c99ae7b3dac13d80d253f8fc2cd3022e070f6053c0d8de55ab1407238c7cd",
+    "docs/foundation-r3-scope/REQUIREMENTS.json": "66f2463529ec136cdd7f3ac0cd4afad8d89cfb93cb131c73311e1dc99170dc81",
+    "src/Bosak.XPath.Core/Schema/SchemaProviderContracts.cs": "bfc82ab58421810703d6fd8ab216044b0941378323d81f1aa084cad82368a47a",
+    "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "932edd4623a7436459accbc3934c3816d3d8a1d90386d48078545d08690bf92c",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "647e96770d62da3879ae90624678dc349995629783289752687938adfc13b791",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "86e62f47d5a7ac86b65afc2f4a0d9f246f3b629dabd03d475514b14ff43176cd"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.5",
+        "2.7.1",
+        "2.7.5",
+        "3.3.1.2",
+        "5.14"
+      ]
+    }
+  ],
+  "intentionalExtensions": "Bosak host boundary preserves container governing/list shape separately from XDM flattened atomics. Borrowed raw lifetime, complete admission, quotas and additive operation signature are Core host policy, not W3C API requirements.",
+  "scope": "PV-T01 policy and planned validation only. No source/API activation, no semantic acceptance or owner waiver."
+}

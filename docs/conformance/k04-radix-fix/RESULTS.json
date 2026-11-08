@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C09",
+  "status": "Bounded radix formatter complete;parse-integer dependency remains open",
+  "sourceBase": "a8b520fd3ca7dfdc4816c0779b0d3d4436bf58e4",
+  "specificationAdoption": "evidence/SPECIFICATION-ADOPTION.json",
+  "summary": {
+    "regressionRows": 68,
+    "beforeRegressionsPassed": 15,
+    "beforeRegressionsFailed": 53,
+    "afterRegressionsPassed": 68,
+    "originalRadixPassed": 16,
+    "originalRadixFailed": 1,
+    "formatterOnlyFailuresFixed": 14,
+    "qt3ControlsPassed": 17,
+    "qt4ControlsPassed": 14,
+    "qt4DependencyControlsFailed": 3,
+    "exploratorySet": [
+      102,
+      100,
+      1,
+      1
+    ],
+    "smallWatchdogProcesses": 52,
+    "timeouts": 0,
+    "solutionPassed": 22111,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1892,
+    "baselineChanged": false,
+    "gatedSetsChanged": false,
+    "candidateVersion": "1.27.0",
+    "publishedVersion": "1.26.3"
+  },
+  "retainedOriginalFailure": [
+    {
+      "name": "qt4-format-integer-40-012",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+        "execute",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-format-integer-40-012-request.json"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.31706790000316687,
+      "result": {
+        "Suite": "qt4",
+        "Name": "format-integer-40-012",
+        "kind": "Failed",
+        "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+      },
+      "log": "qt4-format-integer-40-012.log"
+    }
+  ],
+  "limits": [
+    "4.0 contexts only;3.1 and XSLT3 routes preserve existing interpretation",
+    "Existing public Int64 input range retained;BigInteger magnitude prevents minimum-value overflow",
+    "No parse-integer registration or round-trip case012 closure",
+    "No full modifier-grammar rewrite;existing supported numeric modifiers retained",
+    "No GatedSets,fixture,assertion,QT3 baseline or REQ-126 acceptance changes",
+    "Numeric radix modifiers use existing literal/English suffix conventions;traditional flag does not title-case digits",
+    "Regular/irregular grouping reuses the existing template mechanism",
+    "No full current-draft certification or public arbitrary-precision input claim",
+    "Bosak.Schema owns XSD1.1;REQ-126 remains Complete;no release or upstream submission"
+  ],
+  "next": "Review and implement the separate parse-integer contract,including profile/arity/radix/lexical errors,before attempting case012 or set promotion."
+}

@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "a4a5b5a06d8a4c984245f17a3636d6fe736fb2ce1248f8b9ab88831668ba0ba8",
+  "qualifiedInternalSlice": "TA-09-public-typed-numeric-v1",
+  "scope": "Unchanged exported declarations, XdmValue layout and friends. Bounded public typed numeric profile qualified; no native/freeze acceptance."
+}

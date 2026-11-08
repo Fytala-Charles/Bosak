@@ -1,0 +1,67 @@
+[
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sourcePattern": "private sealed class AssertionGrammar",
+    "lines": [
+      176
+    ],
+    "sha256": "9722af5ec6ec36379cc97e20e520ffdf182492e22a78c3ee19dd1897d3b314ba"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sourcePattern": "internal static bool Accepts",
+    "lines": [
+      182
+    ],
+    "sha256": "9722af5ec6ec36379cc97e20e520ffdf182492e22a78c3ee19dd1897d3b314ba"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sourcePattern": "private bool Operand()",
+    "lines": [
+      210
+    ],
+    "sha256": "9722af5ec6ec36379cc97e20e520ffdf182492e22a78c3ee19dd1897d3b314ba"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs",
+    "sourcePattern": "XPath31Expression.Compile(expression",
+    "lines": [
+      104
+    ],
+    "sha256": "9722af5ec6ec36379cc97e20e520ffdf182492e22a78c3ee19dd1897d3b314ba"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "Profile =",
+    "lines": [
+      46
+    ],
+    "sha256": "62cba28f4d05556f0a5d21a8774cbbcba78d0ff5ed83593dde4a63e158abe727"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "foreach (var child in candidate.Elements())",
+    "lines": [
+      125
+    ],
+    "sha256": "62cba28f4d05556f0a5d21a8774cbbcba78d0ff5ed83593dde4a63e158abe727"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "GetEffectiveBooleanValue()",
+    "lines": [
+      134
+    ],
+    "sha256": "62cba28f4d05556f0a5d21a8774cbbcba78d0ff5ed83593dde4a63e158abe727"
+  },
+  {
+    "path": "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs",
+    "sourcePattern": "IsAssertionCardinalityError",
+    "lines": [
+      137,
+      149
+    ],
+    "sha256": "62cba28f4d05556f0a5d21a8774cbbcba78d0ff5ed83593dde4a63e158abe727"
+  }
+]

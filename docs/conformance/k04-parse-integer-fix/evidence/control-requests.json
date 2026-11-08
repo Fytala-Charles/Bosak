@@ -1,0 +1,416 @@
+[
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-arity1",
+    "category": "positive",
+    "expression": "parse-integer('123')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-arity1",
+    "category": "positive",
+    "expression": "parse-integer('123')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-arity2",
+    "category": "positive",
+    "expression": "parse-integer('ff',16)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-arity2",
+    "category": "positive",
+    "expression": "parse-integer('ff',16)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-empty-value",
+    "category": "boolean",
+    "expression": "empty(parse-integer(()))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-empty-value",
+    "category": "boolean",
+    "expression": "empty(parse-integer(()))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-empty-radix",
+    "category": "positive",
+    "expression": "parse-integer('111',())",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-empty-radix",
+    "category": "positive",
+    "expression": "parse-integer('111',())",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-internal-space",
+    "category": "positive",
+    "expression": "parse-integer(' 1_ 2 3 ')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-internal-space",
+    "category": "positive",
+    "expression": "parse-integer(' 1_ 2 3 ')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-ascii-spaces",
+    "category": "positive",
+    "expression": "parse-integer(codepoints-to-string((9,49,10,50,13,51,32)))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-ascii-spaces",
+    "category": "positive",
+    "expression": "parse-integer(codepoints-to-string((9,49,10,50,13,51,32)))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-radix-invalid",
+    "category": "error",
+    "expression": "parse-integer('10',37)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-radix-invalid",
+    "category": "error",
+    "expression": "parse-integer('10',37)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lexical-invalid",
+    "category": "error",
+    "expression": "parse-integer('0x10',16)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lexical-invalid",
+    "category": "error",
+    "expression": "parse-integer('0x10',16)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lexical-empty",
+    "category": "error",
+    "expression": "parse-integer('_ - _')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lexical-empty",
+    "category": "error",
+    "expression": "parse-integer('_ - _')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-non-xml-space",
+    "category": "error",
+    "expression": "parse-integer('1' || codepoints-to-string(160) || '2')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-non-xml-space",
+    "category": "error",
+    "expression": "parse-integer('1' || codepoints-to-string(160) || '2')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-range-max",
+    "category": "positive",
+    "expression": "parse-integer('9223372036854775807')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-range-max",
+    "category": "positive",
+    "expression": "parse-integer('9223372036854775807')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-range-min",
+    "category": "positive",
+    "expression": "parse-integer('-9223372036854775808')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-range-min",
+    "category": "positive",
+    "expression": "parse-integer('-9223372036854775808')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-range-overflow",
+    "category": "planned-boundary",
+    "expression": "parse-integer('9223372036854775808')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-range-overflow",
+    "category": "planned-boundary",
+    "expression": "parse-integer('9223372036854775808')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-numeric-input",
+    "category": "error",
+    "expression": "parse-integer(123)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-numeric-input",
+    "category": "error",
+    "expression": "parse-integer(123)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-fractional-radix",
+    "category": "error",
+    "expression": "parse-integer('10',2.5)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-fractional-radix",
+    "category": "error",
+    "expression": "parse-integer('10',2.5)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lookup1",
+    "category": "lookup",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),1))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lookup1",
+    "category": "lookup",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),1))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lookup2",
+    "category": "lookup",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lookup2",
+    "category": "lookup",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lookup0",
+    "category": "unsupported-lookup",
+    "expression": "empty(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),0))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lookup0",
+    "category": "unsupported-lookup",
+    "expression": "empty(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),0))",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-arity0",
+    "category": "unsupported",
+    "expression": "parse-integer()",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-arity0",
+    "category": "unsupported",
+    "expression": "parse-integer()",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-arity3",
+    "category": "unsupported",
+    "expression": "parse-integer('10',2,3)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-arity3",
+    "category": "unsupported",
+    "expression": "parse-integer('10',2,3)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-named-reference",
+    "category": "positive",
+    "expression": "(parse-integer#2)('101',2)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-named-reference",
+    "category": "positive",
+    "expression": "(parse-integer#2)('101',2)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-keyword-grammar",
+    "category": "positive",
+    "expression": "parse-integer(radix := 16, value := 'ff')",
+    "expectationOrigin": "3.1 keyword syntax is rejected at grammar stage with XPST0003 before function lookup"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-keyword",
+    "category": "positive",
+    "expression": "parse-integer(radix := 16, value := 'ff')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt3-node-atomization",
+    "category": "positive",
+    "expression": "parse-integer(parse-xml('<n>42</n>')/*)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-parse-integer-fix/evidence/control-fixtures.xml",
+    "Name": "control-qt4-node-atomization",
+    "category": "positive",
+    "expression": "parse-integer(parse-xml('<n>42</n>')/*)",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  }
+]

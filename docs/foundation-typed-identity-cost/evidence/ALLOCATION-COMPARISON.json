@@ -1,0 +1,20 @@
+{
+  "beforeBytesPerCall": 23360,
+  "afterBytesPerCall": 4104,
+  "savedBytesPerCall": 19256,
+  "reductionPercent": 82.4,
+  "setupComparisons": {
+    "$value": {
+      "mutable": 22272,
+      "isolated": 3016
+    },
+    "upper-case($value)": {
+      "mutable": 22576,
+      "isolated": 3320
+    }
+  },
+  "descriptorFingerprint": "E40A85EE87921AFCB0761F30E6247F123987C24924B90F8F1DE0CFFB61A903F1",
+  "descriptorUnchanged": true,
+  "budgetsAccepted": false,
+  "scope": "Same held-operation identity fixture; attribution uses the same compiled VM with mutable/isolated fresh contexts. Before is immutable TA-05 qualification; diagnostic baseline source and rebuilt images are separately pinned."
+}

@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-construction-admission-render/README.md.html",
+      "sha256": "8fed7f0f4274223e24a29bc8b4964c35052a720e4f5f2b48663256433b6c2a51"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "58c0098df3e58b0eb0537bc6625543d77e3fc262c85f44e63ab124dd62d803a6"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "24a83969fb086c1af5a71138480e64319b90fcb0ba35dff585fa36a0b37b6c17"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "8f6356bdbc2b4a6694a3373aa9f09d4b8f6a74a41ba17436a9ec17011330cec5"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "29635959f7778e45f71daa1753d73b77f7c0662fed4f7a94f73082b769afcd19"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "77b4f0f68ff413370f5570967adc4fcfd2aec2f6a450ff29a2ebe8f55a0348c6"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "69942b521fee8eec658cab7847fd71ce43f892ba65e44ce76a745c0b8cbc15a5"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "920753a3edaa285f6833f6f3b0fb65943104d5b0297e194111ec4c97de03953e"
+    },
+    {
+      "source": "docs/conformance/k04-construction-admission/README.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_conformance_k04-construction-admission_README.md.html",
+      "sha256": "c1ef8b0e6b12210ac785375e883ebe8e2c493ce89a98eb0e4a2c7a1b0653a202"
+    },
+    {
+      "source": "docs/conformance/k04-construction-admission/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-construction-admission-render/docs_conformance_k04-construction-admission_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "c140a37eda57a128d9c80ef79569799b465c9b4f8a2589b5ad26bae9cd9e5994"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "recordFormatVersion": 1,
+  "date": "2026-10-30",
+  "scope": "External dependency review dossier, excluding generated build/bytecode outputs and this manifest",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "83b4de790c4257a4d7139b4cc629e4e928bbe06d1cb9d391c5a2aa4e14b76022"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "29dac85a09bc24f1f4bdbde6a3616e09bd6b457ae054dcade1f9349936d8ed89"
+    },
+    {
+      "path": "BOUNDARY.md",
+      "sha256": "138fc765979e49d3bd8f7b21d774bc4e6efd4ee7ec340cbb20930bb248119a15"
+    },
+    {
+      "path": "evidence/boundary-proposal.json",
+      "sha256": "fed35f579e3f013423eff78d98d00efdcee0bc2cf751153f3941256dfd374c25"
+    },
+    {
+      "path": "evidence/extraction-tests.txt",
+      "sha256": "ec70b032692f367e8dc6d4aa3b71249f9dc1017d0846285232d82e9329b2e915"
+    },
+    {
+      "path": "evidence/review-tests.txt",
+      "sha256": "6295afa97ca48e1d8a82e0a0c773155b80912c17521628021cf5cb5be0617b91"
+    },
+    {
+      "path": "evidence/signature-dependencies.json",
+      "sha256": "16ac97793f5f20d6925f629182854cededc09b2fe20f189237222fd18b7a01f7"
+    },
+    {
+      "path": "evidence/validation.json",
+      "sha256": "a797ec799bbc36cd72b5adb874ce006c84ef395d5ca5267139d2728089f6a810"
+    },
+    {
+      "path": "README.md",
+      "sha256": "7c31dd309c13855f9343313205d72f765e1ce03fb3e0f93bd6b4c0101cf921db"
+    },
+    {
+      "path": "tools/Dependencies.csproj",
+      "sha256": "b0655fe2e4b91db06fc9f4da7c1a91df7f87b7204830ea583c7e622398f5f38f"
+    },
+    {
+      "path": "tools/Program.cs",
+      "sha256": "6d6841036d56d75bc1bad45e554852889a67f647bd8b0129338541632fb5e09d"
+    },
+    {
+      "path": "tools/review.py",
+      "sha256": "1850bd5366f3c9cca74e462de7ef6f31822a3013b2c4c800bc64fb592fbb4f6e"
+    },
+    {
+      "path": "tools/test_review.py",
+      "sha256": "10457b7d53e5b0b48c65dd77a2b824e058537a33cfa3c931be2bfee021480a66"
+    },
+    {
+      "path": "tools/verify.py",
+      "sha256": "d441f7a6b74ecf6812620d57956a54d3cbb84d95e9e28a102f1347b3ad229e03"
+    }
+  ]
+}

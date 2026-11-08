@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "returnId": "O2-Core",
+  "packet": "O2",
+  "owner": "Core",
+  "proposalManifestSha256": "63ab58cf319ebb635e28b606c939e2edea2b18f682ea6564dc899fe2309ccc0f",
+  "responseStatus": "Submitted",
+  "decision": "AcceptWithScope",
+  "sourceRevision": "414496dbe2b8c7889f2a00847852189aa4ec9a67",
+  "signer": "Codex \u2014 Core engineering design review",
+  "date": "2026-11-01",
+  "profile": "Core design disposition of the compiled R2 declaration draft only; no production behavior, external owner, R4, C45 or freeze acceptance",
+  "answers": [
+    {
+      "id": "O2-Q1",
+      "answer": "Core selects all six numeric member intents and XdmExactDecimal as the review surface. Arbitrary-precision parsing, arithmetic, casts, map keys and serialization must be implemented coherently before support is claimed. Legacy signatures and wrong-kind checks remain; narrowing must reject overflow/inexactness, not silently round. Session digit/scale and output budgets are separate from caller allocation of an already-created BigInteger. The 1.42.0 production numeric implementation is unchanged and is not qualified for these new semantics. Record exact immutable normative adoption before W3 code."
+    },
+    {
+      "id": "O2-Q2",
+      "answer": "Core retains governing list/union metadata, IsList for empty/singleton lists, ordered per-atomic declared/actual type and optional original assessment. Selected union type must be the actual chosen member. HasNoTypedValue and nil are not empty-list shortcuts. Exact snapshot-specific ReadTypedValue and provider issuance checks precede container getters. Fresh construction carries target evidence without fabricated original assessment. No additional Core signature is presently identified; Schema must validate authentic facts/representation against O1/O2 before joint closure."
+    },
+    {
+      "id": "O2-Q3",
+      "answer": "Core retains the opaque identity, complete-closure/Unsupported, advisor/episode and effective-environment contracts under D07/D10/D12. Names/digests/labels do not authenticate components. IQueryStaticContext intentionally exposes only captured namespaces in this draft; full effective settings remain captured internally. This is not evidence that all future advisor consumers need only namespaces: Schema must name any required observable context member in O2, and a demonstrated required gap prevents R2 closure. Four isolated declaration assemblies establish compile shape, not actual provider feasibility."
+    },
+    {
+      "id": "O2-Q4",
+      "answer": "Core selects endpoint/profile-bound directional compatibility preserving original PSVI. Compatible requires an explicit provider-qualified proof; supported Incompatible and Unsupported remain distinct. An unimplemented backend may return Unsupported with honest profile scope; it cannot synthesize a compatible view or rewrite original facts. Actual positive supported routes and intentional refusals need Schema evidence/R4 acceptance. This scoped Core design return does not close N1\u2013N8 on another owner\u2019s behalf."
+    }
+  ],
+  "unresolvedRequiredSignatureGaps": [],
+  "evidence": [
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-r2-ledger/DECISIONS.md",
+      "sha256": "e7da2ab7ebb1c0114431bfbbebbf777d89e3ef7ce399949f16439bd6e4b8063c"
+    },
+    {
+      "kind": "DesignDisposition",
+      "reference": "docs/foundation-r2-ledger/LEDGER.json",
+      "sha256": "798663d22026b070cbc5d74eabaa6f60330f4c031b60983e4b1bca773d092d35"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "docs/foundation-r2-ledger/proposal/Provider.cs.txt",
+      "sha256": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "docs/foundation-r2-ledger/proposal/ExactNumeric.cs.txt",
+      "sha256": "aa1ceb8ad378e9ba5a71bc6eb43398c6bfb7cf00945f54a62edc9c8121051364"
+    },
+    {
+      "kind": "SourceMapping",
+      "reference": "docs/foundation-r2-ledger/evidence/DELTA.json",
+      "sha256": "415db071a25b2f7dca7313d2a0f987e24585fab1915bb2d599dc1fb955f88b24"
+    }
+  ],
+  "runtimeQualification": false,
+  "c45Accepted": false,
+  "apiFrozen": false
+}

@@ -1,0 +1,14 @@
+{
+  "provider/NativeContainerAdapter.cs": "f6835dd203c474cef2374912d32cbf78e65da70d6b6d0dfcee8f038868ffd09d",
+  "provider/NativeNodeProjection.cs": "3db6c294779771c3bf9ae6c35f395981edb9d0029590abc3954a4bb15e97e599",
+  "provider/NativeProviderSession.cs": "a0f42600061e912c4b155393bd65025627bef9ba692fbb36cf6f99cca335b5ea",
+  "provider/NativeStrictAssessment.cs": "bd48fc115ce84d140824824e8bbd0d395752dc2a379b0aedd754bf3f46802d19",
+  "provider/Provider.csproj": "5a2c4f357aa2d30190b6052e6388ce4171bf49604ee108d29cb29fcd69d017d4",
+  "provider/ProviderDiagnostics.cs": "8b87735246e7c0b6fd9e9df09771c0db9e6b9941b86ffd9d0caf93c9c19bf13e",
+  "probe/Probe.csproj": "2ebdb692d71fdb4620d79b5da6c62a5ff0424320560eb0d236508023edffa509",
+  "probe/Program.cs": "00376c3bab405ec617a93791af7e0044676e0fd245e84999fd5dcf2adcf234a7",
+  "regression/NativeAssessmentTests.cs": "5e94edb32af8bb31d5ebaf1abebbb52664a3b90143c89957a7618a83529bb71e",
+  "regression/NativeContainerTests.cs": "22c883694d3b69ede302e1c9c5b40bf00bb98dbc3bc08db432c4141bab388557",
+  "regression/NativeNodeTests.cs": "49fa1ab8a1125e0073e9a0aef7da99a3add0b7847deb13ab2188eed3121396d6",
+  "regression/Regression.csproj": "5a0b5d6c637a82f89dd6194aa348076cd74afca279bd07ffeb160188a86fff9f"
+}

@@ -1,0 +1,80 @@
+{
+  "hostAssemblySha256": "337dd4ed48d9b3192211cf495cbe1cf9fe570325146cf31293346f8879c352a1",
+  "hostAssemblyPath": "D:\\Development\\Bosak\\.guard-tmp\\bcap-cost\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.Tests.dll",
+  "runs": [
+    {
+      "profile": "source-free",
+      "repetition": 0,
+      "receipt": "source-free-0.json",
+      "sha256": "1ce3181b0acf3abad636137dbda5a925cfd366bad761ff9e23e2b9a83376b132"
+    },
+    {
+      "profile": "source-free",
+      "repetition": 1,
+      "receipt": "source-free-1.json",
+      "sha256": "c3b00ea65f2381a1c8c475a0031ef4f7d6039de03faf4bcd8a0becb81e6d0b6a"
+    },
+    {
+      "profile": "source-free",
+      "repetition": 2,
+      "receipt": "source-free-2.json",
+      "sha256": "4247c505aeac7781a17a5d9d4ce8add4976b1980698058b8c67eda846ae3bbd6"
+    },
+    {
+      "profile": "shared",
+      "repetition": 0,
+      "receipt": "shared-0.json",
+      "sha256": "83e9a4f63a5d33cb1abd010dce704dd0b2aecec6a46876faec0492d1067787f0"
+    },
+    {
+      "profile": "shared",
+      "repetition": 1,
+      "receipt": "shared-1.json",
+      "sha256": "73dbb20c324fab237b031f61954a2f16e628f32cf3a65c10e8de1a33b5c2928c"
+    },
+    {
+      "profile": "shared",
+      "repetition": 2,
+      "receipt": "shared-2.json",
+      "sha256": "225bc59ea3930cbf5d335960b928f78428a71094248013905b8981aa46a3516d"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 0,
+      "receipt": "distinct-0.json",
+      "sha256": "5588287381cdd2302f1e5de512ab56943907dd694bb1adbcf49b87ddad3d4651"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 1,
+      "receipt": "distinct-1.json",
+      "sha256": "f470e178e63ac00bcc0fa5b2e11c9ec525071b426cefc0b274fb443cc5a735e7"
+    },
+    {
+      "profile": "distinct",
+      "repetition": 2,
+      "receipt": "distinct-2.json",
+      "sha256": "671b6cd45a03b57b3ae0b4c9125453fac829a65ec773ff86eb48c1325e025876"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 0,
+      "receipt": "cancellation-0.json",
+      "sha256": "97c2d730ae28804d58d1cc93c1e9e3ae363fe41ca3ff410f79ae6c1deb2d915e"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 1,
+      "receipt": "cancellation-1.json",
+      "sha256": "0d2c2d55a2fc97322bc1dbb287310e5db47d81346503b9b76b19a874f61f601b"
+    },
+    {
+      "profile": "cancellation",
+      "repetition": 2,
+      "receipt": "cancellation-2.json",
+      "sha256": "d3c8cf6742119f56200163c28f06b9a122e8ff20dd1dc8eda82288c84dc60869"
+    }
+  ],
+  "engineRebuild": false,
+  "budgetsAccepted": false
+}

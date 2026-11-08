@@ -1,0 +1,137 @@
+{
+  "checks": 18,
+  "assertions": 37,
+  "rows": [
+    {
+      "id": "XPath-two-source",
+      "passed": true
+    },
+    {
+      "id": "XQuery-two-source",
+      "passed": true
+    },
+    {
+      "id": "XSLT:distinct:matched",
+      "passed": true
+    },
+    {
+      "id": "XSLT:distinct:named",
+      "passed": true
+    },
+    {
+      "id": "XSLT:shared:matched",
+      "passed": true
+    },
+    {
+      "id": "XSLT:shared:named",
+      "passed": true
+    },
+    {
+      "id": "XSLT:unadmitted-match-before-getter",
+      "passed": true
+    },
+    {
+      "id": "XSLT:unadmitted-global-before-getter",
+      "passed": true
+    },
+    {
+      "id": "XSLT:ambiguous-source",
+      "passed": true
+    },
+    {
+      "id": "XSLT:ownership-rechecked-before-transform",
+      "passed": true
+    },
+    {
+      "id": "XSLT:source-free-named-template",
+      "passed": true
+    },
+    {
+      "id": "XSLT:single-snapshot-path-retained",
+      "passed": true
+    },
+    {
+      "id": "XSLT:foreign-operation-token",
+      "passed": true
+    },
+    {
+      "id": "XSLT:canceled-wait-retains-both",
+      "passed": true
+    },
+    {
+      "id": "XSLT:revoked-provider-defers-cleanup",
+      "passed": true
+    },
+    {
+      "id": "XSLT:raw-completion-releases-both",
+      "passed": true
+    },
+    {
+      "id": "XSLT:host-and-cleanup-failures-retained",
+      "passed": true
+    },
+    {
+      "id": "XSLT:failing-cleanup-released-once",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "bindings": [
+    {
+      "name": "Bosak.XPath.Api",
+      "sha256": "e7701df8b8de5bdfbdb7057481c929a555da66920dfd46ac77863bd101f176de"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "sha256": "df8db3a69581228ed6b9c74f38e56703066d5c9fe42f4165d873238c532a5816"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "sha256": "37273d0c0405cafe4a5001fdd30849e4da1f1195bbca231bb4ed24b28e1e3827"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "sha256": "acbf883a105eef90d36aa3578eb1010439490a728bf0c9866b7248b2ee3ed95e"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "sha256": "906cf8585df31e352b4c8cbd1eeb85e988fb334fb78a7268f220c8a042a6dc68"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "sha256": "2855b35cf2237c626600b13e079d6b1e46b4b148102fc48a566fda57e980d0a3"
+    },
+    {
+      "name": "Bosak.XPath.Runtime.Tests",
+      "sha256": "7233737cc337da25c468ccc0c294a7cf808fe7f36c529b74a32d5e726171ddd7"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "sha256": "b15025afa3ea0ca690728bde48ae27343ef766f4bb5dfacefbba54ecacfd5ae9"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "sha256": "fca6cd57d7ae13e893f5763158d41fe226100b7e71833b0d3ebd7fa534552170"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "sha256": "8957ef1b1eb452efedb922297323e9a3b3a3d01e80a5b931a7ff2d79f07f5343"
+    }
+  ],
+  "allocations": [
+    {
+      "members": 0,
+      "bytesPerOperation": 5096
+    },
+    {
+      "members": 1,
+      "bytesPerOperation": 5704
+    },
+    {
+      "members": 2,
+      "bytesPerOperation": 5960
+    }
+  ],
+  "allocationIterations": 1000,
+  "allocationScope": "Warmed real composite transform including capture, context, closed-resource policy, role checks and flat result drain; precompiled stylesheets/preopened sources. Excludes compilation, provider acquisition and worker/concurrency throughput."
+}

@@ -1,0 +1,23 @@
+test_changed_consumer_bytes (__main__.ReceiptTests.test_changed_consumer_bytes) ... ok
+test_complete_structure_never_claims_acceptance (__main__.ReceiptTests.test_complete_structure_never_claims_acceptance) ... ok
+test_distinct_binary_cohort_structure (__main__.ReceiptTests.test_distinct_binary_cohort_structure) ... ok
+test_empty_metrics (__main__.ReceiptTests.test_empty_metrics) ... ok
+test_empty_platform (__main__.ReceiptTests.test_empty_platform) ... ok
+test_missing_budget (__main__.ReceiptTests.test_missing_budget) ... ok
+test_missing_engine (__main__.ReceiptTests.test_missing_engine) ... ok
+test_missing_samples (__main__.ReceiptTests.test_missing_samples) ... ok
+test_negative_tolerance (__main__.ReceiptTests.test_negative_tolerance) ... ok
+test_non_object_receipt (__main__.ReceiptTests.test_non_object_receipt) ... ok
+test_path_escape (__main__.ReceiptTests.test_path_escape) ... ok
+test_stale_candidate (__main__.ReceiptTests.test_stale_candidate) ... ok
+test_swapped_consumer_revision (__main__.ReceiptTests.test_swapped_consumer_revision) ... ok
+test_tampered_fixture (__main__.ReceiptTests.test_tampered_fixture) ... ok
+test_unchanged_binary_cannot_rebuild (__main__.ReceiptTests.test_unchanged_binary_cannot_rebuild) ... ok
+test_wrong_budget_binding (__main__.ReceiptTests.test_wrong_budget_binding) ... ok
+test_wrong_loaded_engine (__main__.ReceiptTests.test_wrong_loaded_engine) ... ok
+test_wrong_scenario (__main__.ReceiptTests.test_wrong_scenario) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.250s
+
+OK

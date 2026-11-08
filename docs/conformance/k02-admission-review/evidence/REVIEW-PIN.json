@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "55905ddcd83b2f7ade2cc846a73b74225ffedf79",
+  "scope": "Read-only full actual-runner rehearsal: current mode and existing guarded diagnostic mode. No tracked source, fixture, AGENTS, admission or baseline change. Prepare exact owner-review proposal only.",
+  "candidate": "1.26.8",
+  "currentQt3": [
+    31144,
+    0,
+    677
+  ],
+  "proposedQt3": [
+    31145,
+    0,
+    676
+  ],
+  "schemaOwner": "Bosak.Schema REQ-009; no XSD1.1 capability claim.",
+  "mechanism": "Reflection into harness TestExecutor selection only; no engine-field reflection, binary patch or alternate assertions."
+}

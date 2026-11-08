@@ -1,0 +1,11 @@
+{
+  "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "6b58f67c84174552e1af9278d348970c2e19658b",
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+  "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+  "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs": "3c13602651ac208808900cbb2358d74b56e18563",
+  "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+  "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs": "edf681598c8139b24c94cf56ada1b84041064baa",
+  "tests/Bosak.XPath.Standard.Tests/SubstringExperimentalContractTests.cs": "7c94264ca2a485d0d00e7a3c73ee2ef6a7d3b7a5",
+  "tests/Bosak.Xslt.Tests/SubstringExperimentalHostBoundaryTests.cs": "5fa885d4caec4d67496ef0b2c18296c40e7f61d9",
+  "tests/Bosak.XPath.Standard.Tests/FnOpTests.cs": "4e007e45777ffa1c7c0c5f930f1a77283ecb55ce"
+}

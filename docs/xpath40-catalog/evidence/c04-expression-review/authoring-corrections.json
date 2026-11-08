@@ -1,0 +1,191 @@
+{
+  "policy": "Normalize singleton sequence display; preserve required draft failures. Do not assume a closed static variable/function context for the open public API. Original requests/results retained.",
+  "changes": [
+    {
+      "id": "otherwise-static-unknown-var",
+      "original": {
+        "id": "otherwise-static-unknown-var",
+        "expression": "1 ?? $missing",
+        "expected": null,
+        "error": "XPST0008",
+        "row": "S3-otherwise",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "requiredPhase": "compile",
+        "ticket": null
+      },
+      "corrected": {
+        "id": "otherwise-static-unknown-var",
+        "expression": "1 ?? $missing",
+        "expected": null,
+        "error": null,
+        "row": "S3-otherwise",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "context-observation",
+        "requiredPhase": null,
+        "ticket": "G04-late-binding-boundary"
+      }
+    },
+    {
+      "id": "otherwise-static-unknown-function",
+      "original": {
+        "id": "otherwise-static-unknown-function",
+        "expression": "1 ?? no-such-function()",
+        "expected": null,
+        "error": "XPST0017",
+        "row": "S3-otherwise",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "requiredPhase": "compile",
+        "ticket": null
+      },
+      "corrected": {
+        "id": "otherwise-static-unknown-function",
+        "expression": "1 ?? no-such-function()",
+        "expected": null,
+        "error": null,
+        "row": "S3-otherwise",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "context-observation",
+        "requiredPhase": null,
+        "ticket": "G04-late-binding-boundary"
+      }
+    },
+    {
+      "id": "keyword-partial",
+      "original": {
+        "id": "keyword-partial",
+        "expression": "let $f := substring(value := ?,start := 2,length := 2) return $f('ABCD')",
+        "expected": "BC",
+        "error": null,
+        "row": "S3-keywords",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "requiredPhase": null,
+        "ticket": null
+      },
+      "corrected": {
+        "id": "keyword-partial",
+        "expression": "let $f := substring(value := ?,start := 2,length := 2) return $f('ABCD')",
+        "expected": "BC",
+        "error": null,
+        "row": "S3-keywords",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "requiredPhase": null,
+        "ticket": "G03-keyword-placeholders"
+      }
+    },
+    {
+      "id": "pipeline-restoration",
+      "original": {
+        "id": "pipeline-restoration",
+        "expression": "100 ! ((1,2) -> count(.) || ':' || string(.))",
+        "expected": "2:100",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "requiredPhase": null,
+        "ticket": null
+      },
+      "corrected": {
+        "id": "pipeline-restoration",
+        "expression": "string-join((100 ! ((1,2) -> count(.) || ':' || string(.))),'|')",
+        "expected": "2:100",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "requiredPhase": null,
+        "ticket": null
+      }
+    },
+    {
+      "id": "mapping-containing-focus",
+      "original": {
+        "id": "mapping-containing-focus",
+        "expression": "100 ! string-join((1,2) =!> concat(':',string(.)),'|')",
+        "expected": "1:100|2:100",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "requiredPhase": null,
+        "ticket": "G02-mapping-containing-focus"
+      },
+      "corrected": {
+        "id": "mapping-containing-focus",
+        "expression": "string-join((100 ! string-join((1,2) =!> concat(':',string(.)),'|')),'|')",
+        "expected": "1:100|2:100",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "requiredPhase": null,
+        "ticket": "G02-mapping-containing-focus"
+      }
+    },
+    {
+      "id": "mapping-containing-position",
+      "original": {
+        "id": "mapping-containing-position",
+        "expression": "100 ! string-join((1,2) =!> concat(':',position(),'/',last()),'|')",
+        "expected": "1:1/1|2:1/1",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "requiredPhase": null,
+        "ticket": "G02-mapping-containing-focus"
+      },
+      "corrected": {
+        "id": "mapping-containing-position",
+        "expression": "string-join((100 ! string-join((1,2) =!> concat(':',position(),'/',last()),'|')),'|')",
+        "expected": "1:1/1|2:1/1",
+        "error": null,
+        "row": "S4-focus",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "requiredPhase": null,
+        "ticket": "G02-mapping-containing-focus"
+      }
+    }
+  ]
+}

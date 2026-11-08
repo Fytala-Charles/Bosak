@@ -1,0 +1,8 @@
+{
+  "src/Bosak.XQuery/Api/LibraryContextItemConstraint.cs": "b8215e2186a2f5213bd2fb4dc1c4e83d81abf51d",
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": "8bacc47653589d53994c30aaeb99fa4b82506d73",
+  "src/Bosak.XQuery/Api/XQueryExecutable.cs": "b858781d720b6eed4a7626757674caa23c2a1bb6",
+  "src/Bosak.XQuery/Api/XQueryModuleLoader.cs": "e04b21da85d21b85c9b86895ca1c96b7b336bd27",
+  "src/Directory.Build.props": "166c7ff2441f0a811c98b0d7bfbed462f7147a9c",
+  "tests/Bosak.XQuery.Tests/LibraryContextTypeScopeTests.cs": "fe5fcce7e680feeb6b2317e271e9e5340d1b94d5"
+}

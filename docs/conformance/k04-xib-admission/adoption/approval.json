@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-28",
+  "proposalCommit": "7593efa7",
+  "proposalId": "K04-xib-adoption-v1",
+  "questionItemId": "[\"request_user_input_async\",\"call_b8c4d42cf87a4822b853ff57b8177efb\",0]",
+  "answer": "Approve exact xib adoption in both suites (Recommended)",
+  "scope": "Exact three-file patch; fresh full solution tests and normal gates; actual-filter matrix replay; no release."
+}

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="99cd0d17-7625-4949-ad4d-f8569df9f1af" name="charl@CHARLES 2026-11-06 13:20:04" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-11-06T13:20:04.6061283+01:00" queuing="2026-11-06T13:20:04.6061284+01:00" start="2026-11-06T13:20:02.6564471+01:00" finish="2026-11-06T13:20:04.6094800+01:00" />
+  <TestSettings name="default" id="2103b808-c522-4612-a973-42d5bd9b71f3">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-11-06_13_20_04" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d141d7a9-3fa4-4bf1-a675-96c53b6d2d52" testId="93532b91-51a9-41f2-73c2-c6a046762f10" testName="Bosak.XPath.Runtime.Tests.PublicCompatibleTests.TC24_CompatibleContainerSupported" computerName="CHARLES" duration="00:00:01.2018452" startTime="2026-11-06T13:20:04.5513831+01:00" endTime="2026-11-06T13:20:04.5513981+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d141d7a9-3fa4-4bf1-a675-96c53b6d2d52" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Runtime.Tests.PublicCompatibleTests.TC24_CompatibleContainerSupported" storage="d:\development\bosak\tests\bosak.xpath.runtime.tests\bin\release\net10.0\bosak.xpath.runtime.tests.dll" id="93532b91-51a9-41f2-73c2-c6a046762f10">
+      <Execution id="d141d7a9-3fa4-4bf1-a675-96c53b6d2d52" />
+      <TestMethod codeBase="D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Runtime.Tests.PublicCompatibleTests" name="TC24_CompatibleContainerSupported" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="93532b91-51a9-41f2-73c2-c6a046762f10" executionId="d141d7a9-3fa4-4bf1-a675-96c53b6d2d52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.26]   Discovering: Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.38]   Discovered:  Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:00.39]   Starting:    Bosak.XPath.Runtime.Tests&#xD;
+[xUnit.net 00:00:01.62]   Finished:    Bosak.XPath.Runtime.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

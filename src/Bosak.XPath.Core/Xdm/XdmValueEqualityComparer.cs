@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.5   | 25-07-2026     | Map keys distinguish string-family subtypes from g* date types                         |
 //                      | Charles Korthout | 0.6   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 04-11-2026     | Compare/hash normalized exact numeric pairs without scale-expanded strings (1.49.0).     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Core.Xdm;
@@ -74,9 +76,9 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
     {
         if (IsNumeric(obj))
         {
-            // Hash the canonical exact-decimal key string so that numerically equal
-            // keys (integer 1, decimal 1.0, double 1.0) share a hash code.
-            return NumericKeyString(obj).GetHashCode();
+            // Normalized exact pairs share hashes without padding a supplied decimal scale.
+            // Hash codes remain process-local implementation details.
+            return ExactNumericKey.FromValue(obj).GetHashCode();
         }
 
         return obj.Kind switch
@@ -140,91 +142,8 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
     /// when its exact decimal expansion matches (same-key-007: xs:double('1.1') is
     /// NOT the same key as xs:decimal('1.1')).
     /// </summary>
-    private static bool NumericEquals(XdmValue a, XdmValue b)
-        => NumericKeyString(a) == NumericKeyString(b);
-
-    /// <summary>
-    /// Canonical exact decimal representation of a numeric key, used for both equality
-    /// and hashing. NaN and infinities map to fixed sentinels.
-    /// </summary>
-    private static string NumericKeyString(XdmValue value)
-        => value.Kind switch
-        {
-            XdmValueKind.Integer => value.IntegerValue.ToString(CultureInfo.InvariantCulture),
-            XdmValueKind.Decimal => CanonicalDecimalString(value.DecimalValue),
-            XdmValueKind.Float or XdmValueKind.Double => ExactDoubleKeyString(value.DoubleValue),
-            _ => string.Empty
-        };
-
-    private static string ExactDoubleKeyString(double d)
-    {
-        if (double.IsNaN(d)) return "NaN";
-        if (double.IsPositiveInfinity(d)) return "INF";
-        if (double.IsNegativeInfinity(d)) return "-INF";
-        return ExactDecimalString(d);
-    }
-
-    private static string CanonicalDecimalString(decimal m)
-    {
-        var s = m.ToString(CultureInfo.InvariantCulture);
-        if (s.Contains('.'))
-            s = s.TrimEnd('0').TrimEnd('.');
-        return s;
-    }
-
-    /// <summary>
-    /// Exact decimal expansion of a finite IEEE-754 double, with trailing zeros
-    /// removed (e.g. 1.1d → "1.100000000000000088817841970012523233890533447265625").
-    /// </summary>
-    private static string ExactDecimalString(double d)
-    {
-        long bits = BitConverter.DoubleToInt64Bits(d);
-        bool negative = bits < 0;
-        long rawExp = (bits >> 52) & 0x7FF;
-        long frac = bits & 0xFFFFFFFFFFFFF;
-
-        BigInteger mantissa;
-        int exp;
-        if (rawExp == 0)
-        {
-            mantissa = frac; // subnormal
-            exp = -1074;
-        }
-        else
-        {
-            mantissa = frac | (1L << 52);
-            exp = (int)rawExp - 1075;
-        }
-
-        string digits;
-        int scale;
-        if (exp >= 0)
-        {
-            digits = (mantissa << exp).ToString(CultureInfo.InvariantCulture);
-            scale = 0;
-        }
-        else
-        {
-            int k = -exp;
-            // mantissa / 2^k == mantissa * 5^k / 10^k — an exact finite decimal.
-            digits = (mantissa * BigInteger.Pow(5, k)).ToString(CultureInfo.InvariantCulture);
-            scale = k;
-        }
-
-        string s;
-        if (scale == 0)
-            s = digits;
-        else if (digits.Length > scale)
-            s = digits.Insert(digits.Length - scale, ".");
-        else
-            s = "0." + new string('0', scale - digits.Length) + digits;
-
-        if (s.Contains('.'))
-            s = s.TrimEnd('0').TrimEnd('.');
-        if (s.Length == 0)
-            s = "0";
-        return negative && s != "0" ? "-" + s : s;
-    }
+    private static bool NumericEquals(XdmValue a,XdmValue b)
+        => ExactNumericKey.FromValue(a).Equals(ExactNumericKey.FromValue(b));
 
     /// <summary>
     /// Duration equality uses the normalized (months, seconds) totals so that e.g.

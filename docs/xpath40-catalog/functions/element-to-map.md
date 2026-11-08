@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. The published simple-content example does not certify every conversion-plan record, name collision, namespace, schema annotation or option; use only tested layouts/options. Current-draft escape-names decoding is unsupported; the new option is not adopted automatically into frozen or Experimental profiles. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Element-to-map conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -59,6 +61,8 @@ The case combines source values, the named feature, and explicit output formatti
 Benefit: Describe the conversion shape explicitly before passing data into a map-oriented pipeline. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Layout and typing options matter for attributes and repeated children. This example deliberately uses a single simple-content element.
 
 ## 12. Implementation
+
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Simple-content XML-to-map shape; Plans/layout/name policy are explicit conversion choices; Wrong input, option and keyword boundaries. **Boundaries:** The published simple-content example does not certify every conversion-plan record, name collision, namespace, schema annotation or option; use only tested layouts/options. Current-draft escape-names decoding is unsupported; the new option is not adopted automatically into frozen or Experimental profiles. Follow-up groups: F01, F14. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

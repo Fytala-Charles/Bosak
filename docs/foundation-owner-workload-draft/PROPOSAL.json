@@ -1,0 +1,208 @@
+{
+  "date": "2026-11-07",
+  "status": "DraftForOwnerReview",
+  "previewVersion": "1.81.1-preview.c0b926de",
+  "candidateCommit": "c0b926de34824ceb2010d5f814a4450b28b31dcc",
+  "inputs": {
+    "docs/foundation-owner-repo-review/REPOSITORIES.json": "6497543608932a4bbb822d550ad309620d16366c78a03b9d60bc0a5d57f1c138",
+    "docs/foundation-owner-gap-review/GAPS.json": "667a1c0d053f996e39e5e164c8db6f7741d138eefc97db0593f2c54bcf7bae8c",
+    "docs/foundation-package-workload/PROTOCOL.json": "cedf1e4e849347ebe2615d8bbed5b67d161a78a7bf4dc5bd4a76f45bb5dbf4d3",
+    "docs/foundation-package-workload/evidence/SUMMARY.json": "dcecf8f7af93b29539a3b869ee85b4f3d3611aa4a59caf364be51ab439b2ec17",
+    "docs/foundation-package-workload/CANDIDATE-PINS.json": "47cb1e292b4d3052d72ea9801d149cc16dc7ea7c9488c509394680725bc608c7"
+  },
+  "scenarios": [
+    {
+      "id": "PF-01",
+      "owners": "Core",
+      "boundary": "Existing no-schema compile/evaluate and sequence enumeration",
+      "metrics": "Warm throughput, latency distribution, allocated bytes/op and GC counts",
+      "proposedWorkload": "Ordinary untyped scalar/axis/map/array queries; first-item and full enumeration separately.",
+      "requiredInputs": "Pin current shipped and candidate capabilities and consumer fixtures; isolate compile/cold/warm execution.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-02",
+      "owners": "Core + Schema",
+      "boundary": "Compiled schema environment and authority lookup",
+      "metrics": "Compile time, lookups/op, CPU, allocated bytes, cache size and invalidation cost",
+      "proposedWorkload": "Schema compile/reuse and supported/foreign authority lookup over owner-selected schemas.",
+      "requiredInputs": "Owner selects actual schema/component sizes and supported/refused profile; compile and lookup budgets separate.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-03",
+      "owners": "Core + Schema",
+      "boundary": "Typed values and provenance transport",
+      "metrics": "Per-item allocation/boxing, throughput, duplicate value conversion and retained metadata",
+      "proposedWorkload": "Start with measured one/eight-child native decimal subset; separately add actual list/union/nil/no-value and preserve/strip/foreign controls.",
+      "requiredInputs": "Decimal subset is real; broader routes need actual supported native carriers and owner qualification before measurement.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": [
+        {
+          "fixture": "native-decimal-1",
+          "scope": "Measured native decimal subset only",
+          "latency": {
+            "unit": "milliseconds/cycle",
+            "statistic": "Maximum of three per-session medians over five measured cycles each",
+            "observed": 72.437,
+            "headroomMultiplier": 2,
+            "roundUpQuantum": 25,
+            "proposedCeiling": 150
+          },
+          "allocation": {
+            "unit": "bytes/cycle",
+            "statistic": "Maximum of three session-average allocations on the measuring thread",
+            "observed": 149971.2,
+            "headroomMultiplier": 2,
+            "roundUpQuantum": 65536,
+            "proposedCeiling": 327680
+          },
+          "accepted": false,
+          "classification": "Provisional diagnostic guardrail; not owner SLA, statistical tolerance or regression acceptance"
+        },
+        {
+          "fixture": "native-decimal-8",
+          "scope": "Measured native decimal subset only",
+          "latency": {
+            "unit": "milliseconds/cycle",
+            "statistic": "Maximum of three per-session medians over five measured cycles each",
+            "observed": 519.0024,
+            "headroomMultiplier": 2,
+            "roundUpQuantum": 25,
+            "proposedCeiling": 1050
+          },
+          "allocation": {
+            "unit": "bytes/cycle",
+            "statistic": "Maximum of three session-average allocations on the measuring thread",
+            "observed": 208057.6,
+            "headroomMultiplier": 2,
+            "roundUpQuantum": 65536,
+            "proposedCeiling": 458752
+          },
+          "accepted": false,
+          "classification": "Provisional diagnostic guardrail; not owner SLA, statistical tolerance or regression acceptance"
+        }
+      ]
+    },
+    {
+      "id": "PF-04",
+      "owners": "XmlDb + Core",
+      "boundary": "Persistent navigation and lazy results",
+      "metrics": "Time to first item, throughput, read counts/bytes, allocations and peak retained memory",
+      "proposedWorkload": "Persistent readers over two immutable store versions; same logical query, cold/warm and first/full results.",
+      "requiredInputs": "Owner supplies original-format store snapshots, expected order/namespaces and read-count/byte observations.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-05",
+      "owners": "XmlDb + Core",
+      "boundary": "Snapshot leases and partial consumption",
+      "metrics": "Lease retention/release events, retained graph/resources and cancellation-to-release timing",
+      "proposedWorkload": "Partial consumption, early break, close, cancellation, nested/reentrant access and work/cleanup faults on actual snapshot leases.",
+      "requiredInputs": "Record exact deterministic ownership/release events; forced-GC observations cannot replace the release contract.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-06",
+      "owners": "Braid + Core + Schema + XmlDb",
+      "boundary": "End-to-end typed and persistent preview",
+      "metrics": "Total latency and phase times: acquisition, assessment, compile, execution, projection/serialization, IPC",
+      "proposedWorkload": "Actual XSLT worker preview over ordinary, supported assessed and persistent routes; distinct/shared roots and source-free invocation.",
+      "requiredInputs": "Select typed/persistent worker routing explicitly; byte transport is not live authority. Pin acquisition through IPC/output phase boundaries.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-07",
+      "owners": "Braid + Core",
+      "boundary": "Run identity and resource invalidation",
+      "metrics": "Hash/serialization bytes and time, cache hit/miss behavior, retained memory",
+      "proposedWorkload": "Repeated unchanged run followed by changed schema/profile/source/store snapshot, with timeout/kill/reopen controls.",
+      "requiredInputs": "Pin worker configuration, run identity and publication currentness checks; no route is approved by a matching digest alone.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-08",
+      "owners": "All owners",
+      "boundary": "Scale, limits and failure responsiveness",
+      "metrics": "Scaling curve, peak memory, timeout/cancellation response and cleanup observations",
+      "proposedWorkload": "Owner-selected size/depth/width ladder and bounded refusal, cancellation/close/reentry schedules.",
+      "requiredInputs": "Keep current operational input/frame/deadline limits separate from measured latency, allocation and retained-resource budgets.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    },
+    {
+      "id": "PF-09",
+      "owners": "All owners",
+      "boundary": "API shape alternatives before final signatures",
+      "metrics": "Dispatch/IPC counts, allocation, conversion cost and useful work per call",
+      "proposedWorkload": "Measure callback/dispatch/conversion counts and immutable metadata reuse on selected real workloads.",
+      "requiredInputs": "Do not propose a new batch/capability/scope API until the actual owner route demonstrates the need.",
+      "status": "DraftForOwnerReview",
+      "ownerAccepted": false,
+      "baseline": null,
+      "baselineAccepted": false,
+      "ownerBudget": null,
+      "relativeRegressionTolerance": null,
+      "draftBudgets": []
+    }
+  ],
+  "guardrailRationale": "Review starting point only: two times largest observed session statistic, rounded upward to 25 ms or 64 KiB. Headroom is a discretionary proposal, not a measured variance bound or product requirement.",
+  "operationalLimits": {
+    "owner": "Braid",
+    "documentBytes": 8388608,
+    "frameBytes": 67108864,
+    "postLaunchDeadlineSeconds": 30,
+    "scope": "Historical product controls from the owner reply, not accepted candidate PF budgets; no bounds on whole-engine/native memory or between-checkpoint time inferred."
+  },
+  "ownerAccepted": false,
+  "budgetsAccepted": false,
+  "apiFrozen": false,
+  "publicationAuthorized": false,
+  "requirementsWaived": 0
+}

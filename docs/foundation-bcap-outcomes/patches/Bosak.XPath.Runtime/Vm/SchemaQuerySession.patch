@@ -1,0 +1,78 @@
+--- a/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
++++ b/src/Bosak.XPath.Runtime/Vm/SchemaQuerySession.cs
+@@ -24,6 +24,9 @@
+ //                      |==================|=======|================|=========================================================================================
+ //                      | Charles Korthout | 0.7 | 01-11-2026     | Reuse the captured composite ownership delegate for role validation. |
+ //                      |==================|=======|================|=========================================================================================
++//                      | Charles Korthout | 0.8 | 01-11-2026 | Isolated BCAP-01 capture feasibility; not adopted. |
++//                      | Charles Korthout | 0.9 | 01-11-2026 | Isolated gate composition and serialization fault controls. |
++//                      | Charles Korthout | 0.10 | 01-11-2026 | Isolated capture and cleanup outcome preservation. |
+ // ===========================================================================================================================================================
+ using System.Collections.Immutable;
+ using System.Security.Cryptography;
+@@ -148,6 +151,20 @@
+         try { return await work(operation).ConfigureAwait(false); }
+         catch (Exception primary) { operation.Complete(primary); throw; }
+         finally { operation.Complete(); }
++    }
++
++    internal (bool HasResult, T? Result, Exception? AdmissionError, Exception? WorkError, IReadOnlyList<Exception> CleanupErrors) RunWithOutcome<T>(
++        SchemaQueryEnvironment environment, ImmutableArray<SchemaEvidenceKernel.Snapshot> snapshots, Func<Operation, T> work, CancellationToken cancellation = default)
++    {
++        ArgumentNullException.ThrowIfNull(work);
++        Operation operation;
++        try { operation = OpenOperation(environment, snapshots, cancellation); }
++        catch (Exception error) { return (false, default, error, null, Array.Empty<Exception>()); }
++        T? result = default; bool hasResult = false; Exception? workError = null;
++        try { result = work(operation); hasResult = true; }
++        catch (Exception error) { workError = error; }
++        var cleanup = operation.CompleteWithErrors();
++        return (hasResult, result, null, workError, cleanup);
+     }
+ 
+     /// <summary>Closes admissions without disposing the borrowed issuer.</summary>
+@@ -179,6 +196,9 @@
+         { RequireMember(snapshot); return _owner._kernel.AttachValue(_owner._kernel.Read(snapshot, value, _cancellationToken)); }
+         internal SchemaOperationInputs CaptureInputs(EvaluationContext caller,
+             Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces)
++            => CaptureInputs(caller, ownsNode, maxBindings, maxNamespaces, false);
++        internal SchemaOperationInputs CaptureInputs(EvaluationContext caller,
++            Func<SchemaEvidenceKernel.Snapshot, IXdmNode, bool> ownsNode, int maxBindings, int maxNamespaces, bool allowExecutionGate)
+         {
+             Check();
+             if (_leaseSet is null) throw new NotSupportedException("Explicit source membership requires a composite operation.");
+@@ -198,7 +218,7 @@
+                 return owners == 1;
+             }
+             Func<IXdmNode, bool> owns = Owns;
+-            var inputs = caller.CaptureSchemaInputs(owns, maxBindings, maxNamespaces).ForOperation(this, owns);
++            var inputs = caller.CaptureSchemaInputs(owns, maxBindings, maxNamespaces, null, allowExecutionGate).ForOperation(this, owns);
+             Check(); return inputs;
+         }
+         internal void RequireNodeInput(SchemaOperationInputs inputs, IXdmNode? node)
+@@ -220,6 +240,12 @@
+             _owner._kernel.CheckSnapshot(_snapshot);
+         }
+         internal void ValidateAccess() => Check();
++        internal CancellationToken RequireOwner(SchemaQuerySession owner)
++        {
++            Check();
++            if (!ReferenceEquals(_owner, owner)) throw new ArgumentException("Foreign executable operation.");
++            return _cancellationToken;
++        }
+         internal XdmValue ReadValue(ISchemaIssuedScalar value)
+         { Check(); RequireSingle(); return _owner._kernel.AttachValue(_owner._kernel.Read(_snapshot, value, _cancellationToken)); }
+         internal XdmValue AdmitConversionValue(XdmValue source, ISchemaIssuedScalar constructed)
+@@ -265,6 +291,12 @@
+         { Check(); RequireSingle(); return _owner._kernel.Read(_snapshot, value, _cancellationToken); }
+         internal SchemaEvidenceKernel.Evidence AdmitConversion(SchemaEvidenceKernel.Evidence source, ISchemaIssuedScalar constructed)
+         { Check(); RequireSingle(); return _owner._kernel.AdmitConversion(source, constructed, _cancellationToken); }
++        internal IReadOnlyList<Exception> CompleteWithErrors()
++        {
++            if (_leaseSet is not null) return _leaseSet.CompleteWithErrors();
++            try { Interlocked.Exchange(ref _lease, null)?.Dispose(); return Array.Empty<Exception>(); }
++            catch (Exception error) { return Array.AsReadOnly(new[] { error }); }
++        }
+         internal void Complete() { if (_leaseSet is not null) _leaseSet.Complete(); else Interlocked.Exchange(ref _lease, null)?.Dispose(); }
+         internal void Complete(Exception primary)
+         {

@@ -1,0 +1,15 @@
+// Generated read-only metadata capture for REQ-126 C01.
+using System.Collections;
+using System.Reflection;
+using System.Text.Json;
+using Bosak.XPath.Standard.Functions;
+using Bosak.XPath.Runtime.Functions;
+var table = (IEnumerable)typeof(FunctionLibrary).GetField("StandardFunctions", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
+var rows = new List<object>();
+foreach (var item in table)
+{
+    var s = (FunctionSignature)item.GetType().GetProperty("Value")!.GetValue(item)!;
+    FunctionLibrary.TryGetKeywordSignature(s.NamespaceUri, s.LocalName, out var keyword);
+    rows.Add(new { ns=s.NamespaceUri, name=s.LocalName, arity=s.Arity, parameterKinds=s.ParameterTypes.Select(x=>x.ToString()), parameterTypeNames=s.ParameterTypeNames, returnKind=s.ReturnType.ToString(), returnTypeName=s.ReturnTypeName, variadic=s.IsVariadic, frozen=s.IsXPath40Only, experimental=s.IsXPath40ExperimentalOnly, keywordNames=keyword?.ParameterNames, keywordDefaults=keyword?.ParameterDefaults });
+}
+File.WriteAllText(args[0], JsonSerializer.Serialize(rows, new JsonSerializerOptions { WriteIndented=true }) + "\n");

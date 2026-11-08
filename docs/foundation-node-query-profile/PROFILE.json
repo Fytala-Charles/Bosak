@@ -1,0 +1,55 @@
+{
+  "status": "SelectedForImplementation",
+  "activated": false,
+  "behaviorProfile": "bosak-original-node-nilled-v1",
+  "descriptorFormat": "bosak-original-node-nilled-descriptor-v1",
+  "compileEntry": "SchemaQuerySession.CompileXPath with non-null supported assessor",
+  "acceptedTrimmedSource": [
+    "nilled($node)",
+    "fn:nilled($node)"
+  ],
+  "functionExpandedName": "{http://www.w3.org/2005/xpath-functions}nilled",
+  "fnPrefixPolicy": "Builtin fn binding or explicit standard function namespace only; foreign fn binding refuses before assessor Bind. No arbitrary aliases or EQNames in this first grammar.",
+  "input": {
+    "variable": "node",
+    "namespace": "",
+    "bindingRequired": true,
+    "directKinds": [
+      "Node",
+      "Undefined"
+    ],
+    "undefinedMeaning": "Explicitly bound empty sequence; missing variable is unsupported",
+    "focus": "absent with zero position and size",
+    "extraVariables": false,
+    "sequenceWrappers": false,
+    "services": "Retain closed captured-context policy; no callbacks/resources/runtime namespaces or populated execution state"
+  },
+  "result": {
+    "emptyInput": "Undefined",
+    "ownedNonElement": "Undefined without annotated-facts getter",
+    "issuedOriginalElement": "Plain Boolean from authenticated original IsNilled",
+    "unsupportedElement": "NotSupportedException; never infer untyped false from missing facts"
+  },
+  "descriptorPolicy": {
+    "canonicalOperation": "fn:nilled",
+    "staticContext": "Frozen existing supported CompileOptions capture",
+    "limits": [
+      "MaxOpenSnapshots",
+      "MaxCachedValuesPerSnapshot",
+      "MaxTypedValueAtoms",
+      "MaxNumericDigits",
+      "MaxDecimalScale"
+    ],
+    "ownership": "exactly-one-selected-live-source-before-node-getters",
+    "facts": "selected-advisor-issued-original-tuple",
+    "metadataRead": "no-typed-value-or-container-getters",
+    "output": "copied-plain-optional-boolean",
+    "cache": "none",
+    "errorMapping": "existing-argument-unavailable-cancellation; unavailable-profile-NotSupportedException"
+  },
+  "publicSignaturesAdded": false,
+  "requiresInternalMetadataOnlyReader": true,
+  "requiresPublicAdvisorFactsBridge": true,
+  "dataAtomizationActivated": false,
+  "dataFollowup": "Separate profile/adoption for source-provenance sequence output, scalar cache accounting and FOTY0012; never encode absent typed value as empty."
+}

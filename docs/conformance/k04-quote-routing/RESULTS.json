@@ -1,0 +1,600 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "88960f3bdfa5373e1dd385fb589023544194f5aa",
+  "status": "K04-C01 correction verified in isolated harness; exact normal adoption awaits owner approval",
+  "summary": {
+    "candidateCases": 16,
+    "candidateProcesses": 32,
+    "prototypePassed": 16,
+    "boundaryCases": 11,
+    "boundaryProcesses": 22,
+    "boundariesUnchanged": true,
+    "lexicalControls": 13,
+    "lexicalControlProcesses": 2,
+    "smallWatchdogProcesses": 56,
+    "fullRehearsals": 1,
+    "timeouts": 0,
+    "currentQt3": [
+      31145,
+      0,
+      676
+    ],
+    "rehearsalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "removedSkips": 16,
+    "retainedSkipNamesReasons": 660,
+    "normalChanged": false,
+    "ownerApproved": false,
+    "inheritedSolutionPassed": 22007,
+    "inheritedQt4": [
+      8437,
+      0,
+      1893
+    ],
+    "candidate": "1.26.11",
+    "published": "1.26.3"
+  },
+  "candidatePairs": {
+    "base-URI-12": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "base-URI-12",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "base-URI-12",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "Constr-attr-syntax-5": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Constr-attr-syntax-5",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Constr-attr-syntax-5",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "DirectConElemAttr-1": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "DirectConElemAttr-1",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "DirectConElemAttr-1",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "DirectConElemNamespace-3": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "DirectConElemNamespace-3",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Unexpected error: Parse error at position 14: XPST0003: Unexpected token LessThan in primary expression; Expected error XQST0046, got: Parse error at position 14: XPST0003: Unexpected token LessThan in primary expression]"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "DirectConElemNamespace-3",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElem-47": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElem-47",
+        "kind": "Failed",
+        "message": "any-of: none matched. [Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression; Expected error XQST0046, got: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression]"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElem-47",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElemAttr-29": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-29",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-29",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElemAttr-40": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-40",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-40",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElemAttr-8": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-8",
+        "kind": "Passed",
+        "message": null
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemAttr-8",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElemContent-28": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemContent-28",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemContent-28",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConElemWhitespace-9": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemWhitespace-9",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConElemWhitespace-9",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K2-DirectConOther-1": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConOther-1",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 7: XPST0003: Unexpected token LessThan in primary expression"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K2-DirectConOther-1",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "Literals069": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Literals069",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Literals069",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "Serialization-adaptive-32": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Serialization-adaptive-32",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Serialization-adaptive-32",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "Serialization-adaptive-33": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Serialization-adaptive-33",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Serialization-adaptive-33",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "Serialization-json-41": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Serialization-json-41",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Serialization-json-41",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "string-constructor-021": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "string-constructor-021",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 14: XPST0003: Unexpected token Invalid in primary expression"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "string-constructor-021",
+        "kind": "Passed",
+        "message": null
+      }
+    }
+  },
+  "boundaryPairs": {
+    "contextDecl-028": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-028",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-028",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-018": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-018",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-018",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-032": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-032",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-032",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-019": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-019",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-019",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-022": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-022",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-022",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-020": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-020",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-020",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "contextDecl-021": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "contextDecl-021",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "contextDecl-021",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "Axes102": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "Axes102",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "Axes102",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "K-CopyNamespacesProlog-3": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-3",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-3",
+        "kind": "Skipped",
+        "message": "XQuery syntax not supported"
+      }
+    },
+    "K-CopyNamespacesProlog-5": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-5",
+        "kind": "Passed",
+        "message": null
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K-CopyNamespacesProlog-5",
+        "kind": "Passed",
+        "message": null
+      }
+    },
+    "K-ExtensionExpression-4a": {
+      "current": {
+        "Suite": "qt3",
+        "Name": "K-ExtensionExpression-4a",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+      },
+      "prototype": {
+        "Suite": "qt3",
+        "Name": "K-ExtensionExpression-4a",
+        "kind": "Failed",
+        "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+      }
+    }
+  },
+  "lexicalControlReceipts": [
+    {
+      "mode": "current",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+        "can-handle",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-quote-routing\\evidence\\controls.json",
+        "current"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.09681299998192117,
+      "result": [
+        {
+          "id": "doubled-string",
+          "accepted": false
+        },
+        {
+          "id": "single-string",
+          "accepted": false
+        },
+        {
+          "id": "comment",
+          "accepted": false
+        },
+        {
+          "id": "nested-comment",
+          "accepted": false
+        },
+        {
+          "id": "direct-attribute",
+          "accepted": false
+        },
+        {
+          "id": "cdata",
+          "accepted": false
+        },
+        {
+          "id": "pi",
+          "accepted": false
+        },
+        {
+          "id": "malformed-attribute",
+          "accepted": false
+        },
+        {
+          "id": "context-prolog",
+          "accepted": false
+        },
+        {
+          "id": "construction-prolog",
+          "accepted": false
+        },
+        {
+          "id": "copy-prolog",
+          "accepted": false
+        },
+        {
+          "id": "pragma",
+          "accepted": false
+        },
+        {
+          "id": "commented-prolog",
+          "accepted": false
+        }
+      ],
+      "log": "controls-current.log"
+    },
+    {
+      "mode": "prototype",
+      "command": [
+        "dotnet",
+        ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+        "can-handle",
+        "D:\\Development\\Bosak\\docs\\conformance\\k04-quote-routing\\evidence\\controls.json",
+        "prototype"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "watchdogSeconds": 20,
+      "wallSeconds": 0.09445679999771528,
+      "result": [
+        {
+          "id": "doubled-string",
+          "accepted": true
+        },
+        {
+          "id": "single-string",
+          "accepted": true
+        },
+        {
+          "id": "comment",
+          "accepted": true
+        },
+        {
+          "id": "nested-comment",
+          "accepted": true
+        },
+        {
+          "id": "direct-attribute",
+          "accepted": true
+        },
+        {
+          "id": "cdata",
+          "accepted": true
+        },
+        {
+          "id": "pi",
+          "accepted": true
+        },
+        {
+          "id": "malformed-attribute",
+          "accepted": true
+        },
+        {
+          "id": "context-prolog",
+          "accepted": false
+        },
+        {
+          "id": "construction-prolog",
+          "accepted": false
+        },
+        {
+          "id": "copy-prolog",
+          "accepted": false
+        },
+        {
+          "id": "pragma",
+          "accepted": false
+        },
+        {
+          "id": "commented-prolog",
+          "accepted": false
+        }
+      ],
+      "log": "controls-prototype.log"
+    }
+  ],
+  "fullRehearsal": {
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-harness/bin/Release/net10.0/Bosak.XPath.Conformance.dll"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 62.64349390001735,
+    "log": "rehearsal-full-run.log",
+    "skipDump": "rehearsal-skips.txt",
+    "mode": "Isolated copied complete harness with quote predicate corrected; normal tracked source unchanged"
+  },
+  "removedSkips": [
+    "Constr-attr-syntax-5",
+    "DirectConElemAttr-1",
+    "DirectConElemNamespace-3",
+    "K2-DirectConElem-47",
+    "K2-DirectConElemAttr-29",
+    "K2-DirectConElemAttr-40",
+    "K2-DirectConElemAttr-8",
+    "K2-DirectConElemContent-28",
+    "K2-DirectConElemWhitespace-9",
+    "K2-DirectConOther-1",
+    "Literals069",
+    "Serialization-adaptive-32",
+    "Serialization-adaptive-33",
+    "Serialization-json-41",
+    "base-URI-12",
+    "string-constructor-021"
+  ],
+  "decision": {
+    "id": "K04-quote-routing-adoption-v1",
+    "proposal": "BASELINE-UPDATE-PROPOSAL.md",
+    "patch": "PROPOSED-ADOPTION.patch",
+    "requiresOwnerApproval": "AGENTS.md requires exactly31145/0/676; proposed normal routing changes the exact result to31161/0/660."
+  },
+  "policy": "No tracked engine/harness/filter/AGENTS/fixture/assertion/baseline/version change. Prototype removes only the raw triple-quote refusal; existing lexical guards, schema/profile/dependency predicates and parser error semantics remain. Original assertions and serialization output-option handling are retained. Unit/qt4 receipts inherited from unchanged engine; no new full-suite claim. No release/upstream/Braid action."
+}

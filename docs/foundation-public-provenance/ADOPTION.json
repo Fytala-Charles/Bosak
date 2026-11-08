@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-06",
+  "baseCommit": "ec6daa0e538fe3c4e2ebc54177a1daeda5834b38",
+  "beforeVersion": "1.76.0",
+  "candidateVersion": "1.77.0",
+  "beforeHashes": {
+    "docs/foundation-provenance-policy/MANIFEST.json": "71f4e16de014c74ecd541674bba6f48a73193c31f2809a3d6f9358fa3e482062",
+    "docs/foundation-provenance-policy/POLICY.json": "012c99ae7b3dac13d80d253f8fc2cd3022e070f6053c0d8de55ab1407238c7cd",
+    "docs/foundation-provenance-policy/IMPLEMENTATION-CASES.json": "664c6b8c78f63b029e9d60e2244f7abdb8f1b9774d18eb7432664950aa89a86a",
+    "docs/foundation-bcap-owner-review/inputs/proposal/Provider.cs.txt": "bf25a5203d3343d66ae8b4d561b6d043d018dc39a47756fa69e36e6b2300a784",
+    "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "f3a71b08fb6d5a05b557563fd993de3669149cd58df81f7982991247843a7242",
+    "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "b64aeaff944ca3607f1b34055c58596db5fd91e93023073facdb07133a3a3908",
+    "src/Bosak.XPath.Api/Schema/ConstructedAtomicPlan.cs": "ad2ee12f53cae3c7663b3aa1668dfe86513f9c6a83640979a75a7ad1c7ff5022",
+    "src/Directory.Build.props": "29f613bb36808845903a6926796f39a90bfbdd32d0975e5fca221f87df5e8738"
+  },
+  "immutableSpecifications": [
+    {
+      "revision": "W3C REC-xpath-datamodel-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sections": [
+        "2.5",
+        "2.7.1",
+        "2.7.5"
+      ]
+    },
+    {
+      "revision": "W3C REC-xpath-functions-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sections": [
+        "2.4 fn:data"
+      ]
+    }
+  ],
+  "semanticScope": "PV-H01 bounded public atomic provenance observation under the exact TA-33 policy hash. Host-owned lifetime/observation semantics are Bosak policy, not W3C requirements. Add only SchemaAtomics and its reviewed static signature; internal bridge on genuine ordinary scalar registry entries and operation-local construction receipts. No value layout/public attachment/provider contract/friend/reference changes.",
+  "hostPolicy": "False/null for plain/non-atomic/unknown/private-legacy/rebound/unregistered/closed/canceled or current-compatible operation-bound entries. Successful observations and each view getter return only cached declared/actual/origin references after callback-free engine checks. No provider/authority/getter/enumerator or lease callback, quota slot, conversion or ambient operation. Source opening cancellation is retained for observation only; existing execution checks unchanged. Construction preserves null origin and exact raw expiry.",
+  "exclusions": "PV-H02 leased compatible observation, PV-T01 complete public empty/list/union transport, PV-L01 legacy disposition, broader numeric/assessment/native/owner/budget/freeze/package/publication acceptance remain open; type presence alone does not close PV-01 or R3."
+}

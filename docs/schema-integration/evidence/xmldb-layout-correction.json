@@ -1,0 +1,6 @@
+{
+  "reason": "Reopen test discovers solution root and sample binary by their original relative layout; flat binary copy lost that test fixture.",
+  "changes": "Restored expected directory layout and solution-name sentinel; copied original sample binary and replaced only core dependencies.",
+  "sourceAndTestChanges": false,
+  "testAssemblySha256": "6633413b677cbce605c553d3c3bbb58ace320d7c83c3b6242bccaaeec5a52b69"
+}

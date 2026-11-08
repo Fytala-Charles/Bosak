@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C13",
+  "sourceBase": "fcdca7437ab264f0a2ce58b00d45ea79d066a86f",
+  "cases": 12,
+  "outcomes": {
+    "Passed": 4,
+    "Failed": 8
+  },
+  "engineChanged": false,
+  "baselineChanged": false,
+  "validationInherited": {
+    "solutionPassed": 22198,
+    "qt3": [
+      31162,
+      0,
+      659
+    ],
+    "qt4": [
+      8587,
+      0,
+      1892
+    ]
+  },
+  "negativeDeclarationCounts": {
+    "qt3": 35,
+    "qt4": 40
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  }
+}

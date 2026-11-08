@@ -1,0 +1,319 @@
+{
+  "date": "2026-10-26",
+  "status": "Prepared for owner decision; not approved",
+  "documentationBase": "1ec2c210",
+  "engineSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "reviewSpec": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "proposalId": "REQ-126-C13-bounded-catalog-acceptance-v1",
+  "criteria": {
+    "AC-01": {
+      "proposal": "Accept landed-slice/name/grammar traceability for the exact bounded catalog and the already-approved C08 historical policy; retain every unsupported/current-draft mismatch as an explicit technical follow-up.",
+      "evidence": [
+        "CURRENT-FUNCTION-INVENTORY.json",
+        "GRAMMAR-COVERAGE-MATRIX.json",
+        "ADOPTION-DISPOSITIONS.json"
+      ]
+    },
+    "AC-02": {
+      "proposal": "Accept the 76 current lifecycle classifications and 19 original/wider disposition groups, preserving historical URLs, refusals, alternatives, non-equivalence and exact legacy history limits.",
+      "evidence": [
+        "LIFECYCLE-RECONCILIATION.json",
+        "ADOPTION-HISTORY-RESEARCH.md"
+      ]
+    },
+    "AC-03": {
+      "proposal": "Accept applicable evidence for 235 bounded contract groups across 76 entries and the four worked chapters. Gates apply only where assigned; XSLT/deferred/refused forms use their named tests, exact examples or alternatives. The 48 retained batch unmet observations remain unmet, including two disputed-source observations.",
+      "evidence": [
+        "SEMANTIC-REVIEW-BATCH-1.json",
+        "SEMANTIC-REVIEW-BATCH-2.json",
+        "SEMANTIC-REVIEW-BATCH-3.json",
+        "SEMANTIC-REVIEW-BATCH-4.json"
+      ]
+    },
+    "AC-04": {
+      "proposal": "Accept the 16-field structure, retained paths, synchronized index and feature-specific language-alignment warnings for the reviewed scope. No universal current-draft parity follows.",
+      "evidence": [
+        "README.md",
+        "evidence/c13-final-review/entry-sources.json"
+      ]
+    },
+    "AC-05": {
+      "proposal": "Maintain the previously met discoverability criterion and synchronized registry/canonical links.",
+      "evidence": [
+        "../../README.md",
+        "../INTEGRATION.md",
+        "../REQ-118-xpath-xslt-40.md"
+      ]
+    }
+  },
+  "findings": {
+    "C02-F01": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F02": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F03": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F04": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F05": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F06": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F07": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F08": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F09": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F10": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F11": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F12": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F13": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C02-F14": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Open follow-up; not implemented by C02",
+      "owner": "Bosak engine/catalog maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-T01": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Explicit implementation limit, not a blanket malformed-input claim",
+      "owner": "Bosak core/runtime maintainer; C13 owner disposition",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-T02": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Documented storage boundary",
+      "owner": "Bosak numeric maintainer; C13 owner disposition",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-T03": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Supported named cases with explicit remaining scope",
+      "owner": "C03 retained schema evidence; C06 host/context review",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-T04": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Bounded supported forms and unclaimed remainder",
+      "owner": "C05/C06 and final C09-C12 per-entry review",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-T05": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Bounded controls, not generic conversion certification",
+      "owner": "C04/C06 and C09-C12",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C03-F08-atomic-annotation-empty": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Still open; not fixed or accepted by C03",
+      "owner": "Existing C02 F08 bounded correction ticket",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C04-G01-otherwise-spelling": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Unsupported current-draft spelling; explicit adoption decision remains",
+      "owner": "Bosak parser/catalog maintainer and C13 owner disposition",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C04-G02-mapping-containing-focus": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Reproduced contextual semantics defect; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C04-G03-keyword-placeholders": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Reproduced unsupported current-draft argument production; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C04-G04-late-binding-boundary": {
+      "category": "Reviewed host distinction; remaining complete-mode boundary",
+      "proposedCatalogDisposition": "Use C06-H01: open API late binding and a permitted lazy XSLT mode are distinct from the mandatory complete static-detection mode, which remains unproved. Preserve that boundary without classifying every lazy result as an engine defect.",
+      "technicalStatus": "Host/static-context review, not a proved closed-context defect",
+      "owner": "C06 host review and C13 owner disposition",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C04-G05-remaining-combinations": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Explicit unaccepted remainder",
+      "owner": "C05/C06 and C09-C12 final applicable-evidence review",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C05-K01-generic-jnode-model": {
+      "category": "Documented implementation or context boundary",
+      "proposedCatalogDisposition": "Accept the explicit storage/model/context limit as a catalog boundary. Wider implementation and untested combinations remain unclaimed; preserve the original owner and technical scope.",
+      "technicalStatus": "Known unsupported model boundary; no promotion",
+      "owner": "Bosak XDM/model maintainer and C13 owner disposition",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C05-K02-choice-matching-alternative": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Reproduced current-draft coercion mismatch; not fixed",
+      "owner": "Bosak runtime/type maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C05-K03-record-destructuring-lookup": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Reproduced current-draft lookup mismatch; not fixed",
+      "owner": "Bosak parser/compiler/runtime maintainer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C05-K04-host-context": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Bounded supported forms and explicit remaining ownership",
+      "owner": "C06 and C09-C12 final evidence review",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C05-K05-remaining-combinations": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Unaccepted combinations retained explicitly",
+      "owner": "C09-C12/C13 and relevant engine maintainer if corrected",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C06-H01": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Evidence gap, not an automatic conformance defect",
+      "owner": "C09-C13 host acceptance / separate compiler investigation",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C06-H02": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Reproduced current-draft mismatch",
+      "owner": "Separate bounded runtime correction; C09-C13 acceptance",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C06-H03": {
+      "category": "Open technical follow-up",
+      "proposedCatalogDisposition": "Accept the catalog only for its documented bounded behavior; retain this technical follow-up, its independent expectations and exit criteria as open. This is not an engine fix or conformance acceptance.",
+      "technicalStatus": "Explicit versioned policy/evidence boundary",
+      "owner": "C09-C13 function/host acceptance",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C06-H04": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Bounded review limit",
+      "owner": "C09-C13 exact entry batches/final review",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C07-L01": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Retain original receipt",
+      "owner": "C09-C13",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C07-L02": {
+      "category": "Previously approved historical policy",
+      "proposedCatalogDisposition": "Already disposed by the exact C08 owner approval: 26 legacy exceptions and two non-adoptions. Retain all 28 original nulls; no new exception or recovered adoption revision is proposed.",
+      "technicalStatus": "Retain original receipt",
+      "owner": "C08/C13",
+      "approvalStatus": "C08 historical policy already approved; no semantic acceptance implied"
+    },
+    "C07-L03": {
+      "category": "Bounded review and final acceptance obligation",
+      "proposedCatalogDisposition": "C09-C12 supply the required per-entry bounded review. Accept only the reviewed claims and named examples, preserving all remaining combinations as unclaimed; final acceptance is still pending.",
+      "technicalStatus": "Retain original receipt",
+      "owner": "C09-C13",
+      "approvalStatus": "Pending C13 owner acceptance"
+    },
+    "C10-highest-source-consistency": {
+      "category": "Unresolved specification-source inconsistency",
+      "proposedCatalogDisposition": "Retain both pinned algorithm/contextual-comparison text and the conflicting highest example with independent expectations. Accept the documented uncertainty as a catalog boundary, request source clarification before a semantic correction, and do not label the result an unqualified engine defect.",
+      "technicalStatus": "Open source-consistency review; no upstream submission",
+      "owner": "Bosak function maintainer and specification reviewer",
+      "approvalStatus": "Pending C13 owner acceptance"
+    }
+  },
+  "acceptanceReceipt": null,
+  "policy": "Proposed disposition only. C13 remains Open and REQ-126 In Progress until explicit owner acceptance. No engine defect is fixed, waived, suppressed, reclassified as a passing control or automatically committed for implementation. The owner may require corrections before acceptance."
+}

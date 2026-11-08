@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-cldr-fix/evidence/control-fixtures.xml", "Name": "control-ordinal-explicit-er", "expected": "Erster", "diagnostic": true}

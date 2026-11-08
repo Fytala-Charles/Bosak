@@ -1,0 +1,5 @@
+{
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": "f3ba156d411ec662ce31973f47cd898ffd4b9a14",
+  "src/Directory.Build.props": "30eb6a512af8c0f26f3e4ad78cf4c39f30283a66",
+  "tests/Bosak.XQuery.Tests/ContextDeclarationErrorTests.cs": "13a6a3f3ce225b92072a0c6dd60bc314b8fa894d"
+}

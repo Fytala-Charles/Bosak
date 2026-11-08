@@ -1,0 +1,11 @@
+{
+  "assemblies": 11,
+  "exportedTypes": 310,
+  "declarationRows": 6369,
+  "declarationsIdentical": true,
+  "friendGrantsIdentical": true,
+  "xdmValueFieldLayoutUnchanged": true,
+  "previousInventorySha256": "78dd50f7d4bbf373a301ecb63afa70ee652ce85cf256aeec2de3d8e2d91df18c",
+  "qualifiedSemanticProfile": "bosak-exact-arithmetic-v1",
+  "scope": "Unchanged public metadata; new bounded profile semantics are qualified by separate execution controls. No full numeric/all-host/native ABI/freeze acceptance."
+}

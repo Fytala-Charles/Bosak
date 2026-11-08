@@ -1,0 +1,14 @@
+[
+  {
+    "key": "qt3",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-qt3.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\qt3\\Bosak.XPath.Conformance.dll"
+  },
+  {
+    "key": "qt4",
+    "exitCode": 0,
+    "log": "docs\\foundation-r2-closure\\evidence\\execution\\preview-qualification-qt4.log",
+    "binary": "D:\\Development\\Bosak\\.guard-tmp\\preview-qualification-1811\\qt4\\Bosak.XPath.Conformance40.dll"
+  }
+]

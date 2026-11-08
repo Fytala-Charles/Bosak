@@ -1,0 +1,27 @@
+{
+  "processId": 8256,
+  "assemblies": [
+    {
+      "name": "Bosak.XPath.Core",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\transport-full-gates\\tests\\Bosak.XPath.Providers.Database.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "sha256": "293a7e4e018ab3fd714a0737fa9b0c55c8384a7497fb9ac71a19031289485dc2",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database.Tests",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\transport-full-gates\\tests\\Bosak.XPath.Providers.Database.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.Tests.dll",
+      "sha256": "b55bfbfe46c71dd9674cba7d6e3d16be8f3173ac439c6924301a1ec8d6346bcb",
+      "context": "Default",
+      "collectible": false
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database",
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\transport-full-gates\\tests\\Bosak.XPath.Providers.Database.Tests\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.dll",
+      "sha256": "7946916e32217268ac8ecb182b0613bec35a635dd5a1925b9b47145f76fa0f44",
+      "context": "Default",
+      "collectible": false
+    }
+  ],
+  "errors": []
+}

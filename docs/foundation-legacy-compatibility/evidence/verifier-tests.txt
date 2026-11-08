@@ -1,0 +1,20 @@
+python : test_changed_bundle_hash_refuses (test_receipts.LegacyReceiptTests.test_changed_bundle_hash_refuses) ... ok
+At line:3 char:1
++ python -m unittest discover -s docs/foundation-legacy-compatibility/t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_changed_bu...refuses) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_changed_caller_hash_refuses (test_receipts.LegacyReceiptTests.test_changed_caller_hash_refuses) ... ok
+test_changed_original_reference_version_refuses 
+(test_receipts.LegacyReceiptTests.test_changed_original_reference_version_refuses) ... ok
+test_changed_result_refuses (test_receipts.LegacyReceiptTests.test_changed_result_refuses) ... ok
+test_failed_case_refuses (test_receipts.LegacyReceiptTests.test_failed_case_refuses) ... ok
+test_missing_case_refuses (test_receipts.LegacyReceiptTests.test_missing_case_refuses) ... ok
+test_valid_cross_version_evidence (test_receipts.LegacyReceiptTests.test_valid_cross_version_evidence) ... ok
+test_wrong_loaded_version_refuses (test_receipts.LegacyReceiptTests.test_wrong_loaded_version_refuses) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.097s
+
+OK

@@ -1,0 +1,6 @@
+{
+  "Suite": "qt4",
+  "SuiteRoot": "D:/Development/Bosak/tests/qt4tests",
+  "SetFile": "D:\\Development\\Bosak\\tests\\qt4tests\\fn\\map-to-element.xml",
+  "Name": "map-to-element-053"
+}

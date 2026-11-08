@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C30",
+  "kind": "Read-only construction/copy-namespaces qualification; isolated prolog-routing prototype",
+  "sourceBase": "fa19941270f6269021bf49bc48d92ddcda5ceb0d",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.6 Construction Declaration",
+      "4.9 Copy-Namespaces Declaration",
+      "Constructor type annotations and namespace copying: wider semantics deferred to implementation qualification"
+    ]
+  },
+  "fixtureRevisions": {
+    "qt3": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "qt4": "68910080d2d4d4092a1c6a908998ceec64ffc6d4"
+  },
+  "scope": [
+    "Inventory all QT3 catalog cases using actual parser and lexical normalizers",
+    "Remove only remaining copy-namespaces/construction refusal in copied harness; preserve pragma guards",
+    "Run original assertions unchanged; distinguish syntax errors from supported modes",
+    "No production, fixtures, assertions, baselines, versions or release changes"
+  ],
+  "limits": [
+    "Normal source, routing, fixtures/assertions, dependency guards, baselines, version and release unchanged",
+    "No qt4 XQuery applicability claim",
+    "Bosak.Schema retains XSD1.1 ownership; current XmlSchemaSet environment does not certify it"
+  ]
+}

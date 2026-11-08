@@ -1,0 +1,777 @@
+[
+  {
+    "name": "si-apply-templates-007",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "si-apply-templates",
+      "si-apply-templates-007",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.1165540000074543,
+    "log": "si-apply-templates-007.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "si-apply-templates-007",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "si-apply-templates-012",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "si-apply-templates",
+      "si-apply-templates-012",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.11633160000201315,
+    "log": "si-apply-templates-012.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "si-apply-templates-012",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "catalog-005",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "catalog",
+      "catalog-005",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2392602000036277,
+    "log": "catalog-005.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "catalog-005",
+        "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "catalog-005b",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "catalog",
+      "catalog-005b",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.09551309997914359,
+    "log": "catalog-005b.log",
+    "observations": []
+  },
+  {
+    "name": "catalog-009",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "catalog",
+      "catalog-009",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.1075692999875173,
+    "log": "catalog-009.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "catalog-009",
+        "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-049",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-049",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10768479999387637,
+    "log": "merge-049.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-049",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-050",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-050",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10478250001324341,
+    "log": "merge-050.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-050",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-051",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-051",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10556559998076409,
+    "log": "merge-051.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-051",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-052",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-052",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10846660000970587,
+    "log": "merge-052.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-052",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-053",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-053",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10408909997204319,
+    "log": "merge-053.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-053",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "merge-054",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "merge",
+      "merge-054",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10675239999545738,
+    "log": "merge-054.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "merge-054",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-101",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-101",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22850210004253313,
+    "log": "stream-101.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-101",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-101",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-102",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-102",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22400930000003427,
+    "log": "stream-102.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-102",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-102",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-103",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-103",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2264924999908544,
+    "log": "stream-103.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-103",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-103",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-104",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-104",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.24865049996878952,
+    "log": "stream-104.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-104",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-104",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-105",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-105",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2506161999772303,
+    "log": "stream-105.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-105",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-105",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-106",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-106",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.26000459998613223,
+    "log": "stream-106.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-106",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-106",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-107",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-107",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2938074000412598,
+    "log": "stream-107.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-107",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-107",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-108",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-108",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2883887000498362,
+    "log": "stream-108.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-108",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-108",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "stream-109",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "stream-109",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.28557930001989007,
+    "log": "stream-109.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "stream-109",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      },
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-109",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-101",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-101",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22823519998928532,
+    "log": "non-stream-101.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-101",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-102",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-102",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22110429999884218,
+    "log": "non-stream-102.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-102",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-103",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-103",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2276242999942042,
+    "log": "non-stream-103.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-103",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-104",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-104",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.2364979000412859,
+    "log": "non-stream-104.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-104",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-105",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-105",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.23240749997785315,
+    "log": "non-stream-105.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-105",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-106",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-106",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.23808089998783544,
+    "log": "non-stream-106.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-106",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-107",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-107",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22621819999767467,
+    "log": "non-stream-107.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-107",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-108",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-108",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22790619998704642,
+    "log": "non-stream-108.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-108",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "non-stream-109",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "source-document",
+      "non-stream-109",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.22650140000041574,
+    "log": "non-stream-109.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "non-stream-109",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "accumulator-073",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "accumulator",
+      "accumulator-073",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.12264369998592883,
+    "log": "accumulator-073.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "accumulator-073",
+        "detail": "environment schema uses xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "strip-space-009",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "strip-space",
+      "strip-space-009",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10572550003416836,
+    "log": "strip-space-009.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "strip-space-009",
+        "detail": "environment schema requires XSD 1.1 (engine supports XSD 1.0 only)"
+      }
+    ]
+  },
+  {
+    "name": "validation-1301",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+      "tests/xslt30-test/catalog.xml",
+      "validation",
+      "validation-1301",
+      "--schema-aware"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.10948230000212789,
+    "log": "validation-1301.log",
+    "observations": [
+      {
+        "outcome": "SKIP",
+        "name": "validation-1301",
+        "detail": "stylesheet declares xs:assert/xs:alternative (XSD 1.1; engine supports XSD 1.0 only)"
+      }
+    ]
+  }
+]

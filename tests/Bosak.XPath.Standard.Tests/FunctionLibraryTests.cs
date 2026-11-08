@@ -101,6 +101,8 @@
 //                      |                  |       |                | encoded (CombinedErrorCodes FORG0002, fn-resolve-uri-31)                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.44  | 03-10-2026     | REQ-119: json-to-xml validate=true on a non-schema-aware context raises FOJS0004        |
+//                      | Charles Korthout | 2.45  | 28-10-2026     | Require FULLY-NORMALIZED conversion and exact Bengali prefix instead of old validation. |
+//                      | Charles Korthout | 2.46  | 28-10-2026     | Render exact scalar sequences explicitly in the conversion regression.                  |
 //                      |                  |       |                | (error-3245a); the typed/FOJS0003 validate tests now run schema-aware via the new      |
 //                      |                  |       |                | EvaluateSchemaAware helper (IsSchemaAware flag)                                        |
 //                      |==================|=======|================|=========================================================================================
@@ -4278,13 +4280,9 @@ public class FunctionLibraryTests
     [Fact]
     public void NormalizeUnicode_FullyNormalized()
     {
-        // Fully-normalized input passes through unchanged...
         Assert.Equal("blah", EvalStr("normalize-unicode('blah', 'FULLY-NORMALIZED')"));
-        Assert.Equal("1", EvalStr("count(normalize-unicode(codepoints-to-string(2494), 'FULLY-NORMALIZED'))"));
-        // ...input not in NFC raises FOCH0003.
-        var ex = Assert.Throws<InvalidOperationException>(() =>
-            Evaluate("normalize-unicode(codepoints-to-string((65, 775)), 'FULLY-NORMALIZED')"));
-        Assert.Contains("FOCH0003", ex.Message);
+        Assert.Equal("32,2494", EvalStr("string-join(string-to-codepoints(normalize-unicode(codepoints-to-string(2494), 'FULLY-NORMALIZED')) ! string(.), ',')"));
+        Assert.Equal("550", EvalStr("string-join(string-to-codepoints(normalize-unicode(codepoints-to-string((65,775)), 'FULLY-NORMALIZED')) ! string(.), ',')"));
     }
 
     [Fact]

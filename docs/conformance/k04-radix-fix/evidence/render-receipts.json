@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-radix-fix-render/README.md.html",
+      "sha256": "04e8822a5bd6c40f04935489d92762fd55c9d996beec7b3f326c9ec0197c7bdd"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "2db1f83fd6adbba72375e9dca735e6e213cb9b1b4ed18fbbdf0dab107e766241"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "20220ece79a39f9ab2a0b70f132a84eb604b3430322f5096a6d52ca4ecd2eafa"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "6f984284af46e7c84e7a6a4558939af68d3d53616c03438e03e42010d0e625c5"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "c3b6e00ca8be5a233ae00b7785d3cd729df20ae7a4b164e1b9ae308693846f6b"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "6819037cbfd7a58304f986bad26216f3874a02570e0b322676caaa7e6c97c1ae"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "5d0c31554cc6ad53247211dbda13840ccc215517acdac3ed4203ef497e2256d7"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "92d7f666fcc5f969f6e987d37af9f3be4a0836f8f6e38ec53753eb873982f6d0"
+    },
+    {
+      "source": "docs/conformance/k04-radix-review/README.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_conformance_k04-radix-review_README.md.html",
+      "sha256": "2dd943e6926ec9565f352eb9df42d6888852105436bbf8dfca1766fc8d427ce3"
+    },
+    {
+      "source": "docs/conformance/k04-radix-fix/README.md",
+      "html": ".guard-tmp/k04-radix-fix-render/docs_conformance_k04-radix-fix_README.md.html",
+      "sha256": "61d03b06747c98ab5666a389431b2d840e5c7f5dfce80881210273904ab7d95d"
+    }
+  ]
+}

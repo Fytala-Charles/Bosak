@@ -1,0 +1,16 @@
+{"calendar":"AD","xslt":false,"fallbackRequired":false,"error":null}
+{"calendar":"ISO","xslt":false,"fallbackRequired":false,"error":null}
+{"calendar":"CB","xslt":false,"fallbackRequired":true,"error":null}
+{"calendar":"Q{}CB","xslt":false,"fallbackRequired":true,"error":null}
+{"calendar":"AH","xslt":false,"fallbackRequired":true,"error":null}
+{"calendar":"Q{urn:calendar}AD","xslt":false,"fallbackRequired":true,"error":null}
+{"calendar":"ZZ","xslt":false,"fallbackRequired":null,"error":"FOFD1340"}
+{"calendar":"1bad","xslt":false,"fallbackRequired":null,"error":"FOFD1340"}
+{"calendar":"AD","xslt":true,"fallbackRequired":false,"error":null}
+{"calendar":"ISO","xslt":true,"fallbackRequired":false,"error":null}
+{"calendar":"CB","xslt":true,"fallbackRequired":true,"error":null}
+{"calendar":"Q{}CB","xslt":true,"fallbackRequired":true,"error":null}
+{"calendar":"AH","xslt":true,"fallbackRequired":true,"error":null}
+{"calendar":"Q{urn:calendar}AD","xslt":true,"fallbackRequired":true,"error":null}
+{"calendar":"ZZ","xslt":true,"fallbackRequired":true,"error":null}
+{"calendar":"1bad","xslt":true,"fallbackRequired":null,"error":"FOFD1340"}

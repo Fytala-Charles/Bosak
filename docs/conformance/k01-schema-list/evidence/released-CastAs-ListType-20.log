@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"CastAs-ListType-20","kind":"Failed","message":"Expected error XPST0051, got: XPTY0004: Value does not match the declared type \u0027xs:NMTOKENS\u0027."}

@@ -1,0 +1,4 @@
+xpath-datamodel.xml -text -whitespace
+spec-commit.json -text
+SPEC-LICENSE.md -text
+*-raw.log -text

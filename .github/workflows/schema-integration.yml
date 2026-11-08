@@ -1,0 +1,40 @@
+name: Open Schema integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  schema-source-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: bosak
+      - name: Checkout the pinned public Apache schema engine
+        uses: actions/checkout@v4
+        with:
+          repository: Fytala-Charles/Bosak.Schema
+          ref: 044d2cb2e67decd46e03e0f5ee7cb03029f34bd9
+          path: Bosak.Schema.Public
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Test actual Schema source and the bounded integration
+        working-directory: bosak
+        run: dotnet test integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj -c Release --logger trx --results-directory TestResults/Schema
+      - name: Run the typed-price example
+        working-directory: bosak
+        run: dotnet run --project integrations/Schema/Example/Bosak.Schema.Example.csproj -c Release --no-build
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: schema-integration-results
+          path: bosak/TestResults/Schema
