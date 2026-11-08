@@ -1,3 +1,11 @@
+# Release delivered and verified - 8 November 2026
+
+[Publication results](release-1.81.2-publication/README.md) confirm all ten NuGet1.81.2 libraries publicly listed/downloadable and payload-identical to approved hosted packages apart from NuGet's added signature entry. Marketplace0.2.6 is publicly listed and byte-identical to the approved VSIX. Tagsv1.81.2/vscode-v0.2.6 point to7249d0e0. Publication runs42510683197/42510685414 pass exact prior-artifact checks without rebuilds. A fresh public-only package consumer restores ten libraries and passes7 smoke controls; ten output DLL hashes match approved packages. Initial propagation404s are preserved.
+
+User-approved scoped release/API/signing dispositions and explicit numerical budget deferral are recorded; no performance guarantees or production Schema/XmlDb/Braid adoption are claimed. Public README now targets1.81.2 and extension notes identify0.2.6 as published. The checkpoint containing this entry follows approval commite92c3fa4. No merge to main or further source change is implied. Earlier entries retain their historical status.
+
+---
+
 # Current checkpoint — 7 November 2026
 
 [Development patch1.81.1](foundation-captured-identity-production/README.md) is adopted and freshly qualified:26,342 solution tests,84 separate language-server tests,exact frozen gates,native/consumer lanes and20 retained binary cases. Only captured issuer identity guards changed;provider-facing full proofs remain. Owner workloads/budgets,production Schema adoption,C45/freeze and release gates remain pending. Next PV-Q05 reviews those exact-cohort gaps. No package,commit,push or publication. Earlier checkpoint entries below are historical.

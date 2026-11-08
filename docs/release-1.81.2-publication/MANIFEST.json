@@ -1,0 +1,98 @@
+{
+  "42510683197-jobs.json": {
+    "sha256": "c0db94faea043eee954a0cd06715a9ff223af681c6eec355aead83e6fc00ed34",
+    "bytes": 3968
+  },
+  "42510683197-log.zip": {
+    "sha256": "b67fcd738bd9f1bac0547db7a8d0902bfd60c22787c64969afab525d306cdcf2",
+    "bytes": 8782
+  },
+  "42510683197-run.json": {
+    "sha256": "2c8b3b0599ce9697ba71c21c2fad5780674341ba32474ac0c858758623d2c16f",
+    "bytes": 12750
+  },
+  "42510685414-jobs.json": {
+    "sha256": "b26c24ea2de59337d39882b2c298867ede66506c00aab6a9cb6666cb436e7055",
+    "bytes": 3844
+  },
+  "42510685414-log.zip": {
+    "sha256": "29b45df355df967f97e72a2c5795e06548453a8bec4cee2b910c22abf703cb5a",
+    "bytes": 7939
+  },
+  "42510685414-run.json": {
+    "sha256": "4e445cd6e0baf297e2cb4cec8256294dd9763f0c7138d1175b7263b6e476f866",
+    "bytes": 12799
+  },
+  "APPROVAL.json": {
+    "sha256": "7732355a49467276191c7a40338dbbf12c6aff4e47c6e6b61528b6914d9da42b",
+    "bytes": 2254
+  },
+  "MARKETPLACE-DELIVERED.zip": {
+    "sha256": "ba358eae21e03a87ed425f52fb4ee14b37aaeb52f7410ac87cf0aa670d764375",
+    "bytes": 4739480
+  },
+  "MARKETPLACE-SERVICE-ATTEMPT-1.json": {
+    "sha256": "3c80c7b66cddafd1037636a124145f3eb5c4f4811add748776046da3d2876407",
+    "bytes": 179
+  },
+  "MARKETPLACE-SERVICE-VERIFICATION.json": {
+    "sha256": "663ae6d4305f2d2b55a0db4cbdc3e5d226020067a6ce2e5ce85a2bd7d060c760",
+    "bytes": 472
+  },
+  "NUGET-DELIVERED.zip": {
+    "sha256": "82da67bad43b12c3d3b0b2c5c58d31dd7dc78f594ec9af2216a65b16dcc588d3",
+    "bytes": 2391154
+  },
+  "NUGET-PAGE-OBSERVATION.json": {
+    "sha256": "de3bd20f5ad571642e82b41c9f1cae7cb2c06b43c17961934ef842054b4d6f3f",
+    "bytes": 90
+  },
+  "NUGET-SERVICE-ATTEMPT-1.json": {
+    "sha256": "e451edb4df4193830699e82b556bfbd316e0f8f1a96cdf3dca64fa4bf8073fb4",
+    "bytes": 2058
+  },
+  "NUGET-SERVICE-ATTEMPT-2.json": {
+    "sha256": "dd6ba59a706475a83a6313020c90156e3f8caeba26f9de1079eb8beb4db4ea9b",
+    "bytes": 3426
+  },
+  "NUGET-SERVICE-VERIFICATION.json": {
+    "sha256": "93544b061b890d53aff019a3568fc16e3337979f244f61b421d0d9f44121e82b",
+    "bytes": 5758
+  },
+  "PUBLIC-CONSUMER-PROVENANCE.json": {
+    "sha256": "b2268a0ae8d7bec03b8a6c418d1dcfbad9d39bb3a6c8c3b1c6dcf7cba917e2a7",
+    "bytes": 2621
+  },
+  "PUBLIC-CONSUMER-RECEIPTS.zip": {
+    "sha256": "53d708a811fd51fa100467ed2df4880d0725fa14e11e59a75156868588344752",
+    "bytes": 7250
+  },
+  "PUBLIC-CONSUMER-RESULTS.json": {
+    "sha256": "00145a06267c283ba324e7e384a5653521487521a282035fb5773c570974c0fb",
+    "bytes": 285
+  },
+  "README.md": {
+    "sha256": "53344f3fdfec689a6a4c393f712ba24446cc6d49d80c16263cc04eb1ada38129",
+    "bytes": 4170
+  },
+  "REGISTRY-BEFORE.json": {
+    "sha256": "9726d039fa3252a17c88090044fece69f0b83e889a059599f9341234dc623889",
+    "bytes": 2237
+  },
+  "REMOTE-TAGS.txt": {
+    "sha256": "fa113d6d2093d2f366d9f90864f963b48e079491e7c5acab51e586c0cc5716a8",
+    "bytes": 258
+  },
+  "RESULTS.json": {
+    "sha256": "b9057e353551e4c3141ffc8b72de99d4f29ea6b7bc88f18352fff1e8705a7d5e",
+    "bytes": 764
+  },
+  "verify-services.py": {
+    "sha256": "541a66fcbe01730598e5b55d931f9f46b092df971f1c8d9160fed8b2b14e6533",
+    "bytes": 3748
+  },
+  "verify.py": {
+    "sha256": "745f45f1d1cd40a437f7e40463eccde746a54a4875217a9bb1d6e30b34aa5106",
+    "bytes": 2830
+  }
+}

@@ -1,3 +1,17 @@
+# Release delivered and verified - 8 November 2026
+
+[Publication results](release-1.81.2-publication/README.md) confirm all ten NuGet1.81.2 libraries publicly listed/downloadable and payload-identical to approved hosted packages apart from NuGet's added signature entry. Marketplace0.2.6 is publicly listed and byte-identical to the approved VSIX. Tagsv1.81.2/vscode-v0.2.6 point to7249d0e0. Publication runs42510683197/42510685414 pass exact prior-artifact checks without rebuilds. A fresh public-only package consumer restores ten libraries and passes7 smoke controls; ten output DLL hashes match approved packages. Initial propagation404s are preserved.
+
+User-approved scoped release/API/signing dispositions and explicit numerical budget deferral are recorded; no performance guarantees or production Schema/XmlDb/Braid adoption are claimed. Public README now targets1.81.2 and extension notes identify0.2.6 as published. The checkpoint containing this entry follows approval commite92c3fa4. No merge to main or further source change is implied. Earlier entries retain their historical status.
+
+---
+
+# Publication executed; NuGet delivery verification pending - 8 November 2026
+
+[Approved publication](release-1.81.2-publication/README.md) used the exact hosted artifacts from7249d0e0. Both tags resolve to that source. NuGet publication run42510683197 and Marketplace run42510685414 succeed without rebuilds; all ten NuGet uploads report success. Marketplace0.2.6 is publicly listed and its downloaded VSIX is byte-identical to the approved artifact. NuGet public downloads/page still return404 at this checkpoint, so registry availability and delivered payload identity are not yet claimed. Retry the retained service verifier after service propagation. User-approved workload budget deferral carries no performance guarantees. No source or active editor profile changed.
+
+---
+
 # Current checkpoint - 6 November 2026
 
 [TA-44 native Schema compatibility lanes](foundation-native-schema-lane/README.md) run fresh **451/0 frozen baseline, 451/0 isolated source and 451/0 unchanged-binary** native regression cases against the exact candidate. The same **451 distinct case identities** agree across lanes; counts are not additive. All nine observed engine DLL hashes match their lane in Default noncollectible contexts. The binary candidate changes only nine engine DLLs; consumer/test/configuration/fixture bytes stay unchanged. Native worktree and Core production remain unchanged at **1.81.0**. Initial diagnostic restore NU1900 is retained; command-scoped offline retry builds with zero warnings/errors. Prior Core **26,338/0**, frozen gates and **318 types/6,465 declarations** are inherited after exact hash checks, not rerun. This qualifies the exercised existing native document-assessment source/binary lanes, not the new public provider binding or owner/performance budgets. Next **PV-Q03 actual public Schema provider adapter feasibility and immutable adoption**. R3/NU-01/SC-01, broader native/persistent/construction/nil/no-value, C45/freeze and R4-R7 remain open. No product pin, package, external source edit, commit, push or publication.

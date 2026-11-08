@@ -78,7 +78,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10), then
 ```bash
 dotnet new console -n BosakDemo
 cd BosakDemo
-dotnet add package Bosak.XPath.Api --version 1.26.3
+dotnet add package Bosak.XPath.Api --version 1.81.2
 ```
 
 Replace `Program.cs` with:
@@ -96,11 +96,11 @@ Run `dotnet run`. For other languages, use the matching package:
 
 | Package | Purpose |
 |---|---|
-| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.3) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.3) | Compile XSLT and transform documents. |
-| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.3) | Compile and evaluate XQuery. |
+| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.81.2) | Compile and evaluate XPath. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.81.2) | Compile XSLT and transform documents. |
+| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.81.2) | Compile and evaluate XQuery. |
 
-Version 1.26.3 is the [verified published baseline](docs/RELEASE-1.26.3-PUBLICATION.md). Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
+Version 1.81.2 is the [verified published baseline](docs/release-1.81.2-publication/README.md), accompanied by VS Code extension 0.2.6. Numerical workload budgets are deferred for this release; no performance guarantees are claimed. Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
 <a id="bosak-ecosystem"></a>
 

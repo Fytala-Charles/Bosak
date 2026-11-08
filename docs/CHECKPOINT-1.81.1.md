@@ -1,3 +1,17 @@
+# Release delivered and verified - 8 November 2026
+
+[Publication results](release-1.81.2-publication/README.md) confirm all ten NuGet1.81.2 libraries publicly listed/downloadable and payload-identical to approved hosted packages apart from NuGet's added signature entry. Marketplace0.2.6 is publicly listed and byte-identical to the approved VSIX. Tagsv1.81.2/vscode-v0.2.6 point to7249d0e0. Publication runs42510683197/42510685414 pass exact prior-artifact checks without rebuilds. A fresh public-only package consumer restores ten libraries and passes7 smoke controls; ten output DLL hashes match approved packages. Initial propagation404s are preserved.
+
+User-approved scoped release/API/signing dispositions and explicit numerical budget deferral are recorded; no performance guarantees or production Schema/XmlDb/Braid adoption are claimed. Public README now targets1.81.2 and extension notes identify0.2.6 as published. The checkpoint containing this entry follows approval commite92c3fa4. No merge to main or further source change is implied. Earlier entries retain their historical status.
+
+---
+
+# Publication executed; NuGet delivery verification pending - 8 November 2026
+
+[Approved publication](release-1.81.2-publication/README.md) used the exact hosted artifacts from7249d0e0. Both tags resolve to that source. NuGet publication run42510683197 and Marketplace run42510685414 succeed without rebuilds; all ten NuGet uploads report success. Marketplace0.2.6 is publicly listed and its downloaded VSIX is byte-identical to the approved artifact. NuGet public downloads/page still return404 at this checkpoint, so registry availability and delivered payload identity are not yet claimed. Retry the retained service verifier after service propagation. User-approved workload budget deferral carries no performance guarantees. No source or active editor profile changed.
+
+---
+
 # Hosted release preparation qualified - 8 November 2026
 
 Code checkpoint `7249d0e01628c47f92b89a3380bc69cf58d70045` is pushed. [Corrected hosted preparation](release-linux-collection-hosted/README.md) passes both workflows: NuGet run42479094503 has26345 solution passes in one invocation and exact QT3 31397/0/424, gated qt4 8941/0/1918 plus11 experimental passes; extension run42479096917 has90 server passes. Ten1.81.2 packages and0.2.6 VSIX independently verify from the clean LF producer checkout. Both publication jobs are skipped. The earlier Linux collection failure is resolved by harness-only file URI transport; shipping source tree6694d2c9 remains unchanged. Local initial authoring/listener failures are preserved separately.
