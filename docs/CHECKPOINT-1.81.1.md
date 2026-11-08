@@ -1,3 +1,9 @@
+# Hosted preparation started - 8 November 2026
+
+User authorized evidence commit/push and both preparation-only workflows. Evidence checkpoint `e2893d1aa36c2a68545a2d0eed34f103ab65632d` is pushed. [Hosted dossier](release-1.81.2-hosted/README.md) records NuGet run42477093485 and extension run42477095428; both publish jobs are skipped. Extension preparation and exact-byte verification pass with90 server tests. NuGet remains pending at this entry; no success is inferred. Owner/API/budget/signing and publication decisions remain open. The prior review packet remains a historical unfilled decision packet.
+
+---
+
 # Exact-artifact decision packet - 8 November 2026
 
 [Current release review](release-1.81.2-review/README.md) pins the final local NuGet, VSIX, API and qualification inputs without transferring older owner approvals. All owner/budget/API/signing/hosted/publication decisions remain unfilled. Inspection found no NuGet signature entry in any of the ten local packages; this is not certificate or service trust validation. The packet consistency check passes. Next technical check is explicitly authorized push/hosted preparation only; no workflow was dispatched. Source remains 1d69d059; this packet and final evidence are uncommitted.

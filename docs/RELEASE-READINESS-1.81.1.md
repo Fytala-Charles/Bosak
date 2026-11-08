@@ -57,3 +57,5 @@ Scenario ownership follows the [existing decision matrix](foundation-owner-gap-r
 No publication date is promised while scope, owner decisions and resulting implementation remain unresolved. This is a documentation step; qualification is retained, not a fresh engine test claim. No owner message, external repository edit, commit, push, tag or publication is performed here.
 
 The [exact-artifact review packet](release-1.81.2-review/README.md) pins the final local cohort and lists outstanding owner, budget, API, signing/provenance and hosted preparation decisions. No approval is inferred from its consistency check.
+
+Authorized preparation-only runs are recorded in the [hosted dossier](release-1.81.2-hosted/README.md), separately from the local candidate and its manifest hashes. Publication remains unapproved.

@@ -1,0 +1,30 @@
+{
+  "runId": 42477095428,
+  "sourceCommit": "e2893d1aa36c2a68545a2d0eed34f103ab65632d",
+  "manifestSha256": "f6011d57c799ef3a6ff24c70f8e3af9665a45f2adee8646271c0586a07c8d2da",
+  "verificationExitCode": 0,
+  "verificationSource": "clean LF checkout of source commit",
+  "windowsCheckoutAttempt": "NOTICE byte mismatch due to checkout line endings; passed against clean LF checkout without changing payload",
+  "serverTests": [
+    {
+      "file": "_runnervm7aw5e_2026-11-08_11_46_52_net10.0.trx",
+      "total": "90",
+      "executed": "90",
+      "passed": "90",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  ],
+  "publicationJob": "skipped"
+}
