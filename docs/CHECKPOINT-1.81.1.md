@@ -1,6 +1,6 @@
 # Hosted preparation started - 8 November 2026
 
-User authorized evidence commit/push and both preparation-only workflows. Evidence checkpoint `e2893d1aa36c2a68545a2d0eed34f103ab65632d` is pushed. [Hosted dossier](release-1.81.2-hosted/README.md) records NuGet run42477093485 and extension run42477095428; both publish jobs are skipped. Extension preparation and exact-byte verification pass with90 server tests. NuGet remains pending at this entry; no success is inferred. Owner/API/budget/signing and publication decisions remain open. The prior review packet remains a historical unfilled decision packet.
+User authorized evidence commit/push and both preparation-only workflows. Evidence checkpoint `e2893d1aa36c2a68545a2d0eed34f103ab65632d` is pushed. [Hosted dossier](release-1.81.2-hosted/README.md) records NuGet run42477093485 and extension run42477095428; both publish jobs are skipped. Extension preparation and exact-byte verification pass with90 server tests. NuGet solution26342 passes, but QT3 fails six collection fixture loads (31391/6/424); qt4/packing were not reached. Next is a focused cross-platform file-path/URI boundary fix and fresh qualification. Owner/API/budget/signing and publication decisions remain open. The prior review packet remains a historical unfilled decision packet.
 
 ---
 
