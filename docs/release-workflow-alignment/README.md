@@ -24,3 +24,7 @@ A clean Git checkout root is required for sealing and verification; tracked chan
 The current version/workflow changes require a new immutable source checkpoint and final-cohort stock-pack qualification. The older locally qualified1.81.2 version-override cohort remains historical. Hosted Actions execution, cross-run artifact download, publisher authentication and service-side publication have not run here. Owner workload/budget/C45/API and final signing/provenance/publication decisions remain open.
 
 No tag, workflow dispatch, publication, owner-repository write, machine permission or active editor profile change occurred. Next: commit the reviewed source/recipe alignment, build and verify stock1.81.2 artifacts from that exact commit, then present the still-open acceptance items separately.
+
+## Tracked generated bundle correction
+
+The first immutable alignment checkout exposed legacy tracked `vscode-bosak/server` binaries, contradicting the old workflow comment. [The correction](TRACKED-SERVER-CORRECTION.json) removes Git index entries only, preserving local files/history, and explicitly ignores the generated bundle. Tag/version preflight now refuses tracked generated outputs. Sourcef0f3e9c8 stock NuGet checks remain a preceding snapshot; final VSIX/cohort qualification uses the corrected follow-up commit and never relabels its artifacts.

@@ -7,7 +7,7 @@
     ],
     "exitCode": 0,
     "log": "artifact-controls.txt",
-    "logSha256": "d6259c95fbbf5ef3a03ff2c0a9308ccf90702fb1b491bc9eb37145e64b29238e"
+    "logSha256": "eca5b88ec1589703454cbd13a4af00e14cbfbcd46a83ba404f1941a82676ad50"
   },
   {
     "name": "source-run-controls",

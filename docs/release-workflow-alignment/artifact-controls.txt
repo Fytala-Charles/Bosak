@@ -2,6 +2,6 @@
   return self._open_to_write(zinfo, force_zip64=force_zip64)
 .............
 ----------------------------------------------------------------------
-Ran 14 tests in 0.619s
+Ran 14 tests in 1.139s
 
 OK

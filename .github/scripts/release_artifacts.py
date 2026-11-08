@@ -126,6 +126,8 @@ def main():
         return
     require(args.kind in ['nuget', 'vscode'], 'Choose nuget or vscode')
     if args.command == 'check-tag':
+        tracked = subprocess.check_output(['git', 'ls-files', '--', 'vscode-bosak/server', 'vscode-bosak/out', 'vscode-bosak/node_modules'], cwd=ROOT, text=True).strip()
+        require(not tracked, 'Generated extension outputs must not be tracked')
         expected = 'v' + core if args.kind == 'nuget' else 'vscode-v' + extension
         require(args.ref_type != 'tag' or args.ref_name == expected, 'Tag does not match the pinned version')
         return
