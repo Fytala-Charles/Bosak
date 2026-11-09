@@ -1,3 +1,11 @@
+# Optional Schema integration pin refreshed - 9 November 2026
+
+The merged Schema dependency PR is sourcec953ebe0057bea1616d3e4f891f7b0a5fc4bd99b; paired Core evidence is merged at4a800929. [Refreshed optional integration](schema-integration-1812/README.md) now selects that Schema revision in CI, instructions and the regenerated37-input source/test/fixture/legal manifest. Twenty library files and thirteen upstream test files are compiled directly against current Core projects; three already-qualified caller ownership controls join the eight local price/assertion cases. LF and CRLF lanes each pass135 identical cases, the typed-price example matches, and a changed disposable input is refused before compilation. The entire original docs/schema-integration dossier is hash-preserved.
+
+No Core engine semantics/version, normal solution dependency, original Schema checkout, retained9d1881e worktree, native assessment worktree or published artifact changes. Full structural XSD1.1 and native provider/session/lease adoption remain separate; no budget or performance guarantee is added. Current Core base4a8009291ad625c4a7dee553ba1ab00616aa7610. This refresh is prepared for the Core PR/CI workflow; local results do not claim hosted execution. Earlier source-pin and delivery notices are historical.
+
+---
+
 # Schema dependency checkpoint committed locally - 9 November 2026
 
 Schema commit `9d1881ef7ccc52e9c756e864e984a6211ae514cc` on `feature/core-1.81.2-adoption` contains the reviewed five package-reference edits and candidate documentation. Its worktree is clean. [Exact-commit qualification](schema-core-1.81.2-adoption/committed/README.md) freshly passes124 solution cases and11 integration/ownership cases with zero build warnings/errors;18 new package/DLL comparisons match published1.81.2 inputs. The earlier124-case unchanged-binary lane is retained and reused only over identical input hashes, not relabeled as a new rerun. Full Core solution/conformance qualification is inherited; no Core engine code changed.

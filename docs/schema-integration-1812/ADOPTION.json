@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-09",
+  "kind": "Optional integration pin refresh plus existing ownership regressions; no new Core language or schema semantics",
+  "schemaRepository": "https://github.com/Fytala-Charles/Bosak.Schema",
+  "schemaRevision": "c953ebe0057bea1616d3e4f891f7b0a5fc4bd99b",
+  "previousSchemaRevision": "044d2cb2e67decd46e03e0f5ee7cb03029f34bd9",
+  "affectedSections": [
+    "Actual public Schema source and existing test/fixture/legal closure",
+    "Existing XSD1.0 validated-copy/typed-price example",
+    "Upstream wildcard negative-constraint representation and explicit unsupported diagnostics",
+    "Existing caller stream/reader ownership contracts"
+  ],
+  "semanticAdoptionBoundary": "The new upstream Schema source revision and its own immutable REQ-009 adoption evidence are retained; this refresh introduces no additional semantic deviations. The old Core adoption and specification correction dossiers remain historical.",
+  "intentionalDeviations": [
+    "Retain staged XSD1.1 extra-child limitation; no full structural validation claim",
+    "No native assessor/advisor/session or concurrent-disposal guarantee"
+  ],
+  "coreBase": "4a8009291ad625c4a7dee553ba1ab00616aa7610"
+}

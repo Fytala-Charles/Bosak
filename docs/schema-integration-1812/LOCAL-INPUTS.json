@@ -1,0 +1,12 @@
+{
+  ".github/workflows/schema-integration.yml": "315019b95ac78986bcfc5479a234d3dc0674583d49fe85f206fe8b9826a741ae",
+  "integrations/Schema/Directory.Build.props": "32ab7e40be3fcf0a6540fc3758e652cddd3937efb99178f99747a2bb23d51f43",
+  "integrations/Schema/Source/Bosak.Schema.Source.csproj": "f8c44a90b0aadd142f07326a60b203b8a67cd7e95c6b1c07195707b376186ade",
+  "integrations/Schema/Source/Schema.Source.Files.props": "84e0cc800b773565f07db4ca768729d8a11d0283293a656041807f06134e60fd",
+  "integrations/Schema/Example/Bosak.Schema.Example.csproj": "eb73166e27ba57718d8a122d4d7f586075699afe44199a392911c84848c4a07b",
+  "integrations/Schema/Example/Program.cs": "5636fb235cb2ca86690e73a4b291b09f94beab883629aa7f218b581e4793e6ef",
+  "integrations/Schema/Example/PriceExample.cs": "f19e6565a2a9b35598260238f62ffdb7babab092937d7e9ddc7b3e18e99a656d",
+  "integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj": "af0828c1de0537265eaca0bbe42b722e6ba225462438cd9bb66caf491a645a21",
+  "integrations/Schema/Tests/OpenSchemaIntegrationTests.cs": "ae4bfc55dbcde2c5dfa9118a142b021642508d5c5561f44f5fb9c8ea3b64a225",
+  "integrations/Schema/Tests/SchemaOwnershipTests.cs": "00412fd253935bb03bd39664988aa919c05b313cf0f9ecc174359dd39fc21ff6"
+}

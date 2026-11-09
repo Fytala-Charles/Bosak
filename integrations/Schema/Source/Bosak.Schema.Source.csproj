@@ -18,6 +18,6 @@
       <Output TaskParameter="Items" ItemName="_HashedSchemaFile" />
     </GetFileHash>
     <Error Condition="'%(_HashedSchemaFile.FileHash)' != '%(_HashedSchemaFile.ExpectedSha256)' and '%(_HashedSchemaFile.FileHash)' != '%(_HashedSchemaFile.AlternateSha256)'"
-           Text="Public Schema source/license pin mismatch: %(_HashedSchemaFile.Identity). Use the revision in docs/schema-integration/SOURCE-PIN.json." />
+           Text="Public Schema source/license pin mismatch: %(_HashedSchemaFile.Identity). Use the revision in docs/schema-integration-1812/SOURCE-PIN.json." />
   </Target>
 </Project>

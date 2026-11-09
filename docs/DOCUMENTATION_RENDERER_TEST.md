@@ -1,3 +1,7 @@
+# Optional Schema pin refresh check - 9 November 2026
+
+Current integration instructions, source-pin qualification and synchronized canonical pages render to HTML with unchanged Fytala CSS. The receipt in `docs/schema-integration-1812/DOCUMENTATION-CHECKS.json` records local destinations/source hashes. No screenshot/PDF or fresh full Core conformance run is claimed.
+
 # Schema Core dependency adoption check - 9 November 2026
 
 The isolated public Schema1.81.2 dependency candidate, its Core-side dossier and synchronized documentation are rendered as HTML with unchanged Fytala CSS. [Receipt](schema-core-1.81.2-adoption/DOCUMENTATION-CHECKS.json) records local destinations and source hashes; no screenshot/PDF or new full Core conformance claim. Schema documentation hygiene passes with one pre-existing `.kimi/HANDOVER.md` date warning.

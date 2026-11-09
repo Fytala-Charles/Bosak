@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Fytala-Charles/Bosak.Schema
-          ref: 044d2cb2e67decd46e03e0f5ee7cb03029f34bd9
+          ref: c953ebe0057bea1616d3e4f891f7b0a5fc4bd99b
           path: Bosak.Schema.Public
       - uses: actions/setup-dotnet@v4
         with:

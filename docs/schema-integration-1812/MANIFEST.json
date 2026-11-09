@@ -1,0 +1,42 @@
+{
+  "ADOPTION.json": {
+    "sha256": "7720436b61d8465b9d3a412ebe68b9f909e8ea574aba971493ded16b95247172",
+    "bytes": 1220
+  },
+  "DOCUMENTATION-CHECKS.json": {
+    "sha256": "7868893909ff7b0adad7d157485b065f42a084dc99249a2fe8e26fc74eaba731",
+    "bytes": 1408
+  },
+  "EXECUTION-RECEIPTS.zip": {
+    "sha256": "03af23f7140fee58d9830b1ae3b7a0b0bb001b2a137b78198dd4dd1e9eebadde",
+    "bytes": 63576
+  },
+  "HISTORICAL-PRESERVATION.json": {
+    "sha256": "84a5e53cc63bd4519f4b378e81e6bd6c78aa4893c0f2befc9ed7f1317aaff1fc",
+    "bytes": 5088
+  },
+  "LOCAL-INPUTS.json": {
+    "sha256": "534312ccbe07e532b2c645948fab49b8f9b9c8e48d4f688d8adca34f14293bd3",
+    "bytes": 1244
+  },
+  "README.md": {
+    "sha256": "e33f89714ce90c4e974652cf8443069f8758d4d4bcf3e440caada17da80cb3ef",
+    "bytes": 2907
+  },
+  "RESULTS.json": {
+    "sha256": "89988d539dc766940e36b37923eb3779aac636539589fe34a47e9146124eb685",
+    "bytes": 1491
+  },
+  "SOURCE-PIN.json": {
+    "sha256": "2e244e06bb639b8f8a01cb349902dcc3f3cd5f1e2cf07ba42cf677e28fe9734a",
+    "bytes": 10989
+  },
+  "TEST-CATALOG.json": {
+    "sha256": "3b38b7279cfb324aa8172ef15d63a485f90d3474b12b364d0f62cd0998c749c4",
+    "bytes": 14707
+  },
+  "tools/verify.py": {
+    "sha256": "97e3ffb7a223b217887e35ca5702c99882c64a713d49a0ab2649619e777cb981",
+    "bytes": 2011
+  }
+}
