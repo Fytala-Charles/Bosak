@@ -1,15 +1,16 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak engine, Schema and Braid ecosystem">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak engine, Schema, XmlDb and Braid ecosystem">
   <br><br><h1>The Bosak ecosystem</h1>
-  <p>One XML engine, optional schema awareness and a visual-authoring application</p>
+  <p>Query and transform XML, validate schemas, store documents and build visual workflows</p>
 </div>
 
-Bosak brings XPath, XSLT and XQuery into .NET applications. Bosak.Schema provides optional Apache-2.0 schema integration and staged XSD 1.1 services without activation. Bosak.Braid uses the engine's source-preserving APIs to build a visual/source XSLT authoring workflow.
+Bosak brings XPath, XSLT and XQuery into .NET applications. Bosak.Schema provides optional Apache-2.0 schema integration and staged XSD 1.1 services without activation. Bosak.XmlDb develops native XML storage and persistent XDM navigation. Bosak.Braid uses the engine's source-preserving APIs to build a visual/source XSLT authoring workflow.
 
 | Component | Role | Availability and next step |
 |---|---|---|
 | Bosak | Apache-2.0 XPath 3.1 / XSLT 3.0 / XQuery 3.1 engine; documented opt-in 4.0 draft features | Public .NET 10 packages. Start with the [README](../README.md#quick-start). |
 | Bosak.Schema | Optional Apache-2.0 schema integration and staged XSD 1.1 services | Public [source](https://github.com/Fytala-Charles/Bosak.Schema) and [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md); no activation, trial or subscription. |
+| Bosak.XmlDb | Separate proprietary native XML storage project, beginning with embedded storage and persistent XDM navigation | In development; packaging is not enabled in the reviewed source. [Contact Fytala](mailto:charles.korthout@fytala.com) for access and delivery information. |
 | Bosak.Braid | Separate visual/source XSLT application, with reviewed authoring and execution workflows | Active development in a private repository. [Contact Fytala](mailto:charles.korthout@fytala.com) for access and delivery information. |
 | Bosak.Folio | XSL-FO-to-PDF formatter in development | Remains proprietary with separate product terms. |
 | VS Code extension | Editing assistance and evaluate/run commands | Public [Marketplace extension](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak); its bundled engine follows a separate release cycle. |
@@ -21,6 +22,12 @@ A schema can describe more than the presence of a field: complex types express a
 Schema's documented implemented profile includes `xsl:import-schema`, named complex-type checks through `instance of` / `treat as`, and schema-validated construction through supported validation/type attributes. Its staged XSD 1.1 services cover selected compilation/assertion capabilities; complete structural validation and full component/PSVI integration remain incomplete. The core retains its own simple-type support.
 
 Both core and Schema are Apache-2.0. Schema remains a separate module with its own supported profile and compatibility lifecycle; no Schema version is implied by a core release. The Apache transition published source without a new Schema NuGet release. See the [verified publication record](SCHEMA-APACHE-PUBLICATION-2026-10-29.md). Billing/key-generation infrastructure and private history remain outside the public schema repository.
+
+## XmlDb's storage direction
+
+Bosak.XmlDb develops one storage engine with embedded use first and server hosting as a later direction. Its current experimental profile includes immutable import/reopen, persistent XDM navigation and bounded scalar transactions. Broader mutation, host delivery and storage-lifetime guarantees remain subject to the project's own qualification and release gates.
+
+The native database is proprietary and is not shipped by the Core 1.81.2 release. The Apache-2.0 `Bosak.XPath.Providers.Database` NuGet package is the existing REST document/collection loader, not the XmlDb storage engine. Core compatibility checks do not establish production XmlDb adoption, a public database release or accepted performance budgets.
 
 ## Braid's bidirectional builder direction
 

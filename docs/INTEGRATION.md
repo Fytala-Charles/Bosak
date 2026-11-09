@@ -5012,3 +5012,7 @@ The [Linux collection fixture correction](release-linux-collection-fix/README.md
 [Publication execution](release-1.81.2-publication/README.md) records user approval, explicit budget deferral without performance guarantees, and successful exact-artifact NuGet/Marketplace publication jobs. Marketplace0.2.6 delivery is byte-verified. NuGet upload acceptance and public delivery verification are recorded separately; do not infer availability from upload success.
 
 Final [publication verification](release-1.81.2-publication/README.md): all ten NuGet1.81.2 packages and extension0.2.6 are publicly available. NuGet payloads match the approved hosted artifacts except the added signature entry; Marketplace VSIX bytes match exactly. The fresh public-only ten-library consumer passes7 smoke controls. Scoped owner/API/signing approval and explicit budget deferral authorize this release; no performance guarantees or production provider adoption are claimed. Earlier pending-publication entries are historical.
+
+## XmlDb ecosystem boundary - 9 November 2026
+
+Bosak.XmlDb is a separate proprietary native XML storage project in development, with embedded storage and persistent XDM navigation as its current direction. The published Apache-2.0 `Bosak.XPath.Providers.Database` package is the existing REST document/collection loader; it does not ship the native database. Core1.81.2 publication and compatibility probes do not announce production XmlDb adoption or a database release. See the [ecosystem overview](ECOSYSTEM.md) and [post-release roadmap](../ROADMAP.md).

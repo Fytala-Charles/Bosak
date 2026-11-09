@@ -1,3 +1,11 @@
+# Reader documentation refreshed - 9 November 2026
+
+README and ROADMAP now reflect published Core1.81.2/extension0.2.6 and the completed scoped release disposition. Bosak.XmlDb is included as a separate proprietary native XML storage project in development, distinct from the Apache Database REST-loader package. XmlDb README/license were consulted read-only; no owner repository or product pin changed. The ecosystem overview agrees with this boundary. The README's engineering dossier tail moved into implementation status, preserving navigation and historical candidate identities. The roadmap now focuses on post-release provider adoption, owner workloads/budgets, language/authoring and maintenance; explicit budget deferral still carries no performance guarantees.
+
+This documentation-only checkpoint follows main mergef52687405e64af3fcd4e4d3d4fcb00429d28c4d0; its commit is the one containing this entry. No engine, API, package or publication change; existing runtime qualification is retained. Source/link/render verification is recorded in the renderer notes. Earlier checkpoints remain historical.
+
+---
+
 # Release delivered and verified - 8 November 2026
 
 [Publication results](release-1.81.2-publication/README.md) confirm all ten NuGet1.81.2 libraries publicly listed/downloadable and payload-identical to approved hosted packages apart from NuGet's added signature entry. Marketplace0.2.6 is publicly listed and byte-identical to the approved VSIX. Tagsv1.81.2/vscode-v0.2.6 point to7249d0e0. Publication runs42510683197/42510685414 pass exact prior-artifact checks without rebuilds. A fresh public-only package consumer restores ten libraries and passes7 smoke controls; ten output DLL hashes match approved packages. Initial propagation404s are preserved.

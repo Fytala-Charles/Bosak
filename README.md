@@ -57,8 +57,7 @@ An opt-in [typed identity integration profile](docs/foundation-public-typed-iden
 [typed numeric profile](docs/foundation-public-typed-numeric/GUIDE.md) computes bounded exact arithmetic and
 comparisons from authenticated scalar operands. Broader schema operations remain staged.
 
-Development sources also provide [captured ordinary XQuery sessions](docs/foundation-public-xquery/GUIDE.md) and [captured ordinary XSLT transforms](docs/foundation-public-xslt/GUIDE.md) with explicit source and raw-operation lifetimes. [Bounded atomic provenance observation](docs/foundation-public-provenance/GUIDE.md) is also available in development sources. [Operation-bound compatible provenance](docs/foundation-leased-provenance/GUIDE.md) is available in development sources. [Complete ordinary and compatible typed-container reads](docs/foundation-public-primitives/GUIDE.md) are available in development sources. Published-package availability is tracked separately below.
-
+The published packages also provide [captured XQuery sessions](docs/foundation-public-xquery/GUIDE.md) and [captured XSLT transforms](docs/foundation-public-xslt/GUIDE.md) with explicit source and operation lifetimes. Opt-in [atomic provenance](docs/foundation-public-provenance/GUIDE.md), [compatible provenance](docs/foundation-leased-provenance/GUIDE.md) and [typed-container reads](docs/foundation-public-primitives/GUIDE.md) retain their documented supported profiles and limits.
 
 [Quick start](#quick-start) | [Integration](docs/INTEGRATION.md) | [Worked examples](docs/xpath40-catalog/worked-examples/README.md) | [Roadmap](ROADMAP.md)
 
@@ -110,14 +109,15 @@ Version 1.81.2 is the [verified published baseline](docs/release-1.81.2-publicat
 |---|---|---|
 | Bosak | XPath, XSLT and XQuery engine | [Apache-2.0](license.md) |
 | [Bosak.Schema](https://github.com/Fytala-Charles/Bosak.Schema) | Optional schema integration and staged XSD 1.1 services | Apache-2.0; no activation |
+| Bosak.XmlDb | Native XML storage and persistent XDM navigation in development | Proprietary; separate product terms |
 | Bosak.Braid | Visual/source XSLT authoring application in development | Commercial; separate product terms |
 | Bosak.Folio | XSL-FO-to-PDF formatter in development | Proprietary; separate product terms |
 
 Schema's public source has its own version and compatibility lifecycle; the Apache transition did not publish a new Schema NuGet package. See its [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md) and the [ecosystem overview](docs/ECOSYSTEM.md).
 
-Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
+Bosak.XmlDb is a separate storage product in development, starting with embedded use. It is distinct from the published [Bosak.XPath.Providers.Database](https://www.nuget.org/packages/Bosak.XPath.Providers.Database/1.81.2) REST-loader package; the native database is not included in the Core packages.
 
-An unpublished [native XSD 1.1 assessment candidate](docs/schema-assessment/README.md) adds a bounded structurally checked document result and typed decimal exports.
+Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
 
 ## Work in VS Code
 
@@ -157,69 +157,5 @@ See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XS
 ## Support and contribute
 
 Use [Discussions](https://github.com/Fytala-Charles/Bosak/discussions) for questions and [Issues](https://github.com/Fytala-Charles/Bosak/issues) for bugs. [Commercial support](COMMERCIAL.md) and [GitHub Sponsors](https://github.com/sponsors/Fytala-Charles) support development; schema access and conformance fixes are not paywalled.
-
-The unpublished [native whole-document assessment candidate](docs/schema-document-bridge/README.md) documents the optional Schema/provider integration and local source-build commands.
-
-The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.
-
-The unpublished [optional decimal assessment candidate](docs/schema-optional-implementation/README.md) extends the finite Schema profile while preserving original assessed state through engine copies.
-
-The [optional assessment review checkpoint](docs/schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.
-
-The unpublished [bounded repeated-decimal candidate](docs/schema-repeated-implementation/README.md) supports finite repetitions with original occurrence state and explicit cardinality/projection behavior.
-
-The [bounded repetition review checkpoint](docs/schema-repetition-review/README.md) records current implementation review and paired delivery identity.
-
-The unpublished [count assertion candidate](docs/schema-count-implementation/README.md) adds finite cardinality assertions while preserving native validation and existing child-name semantics.
-
-[Bounded Schema assessment review and next scope](docs/schema-count-review/README.md).
-
-The [bounded presence assertion candidate](docs/schema-presence-implementation/README.md) adds exists/empty predicates while preserving count and typed-copy behavior.
-
-[Presence assertion implementation review](docs/schema-presence-review/README.md).
-
-[Consumer compatibility and native Schema priorities](docs/schema-consumer-priorities/README.md).
-
-[Isolated persistent-provider compatibility qualification](docs/xmldb-compatibility/README.md).
-
-[Isolated authoring/preview source compatibility qualification](docs/braid-compatibility/README.md).
-
-[Consumer qualification review](docs/consumer-qualification-review/README.md).
-
-[Unchanged-binary compatibility qualification plan](docs/binary-compatibility-scope/README.md).
-
-[Unchanged-binary qualification and runtime identity limits](docs/binary-compatibility-execution/README.md).
-
-[Unchanged-binary qualification review](docs/binary-compatibility-review/README.md).
-
-[Consumer engine identity and reviewed adoption policy](docs/braid-engine-identity-policy/README.md).
-
-[Isolated consumer identity-policy prototype](docs/braid-identity-prototype/README.md).
-
-[Identity-policy prototype review](docs/braid-identity-review/README.md).
-
-[Isolated actual-runtime identity admission experiment](docs/braid-runtime-admission/README.md).
-
-[Actual-runtime admission experiment review](docs/braid-runtime-review/README.md).
-
-[Consumer engine-session integration boundary design](docs/braid-integration-design/README.md).
-
-[Real consumer inspector typed-boundary proof](docs/braid-typed-inspector/README.md).
-
-[Typed-inspector proof and integration review](docs/braid-typed-inspector-review/README.md).
-
-[Isolated guarded authoring-port facade proof](docs/braid-guarded-ports/README.md).
-
-[Guarded authoring-port facade review](docs/braid-guarded-ports-review/README.md).
-
-[Consumer facade and lifecycle contract scope](docs/braid-facade-lifecycle-contract/README.md).
-
-[Deterministic consumer facade lifecycle proof](docs/braid-lifecycle-proof/README.md).
-
-[Facade lifecycle contract and proof review](docs/braid-lifecycle-review/README.md).
-
-[Finite consumer read-only session adoption proposal](docs/braid-readonly-adoption/README.md).
-
-[Read-only consumer adoption proposal review](docs/braid-readonly-adoption-review/README.md).
 
 Maintainers can find artifact preparation and publication instructions in the [release guide](docs/RELEASING.md).
