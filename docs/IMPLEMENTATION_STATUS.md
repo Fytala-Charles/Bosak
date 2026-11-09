@@ -1,3 +1,19 @@
+# Schema dependency checkpoint committed locally - 9 November 2026
+
+Schema commit `9d1881ef7ccc52e9c756e864e984a6211ae514cc` on `feature/core-1.81.2-adoption` contains the reviewed five package-reference edits and candidate documentation. Its worktree is clean. [Exact-commit qualification](schema-core-1.81.2-adoption/committed/README.md) freshly passes124 solution cases and11 integration/ownership cases with zero build warnings/errors;18 new package/DLL comparisons match published1.81.2 inputs. The earlier124-case unchanged-binary lane is retained and reused only over identical input hashes, not relabeled as a new rerun. Full Core solution/conformance qualification is inherited; no Core engine code changed.
+
+The original public Schema checkout and its dirty owner documents remain unchanged. Schema has not been pushed, merged, tagged or published. Core-side evidence/documentation is preserved by the checkpoint containing this entry, based on Core2f08768f. Next obtain explicit remote-delivery direction and open a Schema review without replacing the original checkout's uncommitted documents. Native provider/session adoption, full XSD1.1 structural coverage and numerical budgets remain separate work.
+
+---
+
+# Isolated Schema dependency adoption - 9 November 2026
+
+[Core1.81.2 Schema candidate](schema-core-1.81.2-adoption/README.md) is prepared from public Schema20090180755d0427d824b091cf838e9a03ca9adc on feature/core-1.81.2-adoption at `.worktrees/Bosak.Schema.Core1812`. Five real package entries (four product/one test) now select1.81.2. Baseline/source/unchanged-binary lanes each pass the same124 tests;11 additional price/ownership cases pass, for135 distinct candidate cases. All27 engine output comparisons match approved public packages. No C# source adaptation, original checkout/pin change, commit/push or publication. The original checkout's uncommitted review docs and separate native assessment candidate are preserved.
+
+Full XSD1.1 structural validation, native provider/session/lease adoption and accepted workload budgets remain separate. The existing Core source wrapper's044d2cb2/114-case pin stays historical and unchanged. Next review the dependency-only Schema candidate, reconcile its documentation with the original owner's uncommitted work, and obtain explicit direction before commit/push. Core source HEAD2f08768f2966e1761e1d619d0c0786c1708402c3; current core-side evidence/docs are uncommitted. No fresh full Core solution/conformance run is claimed for this package consumer task.
+
+---
+
 # Ecosystem documentation refresh - 9 November 2026
 
 The README now includes Bosak.XmlDb as a separate proprietary storage project in development and distinguishes it from the published Database REST loader. The roadmap starts from the published1.81.2/extension0.2.6 baseline and separates future provider/workload work from completed scoped release acceptance. Engineering dossier links formerly appended to the README are retained below for navigation; their original dates, candidate identities and acceptance boundaries still apply.

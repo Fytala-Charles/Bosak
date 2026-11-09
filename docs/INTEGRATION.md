@@ -5016,3 +5016,7 @@ Final [publication verification](release-1.81.2-publication/README.md): all ten 
 ## XmlDb ecosystem boundary - 9 November 2026
 
 Bosak.XmlDb is a separate proprietary native XML storage project in development, with embedded storage and persistent XDM navigation as its current direction. The published Apache-2.0 `Bosak.XPath.Providers.Database` package is the existing REST document/collection loader; it does not ship the native database. Core1.81.2 publication and compatibility probes do not announce production XmlDb adoption or a database release. See the [ecosystem overview](ECOSYSTEM.md) and [post-release roadmap](../ROADMAP.md).
+
+The [isolated public Schema dependency candidate](schema-core-1.81.2-adoption/README.md) qualifies actual1.81.2 package references with unchanged product C# source, source/binary regression and bounded caller ownership checks. The original Schema checkout and Core source-wrapper pin are unchanged. This does not supply native foundation provider/session integration, full XSD1.1 structural validation, concurrent-disposal guarantees or accepted budgets.
+
+The dependency-only Schema candidate is now local commit9d1881e, freshly qualified with124 source cases and11 additional integration/ownership cases. [Committed checkpoint](schema-core-1.81.2-adoption/committed/README.md) records exact identities and retained binary-lane reuse. It has not been pushed or adopted into the original Schema checkout.

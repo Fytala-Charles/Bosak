@@ -1,0 +1,7 @@
+{
+  "linkedExistingCoreTests": "integrations/Schema/Tests/OpenSchemaIntegrationTests.cs",
+  "linkedExample": "integrations/Schema/Example/PriceExample.cs",
+  "schemaProject": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Core1812\\src\\Bosak.Schema\\Bosak.Schema.csproj",
+  "assemblySource": "Actual Schema project plus published Core package dependencies, no Core ProjectReference or HintPath",
+  "ownershipScope": "Stream/reader retention and caller tree bytes only; not operation leases, concurrent disposal, native assessment or full XSD1.1 validity."
+}

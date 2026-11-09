@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-09",
+  "kind": "Dependency-only compatibility candidate and existing ownership contract regression probes; no new standards semantics",
+  "schemaRevision": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "corePublishedRevision": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+  "affectedSections": [
+    "SchemaCompiler.Compile(Stream/XmlReader) caller ownership and in-memory compiled model",
+    "SchemaAwareXslt/PriceExample validated-copy behavior",
+    "Existing XSD11 assertion supported/refused profile"
+  ],
+  "implementationSource": "src/Bosak.Schema/Compilation/SchemaCompiler.cs",
+  "sourceSha256": "840e7bb7aa8cffc3df6423118eced40c0fb7e9e4617b987e336e795164514bf3",
+  "intentionalDeviations": []
+}

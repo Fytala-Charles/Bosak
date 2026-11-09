@@ -1,3 +1,7 @@
+# Schema Core dependency adoption check - 9 November 2026
+
+The isolated public Schema1.81.2 dependency candidate, its Core-side dossier and synchronized documentation are rendered as HTML with unchanged Fytala CSS. [Receipt](schema-core-1.81.2-adoption/DOCUMENTATION-CHECKS.json) records local destinations and source hashes; no screenshot/PDF or new full Core conformance claim. Schema documentation hygiene passes with one pre-existing `.kimi/HANDOVER.md` date warning.
+
 # Reader documentation check - 9 November 2026
 
 README, ROADMAP, ecosystem, implementation status and synchronized navigation/handover pages are rendered as HTML with the unchanged Fytala stylesheet under `.guard-tmp/docs-ecosystem-20261109/render`. Local destinations, table structure, preserved FYTALA wording and XmlDb licensing/REST-loader boundaries are checked. No screenshot/PDF review or fresh runtime qualification is claimed.

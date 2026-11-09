@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-09",
+  "coreHead": "2f08768f2966e1761e1d619d0c0786c1708402c3",
+  "schemaBase": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "candidate": "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Core1812",
+  "branch": "feature/core-1.81.2-adoption",
+  "originalCheckout": "D:/Development/Bosak.Schema.Public",
+  "originalCheckoutModified": false,
+  "uncommittedOriginalOwnerDocumentsIncluded": false,
+  "dependencyFrom": "1.26.3",
+  "dependencyTo": "1.81.2",
+  "productReferences": 4,
+  "testReferences": 1,
+  "scope": "Actual public Schema dependency candidate and bounded package-backed consumer/ownership compatibility; no new schema semantics or production native provider adoption.",
+  "priorObservation": "Original Schema handover already reports124 baseline and124 temporary-override passes. This candidate uses actual edited pins and excludes original dirty documentation.",
+  "schemaVersionPolicy": "MinVer unchanged; no version tag or publication",
+  "publicationAuthorized": false
+}

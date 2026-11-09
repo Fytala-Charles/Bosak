@@ -1,0 +1,82 @@
+{
+  "ADOPTION.json": {
+    "sha256": "9883b95a1b7046998e634aba77c827021cf51c1ce16875097238d53d1ac188a4",
+    "bytes": 740
+  },
+  "BASE-SOURCE-PINS.json": {
+    "sha256": "0a5fd744fd6eb819a198268b35deb666dd7af4a8aedc19dd024aad58b98b000a",
+    "bytes": 4575
+  },
+  "DEPENDENCY-UPGRADE.patch": {
+    "sha256": "94aa0738b47a0a43b525278702873f9ccafca4fffee05d5a484e385011f16070",
+    "bytes": 1470
+  },
+  "DOCUMENTATION-CHECKS.json": {
+    "sha256": "009c90e663c4af80e8325aaff47bd7f41d97b33f4ac4110ad21e5109146c67fb",
+    "bytes": 2501
+  },
+  "EXECUTION-RECEIPTS.zip": {
+    "sha256": "873c141a6462fed7b0a73f09a5756b8e457e0caae58c4427584115a7a587f9c5",
+    "bytes": 293824
+  },
+  "INTEGRATION-INPUTS.json": {
+    "sha256": "8d95a74dcc245bb072ea82f1835db58e1658df5e56952c9acd50442c78b094b2",
+    "bytes": 569
+  },
+  "PLAN.json": {
+    "sha256": "68bed4d643634846b701c311e8c271be58e68f426a267ec3d15876d6f0588c3b",
+    "bytes": 1026
+  },
+  "README.md": {
+    "sha256": "d0fe8aae45edc7578b544ce963687cd064570f832fe1abd1ed18a310aef284b4",
+    "bytes": 5153
+  },
+  "RESULTS.json": {
+    "sha256": "41d24a3413e2efb4b1157c4c6370d02fff3500a25fbecb91a390a212b92f9b2a",
+    "bytes": 8557
+  },
+  "SCHEMA-CANDIDATE-FILES.zip": {
+    "sha256": "7174a58d971a7e8fab514aee876f3b43c4980d316ea852ddcc1dc56d1cf03e84",
+    "bytes": 13649
+  },
+  "SCHEMA-DOCUMENTATION.json": {
+    "sha256": "54f250990ce4e834b603b11bf33d769f9dda7a5d20d2ab29930dfdbcc27c3888",
+    "bytes": 348
+  },
+  "TEST-CATALOGS.json": {
+    "sha256": "cb54b1e1a83c90f0d1d040de3539493eb7f3bb218097214a3309534892534637",
+    "bytes": 42410
+  },
+  "committed/EXECUTION-RECEIPTS.zip": {
+    "sha256": "681702e7e7d460cbcca698db6c09e9d430e1bdb2fd257ac6b87980173428142d",
+    "bytes": 150883
+  },
+  "committed/PRE-COMMIT-MANIFEST.json": {
+    "sha256": "d2149bab9703b462b5141e7294390d3288975b71871ba5159a8c065e8bd897bf",
+    "bytes": 1915
+  },
+  "committed/PRE-COMMIT-README.md": {
+    "sha256": "0364e80f1c80a2c38af4724a7263bae3886e4c10aab378d8441a9945b5bf4289",
+    "bytes": 4926
+  },
+  "committed/README.md": {
+    "sha256": "3a5c5543eb4f4a08460dab5993836b3b43fbd1195064554458a8a60f3b932cce",
+    "bytes": 1347
+  },
+  "committed/RESULTS.json": {
+    "sha256": "b1f5ce2d16f10cc95f3b62f0c64ffb7e7b3dd4d9add9293dcb7c2dc33dad3b99",
+    "bytes": 4867
+  },
+  "committed/SCHEMA-COMMIT.patch": {
+    "sha256": "cb58a5819b3275a7092929d6a99b71b9033c4cc92eba5e65eea600c3b5470c07",
+    "bytes": 14007
+  },
+  "tools/SchemaOwnershipTests.cs": {
+    "sha256": "b0d27d6be122a78a1df6293502aea77f7ebd018a722fa1f8475dfc8295e3500d",
+    "bytes": 4649
+  },
+  "tools/verify.py": {
+    "sha256": "0afe87361fddb9a7b4d094d8a380da67fa645d6d95b0998fb46a5b6e4ee58ba1",
+    "bytes": 2275
+  }
+}

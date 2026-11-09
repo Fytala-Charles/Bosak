@@ -1,0 +1,264 @@
+{
+  "date": "2026-11-09",
+  "schemaSourceBase": "20090180755d0427d824b091cf838e9a03ca9adc",
+  "packageUpgrade": {
+    "from": "1.26.3",
+    "to": "1.81.2",
+    "productReferences": 4,
+    "testReferences": 1
+  },
+  "baselineCases": 124,
+  "candidateSourceCases": 124,
+  "candidateUnchangedBinaryCases": 124,
+  "same124CaseNames": true,
+  "additionalIntegrationCases": 8,
+  "additionalOwnershipCases": 3,
+  "distinctCandidateCases": 135,
+  "sourceBuildWarnings": 0,
+  "sourceBuildErrors": 0,
+  "candidateCSharpSourceUnchanged": true,
+  "originalCheckoutSourceAndPinsUnchanged": true,
+  "packageOutputComparisons": [
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "candidate",
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98",
+      "matchesApprovedPublishedPackage": true
+    },
+    {
+      "lane": "unchanged-binary",
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98",
+      "matchesApprovedPublishedPackage": true
+    }
+  ],
+  "schemaAssemblyInformationalVersion": "0.4.0-alpha.0.3+20090180755d0427d824b091cf838e9a03ca9adc",
+  "counts": {
+    "baseline": {
+      "total": "124",
+      "executed": "124",
+      "passed": "124",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "candidate": {
+      "total": "124",
+      "executed": "124",
+      "passed": "124",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "unchanged-binary": {
+      "total": "124",
+      "executed": "124",
+      "passed": "124",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "integration": {
+      "total": "11",
+      "executed": "11",
+      "passed": "11",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  },
+  "nativeProviderSessionAdoptionClaimed": false,
+  "fullXsd11StructuralCoverageClaimed": false,
+  "performanceBudgetsAccepted": false,
+  "commitPushOrPublicationPerformed": false
+}
