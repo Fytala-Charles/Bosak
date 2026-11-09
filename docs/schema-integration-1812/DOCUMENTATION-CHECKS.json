@@ -1,0 +1,43 @@
+{
+  "date": "2026-11-09",
+  "pages": [
+    {
+      "source": "integrations/Schema/README.md",
+      "sha256": "d4bc2898bf957f11a1ffd3236de7a7180f5daedb70b5f37d04e0f2a9aaa06ebc"
+    },
+    {
+      "source": "docs/schema-integration-1812/README.md",
+      "sha256": "e33f89714ce90c4e974652cf8443069f8758d4d4bcf3e440caada17da80cb3ef"
+    },
+    {
+      "source": "ROADMAP.md",
+      "sha256": "6dada071eeaf156e4089813c39f6b44cb1ffe1d8c65ce1b377ddc28ce839be6a"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "f93d278e2bd992060b688cca75414fabcbb3409526dcdc348001fd6803fa6a67"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "c139430cc72626534ba3738b80a54a1a52b26c36e241601cf3eafa2c4e8893e9"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "ccaaa85babe61d9eba87bf6565652aa8a9ee13f809103524840902cd9c1325e6"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "d12a5c0fde4db43327658619c8e49ba81a08bad54ed95eaab7ae2812315cafab"
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "171e2dccaad7a73387a25f3e89ccf7667419d63a310d91ee9ad8c3544e5c2374"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "20c6e0c65d7b2993c1d732561c40a5fe394fe4a62f1d8d57cd2088f8fde74122"
+    }
+  ],
+  "localLinks": 3254,
+  "scope": "HTML/local destination checks; no screenshot/PDF claim"
+}
