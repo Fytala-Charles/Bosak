@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-09",
+  "pages": [
+    {
+      "group": 0,
+      "source": "docs/schema-core-1.81.2-adoption/README.md",
+      "sha256": "d0fe8aae45edc7578b544ce963687cd064570f832fe1abd1ed18a310aef284b4"
+    },
+    {
+      "group": 0,
+      "source": "ROADMAP.md",
+      "sha256": "a2dd7dc94eb5c349480cda5f22bd87b8e1592952b452fa8c731e93ab96c7ae19"
+    },
+    {
+      "group": 0,
+      "source": "docs/INTEGRATION.md",
+      "sha256": "1b283eaa75b8f737b66ce2cd749d1ee8d0aa87acc411e5031c1bf7432b935347"
+    },
+    {
+      "group": 0,
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "ec5a990badb9cfd37b01a5d541b773a4cfdaab0621220d698aaca642b6052087"
+    },
+    {
+      "group": 0,
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "84e86109a61585a807b2d4a1497e62c63cd478998657f5f16d121d9864d5baa7"
+    },
+    {
+      "group": 0,
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "3d217a85ad1fb75bbad96e80b597ed090901ef62aa5431e9367dcf1ba928e0a4"
+    },
+    {
+      "group": 0,
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "a970bee005e5a7b6d7097ef106a3bf3129d2689d1518740d3c246664bfe1741e"
+    },
+    {
+      "group": 0,
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "25bdf12617a5af6032c3fa1e716ce221b17e226647e8bf8828f79654f03ccd67"
+    },
+    {
+      "group": 1,
+      "source": "README.md",
+      "sha256": "feb9ab48ab17cd58d9446ac1843e801c5869a2eafb771db00223ffcbebd537c7"
+    },
+    {
+      "group": 1,
+      "source": "ROADMAP.md",
+      "sha256": "35d31787a80609fd2bd6dcb82549b1addf8f1f36d00b9c6da9381ac380e21203"
+    },
+    {
+      "group": 1,
+      "source": "docs/INTEGRATION.md",
+      "sha256": "90a85929ef1b8b7f59180d14367ad7a5bc21c47315aae667a1c4ff3f90949304"
+    },
+    {
+      "group": 1,
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "598b6a51da62b01c46af9284c3c59073a2d03d9acdad3abddf53092edd0294b8"
+    },
+    {
+      "group": 1,
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "c2b4cf5c432a64692c8c4d4605ce79bc9a260cb9861b00ebcb102fd851c80542"
+    },
+    {
+      "group": 1,
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "d1e554935331537557089c7ecdb4e6269b5449183e3ebb01db2a08e81d2706e5"
+    },
+    {
+      "group": 1,
+      "source": "docs/CORE-1.81.2-ADOPTION.md",
+      "sha256": "cdb8ae9ab6ada95f9c7a45caa843bed67e54a87f2ea1fa6033f5e694041e026f"
+    }
+  ],
+  "localLinks": 3273,
+  "broken": [],
+  "scope": "HTML and local destination checks; no screenshot/PDF claim"
+}

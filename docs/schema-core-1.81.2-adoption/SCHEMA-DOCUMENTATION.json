@@ -1,0 +1,12 @@
+{
+  "args": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Core1812\\tools\\check-docs.ps1",
+    "-ProjectPath",
+    "D:\\Development\\Bosak\\.worktrees\\Bosak.Schema.Core1812"
+  ],
+  "exitCode": 0,
+  "knownWarning": "Pre-existing .kimi/HANDOVER.md date; not modified in this task"
+}

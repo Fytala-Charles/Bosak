@@ -1,0 +1,152 @@
+{
+  "date": "2026-11-09",
+  "schemaCommit": "9d1881ef7ccc52e9c756e864e984a6211ae514cc",
+  "schemaBranch": "feature/core-1.81.2-adoption",
+  "sourceTree": "856caa5de1fb8f007be1e98287e3fe96abb74f53",
+  "testTree": "3963f4f166c7f09fc86d9cb763175d37a3cbf0fd",
+  "schemaWorkingTreeClean": true,
+  "schemaPushPerformed": false,
+  "schemaMergePerformed": false,
+  "schemaPublicationPerformed": false,
+  "sourceBuildWarnings": 0,
+  "sourceBuildErrors": 0,
+  "freshCounts": {
+    "solution": {
+      "total": "124",
+      "executed": "124",
+      "passed": "124",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    "integration": {
+      "total": "11",
+      "executed": "11",
+      "passed": "11",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  },
+  "freshCatalogsMatchPreCommitQualification": true,
+  "packageOutputComparisons": [
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Api.dll",
+      "sha256": "e978234fcdecdf3d94c9853ceec1fb45be5729169981657f35a6f09b04d3c0c1"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Compiler.dll",
+      "sha256": "993fe0252a2b79767160fa1a9ae74daeae989a4335d8d0744cfa815c5a66c347"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Core.dll",
+      "sha256": "cc8a0f3ba4a0c2bd682d7e81c244208d9f46e6fa9e38f5b05eac9fcf04581fbe"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Parser.dll",
+      "sha256": "6d412b3ce27e9f54cd1e47478aaf03ce8613cedccf4a17843fc90d2f1d977dc3"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Providers.dll",
+      "sha256": "7ee7219f6e1e3dd1ceabf7497b4a5fc65253bc54d55cb1707141e09bf83a9536"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Runtime.dll",
+      "sha256": "645f57509afa0148e664397e9519f02f51c6319a6dae593fcf75cc520447c766"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XPath.Standard.dll",
+      "sha256": "fd6af294ad2b7c86c49bea0e0f2d1fe485b38cf29ebcaca98445f56529cef28d"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.XQuery.dll",
+      "sha256": "18ab4aa33868dd4abd9a843a633d0500bbb8c02c9aa9c74af2c7d6570e0dddcd"
+    },
+    {
+      "lane": "solution",
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98"
+    },
+    {
+      "lane": "integration",
+      "file": "Bosak.Xslt.dll",
+      "sha256": "e83189311ca3bd733e0fca5035f3b415c8760b40b2af1735693a5f0654ec9f98"
+    }
+  ],
+  "unchangedBinaryLaneReused": {
+    "passed": 124,
+    "receipt": "../EXECUTION-RECEIPTS.zip",
+    "reason": "No retained baseline Schema/test/configuration bytes or replacement published Core DLL bytes changed; this is not a fresh unchanged-binary rerun."
+  },
+  "originalCheckoutSourceAndDependencyPinsChanged": false,
+  "nativeProviderSessionAdoptionClaimed": false,
+  "acceptedPerformanceBudgets": false
+}

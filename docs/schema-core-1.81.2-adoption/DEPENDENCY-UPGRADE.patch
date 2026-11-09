@@ -1,0 +1,32 @@
+diff --git a/src/Bosak.Schema/Bosak.Schema.csproj b/src/Bosak.Schema/Bosak.Schema.csproj
+index 00646b5..45d4551 100644
+--- a/src/Bosak.Schema/Bosak.Schema.csproj
++++ b/src/Bosak.Schema/Bosak.Schema.csproj
+@@ -9,10 +9,10 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="Bosak.XPath.Api" Version="1.26.3" />
+-    <PackageReference Include="Bosak.XPath.Providers" Version="1.26.3" />
+-    <PackageReference Include="Bosak.Xslt" Version="1.26.3" />
+-    <PackageReference Include="Bosak.XQuery" Version="1.26.3" />
++    <PackageReference Include="Bosak.XPath.Api" Version="1.81.2" />
++    <PackageReference Include="Bosak.XPath.Providers" Version="1.81.2" />
++    <PackageReference Include="Bosak.Xslt" Version="1.81.2" />
++    <PackageReference Include="Bosak.XQuery" Version="1.81.2" />
+   </ItemGroup>
+ 
+ </Project>
+diff --git a/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj b/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
+index 33bb8a6..7f07d83 100644
+--- a/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
++++ b/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
+@@ -15,7 +15,7 @@
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+       <PrivateAssets>all</PrivateAssets>
+     </PackageReference>
+-    <PackageReference Include="Bosak.XPath.Providers" Version="1.26.3" />
++    <PackageReference Include="Bosak.XPath.Providers" Version="1.81.2" />
+   </ItemGroup>
+ 
+   <ItemGroup>

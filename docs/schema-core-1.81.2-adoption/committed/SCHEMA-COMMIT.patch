@@ -1,0 +1,180 @@
+From 9d1881ef7ccc52e9c756e864e984a6211ae514cc Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Mon, 9 Nov 2026 11:25:42 +0100
+Subject: [PATCH] build: adopt published Bosak Core 1.81.2 dependencies
+
+---
+ README.md                                     |  4 +++-
+ ROADMAP.md                                    |  4 ++++
+ docs/AGENT_HANDOVER.md                        |  8 +++++++-
+ docs/ARCHITECTURE.md                          |  4 +++-
+ docs/CORE-1.81.2-ADOPTION.md                  | 20 +++++++++++++++++++
+ docs/FEATURE_REQUESTS.md                      |  4 +++-
+ docs/INTEGRATION.md                           |  4 +++-
+ src/Bosak.Schema/Bosak.Schema.csproj          |  8 ++++----
+ .../Bosak.Schema.Tests.csproj                 |  2 +-
+ 9 files changed, 48 insertions(+), 10 deletions(-)
+ create mode 100644 docs/CORE-1.81.2-ADOPTION.md
+
+diff --git a/README.md b/README.md
+index 42355da..591d768 100644
+--- a/README.md
++++ b/README.md
+@@ -15,7 +15,7 @@
+ 
+ Bosak.Schema is free, open-source Fytala software under [Apache-2.0](LICENSE.md). Schema compilation and validation require no activation, license key, trial, subscription or billing service. This public repository contains only the schema engine, its tests and documentation.
+ 
+-The implementation targets .NET 10 and currently references published Bosak 1.26.3 packages. It provides schema-aware XSLT compiler helpers and a staged XSD 1.1 component/assertion pipeline. Complete XSD 1.1 structural validation and integration of its full component universe into running Bosak expressions are **not yet implemented**. See the [support matrix](docs/FEATURE_REQUESTS.md).
++The implementation targets .NET 10 and in this isolated adoption candidate references published Bosak 1.81.2 packages. It provides schema-aware XSLT compiler helpers and a staged XSD 1.1 component/assertion pipeline. Complete XSD 1.1 structural validation and integration of its full component universe into running Bosak expressions are **not yet implemented**. See the [support matrix](docs/FEATURE_REQUESTS.md).
+ 
+ The initial public source is derived from Fytala's private schema source at `fa0da3e2d9972706a5a86616ef285af4daf5037b`, with the owner-approved Apache transition on 29 October 2026. Billing, key-generation, deployment material and private Git history remain outside this repository. See [provenance](docs/APACHE-TRANSITION.md).
+ 
+@@ -60,3 +60,5 @@ Existing schema factory signatures remain intact. The old `License` entry points
+ Fytala retains copyright and trademark ownership; Apache-2.0 grants the rights stated in the license. Branding does not grant trademark rights. The new license applies to this public source release; old proprietary releases and private licensing-product agreements are separate historical artifacts.
+ 
+ *Last updated: 2026-10-29*
++
++The [Core 1.81.2 adoption candidate](docs/CORE-1.81.2-ADOPTION.md) qualifies existing source, unchanged-binary and bounded integration/ownership controls. Schema MinVer remains on the 0.4 development line; this is not a Schema package release or full native provider/session adoption.
+diff --git a/ROADMAP.md b/ROADMAP.md
+index db7cbdb..97864e2 100644
+--- a/ROADMAP.md
++++ b/ROADMAP.md
+@@ -27,3 +27,7 @@ The 0.4 development line makes schema services Apache-2.0 and activation-free. P
+ The public schema suite passes 124 cases. Existing core package pins stay at 1.26.3. Neither current-draft XDM certification nor full XSD 1.1 support follows from the Apache transition. Billing/key-generation, other product licensing, Folio, XmlDb storage and Braid workflows remain outside this source change.
+ 
+ *Last updated: 2026-10-30*
++
++## Core dependency adoption - 9 November 2026
++
++The isolated [Core 1.81.2 candidate](docs/CORE-1.81.2-ADOPTION.md) updates actual product and test package references and passes existing source/binary regression and bounded consumer checks. Review the candidate before an explicit commit/merge decision. Native provider/session implementation, full XSD 1.1 structural coverage, workload budgets and a Schema release remain separate milestones.
+diff --git a/docs/AGENT_HANDOVER.md b/docs/AGENT_HANDOVER.md
+index 9ed059e..1975f82 100644
+--- a/docs/AGENT_HANDOVER.md
++++ b/docs/AGENT_HANDOVER.md
+@@ -1,3 +1,9 @@
++# Isolated Core 1.81.2 adoption candidate - 9 November 2026
++
++Parent source20090180755d0427d824b091cf838e9a03ca9adc, branchfeature/core-1.81.2-adoption. The local dependency checkpoint is the commit containing this entry; the user requested continuing with review and commit. [Candidate scope](CORE-1.81.2-ADOPTION.md) records five actual dependency edits (four product/one test),124 baseline/source/unchanged-binary controls and11 separate integration/ownership controls. Product/test C# remains unchanged; dependency output hashes match the published1.81.2 cohort. Original public checkout, its dirty review documents and the separate native assessment worktree remain unchanged. No push/tag/release or production native session adoption. Rebuild and qualify the local committed checkpoint, then obtain explicit direction before remote delivery; broader native/XSD coverage remains separate.
++
++---
++
+ # Bosak.Schema handover — 29 October 2026
+ 
+ **Publication verified — 29 October 2026:** Public GitHub repository and Apache-2.0 detection verified; all 114 tests and the content-commit CI pass. [Publication receipt](PUBLICATION.json). No NuGet release or commercial infrastructure publication.
+@@ -14,4 +20,4 @@ Current development line: 0.4 through MinVer; no new tag/NuGet publication is im
+ 
+ Next: reassess the smallest necessary core/session contract around the open implementation, then qualify real component completeness, compatible-schema handoff and consumers before engine integration. See [architecture](ARCHITECTURE.md), [registry](FEATURE_REQUESTS.md), [integration](INTEGRATION.md) and [transition](APACHE-TRANSITION.md).
+ 
+-Last updated: 2026-10-30
++Last updated: 2026-11-09
+diff --git a/docs/ARCHITECTURE.md b/docs/ARCHITECTURE.md
+index b8a2bd0..211389f 100644
+--- a/docs/ARCHITECTURE.md
++++ b/docs/ARCHITECTURE.md
+@@ -13,7 +13,7 @@
+ 
+ ## 1. Current Architecture
+ 
+-One public `Bosak.Schema` assembly references the published Bosak XPath API/providers, XSLT and XQuery packages at 1.26.3. The core engine does not reference this package. Keeping schema services in a separate assembly avoids a dependency cycle; changing the license does not require merging them into Core.
++One public `Bosak.Schema` assembly references the published Bosak XPath API/providers, XSLT and XQuery packages at 1.81.2 in this isolated adoption candidate. The core engine does not reference this package. Keeping schema services in a separate assembly avoids a dependency cycle; changing the license does not require merging them into Core.
+ 
+ ## 2. Components
+ 
+@@ -52,3 +52,5 @@ All 124 public schema tests pass. Existing assertion, facet, alternative, resour
+ No new engine implementation, baseline/filter change, storage migration or consumer adoption is included. Registry reclamation, full PSVI/component completeness and real consumer ABI qualification remain future acceptance gates.
+ 
+ *Last updated: 2026-10-30*
++
++The [Core 1.81.2 adoption candidate](CORE-1.81.2-ADOPTION.md) qualifies existing source, unchanged-binary and bounded integration/ownership controls. Schema MinVer remains on the 0.4 development line; this is not a Schema package release or full native provider/session adoption.
+diff --git a/docs/CORE-1.81.2-ADOPTION.md b/docs/CORE-1.81.2-ADOPTION.md
+new file mode 100644
+index 0000000..d7b3297
+--- /dev/null
++++ b/docs/CORE-1.81.2-ADOPTION.md
+@@ -0,0 +1,20 @@
++# Core 1.81.2 dependency adoption candidate
++
++9 November 2026. Isolated branch `feature/core-1.81.2-adoption`, based on public Schema commit `20090180755d0427d824b091cf838e9a03ca9adc`. The original checkout and its uncommitted review documents are preserved; they are excluded from this candidate.
++
++## Change
++
++Four product PackageReference entries and the test project's direct provider reference change from1.26.3 to1.81.2. No C# product or existing test source changes. MinVer remains unchanged on the0.4 development line; no Schema version tag or publication is performed. Dependencies resolve to the nine published1.81.2 engine libraries with no Core source project references or DLL HintPaths.
++
++## Qualification
++
++- Baseline1.26.3: full solution124/0/0, zero build warnings/errors.
++- Candidate1.81.2: full solution124/0/0, zero build warnings/errors; identical case names.
++- Unchanged-binary lane: original1.26.3-built Schema/test/configuration bytes retained, only nine engine DLLs overlaid with approved published1.81.2 payloads;124/0/0.
++- Additional package-backed integration: eight existing price/staged-assertion cases and three stream/reader ownership cases;11/0/0. A compiled model remains usable after the caller disposes its input, failed compilation leaves the stream open, and supplied readers remain caller-owned. These are135 distinct exercised candidate cases; the repeated124-case binary/baseline lanes are not additive coverage.
++
++The Core-side evidence dossier is `docs/schema-core-1.81.2-adoption` in the adjacent Bosak repository. It retains source/hash pins, the dependency-only patch, test logs/TRX, output DLL/package comparisons, harness inputs and reproducibility notes. The existing historical Core integration wrapper and its044d2cb2 source pin are unchanged.
++
++## Remaining boundaries
++
++Existing XSD1.0/schema-aware transformation and staged XSD1.1 assertion behavior are compatible within the exercised cases. The retained extra-child test still demonstrates incomplete XSD1.1 structural validation. This does not implement native foundation assessor/advisor/session attachment, component-universe interchange, concurrent disposal/operation leases or production provider adoption. Workload budgets remain unaccepted; Core's scoped release deferral creates no Schema performance guarantee. The user requested continuing with review and local commit. This guide belongs to that local dependency checkpoint. Remote push/review/merge and any Schema publication remain separate explicit decisions.
+diff --git a/docs/FEATURE_REQUESTS.md b/docs/FEATURE_REQUESTS.md
+index b46de9f..0070f95 100644
+--- a/docs/FEATURE_REQUESTS.md
++++ b/docs/FEATURE_REQUESTS.md
+@@ -30,4 +30,6 @@ The Apache transition passed 114 public schema tests with zero failures/skips. C
+ 
+ The transition does not implement the proposed core session API, change frozen W3C gates, admit skipped tests, certify XmlDb/Braid adoption or release a package. Future semantic additions require immutable specification adoption evidence and happy-path/edge regression tests.
+ 
+-*Last updated: 2026-10-30*
++*Last updated: 2026-11-09*
++
++Core dependency adoption candidate (9 November 2026): actual package references now select1.81.2 in this isolated branch;124 source cases,124 unchanged-binary cases and11 additional integration/ownership cases pass. This completes no new schema feature or native provider/session requirement. See [candidate scope](CORE-1.81.2-ADOPTION.md).
+diff --git a/docs/INTEGRATION.md b/docs/INTEGRATION.md
+index 9ddc47d..afc934c 100644
+--- a/docs/INTEGRATION.md
++++ b/docs/INTEGRATION.md
+@@ -13,7 +13,7 @@
+ 
+ ## 1. Dependency and Availability
+ 
+-Build this source with .NET 10. The project references Bosak XPath API/providers, XSLT and XQuery 1.26.3. The source transition targets the 0.4 development line through MinVer; no new NuGet release or tag is claimed.
++Build this source with .NET 10. The project references Bosak XPath API/providers, XSLT and XQuery 1.81.2 in this isolated adoption candidate. The source transition targets the 0.4 development line through MinVer; no new NuGet release or tag is claimed.
+ 
+ ## 2. Compile and Validate
+ 
+@@ -53,3 +53,5 @@ The new package contains no internal HMAC/product key, signing implementation, k
+ Public factory/type signatures are retained, with the intentional licensing behavior change documented above. Real previously compiled consumer replacement tests and full schema-session ABI/provider acceptance are not certified by these source tests.
+ 
+ *Last updated: 2026-10-30*
++
++The [Core 1.81.2 adoption candidate](CORE-1.81.2-ADOPTION.md) qualifies existing source, unchanged-binary and bounded integration/ownership controls. Schema MinVer remains on the 0.4 development line; this is not a Schema package release or full native provider/session adoption.
+diff --git a/src/Bosak.Schema/Bosak.Schema.csproj b/src/Bosak.Schema/Bosak.Schema.csproj
+index 00646b5..45d4551 100644
+--- a/src/Bosak.Schema/Bosak.Schema.csproj
++++ b/src/Bosak.Schema/Bosak.Schema.csproj
+@@ -9,10 +9,10 @@
+   </PropertyGroup>
+ 
+   <ItemGroup>
+-    <PackageReference Include="Bosak.XPath.Api" Version="1.26.3" />
+-    <PackageReference Include="Bosak.XPath.Providers" Version="1.26.3" />
+-    <PackageReference Include="Bosak.Xslt" Version="1.26.3" />
+-    <PackageReference Include="Bosak.XQuery" Version="1.26.3" />
++    <PackageReference Include="Bosak.XPath.Api" Version="1.81.2" />
++    <PackageReference Include="Bosak.XPath.Providers" Version="1.81.2" />
++    <PackageReference Include="Bosak.Xslt" Version="1.81.2" />
++    <PackageReference Include="Bosak.XQuery" Version="1.81.2" />
+   </ItemGroup>
+ 
+ </Project>
+diff --git a/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj b/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
+index 33bb8a6..7f07d83 100644
+--- a/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
++++ b/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj
+@@ -15,7 +15,7 @@
+       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+       <PrivateAssets>all</PrivateAssets>
+     </PackageReference>
+-    <PackageReference Include="Bosak.XPath.Providers" Version="1.26.3" />
++    <PackageReference Include="Bosak.XPath.Providers" Version="1.81.2" />
+   </ItemGroup>
+ 
+   <ItemGroup>
+-- 
+2.54.0.windows.1
+

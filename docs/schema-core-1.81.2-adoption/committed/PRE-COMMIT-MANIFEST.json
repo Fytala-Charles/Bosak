@@ -1,0 +1,58 @@
+{
+  "ADOPTION.json": {
+    "sha256": "9883b95a1b7046998e634aba77c827021cf51c1ce16875097238d53d1ac188a4",
+    "bytes": 740
+  },
+  "BASE-SOURCE-PINS.json": {
+    "sha256": "0a5fd744fd6eb819a198268b35deb666dd7af4a8aedc19dd024aad58b98b000a",
+    "bytes": 4575
+  },
+  "DEPENDENCY-UPGRADE.patch": {
+    "sha256": "94aa0738b47a0a43b525278702873f9ccafca4fffee05d5a484e385011f16070",
+    "bytes": 1470
+  },
+  "DOCUMENTATION-CHECKS.json": {
+    "sha256": "696f11f738b6c08f22207af5369e5e05109c3650e10a04e17cbbd3db5e51d81a",
+    "bytes": 2501
+  },
+  "EXECUTION-RECEIPTS.zip": {
+    "sha256": "873c141a6462fed7b0a73f09a5756b8e457e0caae58c4427584115a7a587f9c5",
+    "bytes": 293824
+  },
+  "INTEGRATION-INPUTS.json": {
+    "sha256": "8d95a74dcc245bb072ea82f1835db58e1658df5e56952c9acd50442c78b094b2",
+    "bytes": 569
+  },
+  "PLAN.json": {
+    "sha256": "68bed4d643634846b701c311e8c271be58e68f426a267ec3d15876d6f0588c3b",
+    "bytes": 1026
+  },
+  "README.md": {
+    "sha256": "0364e80f1c80a2c38af4724a7263bae3886e4c10aab378d8441a9945b5bf4289",
+    "bytes": 4926
+  },
+  "RESULTS.json": {
+    "sha256": "41d24a3413e2efb4b1157c4c6370d02fff3500a25fbecb91a390a212b92f9b2a",
+    "bytes": 8557
+  },
+  "SCHEMA-CANDIDATE-FILES.zip": {
+    "sha256": "7174a58d971a7e8fab514aee876f3b43c4980d316ea852ddcc1dc56d1cf03e84",
+    "bytes": 13649
+  },
+  "SCHEMA-DOCUMENTATION.json": {
+    "sha256": "54f250990ce4e834b603b11bf33d769f9dda7a5d20d2ab29930dfdbcc27c3888",
+    "bytes": 348
+  },
+  "TEST-CATALOGS.json": {
+    "sha256": "cb54b1e1a83c90f0d1d040de3539493eb7f3bb218097214a3309534892534637",
+    "bytes": 42410
+  },
+  "tools/SchemaOwnershipTests.cs": {
+    "sha256": "b0d27d6be122a78a1df6293502aea77f7ebd018a722fa1f8475dfc8295e3500d",
+    "bytes": 4649
+  },
+  "tools/verify.py": {
+    "sha256": "2aa1ce87d5514485603b034923442e1bf0a766aab4218c67d41224b2d0b26cc9",
+    "bytes": 1595
+  }
+}
