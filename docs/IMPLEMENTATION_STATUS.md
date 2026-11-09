@@ -1,3 +1,78 @@
+# Ecosystem documentation refresh - 9 November 2026
+
+The README now includes Bosak.XmlDb as a separate proprietary storage project in development and distinguishes it from the published Database REST loader. The roadmap starts from the published1.81.2/extension0.2.6 baseline and separates future provider/workload work from completed scoped release acceptance. Engineering dossier links formerly appended to the README are retained below for navigation; their original dates, candidate identities and acceptance boundaries still apply.
+
+## Integration development dossiers
+
+The unpublished [native XSD 1.1 assessment candidate](schema-assessment/README.md) records its bounded structural-check and typed-decimal profile.
+
+The unpublished [native whole-document assessment candidate](schema-document-bridge/README.md) documents the optional Schema/provider integration and local source-build commands.
+
+The [bounded bridge API review checkpoint](schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.
+
+The unpublished [optional decimal assessment candidate](schema-optional-implementation/README.md) extends the finite Schema profile while preserving original assessed state through engine copies.
+
+The [optional assessment review checkpoint](schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.
+
+The unpublished [bounded repeated-decimal candidate](schema-repeated-implementation/README.md) supports finite repetitions with original occurrence state and explicit cardinality/projection behavior.
+
+The [bounded repetition review checkpoint](schema-repetition-review/README.md) records current implementation review and paired delivery identity.
+
+The unpublished [count assertion candidate](schema-count-implementation/README.md) adds finite cardinality assertions while preserving native validation and existing child-name semantics.
+
+[Bounded Schema assessment review and next scope](schema-count-review/README.md).
+
+The [bounded presence assertion candidate](schema-presence-implementation/README.md) adds exists/empty predicates while preserving count and typed-copy behavior.
+
+[Presence assertion implementation review](schema-presence-review/README.md).
+
+[Consumer compatibility and native Schema priorities](schema-consumer-priorities/README.md).
+
+[Isolated persistent-provider compatibility qualification](xmldb-compatibility/README.md).
+
+[Isolated authoring/preview source compatibility qualification](braid-compatibility/README.md).
+
+[Consumer qualification review](consumer-qualification-review/README.md).
+
+[Unchanged-binary compatibility qualification plan](binary-compatibility-scope/README.md).
+
+[Unchanged-binary qualification and runtime identity limits](binary-compatibility-execution/README.md).
+
+[Unchanged-binary qualification review](binary-compatibility-review/README.md).
+
+[Consumer engine identity and reviewed adoption policy](braid-engine-identity-policy/README.md).
+
+[Isolated consumer identity-policy prototype](braid-identity-prototype/README.md).
+
+[Identity-policy prototype review](braid-identity-review/README.md).
+
+[Isolated actual-runtime identity admission experiment](braid-runtime-admission/README.md).
+
+[Actual-runtime admission experiment review](braid-runtime-review/README.md).
+
+[Consumer engine-session integration boundary design](braid-integration-design/README.md).
+
+[Real consumer inspector typed-boundary proof](braid-typed-inspector/README.md).
+
+[Typed-inspector proof and integration review](braid-typed-inspector-review/README.md).
+
+[Isolated guarded authoring-port facade proof](braid-guarded-ports/README.md).
+
+[Guarded authoring-port facade review](braid-guarded-ports-review/README.md).
+
+[Consumer facade and lifecycle contract scope](braid-facade-lifecycle-contract/README.md).
+
+[Deterministic consumer facade lifecycle proof](braid-lifecycle-proof/README.md).
+
+[Facade lifecycle contract and proof review](braid-lifecycle-review/README.md).
+
+[Finite consumer read-only session adoption proposal](braid-readonly-adoption/README.md).
+
+[Read-only consumer adoption proposal review](braid-readonly-adoption-review/README.md).
+
+
+---
+
 # Release delivered and verified - 8 November 2026
 
 [Publication results](release-1.81.2-publication/README.md) confirm all ten NuGet1.81.2 libraries publicly listed/downloadable and payload-identical to approved hosted packages apart from NuGet's added signature entry. Marketplace0.2.6 is publicly listed and byte-identical to the approved VSIX. Tagsv1.81.2/vscode-v0.2.6 point to7249d0e0. Publication runs42510683197/42510685414 pass exact prior-artifact checks without rebuilds. A fresh public-only package consumer restores ten libraries and passes7 smoke controls; ten output DLL hashes match approved packages. Initial propagation404s are preserved.
