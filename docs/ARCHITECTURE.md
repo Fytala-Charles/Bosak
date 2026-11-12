@@ -6,9 +6,11 @@
 
 ## Release artifact boundary
 
-Core/server development metadata is now **1.81.3**, an unpublished patch for the [standalone XSLT output-isolation candidate](xslt30-isolation-candidate/README.md). Published Core remains1.81.2; the extension manifest remains0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
+Core/server development metadata is now **1.81.4**, an unpublished follow-up for the [XSLT XML-version namespace correction](xslt30-xml-version/README.md), based on output-isolation PR #474. Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
 
 The conformance runner uses an internal observed-execution helper to capture secondary outputs with logical URI, raw XDM and per-output serialization properties. It serializes at production time and compares only current captured outputs; golden fixture files remain independent inputs. The engine isolates explicit principal result-document content from enclosing sequence accumulators and gives that principal raw output precedence over the enclosing template result. Ordinary raw-template results and public API signatures retain their routes. [Immutable specification adoption](xslt30-isolation-candidate/ADOPTION.json).
+
+Literal-result namespace collection now honors provider undeclaration metadata as a shadowing boundary. Attribute hints share that lookup, while namespace fixup removes obsolete provisional markers when the element actually binds the prefix. The XML writer omits redundant identical declarations without suppressing genuine rebinding or default namespace resets. Raw XDM namespace state remains distinct from the XML 1.0 reconstructed tree. [Namespace adoption and scope](xslt30-xml-version/ADOPTION.json).
 
 
 # Current checkpoint — 7 November 2026

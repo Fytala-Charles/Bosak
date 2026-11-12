@@ -1,0 +1,82 @@
+{
+  "sourceCommit": null,
+  "sourceBaseCommit": "46b3ba0421d99fa2107997229732ff925fc331b5",
+  "sourceHashes": {
+    "src/Bosak.Xslt/Runtime/ResultTreeSerializer.cs": "cbde9f0475b1aa0ccdc1d03e52555b43bf5b1d6d901f9deecce1518962479f78",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "2ee4cfe5f4a57e38576ed536f0bca6f0bceb0d7a3ba38e9c442f9868e534df7f",
+    "src/Directory.Build.props": "1e5f7fbdf984e0b2839528facdfcdf98e712f36c268bf89bd846fc2834bf73af",
+    "tests/Bosak.Xslt.Tests/NamespaceUndeclarationTests.cs": "99255713f27700246768a06e5557977fe3503238571e20724156f4c242f83f25"
+  },
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "totalCases": 14601,
+  "counts": {
+    "Passed": 10219,
+    "Skipped": 4380,
+    "Failed": 2
+  },
+  "exactTestSetHashes": true,
+  "unchangedSkipNamesAndReasons": true,
+  "failureSets": {
+    "output": 1,
+    "try": 1
+  },
+  "qualificationSuccessful": false,
+  "run": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-xml-version-qualified-20261112\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-xml-version-qualified-20261112\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": null,
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": false,
+    "processId": 20804,
+    "startedUtc": "2026-11-12T16:25:18Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 776.08,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10219,
+      "Failed": 2,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "bfefc4950b8c81b2389ea21eb9575f5d26f0054f95b714ae814a2ca80887bb36",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "integrity": {
+    "originalCorpusUnchanged": true,
+    "originalCorpusFiles": 13229,
+    "originalCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "cleanAtStartCorpusFiles": 12886,
+    "runtimeLayoutUnchanged": true,
+    "disposableCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "generatedOutputsSha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+    "testSetDefinitions": "Separately checked against every pre-run SHA-256 by report.py",
+    "policy": "All generated/changed bytes retained; neither original nor disposable corpus restored or cleaned"
+  },
+  "version": "1.81.4",
+  "published": false,
+  "parentReview": "https://github.com/Fytala-Charles/Bosak/pull/474"
+}

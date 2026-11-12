@@ -14,7 +14,9 @@ The subsequent [local 1.81.3 candidate](xslt30-isolation-candidate/README.md) is
 
 ## Tracked release candidate and packaging
 
-Core/server development metadata is1.81.3 for the unpublished XSLT correction; published Core remains1.81.2. The extension manifest/lock remains0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
+Core/server development metadata is 1.81.4 for the unpublished [XML-version namespace correction](xslt30-xml-version/README.md), following output-isolation PR #474; published Core remains 1.81.2. The extension manifest/lock remains 0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
+
+Public transformation signatures are unchanged. Literal-result construction preserves XML 1.1 prefix undeclarations and later rebinding in raw XDM namespace queries. XML output omits redundant identical declarations, so serialized bytes can change while preserving namespace meaning. Genuine rebinding and default namespace resets remain explicit. XML 1.0 cannot preserve nonempty-prefix undeclarations on round-trip; that serialization limitation does not authorize changing the original raw XDM bindings. The full 42-case XML-version selection passes. The complete pinned catalog records 10,219 passed / 2 failed / 4,380 skipped with unchanged exclusions and zero corpus writes; standalone qualification remains unsuccessful and separate from earlier cohorts.
 
 
 ## Prepared editor command URI correction

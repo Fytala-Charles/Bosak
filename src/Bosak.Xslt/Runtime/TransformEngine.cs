@@ -579,6 +579,8 @@
 //                      | Charles Korthout | 7.61  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 //                      | Charles Korthout | 7.62  | 01-11-2026     | Add explicit global-context core while preserving legacy source fallback. |
 //                      | Charles Korthout | 7.63  | 12-11-2026     | Return explicit principal raw output before the enclosing template accumulator.           |
+//                      | Charles Korthout | 7.64  | 12-11-2026     | Honor prefix undeclarations when collecting literal-result namespace bindings.              |
+//                      | Charles Korthout | 7.65  | 12-11-2026     | Reconcile provisional undeclaration markers with the final raw XDM bindings.                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -10360,7 +10362,7 @@ internal sealed class TransformEngine
                 var local = attr.Name.LocalName;
                 if (string.IsNullOrEmpty(local) || local == "xml" || local == "xmlns")
                     continue;
-                var styleNs = source.GetNamespaceOfPrefix(local);
+                var styleNs = lreInfo.InScopeDeclarations.FirstOrDefault(binding => binding.Prefix == local).Namespace;
                 if (styleNs == null || string.IsNullOrEmpty(styleNs.NamespaceName))
                     continue;
                 if (styleNs.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
@@ -12056,6 +12058,15 @@ internal sealed class TransformEngine
             }
         }
 
+        // A child can carry its own binding despite its parent's inheritance barrier.
+        // Do not let a provisional undeclaration marker hide that final XDM binding.
+        if (element.Annotation<PrefixedNamespaceUndeclarations>() is { } ownUndeclarations)
+        {
+            ownUndeclarations.Prefixes.RemoveAll(bindings.ContainsKey);
+            if (ownUndeclarations.Prefixes.Count == 0)
+                element.RemoveAnnotations<PrefixedNamespaceUndeclarations>();
+        }
+
         // Record the effective bindings so consumers such as the namespace axis can
         // determine the namespace context of this element.
         var context = element.Annotation<NamespaceInheritanceContext>();
@@ -12081,9 +12092,10 @@ internal sealed class TransformEngine
                         continue;
                     if (!bindings.TryGetValue(prefix, out var uri) || string.IsNullOrEmpty(uri))
                         continue;
-                    childUndecl.Prefixes.Add(prefix);
+                    if (!childUndecl.Prefixes.Contains(prefix))
+                        childUndecl.Prefixes.Add(prefix);
                 }
-                if (childUndecl.Prefixes.Count > 0)
+                if (childUndecl.Prefixes.Count > 0 && child.Annotation<PrefixedNamespaceUndeclarations>() == null)
                     child.AddAnnotation(childUndecl);
             }
         }
@@ -19904,6 +19916,7 @@ internal sealed class TransformEngine
     private static IEnumerable<(string Prefix, XNamespace Namespace)> GetInScopeNamespaceDeclarations(XElement element)
     {
         var declarations = new Dictionary<string, XNamespace>();
+        var seenPrefixes = new HashSet<string>(StringComparer.Ordinal);
         var current = element;
         while (current != null)
         {
@@ -19912,9 +19925,14 @@ internal sealed class TransformEngine
                 if (!attr.IsNamespaceDeclaration)
                     continue;
                 string prefix = attr.Name.LocalName == "xmlns" ? "" : attr.Name.LocalName;
-                if (!declarations.ContainsKey(prefix))
+                if (seenPrefixes.Add(prefix))
                     declarations[prefix] = XNamespace.Get(attr.Value);
             }
+            // LINQ-to-XML cannot hold xmlns:p="" attributes. The loader retains
+            // them as metadata; they shadow ancestors just like real declarations.
+            if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
+                foreach (var prefix in undeclarations.Prefixes)
+                    seenPrefixes.Add(prefix);
             current = current.Parent;
         }
         return declarations.Select(kv => (kv.Key, kv.Value));

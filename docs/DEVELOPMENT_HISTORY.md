@@ -1,3 +1,11 @@
+# XSLT output-isolation delivery and namespace correction - 12 November 2026
+
+The output-isolation slice is committed at46b3ba04 and delivered as [PR #474](https://github.com/Fytala-Charles/Bosak/pull/474); all five required checks pass. A separate unpublished1.81.4 namespace correction honors literal-result prefix undeclarations, reconciles raw XDM binding markers and omits redundant identical XML declarations. Five new cases pass, with four demonstrated regression failures against the unchanged sealed baseline. All42 XML-version tests pass, resolving the eight remaining failures in that selection.
+
+The complete pinned catalog improves from10,211/10/4,380 to10,219/2/4,380. Every original case and skip explanation reconciles; no corpus file is added, changed or removed. All26,354 implementation cases and90 language-server cases pass. Both frozen gates retain their exact counts and named skip/reason maps. The legacy rounded100.0% display is not accepted as qualification success: output-0707 and try-022 remain failures. [Namespace evidence](xslt30-xml-version/README.md) keeps exact specification adoption, source/runtime/corpus hashes and all diagnostics separate from both historical cohorts. No fixture edit, skip admission, publication, full-conformance claim or standalone gate promotion.
+
+---
+
 # Optional Schema integration pin refreshed - 9 November 2026
 
 The merged Schema dependency PR is sourcec953ebe0057bea1616d3e4f891f7b0a5fc4bd99b; paired Core evidence is merged at4a800929. [Refreshed optional integration](schema-integration-1812/README.md) now selects that Schema revision in CI, instructions and the regenerated37-input source/test/fixture/legal manifest. Twenty library files and thirteen upstream test files are compiled directly against current Core projects; three already-qualified caller ownership controls join the eight local price/assertion cases. LF and CRLF lanes each pass135 identical cases, the typed-price example matches, and a changed disposable input is refused before compilation. The entire original docs/schema-integration dossier is hash-preserved.

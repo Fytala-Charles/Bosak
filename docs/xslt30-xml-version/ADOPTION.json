@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-12",
+  "beforeImplementation": true,
+  "sourceBase": "46b3ba0421d99fa2107997229732ff925fc331b5",
+  "parentReview": "https://github.com/Fytala-Charles/Bosak/pull/474",
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "specifications": [
+    {
+      "revision": "W3C Recommendation 8 June 2017",
+      "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+      "sections": ["11.1.3 Namespace Nodes for Literal Result Elements", "5.7.3 Namespace Fixup"]
+    },
+    {
+      "revision": "W3C Recommendation 21 March 2017",
+      "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-xquery-serialization-31-20170321/",
+      "sections": ["5 XML Output Method: reconstructed-tree namespace rules", "5.1.8 undeclare-prefixes", "6.1.8 XHTML undeclare-prefixes"]
+    },
+    {
+      "revision": "W3C Recommendation 16 August 2006, Second Edition",
+      "immutableUrl": "https://www.w3.org/TR/2006/REC-xml-names11-20060816/",
+      "sections": ["6.1 Namespace Scoping: prefix undeclaration and subsequent rebinding"]
+    }
+  ],
+  "decision": [
+    "Nearest namespace declarations and XML 1.1 undeclaration metadata both terminate ancestor lookup for their prefix. A deeper explicit rebinding remains effective.",
+    "Literal-result attribute namespace hints must use the same undeclaration-aware bindings, rather than resurrect an ancestor binding through LINQ-to-XML lookup.",
+    "Namespace fixup must remove obsolete undeclaration markers when the final element actually binds that prefix. Synthetic inheritance-barrier markers cannot hide the element's own binding from raw XDM namespace queries; missing-prefix markers remain effective.",
+    "Use the existing XmlWriter route with redundant identical namespace declarations omitted. Preserve genuine rebinding and default namespace resets. This is a serialization policy choice, not a claim that XML 1.0 universally prohibits redundant declarations.",
+    "Keep raw XDM namespace state separate from XML 1.0 reconstructed namespace state: XML 1.0 serialization cannot undeclare a nonempty prefix and may reconstruct additional bindings."
+  ],
+  "intentionalDeviations": [],
+  "scope": "No fixture edits, skip admissions, new schema coverage or standalone gate promotion. Preserve PR474 and all historical qualification receipts."
+}
