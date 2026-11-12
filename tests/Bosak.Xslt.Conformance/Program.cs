@@ -248,6 +248,7 @@
 //                      | Charles Korthout | 3.77  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 3.78  | 20-10-2026     | Distinguish unselected cases and fail incomplete selected catalogs.                      |
 //                      | Charles Korthout | 3.79  | 20-10-2026     | Match structured error identities before excluding legacy aliases in exact mode.         |
+//                      | Charles Korthout | 3.80  | 12-11-2026     | Capture secondary outputs independently of immutable expected-result files.              |
 //                      |==================|=======|================|=========================================================================================
 using System.Xml.Linq;
 using System.Xml;
@@ -321,6 +322,8 @@ class Program
     // them, so the assertions are evaluated against the captured value. Null for tests
     // that run through the normal file-writing path.
     static IReadOnlyDictionary<string, XdmValue>? _capturedSecondaryResults;
+    static IReadOnlyDictionary<string, string>? _serializedSecondaryResults;
+    static IReadOnlyDictionary<string, Bosak.Xslt.Stylesheet.OutputProperties>? _secondaryOutputProperties;
 
     // REQ-113 (PB-2): scoped to one CompareResult evaluation — true when the result's
     // assertion set (anywhere in its all-of/any-of tree) references a schema kind test
@@ -831,6 +834,9 @@ class Program
     static TestResult RunTestCase(XElement testCase, Dictionary<string, XElement> environments, string testSetDir, string testSetPath, string catalogDir, XNamespace ns, string testSetName)
     {
         var name = testCase.Attribute("name")?.Value ?? "unknown";
+        _capturedSecondaryResults = null;
+        _serializedSecondaryResults = null;
+        _secondaryOutputProperties = null;
         var packageVersionResolutionStrategy = Bosak.Xslt.Api.PackageVersionResolutionStrategy.Highest;
 
         if (_testNameFilter != null && !name.Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase))
@@ -1621,98 +1627,43 @@ class Program
                 }
             }
 
-            // PC-1 W7 (si-result-document-116): when a schema-aware test asserts a typed kind
-            // test (instance of element(*, T), T != xs:untyped) against a secondary result
-            // document, run through the capture path so the PSVI annotations survive; the
-            // assert-result-document comparator below prefers the captured value.
-            _capturedSecondaryResults = null;
-            var resultSpecElem = testCase.Element(ns + "result");
-            bool captureSecondaryResults = _schemaAware && resultSpecElem != null
-                && resultSpecElem.Descendants().Any(e =>
-                    e.Name.LocalName == "assert-result-document"
-                    && e.Descendants().Any(a => a.Name.LocalName == "assert"
-                        && a.Value.Contains("instance of", StringComparison.Ordinal)
-                        && !a.Value.Contains("xs:untyped", StringComparison.Ordinal)));
-
-            XdmValue RunRawTransform(IXdmNode? src, XdmValue? matchSel, string? tmpl, string? mode)
+            // Keep produced outputs independent of the immutable catalog/expected files.
+            // URI identities remain logical; the observer performs serialization inside
+            // result production so xsl:try can still observe serialization errors.
+            var secondaryValues = new Dictionary<string, XdmValue>(StringComparer.Ordinal);
+            var secondaryText = new Dictionary<string, string>(StringComparer.Ordinal);
+            var secondaryProperties = new Dictionary<string, Bosak.Xslt.Stylesheet.OutputProperties>(StringComparer.Ordinal);
+            _capturedSecondaryResults = secondaryValues;
+            _serializedSecondaryResults = secondaryText;
+            _secondaryOutputProperties = secondaryProperties;
+            void ObserveSecondary(string uri, XdmValue value, Bosak.Xslt.Stylesheet.OutputProperties properties)
             {
-                if (!captureSecondaryResults)
-                    // Preserve the pre-W7 call shapes: an initial match selection uses its
-                    // own overload — dropping it here threw XTDE0044 for package-001d..s
-                    // (<initial-mode select="42"> with no source document).
-                    return matchSel != null
-                        ? executable.Transform(null, matchSel, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri)
-                        : executable.Transform(src, evalContext, tmpl, mode, rawResult: true, baseOutputUri: baseOutputUri);
-                var value = executable.TransformCaptured(src, matchSel, evalContext, tmpl, mode,
-                    "document", baseOutputUri, out var captured);
-                _capturedSecondaryResults = captured;
-                return value;
+                var effective = properties.Clone();
+                // Preserve the existing file-delivery HTML policy for tree outputs.
+                if (effective.BuildTree && effective.Method is not ("json" or "adaptive"))
+                    effective.SelfCloseVoidHtmlElements = true;
+                var serialized = Bosak.Xslt.Runtime.ResultTreeSerializer.Serialize(value, effective);
+                if (value.IsNode && value.NodeValue is XDocumentNode node && node.UnderlyingObject is XDocument document)
+                {
+                    document.RemoveAnnotations<string>();
+                    document.AddAnnotation(uri);
+                    node.SetDocumentUri(uri);
+                }
+                secondaryValues[uri] = value;
+                secondaryText[uri] = serialized;
+                secondaryProperties[uri] = effective;
             }
-
+            string? functionName = null;
+            XdmValue[]? functionArguments = null;
             if (isInitialFunction)
-            {
-                var (funcName, args) = ResolveInitialFunction(initialFunctionElem!, evalContext, ns);
-                if (rawOutput)
-                {
-                    resultValue = executable.TransformFunction(funcName, args, evalContext);
-                }
-                else
-                {
-                    resultXml = executable.TransformFunctionToString(funcName, args, evalContext, serializationParams);
-                }
-            }
-            else if (sourceNode != null)
-            {
-                if (rawOutput)
-                    resultValue = RunRawTransform(sourceNode, null, initialTemplate, initialMode);
-                else if (captureSecondaryResults)
-                    resultValue = RunRawTransform(sourceNode, null, initialTemplate, initialMode);
-                else
-                    resultXml = executable.TransformToString(sourceNode, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
-            }
-            else if (initialMatchSelection != null)
-            {
-                // Initial mode with an explicit initial match selection.
-                if (rawOutput)
-                    resultValue = RunRawTransform(null, initialMatchSelection, initialTemplate, initialMode);
-                else if (captureSecondaryResults)
-                    resultValue = RunRawTransform(null, initialMatchSelection, initialTemplate, initialMode);
-                else
-                    resultXml = executable.TransformToString(null, initialMatchSelection, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
-            }
-            else if (!string.IsNullOrEmpty(initialTemplate) || hasImplicitInitialTemplate)
-            {
-                // Named-template entry points with no explicit source document have no
-                // initial context item (XSLT 3.0 §6.5 / §9.6).
-                if (rawOutput)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else if (captureSecondaryResults)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
-            }
-            else if (initialModeElem != null)
-            {
-                // Initial mode with no source document: let the runtime detect XTDE0044.
-                if (rawOutput)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else if (captureSecondaryResults)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
-            }
+                (functionName, functionArguments) = ResolveInitialFunction(initialFunctionElem!, evalContext, ns);
+            var observedResult = executable.TransformObserved(sourceNode,
+                sourceNode != null ? null : initialMatchSelection, evalContext, initialTemplate, initialMode,
+                functionName, functionArguments, rawOutput, baseOutputUri, serializationParams, ObserveSecondary);
+            if (rawOutput)
+                resultValue = observedResult;
             else
-            {
-                // No source and no explicit entry point. Let the runtime report the
-                // appropriate error (XTDE0044 or, for a package with no public initial
-                // template, XTDE0040) instead of fabricating a dummy source document.
-                if (rawOutput)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else if (captureSecondaryResults)
-                    resultValue = RunRawTransform(null, null, initialTemplate, initialMode);
-                else
-                    resultXml = executable.TransformToString(null, evalContext, initialTemplate, initialMode, baseOutputUri, serializationParams);
-            }
+                resultXml = observedResult.StringValue;
 
             // Bind the raw result to the variable named by <output result-var="..."/>
             // so that assertions such as <assert>deep-equal($result, ...)</assert> work.
@@ -2679,24 +2630,40 @@ class Program
         return (funcName, args.ToArray());
     }
 
-    /// <summary>
-    /// Resolves the absolute path for an &lt;assert-result-document&gt; @uri.
-    /// When the test supplies a base output URI, the URI is resolved relative to the
-    /// directory containing that output; otherwise it is resolved relative to the test
-    /// set directory.
-    /// </summary>
-    static string ResolveResultDocumentPath(string uri, string testSetDir, string? baseOutputUri)
+    /// <summary>Resolves a secondary assertion's logical identity without reading the corpus as output.</summary>
+    static string ResolveResultDocumentUri(string uri, string testSetDir, string? baseOutputUri)
     {
-        if (!string.IsNullOrEmpty(baseOutputUri))
+        if (Uri.TryCreate(uri, UriKind.Absolute, out var absolute))
+            return absolute.AbsoluteUri;
+        var baseUri = !string.IsNullOrEmpty(baseOutputUri)
+            ? new Uri(baseOutputUri, UriKind.Absolute)
+            : new Uri(Path.GetFullPath(testSetDir).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + "/");
+        return new Uri(baseUri, uri).AbsoluteUri;
+    }
+
+    static bool CompareSecondaryResult(XElement assertion, XNamespace ns, string testSetDir, string catalogDir,
+        List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex,
+        EvaluationContext? assertContext, string? baseOutputUri)
+    {
+        var uri = assertion.Attribute("uri")?.Value;
+        if (string.IsNullOrEmpty(uri)) return false;
+        var identity = ResolveResultDocumentUri(uri, testSetDir, baseOutputUri);
+        if (_capturedSecondaryResults == null || !_capturedSecondaryResults.TryGetValue(identity, out var value)
+            || _serializedSecondaryResults == null || !_serializedSecondaryResults.TryGetValue(identity, out var serialized)
+            || _secondaryOutputProperties == null || !_secondaryOutputProperties.TryGetValue(identity, out var properties))
+            return false;
+        bool serializedAssertion = assertion.Descendants().All(a => a.Name.LocalName is
+            "assert-serialization" or "assert-string-value" or "serialization-matches" or "any-of" or "all-of" or "not");
+        foreach (var child in assertion.Elements())
         {
-            var localPath = new Uri(baseOutputUri).LocalPath;
-            if (Directory.Exists(localPath))
-                return Path.Combine(localPath, uri);
-            var dir = Path.GetDirectoryName(localPath);
-            if (!string.IsNullOrEmpty(dir))
-                return Path.Combine(dir, uri);
+            bool matches = serializedAssertion
+                ? CompareResult(serialized, child, ns, testSetDir, catalogDir, messages, warnings,
+                    ref messageIndex, ref warningIndex, properties, baseOutputUri)
+                : CompareResult(value, child, ns, testSetDir, catalogDir, messages, warnings,
+                    ref messageIndex, ref warningIndex, assertContext, properties, baseOutputUri);
+            if (!matches) return false;
         }
-        return Path.Combine(testSetDir, uri);
+        return true;
     }
 
     static bool CompareResult(string actual, XElement resultElem, XNamespace ns, string testSetDir, string catalogDir, List<string> messages, List<string> warnings, ref int messageIndex, ref int warningIndex, Bosak.Xslt.Stylesheet.OutputProperties? outputProperties = null, string? baseOutputUri = null)
@@ -2921,62 +2888,12 @@ class Program
             return EvaluateAssertDeepEq(actual, assertDeepEq.Value, ExtractNamespaces(assertDeepEq), assertContext);
         }
 
-        // assert-result-document: read the secondary output file and evaluate nested assertions.
+        // Secondary results are current produced outputs, never expected fixture files.
         if (resultElem.Name.LocalName == "assert-result-document" || resultElem.Element(ns + "assert-result-document") != null)
         {
-            var assertDoc = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
-            var uri = assertDoc.Attribute("uri")?.Value;
-            if (!string.IsNullOrEmpty(uri))
-            {
-                // PC-1 W7 (si-result-document-116): when the test ran through the capture
-                // path (typed kind-test assertions), the in-memory secondary document keeps
-                // the constructed tree's PSVI annotations, which file round-tripping would
-                // destroy — evaluate the nested assertions against it.
-                if (_capturedSecondaryResults != null)
-                {
-                    var capturePath = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
-                    var captureUri = new Uri(Path.GetFullPath(capturePath)).AbsoluteUri;
-                    if (_capturedSecondaryResults.TryGetValue(captureUri, out var capturedValue))
-                    {
-                        try
-                        {
-                            foreach (var child in assertDoc.Elements())
-                            {
-                                if (!CompareResult(capturedValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, null, baseOutputUri))
-                                    return false;
-                            }
-                            return true;
-                        }
-                        catch
-                        {
-                            return false;
-                        }
-                    }
-                }
-                var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
-                if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
-                if (File.Exists(path))
-                {
-                    try
-                    {
-                        var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-                        var baseUri = new Uri(Path.GetFullPath(path)).AbsoluteUri;
-                        doc.AddAnnotation(baseUri);
-                        var docValue = XdmValue.FromNode(new XDocumentNode(doc));
-                        foreach (var child in assertDoc.Elements())
-                        {
-                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, assertContext, null, baseOutputUri))
-                                return false;
-                        }
-                        return true;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                }
-            }
-            return false;
+            var assertion = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
+            return CompareSecondaryResult(assertion, ns, testSetDir, catalogDir, messages, warnings,
+                ref messageIndex, ref warningIndex, assertContext, baseOutputUri);
         }
 
         // assert-xml: serialize the value and compare
@@ -3156,78 +3073,12 @@ class Program
             return true;
         }
 
-        // assert-result-document: read the secondary output file and evaluate nested assertions.
+        // Secondary results are current produced outputs, never expected fixture files.
         if (resultElem.Name.LocalName == "assert-result-document" || resultElem.Element(ns + "assert-result-document") != null)
         {
-            var assertDoc = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
-            var uri = assertDoc.Attribute("uri")?.Value;
-            if (!string.IsNullOrEmpty(uri))
-            {
-                var path = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
-                if (!File.Exists(path)) path = Path.Combine(catalogDir, uri);
-                if (File.Exists(path))
-                {
-                    try
-                    {
-                        // Text result documents (method="text") are compared as strings;
-                        // everything else is loaded as XML so that base-uri and node
-                        // assertions work correctly. any-of/all-of/not wrappers around
-                        // serialization assertions still count as text comparisons.
-                        var childNames = assertDoc.Descendants().Select(e => e.Name.LocalName).ToHashSet();
-                        bool isText = childNames.All(n => n is "assert-serialization" or "assert-string-value"
-                            or "serialization-matches" or "any-of" or "all-of" or "not");
-                        // PC-1 W7 (si-result-document-116): typed kind-test assertions need the
-                        // captured in-memory document (PSVI survives); see the XdmValue overload.
-                        if (!isText && _capturedSecondaryResults != null)
-                        {
-                            var capturePath = ResolveResultDocumentPath(uri, testSetDir, baseOutputUri);
-                            var captureUri = new Uri(Path.GetFullPath(capturePath)).AbsoluteUri;
-                            if (_capturedSecondaryResults.TryGetValue(captureUri, out var capturedValue))
-                            {
-                                try
-                                {
-                                    foreach (var child in assertDoc.Elements())
-                                    {
-                                        if (!CompareResult(capturedValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, null, baseOutputUri))
-                                            return false;
-                                    }
-                                    return true;
-                                }
-                                catch
-                                {
-                                    return false;
-                                }
-                            }
-                        }
-                        if (isText)
-                        {
-                            var text = File.ReadAllText(path);
-                            foreach (var child in assertDoc.Elements())
-                            {
-                                if (!CompareResult(text, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, baseOutputUri))
-                                    return false;
-                            }
-                            return true;
-                        }
-
-                        var doc = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-                        var baseUri = new Uri(Path.GetFullPath(path)).AbsoluteUri;
-                        doc.AddAnnotation(baseUri);
-                        var docValue = XdmValue.FromNode(new XDocumentNode(doc));
-                        foreach (var child in assertDoc.Elements())
-                        {
-                            if (!CompareResult(docValue, child, ns, testSetDir, catalogDir, messages, warnings, ref messageIndex, ref warningIndex, null, null, baseOutputUri))
-                                return false;
-                        }
-                        return true;
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                }
-            }
-            return false;
+            var assertion = resultElem.Name.LocalName == "assert-result-document" ? resultElem : resultElem.Element(ns + "assert-result-document")!;
+            return CompareSecondaryResult(assertion, ns, testSetDir, catalogDir, messages, warnings,
+                ref messageIndex, ref warningIndex, null, baseOutputUri);
         }
 
         // When called from all-of/any-of, resultElem itself may be the assertion.

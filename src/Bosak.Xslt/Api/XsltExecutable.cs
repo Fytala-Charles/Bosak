@@ -57,6 +57,7 @@
 //                      | Charles Korthout | 1.20  | 01-11-2026     | Expose effective static values internally for bounded capture. |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.21 | 06-11-2026     | Run explicit source-role capture with local serialization diagnostics (1.76.0). |
+//                      | Charles Korthout | 1.22 | 12-11-2026     | Add internal observed execution for independent conformance output delivery. |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -534,6 +535,71 @@ public sealed class XsltExecutable
         }, DefaultTransformStackSize);
         secondaryResults = capturedResults;
         return principalResult;
+    }
+
+    /// <summary>Runs an observed transformation without delivering secondary outputs to external resources.</summary>
+    /// <param name="source">Initial source node, when supplied.</param>
+    /// <param name="initialMatchSelection">Initial match selection, when supplied.</param>
+    /// <param name="context">Dynamic evaluation context.</param>
+    /// <param name="initialTemplate">Initial named template.</param>
+    /// <param name="initialMode">Initial mode.</param>
+    /// <param name="initialFunction">Initial function, or null for template/mode invocation.</param>
+    /// <param name="functionArguments">Arguments for the initial function.</param>
+    /// <param name="rawResult">Whether the principal result is returned without serialization.</param>
+    /// <param name="baseOutputUri">Logical base output URI; independent of physical delivery.</param>
+    /// <param name="serializationParams">Principal serialization parameters.</param>
+    /// <param name="observeSecondary">Synchronous secondary-output observer, invoked inside result production.</param>
+    /// <returns>The raw principal result, or its serialized string value.</returns>
+    internal XdmValue TransformObserved(
+        IXdmNode? source, XdmValue? initialMatchSelection, EvaluationContext? context,
+        string? initialTemplate, string? initialMode, string? initialFunction, XdmValue[]? functionArguments,
+        bool rawResult, string? baseOutputUri, Stylesheet.OutputProperties? serializationParams,
+        Action<string, XdmValue, Stylesheet.OutputProperties> observeSecondary)
+    {
+        ArgumentNullException.ThrowIfNull(observeSecondary);
+        return RunWithStack(() =>
+        {
+            var engine = new Runtime.TransformEngine(_stylesheet, context, _messageListener, _treatRecoverableAmbiguousMatchAsError);
+            engine.ResultDocumentCaptureObserver = (uri, value, properties) =>
+            {
+                observeSecondary(uri, value, properties);
+                return false;
+            };
+            var result = initialFunction != null
+                ? engine.TransformFunction(initialFunction, functionArguments ?? Array.Empty<XdmValue>(),
+                    captureResultDocuments: true, baseOutputUri: baseOutputUri)
+                : engine.Transform(source, initialTemplate, initialMode, rawResult, baseOutputUri,
+                    initialMatchSelection: initialMatchSelection, captureResultDocuments: true);
+            LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+            if (rawResult)
+                return result;
+
+            var outputProperties = (engine.PrincipalResultDocumentProperties
+                ?? _stylesheet.EffectiveOutputProperties ?? new Stylesheet.OutputProperties()).Clone();
+            bool implicitResultTree = engine.PrincipalResultDocumentProperties == null;
+            if (implicitResultTree && result.IsNode && result.NodeValue is XDocumentNode node)
+            {
+                var annotated = node.UnderlyingObject switch
+                {
+                    XDocument document => document.Annotation<Stylesheet.OutputProperties>(),
+                    XElement element => element.Annotation<Stylesheet.OutputProperties>(),
+                    _ => null
+                };
+                if (annotated != null)
+                {
+                    outputProperties = annotated.Clone();
+                    implicitResultTree = false;
+                }
+            }
+            outputProperties.EffectiveVersion = _stylesheet.Version;
+            outputProperties.ImplicitResultTree = implicitResultTree;
+            if (outputProperties.UseCharacterMaps.Count > 0 && outputProperties.CharacterMap == null)
+                outputProperties.CharacterMap = _stylesheet.ResolveCharacterMap(
+                    outputProperties.UseCharacterMaps.Select(Stylesheet.Stylesheet.ExpandQName));
+            if (serializationParams != null)
+                Stylesheet.OutputProperties.Merge(outputProperties, serializationParams);
+            return XdmValue.FromString(Runtime.ResultTreeSerializer.Serialize(result, outputProperties));
+        }, DefaultTransformStackSize);
     }
 
     /// <summary>

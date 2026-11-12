@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-12",
+  "sourceCommit": "77301df7f36f1fb8674d67ec6c1fba36c726dac0",
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "corpusUpstream": "https://github.com/w3c/xslt30-test",
+  "platform": "Windows x64 10.0.26300",
+  "sdk": "10.0.301",
+  "configuration": "Release",
+  "profile": {
+    "processor": "Legacy",
+    "catalog": "Xslt30",
+    "schemaAware": false,
+    "filters": null,
+    "originalCatalogSets": 234
+  },
+  "counts": {
+    "passed": 10199,
+    "failed": 22,
+    "skipped": 4380,
+    "notRun": 0,
+    "missingTestSets": 0,
+    "total": 14601
+  },
+  "status": "Completed reference measurement; unsuccessful qualification",
+  "acceptedAsRequiredGate": false,
+  "runnerExitCode": 0,
+  "controllerSuccess": false,
+  "elapsedSeconds": 870.282,
+  "wallLimitSeconds": 1200,
+  "memoryLimitBytes": 8589934592,
+  "buildWarnings": 1,
+  "buildErrors": 0,
+  "originalInventoriedFiles": 13229,
+  "originalInventoriedFilesUnchanged": true,
+  "runtimeLayoutFiles": 32,
+  "runtimeLayoutUnchanged": true,
+  "testSetDefinitionHashesUnchanged": 234,
+  "disposableCorpusTrackedFilesChanged": [
+    "tests/misc/xslt-compat/xslt-compat-003-2.out",
+    "tests/strm/si-for-each-group/account01826370.xml",
+    "tests/strm/si-for-each-group/account43861562.xml",
+    "tests/strm/si-for-each-group/account92741838.xml"
+  ],
+  "disposableCorpusFilesAdded": 250,
+  "failureSets": {
+    "output": 1,
+    "result-document": 12,
+    "try": 1,
+    "xml-version": 8
+  },
+  "skipReasonSources": {
+    "DerivedFromPinnedPolicyAndCatalog": 825,
+    "DerivedFromPinnedNamedSkipComment": 37,
+    "RunnerCaseLine": 141,
+    "RunnerSetSkip": 3377
+  },
+  "unresolvedSkipReasons": 0,
+  "limits": [
+    "Basic/non-schema-aware profile with existing exclusions; not full schema-aware/XSD or XSLT4 qualification",
+    "Runtime caps are diagnostic stop conditions, not accepted performance budgets",
+    "Four tracked disposable-corpus resources were changed by runner execution; review write isolation before gate adoption",
+    "Named-skip comments are historical rationales, not newly revalidated capability findings"
+  ],
+  "postMergeCi": {
+    "ci": 43220231030,
+    "schema": 43220230992,
+    "conclusion": "success"
+  }
+}

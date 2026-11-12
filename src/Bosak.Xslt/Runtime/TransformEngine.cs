@@ -578,6 +578,7 @@
 //                      | Charles Korthout | 7.60  | 23-10-2026     | Use the default mode for omitted apply-templates mode in function sequences.              |
 //                      | Charles Korthout | 7.61  | 29-10-2026     | Add bounded native document assessment bridge and original-state copy handling           |
 //                      | Charles Korthout | 7.62  | 01-11-2026     | Add explicit global-context core while preserving legacy source fallback. |
+//                      | Charles Korthout | 7.63  | 12-11-2026     | Return explicit principal raw output before the enclosing template accumulator.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -1570,6 +1571,14 @@ internal sealed class TransformEngine
                 }
             }
 
+        // An explicit principal result document owns the principal output, including
+        // when its enclosing initial template also collected raw top-level items.
+        if (_principalRawResultDocument != null)
+        {
+            FinalizeResultTreeNamespaces(_principalRawResultDocument.Value);
+            return _principalRawResultDocument.Value;
+        }
+
         // If the entry point was an initial named template and the caller asked for
         // the raw XDM result, return that instead of the serialized result tree.
         if (_returnRawInitialTemplateResult && _rawInitialTemplateResult != null)
@@ -1594,11 +1603,6 @@ internal sealed class TransformEngine
             FinalizeResultTreeNamespaces(rawTransformValue);
             return rawTransformValue;
         }
-
-        // A principal xsl:result-document with method="json" or build-tree="no" takes
-        // precedence over the normal principal result tree.
-        if (_principalRawResultDocument != null)
-            return _principalRawResultDocument.Value;
 
         // For JSON or adaptive output, return the collected raw top-level items as a sequence.
         if (_jsonOutputMode || _adaptiveOutputMode)
@@ -19278,8 +19282,9 @@ internal sealed class TransformEngine
             // as the temp container's only child, so validation validates the wrapper and
             // serialization drops the payload (si-result-document family).
             var savedAccumulator = _sequenceAccumulator;
-            if (!collectRaw)
-                _sequenceAccumulator = null;
+            // Both tree and raw result documents own their content. An enclosing
+            // typed/raw-template accumulator must not intercept their items.
+            _sequenceAccumulator = null;
 
             try
             {

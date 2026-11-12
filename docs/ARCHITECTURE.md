@@ -6,7 +6,9 @@
 
 ## Release artifact boundary
 
-The tracked candidate is Core/server1.81.2 and extension0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. This changes release automation, not the execution layers or public engine semantics. [Release guide](RELEASING.md).
+Core/server development metadata is now **1.81.3**, an unpublished patch for the [standalone XSLT output-isolation candidate](xslt30-isolation-candidate/README.md). Published Core remains1.81.2; the extension manifest remains0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
+
+The conformance runner uses an internal observed-execution helper to capture secondary outputs with logical URI, raw XDM and per-output serialization properties. It serializes at production time and compares only current captured outputs; golden fixture files remain independent inputs. The engine isolates explicit principal result-document content from enclosing sequence accumulators and gives that principal raw output precedence over the enclosing template result. Ordinary raw-template results and public API signatures retain their routes. [Immutable specification adoption](xslt30-isolation-candidate/ADOPTION.json).
 
 
 # Current checkpoint — 7 November 2026

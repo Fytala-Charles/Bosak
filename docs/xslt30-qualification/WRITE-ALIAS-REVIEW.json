@@ -1,0 +1,21 @@
+{
+  "sourceCommit": "77301df7f36f1fb8674d67ec6c1fba36c726dac0",
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "case": "xslt-compat-003",
+  "observedStatus": "Passed",
+  "stdoutLine": "15283",
+  "catalogFile": "tests/misc/xslt-compat/_xslt-compat-test-set.xml",
+  "secondaryUri": "xslt-compat-003-2.out",
+  "fileAssertion": "xslt-compat-003-2.out",
+  "testOutputElementAbsent": true,
+  "basicProfileUsesCapturedTypedSecondaryResult": false,
+  "actualAndExpectedResolveToSameTrackedRelativePath": "tests/misc/xslt-compat/xslt-compat-003-2.out",
+  "beforeSha256": "1dce4ea82b606abe632d41d64a1549345c180169ede95261f143eeff7da58c62",
+  "afterSha256": "f5d75de3c60f6f6cc1b5d9d53540eccfaebd42f4fbee646a7c3652917b34dca0",
+  "parsedXmlTreesEqualInThisObservation": true,
+  "sourcePathRules": {
+    "actual": "ResolveResultDocumentPath: absent baseOutputUri resolves under testSetDir",
+    "expected": "assert-xml/@file resolves under the same testSetDir"
+  },
+  "scope": "Read-only catalog, source-path and retained-byte review. No mutated-output/false-pass execution probe; this run does not prove an incorrect result was accepted."
+}

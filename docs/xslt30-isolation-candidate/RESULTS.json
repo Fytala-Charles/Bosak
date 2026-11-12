@@ -1,0 +1,89 @@
+{
+  "sourceCommit": null,
+  "sourceBaseCommit": "77301df7f36f1fb8674d67ec6c1fba36c726dac0",
+  "sourceHashes": {
+    "src/Bosak.Xslt/Api/XsltExecutable.cs": "0376ae0f2d48b170189561a1fb14a45cbe5a5d753adb6f9b240f576a6f116a32",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "dfadb64e36afb0e4a7d589eea52378ad81e307fb3d51fefe5dff082e53bdeb44",
+    "src/Directory.Build.props": "414ff737aad9579b8d5d71f62884bda9cc39aab9d469b138c8b1de5f35addaf9",
+    "tests/Bosak.Xslt.Conformance/Program.cs": "98dc3e3dc2a130655852d7b442d96f87cec6b822911fa0b030969f0e0bd1b124",
+    "tests/Bosak.Xslt.Tests/ObservedOutputTests.cs": "df0e54e7fee0dc89d3282896c7b63743ed789a5491d0a3456454df007b958578"
+  },
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "totalCases": 14601,
+  "counts": {
+    "Passed": 10211,
+    "Skipped": 4380,
+    "Failed": 10
+  },
+  "exactTestSetHashes": true,
+  "unchangedSkipNamesAndReasons": true,
+  "failureSets": {
+    "output": 1,
+    "try": 1,
+    "xml-version": 8
+  },
+  "qualificationSuccessful": false,
+  "run": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-isolation-retry-20261112\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-isolation-retry-20261112\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": null,
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": false,
+    "processId": 27608,
+    "startedUtc": "2026-11-12T15:31:47Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 678.915,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10211,
+      "Failed": 10,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "4036478d6010ad4b64131ac608bc2d8b0107dc2bd61c5e8cf9b3279ade1e6f66",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "integrity": {
+    "originalCorpusUnchanged": true,
+    "originalCorpusFiles": 13229,
+    "originalCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "cleanAtStartCorpusFiles": 12886,
+    "runtimeLayoutUnchanged": true,
+    "disposableCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "generatedOutputsSha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+    "testSetDefinitions": "Separately checked against every pre-run SHA-256 by report.py",
+    "policy": "All generated/changed bytes retained; neither original nor disposable corpus restored or cleaned"
+  },
+  "version": "1.81.3",
+  "published": false,
+  "originalReferenceCounts": {
+    "Passed": 10199,
+    "Failed": 22,
+    "Skipped": 4380
+  },
+  "acceptance": "Local regression candidate only; no frozen-gate adoption or full-conformance claim"
+}

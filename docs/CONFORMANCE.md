@@ -4,11 +4,11 @@
   <p>Recorded results, tested profiles, and reasons for excluded tests</p>
 </div>
 
-Last updated: 12 November 2026. Results below were recorded on **8 November 2026**, not rerun for this document.
+Last updated: 12 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
 ## Results and scope
 
-This summary uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate.
+The following release table uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate. The later standalone reference measurement is reported separately.
 
 | Gate / test scope | Passed | Failed | Skipped | What the result establishes |
 |---|---:|---:|---:|---|
@@ -18,9 +18,26 @@ This summary uses the successful hosted preparation of the **published Bosak 1.8
 | Solution implementation tests: ten projects | 26,345 | 0 | 0 | Regression and implementation coverage, including the XSLT and XQuery subsets below. [Original TRX archive](release-linux-collection-hosted/nuget-42479094503.zip), [project totals](conformance/summary.json). |
 | XSLT implementation tests, included in solution total | 8,320 | 0 | 0 | `Bosak.Xslt.Tests`; not a standalone W3C XSLT corpus result. |
 | XQuery implementation tests, included in solution total | 841 | 0 | 0 | `Bosak.XQuery.Tests`; not a separate full XQuery conformance claim. |
-| Standalone W3C XSLT 3.0 / 4.0 corpus | — | — | — | No aggregate result is supplied by these selected release receipts. The [dedicated adapter](../tests/Bosak.Xslt.Conformance/Program.cs) exists; implementation-test counts must not be substituted for corpus results. |
+| Standalone W3C XSLT 3.0 / 4.0 corpus | — | — | — | No aggregate result is supplied by these selected release receipts. See the separate [12 November XSLT 3.0 reference qualification](xslt30-qualification/README.md). A standalone XSLT 4.0 aggregate remains unreported. |
 
 Totals from different rows must not be added: the solution subsets overlap their parent total, and the QT3 and qt4 corpora contain overlapping tests. An em dash means no result is asserted here, not zero failures or zero exclusions.
+
+## Standalone XSLT 3.0 reference qualification
+
+**12 November 2026 — completed, with qualification unsuccessful.** This is a reference measurement under existing exclusions, not an adopted required gate.
+
+| Scope | Passed | Failed | Skipped | Not run |
+|---|---:|---:|---:|---:|
+| Entire 234-set / 14,601-case W3C catalog; basic/non-schema-aware, Legacy processor, Xslt30 catalog profile | 10,199 | 22 | 4,380 | 0 |
+| Subsequent unpublished1.81.3 output-isolation candidate; same pinned catalog and retained profile/exclusions | 10,211 | 10 | 4,380 | 0 |
+
+Source is `77301df7f36f1fb8674d67ec6c1fba36c726dac0`; corpus is `w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56`. Execution used Windows x64 and SDK10.0.301/Release, a 1,200-second watchdog and 8 GiB job-memory limit; the run completed in 870.282 seconds. These diagnostic limits are not performance acceptance. No test-set file was missing and no filter, resume or retry was used.
+
+The legacy runner returned zero despite the failures; the qualification controller independently rejected success. All [22 failures](xslt30-qualification/failures.csv) and [4,380 skip explanations](xslt30-qualification/skips.csv) are retained. Printed reasons, silent-skip policy explanations and historical named-skip notes are distinguished.
+
+**Write-audit caveat:** the runner changed four tracked resources in the disposable corpus, including an expected-output file, and created 250 files. Those bytes are retained. A [source-path review](xslt30-qualification/WRITE-ALIAS-REVIEW.json) identifies a produced/expected-file collision for `xslt-compat-003`; that case's observed XML trees agree, so no incorrect-result acceptance is claimed from this observation. Test-set definitions, the sealed runtime layout, and the original edited checkout's 13,229 inventoried files are unchanged. Fixture-write isolation and assertion independence need review before gate adoption or stronger reliance on passing-case counts. The [qualification dossier](xslt30-qualification/README.md) records the exact inputs, complete case ledger, integrity checks, failures and remaining work. No frozen gate, skip policy or engine behavior changed.
+
+**Subsequent local candidate:** the [unpublished1.81.3 correction](xslt30-isolation-candidate/README.md) captures secondary output independently of golden files and fixes principal raw result-document delivery. Its complete678.915-second rerun has10,211 passes,10 failures and4,380 unchanged skips, with zero missing/unselected cases and zero corpus writes. All12 original result-document failures now pass. Synthetic controls prove that the original runner accepted deliberately wrong/missing outputs after a golden-file overwrite; the candidate refuses wrong/missing/stale outputs and preserves fixture bytes. This proof is separate from the original `xslt-compat-003` observation. Eight XML-version cases, `output-0707` and `try-022` remain failures; qualification is unsuccessful and no standalone gate is adopted. Exact uncommitted source hashes and all original/interrupted receipts are retained separately from the reference77301df7 measurement.
 
 ## Why tests were skipped
 

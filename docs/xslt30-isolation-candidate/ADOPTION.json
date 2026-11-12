@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-12",
+  "beforeImplementation": true,
+  "sourceBase": "77301df7f36f1fb8674d67ec6c1fba36c726dac0",
+  "specification": {
+    "revision": "W3C Recommendation 8 June 2017",
+    "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+    "sections": [
+      "2.3.6 Post-processing the Raw Result: base output URI",
+      "25.1 xsl:result-document: result identity and implementation-defined delivery",
+      "25.3.1 fn:current-output-uri",
+      "26 Serialization"
+    ]
+  },
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "decision": "Capture produced secondary outputs through the existing runtime observer, preserve logical URIs and per-output serialization, and make harness assertions consume only current produced outputs. Expected-result files remain independent read-only inputs.",
+  "scope": [
+    "Internal observed execution helper and conformance harness delivery isolation",
+    "Principal raw xsl:result-document takes precedence over the enclosing raw initial-template accumulator (sections 2.3.6 and 25.1); preserve ordinary raw template results when no principal result-document exists",
+    "No new skip admission, expected-result edit, baseline promotion or schema-coverage claim",
+    "Retain raw and serialized secondary representations so typed assertions and text/serialization assertions remain distinct",
+    "Evaluate serialization at secondary production time so xsl:try timing remains observable"
+  ],
+  "intentionalDeviations": [
+    "Existing harness profile/exclusions remain as documented in the original reference qualification; this does not adopt new language semantics beyond the bounded host-delivery correction."
+  ],
+  "historicalEvidence": "docs/xslt30-qualification remains the original unsuccessful reference cohort; all candidate evidence is separate"
+}
