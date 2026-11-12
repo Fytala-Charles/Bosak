@@ -8,9 +8,13 @@
 
 See [conformance results and exclusions](CONFORMANCE.md) for the published 1.81.2 release's recorded gate counts, exact source and corpus revisions, platform, and complete per-case skip explanations. Selected XPath 4.0 gates and implementation tests have distinct scopes; neither implies complete language or schema conformance. The summary links the original receipts and separates later documentation updates from new test executions.
 
+The separate [pinned standalone XSLT 3.0 reference qualification](xslt30-qualification/README.md) records 10,199 passed, 22 failed and 4,380 skipped cases in its basic/non-schema-aware profile. It also retains a corpus-write audit caveat requiring review before gate adoption. The complete catalog result does not establish full schema-aware or XSLT 4.0 coverage.
+
+The subsequent [local 1.81.3 candidate](xslt30-isolation-candidate/README.md) isolates runner output from golden files and corrects principal raw result-document delivery. The observed-execution helper is internal; consumers keep the existing public transformation APIs. Normal secondary file delivery remains available outside the runner. The targeted result-document selection passes 161 cases with 36 existing skips and no failures. Its full pinned rerun records **10,211 passed / 10 failed / 4,380 skipped**, all original cases accounted for and no corpus writes. All skip identities and explanations are unchanged. Standalone qualification remains unsuccessful; its evidence is separate from the original reference cohort and frozen release gates.
+
 ## Tracked release candidate and packaging
 
-Core/server metadata is1.81.2 and the extension manifest/lock are0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. These source pins are unpublished. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
+Core/server development metadata is1.81.3 for the unpublished XSLT correction; published Core remains1.81.2. The extension manifest/lock remains0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
 
 
 ## Prepared editor command URI correction

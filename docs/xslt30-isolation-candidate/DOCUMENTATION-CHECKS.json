@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "docs/xslt30-isolation-candidate/README.md",
+      "sha256": "9b1f33e8b18ae76a09f94bbc8c4d08df52fc1dae3dcd5cb7f2fa10336674643a",
+      "tables": 1
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "71e59b3c4aacda1548198096e264893c46f166cfb6454e7e785ef6741de4b68f",
+      "tables": 8
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "aca230a88c1394b351667cf7416dc40140e415fb417fb20ea102858168b44559",
+      "tables": 194
+    },
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "c10326558a38edf08e49581eecb94ece52e3fdf3519b9a0e27f93d6d0d67052e",
+      "tables": 4
+    },
+    {
+      "source": "docs/xslt30-qualification/README.md",
+      "sha256": "48d99bcc9ba992d6de7542b0da98f9e037949d15c244217126e3cd11e00bbb1c",
+      "tables": 4
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "3a5dc00cf64a1561705dc4e91316045c4223e9bbfdb3dc966795a1424ae6de62",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "642c2a7dae5fae285cb7fd1591a4eb860bbbbc5b984b7499bff01ef26d7fd3d4",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "179cd4a11c04d95193eef4571199615e28d8f41383c92668a1eb29f6590cfa08",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "64c45f6951ae9c691911b50163c6a90d4023772fc399aa04a1e5971f14ff6b34",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 3370,
+  "inheritedDestinationsResolvedInOriginalLayout": 1,
+  "renderedDirectory": ".guard-tmp/xslt30-isolation-retry-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, original/candidate result tables, fixture independence, branding and link destinations; no screenshot/PDF acceptance or new baseline adoption"
+}

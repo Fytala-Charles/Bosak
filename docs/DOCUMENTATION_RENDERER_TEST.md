@@ -1,3 +1,11 @@
+# Standalone XSLT output-isolation documentation check - 12 November 2026
+
+The candidate dossier, original reference dossier, conformance table, architecture, feature registry, integration/status/handover and this note render to nine local HTML pages using unchanged Fytala CSS. The [candidate receipt](xslt30-isolation-candidate/DOCUMENTATION-CHECKS.json) checks table counts, local destinations, measured results and explicit unsuccessful-qualification scope. Candidate and original evidence verifiers retain separate source/runtime/corpus identities and all preliminary attempts. The README's FYTALA statement remains unchanged. No screenshot/PDF acceptance, full-conformance claim or gate promotion is asserted.
+
+# Standalone XSLT 3.0 qualification documentation check - 12 November 2026
+
+The updated [conformance summary](CONFORMANCE.md), [standalone reference dossier](xslt30-qualification/README.md), integration/status/handover and this renderer note are checked with the unchanged Fytala stylesheet. [Receipt](xslt30-qualification/DOCUMENTATION-CHECKS.json) records HTML structure, local destinations, table counts, failure totals and write-audit caveats. The retained-data verifier and ten controller/parser checks pass. This documents the completed reference execution separately from historical release-gate evidence; no screenshot/PDF acceptance or baseline promotion is claimed.
+
 # Conformance summary documentation check - 12 November 2026
 
 The new branded [conformance summary](CONFORMANCE.md), README navigation, integration link and synchronized status/handover pages render to local HTML using the unchanged Fytala stylesheet. [Receipt](conformance/DOCUMENTATION-CHECKS.json) records source hashes, table/local-link checks and the renderer's scope. Exact original gate logs and complete skip inventories are verified against the sealed hosted archive by `python docs/conformance/generate-summary.py --check`. No screenshot/PDF acceptance or fresh engine/conformance execution is claimed.

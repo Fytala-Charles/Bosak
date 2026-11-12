@@ -685,3 +685,7 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 # Keep derived conformance inventories and original hosted logs stable across checkouts.
 /docs/conformance/** -text whitespace=cr-at-eol
 /docs/conformance/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+# Preserve the pinned standalone XSLT reference receipts and inventory bytes.
+/docs/xslt30-qualification/** -text whitespace=cr-at-eol
+/docs/xslt30-isolation-candidate/** -text whitespace=cr-at-eol
