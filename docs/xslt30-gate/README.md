@@ -22,6 +22,6 @@ python -m unittest discover -s tools -p test_xslt30_gate.py
 python tools/xslt30_gate.py --corpus <clean-pinned-LF-checkout> --output <fresh-packet-path-outside-checkout>
 ```
 
-Twelve Python controls cover accepted case-ledger replay, legacy false success, timeout, missing/duplicate outcomes, changed exclusion identity/reason, ignored output inventory, retained fixture overwrites and refusal to overwrite earlier receipts. One control replays every case from the sealed successful qualification. Negative controls are caught Python failures; they do not launch unhandled .NET negative cases.
+Fourteen Python controls cover accepted case-ledger replay, legacy false success, timeout, missing/duplicate outcomes, changed exclusion identity/reason, ignored output inventory, retained fixture overwrites and refusal to overwrite earlier receipts and refusal of recursively nested packet paths. One control replays every case from the sealed successful qualification. Negative controls are caught Python failures; they do not launch unhandled .NET negative cases.
 
 Fresh end-to-end execution and hosted workflow results will be recorded before delivery. Core/server metadata stays 1.81.5, unpublished; public APIs, packages, frozen QT3/qt4 routing, engine code and all historical dossiers remain unchanged.

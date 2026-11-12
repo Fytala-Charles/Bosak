@@ -95,6 +95,22 @@ class GateTests(unittest.TestCase):
         self.assertEqual(len(rows),14601)
         self.assertEqual(len(inputs),12886)
 
+    def test_packet_inside_corpus_is_refused_before_copying(self):
+        with tempfile.TemporaryDirectory() as name:
+            corpus=Path(name)/'corpus'; corpus.mkdir()
+            packet=corpus/'packet'
+            with self.assertRaisesRegex(ValueError,'recursive copying'):
+                gate.prepare(packet,corpus,Path(name)/'runtime/Bosak.Xslt.Conformance.dll')
+            self.assertFalse(packet.exists())
+
+    def test_packet_inside_runtime_is_refused_before_copying(self):
+        with tempfile.TemporaryDirectory() as name:
+            runtime=Path(name)/'runtime'; runtime.mkdir()
+            packet=runtime/'packet'
+            with self.assertRaisesRegex(ValueError,'recursive copying'):
+                gate.prepare(packet,Path(name)/'corpus',runtime/'Bosak.Xslt.Conformance.dll')
+            self.assertFalse(packet.exists())
+
 
 if __name__=='__main__':
     unittest.main()

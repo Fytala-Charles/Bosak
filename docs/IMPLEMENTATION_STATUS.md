@@ -2,7 +2,7 @@
 
 The [pinned standalone XSLT gate proposal](xslt30-gate/README.md) adds a separate Windows CI check for the previously qualified basic/non-schema-aware Legacy/Xslt30 profile: 10,221 passed / 0 failed / 4,380 excluded, with exact case coverage, unchanged exclusion identities/reasons and fixture/runtime integrity. The immutable corpus and sealed baseline are hash-bound; complete outcomes override legacy exit zero. Existing engine/API semantics, version1.81.5 and frozen QT3/qt4 gates are unchanged. No publication or branch-protection setting change. Adoption is proposed in this review branch; previous qualification dossiers remain historical.
 
-Worktree `.worktrees/Bosak.XsltGate`, branch `ci/xslt30-pinned-gate`, base a743a1f159fbe06ea5500c7a90f0e465c6d5b7f6. PR476 post-merge CI43285185767 and Schema43285185880 pass. Gate controls pass12/12; fresh complete execution and hosted checks remain pending. Preserve the dirty root owner checkout and all earlier sealed receipts.
+Worktree `.worktrees/Bosak.XsltGate`, branch `ci/xslt30-pinned-gate`, base a743a1f159fbe06ea5500c7a90f0e465c6d5b7f6. PR476 post-merge CI43285185767 and Schema43285185880 pass. Gate controls pass14/14; fresh complete execution and hosted checks remain pending. Preserve the dirty root owner checkout and all earlier sealed receipts.
 
 ---
 

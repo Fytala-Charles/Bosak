@@ -92,6 +92,8 @@ def prepare(packet, corpus, assembly):
     policy, plan, inputs, skips = baseline()
     if packet.exists():
         raise ValueError('Existing packet: use a fresh path, never overwrite receipts')
+    if packet.is_relative_to(corpus) or packet.is_relative_to(assembly.parent):
+        raise ValueError('Packet must be outside the source corpus and runtime; recursive copying is refused')
     if not assembly.is_file() or assembly.name != 'Bosak.Xslt.Conformance.dll':
         raise ValueError('Build the conformance runner first')
     revision = subprocess.check_output(['git', '-C', str(corpus), 'rev-parse', 'HEAD'], text=True).strip()
