@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-12",
+  "file": "docs/xslt30-gate/BASELINE.json",
+  "before": {
+    "bytes": 787,
+    "sha256": "7b29059fd3ff4474025ac0036c7c3b72ff01fe23d412700576a6b6cef1962456"
+  },
+  "restored": {
+    "bytes": 808,
+    "sha256": "7169f840157b4ac3a24373c97a25136a9015ff5e4473c7b7d55db934a723fd11"
+  },
+  "policyValuesUnchanged": true,
+  "originalManifestAndArchiveUnchanged": true,
+  "cause": "The existing Git blob retained normalized LF before the dossier -text rule was added; its local seal recorded CRLF. Restore the exact originally sealed CRLF metadata, without resealing historical evidence."
+}

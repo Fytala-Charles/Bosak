@@ -4,6 +4,8 @@ The [standalone XSLT gate is adopted](xslt30-gate-adoption/README.md): [PR #477]
 
 Documentation delivery worktree `.worktrees/Bosak.XsltGateAdoption`, branch `docs/xslt30-gate-adoption`, base b3e2839c. The delivery checkpoint is the commit containing this entry. Original proposal and correction dossiers remain sealed historical evidence. Ruleset22255065 readback confirms the new check on main, source integration15368, with no additional bypass or up-to-date policy. Core/server1.81.5 remains unpublished; published Core1.81.2 and extension0.2.6 are unchanged. Preserve the dirty owner checkout at18946b31.
 
+Fresh-checkout verification also restores the exact originally sealed CRLF bytes of gate BASELINE.json (808 bytes; the transported LF blob had787). Policy values, original manifest and evidence archive are unchanged. See [transport correction](xslt30-gate-adoption/TRANSPORT-CORRECTION.json).
+
 ---
 
 # Pinned standalone gate proposal — 12 November 2026

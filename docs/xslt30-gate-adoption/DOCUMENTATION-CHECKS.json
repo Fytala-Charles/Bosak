@@ -28,7 +28,7 @@
     },
     {
       "source": "docs/DEVELOPMENT_HISTORY.md",
-      "sha256": "b816da6696a479ec74468f3dbc98004a580d9a4c34d08e62f3f778fd1efed0a1",
+      "sha256": "efc6ae1b746b68a070215dd321983791fc1ff006fef5baa66c31cd8e8dd0d952",
       "tables": 12
     },
     {
@@ -63,12 +63,12 @@
     },
     {
       "source": "docs/IMPLEMENTATION_STATUS.md",
-      "sha256": "77496a38e961670214b152710efdafcefb5afefdce724ab8dc88bcb97df6c9d2",
+      "sha256": "a6781441159e536698c27df768583259efa22297df15252c162a0043cc480806",
       "tables": 2
     },
     {
       "source": "docs/AGENT_HANDOVER.md",
-      "sha256": "a25bcf7dea883d80780b2d7b4dcc3c1605aa4688a24df0689aef1d45baea3479",
+      "sha256": "43dcc1f315078e0aa708183924faa39fb0f1d9547a4bedcc115b6d36c9913b6b",
       "tables": 63
     },
     {
@@ -77,7 +77,7 @@
       "tables": 1
     }
   ],
-  "localDestinationsChecked": 4114,
+  "localDestinationsChecked": 4117,
   "inheritedDestinationsResolvedInOriginalLayout": 2,
   "renderedDirectory": "D:/Development/Bosak/.guard-tmp/xslt30-gate-adoption-20261112/render",
   "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
