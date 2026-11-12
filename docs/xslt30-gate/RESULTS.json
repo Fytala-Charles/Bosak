@@ -1,0 +1,57 @@
+{
+  "gate": {
+    "success": true,
+    "scope": "Pinned basic/non-schema-aware Legacy/Xslt30; exclusions are not passes",
+    "corpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "sourceCorpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "d30087402ca49586b67bab5fc744b2bb18946ae6"
+  },
+  "run": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-gate-guarded-20261112\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-gate-guarded-20261112\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": "d30087402ca49586b67bab5fc744b2bb18946ae6",
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": true,
+    "processId": 13364,
+    "startedUtc": "2026-11-12T19:21:26Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 761.06,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "8a35e1948c32ca7d78f1653e446529ec073f8a3423362be4a9418824b2d71355",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Operational gate proposal; clean tested source recorded, no engine semantics or branch-protection change"
+}

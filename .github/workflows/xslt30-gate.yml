@@ -1,0 +1,56 @@
+name: Pinned standalone XSLT 3.0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  xslt30-pinned:
+    name: Standalone XSLT 3.0 (pinned basic profile)
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.301'
+      - name: Verify gate refusal and integrity controls
+        run: python -m unittest discover -s tools -p test_xslt30_gate.py
+      - name: Fetch exact corpus with LF bytes
+        shell: pwsh
+        run: |
+          $policy = Get-Content docs/xslt30-gate/BASELINE.json -Raw | ConvertFrom-Json
+          $fixture = Join-Path $env:RUNNER_TEMP 'xslt30-pinned-input'
+          git -c core.autocrlf=false clone --no-checkout $policy.corpusUrl $fixture
+          if ($LASTEXITCODE -ne 0) { throw 'Corpus clone failed' }
+          git -C $fixture -c core.autocrlf=false checkout --detach $policy.corpusCommit
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned corpus checkout failed' }
+      - name: Build conformance runner
+        run: dotnet build tests/Bosak.Xslt.Conformance -c Release
+      - name: Qualify complete pinned catalog and audit fixtures
+        shell: pwsh
+        run: |
+          python tools/xslt30_gate.py --corpus "$env:RUNNER_TEMP/xslt30-pinned-input" --output "$env:RUNNER_TEMP/xslt30-gate-packet"
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned standalone qualification refused' }
+      - name: Retain complete gate receipts on success or failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xslt30-pinned-gate
+          include-hidden-files: true
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/xslt30-gate-packet/*.json
+            ${{ runner.temp }}/xslt30-gate-packet/*.log
+            ${{ runner.temp }}/xslt30-gate-packet/*.csv
+            ${{ runner.temp }}/xslt30-gate-packet/*.zip
+            ${{ runner.temp }}/xslt30-gate-packet/work/

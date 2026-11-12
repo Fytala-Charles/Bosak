@@ -1,3 +1,7 @@
+# Pinned gate renderer check — 12 November 2026
+
+The [gate proposal receipt](xslt30-gate/DOCUMENTATION-CHECKS.json) records fourteen rendered pages, local link checks, retained profile limits and unchanged Fytala CSS/README statement. Earlier dossiers and their original receipts are unchanged. No screenshot/PDF acceptance is asserted.
+
 # Latest renderer check — 12 November 2026
 
 The [final correction receipt](xslt30-final-cases/DOCUMENTATION-CHECKS.json) checks rendered dossier, canonical pages, local links and unchanged Fytala CSS. Historical dossiers retain their sealed bytes. The README CLI summary sentence changes; its FYTALA statement remains unchanged. No screenshot or PDF acceptance is asserted.

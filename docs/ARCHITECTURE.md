@@ -4,6 +4,11 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Pinned standalone gate proposal — 12 November 2026
+
+The [pinned standalone XSLT gate proposal](xslt30-gate/README.md) adds a separate Windows CI check for the previously qualified basic/non-schema-aware Legacy/Xslt30 profile: 10,221 passed / 0 failed / 4,380 excluded, with exact case coverage, unchanged exclusion identities/reasons and fixture/runtime integrity. The immutable corpus and sealed baseline are hash-bound; complete outcomes override legacy exit zero. Existing engine/API semantics, version1.81.5 and frozen QT3/qt4 gates are unchanged. No publication or branch-protection setting change. Adoption is proposed in this review branch; previous qualification dossiers remain historical. Fresh end-to-end gate execution passes: **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 761.060 seconds, with unchanged corpus/runtime bytes and exact exclusion identities/reasons. The tested clean source is `d30087402ca49586b67bab5fc744b2bb18946ae6`. All fourteen gate controls pass; unchanged-engine solution coverage is supplied by successful merged-main CI43285185767 and Schema43285185880. No engine, fixture or public API change is included. Hosted checks for this proposal remain pending.
+
+
 ## Final standalone execution boundary — 12 November 2026
 
 Typed/raw template results retain top-level attribute order, duplicate names and parentlessness. The route is bound to the exact template result container so nested simple-content collectors retain their behavior; ordinary element content still rejects late attributes. Secondary-result assertion maps canonicalize lookup keys without changing processor dynamic output URIs or node annotations. The console reports selected-case results and counts instead of rounded percentages. Public API signatures are unchanged. Immutable specification adoption and the rejected first cohort are retained in the dossier.

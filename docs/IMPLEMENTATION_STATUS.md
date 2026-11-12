@@ -1,3 +1,11 @@
+# Pinned standalone gate proposal — 12 November 2026
+
+The [pinned standalone XSLT gate proposal](xslt30-gate/README.md) adds a separate Windows CI check for the previously qualified basic/non-schema-aware Legacy/Xslt30 profile: 10,221 passed / 0 failed / 4,380 excluded, with exact case coverage, unchanged exclusion identities/reasons and fixture/runtime integrity. The immutable corpus and sealed baseline are hash-bound; complete outcomes override legacy exit zero. Existing engine/API semantics, version1.81.5 and frozen QT3/qt4 gates are unchanged. No publication or branch-protection setting change. Adoption is proposed in this review branch; previous qualification dossiers remain historical.
+
+Worktree `.worktrees/Bosak.XsltGate`, branch `ci/xslt30-pinned-gate`, base a743a1f159fbe06ea5500c7a90f0e465c6d5b7f6. PR476 post-merge CI43285185767 and Schema43285185880 pass. Fresh end-to-end gate execution passes: **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 761.060 seconds, with unchanged corpus/runtime bytes and exact exclusion identities/reasons. The tested clean source is `d30087402ca49586b67bab5fc744b2bb18946ae6`. All fourteen gate controls pass; unchanged-engine solution coverage is supplied by successful merged-main CI43285185767 and Schema43285185880. No engine, fixture or public API change is included. Hosted checks for this proposal remain pending. Preserve the dirty root owner checkout and all earlier sealed receipts.
+
+---
+
 # Current checkpoint — 12 November 2026: final standalone qualification
 
 The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate.

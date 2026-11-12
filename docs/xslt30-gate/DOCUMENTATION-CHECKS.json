@@ -1,0 +1,81 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "docs/xslt30-gate/README.md",
+      "sha256": "6bb24aa2b2ebb560c225c081b9ccadabcb70bfcde585b56b00858905061c136a",
+      "tables": 0
+    },
+    {
+      "source": "README.md",
+      "sha256": "215d40fdce3ece44543b20947dd25f01d3ca4cdfe43d8d3a295952bed0659d63",
+      "tables": 3
+    },
+    {
+      "source": "docs/xslt30-final-cases/README.md",
+      "sha256": "1badd758388700553b3f8b9c366b98a9c829fa3ead9bc9f1d15e00dec8c1f11a",
+      "tables": 0
+    },
+    {
+      "source": "docs/xslt30-xml-version/README.md",
+      "sha256": "c8637b8ac20fdb8d8fb318e88de1efd001aa35bd524cae6c1ea2cced94c65d9c",
+      "tables": 1
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "6a4752447fb58f4a61faac45a665a5c8360a1502059e34f99f9de6b094c260fb",
+      "tables": 12
+    },
+    {
+      "source": "docs/xslt30-isolation-candidate/README.md",
+      "sha256": "9b1f33e8b18ae76a09f94bbc8c4d08df52fc1dae3dcd5cb7f2fa10336674643a",
+      "tables": 1
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "479e46dad384dabef2893241ae5875b49df97a62294b71ca69290313d49f33fe",
+      "tables": 8
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "41dadfbad11590df758f5be5e0bd60a983482ce060e301b89ed2e9b62e8f8077",
+      "tables": 194
+    },
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "02f899ee930112ae89dfe2ebc3b4454f70cf7e68434c35abc841708472c44e1d",
+      "tables": 4
+    },
+    {
+      "source": "docs/xslt30-qualification/README.md",
+      "sha256": "48d99bcc9ba992d6de7542b0da98f9e037949d15c244217126e3cd11e00bbb1c",
+      "tables": 4
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "6ca21d9c0418bebfbe7a4e7562dee27ece8749cb0da4324727b5e89e71f1231f",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "66bc6226fb6fe9913187bd89c0f1c826f5e7f48a7098b8ffd9db49f9346c6aca",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "4ddee5237a1ee5ea93efe3494b7ae08b6803e53cd1a78ae2b4a866c497b4422c",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "29df7d7b1f65c317d11eb050dc008daaa06bb1524cf20e1cb36b5af5886c274d",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 4101,
+  "inheritedDestinationsResolvedInOriginalLayout": 2,
+  "renderedDirectory": "D:/Development/Bosak/.guard-tmp/xslt30-gate-guarded-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, historical result tables, pinned operational gate limits, fixture independence, branding and link destinations; no screenshot/PDF acceptance or branch-protection change"
+}
