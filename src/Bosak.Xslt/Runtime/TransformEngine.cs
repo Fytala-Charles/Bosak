@@ -581,6 +581,9 @@
 //                      | Charles Korthout | 7.63  | 12-11-2026     | Return explicit principal raw output before the enclosing template accumulator.           |
 //                      | Charles Korthout | 7.64  | 12-11-2026     | Honor prefix undeclarations when collecting literal-result namespace bindings.              |
 //                      | Charles Korthout | 7.65  | 12-11-2026     | Reconcile provisional undeclaration markers with the final raw XDM bindings.                 |
+//                      | Charles Korthout | 7.66  | 12-11-2026     | Preserve standalone attributes in typed/raw template sequences at their source positions.  |
+//                      | Charles Korthout | 7.67  | 12-11-2026     | Keep nested standalone attribute materialization on its existing evaluator route.           |
+//                      | Charles Korthout | 7.68  | 12-11-2026     | Bind raw attribute collection to the actual typed-template root container.                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -772,6 +775,7 @@ internal sealed class TransformEngine
     // container, so CopyToResult stores them here and ExecuteTemplate merges them into
     // the collected result items. Null outside typed-template result construction.
     private List<XdmValue>? _typedResultRawItems;
+    private XElement? _typedResultContainer;
     private bool _preserveDocumentNodes;
 
     // Tracks nesting depth of literal result elements inside a sequence constructor.
@@ -7222,6 +7226,7 @@ internal sealed class TransformEngine
         var savedLiteralDepth = _literalElementDepth;
         var savedLastAtomic = _lastAddedWasAtomic;
         var savedTypedRawItems = _typedResultRawItems;
+        var savedTypedResultContainer = _typedResultContainer;
         XElement? tempContainer = null;
         // Tracks normal completion of the template body. The as-conversion and result
         // delivery in the finally must not run while an exception from the body is in
@@ -7243,6 +7248,7 @@ internal sealed class TransformEngine
             _preserveDocumentNodes = true;
             _literalElementDepth = 0;
             _typedResultRawItems = new List<XdmValue>();
+            _typedResultContainer = tempContainer;
         }
 
         var savedTemplateRule = _currentTemplateRule;
@@ -7524,6 +7530,7 @@ internal sealed class TransformEngine
                 _literalElementDepth = savedLiteralDepth;
                 _lastAddedWasAtomic = savedLastAtomic;
                 _typedResultRawItems = savedTypedRawItems;
+                _typedResultContainer = savedTypedResultContainer;
 
                 // Convert and deliver the result only when the body completed normally;
                 // during exception unwinding the in-flight error must propagate unchanged.
@@ -7564,6 +7571,7 @@ internal sealed class TransformEngine
                 _preserveDocumentNodes = savedPreserveDocuments;
                 _literalElementDepth = savedLiteralDepth;
                 _typedResultRawItems = savedTypedRawItems;
+                _typedResultContainer = savedTypedResultContainer;
             }
         }
     }
@@ -8109,15 +8117,25 @@ internal sealed class TransformEngine
 
                     // When building a raw-item sequence (JSON/adaptive/build-tree=no),
                     // a top-level xsl:attribute produces a free-standing attribute node.
-                    if (IsRawCollectionTopLevel)
+                    bool typedAttributeSequence = _sequenceAccumulator is PlaceholderSequenceAccumulator
+                        && _typedResultRawItems != null && _literalElementDepth == 0
+                        && _standaloneAttributeDepth == 0
+                        && ReferenceEquals(_currentContainer, _typedResultContainer);
+                    if (IsRawCollectionTopLevel || typedAttributeSequence)
                     {
                         var standaloneAttrName = XName.Get(Xml11NameCodec.EncodeName(attrLocalName), attrNsUri);
                         // REQ-099 seam H4: a parentless attribute is validated standalone;
                         // failures surface as XTTE1555.
                         var validatedStandalone = ValidateConstructedAttribute(standaloneAttrName, value, instruction,
                             complexTypeErrorCode: "XTSE1530", standalone: true);
-                        var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
-                        rawList.Add(XdmValue.FromNode(XDocumentNode.Wrap(validatedStandalone ?? new XAttribute(standaloneAttrName, value))));
+                        var attributeValue = XdmValue.FromNode(XDocumentNode.Wrap(validatedStandalone ?? new XAttribute(standaloneAttrName, value)));
+                        if (typedAttributeSequence)
+                            _sequenceAccumulator!.Add(attributeValue);
+                        else
+                        {
+                            var rawList = _resultDocumentStack.Count == 0 ? _jsonResultItems : _resultDocumentRawItems;
+                            rawList.Add(attributeValue);
+                        }
                         break;
                     }
 

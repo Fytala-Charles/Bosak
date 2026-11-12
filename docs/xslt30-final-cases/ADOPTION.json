@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-12",
+  "beforeImplementation": true,
+  "sourceBase": "d86fc38e7ee83519e761afa16d960d7c74a4ad55",
+  "precedingMergedReviews": [474, 475],
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "specifications": [
+    {
+      "revision": "W3C Recommendation 8 June 2017",
+      "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+      "sections": ["2.3.6 Post-processing the Raw Result", "5.7 Sequence Constructors", "5.7.1 Constructing Complex Content", "5.7.2 Constructing Simple Content", "11.3 Creating Attribute Nodes", "11.7 Creating Namespace Nodes", "25.1 Creating Final Result Trees"]
+    },
+    {
+      "revision": "W3C Recommendation 21 March 2017",
+      "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-xquery-serialization-31-20170321/",
+      "sections": ["10 Adaptive Output Method: attribute items"]
+    }
+  ],
+  "decisions": [
+    "A top-level attribute produced for an existing typed/raw template sequence is a parentless sequence item. Use its placeholder accumulator to preserve position and duplicate attribute items. Attributes constructed inside ordinary element content retain existing complex-content ordering errors.",
+    "The existing standalone attribute evaluator owns its temporary materialization container; the typed-template route must not intercept that nested evaluator's returned attribute, including during simple content construction for xsl:namespace.",
+    "Identify the current typed template's own root container explicitly; inherited collector flags alone must not classify nested simple-content temporary containers as that root.",
+    "Canonicalize only secondary capture-map lookup keys using the same existing host resolver as assert-result-document. Preserve processor current-output-uri behavior and the captured node's existing URI annotations. This repairs host lookup consistency for relative keys without claiming broader no-base-output-URI semantics.",
+    "Replace the rounded percentage with an explicit selected-case PASS/FAIL/NO EXECUTED CASES line; counts and exclusions remain authoritative. Retain legacy exit behavior and independent qualification-controller refusal of failed or incomplete runs."
+  ],
+  "intentionalDeviations": [],
+  "scope": "No expected fixture edits, skip admissions, schema expansion, percentage conformance claim or automatic standalone-gate promotion. Preserve all historical cohorts and original diagnostics."
+}

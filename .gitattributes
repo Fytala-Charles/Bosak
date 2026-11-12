@@ -690,3 +690,4 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/xslt30-qualification/** -text whitespace=cr-at-eol
 /docs/xslt30-isolation-candidate/** -text whitespace=cr-at-eol
 /docs/xslt30-xml-version/** -text whitespace=cr-at-eol
+/docs/xslt30-final-cases/** -text whitespace=cr-at-eol

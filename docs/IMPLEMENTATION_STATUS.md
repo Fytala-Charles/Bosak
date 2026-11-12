@@ -1,3 +1,13 @@
+# Current checkpoint — 12 November 2026: final standalone qualification
+
+The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate.
+
+Typed/raw template results retain top-level attribute order, duplicate names and parentlessness. The route is bound to the exact template result container so nested simple-content collectors retain their behavior; ordinary element content still rejects late attributes. Secondary-result assertion maps canonicalize lookup keys without changing processor dynamic output URIs or node annotations. The console reports selected-case results and counts instead of rounded percentages. Public API signatures are unchanged. Immutable specification adoption and the rejected first cohort are retained in the dossier.
+
+PRs [#474](https://github.com/Fytala-Charles/Bosak/pull/474) and [#475](https://github.com/Fytala-Charles/Bosak/pull/475) are merged; latest main CI and Schema integration pass. Earlier entries retain their historical results.
+
+---
+
 # XSLT XML-version namespace follow-up - 12 November 2026
 
 [PR #474](https://github.com/Fytala-Charles/Bosak/pull/474) delivers the output-isolation correction at46b3ba04; all five CI checks pass. The separate [1.81.4 namespace candidate](xslt30-xml-version/README.md) honors prefix undeclarations during literal-result namespace collection, uses the same bindings for attribute hints and reconciles provisional markers with raw XDM bindings. XML serialization omits redundant identical declarations while preserving actual rebinding/default resets.

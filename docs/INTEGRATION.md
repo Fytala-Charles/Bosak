@@ -4,6 +4,14 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Latest standalone qualification — 12 November 2026
+
+The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate.
+
+Typed/raw template results retain top-level attribute order, duplicate names and parentlessness. The route is bound to the exact template result container so nested simple-content collectors retain their behavior; ordinary element content still rejects late attributes. Secondary-result assertion maps canonicalize lookup keys without changing processor dynamic output URIs or node annotations. The console reports selected-case results and counts instead of rounded percentages. Public API signatures are unchanged. Immutable specification adoption and the rejected first cohort are retained in the dossier. Consumers parsing CLI output should use selected-case counts and independent completeness checks. Legacy exit behavior is unchanged. Earlier cohorts below are historical.
+
+
+
 ## Conformance evidence
 
 See [conformance results and exclusions](CONFORMANCE.md) for the published 1.81.2 release's recorded gate counts, exact source and corpus revisions, platform, and complete per-case skip explanations. Selected XPath 4.0 gates and implementation tests have distinct scopes; neither implies complete language or schema conformance. The summary links the original receipts and separates later documentation updates from new test executions.
@@ -14,7 +22,7 @@ The subsequent [local 1.81.3 candidate](xslt30-isolation-candidate/README.md) is
 
 ## Tracked release candidate and packaging
 
-Core/server development metadata is 1.81.4 for the unpublished [XML-version namespace correction](xslt30-xml-version/README.md), following output-isolation PR #474; published Core remains 1.81.2. The extension manifest/lock remains 0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
+Core/server development metadata is 1.81.5 for the unpublished [final standalone corrections](xslt30-final-cases/README.md), following merged PRs #474 and #475; published Core remains 1.81.2. The extension manifest/lock remains 0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.
 
 Public transformation signatures are unchanged. Literal-result construction preserves XML 1.1 prefix undeclarations and later rebinding in raw XDM namespace queries. XML output omits redundant identical declarations, so serialized bytes can change while preserving namespace meaning. Genuine rebinding and default namespace resets remain explicit. XML 1.0 cannot preserve nonempty-prefix undeclarations on round-trip; that serialization limitation does not authorize changing the original raw XDM bindings. The full 42-case XML-version selection passes. The complete pinned catalog records 10,219 passed / 2 failed / 4,380 skipped with unchanged exclusions and zero corpus writes; standalone qualification remains unsuccessful and separate from earlier cohorts.
 

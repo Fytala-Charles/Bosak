@@ -1,3 +1,7 @@
+# Latest renderer check — 12 November 2026
+
+The [final correction receipt](xslt30-final-cases/DOCUMENTATION-CHECKS.json) checks rendered dossier, canonical pages, local links and unchanged Fytala CSS. Historical dossiers retain their sealed bytes. The README CLI summary sentence changes; its FYTALA statement remains unchanged. No screenshot or PDF acceptance is asserted.
+
 # XSLT namespace correction documentation check - 12 November 2026
 
 The namespace dossier and synchronized conformance/architecture/registry/integration/status/handover/history pages render with unchanged Fytala CSS. The [namespace receipt](xslt30-xml-version/DOCUMENTATION-CHECKS.json) records source hashes, local destinations, qualification scope and namespace result-table checks. Both earlier dossiers retain their sealed bytes and historical renderer receipts. README/FYTALA wording and kit assets are unchanged. No screenshot/PDF acceptance or standalone gate promotion is asserted.

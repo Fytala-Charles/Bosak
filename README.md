@@ -153,7 +153,7 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
-See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XSLT test workaround.
+See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XSLT test workaround. Standalone XSLT summaries report selected-case results, executed counts and exclusions rather than a conformance percentage.
 
 ## Support and contribute
 

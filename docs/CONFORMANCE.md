@@ -24,13 +24,14 @@ Totals from different rows must not be added: the solution subsets overlap their
 
 ## Standalone XSLT 3.0 reference qualification
 
-**12 November 2026 — completed, with qualification unsuccessful.** This is a reference measurement under existing exclusions, not an adopted required gate.
+**12 November 2026 — original reference unsuccessful; final retained-profile qualification successful.** The separate cohorts below retain their original evidence. No standalone required gate is adopted.
 
 | Scope | Passed | Failed | Skipped | Not run |
 |---|---:|---:|---:|---:|
 | Entire 234-set / 14,601-case W3C catalog; basic/non-schema-aware, Legacy processor, Xslt30 catalog profile | 10,199 | 22 | 4,380 | 0 |
 | Subsequent unpublished1.81.3 output-isolation candidate; same pinned catalog and retained profile/exclusions | 10,211 | 10 | 4,380 | 0 |
 | Subsequent unpublished 1.81.4 namespace correction; same pinned catalog and retained profile/exclusions | 10,219 | 2 | 4,380 | 0 |
+| Subsequent unpublished 1.81.5 final corrections; same pinned catalog and retained profile/exclusions | 10,221 | 0 | 4,380 | 0 |
 
 Source is `77301df7f36f1fb8674d67ec6c1fba36c726dac0`; corpus is `w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56`. Execution used Windows x64 and SDK10.0.301/Release, a 1,200-second watchdog and 8 GiB job-memory limit; the run completed in 870.282 seconds. These diagnostic limits are not performance acceptance. No test-set file was missing and no filter, resume or retry was used.
 
@@ -41,6 +42,8 @@ The legacy runner returned zero despite the failures; the qualification controll
 **Subsequent local candidate:** the [unpublished1.81.3 correction](xslt30-isolation-candidate/README.md) captures secondary output independently of golden files and fixes principal raw result-document delivery. Its complete678.915-second rerun has10,211 passes,10 failures and4,380 unchanged skips, with zero missing/unselected cases and zero corpus writes. All12 original result-document failures now pass. Synthetic controls prove that the original runner accepted deliberately wrong/missing outputs after a golden-file overwrite; the candidate refuses wrong/missing/stale outputs and preserves fixture bytes. This proof is separate from the original `xslt-compat-003` observation. Eight XML-version cases, `output-0707` and `try-022` remain failures; qualification is unsuccessful and no standalone gate is adopted. Exact uncommitted source hashes and all original/interrupted receipts are retained separately from the reference77301df7 measurement.
 
 **Namespace follow-up:** the [separate 1.81.4 correction](xslt30-xml-version/README.md), based on delivered PR #474, resolves all eight XML-version failures. The complete 776.080-second rerun records **10,219 passed / 2 failed / 4,380 skipped**, with every original case accounted for and zero corpus writes. All skip identities and explanations are unchanged; `output-0707` and `try-022` remain failures. Raw namespace queries and serialized output have separate regression coverage. The legacy console's rounded `100.0%` line does not establish success: the independent controller rejects qualification. Earlier cohorts retain their own source hashes and receipts. No full-conformance claim or standalone gate adoption follows.
+
+**Final follow-up:** The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate. [All named exclusions and explanations](xslt30-final-cases/skips.csv) remain visible. The runner now prints selected-case results and counts; it retains its legacy exit behavior. Independent completeness and integrity checks establish this result. The rejected first attempt (10,220/1/4,380, namespace-2602) remains separate evidence; the corrected run includes a new nested-collector regression case.
 
 ## Why tests were skipped
 
