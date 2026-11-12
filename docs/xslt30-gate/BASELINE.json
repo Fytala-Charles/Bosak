@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-12",
+  "sourceBase": "a743a1f159fbe06ea5500c7a90f0e465c6d5b7f6",
+  "corpusUrl": "https://github.com/w3c/xslt30-test.git",
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "evidence": "docs/xslt30-final-cases/EVIDENCE.zip",
+  "evidenceSha256": "34b43a823a560f9637da9abdb9bdb44acf429c7cf53489306c31327e227da811",
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "wallTimeoutSeconds": 1200,
+  "memoryLimitBytes": 8589934592,
+  "processorProfile": "Legacy",
+  "catalogProfile": "Xslt30",
+  "schemaAware": false,
+  "semanticChanges": false,
+  "adoptionScope": "Operational CI gate based on PR476 qualification; no engine, fixture or exclusion-policy change",
+  "specificationAdoption": "../xslt30-final-cases/ADOPTION.json"
+}
