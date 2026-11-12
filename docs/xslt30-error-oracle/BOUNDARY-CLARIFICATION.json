@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-12",
+  "metadataClarificationOnly": true,
+  "compileCall": {
+    "member": "XsltCompiler.Compile(XDocument, string)",
+    "visibility": "public"
+  },
+  "executeCall": {
+    "member": "XsltExecutable.TransformObserved",
+    "visibility": "internal",
+    "role": "Existing conformance-runner capture helper"
+  },
+  "sourceCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+  "clarification": "Earlier observer metadata used public API boundaries loosely. All compile/execute fields mean these specific entry-point calls; the execute helper is internal. No public API was added or changed.",
+  "originalExecutionArchiveAndReportsUnchanged": true,
+  "initialPresentationAndManifestRetained": "INITIAL-METADATA.zip"
+}

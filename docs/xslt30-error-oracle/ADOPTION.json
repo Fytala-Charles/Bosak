@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-12",
+  "beforeDiagnosticImplementation": true,
+  "purpose": "Observe error identity, original matcher branch and public API boundary without changing acceptance, processor/catalog profile or engine binaries.",
+  "engineSourceCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+  "priorMeasurementCommit": "86c352ddfb616aa2f600d44730d6981b0540b35c",
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "immutableSpecification": {
+    "url": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/#errors",
+    "revision": "W3C Recommendation 8 June 2017",
+    "section": "2.14 Error Handling"
+  },
+  "interpretationLimits": [
+    "Compile/execute labels identify public API call boundaries, not automatically normative static/dynamic phases or conformance defects.",
+    "The specification permits early detection of some dynamic errors and optional modes that defer reporting of static errors in unevaluated code.",
+    "Multiple violated rules can permit different reported errors. A catalog mismatch is a review candidate, not a proven engine defect.",
+    "Structured QName identity is authoritative when available. Unstructured leading codes are distinguished from QName proof; uncoded or ambiguous reports remain unclassified.",
+    "Legacy decisions and all fixture/oracle alternatives are preserved. Independent exact comparisons do not become a new gate or a new production mode."
+  ],
+  "engineChanges": false,
+  "catalogOrProcessorProfileChanges": false,
+  "gateAdmission": false,
+  "intentionalSemanticDeviations": []
+}

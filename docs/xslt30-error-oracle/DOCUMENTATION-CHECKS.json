@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "docs/xslt30-error-oracle/README.md",
+      "sha256": "2a41edffda333b44bd8309422c6f95b3d184fdaeec2e5d97851f2cf1bb49145d",
+      "tables": 3
+    },
+    {
+      "source": "docs/xslt30-error-audit/README.md",
+      "sha256": "91d9c4de9a623d62857da4aed6abc2845efca9cbce3de4b9b37efce0b02d7afd",
+      "tables": 2
+    },
+    {
+      "source": "docs/xslt30-gate-adoption/README.md",
+      "sha256": "1c3c1ba7743b4210cf5110adf6b3d0a06debb92461ef0659c41e8363ebdec32a",
+      "tables": 0
+    },
+    {
+      "source": "docs/xslt30-gate/README.md",
+      "sha256": "6bb24aa2b2ebb560c225c081b9ccadabcb70bfcde585b56b00858905061c136a",
+      "tables": 0
+    },
+    {
+      "source": "README.md",
+      "sha256": "ee738d7c5962778ab49c39cd62bd1bf98ca26cb2bd2f7291f35ee331933a83c8",
+      "tables": 3
+    },
+    {
+      "source": "docs/xslt30-final-cases/README.md",
+      "sha256": "1badd758388700553b3f8b9c366b98a9c829fa3ead9bc9f1d15e00dec8c1f11a",
+      "tables": 0
+    },
+    {
+      "source": "docs/xslt30-xml-version/README.md",
+      "sha256": "c8637b8ac20fdb8d8fb318e88de1efd001aa35bd524cae6c1ea2cced94c65d9c",
+      "tables": 1
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "15d3745933a69c4d57cad90f049bbeb0fecbc5175b0002b8bb343fe7f558a13b",
+      "tables": 12
+    },
+    {
+      "source": "docs/xslt30-isolation-candidate/README.md",
+      "sha256": "9b1f33e8b18ae76a09f94bbc8c4d08df52fc1dae3dcd5cb7f2fa10336674643a",
+      "tables": 1
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "18e050003b359520acbe5795016f5ce62fa67d568f4cd62b6e31f6787f8b03d8",
+      "tables": 8
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "bbf8c07f1ff61fe4474367c5e337b6126942f7d6fb4893887296993d566d5adb",
+      "tables": 194
+    },
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "89bd57cd91576fb3c09506885d826c82a414ef405ea6ffdc97fb7edd95c9344c",
+      "tables": 4
+    },
+    {
+      "source": "docs/xslt30-qualification/README.md",
+      "sha256": "48d99bcc9ba992d6de7542b0da98f9e037949d15c244217126e3cd11e00bbb1c",
+      "tables": 4
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "26c573ec8cb549684f7114b426fb54d7c5d50e118df444205329e92161fcf0f7",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "17559828e319c342977ff29c8288b8a0bde8fd5e2a0b41a42fec6e07977db43f",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "cfb3499a07187ad8dcf2fc56fc3731e19681371c9b3bbdf8949bf679ce78f190",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "c578f8f024d65ccd97f833e8a97c4f12078bf06ce3e27f4ef0a6e52f47282ac5",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 4156,
+  "inheritedDestinationsResolvedInOriginalLayout": 2,
+  "renderedDirectory": "D:/Development/Bosak/.guard-tmp/xslt30-error-oracle-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, historical result tables, pinned operational gate limits, fixture independence, branding and link destinations; no screenshot/PDF acceptance or branch-protection change"
+}

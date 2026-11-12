@@ -1,3 +1,7 @@
+# Error-oracle renderer check — 12 November 2026
+
+The [observer receipt](xslt30-error-oracle/DOCUMENTATION-CHECKS.json) verifies result/identity/boundary tables, overlap warnings, oracle limitations and unchanged adopted-gate totals. Historical dossiers and Fytala CSS/README company wording remain unchanged. No screenshot/PDF acceptance is asserted.
+
 # Error-audit renderer check — 12 November 2026
 
 The [audit receipt](xslt30-error-audit/DOCUMENTATION-CHECKS.json) verifies rendered counts, all66 skip explanations, the Legacy-oracle limitation and unchanged adopted-gate totals. Original dossiers, Fytala CSS and README company wording remain unchanged. No screenshot/PDF acceptance is asserted.
