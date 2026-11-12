@@ -1,0 +1,90 @@
+{
+  "files": {
+    "EVIDENCE.zip": {
+      "bytes": 1940887,
+      "sha256": "b35ebc70e6b9009e374660d800ae83bb9d086357793a08a7371a4f297022a4df"
+    },
+    "README.md": {
+      "bytes": 2579,
+      "sha256": "1c3c1ba7743b4210cf5110adf6b3d0a06debb92461ef0659c41e8363ebdec32a"
+    },
+    "RESULTS.json": {
+      "bytes": 1024,
+      "sha256": "50571910b34c7cb90626c369e64d52e278816aa808525e5d9fd49f84edf34228"
+    },
+    "verify.py": {
+      "bytes": 3607,
+      "sha256": "3d270cc4a05348f9747af5749ef9e809f9e7ed459b0c4f7b56a4656ee643c6e7"
+    }
+  },
+  "archiveEntries": {
+    "HOSTED-PR477.zip": {
+      "bytes": 1982511,
+      "sha256": "56e0c70453398eea324073b1727e69a735e4c1f3ff76359f30699dd08539e2f5"
+    },
+    "HOSTED-ARTIFACT.json": {
+      "bytes": 807,
+      "sha256": "7ab914d4009c9e97c6365219a5febf77efc94baa7bc0435bc259424cd8509eb4"
+    },
+    "HOSTED-VERIFICATION.json": {
+      "bytes": 464,
+      "sha256": "a3ec7ec509c873c4047bbfa3b4f472c0965e5ff5e493ae5002a9600c224f4473"
+    },
+    "HOSTED-WORKFLOW.json": {
+      "bytes": 12839,
+      "sha256": "ccb6aca2894c22dfe714db1c4131055f25e71d5f213241934a0123e4db84c877"
+    },
+    "HOSTED-SOURCE-COMMIT.json": {
+      "bytes": 2645,
+      "sha256": "e32f4b4289b057fa065088898d632abf189e6b34847d61018a5e8c3e20864724"
+    },
+    "PR477-HEAD-COMMIT.json": {
+      "bytes": 1181,
+      "sha256": "74c0964cc44de30c65e96fb42bcd1bc475375a3f32f3a974399f0d2826bce6d4"
+    },
+    "PREMERGE-477.json": {
+      "bytes": 2002,
+      "sha256": "2078f1cccf324c29c4e4952ee426eb65b01526590ca6979f46e380add711a0d7"
+    },
+    "MERGE-477.json": {
+      "bytes": 188,
+      "sha256": "9d8aa9aba30000cc06eca70066f88841e4c3ae401b3cb9874f4d8ddea091dc65"
+    },
+    "RULESET-BEFORE.json": {
+      "bytes": 1327,
+      "sha256": "8e6f9a0e4f077f07bec66bfff7999451bbf930b3950ca38e66b74bb3cef99283"
+    },
+    "RULESET-PAYLOAD.json": {
+      "bytes": 1149,
+      "sha256": "dfa00a269b0fc67dce6e8d625215acd1120637eee2a67dd091a751a5bb3934bf"
+    },
+    "RULESET-AFTER.json": {
+      "bytes": 1696,
+      "sha256": "082adbd1e70d6f037e347d6b9f5d4d1bf547ec785a9581cfb06a0b81973ce320"
+    },
+    "RULESET-VERIFICATION.json": {
+      "bytes": 251,
+      "sha256": "9c669a112ef029024a3a7ec18f4133e02180478229fd6dd7025b8c2f38a7402c"
+    },
+    "LIVE-MAIN-RULES.json": {
+      "bytes": 1231,
+      "sha256": "27131beaa806a34b69e783849834a2f1fccfc598755234ec2c70988c8918cdf8"
+    },
+    "CHECK-SOURCE.json": {
+      "bytes": 4630,
+      "sha256": "eecb6938de2d4890c08978f1ba55328fa2dae177c3f2af8f1d6e029e5dcd4880"
+    },
+    "prepare-ruleset.py": {
+      "bytes": 1374,
+      "sha256": "4f0b6fc2872e6ed802e57fbe0da2b63cd7966185e156c5d9ef140b063be4866b"
+    },
+    "apply-ruleset.py": {
+      "bytes": 2397,
+      "sha256": "bec03cd3965c15f305074eddd17221947221d6f4270994324eb97296a5ce35e0"
+    },
+    "verify-hosted.py": {
+      "bytes": 2424,
+      "sha256": "c58baac9f9ba2ebba6b6a02d03a01a113c99323a8bcd1bf358424dfd285e3035"
+    }
+  }
+}

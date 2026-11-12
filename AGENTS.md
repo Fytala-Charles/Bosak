@@ -63,7 +63,7 @@ Use `tools/run-retained-foundation-caller.py` for retained foundation binary cal
 
 ## Conformance Harnesses
 
-The proposed [pinned standalone XSLT 3.0 CI gate](docs/xslt30-gate/README.md) runs `python tools/xslt30_gate.py --corpus <clean-pinned-LF-checkout> --output <fresh-external-packet>`. It requires exactly **10,221/0/4,380**, all original case/exclusion identities and unchanged fixture/runtime bytes. Windows bounds remain1,200 seconds /8 GiB; never reuse an existing receipt directory or silently change the baseline. This adds no engine semantics or full-conformance claim. Repository mandatory-check settings are separate.
+The adopted required [pinned standalone XSLT 3.0 CI gate](docs/xslt30-gate-adoption/README.md) runs `python tools/xslt30_gate.py --corpus <clean-pinned-LF-checkout> --output <fresh-external-packet>`. It requires exactly **10,221/0/4,380**, all original case/exclusion identities and unchanged fixture/runtime bytes. Windows bounds remain1,200 seconds /8 GiB; never reuse an existing receipt directory or silently change the baseline. This adds no engine semantics or full-conformance claim. The main ruleset requires `Standalone XSLT 3.0 (pinned basic profile)` from GitHub Actions; preserve all existing rules and exclusion explanations.
 
 Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
 

@@ -1,3 +1,7 @@
+# Adoption renderer check — 12 November 2026
+
+The [adoption receipt](xslt30-gate-adoption/DOCUMENTATION-CHECKS.json) records rendered canonical/dossier pages, local destinations and unchanged Fytala CSS/README company wording. Historical dossiers and renderer receipts retain their original bytes. No screenshot/PDF acceptance is asserted.
+
 # Pinned gate renderer check — 12 November 2026
 
 The [gate proposal receipt](xslt30-gate/DOCUMENTATION-CHECKS.json) records fourteen rendered pages, local link checks, retained profile limits and unchanged Fytala CSS/README statement. Earlier dossiers and their original receipts are unchanged. No screenshot/PDF acceptance is asserted.

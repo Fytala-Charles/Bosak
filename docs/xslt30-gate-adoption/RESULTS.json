@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-12",
+  "mergedPr": 477,
+  "mergeCommit": "b3e2839cfeb1c6e6e9add98b13d84ea7c0827b0c",
+  "hosted": {
+    "success": true,
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "elapsedSeconds": 1095.141,
+    "sourceCommit": "94bee568f51c21d64cf2133a6eaa6850916553e3",
+    "sourceTree": "1d6f92730eaa3f67e2b762c1d7df3fdadd3a37df",
+    "prHeadTreeIdentical": true,
+    "corpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "artifactSha256": "56e0c70453398eea324073b1727e69a735e4c1f3ff76359f30699dd08539e2f5"
+  },
+  "ruleset": {
+    "success": true,
+    "originalRulesPreserved": true,
+    "conditionsAndBypassActorsPreserved": true,
+    "activeOnMain": true,
+    "requiredCheck": {
+      "context": "Standalone XSLT 3.0 (pinned basic profile)",
+      "integration_id": 15368
+    }
+  },
+  "scope": "Required operational CI gate; unchanged retained exclusions and engine semantics; not complete conformance"
+}
