@@ -249,6 +249,7 @@
 //                      | Charles Korthout | 3.78  | 20-10-2026     | Distinguish unselected cases and fail incomplete selected catalogs.                      |
 //                      | Charles Korthout | 3.79  | 20-10-2026     | Match structured error identities before excluding legacy aliases in exact mode.         |
 //                      | Charles Korthout | 3.80  | 12-11-2026     | Capture secondary outputs independently of immutable expected-result files.              |
+//                      | Charles Korthout | 3.81  | 12-11-2026     | Normalize capture lookup identities and report counts without a rounded percentage.       |
 //                      |==================|=======|================|=========================================================================================
 using System.Xml.Linq;
 using System.Xml;
@@ -677,7 +678,9 @@ class Program
         Console.WriteLine($"Selected skipped: {Skipped - Unselected}");
         Console.WriteLine($"Missing test sets: {MissingTestSets}");
         Console.WriteLine();
-        Console.WriteLine($"Pass rate: {(Passed * 100.0 / Math.Max(1, Passed + Failed)):F1}%");
+        var selectedResult = Failed > 0 || MissingTestSets > 0 ? "FAIL"
+            : Passed + Failed == 0 ? "NO EXECUTED CASES" : "PASS";
+        Console.WriteLine($"Selected-case result: {selectedResult} ({Passed + Failed} executed; {Skipped - Unselected} excluded)");
         if (_xslt40 || _processorProfile == Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft)
             Environment.ExitCode = Failed > 0 || MissingTestSets > 0 || Passed + Failed == 0 ? 1 : 0;
     }
@@ -1638,6 +1641,7 @@ class Program
             _secondaryOutputProperties = secondaryProperties;
             void ObserveSecondary(string uri, XdmValue value, Bosak.Xslt.Stylesheet.OutputProperties properties)
             {
+                var identity = ResolveResultDocumentUri(uri, testSetDir, baseOutputUri);
                 var effective = properties.Clone();
                 // Preserve the existing file-delivery HTML policy for tree outputs.
                 if (effective.BuildTree && effective.Method is not ("json" or "adaptive"))
@@ -1649,9 +1653,9 @@ class Program
                     document.AddAnnotation(uri);
                     node.SetDocumentUri(uri);
                 }
-                secondaryValues[uri] = value;
-                secondaryText[uri] = serialized;
-                secondaryProperties[uri] = effective;
+                secondaryValues[identity] = value;
+                secondaryText[identity] = serialized;
+                secondaryProperties[identity] = effective;
             }
             string? functionName = null;
             XdmValue[]? functionArguments = null;

@@ -1,0 +1,78 @@
+{
+  "sourceCommit": null,
+  "sourceBaseCommit": "d86fc38e7ee83519e761afa16d960d7c74a4ad55",
+  "sourceHashes": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "382dcbb4538ebbdb74158268c8ccc53f142aed7d1444360d85a2fb5ea2488c74",
+    "src/Directory.Build.props": "1896f37324eb56d7f243170bb5d96bfd63b6c19085c729bb4c9936782748b289",
+    "tests/Bosak.Xslt.Conformance/Program.cs": "3e84a59eb5fac331d031cd7aec00ac805bce78d6c2fbefabb76dbddc19bbebd1",
+    "tests/Bosak.Xslt.Tests/RawAttributeSequenceTests.cs": "4ad9395dbe449e75fd5953918dfb2d095f1b91fe21b5fb9ce98601426499d86a"
+  },
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "totalCases": 14601,
+  "counts": {
+    "Passed": 10221,
+    "Skipped": 4380
+  },
+  "exactTestSetHashes": true,
+  "unchangedSkipNamesAndReasons": true,
+  "failureSets": {},
+  "qualificationSuccessful": true,
+  "run": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-final-retry-20261112\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-final-retry-20261112\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": null,
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": true,
+    "processId": 13724,
+    "startedUtc": "2026-11-12T17:52:19Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 829.117,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "56a8706bff30b23219df2647685cd765f3ad8ae1e7d3db00c6cda35a86495526",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "integrity": {
+    "originalCorpusUnchanged": true,
+    "originalCorpusFiles": 13229,
+    "originalCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "cleanAtStartCorpusFiles": 12886,
+    "runtimeLayoutUnchanged": true,
+    "disposableCorpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "generatedOutputsSha256": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+    "testSetDefinitions": "Separately checked against every pre-run SHA-256 by report.py",
+    "policy": "All generated/changed bytes retained; neither original nor disposable corpus restored or cleaned"
+  },
+  "version": "1.81.5",
+  "published": false,
+  "qualificationScope": "Basic non-schema-aware Legacy/Xslt30 under unchanged exclusions; not full conformance or automatic gate adoption"
+}

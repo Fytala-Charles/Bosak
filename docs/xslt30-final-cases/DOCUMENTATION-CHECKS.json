@@ -1,0 +1,76 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "README.md",
+      "sha256": "5db80ebb608f8349bf07d973bbb3853ccf5c2b47271d66702d16a807738a3fb4",
+      "tables": 3
+    },
+    {
+      "source": "docs/xslt30-final-cases/README.md",
+      "sha256": "1badd758388700553b3f8b9c366b98a9c829fa3ead9bc9f1d15e00dec8c1f11a",
+      "tables": 0
+    },
+    {
+      "source": "docs/xslt30-xml-version/README.md",
+      "sha256": "c8637b8ac20fdb8d8fb318e88de1efd001aa35bd524cae6c1ea2cced94c65d9c",
+      "tables": 1
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "b64a26788ecbe6cf9ecbf550376e2437e82dd414857ab59fe01f38fca597a869",
+      "tables": 12
+    },
+    {
+      "source": "docs/xslt30-isolation-candidate/README.md",
+      "sha256": "9b1f33e8b18ae76a09f94bbc8c4d08df52fc1dae3dcd5cb7f2fa10336674643a",
+      "tables": 1
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "9188e2ea134ee12aec43afe971907e38f3760da2b35848b130ce0a212bac1ced",
+      "tables": 8
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "1601ca173230635e8e84091726e358f5f4377193e7216ecb7a46491d4eda80b9",
+      "tables": 194
+    },
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "b6ae56c4bf0297d12d3dc1a38387d452932256e2b5d0c1a24dc6f1438d0026e9",
+      "tables": 4
+    },
+    {
+      "source": "docs/xslt30-qualification/README.md",
+      "sha256": "48d99bcc9ba992d6de7542b0da98f9e037949d15c244217126e3cd11e00bbb1c",
+      "tables": 4
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "a491c35f1559cb5204cc53c0763bdf90afdc45f42531c599f8b6d1372af92745",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "8eecad0e6fa2250b6538b1054e81ddb2d27855ad59b4eceec0f9515290beaced",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "82c55e4315ba4921528a012416aa55b155bac95ede372ce12dd71531eba1f0af",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "b1713431c36a57c2acd7bf53fc408ea37db0efb4b3b48012e63731225015f671",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 4084,
+  "inheritedDestinationsResolvedInOriginalLayout": 2,
+  "renderedDirectory": "D:/Development/Bosak/.guard-tmp/xslt30-final-retry-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, original/output-isolation/namespace result tables, fixture independence, branding and link destinations; no screenshot/PDF acceptance or new baseline adoption"
+}

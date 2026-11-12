@@ -4,9 +4,17 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Final standalone execution boundary — 12 November 2026
+
+Typed/raw template results retain top-level attribute order, duplicate names and parentlessness. The route is bound to the exact template result container so nested simple-content collectors retain their behavior; ordinary element content still rejects late attributes. Secondary-result assertion maps canonicalize lookup keys without changing processor dynamic output URIs or node annotations. The console reports selected-case results and counts instead of rounded percentages. Public API signatures are unchanged. Immutable specification adoption and the rejected first cohort are retained in the dossier.
+
+The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate.
+
+
+
 ## Release artifact boundary
 
-Core/server development metadata is now **1.81.4**, an unpublished follow-up for the [XSLT XML-version namespace correction](xslt30-xml-version/README.md), based on output-isolation PR #474. Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
+Core/server development metadata is now **1.81.5**, an unpublished follow-up for the [final standalone corrections](xslt30-final-cases/README.md), based on merged PRs #474 and #475. Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
 
 The conformance runner uses an internal observed-execution helper to capture secondary outputs with logical URI, raw XDM and per-output serialization properties. It serializes at production time and compares only current captured outputs; golden fixture files remain independent inputs. The engine isolates explicit principal result-document content from enclosing sequence accumulators and gives that principal raw output precedence over the enclosing template result. Ordinary raw-template results and public API signatures retain their routes. [Immutable specification adoption](xslt30-isolation-candidate/ADOPTION.json).
 

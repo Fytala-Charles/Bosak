@@ -1,3 +1,15 @@
+<!-- xslt30-final-cases-20261112 -->
+# Latest handover — 12 November 2026
+
+The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate.
+
+Typed/raw template results retain top-level attribute order, duplicate names and parentlessness. The route is bound to the exact template result container so nested simple-content collectors retain their behavior; ordinary element content still rejects late attributes. Secondary-result assertion maps canonicalize lookup keys without changing processor dynamic output URIs or node annotations. The console reports selected-case results and counts instead of rounded percentages. Public API signatures are unchanged. Immutable specification adoption and the rejected first cohort are retained in the dossier.
+
+PR474 merged at c14911672c115b13da7744db5822cefdaf03ffba; PR475 merged at d86fc38e7ee83519e761afa16d960d7c74a4ad55. Latest main CI43267558394 and Schema43267558718 pass. PR474 post-merge allocation observation failed once and passed a same-commit failed-job rerun; both receipts remain. No threshold was weakened.
+
+Worktree `.worktrees/Bosak.XsltFinalCases`, branch `fix/xslt30-final-cases`, base d86fc38e. Delivery checkpoint is the commit containing this entry; four exact source hashes identify the qualified uncommitted source. Packet `.guard-tmp/xslt30-final-retry-20261112` retains final inputs, source/runtime manifests and all receipts. The first complete cohort is rejected (10,220/1/4,380: namespace-2602); root-container identity and a fifth unit case protect its nested collector boundary. Five new cases pass; identical sources against sealed 1.81.4 yield three failures and two protective passes. All 12,886 candidate corpus files, 13,229 original files and 32 runtime files remain unchanged. Temporary idle reservation released. No persistent power/WER settings changed. Root owner checkout remains dirty at 18946b31; preserve its edits. Deliver the focused PR for review; subsequent gate adoption and publication require separate decisions.
+<!-- /xslt30-final-cases-20261112 -->
+
 <!-- xslt30-xml-version-20261112 -->
 # XSLT XML-version namespace follow-up - 12 November 2026
 

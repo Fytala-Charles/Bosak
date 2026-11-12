@@ -4,6 +4,12 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Latest maintenance checkpoint — 12 November 2026
+
+The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate. No new REQ closure or schema-coverage expansion. Earlier checkpoints below are historical.
+
+
+
 # Current checkpoint — 12 November 2026
 
 The [namespace follow-up](xslt30-xml-version/README.md) resolves all eight XML-version failures in the 42/42 targeted selection. Five new unit cases exercise raw bindings, rebinding, attribute hints and serialization boundaries; 26,354 solution cases and 90 language-server cases pass. QT3 and selected qt4 retain exact counts and skip maps. The complete pinned rerun records 10,219/2/4,380, all original cases accounted for and zero corpus writes. Only `output-0707` and `try-022` remain failures; standalone qualification remains unsuccessful. Development Core/server metadata is 1.81.4, unpublished. This is maintenance work with no new REQ closure, skip admission or schema-coverage claim. The preceding output-isolation PR #474 is delivered with all five CI checks green.
