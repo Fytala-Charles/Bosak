@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "docs/xslt30-xml-version/README.md",
+      "sha256": "c8637b8ac20fdb8d8fb318e88de1efd001aa35bd524cae6c1ea2cced94c65d9c",
+      "tables": 1
+    },
+    {
+      "source": "docs/DEVELOPMENT_HISTORY.md",
+      "sha256": "4a85caf97f5134c52e8177e93e0da373e2635dadf79e3f9669a29e67a627ae44",
+      "tables": 12
+    },
+    {
+      "source": "docs/xslt30-isolation-candidate/README.md",
+      "sha256": "9b1f33e8b18ae76a09f94bbc8c4d08df52fc1dae3dcd5cb7f2fa10336674643a",
+      "tables": 1
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "sha256": "3fc1f39117a3b378a55606bdf07966173fb07de62dcb2d6d5a3feaeb620d5c2a",
+      "tables": 8
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "sha256": "b10e81242ddd1f9470c733aac7a2aaee7a74d586f50c7c8aaaeeac33bc9b2ff1",
+      "tables": 194
+    },
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "c75fbb7fd874a8b6d06605da37de6ea043299bef61e28322a1f26150a862ff6b",
+      "tables": 4
+    },
+    {
+      "source": "docs/xslt30-qualification/README.md",
+      "sha256": "48d99bcc9ba992d6de7542b0da98f9e037949d15c244217126e3cd11e00bbb1c",
+      "tables": 4
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "01f74377cc252e147b46a7e153e782cfb1cf50127d99a759a5bbf2c9c54dacc3",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "d8b2ed1cf7f52ef6188f52b268bf6c65320489879fc9568562c9632097c15b92",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "1fa7aab198069d106cd69fbf312dcf327c6fe24e25cd5a72e9c56514be8b9eac",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "8f16f6842aebd197deff8ea6b47aa6cfbeba0a2b86fe9af033c52e98736995e0",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 4028,
+  "inheritedDestinationsResolvedInOriginalLayout": 1,
+  "renderedDirectory": ".guard-tmp/xslt30-xml-version-qualified-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, original/output-isolation/namespace result tables, fixture independence, branding and link destinations; no screenshot/PDF acceptance or new baseline adoption"
+}

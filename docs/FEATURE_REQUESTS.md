@@ -6,6 +6,12 @@
 
 # Current checkpoint — 12 November 2026
 
+The [namespace follow-up](xslt30-xml-version/README.md) resolves all eight XML-version failures in the 42/42 targeted selection. Five new unit cases exercise raw bindings, rebinding, attribute hints and serialization boundaries; 26,354 solution cases and 90 language-server cases pass. QT3 and selected qt4 retain exact counts and skip maps. The complete pinned rerun records 10,219/2/4,380, all original cases accounted for and zero corpus writes. Only `output-0707` and `try-022` remain failures; standalone qualification remains unsuccessful. Development Core/server metadata is 1.81.4, unpublished. This is maintenance work with no new REQ closure, skip admission or schema-coverage claim. The preceding output-isolation PR #474 is delivered with all five CI checks green.
+
+---
+
+## Preceding output-isolation checkpoint — 12 November 2026
+
 The [local standalone XSLT output-isolation patch](xslt30-isolation-candidate/README.md) preserves golden inputs, refuses missing/stale outputs and corrects principal raw result-document delivery. Four new implementation cases pass; the targeted result-document selection is 161/0/36. The complete pinned rerun records 10,211/10/4,380 with unchanged skips and zero corpus writes; qualification remains unsuccessful. This maintenance correction does not close a new REQ item, promote a conformance gate or expand schema coverage. Published Core remains 1.81.2; development Core/server metadata is 1.81.3. Full-corpus candidate receipts remain separate from the original reference measurement.
 
 ---

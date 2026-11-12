@@ -76,6 +76,7 @@
 //                      | Charles Korthout | 1.38  | 11-10-2026     | C-F1: shared writer-based HTML/XHTML serialization for bounded capture.                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.39  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 1.40  | 12-11-2026     | Omit redundant XML namespace declarations while preserving rebinding and resets.           |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -3499,6 +3500,7 @@ internal static partial class ResultTreeSerializer
             Indent = props.Indent,
             Encoding = encoding ?? System.Text.Encoding.UTF8,
             ConformanceLevel = ConformanceLevel.Document,
+            NamespaceHandling = NamespaceHandling.OmitDuplicates,
             NewLineHandling = NewLineHandling.None
         };
     }

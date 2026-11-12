@@ -1,3 +1,11 @@
+# XSLT XML-version namespace follow-up - 12 November 2026
+
+[PR #474](https://github.com/Fytala-Charles/Bosak/pull/474) delivers the output-isolation correction at46b3ba04; all five CI checks pass. The separate [1.81.4 namespace candidate](xslt30-xml-version/README.md) honors prefix undeclarations during literal-result namespace collection, uses the same bindings for attribute hints and reconciles provisional markers with raw XDM bindings. XML serialization omits redundant identical declarations while preserving actual rebinding/default resets.
+
+The XML-version selection passes42/42, resolving all eight failures. Five new regression cases pass; identical cases against the sealed baseline yield four failures and one pass. All26,354 solution cases and90 language-server cases pass; exact frozen gate counts and skip maps remain unchanged. Full pinned qualification completes in776.080 seconds:10,219 passed /2 failed /4,380 skipped, all14,601 cases accounted for and zero corpus writes. Every skip identity/explanation remains unchanged. `output-0707` and `try-022` remain failures, so standalone qualification is unsuccessful despite the legacy rounded100.0% display. No fixture edit, skip admission, new schema capability or standalone gate adoption; development metadata1.81.4 remains unpublished. Historical cohorts below retain their own identities and receipts.
+
+---
+
 # Standalone XSLT output-isolation patch candidate - 12 November 2026
 
 The [local1.81.3 candidate](xslt30-isolation-candidate/README.md) captures secondary outputs without writing golden fixtures and compares only current produced values. It also isolates explicit principal result-document content from enclosing sequence accumulators and returns that raw principal output before the enclosing template result. The original runner accepts deliberately wrong/missing output on disposable controls; the new runner refuses wrong/missing/stale output while preserving fixture bytes. Four new unit cases pass; targeted result-document coverage is161/0/36, resolving the original12 failures in that selection.
