@@ -4,6 +4,11 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Observational checkpoint — 12 November 2026
+
+The [targeted error-set audit](xslt30-error-audit/README.md) measures all 579 original cases at the unchanged pinned source/corpus: **513 passed / 0 failed / 66 skipped** under the existing Legacy oracle. Inputs and runtime bytes are unchanged. The set covers static and dynamic errors; its legacy matcher has code/message aliases, including dynamic codes accepted for some static expectations. Seventy-one passing cases share expected codes with alias tables, but actual alias use and error phase are not logged. These results are not admission evidence by themselves. The adopted required gate stays **10,221/0/4,380**, with all original exclusions and reasons retained. Next is an independent exact-code/phase audit; no engine, runner, workflow, version, ruleset or exclusion change is made. No REQ status or coverage claim changes.
+
+
 ## Adopted standalone gate — 12 November 2026
 
 The [standalone XSLT gate is adopted](xslt30-gate-adoption/README.md): [PR #477](https://github.com/Fytala-Charles/Bosak/pull/477) merged at `b3e2839cfeb1c6e6e9add98b13d84ea7c0827b0c` after all six hosted checks passed. Independent replay of the hosted artifact confirms **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 1,095.141 seconds, with unchanged fixture/runtime bytes and exclusion identities/reasons. The active main ruleset now requires `Standalone XSLT 3.0 (pinned basic profile)` from GitHub Actions. Existing pull-request/deletion rules, branch scope and bypass actors are preserved. The retained Legacy/Xslt30 basic/non-schema-aware profile, immutable corpus, 1,200-second/8 GiB bounds and frozen QT3/qt4 policies are unchanged. This is operational adoption; no engine/API/package change, publication, new exclusion or complete-conformance claim.
