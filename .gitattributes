@@ -681,3 +681,7 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/schema-core-1.81.2-adoption/committed/SCHEMA-COMMIT.patch -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
 
 /docs/schema-integration-1812/** -text whitespace=cr-at-eol
+
+# Keep derived conformance inventories and original hosted logs stable across checkouts.
+/docs/conformance/** -text whitespace=cr-at-eol
+/docs/conformance/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

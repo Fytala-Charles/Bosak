@@ -1,3 +1,7 @@
+# Conformance summary documentation check - 12 November 2026
+
+The new branded [conformance summary](CONFORMANCE.md), README navigation, integration link and synchronized status/handover pages render to local HTML using the unchanged Fytala stylesheet. [Receipt](conformance/DOCUMENTATION-CHECKS.json) records source hashes, table/local-link checks and the renderer's scope. Exact original gate logs and complete skip inventories are verified against the sealed hosted archive by `python docs/conformance/generate-summary.py --check`. No screenshot/PDF acceptance or fresh engine/conformance execution is claimed.
+
 # Optional Schema pin refresh check - 9 November 2026
 
 Current integration instructions, source-pin qualification and synchronized canonical pages render to HTML with unchanged Fytala CSS. The receipt in `docs/schema-integration-1812/DOCUMENTATION-CHECKS.json` records local destinations/source hashes. No screenshot/PDF or fresh full Core conformance run is claimed.

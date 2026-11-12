@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-12",
+  "pages": [
+    {
+      "source": "docs/CONFORMANCE.md",
+      "sha256": "a5bb7cedd1477316df3ae6d28de606454e11c9998a6171d957addecd7ea4db0c",
+      "tables": 3
+    },
+    {
+      "source": "README.md",
+      "sha256": "9f7f012140c128ad7585536564537cd1996716dc0ec394c55ac5fea055261f13",
+      "tables": 3
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "sha256": "6f5599858e199cb559ffb0c0b36805d247cd404376a4ca053ba1566683e523e1",
+      "tables": 10
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "3b17ab7ac2030b21aea8f2de14b1008389b63c5d3f78f454c66ec93846b09b07",
+      "tables": 2
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "sha256": "3428102c69978a9e69abd815d934baba6f1c727ed58b2127fd07522274252720",
+      "tables": 63
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "787b6d48c4bbd710bcd6736ffdf2a5747b3d7ef02361c71d99f315f781cd1c38",
+      "tables": 1
+    }
+  ],
+  "localDestinationsChecked": 1915,
+  "inheritedDestinationsResolvedInOriginalLayout": 1,
+  "renderedDirectory": ".guard-tmp/conformance-docs-20261112/render",
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "fytalaStatementUnchanged": true,
+  "scope": "Local HTML structure, table content, branding and link destinations; no screenshot/PDF acceptance or new engine execution"
+}

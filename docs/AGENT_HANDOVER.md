@@ -1,3 +1,11 @@
+<!-- conformance-summary-20261112 -->
+# Linked conformance summary completed - 12 November 2026
+
+Owner requested the linked `docs/CONFORMANCE.md` and avoiding blanket 100% claims. README navigation and INTEGRATION now link the branded summary. It uses sealed published1.81.2 producer source7249d0e/run42479094503 from8 November, retaining platform/SDK/corpus pins and distinguishing gate-only, exploratory and implementation-test scopes. Generated CSV inventories explain every424 QT3 and1,918 selected-qt4 skip while retaining original reasons/declarations and exact original logs. Experimental11 is explicitly a subset of qt4's8,941 passes. No full XSLT corpus result is invented from8,320 implementation tests.
+
+Regenerate/verify with `python docs/conformance/generate-summary.py [--check]`; four receipt-parser controls cover valid and refused inventories. See DOCUMENTATION_RENDERER_TEST for local HTML/table/link verification. Engine/harness/baselines/spec-adoption evidence and earlier receipts remain unchanged. The owner authorized documentation-only branch/PR delivery. Unrelated original-checkout handover edits remain outside this PR. No fresh engine execution or package publication is claimed. Delivery base18946b31.
+<!-- /conformance-summary-20261112 -->
+
 # Optional Schema integration pin refreshed - 9 November 2026
 
 The merged Schema dependency PR is sourcec953ebe0057bea1616d3e4f891f7b0a5fc4bd99b; paired Core evidence is merged at4a800929. [Refreshed optional integration](schema-integration-1812/README.md) now selects that Schema revision in CI, instructions and the regenerated37-input source/test/fixture/legal manifest. Twenty library files and thirteen upstream test files are compiled directly against current Core projects; three already-qualified caller ownership controls join the eight local price/assertion cases. LF and CRLF lanes each pass135 identical cases, the typed-price example matches, and a changed disposable input is refused before compilation. The entire original docs/schema-integration dossier is hash-preserved.
