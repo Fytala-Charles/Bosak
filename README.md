@@ -128,6 +128,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | Guide | Contents |
 |---|---|
 | [Integration](docs/INTEGRATION.md) | Public APIs and supported usage profiles. |
+| [Conformance](docs/CONFORMANCE.md) | Recorded gate results, tested profiles, and per-case skip explanations. |
 | [Ordinary-source sessions](docs/foundation-public-ordinary/GUIDE.md) | Opt-in string/boolean queries with explicit source ownership and lifetime. |
 | [Exact decimals](docs/foundation-exact-decimal/GUIDE.md) | Exact coefficient/scale values with explicit capacity and output bounds. |
 | [Exact XDM numeric carriers](docs/foundation-exact-value-transport/GUIDE.md) | Full numeric access with checked legacy views and source migration guidance. |

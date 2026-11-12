@@ -1,3 +1,11 @@
+# Conformance summary and skip inventory - 12 November 2026
+
+[Conformance results](CONFORMANCE.md) now summarize the published 1.81.2 producer run from 8 November, source `7249d0e01628c47f92b89a3380bc69cf58d70045`: solution26,345/0/0, QT3 31,397/0/424, and selected qt4 8,941/0/1,918. The 11 experimental-level qt4 passes are included in8,941, not additional passes. XSLT8,320 and XQuery841 are implementation-test subsets, not full standalone language-corpus claims. Ungated/exploratory and standalone XSLT aggregate results are explicitly not asserted by that receipt.
+
+The summary links all424 QT3 and1,918 selected-qt4 skip names, original reasons, specific profile explanations and catalog dependencies. `docs/conformance/generate-summary.py --check` verifies sealed inputs, counts, pinned clean corpora and generated documentation; parser controls exercise retained reasons and refusal of truncated, duplicate or reasonless inventories. This is documentation derived from retained evidence, not a new engine/gate run, skip admission, feature acceptance or release. No runtime/harness/baseline change.
+
+---
+
 # Optional Schema integration pin refreshed - 9 November 2026
 
 The merged Schema dependency PR is sourcec953ebe0057bea1616d3e4f891f7b0a5fc4bd99b; paired Core evidence is merged at4a800929. [Refreshed optional integration](schema-integration-1812/README.md) now selects that Schema revision in CI, instructions and the regenerated37-input source/test/fixture/legal manifest. Twenty library files and thirteen upstream test files are compiled directly against current Core projects; three already-qualified caller ownership controls join the eight local price/assertion cases. LF and CRLF lanes each pass135 identical cases, the typed-price example matches, and a changed disposable input is refused before compilation. The entire original docs/schema-integration dossier is hash-preserved.

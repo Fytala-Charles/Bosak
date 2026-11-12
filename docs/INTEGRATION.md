@@ -4,6 +4,10 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Conformance evidence
+
+See [conformance results and exclusions](CONFORMANCE.md) for the published 1.81.2 release's recorded gate counts, exact source and corpus revisions, platform, and complete per-case skip explanations. Selected XPath 4.0 gates and implementation tests have distinct scopes; neither implies complete language or schema conformance. The summary links the original receipts and separates later documentation updates from new test executions.
+
 ## Tracked release candidate and packaging
 
 Core/server metadata is1.81.2 and the extension manifest/lock are0.2.6. The shipping set contains ten NuGet libraries, including the existing Database REST loaders; provider adoption in separate Schema/XmlDb/Braid repositories remains outside this delivery scope. These source pins are unpublished. [The release guide](RELEASING.md) separates preparation from publication of reviewed artifacts and explains the required acceptance and provenance checks.

@@ -1,0 +1,119 @@
+{
+  "sourceCommit": "7249d0e01628c47f92b89a3380bc69cf58d70045",
+  "run": "https://github.com/Fytala-Charles/Bosak/actions/runs/42479094503",
+  "date": "2026-11-08",
+  "platform": "Ubuntu 24.04.5, runner image 20261101.360.1",
+  "sdk": "10.0.301",
+  "configuration": "Release",
+  "framework": "net10.0",
+  "archiveSha256": "48275c11f1129cb104f8104b1b14738b4a30e56c5886066782858af5291b31d7",
+  "suites": {
+    "qt3": {
+      "passed": 31397,
+      "failed": 0,
+      "skipped": 424,
+      "corpusCommit": "201a6e466940cdfc727f4babfedcde5332b9f578",
+      "skipSha256": "2c7a59c03ca54ea88314d5a851915bf3fe3a029600f089dc14c7f97405036613",
+      "recordedReasonCounts": {
+        "Unsupported dependency": 368,
+        "XMark benchmark set is skipped during unattended sweeps": 21,
+        "Catalog consistency checks load the full QT3 corpus per test; skipped to avoid hang": 14,
+        "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.": 6,
+        "Demo applications are skipped during unattended sweeps": 5,
+        "Platform limitation: .NET decimal cannot preserve the precision of this decimal literal": 2,
+        "Implementation-defined range limit: 10^27-year duration component rejected lexically before range detection": 2,
+        "Implementation-defined range limit: 10^26-digit year rejected lexically before range detection": 2,
+        "Platform limitation: DateTimeOffset does not support year -2": 2,
+        "Implementation-defined range limit: 65 to 2^32+10 is not detected and would enumerate billions of integers": 1,
+        "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap": 1
+      },
+      "filterSource": "tests/Bosak.XPath.Conformance/DependencyFilter.cs"
+    },
+    "qt4": {
+      "passed": 8941,
+      "failed": 0,
+      "skipped": 1918,
+      "corpusCommit": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+      "skipSha256": "ca3d1f0651f257492bfb423d6769ceba00c726fc73b5e4d295e5afec06f1f1d0",
+      "recordedReasonCounts": {
+        "Unsupported dependency": 1918
+      },
+      "filterSource": "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs",
+      "gateOnly": true,
+      "selectedSets": 230,
+      "experimentalPassesIncludedInPassed": 11
+    }
+  },
+  "unitProjects": [
+    {
+      "project": "Bosak.XPath.Api.Tests.dll",
+      "passed": 681,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_13_52_net10.0[2].trx"
+    },
+    {
+      "project": "Bosak.XPath.Compiler.Tests.dll",
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_13_56_net10.0.trx"
+    },
+    {
+      "project": "Bosak.XPath.Core.Tests.dll",
+      "passed": 266,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_13_52_net10.0[1].trx"
+    },
+    {
+      "project": "Bosak.XPath.Parser.Tests.dll",
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_13_52_net10.0.trx"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Database.Tests.dll",
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_14_22_net10.0.trx"
+    },
+    {
+      "project": "Bosak.XPath.Providers.Tests.dll",
+      "passed": 223,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_14_09_net10.0.trx"
+    },
+    {
+      "project": "Bosak.XPath.Runtime.Tests.dll",
+      "passed": 1899,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_13_52_net10.0[3].trx"
+    },
+    {
+      "project": "Bosak.XPath.Standard.Tests.dll",
+      "passed": 13800,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_14_01_net10.0.trx"
+    },
+    {
+      "project": "Bosak.XQuery.Tests.dll",
+      "passed": 841,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_14_03_net10.0.trx"
+    },
+    {
+      "project": "Bosak.Xslt.Tests.dll",
+      "passed": 8320,
+      "failed": 0,
+      "skipped": 0,
+      "receipt": "qualification/test-results/_runnervm7aw5e_2026-11-08_12_14_09_net10.0[1].trx"
+    }
+  ]
+}
