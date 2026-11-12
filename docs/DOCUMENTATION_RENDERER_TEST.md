@@ -1,3 +1,7 @@
+# Error-audit renderer check — 12 November 2026
+
+The [audit receipt](xslt30-error-audit/DOCUMENTATION-CHECKS.json) verifies rendered counts, all66 skip explanations, the Legacy-oracle limitation and unchanged adopted-gate totals. Original dossiers, Fytala CSS and README company wording remain unchanged. No screenshot/PDF acceptance is asserted.
+
 # Adoption renderer check — 12 November 2026
 
 The [adoption receipt](xslt30-gate-adoption/DOCUMENTATION-CHECKS.json) records rendered canonical/dossier pages, local destinations and unchanged Fytala CSS/README company wording. Historical dossiers and renderer receipts retain their original bytes. No screenshot/PDF acceptance is asserted.

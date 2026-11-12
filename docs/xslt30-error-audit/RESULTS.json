@@ -1,0 +1,69 @@
+{
+  "sourceCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+  "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "selectedSet": "error",
+  "totalCases": 579,
+  "counts": {
+    "Passed": 513,
+    "Failed": 0,
+    "Skipped": 66
+  },
+  "completeIdentityReconciliation": true,
+  "measurementComplete": true,
+  "elapsedSeconds": 1.258,
+  "integrity": {
+    "corpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "sourceCorpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "gatePolicyUnchanged": true
+  },
+  "skipReasonGroups": [
+    {
+      "reason": "Catalog spec=XSLT20 is outside the retained XSLT 3.0 catalog profile",
+      "count": 29
+    },
+    {
+      "reason": "Requires feature=schema_aware, excluded by this runner profile",
+      "count": 29
+    },
+    {
+      "reason": "Requires absence of admitted feature=disabling_output_escaping",
+      "count": 2
+    },
+    {
+      "reason": "Retained named skip; historical policy note (not revalidated): error-0010bb uses version=\"22.0\" with an unknown xsl:banana instruction. In forwards-compatible mode unknown XSLT instructions are ignored, so this test cannot be reconciled with the forwards test set without breaking those tests.",
+      "count": 1
+    },
+    {
+      "reason": "Requires absence of admitted feature=backwards_compatibility",
+      "count": 1
+    },
+    {
+      "reason": "Requires absence of admitted feature=XSD_1.1",
+      "count": 1
+    },
+    {
+      "reason": "Retained remote-resource skip; printed historical condition was not re-probed: Remote HTTP blocked: the test fetches http://www.w3.org/2005/11/schema-for-xslt20.xsd via fn:document, which the sandbox prevents (FODC0002 before the fragment-identifier check is reached); same class as QT3 fn-unparsed-text-054a, not an engine gap",
+      "count": 1
+    },
+    {
+      "reason": "Requires absence of admitted feature=dynamic_evaluation",
+      "count": 1
+    },
+    {
+      "reason": "Requires ignoring document-load failure; the retained runner does not support this policy",
+      "count": 1
+    }
+  ],
+  "adoptedGateCounts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "adoptedGateUnchanged": true,
+  "scope": "Existing Legacy assertions accepted 513 cases; no independent compile-time/error-stage proof, skip admission, engine change or complete conformance claim"
+}

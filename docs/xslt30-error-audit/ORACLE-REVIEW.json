@@ -1,0 +1,424 @@
+{
+  "sourceCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+  "sourcePath": "tests/Bosak.Xslt.Conformance/Program.cs",
+  "sourceSha256": "3e84a59eb5fac331d031cd7aec00ac805bce78d6c2fbefabb76dbddc19bbebd1",
+  "messageLabelPairs": [
+    {
+      "expected": "XTSE0150",
+      "messageLabel": "Expected xsl:stylesheet or xsl:transform"
+    },
+    {
+      "expected": "XTSE0180",
+      "messageLabel": "Circular stylesheet reference detected"
+    },
+    {
+      "expected": "XTSE0210",
+      "messageLabel": "Circular stylesheet reference detected"
+    },
+    {
+      "expected": "XTDE0440",
+      "messageLabel": "within the same start element tag"
+    },
+    {
+      "expected": "XTDE0890",
+      "messageLabel": "Name cannot begin with the"
+    },
+    {
+      "expected": "XTDE0890",
+      "messageLabel": "invalid name for a processing instruction"
+    },
+    {
+      "expected": "XTDE0925",
+      "messageLabel": "The prefix 'xml' is bound to the namespace name"
+    }
+  ],
+  "codeAliasPairs": [
+    {
+      "expected": "XTSE0170",
+      "acceptedActual": "XTSE0010"
+    },
+    {
+      "expected": "XTSE0190",
+      "acceptedActual": "XTSE0010"
+    },
+    {
+      "expected": "XTSE0280",
+      "acceptedActual": "XPST0081"
+    },
+    {
+      "expected": "XTTE0600",
+      "acceptedActual": "XTTE0590"
+    },
+    {
+      "expected": "XTDE0700",
+      "acceptedActual": "XTTE0590"
+    },
+    {
+      "expected": "XTDE0700",
+      "acceptedActual": "XTTE0570"
+    },
+    {
+      "expected": "XTSE0650",
+      "acceptedActual": "XTDE0040"
+    },
+    {
+      "expected": "XTSE0810",
+      "acceptedActual": "XTSE0010"
+    },
+    {
+      "expected": "XTSE0810",
+      "acceptedActual": "XTSE0813"
+    },
+    {
+      "expected": "XTSE0812",
+      "acceptedActual": "XTSE0010"
+    },
+    {
+      "expected": "XTDE1140",
+      "acceptedActual": "FORX0002"
+    },
+    {
+      "expected": "XTDE1145",
+      "acceptedActual": "FORX0001"
+    },
+    {
+      "expected": "XTDE1270",
+      "acceptedActual": "XPTY0004"
+    },
+    {
+      "expected": "XTDE1425",
+      "acceptedActual": "XPST0017"
+    },
+    {
+      "expected": "XTDE2220",
+      "acceptedActual": "XTSE0090"
+    },
+    {
+      "expected": "XTSE3055",
+      "acceptedActual": "XTSE3050"
+    },
+    {
+      "expected": "XTDE3340",
+      "acceptedActual": "XPST0017"
+    },
+    {
+      "expected": "XTTE3360",
+      "acceptedActual": "XTDE3362"
+    },
+    {
+      "expected": "XTDE3160",
+      "acceptedActual": "XPST0003"
+    },
+    {
+      "expected": "XTSE3430",
+      "acceptedActual": "XTDE3400"
+    },
+    {
+      "expected": "XTSE3430",
+      "acceptedActual": "XTDE3362"
+    },
+    {
+      "expected": "XTSE3460",
+      "acceptedActual": "XTDE0040"
+    }
+  ],
+  "otherLegacyAliases": [
+    {
+      "expected": "XTSE0800",
+      "acceptedActual": "XTSE0085"
+    },
+    {
+      "expected": "XTRE0270",
+      "acceptedActual": "XTSE0270"
+    }
+  ],
+  "reviewCandidates": [
+    {
+      "test": "error-0010x",
+      "expectedErrorCodes": "XTSE0010 XTSE0170"
+    },
+    {
+      "test": "error-0010z",
+      "expectedErrorCodes": "XTSE0010 XTSE0190"
+    },
+    {
+      "test": "error-0150a",
+      "expectedErrorCodes": "XTSE0150"
+    },
+    {
+      "test": "error-0150b",
+      "expectedErrorCodes": "XTSE0150 XTSE0165"
+    },
+    {
+      "test": "error-0150c",
+      "expectedErrorCodes": "XTSE0150 XTSE0165"
+    },
+    {
+      "test": "error-0150d",
+      "expectedErrorCodes": "XTSE0150"
+    },
+    {
+      "test": "error-0150e",
+      "expectedErrorCodes": "XTSE0165 XTSE0150"
+    },
+    {
+      "test": "error-0165c",
+      "expectedErrorCodes": "XTSE0150 XTSE0165"
+    },
+    {
+      "test": "error-0165f",
+      "expectedErrorCodes": "XTSE0150 XTSE0165"
+    },
+    {
+      "test": "error-0165i",
+      "expectedErrorCodes": "XTSE0165 XTSE0150"
+    },
+    {
+      "test": "error-0170a",
+      "expectedErrorCodes": "XTSE0010 XTSE0170"
+    },
+    {
+      "test": "error-0170b",
+      "expectedErrorCodes": "XTSE0170"
+    },
+    {
+      "test": "error-0180a",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0180b",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0180c",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0180d",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0180e",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0180f",
+      "expectedErrorCodes": "XTSE0180"
+    },
+    {
+      "test": "error-0190a",
+      "expectedErrorCodes": "XTSE0010 XTSE0190"
+    },
+    {
+      "test": "error-0190b",
+      "expectedErrorCodes": "XTSE0190"
+    },
+    {
+      "test": "error-0210a",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0210b",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0210c",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0210d",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0210e",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0210f",
+      "expectedErrorCodes": "XTSE0210"
+    },
+    {
+      "test": "error-0280a",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0280b",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0280c",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0280d",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0280e",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0280f",
+      "expectedErrorCodes": "XTSE0280"
+    },
+    {
+      "test": "error-0440a",
+      "expectedErrorCodes": "XTDE0440"
+    },
+    {
+      "test": "error-0440b",
+      "expectedErrorCodes": "XTDE0440"
+    },
+    {
+      "test": "error-0600a",
+      "expectedErrorCodes": "XTTE0600"
+    },
+    {
+      "test": "error-0610b",
+      "expectedErrorCodes": "XTDE0700"
+    },
+    {
+      "test": "error-0610d",
+      "expectedErrorCodes": "XTDE0700"
+    },
+    {
+      "test": "error-0650a",
+      "expectedErrorCodes": "XTSE0650"
+    },
+    {
+      "test": "error-0650b",
+      "expectedErrorCodes": "XTSE0650"
+    },
+    {
+      "test": "error-0650c",
+      "expectedErrorCodes": "XTSE0650"
+    },
+    {
+      "test": "error-0700a",
+      "expectedErrorCodes": "XTDE0700"
+    },
+    {
+      "test": "error-0700b",
+      "expectedErrorCodes": "XTDE0700"
+    },
+    {
+      "test": "error-0810a",
+      "expectedErrorCodes": "XTSE0810"
+    },
+    {
+      "test": "error-0810b",
+      "expectedErrorCodes": "XTSE0810"
+    },
+    {
+      "test": "error-0812a",
+      "expectedErrorCodes": "XTSE0812"
+    },
+    {
+      "test": "error-0890a",
+      "expectedErrorCodes": "XTDE0890"
+    },
+    {
+      "test": "error-0890b",
+      "expectedErrorCodes": "XTDE0890"
+    },
+    {
+      "test": "error-0925a",
+      "expectedErrorCodes": "XTDE0925"
+    },
+    {
+      "test": "error-0925b",
+      "expectedErrorCodes": "XTDE0925"
+    },
+    {
+      "test": "error-1140a",
+      "expectedErrorCodes": "XTDE1140"
+    },
+    {
+      "test": "error-1145a",
+      "expectedErrorCodes": "XTDE1145"
+    },
+    {
+      "test": "error-1270a",
+      "expectedErrorCodes": "XTDE1270"
+    },
+    {
+      "test": "error-1270b",
+      "expectedErrorCodes": "XTDE1270"
+    },
+    {
+      "test": "error-1270c",
+      "expectedErrorCodes": "XTDE1270"
+    },
+    {
+      "test": "error-1425a",
+      "expectedErrorCodes": "XTDE1425"
+    },
+    {
+      "test": "error-2220a",
+      "expectedErrorCodes": "XTDE2220"
+    },
+    {
+      "test": "error-3052a",
+      "expectedErrorCodes": "XTSE0650"
+    },
+    {
+      "test": "error-3055a",
+      "expectedErrorCodes": "XTSE3055"
+    },
+    {
+      "test": "error-3160a",
+      "expectedErrorCodes": "XTDE3160"
+    },
+    {
+      "test": "error-3340a",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3340b",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3340c",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3340d",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3340e",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3340f",
+      "expectedErrorCodes": "XTDE3340"
+    },
+    {
+      "test": "error-3360a",
+      "expectedErrorCodes": "XTTE3360"
+    },
+    {
+      "test": "error-3360b",
+      "expectedErrorCodes": "XTTE3360"
+    },
+    {
+      "test": "error-3360c",
+      "expectedErrorCodes": "XTTE3360"
+    },
+    {
+      "test": "error-3420a",
+      "expectedErrorCodes": "XTSE3430"
+    },
+    {
+      "test": "error-3430a",
+      "expectedErrorCodes": "XTSE3430"
+    },
+    {
+      "test": "error-3460a",
+      "expectedErrorCodes": "XTSE3460"
+    }
+  ],
+  "reviewCandidateCount": 71,
+  "limitation": "Candidates share expected codes with the alias tables; PASS lines do not identify the actual exception or matching branch. These are not confirmed alias-dependent passes. No per-case code fidelity or compile-time/error-stage proof is claimed.",
+  "recommendation": "Keep the adopted gate unchanged. Next audit exact error identity and static/dynamic phase independently under the same catalog and engine profile; do not infer eligibility from the 513 legacy passes."
+}
