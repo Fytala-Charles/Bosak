@@ -4,6 +4,11 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Adopted standalone gate — 12 November 2026
+
+The [standalone XSLT gate is adopted](xslt30-gate-adoption/README.md): [PR #477](https://github.com/Fytala-Charles/Bosak/pull/477) merged at `b3e2839cfeb1c6e6e9add98b13d84ea7c0827b0c` after all six hosted checks passed. Independent replay of the hosted artifact confirms **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 1,095.141 seconds, with unchanged fixture/runtime bytes and exclusion identities/reasons. The active main ruleset now requires `Standalone XSLT 3.0 (pinned basic profile)` from GitHub Actions. Existing pull-request/deletion rules, branch scope and bypass actors are preserved. The retained Legacy/Xslt30 basic/non-schema-aware profile, immutable corpus, 1,200-second/8 GiB bounds and frozen QT3/qt4 policies are unchanged. This is operational adoption; no engine/API/package change, publication, new exclusion or complete-conformance claim.
+
+
 ## Pinned standalone gate proposal — 12 November 2026
 
 The [pinned standalone XSLT gate proposal](xslt30-gate/README.md) adds a separate Windows CI check for the previously qualified basic/non-schema-aware Legacy/Xslt30 profile: 10,221 passed / 0 failed / 4,380 excluded, with exact case coverage, unchanged exclusion identities/reasons and fixture/runtime integrity. The immutable corpus and sealed baseline are hash-bound; complete outcomes override legacy exit zero. Existing engine/API semantics, version1.81.5 and frozen QT3/qt4 gates are unchanged. No publication or branch-protection setting change. Adoption is proposed in this review branch; previous qualification dossiers remain historical. Fresh end-to-end gate execution passes: **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 761.060 seconds, with unchanged corpus/runtime bytes and exact exclusion identities/reasons. The tested clean source is `d30087402ca49586b67bab5fc744b2bb18946ae6`. All fourteen gate controls pass; unchanged-engine solution coverage is supplied by successful merged-main CI43285185767 and Schema43285185880. No engine, fixture or public API change is included. Hosted checks for this proposal remain pending.
