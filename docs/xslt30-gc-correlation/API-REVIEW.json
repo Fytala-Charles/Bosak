@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "kind": "Read-only existing EventPipe GC correlation; no engine semantic adoption",
+  "documentationRevision": "94b7dca39d8dca4374f326176874381661f4dd59",
+  "documentationPath": "docs/fundamentals/diagnostics/runtime-garbage-collection-events.md",
+  "traceSha256": "26e7d71bf665a9b7c822d16278513200ac54decb8b17e4daebd1354f3d647b44",
+  "traceEventVersion": "3.1.23",
+  "traceEventBinaryIdentity": "Bound by the original profiler10.0.745401 closure; public version-tag review pin is not asserted to match informational build revision.",
+  "traceEventReviewCommit": "bc9c1c6811d2ac9a4ad1e97a7fd8de01bea09a26",
+  "contracts": [
+    "Read existing trace first; no workload rerun for event extraction.",
+    "GCStart/Stop elapsed can overlap background execution and is not stop-the-world time.",
+    "GCSuspendEEStart through RestartEEStop measures a suspension window, including suspension/resumption; classify reason and report unmatched edges.",
+    "AllocationTick is Verbose5 while original dotnet-common provider was Informational4; absence is expected, not zero allocations.",
+    "AllocationAmount64 is approximate bytes since sampling threshold, not bytes all belonging to TypeName; TypeName names threshold-crossing object.",
+    "Use TraceLog timebase to match the same Speedscope conversion; report timebase evidence before overlap claims.",
+    "Keep collection, suspension, finalizer and sampled thread-time domains separate; no CPU or causal equivalence.",
+    "Analyze under bounded owned job with scoped error mode and caught diagnostic errors; no unhandled negative.NET launches."
+  ]
+}

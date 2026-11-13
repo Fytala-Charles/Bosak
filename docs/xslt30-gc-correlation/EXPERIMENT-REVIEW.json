@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-13",
+  "beforeCollection": true,
+  "reason": "Original informational4 trace has240 GC starts but no verbose5 AllocationTick events; sampled thread tracing produces many separate SuspendOther events.",
+  "workload": "Same sealed copied caller, nine retained engines, target10.0.11/Disable,54 original sx-GeneralComp-gt cases",
+  "experiment": "One gc-verbose-only capture, no sampled-thread-time provider",
+  "limits": {
+    "seconds": 180,
+    "aggregateMemoryBytes": 8589934592,
+    "maxTraceBytes": 268435456
+  },
+  "interpretation": [
+    "Separate fresh-process captures do not provide a controlled timing/overhead A/B.",
+    "AllocationTick TypeName identifies the threshold-crossing allocation only; never assign all interval bytes to that type.",
+    "Preserve original240-collection trace and compare event domains rather than replacing it.",
+    "No engine/caller edits, new exclusions, production budget changes, retries or global runtime/WER settings."
+  ]
+}

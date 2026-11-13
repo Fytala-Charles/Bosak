@@ -1,3 +1,7 @@
+# GC/allocation renderer check - 13 November 2026
+
+The [GC receipt](xslt30-gc-correlation/DOCUMENTATION-CHECKS.json) checks event-domain boundaries, failed-trace retention, approximate allocation semantics, coverage and original failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.
+
 # Template-name renderer check — 13 November 2026
 
 The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.

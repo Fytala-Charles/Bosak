@@ -1,0 +1,62 @@
+// Generated read-only diagnostic; never executes the profiled workload.
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 13 November 2026
+// PURPOSE              : Extract runtime GC events from an existing sealed EventPipe trace.
+// SPECIAL NOTES        : Diagnostic only; collection elapsed, suspension and allocation samples are separate domains.
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      | Charles Korthout | 0.1 | 13-11-2026 | Creation |
+// ===========================================================================================================================================================
+using System.Globalization;
+using System.Text.Json;
+using Microsoft.Diagnostics.Tracing.Etlx;
+
+internal static class GcEvents
+{
+    private static int Main(string[] args)
+    {
+        try
+        {
+            using var log = new TraceLog(TraceLog.CreateFromEventPipeDataFile(args[0]));
+            using var writer = new StreamWriter(new FileStream(args[1], FileMode.CreateNew));
+            int total = 0;
+            var names = new Dictionary<string,int>();
+            foreach (var entry in log.Events)
+            {
+                if (entry.ProviderName != "Microsoft-Windows-DotNETRuntime" || !entry.EventName.StartsWith("GC", StringComparison.Ordinal)) continue;
+                var payload = new Dictionary<string,string?>();
+                foreach (var name in entry.PayloadNames)
+                    payload[name] = Convert.ToString(entry.PayloadByName(name), CultureInfo.InvariantCulture);
+                var engineFrames = new List<string>();
+                if (entry.EventName.Contains("AllocationTick", StringComparison.Ordinal))
+                {
+                    int depth = 0;
+                    for (var stack = entry.CallStack(); stack != null && depth++ < 256; stack = stack.Caller)
+                    {
+                        var method = stack.CodeAddress.FullMethodName;
+                        if (method.Contains("Bosak.", StringComparison.Ordinal)) engineFrames.Add(method);
+                        if (engineFrames.Count == 8) break;
+                    }
+                }
+                writer.WriteLine(JsonSerializer.Serialize(new { name = entry.EventName, milliseconds = entry.TimeStampRelativeMSec,
+                    processId = entry.ProcessID, threadId = entry.ThreadID, payload, engineFrames }));
+                names[entry.EventName] = names.GetValueOrDefault(entry.EventName) + 1;
+                if (++total > 100000) throw new InvalidOperationException("GC event extraction exceeds reviewed bound.");
+            }
+            File.WriteAllText(args[2], JsonSerializer.Serialize(new { events = total, eventNames = names,
+                sessionStartUtc = log.SessionStartTime.ToUniversalTime().ToString("O"),
+                sessionEndUtc = log.SessionEndTime.ToUniversalTime().ToString("O"),
+                timebase = "TraceLog.TimeStampRelativeMSec, same conversion as retained Speedscope",
+                analysisOnly = true, workloadExecutions = 0 }));
+            return 0;
+        }
+        catch (Exception error)
+        {
+            Console.Error.WriteLine(error);
+            return 2;
+        }
+    }
+}

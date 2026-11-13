@@ -1,0 +1,9 @@
+{
+  "path": "D:\\Development\\Bosak\\.guard-tmp\\xslt30-gc-only-run-20261113\\raw.nettrace",
+  "bytes": 272139284,
+  "sha256": "5ad2aa94e4f31e8df256e633d1ad26c499a34c508af345e7ae616cd57ebee6fe",
+  "status": "TraceSizeExceeded",
+  "retainedLocally": true,
+  "publicArchiveContainsRaw": false,
+  "thresholdBytes": 268435456
+}

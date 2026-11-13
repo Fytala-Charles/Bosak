@@ -6,6 +6,8 @@
 
 Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
+The [GC/allocation investigation](xslt30-gc-correlation/README.md) retains a failed broad trace and a completed54-case narrow capture (52passes/2unchanged schema-aware exclusions). It measures a copied caller without new gate qualification, admissions, exclusions or production-budget changes.
+
 ## Results and scope
 
 The following release table uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate. The later standalone reference measurement is reported separately.
