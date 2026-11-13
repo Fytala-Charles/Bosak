@@ -4,7 +4,7 @@
   <p>Recorded results, tested profiles, and reasons for excluded tests</p>
 </div>
 
-Last updated: 12 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
+Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
 ## Results and scope
 
@@ -24,7 +24,7 @@ Totals from different rows must not be added: the solution subsets overlap their
 
 ## Standalone XSLT 3.0 reference qualification
 
-**12 November 2026 — original reference unsuccessful; final retained-profile qualification successful.** The separate cohorts below retain their original evidence. No standalone required gate is adopted.
+**12 November 2026 — original reference unsuccessful; final retained-profile qualification successful.** The separate cohorts below retain their original evidence. These qualification receipts preceded the operational adoption recorded below.
 
 | Scope | Passed | Failed | Skipped | Not run |
 |---|---:|---:|---:|---:|
@@ -44,6 +44,12 @@ The legacy runner returned zero despite the failures; the qualification controll
 **Namespace follow-up:** the [separate 1.81.4 correction](xslt30-xml-version/README.md), based on delivered PR #474, resolves all eight XML-version failures. The complete 776.080-second rerun records **10,219 passed / 2 failed / 4,380 skipped**, with every original case accounted for and zero corpus writes. All skip identities and explanations are unchanged; `output-0707` and `try-022` remain failures. Raw namespace queries and serialized output have separate regression coverage. The legacy console's rounded `100.0%` line does not establish success: the independent controller rejects qualification. Earlier cohorts retain their own source hashes and receipts. No full-conformance claim or standalone gate adoption follows.
 
 **Final follow-up:** The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate. [All named exclusions and explanations](xslt30-final-cases/skips.csv) remain visible. The runner now prints selected-case results and counts; it retains its legacy exit behavior. Independent completeness and integrity checks establish this result. The rejected first attempt (10,220/1/4,380, namespace-2602) remains separate evidence; the corrected run includes a new nested-collector regression case.
+
+## Scoped analyze-string reporting follow-up
+
+The [scoped analyze-string correction](xslt30-analyze-string-fix/README.md) reports XTDE1140/XTDE1145 for invalid effective regex/flags while preserving XPath errors from AVTs, child instructions and ordinary functions. Fourteen focused tests pass; identical sources against sealed 1.81.5 binaries give four expected failures and ten passes. All 26,373 solution cases pass across the retained restricted run and authorized 47-case database retry; 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 (including 11 experimental passes), with every skip name/reason unchanged. The complete clean-source standalone gate remains 10,221/0/4,380 in 713.170 seconds, all 14,601 cases accounted for, with unchanged fixtures/runtime and original 1,200-second/8 GiB bounds.
+
+The original 579-case error audit remains 513/0/66. Only error-1140a and error-1145a change reported identities, now the expected local codes without legacy aliases; named xsl:catch controls independently prove the standard QNames. Remaining 29 code differences, 23 uncoded reports and 55 execute-call/static-label observations still require review. Compile is public; TransformObserved is an internal capture helper; these call boundaries are not normative phase verdicts. No cases are admitted. Development Core/server 1.81.6 is unpublished; no public signature, fixture, skip, gate-budget or ruleset change.
 
 ## Adopted standalone CI gate
 

@@ -1,0 +1,42 @@
+{
+  "legacyCounts": {
+    "Passed": 513,
+    "Failed": 0,
+    "Skipped": 66
+  },
+  "totalCases": 579,
+  "allLegacyOutcomesIdentical": true,
+  "events": {
+    "exception": 504,
+    "match": 517,
+    "normal-result": 9
+  },
+  "observedApiBoundaries": {
+    "compile-call": 255,
+    "execute-call": 249,
+    "assertion": 9
+  },
+  "acceptedLegacyBranches": {
+    "message-code-substring": 449,
+    "normal-result-assertions": 9,
+    "legacy-message-label": 23,
+    "legacy-code-alias": 29,
+    "structured-local-or-qname": 3
+  },
+  "catalogCodeAssessments": {
+    "reported-code-exact": 447,
+    "skipped": 66,
+    "normal-result": 9,
+    "uncoded": 23,
+    "reported-code-mismatch": 29,
+    "qname-exact": 5
+  },
+  "lateStaticLabelCandidates": 55,
+  "controlsPassed": true,
+  "nineEngineAssembliesUnchanged": true,
+  "corpusAndRuntimeUnchanged": true,
+  "gateUnchanged": true,
+  "elapsedSeconds": 4.009,
+  "normativeDefectVerdicts": false,
+  "scope": "Reported identities and entry-point call boundaries: public Compile, internal TransformObserved capture helper; not normative phases. Local code properties do not independently prove a namespace. Remaining catalog differences require fixture/spec review; no admission."
+}

@@ -1,0 +1,39 @@
+{
+  "onlyChangedReportedIdentities": [
+    "error-1140a",
+    "error-1145a"
+  ],
+  "all579StatusesAndSkipReasonsUnchanged": true,
+  "remainingCodeDifferences": 29,
+  "remainingUncodedReports": 23,
+  "remainingToleranceBranches": 52,
+  "namespaceProof": "The original fixtures expose local ErrorCode properties. Separate named xsl:catch regression tests prove standard namespace and local name.",
+  "cases": [
+    {
+      "test": "error-1140a",
+      "before": {
+        "actual_code": "FORX0002",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTDE1140",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      }
+    },
+    {
+      "test": "error-1145a",
+      "before": {
+        "actual_code": "FORX0001",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTDE1145",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      }
+    }
+  ]
+}

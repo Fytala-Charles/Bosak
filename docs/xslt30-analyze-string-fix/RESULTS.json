@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-13",
+  "sourceCommit": "50c9fd762fb12704dbd670b8f49f1415d70d2bfa",
+  "sourceBaseCommit": "2e5abb5112f7ce422caa11d930d87b8e3c263b6b",
+  "developmentVersion": "1.81.6",
+  "published": false,
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "totalCases": 14601,
+  "elapsedSeconds": 713.17,
+  "solutionTests": 26373,
+  "xsltTestsIncluded": 8348,
+  "languageServerTests": 90,
+  "focusedTests": 14,
+  "baselineExpectedFailures": 4,
+  "baselinePasses": 10,
+  "targetedErrorCounts": {
+    "Passed": 513,
+    "Failed": 0,
+    "Skipped": 66
+  },
+  "admittedCases": 0,
+  "fixtureAndRuntimeUnchanged": true
+}

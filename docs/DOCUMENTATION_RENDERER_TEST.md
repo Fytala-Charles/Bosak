@@ -1,3 +1,7 @@
+# Scoped reporting renderer check — 13 November 2026
+
+The [reporting-fix receipt](xslt30-analyze-string-fix/DOCUMENTATION-CHECKS.json) verifies rendered regression/original-case tables, complete pinned-gate counts, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.
+
 # Error-oracle renderer check — 12 November 2026
 
 The [observer receipt](xslt30-error-oracle/DOCUMENTATION-CHECKS.json) verifies result/identity/boundary tables, overlap warnings, oracle limitations and unchanged adopted-gate totals. Historical dossiers and Fytala CSS/README company wording remain unchanged. No screenshot/PDF acceptance is asserted.
