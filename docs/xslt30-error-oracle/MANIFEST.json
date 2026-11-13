@@ -1,0 +1,255 @@
+{
+  "files": {
+    "ADOPTION.json": {
+      "bytes": 1578,
+      "sha256": "311adaf2eab501f8bd4a2a38d2080df5d39dad1e7a0dc72f89b37046009c693c"
+    },
+    "BOUNDARY-CLARIFICATION.json": {
+      "bytes": 753,
+      "sha256": "460a176e56ccd1a326a30586c9787fb48492935be28c8a18a88bf957a58d2111"
+    },
+    "CANDIDATE-RESOLUTION.json": {
+      "bytes": 1759,
+      "sha256": "3654f45a2608a111a2f6fd40993397f8a5be9176deb1794e055959ad76fce1d2"
+    },
+    "classifier.py": {
+      "bytes": 2789,
+      "sha256": "b430470e29a70f85de0d63289c549f490cc07bac33a0f5fd555422a98717c550"
+    },
+    "EVIDENCE.zip": {
+      "bytes": 5253734,
+      "sha256": "6a421e80219500eb4af9a5b16cb67123fed21be9bc9f5fe336e4d3f39d6657bf"
+    },
+    "INITIAL-METADATA.zip": {
+      "bytes": 5863,
+      "sha256": "1598d895cad503e968de735cae62f59827ddfb6c5289d0da81528a474b06c828"
+    },
+    "late-static-labels.csv": {
+      "bytes": 20839,
+      "sha256": "1149977b9b65c05eefd70a7696a6bf2f943c35f1e93aa47bdb9b8298b4546c22"
+    },
+    "outcomes.csv": {
+      "bytes": 213054,
+      "sha256": "882cbdb4b9cc2ac41e7d8945b325aee8ad72ef17444d2991646278630a5f1a86"
+    },
+    "README.md": {
+      "bytes": 6330,
+      "sha256": "2a41edffda333b44bd8309422c6f95b3d184fdaeec2e5d97851f2cf1bb49145d"
+    },
+    "REGEX-REVIEW.json": {
+      "bytes": 1974,
+      "sha256": "3f5cefcdf5f0a669748771c1c9433ac5eff7fba62652be59744e8f66da5a6adf"
+    },
+    "RESULTS.json": {
+      "bytes": 1197,
+      "sha256": "04a6b51b6be4a0ea80cda3a5c4836b88797601931a352ef22a7d6eaa0aaf43d2"
+    },
+    "review-candidates.csv": {
+      "bytes": 19707,
+      "sha256": "f6137ac0db74293065cab0cc19eceab0a581bcd7caac9ed654ba648d2fdd3f0e"
+    },
+    "skips.csv": {
+      "bytes": 21811,
+      "sha256": "e4c2917e4100be50ba2851563799d5a3b72edb2870af4a043b64ea49fed1efd1"
+    },
+    "verify.py": {
+      "bytes": 6753,
+      "sha256": "7125c2697aeeb9e095383f56c00393466b5c00b679b7daa653aa3be95d9750d2"
+    }
+  },
+  "archiveEntries": {
+    "ADOPTION.json": {
+      "bytes": 1578,
+      "sha256": "311adaf2eab501f8bd4a2a38d2080df5d39dad1e7a0dc72f89b37046009c693c"
+    },
+    "REPORT.json": {
+      "bytes": 1197,
+      "sha256": "04a6b51b6be4a0ea80cda3a5c4836b88797601931a352ef22a7d6eaa0aaf43d2"
+    },
+    "REGEX-REVIEW.json": {
+      "bytes": 1974,
+      "sha256": "3f5cefcdf5f0a669748771c1c9433ac5eff7fba62652be59744e8f66da5a6adf"
+    },
+    "CANDIDATE-RESOLUTION.json": {
+      "bytes": 1759,
+      "sha256": "3654f45a2608a111a2f6fd40993397f8a5be9176deb1794e055959ad76fce1d2"
+    },
+    "DIAGNOSTIC-IDENTITY.json": {
+      "bytes": 1585,
+      "sha256": "c3a07f2d145916be25dc551e6e65b4c67bd01f0eaeeb952aebb55f6e38c7fd8d"
+    },
+    "DIAGNOSTIC.diff": {
+      "bytes": 8543,
+      "sha256": "ec64f523bb14eb17848127f1a08c1439ea99a48d0dfa66bb169175f313b2a9a2"
+    },
+    "INSTRUMENTATION-VERIFICATION.json": {
+      "bytes": 520,
+      "sha256": "ac529b0eb614d0ba8bc8fdd84473d9dbd977e4f419e723a61f889c334cc0140a"
+    },
+    "CONTROLS.json": {
+      "bytes": 4095,
+      "sha256": "6d7da9fefa831c599683de11a68acb405f3989da49add0d8712c4ffb318a824f"
+    },
+    "CONTROLS.stdout.log": {
+      "bytes": 51,
+      "sha256": "c484c475cb4e18bc1d139ac666c489df368cad73eb5b84f9b0af974ea2acdece"
+    },
+    "CONTROLS.stderr.log": {
+      "bytes": 10493,
+      "sha256": "90471e272708ec6fcdf71ec339d6908b79ed3b8144294fa6aca663cc50c8ceba"
+    },
+    "DIAGNOSTIC-BUILD.log": {
+      "bytes": 11854,
+      "sha256": "12fc8a0e5bc07fdcb6ba8c3d93508fded74f6fdd7f5ea128761ea42ed7f6d689"
+    },
+    "DIAGNOSTIC-BUILD-2.log": {
+      "bytes": 2878,
+      "sha256": "cabb13196b460e14a0fef3ef86247fb50b9970cb0da349eda713531deebba24e"
+    },
+    "TraceHelpers-attempt1.cs": {
+      "bytes": 6725,
+      "sha256": "803e609df66dc54db2b096e3b507ffe72630401cfa0977bd61d4f75ed6017ca4"
+    },
+    "outcomes.csv": {
+      "bytes": 213054,
+      "sha256": "882cbdb4b9cc2ac41e7d8945b325aee8ad72ef17444d2991646278630a5f1a86"
+    },
+    "review-candidates.csv": {
+      "bytes": 19707,
+      "sha256": "f6137ac0db74293065cab0cc19eceab0a581bcd7caac9ed654ba648d2fdd3f0e"
+    },
+    "late-static-labels.csv": {
+      "bytes": 20839,
+      "sha256": "1149977b9b65c05eefd70a7696a6bf2f943c35f1e93aa47bdb9b8298b4546c22"
+    },
+    "exceptions.json": {
+      "bytes": 773575,
+      "sha256": "8a619e50d8cedb482e002776280103f2db4ba4491505a9d60c079330f6db6202"
+    },
+    "skips.csv": {
+      "bytes": 21811,
+      "sha256": "e4c2917e4100be50ba2851563799d5a3b72edb2870af4a043b64ea49fed1efd1"
+    },
+    "HOSTED-MAIN-DIAGNOSTIC.zip": {
+      "bytes": 1982506,
+      "sha256": "f92503278f354fa69ae08871e94a0da53ce7468d4ef519d084620f37169c7522"
+    },
+    "HOSTED-MAIN-DIAGNOSTIC.json": {
+      "bytes": 1302,
+      "sha256": "996f46bf20bd9c9d5c9fd3b0956e5cd5f8269f725d697589b1833ab6064cff7a"
+    },
+    "HOSTED-PR479.zip": {
+      "bytes": 1982511,
+      "sha256": "796939fdcccbedc8b33d2292e502b6eeaaff0f7603cbffa445f992ef0fb7d0e2"
+    },
+    "HOSTED-PR479.json": {
+      "bytes": 1328,
+      "sha256": "c63701c9ba64bc9be1abffb541d6e532b812587f8c3b23d8e70b060c51a147b5"
+    },
+    "PREMERGE-479.json": {
+      "bytes": 1945,
+      "sha256": "0c4685f07c97e7af876f385d7b224b2f7edb49909b7ba0e554751aaa7dc62955"
+    },
+    "MERGE-479.json": {
+      "bytes": 188,
+      "sha256": "5a75f216786f28014263b0dcc49237b36d7bfb524afcd789a8c142af3313b998"
+    },
+    "classifier.py": {
+      "bytes": 2789,
+      "sha256": "b430470e29a70f85de0d63289c549f490cc07bac33a0f5fd555422a98717c550"
+    },
+    "prepare-diagnostic.py": {
+      "bytes": 6046,
+      "sha256": "6af3269fa6654141e55980d860bf8b5b25ee00537acabe25c44d1e1b9f7af5dd"
+    },
+    "prepare-measurement.py": {
+      "bytes": 1635,
+      "sha256": "1ba811ef8a859bf235dbacfec71fee0c5322ec88108d995ab86abd444e27a8f4"
+    },
+    "run-controls.py": {
+      "bytes": 2330,
+      "sha256": "1f05c176f5b7ea605fd0417c285dd68ae448d18d20936c9bb3b2e7bbfd0dc238"
+    },
+    "run-selected.py": {
+      "bytes": 8808,
+      "sha256": "dd7a70943556b315ce3dc8496941e4d3aa1c36e7db3d6147c1aa7258c4c7b1c4"
+    },
+    "analyze.py": {
+      "bytes": 6869,
+      "sha256": "b550e3d69ec1085636a679bdde5e859ecc0705ce255fe6730dc2e020d86fc3bf"
+    },
+    "review-candidates.py": {
+      "bytes": 2933,
+      "sha256": "eb5b8dbfeb4dc343dd9bfa07be388d6cd51fab73753260354ff9fa784f50bed1"
+    },
+    "validate-instrumentation.py": {
+      "bytes": 2237,
+      "sha256": "a88a6413a225caafc2367e1fffae41dcda59666c4145a6cc0854120dfddbc083"
+    },
+    "diagnostic/Program.cs": {
+      "bytes": 239830,
+      "sha256": "51176fad12f9b19c6b7529fd38d65a69fe13b2f2cd97e7cb6bfb7b88e2e9abce"
+    },
+    "diagnostic/TraceHelpers.cs": {
+      "bytes": 6921,
+      "sha256": "ecb04220e45ee6aab8232303a1d5fcc0cec9d95474b90789253de7310a448e70"
+    },
+    "diagnostic/Diagnostic.csproj": {
+      "bytes": 2040,
+      "sha256": "e056ab79aa9e5419af1daad36d4f0731d51e72eadbe0332e08bb9d88b8550915"
+    },
+    "measurement/PLAN.json": {
+      "bytes": 15563,
+      "sha256": "28c4be848906d9fd6c64f7cdad3431c416ad81039e695ca5849e59eb033ecbd0"
+    },
+    "measurement/RUN.json": {
+      "bytes": 1232,
+      "sha256": "e737bf19f4e785255421676a426379f53335322ca4d90c2e618c99a7ad5a0efd"
+    },
+    "measurement/RUNTIME-HASHES.json": {
+      "bytes": 3218,
+      "sha256": "a5d9346cfc520c6f6ddc82be79b8d884bd9279cf582be9874961703e1a179672"
+    },
+    "measurement/CORPUS-BEFORE.json": {
+      "bytes": 2033541,
+      "sha256": "ff2710c3164a56e99fdfd08595f2d429efb307649983909598de88698d571554"
+    },
+    "measurement/CORPUS-AFTER.json": {
+      "bytes": 2033541,
+      "sha256": "43639a12b3e6373d5bb61bbca1c4f788e18b5c109f381fd6140aa5e507ec20e0"
+    },
+    "measurement/stdout.log": {
+      "bytes": 23363,
+      "sha256": "cc9f560faa3ec636e293d2b876d55ffb8fac816848f428894f69887e0fa4dc13"
+    },
+    "measurement/stderr.log": {
+      "bytes": 337594,
+      "sha256": "1d7df7ab9e70c5931b5d89ea629797aa4005c067bdcf7ac8af707f4c5fca95e1"
+    },
+    "original/Program.cs": {
+      "bytes": 238635,
+      "sha256": "3e84a59eb5fac331d031cd7aec00ac805bce78d6c2fbefabb76dbddc19bbebd1"
+    },
+    "original/outcomes.csv": {
+      "bytes": 148516,
+      "sha256": "6f7c96582903e848f3c66caa2e13eb6a9c68acc929ee6bbdd7764539b206c960"
+    },
+    "original/RUNTIME-HASHES.json": {
+      "bytes": 3117,
+      "sha256": "dca8b53ce87334b7ea7785b3754b99249628f254e1c4cc6f5ae8938f51165da4"
+    },
+    "fixtures/error-1140a.xsl": {
+      "bytes": 1055,
+      "sha256": "1bee2db4d6b01fcbd0204185e3f587aaf0b487a3d66ec95c254162c9b0f1e855"
+    },
+    "fixtures/error-1145a.xsl": {
+      "bytes": 1062,
+      "sha256": "26a67f35fb8630d251b9f70e2fcaece17ba635b4e290871a13f3d36c1301521c"
+    },
+    "fixtures/_error-test-set.xml": {
+      "bytes": 441319,
+      "sha256": "57f562c955b1a206f2b94b418db21eb1f5c854a0fe91adb7a55d40e2a1983e48"
+    }
+  },
+  "metadataRevision": "Entry-point visibility clarified; all original execution bytes/reports unchanged, initial metadata retained"
+}

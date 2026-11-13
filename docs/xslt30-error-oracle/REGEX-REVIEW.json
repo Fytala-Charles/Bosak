@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-12",
+  "reviewOnly": true,
+  "implementationStarted": false,
+  "immutableSpecification": {
+    "url": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+    "revision": "W3C Recommendation 8 June 2017",
+    "sections": [
+      "2.14 Error Handling",
+      "17.1 The xsl:analyze-string Instruction"
+    ],
+    "errors": [
+      "XTDE1140",
+      "XTDE1145"
+    ]
+  },
+  "cases": [
+    {
+      "test": "error-1140a",
+      "expected": "XTDE1140",
+      "observed": "FORX0002",
+      "apiBoundary": "execute-call",
+      "legacyBranch": "legacy-code-alias",
+      "fixtureSha256": "1bee2db4d6b01fcbd0204185e3f587aaf0b487a3d66ec95c254162c9b0f1e855",
+      "exception": {
+        "type": "System.InvalidOperationException",
+        "message": "FORX0002",
+        "codeLocalName": null,
+        "codeNamespaceUri": null,
+        "errorCode": null
+      }
+    },
+    {
+      "test": "error-1145a",
+      "expected": "XTDE1145",
+      "observed": "FORX0001",
+      "apiBoundary": "execute-call",
+      "legacyBranch": "legacy-code-alias",
+      "fixtureSha256": "26a67f35fb8630d251b9f70e2fcaece17ba635b4e290871a13f3d36c1301521c",
+      "exception": {
+        "type": "System.InvalidOperationException",
+        "message": "FORX0001",
+        "codeLocalName": null,
+        "codeNamespaceUri": null,
+        "errorCode": null
+      }
+    }
+  ],
+  "sourceObservation": "ExecuteAnalyzeString passes regex/flags preparation through XPath RegexHelper without translating these two observed FORX codes.",
+  "proposedNext": "Correct only the xsl:analyze-string regex/flags preparation boundary; preserve FORX errors from XPath functions, attribute-value-template evaluation and matching/non-matching child evaluation.",
+  "scope": "Two simple fixture/reporting discrepancies reviewed; no verdict for the other 29 reported-code differences or the 55 late static-label observations. No engine change or admission."
+}
