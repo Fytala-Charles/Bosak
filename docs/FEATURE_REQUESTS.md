@@ -4,9 +4,11 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
-## Scoped regex reporting checkpoint — 13 November 2026
+## Scoped regex reporting qualification — 13 November 2026
 
-The [scoped analyze-string reporting correction](xslt30-analyze-string-fix/README.md) maps only effective regex/flags preparation errors to XTDE1140/XTDE1145. XPath errors from select/AVTs, child callbacks and ordinary functions retain their identities. Child-validation/native-construction order and the shared RegexHelper/legacy matcher are unchanged. Fourteen focused cases pass; identical sources against the sealed1.81.5 baseline yield four failures and ten passes. Fresh full qualification is pending. Development Core/server1.81.6 is unpublished; no gate admission, fixture/skip/budget/ruleset change or public signature addition.
+The [scoped analyze-string correction](xslt30-analyze-string-fix/README.md) reports XTDE1140/XTDE1145 for invalid effective regex/flags while preserving XPath errors from AVTs, child instructions and ordinary functions. Fourteen focused tests pass; identical sources against sealed 1.81.5 binaries give four expected failures and ten passes. All 26,373 solution cases pass across the retained restricted run and authorized 47-case database retry; 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 (including 11 experimental passes), with every skip name/reason unchanged. The complete clean-source standalone gate remains 10,221/0/4,380 in 713.170 seconds, all 14,601 cases accounted for, with unchanged fixtures/runtime and original 1,200-second/8 GiB bounds.
+
+The original 579-case error audit remains 513/0/66. Only error-1140a and error-1145a change reported identities, now the expected local codes without legacy aliases; named xsl:catch controls independently prove the standard QNames. Remaining 29 code differences, 23 uncoded reports and 55 execute-call/static-label observations still require review. Compile is public; TransformObserved is an internal capture helper; these call boundaries are not normative phase verdicts. No cases are admitted. Development Core/server 1.81.6 is unpublished; no public signature, fixture, skip, gate-budget or ruleset change.
 
 
 ## Observational checkpoint — 12 November 2026
