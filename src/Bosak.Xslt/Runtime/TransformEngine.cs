@@ -584,6 +584,7 @@
 //                      | Charles Korthout | 7.66  | 12-11-2026     | Preserve standalone attributes in typed/raw template sequences at their source positions.  |
 //                      | Charles Korthout | 7.67  | 12-11-2026     | Keep nested standalone attribute materialization on its existing evaluator route.           |
 //                      | Charles Korthout | 7.68  | 12-11-2026     | Bind raw attribute collection to the actual typed-template root container.                  |
+//                      | Charles Korthout | 7.69  | 13-11-2026     | Scope analyze-string regex/flags preparation errors to XTDE1140 and XTDE1145.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -22044,11 +22045,23 @@ internal sealed class TransformEngine
         var flagsAttr = instruction.Attribute("flags")?.Value ?? string.Empty;
         string flags = EvaluateAvt(flagsAttr, instruction);
 
-        var options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
-        if (isQuoteMode)
-            pattern = Regex.Escape(pattern);
-        else
-            pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options, caseInsensitive);
+        RegexOptions options;
+        try
+        {
+            options = RegexHelper.ParseRegexFlags(flags, out bool isQuoteMode, out bool caseInsensitive);
+            if (isQuoteMode)
+                pattern = Regex.Escape(pattern);
+            else
+                pattern = RegexHelper.ValidateAndTranslatePatternCached(pattern, options, caseInsensitive);
+        }
+        catch (InvalidOperationException error) when (error.Message == "FORX0001")
+        {
+            throw new XsltRuntimeException("XTDE1145", "Invalid xsl:analyze-string flags.", XdmValue.Undefined);
+        }
+        catch (InvalidOperationException error) when (error.Message == "FORX0002")
+        {
+            throw new XsltRuntimeException("XTDE1140", "Invalid xsl:analyze-string regular expression.", XdmValue.Undefined);
+        }
 
         var matchingChild = instruction.Element(XName.Get("matching-substring", xsl));
         var nonMatchingChild = instruction.Element(XName.Get("non-matching-substring", xsl));
@@ -22092,7 +22105,15 @@ internal sealed class TransformEngine
         // XSLT 3.0 position-based algorithm (§17.1). This correctly handles regexes
         // that match zero-length substrings.
         var segments = new List<(bool IsMatch, string Text, Match? Match)>();
-        var regex = RegexHelper.GetRegex(pattern, options);
+        Regex regex;
+        try
+        {
+            regex = RegexHelper.GetRegex(pattern, options);
+        }
+        catch (InvalidOperationException error) when (error.Message == "FORX0002")
+        {
+            throw new XsltRuntimeException("XTDE1140", "Invalid xsl:analyze-string regular expression.", XdmValue.Undefined);
+        }
         int pos = 0;
         var pendingNonMatch = new StringBuilder();
 

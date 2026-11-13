@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "reviewedAuditPr": 480,
+  "reviewedCases": ["error-1140a", "error-1145a"],
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "specification": {
+    "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+    "revision": "W3C Recommendation 8 June 2017",
+    "sections": ["2.14 Error Handling", "17.1 The xsl:analyze-string Instruction"],
+    "affectedErrors": ["XTDE1140", "XTDE1145"]
+  },
+  "decision": "Translate the reviewed XPath regex-helper errors only while preparing the effective regex and flags of xsl:analyze-string. Report XTDE1140 for invalid pattern and XTDE1145 for invalid flags, with the standard error QName available to xsl:catch.",
+  "boundaries": [
+    "Evaluate select and regex/flags AVTs outside translation scopes.",
+    "Preserve child validation and native-regex construction order.",
+    "Do not translate XPath errors raised by AVT evaluation, matching/non-matching child execution or ordinary XPath functions.",
+    "Do not change the shared XPath RegexHelper, legacy assertion matcher, profiles, fixtures, exclusions, gate bounds or rules.",
+    "No admission of the 579 excluded error cases; the required gate remains 10221/0/4380."
+  ],
+  "intentionalDeviations": [],
+  "publication": "Unpublished development patch 1.81.6; no package publication authorized."
+}

@@ -4,6 +4,11 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Scoped regex reporting checkpoint — 13 November 2026
+
+The [scoped analyze-string reporting correction](xslt30-analyze-string-fix/README.md) maps only effective regex/flags preparation errors to XTDE1140/XTDE1145. XPath errors from select/AVTs, child callbacks and ordinary functions retain their identities. Child-validation/native-construction order and the shared RegexHelper/legacy matcher are unchanged. Fourteen focused cases pass; identical sources against the sealed1.81.5 baseline yield four failures and ten passes. Fresh full qualification is pending. Development Core/server1.81.6 is unpublished; no gate admission, fixture/skip/budget/ruleset change or public signature addition.
+
+
 ## Adopted standalone gate — 12 November 2026
 
 The [standalone XSLT gate is adopted](xslt30-gate-adoption/README.md): [PR #477](https://github.com/Fytala-Charles/Bosak/pull/477) merged at `b3e2839cfeb1c6e6e9add98b13d84ea7c0827b0c` after all six hosted checks passed. Independent replay of the hosted artifact confirms **10,221 passed / 0 failed / 4,380 excluded**, all 14,601 cases accounted for in 1,095.141 seconds, with unchanged fixture/runtime bytes and exclusion identities/reasons. The active main ruleset now requires `Standalone XSLT 3.0 (pinned basic profile)` from GitHub Actions. Existing pull-request/deletion rules, branch scope and bypass actors are preserved. The retained Legacy/Xslt30 basic/non-schema-aware profile, immutable corpus, 1,200-second/8 GiB bounds and frozen QT3/qt4 policies are unchanged. This is operational adoption; no engine/API/package change, publication, new exclusion or complete-conformance claim.
@@ -24,7 +29,7 @@ The [final standalone corrections](xslt30-final-cases/README.md) resolve `output
 
 ## Release artifact boundary
 
-Core/server development metadata is now **1.81.5**, an unpublished follow-up for the [final standalone corrections](xslt30-final-cases/README.md), based on merged PRs #474 and #475. Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
+Core/server development metadata is now **1.81.6**, an unpublished follow-up for the [scoped analyze-string reporting correction](xslt30-analyze-string-fix/README.md). Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
 
 The conformance runner uses an internal observed-execution helper to capture secondary outputs with logical URI, raw XDM and per-output serialization properties. It serializes at production time and compares only current captured outputs; golden fixture files remain independent inputs. The engine isolates explicit principal result-document content from enclosing sequence accumulators and gives that principal raw output precedence over the enclosing template result. Ordinary raw-template results and public API signatures retain their routes. [Immutable specification adoption](xslt30-isolation-candidate/ADOPTION.json).
 

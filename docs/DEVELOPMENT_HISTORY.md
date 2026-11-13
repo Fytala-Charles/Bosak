@@ -1,3 +1,11 @@
+# Scoped analyze-string reporting — 13 November 2026
+
+The [scoped analyze-string reporting correction](xslt30-analyze-string-fix/README.md) maps only effective regex/flags preparation errors to XTDE1140/XTDE1145. XPath errors from select/AVTs, child callbacks and ordinary functions retain their identities. Child-validation/native-construction order and the shared RegexHelper/legacy matcher are unchanged. Fourteen focused cases pass; identical sources against the sealed1.81.5 baseline yield four failures and ten passes. Fresh full qualification is pending. Development Core/server1.81.6 is unpublished; no gate admission, fixture/skip/budget/ruleset change or public signature addition.
+
+PR480 merged at2e5abb5112f7ce422caa11d930d87b8e3c263b6b after all six checks passed; hosted artifact independently reconciles10,221/0/4,380. Worktree `.worktrees/Bosak.AnalyzeStringErrors`, branch `fix/xslt-analyze-string-errors`, base2e5abb51. Candidate checkpoint is the commit containing this entry. Adoption was recorded before code; tests and all C# license/history headers are current. Preserve the owner checkout and all earlier sealed dossiers. Do not claim completion or publication until fresh solution/frozen/standalone qualification succeeds.
+
+---
+
 # Error identity/API-boundary observations — 12 November 2026
 
 The [error identity/API-boundary audit](xslt30-error-oracle/README.md) preserves every legacy outcome (**513/0/66**) and all skip reasons. Independent observations distinguish5 explicit QName matches,445 local-code matches,31 differing reported codes,23 uncoded exceptions and9 normal-result passes. The71 potential alias-review cases resolve to54 observed tolerance branches and17 ordinary branches. Exceptions surfaced in255 compile calls and249 execute calls;55 static-labelled expectations surfaced in the latter, without automatic normative defect verdicts. Sixteen controls pass; all nine engine DLL hashes and fixture/runtime bytes are unchanged. The reviewed next correction is limited to xsl:analyze-string reporting for error-1140a/1145a (XTDE1140/XTDE1145 instead of FORX0002/FORX0001), preserving XPath errors elsewhere. No production implementation or gate admission occurs; required counts stay10,221/0/4,380.
