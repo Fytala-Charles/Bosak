@@ -4,6 +4,10 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Streaming wrapper cache allocation candidate — 13 November 2026
+
+The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static state factory with the existing weak table. The same four focused tests pass against the candidate; the retained 1.81.8 binaries pass the three protective identity/race/collection checks and fail only the allocation check (9,600,000 bytes for 100,000 warmed hits, versus zero for the candidate). This local allocation result does not establish whole-suite speed or the cause of earlier hosted timeouts. Full solution and conformance qualification are pending. Development Core/server 1.81.9 remains unpublished. Public signatures and streaming evaluation semantics are unchanged.
+
 ## Template-name reporting qualification — 13 November 2026
 
 The [named-template prefix reporting correction](xslt30-template-name-fix/README.md) translates XPST0081 to XTSE0280 only around name expansion in named-template binding collection, for well-formed prefixed lexical names. Existing namespace resolution and shared QName expansion stay unchanged, as do XPath diagnostics, malformed-name precedence, EQNames, reserved names and preprocessing. Twenty-eight focused tests pass; identical sources against sealed 1.81.7 binaries give ten expected reporting failures and eighteen protective passes. All 26,422 solution cases pass in one invocation, including 8,397 XSLT cases; 90 separate language-server tests pass. Frozen QT3 stays 31,397/0/424 and selected qt4 stays 8,941/0/1,918 (including 11 experimental passes), with every skip name/reason unchanged. The complete pinned standalone gate stays 10,221/0/4,380 in 783.428 seconds, all 14,601 identities accounted for and unchanged corpus/runtime bytes under the original 1,200-second/8 GiB limits.

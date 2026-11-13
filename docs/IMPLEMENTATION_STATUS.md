@@ -131,6 +131,10 @@ Full XSD1.1 structural validation, native provider/session/lease adoption and ac
 
 The README now includes Bosak.XmlDb as a separate proprietary storage project in development and distinguishes it from the published Database REST loader. The roadmap starts from the published1.81.2/extension0.2.6 baseline and separates future provider/workload work from completed scoped release acceptance. Engineering dossier links formerly appended to the README are retained below for navigation; their original dates, candidate identities and acceptance boundaries still apply.
 
+## Streaming wrapper cache allocation candidate — 13 November 2026
+
+The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static state factory with the existing weak table. The same four focused tests pass against the candidate; the retained 1.81.8 binaries pass the three protective identity/race/collection checks and fail only the allocation check (9,600,000 bytes for 100,000 warmed hits, versus zero for the candidate). This local allocation result does not establish whole-suite speed or the cause of earlier hosted timeouts. Full solution and conformance qualification are pending. Development Core/server 1.81.9 remains unpublished. Public signatures and streaming evaluation semantics are unchanged.
+
 ## Integration development dossiers
 
 The unpublished [native XSD 1.1 assessment candidate](schema-assessment/README.md) records its bounded structural-check and typed-decimal profile.
