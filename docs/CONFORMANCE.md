@@ -47,6 +47,8 @@ The legacy runner returned zero despite the failures; the qualification controll
 
 ## Hosted gate timing evidence
 
+The [delivery refresh](xslt30-timing-refresh/README.md) incorporates merged PR #489 after independent hosted qualification. The earlier timing report and its original timeout remain historical evidence; the refreshed documentation PR awaits its own required check.
+
 The [hosted XSLT timing investigation](xslt30-hosted-timing/README.md) replays seven retained attempts without new diagnostic execution or gate changes. Two same-checkout comparisons have identical32-file application manifests yet include both a success and a1200-second timeout. Four complete runs each replay10,221/0/4,380; three incomplete timeouts remain failed. Equivalent-tree/different-payload comparisons are separate. Twenty-second progress samples show earlier delay, but cannot identify CPU/GC/I/O causes or individual test durations. No failure rate, regional cause or performance acceptance is inferred. Next prepare separate host/process telemetry under unchanged bounds before another semantic slice. PR483 merged04eea731 after all six checks and hosted replay passed; parent timeouts remain original evidence.
 
 ## Scoped named-template prefix reporting follow-up
