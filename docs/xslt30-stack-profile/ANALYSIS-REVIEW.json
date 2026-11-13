@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-13",
+  "beforeAnalysisRevision": true,
+  "collectionSource": "bbccd7cf",
+  "traceSha256": "26e7d71bf665a9b7c822d16278513200ac54decb8b17e4daebd1354f3d647b44",
+  "reason": "RunTestCase caller blocks in RunWithStack.Thread.Join; execution threads lack that ancestor. Do not rank only caller ancestry.",
+  "workerSource": {
+    "commit": "04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf",
+    "file": "src/Bosak.Xslt/Api/XsltExecutable.cs",
+    "method": "RunWithStack",
+    "sha256": "0376ae0f2d48b170189561a1fb14a45cbe5a5d753adb6f9b240f576a6f116a32"
+  },
+  "traceEvent": {
+    "repository": "microsoft/perfview",
+    "reviewTag": "v3.1.23",
+    "reviewCommit": "bc9c1c6811d2ac9a4ad1e97a7fd8de01bea09a26",
+    "binaryInformationalCommit": "ea4be383d3534033723c6c32f1b0add59f64f772",
+    "binaryCommitResolution": "Public tree lookup returned422; review tag is not asserted as the binary build commit",
+    "files": [
+      "src/TraceEvent/Computers/SampleProfilerThreadTimeComputer.cs",
+      "src/TraceEvent/Stacks/SpeedScopeStackSourceWriter.cs",
+      "src/TraceEvent/TraceEvent.Tests/Speedscope/SpeedScopeExporterTests.cs"
+    ]
+  },
+  "rules": [
+    "Preserve original caller-only derived report; reprocess the same converted trace without another workload execution.",
+    "CPU_TIME and UNMANAGED_CODE_TIME are converter virtual frames, not measured methods or hardware CPU percentages.",
+    "Report engine-associated CPU_TIME-category stacks across execution threads, stripping virtual leaves before selecting the last resolved managed method.",
+    "Keep caller-only, opaque/unmanaged engine and managed-category engine weights separate.",
+    "Attribute nearest engine context for CWT/Monitor-containing stacks only as an investigation lead; no allocation count, exact CPU or causal verdict."
+  ]
+}

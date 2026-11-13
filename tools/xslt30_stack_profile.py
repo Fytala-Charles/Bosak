@@ -147,8 +147,10 @@ def validate_cases(rows, expected):
 
 def stack_report(data):
     frames=data['shared']['frames'];exclusive=collections.Counter();inclusive=collections.Counter();total=0.;case_total=0.;case_exclusive=collections.Counter();case_inclusive=collections.Counter()
+    engine_total=0.;engine_without_caller=0.;engine_opaque=0.;engine_exclusive=collections.Counter();engine_inclusive=collections.Counter();cache_context=collections.Counter()
+    all_managed_category=0.;all_managed_exclusive=collections.Counter()
     def interval(stack,weight):
-        nonlocal total,case_total
+        nonlocal total,case_total,engine_total,engine_without_caller,engine_opaque,all_managed_category
         if not math.isfinite(weight) or weight<0:raise ValueError('Invalid sampled duration')
         if any(type(i)!=int or i<0 or i>=len(frames) for i in stack):raise ValueError('Invalid stack frame')
         if not stack:return
@@ -157,6 +159,19 @@ def stack_report(data):
         if any('RunTestCase' in frames[i]['name'] for i in stack):
             case_total+=weight;case_exclusive[stack[-1]]+=weight
             for i in set(stack):case_inclusive[i]+=weight
+        marker=frames[stack[-1]]['name'];real=[i for i in stack if '!' in frames[i]['name']]
+        if marker=='CPU_TIME' and real:
+            all_managed_category+=weight;all_managed_exclusive[real[-1]]+=weight
+        engine=[i for i in stack if frames[i]['name'].startswith(('Bosak.XPath.','Bosak.Xslt!','Bosak.XQuery!'))]
+        if engine:
+            if marker=='UNMANAGED_CODE_TIME':engine_opaque+=weight
+            elif marker=='CPU_TIME':
+                if not real:raise ValueError('No resolved managed leaf in engine stack')
+                engine_total+=weight;engine_exclusive[real[-1]]+=weight
+                if not any('RunTestCase' in frames[i]['name'] for i in stack):engine_without_caller+=weight
+                for i in set(real):engine_inclusive[i]+=weight
+                if any('ConditionalWeakTable' in frames[i]['name'] or 'Monitor.Enter_Slowpath' in frames[i]['name'] for i in stack):
+                    cache_context[engine[-1]]+=weight
     units=set()
     for profile in data['profiles']:
         units.add(profile['unit'])
@@ -180,7 +195,13 @@ def stack_report(data):
         return [dict(frame=frames[i]['name'],weight=value,share=value/denominator) for i,value in counter.most_common(30)]
     return dict(unit=next(iter(units)),profiles=len(data['profiles']),frames=len(frames),sampledThreadWeight=total,
         caseStackWeight=case_total,allExclusive=top(exclusive,total),caseExclusive=top(case_exclusive,case_total),
-        caseInclusive=top(case_inclusive,case_total),interpretation='Sampled thread wall-time weights, not on-CPU percentages. Case stacks require a resolved RunTestCase ancestor. Inclusive methods deduplicate recursion and overlap; do not sum their shares.')
+        caseInclusive=top(case_inclusive,case_total),engineCategoryWeight=engine_total,engineWithoutCallerAncestryWeight=engine_without_caller,
+        engineOpaqueCategoryWeight=engine_opaque,engineExclusive=top(engine_exclusive,engine_total) if engine_total else [],
+        engineInclusive=top(engine_inclusive,engine_total) if engine_total else [],
+        cacheOrMonitorEngineContexts=top(cache_context,engine_total) if engine_total else [],
+        allManagedCategoryWeight=all_managed_category,
+        allManagedCategoryExclusive=top(all_managed_exclusive,all_managed_category) if all_managed_category else [],
+        interpretation='Sampled thread wall-time weights, not on-CPU percentages. Caller ancestry is retained as a separate waiting-caller view. Engine rankings use converted CPU_TIME-category stacks across threads; virtual markers are not methods. Inclusive methods deduplicate recursion and overlap; do not sum their shares.')
 
 
 def run(packet):
@@ -210,6 +231,7 @@ def run(packet):
     speedscope=list(packet.glob('stack*.speedscope.json'))
     if len(speedscope)!=1:raise ValueError('Expected one converted trace')
     result=stack_report(json.loads(speedscope[0].read_text(encoding='utf-8-sig')))
+    if not result['engineCategoryWeight']:raise ValueError('No resolved managed-category engine execution samples')
     result.update(diagnosticOnly=True,qualification=False,selectedCases=len(rows),outsideSelection=14601-len(rows),
         selectedOutcomes=dict(collections.Counter(r['result'] for r in rows)),caseWallSeconds=sum(r['wallSeconds'] for r in rows),
         caseCpuSeconds=sum(r['cpuSeconds'] for r in rows),elapsedSeconds=receipt['elapsedSeconds'],traceSha256=sha(packet/'raw.nettrace'))

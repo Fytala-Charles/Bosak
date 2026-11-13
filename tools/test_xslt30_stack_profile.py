@@ -88,5 +88,17 @@ class StackProfileTests(unittest.TestCase):
         self.assertEqual(set(baseline['targetSet']['cases']),set(baseline['expectedResults']))
         self.assertEqual(180,baseline['wallTimeoutSeconds']);self.assertEqual(8589934592,baseline['memoryLimitBytes'])
 
+    def test_execution_thread_without_caller_ancestry_is_ranked_separately(self):
+        names=['Program.RunTestCase','Bosak.Xslt!Engine.RunWithStack','UNMANAGED_CODE_TIME',
+            'Bosak.XPath.Runtime!Engine.Execute','System.Core!Monitor.Enter_Slowpath','CPU_TIME']
+        data=dict(shared=dict(frames=[dict(name=n) for n in names]),profiles=[
+            dict(type='sampled',unit='milliseconds',samples=[[0,1,2],[3,4,5]],weights=[10,9])])
+        result=profile.stack_report(data)
+        self.assertEqual(10,result['caseStackWeight']);self.assertEqual(9,result['engineCategoryWeight'])
+        self.assertEqual(9,result['engineWithoutCallerAncestryWeight']);self.assertEqual(10,result['engineOpaqueCategoryWeight'])
+        self.assertEqual('System.Core!Monitor.Enter_Slowpath',result['engineExclusive'][0]['frame'])
+        self.assertEqual(1,result['engineExclusive'][0]['share'])
+        self.assertEqual('Bosak.XPath.Runtime!Engine.Execute',result['cacheOrMonitorEngineContexts'][0]['frame'])
+
 
 if __name__=='__main__':unittest.main()

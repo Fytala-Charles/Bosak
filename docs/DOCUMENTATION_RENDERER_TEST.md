@@ -1,3 +1,7 @@
+# Managed-stack diagnostic renderer check - 13 November 2026
+
+The [stack receipt](xslt30-stack-profile/DOCUMENTATION-CHECKS.json) checks selected/unselected accounting, explained exclusions, sampling denominators, worker-selection correction and retained failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.
+
 # Template-name renderer check — 13 November 2026
 
 The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.

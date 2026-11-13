@@ -6,6 +6,8 @@
 
 Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
+The selected stack observation now completes54 cases with52passes and2unchangedschema-aware exclusions;14,547 othercases are unselected. The same trace was reanalyzed for execution-worker stacks, with no new workload or qualification.
+
 The separate [sampled managed-stack investigation](xslt30-stack-profile/README.md) selects54 original comparison cases under exact caller/engine/native pins. It does not change the adopted profile, exclusions or qualification budgets; sampling weights are thread wall-time, not CPU percentages.
 
 ## Results and scope

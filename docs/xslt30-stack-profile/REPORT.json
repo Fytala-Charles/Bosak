@@ -1,0 +1,978 @@
+{
+  "unit": "milliseconds",
+  "profiles": 19,
+  "frames": 785,
+  "sampledThreadWeight": 59470.801316685494,
+  "caseStackWeight": 20816.60352405357,
+  "allExclusive": [
+    {
+      "frame": "CPU_TIME",
+      "weight": 38272.07577123471,
+      "share": 0.6435439732421574
+    },
+    {
+      "frame": "UNMANAGED_CODE_TIME",
+      "weight": 21198.694821730594,
+      "share": 0.356455510139275
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.RunTestCase(class System.Xml.Linq.XElement,class System.Collections.Generic.Dictionary`2<class System.String,class System.Xml.Linq.XElement>,class System.String,class System.String,class System.String,class System.Xml.Linq.XNamespace,class System.String)",
+      "weight": 0.01169555855199178,
+      "share": 1.9666051731356782e-07
+    },
+    {
+      "frame": "Process64 Program (53560) Args:  exec --fx-version 10.0.11 --roll-forward Disable D:\\Development\\Bosak\\.guard-tmp\\xslt30-stack-run-20261113\\runtime\\Bosak.Xslt.Conformance.dll --processor-profile legacy D:\\Development\\Bosak\\.guard-tmp\\xslt30-stack-run-20261113\\corpus\\catalog.xml sx-GeneralComp-gt ",
+      "weight": 0.010350135042244801,
+      "share": 1.7403725547819217e-07
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext,value class Bosak.XPath.Core.Xdm.XdmValue[],int32)",
+      "weight": 0.0032249797835675054,
+      "share": 5.4227952409692604e-08
+    },
+    {
+      "frame": "Thread (52728)",
+      "weight": 0.0019251411442464672,
+      "share": 3.237119900226294e-08
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.RunTestSet(class System.String,class System.String,class System.String)",
+      "weight": 0.0009557670591391343,
+      "share": 1.6071198604666833e-08
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<Pump>d__78.MoveNext()",
+      "weight": 0.0008891633937082588,
+      "share": 1.4951259677390452e-08
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ApplyFunctionConversion(value class Bosak.XPath.Core.Xdm.XdmValue,class System.String,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 0.0004242465993229416,
+      "share": 7.133695694863832e-09
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(class System.Xml.Linq.XElement,value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 0.00032064724132396805,
+      "share": 5.391675145194408e-09
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable.RunWithStack(class System.Func`1<!!0>,int32)",
+      "weight": 0.00023246421733347233,
+      "share": 3.9088798567819325e-09
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ApplyAxis(value class Bosak.XPath.Core.Xdm.XdmValue,value class Bosak.XPath.Core.Xdm.XdmAxis,bool)",
+      "weight": 0.0001665473939169715,
+      "share": 2.800490160374616e-09
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Multiply(value class Bosak.XPath.Core.Xdm.XdmValue,value class Bosak.XPath.Core.Xdm.XdmValue,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 0.00014076938623475144,
+      "share": 2.3670336218465635e-09
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<FilterNodesLazyIterator>d__49.MoveNext()",
+      "weight": 0.00012892091808680561,
+      "share": 2.167801933595853e-09
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.GC.RunFinalizers()",
+      "weight": 8.82833506921088e-05,
+      "share": 1.4844822793288894e-09
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode+<WrapEach>d__89.MoveNext()",
+      "weight": 5.375519913286553e-05,
+      "share": 9.0389229576067e-10
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet..ctor(class System.Xml.Linq.XDocument,class System.String,class Bosak.Xslt.Api.IXsltUriResolver,int32,class System.Collections.Generic.HashSet`1<class System.String>,class System.Object,class System.Collections.Generic.IReadOnlyDictionary`2<value class System.ValueTuple`2<class System.String,class System.String>,value class Bosak.XPath.Core.Xdm.XdmValue>,class Bosak.Xslt.Stylesheet.Stylesheet,class Bosak.Xslt.Stylesheet.Stylesheet,value class Bosak.Xslt.Api.PackageVersionResolutionStrategy,bool,class Bosak.Xslt.Stylesheet.SchemaImportState,int32,value class Bosak.Xslt.Api.XsltProcessorProfile)",
+      "weight": 2.7969741807964965e-05,
+      "share": 4.703104916818668e-10
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.GetElementTreeSequence(class System.Xml.Linq.XElement)",
+      "weight": 1.542358620554296e-05,
+      "share": 2.593472067647359e-10
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Add(value class Bosak.XPath.Core.Xdm.XdmValue,value class Bosak.XPath.Core.Xdm.XdmValue,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 1.4412685231945943e-05,
+      "share": 2.423489328014525e-10
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode+<EnumerateAttributes>d__148.MoveNext()",
+      "weight": 8.204079676943365e-06,
+      "share": 1.379513895105627e-10
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable+<>c__DisplayClass23_0.<TransformObserved>b__0()",
+      "weight": 7.157135030411155e-06,
+      "share": 1.203470421106148e-10
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.Load()",
+      "weight": 7.088662812293478e-06,
+      "share": 1.1919568351779783e-10
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.InitHelpers.InitClassSlow(value class System.Runtime.CompilerServices.MethodTable*)",
+      "weight": 5.507659921022423e-06,
+      "share": 9.261116041961183e-11
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource.WrapNonElementRecord(class System.Xml.Linq.XNode)",
+      "weight": 4.211235705042782e-06,
+      "share": 7.081182045316163e-11
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.MaterializeSequence(value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 3.5324078453413676e-06,
+      "share": 5.939734738953809e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(class Bosak.Xslt.Stylesheet.TemplateRule,value class Bosak.XPath.Core.Xdm.XdmValue,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,int32,int32,bool)",
+      "weight": 3.337860107421875e-06,
+      "share": 5.6126032162364434e-11
+    },
+    {
+      "frame": "Bosak.XPath.Standard!Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 3.131294249669736e-06,
+      "share": 5.265263255820972e-11
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.Wrap(class System.Xml.Linq.XObject)",
+      "weight": 2.7381902327761054e-06,
+      "share": 4.604259858876093e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.Run()",
+      "weight": 2.722167948832066e-06,
+      "share": 4.5773184294867034e-11
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.TryCast(value class Bosak.XPath.Core.Xdm.XdmValue,class System.String,class Bosak.XPath.Runtime.Vm.EvaluationContext,value class Bosak.XPath.Core.Xdm.XdmValue&,value class CastFailureKind&)",
+      "weight": 2.2039424152353604e-06,
+      "share": 3.7059235228717336e-11
+    }
+  ],
+  "caseExclusive": [
+    {
+      "frame": "UNMANAGED_CODE_TIME",
+      "weight": 20264.035966291613,
+      "share": 0.9734554411278734
+    },
+    {
+      "frame": "CPU_TIME",
+      "weight": 552.5555785818096,
+      "share": 0.02654398340936513
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.RunTestCase(class System.Xml.Linq.XElement,class System.Collections.Generic.Dictionary`2<class System.String,class System.Xml.Linq.XElement>,class System.String,class System.String,class System.String,class System.Xml.Linq.XNamespace,class System.String)",
+      "weight": 0.01169555855199178,
+      "share": 5.618379837266714e-07
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable.RunWithStack(class System.Func`1<!!0>,int32)",
+      "weight": 0.00023246421733347233,
+      "share": 1.1167250078278145e-08
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet..ctor(class System.Xml.Linq.XDocument,class System.String,class Bosak.Xslt.Api.IXsltUriResolver,int32,class System.Collections.Generic.HashSet`1<class System.String>,class System.Object,class System.Collections.Generic.IReadOnlyDictionary`2<value class System.ValueTuple`2<class System.String,class System.String>,value class Bosak.XPath.Core.Xdm.XdmValue>,class Bosak.Xslt.Stylesheet.Stylesheet,class Bosak.Xslt.Stylesheet.Stylesheet,value class Bosak.Xslt.Api.PackageVersionResolutionStrategy,bool,class Bosak.Xslt.Stylesheet.SchemaImportState,int32,value class Bosak.Xslt.Api.XsltProcessorProfile)",
+      "weight": 2.7969741807964965e-05,
+      "share": 1.343626580371094e-09
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.Load()",
+      "weight": 7.088662812293478e-06,
+      "share": 3.405292704980682e-10
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.InitHelpers.InitClassSlow(value class System.Runtime.CompilerServices.MethodTable*)",
+      "weight": 5.507659921022423e-06,
+      "share": 2.6458014222437033e-10
+    },
+    {
+      "frame": "Bosak.XPath.Standard!Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 3.131294249669736e-06,
+      "share": 1.5042291822734328e-10
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.Run()",
+      "weight": 2.722167948832066e-06,
+      "share": 1.3076907314330134e-10
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.Analyze(class Bosak.XPath.Parser.Ast.XPathAstNode,class Env)",
+      "weight": 1.087761006601795e-06,
+      "share": 5.2254490284396683e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.CheckUnit(class System.Xml.Linq.XElement,class Env,class System.Collections.Generic.IEnumerable`1<class System.String>)",
+      "weight": 6.637573619627801e-07,
+      "share": 3.188595878265198e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.UseWhen(class System.Xml.Linq.XElement,class System.String)",
+      "weight": 4.7435736405532225e-07,
+      "share": 2.2787452501903235e-11
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.Xml11Loader.ReadAllTextWithDeclaredEncoding(class System.String)",
+      "weight": 4.295349071981036e-07,
+      "share": 2.0634245481102444e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.AnalyzeSourceDocuments()",
+      "weight": 3.4980769214598695e-07,
+      "share": 1.6804263564984768e-11
+    },
+    {
+      "frame": "Bosak.XPath.Standard!Bosak.XPath.Standard.Functions.FunctionLibrary..cctor()",
+      "weight": 3.3550261946402316e-07,
+      "share": 1.6117068237205465e-11
+    },
+    {
+      "frame": "Bosak.XPath.Parser!Bosak.XPath.Parser.Ast.XPathParser.ParseForExpr()",
+      "weight": 3.2272339467454003e-07,
+      "share": 1.550317247007339e-11
+    },
+    {
+      "frame": "System.Collections.Immutable.il!System.Collections.Frozen.FrozenSet.ToFrozenSet(class System.Collections.Generic.IEnumerable`1<!!0>,class System.Collections.Generic.IEqualityComparer`1<!!0>)",
+      "weight": 2.3555756456516974e-07,
+      "share": 1.1315850075781245e-11
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.AnalyzeCall(class Bosak.XPath.Parser.Ast.FunctionCallNode,class Env)",
+      "weight": 1.3008121868551825e-07,
+      "share": 6.248916569660824e-12
+    },
+    {
+      "frame": "Bosak.XPath.Api!Bosak.XPath.Api.XPath31Expression.Compile(class System.String,class Bosak.XPath.Api.CompileOptions)",
+      "weight": 1.1863707527481893e-07,
+      "share": 5.699156211421996e-12
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.EvaluateStaticExpression(class System.String,class System.Xml.Linq.XElement)",
+      "weight": 1.0490418844710803e-07,
+      "share": 5.039447877550788e-12
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.BuildStaticContext()",
+      "weight": 8.258825801021885e-08,
+      "share": 3.9674223470119985e-12
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.StreamabilityAnalyzer+Worker.WalkInstruction(class System.Xml.Linq.XElement,class Env)",
+      "weight": 7.858278650019201e-08,
+      "share": 3.775005197624563e-12
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.EvaluateAssert(class System.String,class System.String,class System.Collections.Generic.Dictionary`2<class System.String,class System.String>,bool)",
+      "weight": 5.073547981737647e-08,
+      "share": 2.4372602263741855e-12
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.EvaluationContext.InstallStandardFunctionTable(class System.Collections.Generic.Dictionary`2<value class System.ValueTuple`3<class System.String,class System.String,int32>,class Bosak.XPath.Runtime.Functions.FunctionSignature>)",
+      "weight": 4.615776560967788e-08,
+      "share": 2.2173533524017314e-12
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.Xml11Loader.Load(class System.String,value class System.Xml.Linq.LoadOptions)",
+      "weight": 4.577637469083129e-08,
+      "share": 2.199031875586078e-12
+    },
+    {
+      "frame": "Bosak.XPath.Parser!Bosak.XPath.Parser.Ast.XPathParser.ParseExpression()",
+      "weight": 4.005431719633634e-08,
+      "share": 1.924152379135895e-12
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.ProcessStaticVariable(class System.Xml.Linq.XElement)",
+      "weight": 3.5858164437740925e-08,
+      "share": 1.7225751740098638e-12
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Execute(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 3.356933575560106e-08,
+      "share": 1.6126231023620983e-12
+    },
+    {
+      "frame": "Bosak.XPath.Parser!Bosak.XPath.Parser.Ast.XPathParser.Parse(class System.String,bool,bool,bool,bool,bool)",
+      "weight": 3.013610694324598e-08,
+      "share": 1.447695677559681e-12
+    },
+    {
+      "frame": "System.Linq.il!System.Linq.Enumerable+IEnumerableWhereIterator`1[System.Collections.Generic.KeyValuePair`2[System.ValueTuple`3[System.__Canon,System.__Canon,System.Int32],System.__Canon]].ToList()",
+      "weight": 1.8882730046243523e-08,
+      "share": 9.070994710748342e-13
+    }
+  ],
+  "caseInclusive": [
+    {
+      "frame": "Process64 Program (53560) Args:  exec --fx-version 10.0.11 --roll-forward Disable D:\\Development\\Bosak\\.guard-tmp\\xslt30-stack-run-20261113\\runtime\\Bosak.Xslt.Conformance.dll --processor-profile legacy D:\\Development\\Bosak\\.guard-tmp\\xslt30-stack-run-20261113\\corpus\\catalog.xml sx-GeneralComp-gt ",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "Threads",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "Thread (52728)",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.Main(class System.String[])",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.RunTestSet(class System.String,class System.String,class System.String)",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.RunTestCase(class System.Xml.Linq.XElement,class System.Collections.Generic.Dictionary`2<class System.String,class System.Xml.Linq.XElement>,class System.String,class System.String,class System.String,class System.Xml.Linq.XNamespace,class System.String)",
+      "weight": 20816.60352405357,
+      "share": 1.0
+    },
+    {
+      "frame": "(Non-Activities)",
+      "weight": 20811.381452313613,
+      "share": 0.9997491391074474
+    },
+    {
+      "frame": "UNMANAGED_CODE_TIME",
+      "weight": 20264.035966291613,
+      "share": 0.9734554411278734
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable.TransformObserved(class Bosak.XPath.Core.Xdm.IXdmNode,value class System.Nullable`1<value class Bosak.XPath.Core.Xdm.XdmValue>,class Bosak.XPath.Runtime.Vm.EvaluationContext,class System.String,class System.String,class System.String,value class Bosak.XPath.Core.Xdm.XdmValue[],bool,class System.String,class Bosak.Xslt.Stylesheet.OutputProperties,class System.Action`3<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue,class Bosak.Xslt.Stylesheet.OutputProperties>)",
+      "weight": 19956.764197293276,
+      "share": 0.958694542759257
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable.RunWithStack(class System.Func`1<!!0>,int32)",
+      "weight": 19956.764197293276,
+      "share": 0.958694542759257
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.Join()",
+      "weight": 19952.1095649662,
+      "share": 0.9584709408483257
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.Join(int32)",
+      "weight": 19943.9664650938,
+      "share": 0.9580797579224949
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltCompiler.Compile(class System.Xml.Linq.XDocument,class System.String)",
+      "weight": 629.7582945211399,
+      "share": 0.030252691981833377
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet..ctor(class System.Xml.Linq.XDocument,class System.String,class Bosak.Xslt.Api.IXsltUriResolver,int32,class System.Collections.Generic.HashSet`1<class System.String>,class System.Object,class System.Collections.Generic.IReadOnlyDictionary`2<value class System.ValueTuple`2<class System.String,class System.String>,value class Bosak.XPath.Core.Xdm.XdmValue>,class Bosak.Xslt.Stylesheet.Stylesheet,class Bosak.Xslt.Stylesheet.Stylesheet,value class Bosak.Xslt.Api.PackageVersionResolutionStrategy,bool,class Bosak.Xslt.Stylesheet.SchemaImportState,int32,value class Bosak.Xslt.Api.XsltProcessorProfile)",
+      "weight": 629.7582945211399,
+      "share": 0.030252691981833377
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.Load()",
+      "weight": 619.6979718553531,
+      "share": 0.02976940840225412
+    },
+    {
+      "frame": "CPU_TIME",
+      "weight": 552.5555785818096,
+      "share": 0.02654398340936513
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.BuildStaticContext()",
+      "weight": 295.4731974676106,
+      "share": 0.014194111788034562
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+      "weight": 266.5241345449448,
+      "share": 0.012803440015417325
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.UseWhen(class System.Xml.Linq.XElement,class System.String)",
+      "weight": 211.87600714492243,
+      "share": 0.010178221768988386
+    },
+    {
+      "frame": "Bosak.XPath.Api!Bosak.XPath.Api.XPath31Expression.Compile(class System.String,class Bosak.XPath.Api.CompileOptions)",
+      "weight": 160.43956057490777,
+      "share": 0.007707288097672609
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.ValidateInstructionTree(class System.Xml.Linq.XElement)",
+      "weight": 151.6181050159454,
+      "share": 0.0072835179303266636
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.ProcessStaticVariable(class System.Xml.Linq.XElement)",
+      "weight": 145.93919993515013,
+      "share": 0.0070107114144013685
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.EvaluateStaticExpression(class System.String,class System.Xml.Linq.XElement)",
+      "weight": 142.82770255126954,
+      "share": 0.006861239509424879
+    },
+    {
+      "frame": "Bosak.XPath.Compiler!Bosak.XPath.Compiler.Ir.IrLowerer.Lower(class Bosak.XPath.Parser.Ast.XPathAstNode)",
+      "weight": 138.91596052035777,
+      "share": 0.006673324990786344
+    },
+    {
+      "frame": "Bosak.Xslt.Conformance!Bosak.Xslt.Conformance.Program.LoadDocumentFromFile(class System.String)",
+      "weight": 124.83420310668842,
+      "share": 0.005996857410597391
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.Xml11Loader.Load(class System.String,value class System.Xml.Linq.LoadOptions)",
+      "weight": 122.82520315818684,
+      "share": 0.00590034791296584
+    },
+    {
+      "frame": "Bosak.XPath.Standard!Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 115.02460250968883,
+      "share": 0.005525618162289443
+    },
+    {
+      "frame": "Bosak.XPath.Api!Bosak.XPath.Api.XPath31Expression.Evaluate(class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 102.00210159759465,
+      "share": 0.004900035756540748
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Collections.Generic.HashSet`1[System.__Canon].Resize(int32,bool)",
+      "weight": 91.83809979381556,
+      "share": 0.00441177157876388
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Collections.Generic.HashSet`1[System.__Canon].Add(!0)",
+      "weight": 88.7325998109817,
+      "share": 0.004262587780396126
+    }
+  ],
+  "engineCategoryWeight": 19521.72414722958,
+  "engineWithoutCallerAncestryWeight": 19047.91006862965,
+  "engineOpaqueCategoryWeight": 21077.076286958105,
+  "engineExclusive": [
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Monitor.Enter_Slowpath(class System.Object)",
+      "weight": 8639.524813543518,
+      "share": 0.44255951720174236
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+      "weight": 7418.519400395973,
+      "share": 0.3800135348930627
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.RuntimeHelpers.<GetHashCode>g__GetHashCodeWorker|15_0(class System.Object)",
+      "weight": 1044.7044474498757,
+      "share": 0.053514968225700225
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.ConditionalWeakTable`2+Container[System.__Canon,System.__Canon].Resize()",
+      "weight": 973.3640993055268,
+      "share": 0.0498605600593768
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.ConditionalWeakTable`2+Container[System.__Canon,System.__Canon].Resize(int32)",
+      "weight": 270.1346987121583,
+      "share": 0.013837645521207429
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext,value class Bosak.XPath.Core.Xdm.XdmValue[],int32)",
+      "weight": 142.30000503902465,
+      "share": 0.00728931542961174
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+      "weight": 128.09189956588807,
+      "share": 0.006561505459243271
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<Pump>d__78.MoveNext()",
+      "weight": 112.75930122184582,
+      "share": 0.005776093359963189
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.StaticsHelpers.GetGCThreadStaticsByIndexSlow(int32)",
+      "weight": 98.89739990234375,
+      "share": 0.00506601769169957
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ShouldStripStreamedRecord(class System.Xml.Linq.XObject,class Bosak.XPath.Core.Xdm.IXdmNode,class System.Collections.Generic.List`1<value class Bosak.Xslt.Stylesheet.SpaceHandlingRule>,bool)",
+      "weight": 96.17589932479859,
+      "share": 0.004926608869147829
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.PathHelper.GetFullPathName(value class System.ReadOnlySpan`1<wchar>,value class System.Text.ValueStringBuilder&)",
+      "weight": 78.94610188274419,
+      "share": 0.004044012777116708
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<FilterNodesLazyIterator>d__49.MoveNext()",
+      "weight": 63.90477609100344,
+      "share": 0.0032735211095620605
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode+<EnumerateAttributes>d__148.MoveNext()",
+      "weight": 63.481099407386864,
+      "share": 0.0032518182783765935
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.MaterializeSequenceView(value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 28.770082105442953,
+      "share": 0.0014737469850748736
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode.RecordAxis(value class Bosak.XPath.Core.Xdm.XdmAxis)",
+      "weight": 24.423299963378668,
+      "share": 0.0012510831409757778
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+      "weight": 21.5334957176201,
+      "share": 0.001103052965773826
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.EvaluationContext.InstallStandardFunctionTable(class System.Collections.Generic.Dictionary`2<value class System.ValueTuple`3<class System.String,class System.String,int32>,class Bosak.XPath.Runtime.Functions.FunctionSignature>)",
+      "weight": 17.311594844054582,
+      "share": 0.0008867861626100968
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.IsInstanceOfClass(void*,class System.Object)",
+      "weight": 14.638999788285219,
+      "share": 0.0007498825246110604
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode+<WrapEach>d__89.MoveNext()",
+      "weight": 13.19609942436341,
+      "share": 0.0006759699770799257
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Marvin.ComputeHash32(unsigned int8&,unsigned int32,unsigned int32,unsigned int32)",
+      "weight": 12.567499743080248,
+      "share": 0.0006437699686922255
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<>c.<ExecuteBlock>b__1_19(class Bosak.XPath.Core.Xdm.IXdmNode)",
+      "weight": 10.971599769020258,
+      "share": 0.0005620200186353566
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Execute(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 10.025999624633755,
+      "share": 0.000513581666712394
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Collections.Generic.Dictionary`2[System.ValueTuple`3[System.__Canon,System.__Canon,System.Int32],System.__Canon].TryInsert(!0,!1,value class System.Collections.Generic.InsertionBehavior)",
+      "weight": 8.668199948501751,
+      "share": 0.0004440284005207551
+    },
+    {
+      "frame": "System.Text.RegularExpressions.il!System.Text.RegularExpressions.Match.AddMatch(int32,int32,int32)",
+      "weight": 8.532799499511384,
+      "share": 0.0004370925147368356
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.FilterNodesLazy(value class Bosak.XPath.Core.Xdm.XdmValue,class System.Func`2<class Bosak.XPath.Core.Xdm.IXdmNode,bool>)",
+      "weight": 8.338599581336894,
+      "share": 0.0004271446271061188
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.MaterializeSequence(value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 7.069999682998969,
+      "share": 0.0003621606180723697
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.Axis(value class Bosak.XPath.Core.Xdm.XdmAxis)",
+      "weight": 6.1706000873564335,
+      "share": 0.0003160888885028187
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Collections.Generic.List`1[Bosak.XPath.Core.Xdm.XdmValue].AddWithResize(!0)",
+      "weight": 5.637399980926602,
+      "share": 0.00028877572177591867
+    },
+    {
+      "frame": "System.Private.CoreLib.il!Interop+Kernel32.ReadFile(class System.Runtime.InteropServices.SafeHandle,unsigned int8*,int32,int32&,value class System.Threading.NativeOverlapped*)",
+      "weight": 5.492099847602844,
+      "share": 0.00028133272482401377
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Stylesheet.Stylesheet.ValidateInstructionTree(class System.Xml.Linq.XElement)",
+      "weight": 5.266500242614711,
+      "share": 0.00026977638875007385
+    }
+  ],
+  "engineInclusive": [
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.ExecutionContext.RunInternal(class System.Threading.ExecutionContext,class System.Threading.ContextCallback,class System.Object)",
+      "weight": 19046.682686392407,
+      "share": 0.9756660089419106
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread+StartHelper.Callback(class System.Object)",
+      "weight": 19046.682686392407,
+      "share": 0.9756660089419106
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable+<>c__DisplayClass32_0`1[Bosak.XPath.Core.Xdm.XdmValue].<RunWithStack>b__0()",
+      "weight": 19046.682686392407,
+      "share": 0.9756660089419106
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Api.XsltExecutable+<>c__DisplayClass23_0.<TransformObserved>b__0()",
+      "weight": 19046.682686392407,
+      "share": 0.9756660089419106
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.Transform(class Bosak.XPath.Core.Xdm.IXdmNode,class System.String,class System.String,bool,class System.String,value class System.Nullable`1<value class Bosak.XPath.Core.Xdm.XdmValue>,bool,bool,class Bosak.XPath.Core.Xdm.IXdmNode)",
+      "weight": 19037.247186674696,
+      "share": 0.9751826756232678
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.TransformCore(class Bosak.XPath.Core.Xdm.IXdmNode,class System.String,class System.String,bool,class System.String,value class System.Nullable`1<value class Bosak.XPath.Core.Xdm.XdmValue>,bool,bool,class Bosak.XPath.Core.Xdm.IXdmNode,bool)",
+      "weight": 19037.247186674696,
+      "share": 0.9751826756232678
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.CallTemplate(class System.String,value class Bosak.XPath.Core.Xdm.XdmValue,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>)",
+      "weight": 19035.256886616902,
+      "share": 0.9750807225353754
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(class Bosak.Xslt.Stylesheet.TemplateRule,value class Bosak.XPath.Core.Xdm.XdmValue,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,int32,int32,bool)",
+      "weight": 19035.256886616902,
+      "share": 0.9750807225353754
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(class Bosak.Xslt.Stylesheet.Stylesheet,class System.Action)",
+      "weight": 19035.256886616902,
+      "share": 0.9750807225353754
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine+<>c__DisplayClass253_0.<ExecuteTemplate>b__0()",
+      "weight": 19035.256886616902,
+      "share": 0.9750807225353754
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(class Bosak.Xslt.Stylesheet.TemplateRule,value class Bosak.XPath.Core.Xdm.XdmValue,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,class System.Collections.Generic.Dictionary`2<class System.String,value class Bosak.XPath.Core.Xdm.XdmValue>,int32,int32,bool)",
+      "weight": 19035.256886616902,
+      "share": 0.9750807225353754
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(class System.Xml.Linq.XElement,value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 19032.230787068373,
+      "share": 0.9749257106355192
+    },
+    {
+      "frame": "Bosak.XPath.Api!Bosak.XPath.Api.XPath31Expression.Evaluate(class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 18968.293586054424,
+      "share": 0.9716505285598098
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.EvaluateSequenceConstructor(class System.Xml.Linq.XElement,value class Bosak.XPath.Core.Xdm.XdmValue,bool,bool,bool)",
+      "weight": 18925.702087074285,
+      "share": 0.9694687797214941
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Execute(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 18923.668786734204,
+      "share": 0.9693646239448451
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.EvaluateSequenceConstructorToItems(class System.Xml.Linq.XElement,value class Bosak.XPath.Core.Xdm.XdmValue,class System.Func`2<class System.Xml.Linq.XElement,bool>)",
+      "weight": 18923.15478697396,
+      "share": 0.9693382943155374
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElement(class System.Xml.Linq.XElement)",
+      "weight": 18923.15478697396,
+      "share": 0.9693382943155374
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElementCore(class System.Xml.Linq.XElement)",
+      "weight": 18923.15478697396,
+      "share": 0.9693382943155374
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext,value class Bosak.XPath.Core.Xdm.XdmValue[],int32)",
+      "weight": 18913.642787109573,
+      "share": 0.9688510422781329
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<FilterNodesLazyIterator>d__49.MoveNext()",
+      "weight": 9117.807821356026,
+      "share": 0.46705955645060054
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ApplyAxis(value class Bosak.XPath.Core.Xdm.XdmValue,value class Bosak.XPath.Core.Xdm.XdmAxis,bool)",
+      "weight": 9082.902274808119,
+      "share": 0.46527152039985753
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Monitor.Enter_Slowpath(class System.Object)",
+      "weight": 8639.524813543518,
+      "share": 0.44255951720174236
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<ReplayChildren>d__69.MoveNext()",
+      "weight": 8223.03651499786,
+      "share": 0.42122491092390685
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<Pump>d__78.MoveNext()",
+      "weight": 8223.03651499786,
+      "share": 0.42122491092390685
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+      "weight": 7418.519400395973,
+      "share": 0.3800135348930627
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Buffer.BulkMoveWithWriteBarrier(unsigned int8&,unsigned int8&,unsigned int)",
+      "weight": 6377.901304747971,
+      "share": 0.32670788997154687
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.GetElementTreeSequence(class System.Xml.Linq.XElement)",
+      "weight": 4126.837489470103,
+      "share": 0.21139718286900197
+    },
+    {
+      "frame": "Bosak.XPath.Core!Bosak.XPath.Core.Xdm.XdmSequence+Enumerator.MoveNext()",
+      "weight": 3844.07028569088,
+      "share": 0.19691243748244494
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode+<WrapEach>d__89.MoveNext()",
+      "weight": 3464.2093357090007,
+      "share": 0.17745406653544088
+    },
+    {
+      "frame": "Bosak.XPath.Standard!Bosak.XPath.Standard.Functions.FunctionLibrary.Abs(class Bosak.XPath.Runtime.Vm.EvaluationContext,value class System.ReadOnlySpan`1<value class Bosak.XPath.Core.Xdm.XdmValue>)",
+      "weight": 2042.2535654300673,
+      "share": 0.10461440547093753
+    }
+  ],
+  "cacheOrMonitorEngineContexts": [
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.GetElementTreeSequence(class System.Xml.Linq.XElement)",
+      "weight": 3806.666092754179,
+      "share": 0.19499640831132228
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<Pump>d__78.MoveNext()",
+      "weight": 3256.648972641557,
+      "share": 0.1668217903337049
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode+<WrapEach>d__89.MoveNext()",
+      "weight": 1334.7240853935186,
+      "share": 0.06837121943365518
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode+<EnumerateAttributes>d__148.MoveNext()",
+      "weight": 1140.6158753933028,
+      "share": 0.05842802955266495
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode.Wrap(class System.Xml.Linq.XObject)",
+      "weight": 326.68168529357797,
+      "share": 0.016734263983539534
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource.Wrap(class Bosak.XPath.Providers.Xml.XDocumentNode,int32)",
+      "weight": 31.8321995805735,
+      "share": 0.0016306039026317744
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.Xml11Loader.AttachUnparsedEntities(class System.Xml.Linq.XDocument,class System.String,class System.String)",
+      "weight": 4.788499906730635,
+      "share": 0.0002452908293661241
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.<CopyLiteralElementCore>b__273_0(class System.Xml.Linq.XElement)",
+      "weight": 3.5676999280929635,
+      "share": 0.00018275537043685114
+    }
+  ],
+  "allManagedCategoryWeight": 38272.07577123471,
+  "allManagedCategoryExclusive": [
+    {
+      "frame": "System.Private.CoreLib.il!System.GC.RunFinalizers()",
+      "weight": 10587.48893973827,
+      "share": 0.27663743673124275
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Monitor.Enter_Slowpath(class System.Object)",
+      "weight": 8639.524813543518,
+      "share": 0.22573964540582833
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Threading.Thread.<PollGC>g__PollGCWorker|70_0()",
+      "weight": 7716.2496860405045,
+      "share": 0.2016156565994269
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.ConditionalWeakTable`2+Container[System.__Canon,System.__Canon].Finalize()",
+      "weight": 7311.5010941524515,
+      "share": 0.1910400976904361
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.RuntimeHelpers.<GetHashCode>g__GetHashCodeWorker|15_0(class System.Object)",
+      "weight": 1044.7044474498757,
+      "share": 0.027296780391385916
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.ConditionalWeakTable`2+Container[System.__Canon,System.__Canon].Resize()",
+      "weight": 973.3640993055268,
+      "share": 0.025432749065497702
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Buffers.SharedArrayPool`1+<>c[System.ValueTuple`2[System.Int32,System.Int32]].<InitializeTlsBucketsAndTrimming>b__11_0(class System.Object)",
+      "weight": 432.8096923828125,
+      "share": 0.011308759288883731
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.ConditionalWeakTable`2+Container[System.__Canon,System.__Canon].Resize(int32)",
+      "weight": 270.1346987121583,
+      "share": 0.007058271422925837
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext,value class Bosak.XPath.Core.Xdm.XdmValue[],int32)",
+      "weight": 142.30000503902465,
+      "share": 0.0037181156802050786
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.Strategies.OSFileStreamStrategy.Read(value class System.Span`1<unsigned int8>)",
+      "weight": 128.09189956588807,
+      "share": 0.0033468762011116715
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingSource+<Pump>d__78.MoveNext()",
+      "weight": 112.75930122184582,
+      "share": 0.00294625517298426
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.StaticsHelpers.GetGCThreadStaticsByIndexSlow(int32)",
+      "weight": 98.89739990234375,
+      "share": 0.002584061562103068
+    },
+    {
+      "frame": "Bosak.Xslt!Bosak.Xslt.Runtime.TransformEngine.ShouldStripStreamedRecord(class System.Xml.Linq.XObject,class Bosak.XPath.Core.Xdm.IXdmNode,class System.Collections.Generic.List`1<value class Bosak.Xslt.Stylesheet.SpaceHandlingRule>,bool)",
+      "weight": 96.17589932479859,
+      "share": 0.0025129522605378094
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.PathHelper.GetFullPathName(value class System.ReadOnlySpan`1<wchar>,value class System.Text.ValueStringBuilder&)",
+      "weight": 78.94610188274419,
+      "share": 0.0020627598658257275
+    },
+    {
+      "frame": "System.Console.il!System.Text.OSEncoding.WideCharToMultiByte(int32,wchar*,int32,unsigned int8*,int32)",
+      "weight": 74.53730010986328,
+      "share": 0.0019475635592748671
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<FilterNodesLazyIterator>d__49.MoveNext()",
+      "weight": 63.90477609100344,
+      "share": 0.0016697494139848632
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Xml.XDocumentNode+<EnumerateAttributes>d__148.MoveNext()",
+      "weight": 63.481099407386864,
+      "share": 0.0016586792884408755
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.MaterializeSequenceView(value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 28.770082105442953,
+      "share": 0.0007517251553694546
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode.RecordAxis(value class Bosak.XPath.Core.Xdm.XdmAxis)",
+      "weight": 24.423299963378668,
+      "share": 0.0006381493418168663
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.IO.Strategies.BufferedFileStreamStrategy.ReadSpan(value class System.Span`1<unsigned int8>,value class System.ArraySegment`1<unsigned int8>)",
+      "weight": 21.5334957176201,
+      "share": 0.0005626424823762674
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.EvaluationContext.InstallStandardFunctionTable(class System.Collections.Generic.Dictionary`2<value class System.ValueTuple`3<class System.String,class System.String,int32>,class Bosak.XPath.Runtime.Functions.FunctionSignature>)",
+      "weight": 17.311594844054582,
+      "share": 0.0004523296553741142
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Runtime.CompilerServices.CastHelpers.IsInstanceOfClass(void*,class System.Object)",
+      "weight": 14.638999788285219,
+      "share": 0.0003824981920444433
+    },
+    {
+      "frame": "Bosak.XPath.Providers!Bosak.XPath.Providers.Streaming.StreamingNode+<WrapEach>d__89.MoveNext()",
+      "weight": 13.19609942436341,
+      "share": 0.000344797065705059
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Marvin.ComputeHash32(unsigned int8&,unsigned int32,unsigned int32,unsigned int32)",
+      "weight": 12.567499743080248,
+      "share": 0.0003283725664163212
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine+<>c.<ExecuteBlock>b__1_19(class Bosak.XPath.Core.Xdm.IXdmNode)",
+      "weight": 10.971599769020258,
+      "share": 0.00028667375750929383
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.Execute(class Bosak.XPath.Compiler.Ir.IrModule,class Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "weight": 10.025999624633755,
+      "share": 0.00026196644479287157
+    },
+    {
+      "frame": "System.Private.CoreLib.il!System.Collections.Generic.Dictionary`2[System.ValueTuple`3[System.__Canon,System.__Canon,System.Int32],System.__Canon].TryInsert(!0,!1,value class System.Collections.Generic.InsertionBehavior)",
+      "weight": 8.668199948501751,
+      "share": 0.00022648888971464593
+    },
+    {
+      "frame": "System.Text.RegularExpressions.il!System.Text.RegularExpressions.Match.AddMatch(int32,int32,int32)",
+      "weight": 8.532799499511384,
+      "share": 0.00022295105053916713
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.FilterNodesLazy(value class Bosak.XPath.Core.Xdm.XdmValue,class System.Func`2<class Bosak.XPath.Core.Xdm.IXdmNode,bool>)",
+      "weight": 8.338599581336894,
+      "share": 0.00021787685703747965
+    },
+    {
+      "frame": "Bosak.XPath.Runtime!Bosak.XPath.Runtime.Vm.VmEngine.MaterializeSequence(value class Bosak.XPath.Core.Xdm.XdmValue)",
+      "weight": 7.069999682998969,
+      "share": 0.00018472997715772657
+    }
+  ],
+  "interpretation": "Sampled thread wall-time weights, not on-CPU percentages. Caller ancestry is retained as a separate waiting-caller view. Engine rankings use converted CPU_TIME-category stacks across threads; virtual markers are not methods. Inclusive methods deduplicate recursion and overlap; do not sum their shares.",
+  "diagnosticOnly": true,
+  "qualification": false,
+  "selectedCases": 54,
+  "outsideSelection": 14547,
+  "selectedOutcomes": {
+    "Pass": 52,
+    "Skip": 2
+  },
+  "caseWallSeconds": 20.8409443,
+  "caseCpuSeconds": 22.546875,
+  "elapsedSeconds": 21.28124039998511,
+  "traceSha256": "26e7d71bf665a9b7c822d16278513200ac54decb8b17e4daebd1354f3d647b44"
+}

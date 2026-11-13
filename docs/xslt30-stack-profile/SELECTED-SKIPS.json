@@ -1,0 +1,22 @@
+[
+  {
+    "test_set": "sx-GeneralComp-gt",
+    "test": "sx-gc-gt-100",
+    "status": "Skipped",
+    "reason": "Requires feature=schema_aware, excluded by this runner profile",
+    "recorded_reason": "",
+    "reason_source": "DerivedFromPinnedPolicyAndCatalog",
+    "evidence_line": "19208",
+    "catalog_file": "tests/strm/sx-GeneralComp-gt/_sx-GeneralComp-gt-test-set.xml"
+  },
+  {
+    "test_set": "sx-GeneralComp-gt",
+    "test": "sx-gc-gt-101",
+    "status": "Skipped",
+    "reason": "Requires feature=schema_aware, excluded by this runner profile",
+    "recorded_reason": "",
+    "reason_source": "DerivedFromPinnedPolicyAndCatalog",
+    "evidence_line": "19209",
+    "catalog_file": "tests/strm/sx-GeneralComp-gt/_sx-GeneralComp-gt-test-set.xml"
+  }
+]
