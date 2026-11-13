@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "sourceBaseCommit": "014494e9a6550d52c792fa47494d13462d5fc780",
+  "specification": {
+    "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+    "revision": "W3C Recommendation 8 June 2017",
+    "sections": [
+      "2.14 Error Handling",
+      "3.13 Stylesheet Preprocessing",
+      "5.1.1 Qualified Names",
+      "10.1 Named Templates"
+    ],
+    "affectedErrors": [
+      "XTSE0280"
+    ]
+  },
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "fixtureSha256": {
+    "error-0280d.xsl": "a78bfc9e45e59f6ed2e27169cb230080d4558cbd00bf445dce388bdb4c73738a",
+    "error-0280f.xsl": "0d6bc933031124759ef4229a42e58218677e9eead0360edffcd695bb3a84cadd",
+    "_error-test-set.xml": "57f562c955b1a206f2b94b418db21eb1f5c854a0fe91adb7a55d40e2a1983e48"
+  },
+  "decision": "Report XTSE0280 in existing early named-template QName validation when a well-formed prefixed lexical template name has no binding in the existing applicable namespace lookup. Do not rewrite XPST0081 in shared QName expansion, XPath expressions, variables, patterns or functions.",
+  "boundaries": [
+    "Reuse existing module/component namespace resolution; no namespace-context or fixed-binding semantics change.",
+    "Limit the new early rejection to well-formed lexical QName prefix and local NCNames. Preserve malformed-name diagnostic precedence, EQNames, reserved-name checks and xsl:initial-template exemption.",
+    "Honor use-when and module-local namespace contexts.",
+    "No override/package grammar expansion, global error mapping, legacy matcher change, fixture edit, skip/admission, budget/ruleset change or publication."
+  ],
+  "review": "Both retained fixtures have an ordinary named template with an unbound valid lexical prefix. Earlier component enumeration raises XPST0081 before the existing later XTSE0280 validation. Specific static reporting can be selected before this enumeration without changing shared XPath behavior.",
+  "intentionalDeviations": [],
+  "publication": "Unpublished development patch 1.81.8"
+}

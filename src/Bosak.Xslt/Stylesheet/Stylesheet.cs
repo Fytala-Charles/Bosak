@@ -336,6 +336,8 @@
 //                      | Charles Korthout | 2.174 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 2.175 | 20-10-2026     | Enforce trailing-only fallback children in switch content.                             |
 //                      | Charles Korthout | 2.176 | 13-11-2026     | Report specific include/import codes on the existing non-top-level rejection path.       |
+//                      | Charles Korthout | 2.177 | 13-11-2026     | Report XTSE0280 early for well-formed unbound named-template prefixes.                    |
+//                      | Charles Korthout | 2.178 | 13-11-2026     | Scope prefix translation to the earlier named-template binding-collection call.           |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -9204,7 +9206,22 @@ internal sealed class Stylesheet
                 var nameAttr = element.Attribute("name")?.Value;
                 if (!string.IsNullOrEmpty(nameAttr))
                 {
-                    var name = ExpandVariableName(element, nameAttr);
+                    var templateName = nameAttr.Trim();
+                    int colon = templateName.IndexOf(':');
+                    (string LocalName, string NamespaceUri) name;
+                    try
+                    {
+                        name = ExpandVariableName(element, nameAttr);
+                    }
+                    catch (InvalidOperationException error) when (
+                        error.Message.StartsWith("XPST0081:", StringComparison.Ordinal)
+                        && !templateName.StartsWith("Q{", StringComparison.Ordinal)
+                        && colon > 0 && IsValidNCName(templateName[..colon])
+                        && IsValidNCName(templateName[(colon + 1)..]))
+                    {
+                        throw new InvalidOperationException(
+                            $"XTSE0280: The prefix '{templateName[..colon]}' in xsl:template/@name is not declared.", error);
+                    }
                     named.Add((ImportPrecedence, order++, name, element));
                 }
             }

@@ -4,6 +4,12 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Template-name reporting checkpoint — 13 November 2026
+
+The [named-template prefix reporting correction](xslt30-template-name-fix/README.md) translates XPST0081 to XTSE0280 only around name expansion during named-template binding collection, and only for well-formed prefixed lexical names. Existing namespace lookup, shared QName expansion, XPath diagnostics, malformed-name precedence, EQNames, reserved-name checks and preprocessing stay unchanged. Twenty-eight focused tests pass; identical sources against sealed 1.81.7 binaries give ten expected reporting failures and eighteen protective passes. Original ineffective guard, failed focused run and caught stack are retained; the revised implementation decision was recorded before edits. Fresh solution/frozen/standalone qualification is pending. Development Core/server 1.81.8 remains unpublished; no public signature, fixture, skip/admission, budget or ruleset change.
+
+
+
 ## Module-placement reporting qualification — 13 November 2026
 
 The [module-placement reporting correction](xslt30-module-placement-fix/README.md) chooses XTSE0170/XTSE0190 only where the existing validator rejects nested include/import declarations. Other structural codes, acceptance paths, use-package/override parent exemptions, preprocessing, module resolution and legacy matching stay unchanged. Twenty-one focused tests pass; identical sources against sealed 1.81.6 binaries give eight expected reporting failures and thirteen protective passes. All 26,394 solution tests pass in one invocation, including 8,369 XSLT cases; 90 separate language-server tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 stays 8,941/0/1,918 (including 11 experimental passes), with identical skip names/reasons. The complete pinned standalone gate stays 10,221/0/4,380 in 825.655 seconds, all 14,601 case identities accounted for and unchanged corpus/runtime bytes under the original 1,200-second/8 GiB limits.
