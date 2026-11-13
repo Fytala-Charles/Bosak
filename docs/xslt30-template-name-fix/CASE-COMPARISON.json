@@ -1,0 +1,45 @@
+{
+  "onlyChangedReportedIdentities": [
+    "error-0280d",
+    "error-0280f"
+  ],
+  "casesNewlyMatchingWithoutAliases": [
+    "error-0280d",
+    "error-0280f"
+  ],
+  "alreadyAcceptedAlternativeCases": [],
+  "all579StatusesAndSkipReasonsUnchanged": true,
+  "originalCausesPreserved": true,
+  "remainingCodeDifferences": 25,
+  "remainingUncodedReports": 23,
+  "remainingToleranceBranches": 48,
+  "namespaceProof": "Leading local compile-time codes only; no independent namespace proof.",
+  "cases": [
+    {
+      "test": "error-0280d",
+      "before": {
+        "actual_code": "XPST0081",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTSE0280",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      }
+    },
+    {
+      "test": "error-0280f",
+      "before": {
+        "actual_code": "XPST0081",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTSE0280",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      }
+    }
+  ]
+}
