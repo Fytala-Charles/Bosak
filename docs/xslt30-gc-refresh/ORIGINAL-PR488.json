@@ -1,0 +1,61 @@
+{
+  "run": {
+    "status": "TimedOut",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\a\\_temp\\xslt30-gate-packet\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\a\\_temp\\xslt30-gate-packet\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": "2263a14ca416d268b3bba77c40c3a46298507b90",
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": false,
+    "processId": 5476,
+    "startedUtc": "2026-11-13T18:41:22Z",
+    "runnerExitCode": 124,
+    "elapsedSeconds": 1200.234,
+    "counts": {},
+    "completeCatalogCounts": false,
+    "stdout.logSha256": "b7f9fd0c50524a43e0caef9cedca40ed9770772172858ce6edd81b3ba957eee7",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "gate": {
+    "success": false,
+    "scope": "Pinned basic/non-schema-aware Legacy/Xslt30; exclusions are not passes",
+    "corpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "sourceCorpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "error": "ValueError('Failed, timed-out or incomplete runner attempt')"
+  },
+  "artifact": {
+    "id": 14067932353,
+    "node_id": "MDg6QXJ0aWZhY3QxNDA2NzkzMjM1Mw==",
+    "name": "xslt30-pinned-gate",
+    "size_in_bytes": 1878549,
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14067932353",
+    "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14067932353/zip",
+    "expired": false,
+    "digest": "sha256:a4a86908f4308be35b30f80a068d9ad3e66f7200b877a285c146329fbd42b9a4",
+    "created_at": "2026-11-13T19:01:29Z",
+    "updated_at": "2026-11-13T19:01:29Z",
+    "expires_at": "2026-12-13T19:01:29Z",
+    "workflow_run": {
+      "id": 43484674916,
+      "repository_id": 1242768879,
+      "head_repository_id": 1242768879,
+      "head_branch": "diagnostics/xslt30-gc-correlation",
+      "head_sha": "116b8245ea7c5a2c54c345624415d0f900e51bea"
+    }
+  }
+}

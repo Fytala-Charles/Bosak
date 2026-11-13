@@ -1,0 +1,36 @@
+{
+  "files": {
+    "DOCUMENTATION-CHECKS.json": {
+      "bytes": 3046,
+      "sha256": "a285bd00ba0dd2cfe28a45c9d7b166a5ddc93aec655e982b15a9159544879810"
+    },
+    "MERGE-489.json": {
+      "bytes": 3396,
+      "sha256": "b30ea64ee228c9946b573f14377008342e23ff20020f367f1e3de5f12fd68ec3"
+    },
+    "ORIGINAL-PR484.json": {
+      "bytes": 17707,
+      "sha256": "36dd2bec5fabe38ba7b82667d12a8c2f7ec1c63a7f0c89e115ca6d7ff0e616c3"
+    },
+    "ORIGINAL-PR484.zip": {
+      "bytes": 1874521,
+      "sha256": "51aaac8790164000e82c319be574094f5eb9cd68878018455bedd9f43b92f203"
+    },
+    "QUALIFIED-PR489.json": {
+      "bytes": 2913,
+      "sha256": "168108f4be37bffaffa14eec2817b911b2ed9de35cd9569733163fea598e89ed"
+    },
+    "QUALIFIED-PR489.zip": {
+      "bytes": 1982513,
+      "sha256": "9f9ab409a0195dbef3886c5025f9ad231d38d7a82aa5a7621a3439c1bb60dc5c"
+    },
+    "README.md": {
+      "bytes": 2378,
+      "sha256": "847cf2f5d5e4e3d4434cc915345c3f4b7ca71373e1d6bbc3d4ab71211d44729e"
+    },
+    "verify.py": {
+      "bytes": 2693,
+      "sha256": "c6cd7d9a4cfb9239620bfd81f511b1f7fc40c053e64c65436773cdf20827f0dc"
+    }
+  }
+}

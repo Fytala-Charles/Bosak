@@ -1,0 +1,51 @@
+{
+  "pr": {
+    "mergeCommit": {
+      "oid": "728f092063fb2865ab1813e0b942ba8751aaec03"
+    },
+    "mergedAt": "2026-11-13T21:41:35Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/487"
+  },
+  "commit": {
+    "sha": "728f092063fb2865ab1813e0b942ba8751aaec03",
+    "node_id": "C_kwDOShMl79oAKDcyOGYwOTIwNjNmYjI4NjVhYjE4MTNlMGI5NDJiYTg3NTFhYWVjMDM",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/728f092063fb2865ab1813e0b942ba8751aaec03",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/728f092063fb2865ab1813e0b942ba8751aaec03",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-13T21:41:34Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-13T21:41:34Z"
+    },
+    "tree": {
+      "sha": "7cd2f8031f0d5ce521e43437a1c97345592c0cfa",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/7cd2f8031f0d5ce521e43437a1c97345592c0cfa"
+    },
+    "message": "Merge pull request #487 from Fytala-Charles/diagnostics/xslt30-cpu-profile\n\nObserve selected comparison stacks with pinned binaries and cross-thread attribution",
+    "parents": [
+      {
+        "sha": "8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/8e2b58ebf6fad4473fbe527dfc19ee571134e84d"
+      },
+      {
+        "sha": "d90c820908cd56165f2d07c49dc7383e574a9c84",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/d90c820908cd56165f2d07c49dc7383e574a9c84",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/d90c820908cd56165f2d07c49dc7383e574a9c84"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq94QOCRC1aQ7uu5UhlAAAkXYQAF5NR88IMJw1Cg7nn/mnUMqe\nHUPx7uodzH9UsdX27gUsey16EQU7utKO8XxaWLq+to5Rao7ypJn+4dnnmV9cTko5\nadhZBVB5iyoveTTOCf/G4K/WtOz3frn3aJX67e898FatkHVu17jAoWsF7RnENU2n\nFK+R8r/X++7nDDSXUtcwO7AjQ7+vJqwdw7sEWibz98+5chg03T/iMNEaVzbTPiFd\ngLSDeR5dObmBCW8ksevyBNZ3bsxRQy6mBDeNhWZGxSJntGWy2biKSa27l3m2W+dX\nCuRkcYDGpq6JdlCSCOHFTwU/TMs2RDoNYcLZAY6KtIiLE0xCiuoW0mEAneqdnGrz\nIwMLtkcBku4BfN0i5T/iAdCBePP95I146d3+xD7pqI41SnW6nc4qWtABV2aAbnbR\n8W+T8Yn2NxvJVqLyRnu3VugfNUGADQh53qQ25a2D5vjKbCWXq8DsHVBsxZPZGae7\nF3B8m66+F/7J5nz73t6mIJ843v4BK8PuCCUcRO/Pr7bMcAGUzl00VxGDWu1Q1eGC\nRJC7bPIbovIXD9C17b4hPggkNTFFtpwIDgmMj/cPHRt67aazC8HInevNwgXUqrU0\n7iYAce+lj3zfVXCUvrCBsWQSEclpGJ9C6yzdBTtpr08UML0XzuOI3mDQ5euNzvMH\nM/m3IiQ1fJEvdD+Odgj9\n=4CMv\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 7cd2f8031f0d5ce521e43437a1c97345592c0cfa\nparent 8e2b58ebf6fad4473fbe527dfc19ee571134e84d\nparent d90c820908cd56165f2d07c49dc7383e574a9c84\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794606094 +0100\ncommitter GitHub <noreply@github.com> 1794606094 +0100\n\nMerge pull request #487 from Fytala-Charles/diagnostics/xslt30-cpu-profile\n\nObserve selected comparison stacks with pinned binaries and cross-thread attribution",
+      "verified_at": "2026-11-13T21:41:34Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

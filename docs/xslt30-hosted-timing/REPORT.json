@@ -1,0 +1,1912 @@
+{
+  "date": "2026-11-13",
+  "attempts": [
+    {
+      "id": "df16-timeout",
+      "runId": "43300842122",
+      "attempt": 1,
+      "workflowEvent": "push",
+      "workflowHead": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+      "checkoutCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+      "sourceTree": "01bb21c43209e280e02e8ef09f5beed08c10e857",
+      "status": "TimedOut",
+      "elapsedSeconds": 1200.25,
+      "rightCensored": true,
+      "completeCounts": null,
+      "lastCase": "date-020",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "e0a5f4ac5d59ac84d7394c83e2a9836ed1afbcaf58e9607fd06d98e26b742632",
+      "engineFingerprint": "47cff3c1c3269ff937b6bd6563d86016a933638fc3be8b29748f062666df02a8",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "override-f-018"
+        },
+        {
+          "seconds": 40,
+          "test": "normalize-unicode-008"
+        },
+        {
+          "seconds": 60,
+          "test": "number-2201"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 200,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 220,
+          "test": "catalog-012"
+        },
+        {
+          "seconds": 240,
+          "test": "docbook-001"
+        },
+        {
+          "seconds": 260,
+          "test": "regex-syntax-0195"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-avg-020"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-boolean-018"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 341,
+          "test": "sf-current-100"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-distinct-values-004"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-empty-100"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-exists-100"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-max-007"
+        },
+        {
+          "seconds": 581,
+          "test": "sf-max-021"
+        },
+        {
+          "seconds": 601,
+          "test": "sf-min-021"
+        },
+        {
+          "seconds": 621,
+          "test": "sf-not-100"
+        },
+        {
+          "seconds": 641,
+          "test": "sf-one-or-more-032"
+        },
+        {
+          "seconds": 661,
+          "test": "sf-sum-021"
+        },
+        {
+          "seconds": 681,
+          "test": "si-attribute-020"
+        },
+        {
+          "seconds": 701,
+          "test": "si-choose-012"
+        },
+        {
+          "seconds": 721,
+          "test": "si-element-029"
+        },
+        {
+          "seconds": 741,
+          "test": "si-element-221"
+        },
+        {
+          "seconds": 761,
+          "test": "si-iterate-135"
+        },
+        {
+          "seconds": 781,
+          "test": "si-try-020"
+        },
+        {
+          "seconds": 801,
+          "test": "si-try-120"
+        },
+        {
+          "seconds": 821,
+          "test": "si-value-of-020"
+        },
+        {
+          "seconds": 841,
+          "test": "si-lre-220"
+        },
+        {
+          "seconds": 861,
+          "test": "sx-gc-eq-016"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-eq-116"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-eq-121"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-ge-021"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-ge-120"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-gt-019"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-gt-118"
+        },
+        {
+          "seconds": 1001,
+          "test": "sx-gc-le-016"
+        },
+        {
+          "seconds": 1021,
+          "test": "sx-gc-le-021"
+        },
+        {
+          "seconds": 1041,
+          "test": "sx-gc-le-121"
+        },
+        {
+          "seconds": 1062,
+          "test": "sx-gc-lt-019"
+        },
+        {
+          "seconds": 1082,
+          "test": "sx-gc-lt-118"
+        },
+        {
+          "seconds": 1102,
+          "test": "sx-gc-ne-016"
+        },
+        {
+          "seconds": 1122,
+          "test": "sx-gc-ne-021"
+        },
+        {
+          "seconds": 1142,
+          "test": "sx-gc-ne-121"
+        },
+        {
+          "seconds": 1162,
+          "test": "sx-instance-of-018"
+        },
+        {
+          "seconds": 1182,
+          "test": "sx-treat-017"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        "sf-": {
+          "seconds": 280,
+          "test": "sf-avg-020"
+        },
+        "si-": {
+          "seconds": 681,
+          "test": "si-attribute-020"
+        },
+        "sx-": {
+          "seconds": 861,
+          "test": "sx-gc-eq-016"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "centralus",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "df16-success",
+      "runId": "43305315323",
+      "attempt": 1,
+      "workflowEvent": "workflow_dispatch",
+      "workflowHead": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+      "checkoutCommit": "df16de7f39a556c6f9afea3eee9f61ef9bbc602e",
+      "sourceTree": "01bb21c43209e280e02e8ef09f5beed08c10e857",
+      "status": "Completed",
+      "elapsedSeconds": 1079.563,
+      "rightCensored": false,
+      "completeCounts": {
+        "Passed": 10221,
+        "Failed": 0,
+        "Skipped": 4380
+      },
+      "lastCase": "type-0501",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "e0a5f4ac5d59ac84d7394c83e2a9836ed1afbcaf58e9607fd06d98e26b742632",
+      "engineFingerprint": "47cff3c1c3269ff937b6bd6563d86016a933638fc3be8b29748f062666df02a8",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "variable-0108"
+        },
+        {
+          "seconds": 40,
+          "test": "normalize-unicode-008"
+        },
+        {
+          "seconds": 60,
+          "test": "catalog-003"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 200,
+          "test": "docbook-001"
+        },
+        {
+          "seconds": 220,
+          "test": "regex-syntax-0202"
+        },
+        {
+          "seconds": 240,
+          "test": "sf-avg-020"
+        },
+        {
+          "seconds": 260,
+          "test": "sf-boolean-103"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-count-018"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-distinct-values-004"
+        },
+        {
+          "seconds": 341,
+          "test": "sf-empty-101"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-exists-102"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-max-018"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-min-016"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-not-005"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-not-106"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-sum-019"
+        },
+        {
+          "seconds": 581,
+          "test": "si-apply-imports-070"
+        },
+        {
+          "seconds": 601,
+          "test": "si-choose-012"
+        },
+        {
+          "seconds": 621,
+          "test": "si-element-029"
+        },
+        {
+          "seconds": 641,
+          "test": "si-element-221"
+        },
+        {
+          "seconds": 661,
+          "test": "si-iterate-135"
+        },
+        {
+          "seconds": 681,
+          "test": "si-try-018"
+        },
+        {
+          "seconds": 701,
+          "test": "si-try-120"
+        },
+        {
+          "seconds": 721,
+          "test": "si-value-of-021"
+        },
+        {
+          "seconds": 741,
+          "test": "si-lre-221"
+        },
+        {
+          "seconds": 761,
+          "test": "sx-gc-eq-018"
+        },
+        {
+          "seconds": 781,
+          "test": "sx-gc-eq-118"
+        },
+        {
+          "seconds": 801,
+          "test": "sx-gc-ge-016"
+        },
+        {
+          "seconds": 821,
+          "test": "sx-gc-ge-116"
+        },
+        {
+          "seconds": 841,
+          "test": "sx-gc-gt-012"
+        },
+        {
+          "seconds": 861,
+          "test": "sx-gc-gt-021"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-gt-121"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-le-021"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-le-120"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-lt-020"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-lt-119"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-ne-018"
+        },
+        {
+          "seconds": 1001,
+          "test": "sx-gc-ne-118"
+        },
+        {
+          "seconds": 1021,
+          "test": "sx-if-216"
+        },
+        {
+          "seconds": 1042,
+          "test": "sx-instance-of-101"
+        },
+        {
+          "seconds": 1062,
+          "test": "sx-treat-100"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 60,
+          "test": "catalog-003"
+        },
+        "sf-": {
+          "seconds": 240,
+          "test": "sf-avg-020"
+        },
+        "si-": {
+          "seconds": 581,
+          "test": "si-apply-imports-070"
+        },
+        "sx-": {
+          "seconds": 761,
+          "test": "sx-gc-eq-018"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "westus3",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "pr481-attempt1",
+      "runId": "43374636539",
+      "attempt": 1,
+      "workflowEvent": "pull_request",
+      "workflowHead": "8a1381fd43c5e7b38540ad8191a605832038143a",
+      "checkoutCommit": "dc4775726b2afa833c36e853725d70e1bccbf84a",
+      "sourceTree": "0ef896ebb3d4d1bb4b72dcdab9c6ef2880983735",
+      "status": "TimedOut",
+      "elapsedSeconds": 1200.218,
+      "rightCensored": true,
+      "completeCounts": null,
+      "lastCase": "sx-treat-103",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "64dcd40d02df3c3c9da1f854e7215fd7551a503647170eca155a81841dba1389",
+      "engineFingerprint": "66815231e73f6e5a54fa122b894695bffced56a5aab6e3e004deb87eb5721536",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "override-m-007"
+        },
+        {
+          "seconds": 40,
+          "test": "normalize-unicode-008"
+        },
+        {
+          "seconds": 60,
+          "test": "result-document-0260"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 200,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 220,
+          "test": "catalog-012"
+        },
+        {
+          "seconds": 240,
+          "test": "docbook-001"
+        },
+        {
+          "seconds": 260,
+          "test": "regex-syntax-0183"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-avg-018"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-boolean-016"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 340,
+          "test": "sf-count-101"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-distinct-values-003"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-empty-018"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-exists-018"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-max-016"
+        },
+        {
+          "seconds": 581,
+          "test": "sf-max-021"
+        },
+        {
+          "seconds": 601,
+          "test": "sf-min-021"
+        },
+        {
+          "seconds": 621,
+          "test": "sf-not-100"
+        },
+        {
+          "seconds": 641,
+          "test": "sf-outermost-033"
+        },
+        {
+          "seconds": 661,
+          "test": "sf-sum-021"
+        },
+        {
+          "seconds": 681,
+          "test": "si-attribute-020"
+        },
+        {
+          "seconds": 701,
+          "test": "si-choose-012"
+        },
+        {
+          "seconds": 721,
+          "test": "si-element-219"
+        },
+        {
+          "seconds": 741,
+          "test": "si-iterate-037"
+        },
+        {
+          "seconds": 761,
+          "test": "si-next-match-067"
+        },
+        {
+          "seconds": 781,
+          "test": "si-try-022"
+        },
+        {
+          "seconds": 801,
+          "test": "si-try-121"
+        },
+        {
+          "seconds": 821,
+          "test": "si-value-of-021"
+        },
+        {
+          "seconds": 841,
+          "test": "si-lre-220"
+        },
+        {
+          "seconds": 861,
+          "test": "sx-gc-eq-016"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-eq-024"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-eq-121"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-ge-020"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-ge-119"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-gt-018"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-gt-116"
+        },
+        {
+          "seconds": 1001,
+          "test": "sx-gc-gt-121"
+        },
+        {
+          "seconds": 1021,
+          "test": "sx-gc-le-021"
+        },
+        {
+          "seconds": 1041,
+          "test": "sx-gc-le-120"
+        },
+        {
+          "seconds": 1061,
+          "test": "sx-gc-lt-019"
+        },
+        {
+          "seconds": 1082,
+          "test": "sx-gc-lt-118"
+        },
+        {
+          "seconds": 1102,
+          "test": "sx-gc-ne-016"
+        },
+        {
+          "seconds": 1122,
+          "test": "sx-gc-ne-021"
+        },
+        {
+          "seconds": 1142,
+          "test": "sx-gc-ne-120"
+        },
+        {
+          "seconds": 1162,
+          "test": "sx-instance-of-016"
+        },
+        {
+          "seconds": 1182,
+          "test": "sx-treat-015"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        "sf-": {
+          "seconds": 280,
+          "test": "sf-avg-018"
+        },
+        "si-": {
+          "seconds": 681,
+          "test": "si-attribute-020"
+        },
+        "sx-": {
+          "seconds": 861,
+          "test": "sx-gc-eq-016"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "centralus",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "pr481-attempt2",
+      "runId": "43374636539",
+      "attempt": 2,
+      "workflowEvent": "pull_request",
+      "workflowHead": "8a1381fd43c5e7b38540ad8191a605832038143a",
+      "checkoutCommit": "dc4775726b2afa833c36e853725d70e1bccbf84a",
+      "sourceTree": "0ef896ebb3d4d1bb4b72dcdab9c6ef2880983735",
+      "status": "Completed",
+      "elapsedSeconds": 1133.657,
+      "rightCensored": false,
+      "completeCounts": {
+        "Passed": 10221,
+        "Failed": 0,
+        "Skipped": 4380
+      },
+      "lastCase": "type-0501",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "64dcd40d02df3c3c9da1f854e7215fd7551a503647170eca155a81841dba1389",
+      "engineFingerprint": "66815231e73f6e5a54fa122b894695bffced56a5aab6e3e004deb87eb5721536",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "variable-0108"
+        },
+        {
+          "seconds": 40,
+          "test": "normalize-unicode-008"
+        },
+        {
+          "seconds": 60,
+          "test": "catalog-003"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 200,
+          "test": "catalog-012"
+        },
+        {
+          "seconds": 220,
+          "test": "docbook-002"
+        },
+        {
+          "seconds": 260,
+          "test": "sf-boolean-015"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-count-101"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 340,
+          "test": "sf-distinct-values-004"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-empty-101"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-exists-101"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-max-012"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-max-021"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-min-021"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-not-100"
+        },
+        {
+          "seconds": 581,
+          "test": "sf-one-or-more-001"
+        },
+        {
+          "seconds": 601,
+          "test": "sf-sum-021"
+        },
+        {
+          "seconds": 621,
+          "test": "si-attribute-021"
+        },
+        {
+          "seconds": 641,
+          "test": "si-copy-023"
+        },
+        {
+          "seconds": 661,
+          "test": "si-element-220"
+        },
+        {
+          "seconds": 681,
+          "test": "si-iterate-134"
+        },
+        {
+          "seconds": 701,
+          "test": "si-try-017"
+        },
+        {
+          "seconds": 721,
+          "test": "si-try-119"
+        },
+        {
+          "seconds": 741,
+          "test": "si-value-of-019"
+        },
+        {
+          "seconds": 761,
+          "test": "si-lre-218"
+        },
+        {
+          "seconds": 781,
+          "test": "su-absorbing-009"
+        },
+        {
+          "seconds": 801,
+          "test": "sx-gc-eq-021"
+        },
+        {
+          "seconds": 821,
+          "test": "sx-gc-eq-120"
+        },
+        {
+          "seconds": 841,
+          "test": "sx-gc-ge-019"
+        },
+        {
+          "seconds": 861,
+          "test": "sx-gc-ge-119"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-gt-016"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-gt-021"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-gt-121"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-le-020"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-le-119"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-lt-016"
+        },
+        {
+          "seconds": 1001,
+          "test": "sx-gc-lt-116"
+        },
+        {
+          "seconds": 1022,
+          "test": "sx-gc-lt-121"
+        },
+        {
+          "seconds": 1042,
+          "test": "sx-gc-ne-021"
+        },
+        {
+          "seconds": 1062,
+          "test": "sx-gc-ne-121"
+        },
+        {
+          "seconds": 1082,
+          "test": "sx-instance-of-017"
+        },
+        {
+          "seconds": 1102,
+          "test": "sx-treat-016"
+        },
+        {
+          "seconds": 1122,
+          "test": "boolean-068"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 60,
+          "test": "catalog-003"
+        },
+        "sf-": {
+          "seconds": 260,
+          "test": "sf-boolean-015"
+        },
+        "si-": {
+          "seconds": 621,
+          "test": "si-attribute-021"
+        },
+        "sx-": {
+          "seconds": 801,
+          "test": "sx-gc-eq-021"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "eastus2",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "pr482",
+      "runId": "43408032043",
+      "attempt": 1,
+      "workflowEvent": "pull_request",
+      "workflowHead": "7d7f8c89764047f99ea065406f4275143a60e160",
+      "checkoutCommit": "d48cdd497a72c74c237fda675f6b31e468169e3e",
+      "sourceTree": "6331a2239896ff05ccbef723fa15c62da8250069",
+      "status": "Completed",
+      "elapsedSeconds": 632.735,
+      "rightCensored": false,
+      "completeCounts": {
+        "Passed": 10221,
+        "Failed": 0,
+        "Skipped": 4380
+      },
+      "lastCase": "type-0501",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "a4c19653a02fa3167059424d5df50b7dc3acb09c87c28c5575ab529daedb75c5",
+      "engineFingerprint": "8c5e7683cdf2a41240997350c822bd83b2e691662049e6549564f2ba63cf24da",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "key-096"
+        },
+        {
+          "seconds": 40,
+          "test": "number-2701"
+        },
+        {
+          "seconds": 60,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 120,
+          "test": "docbook-001"
+        },
+        {
+          "seconds": 140,
+          "test": "sf-avg-019"
+        },
+        {
+          "seconds": 160,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 180,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 200,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 220,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 240,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 260,
+          "test": "sf-distinct-values-004"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-exists-018"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 321,
+          "test": "sf-index-of-001"
+        },
+        {
+          "seconds": 341,
+          "test": "sf-min-020"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-not-107"
+        },
+        {
+          "seconds": 381,
+          "test": "si-attribute-016"
+        },
+        {
+          "seconds": 401,
+          "test": "si-element-216"
+        },
+        {
+          "seconds": 421,
+          "test": "si-try-015"
+        },
+        {
+          "seconds": 441,
+          "test": "si-try-121"
+        },
+        {
+          "seconds": 461,
+          "test": "si-lre-904"
+        },
+        {
+          "seconds": 481,
+          "test": "sx-gc-eq-120"
+        },
+        {
+          "seconds": 501,
+          "test": "sx-gc-ge-119"
+        },
+        {
+          "seconds": 521,
+          "test": "sx-gc-gt-025"
+        },
+        {
+          "seconds": 541,
+          "test": "sx-gc-le-020"
+        },
+        {
+          "seconds": 561,
+          "test": "sx-gc-lt-019"
+        },
+        {
+          "seconds": 581,
+          "test": "sx-gc-lt-121"
+        },
+        {
+          "seconds": 601,
+          "test": "sx-gc-ne-120"
+        },
+        {
+          "seconds": 621,
+          "test": "sx-treat-018"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 60,
+          "test": "catalog-006"
+        },
+        "sf-": {
+          "seconds": 140,
+          "test": "sf-avg-019"
+        },
+        "si-": {
+          "seconds": 381,
+          "test": "si-attribute-016"
+        },
+        "sx-": {
+          "seconds": 481,
+          "test": "sx-gc-eq-120"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "centralus",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "main482-timeout",
+      "runId": "43416044519",
+      "attempt": 1,
+      "workflowEvent": "push",
+      "workflowHead": "014494e9a6550d52c792fa47494d13462d5fc780",
+      "checkoutCommit": "014494e9a6550d52c792fa47494d13462d5fc780",
+      "sourceTree": "6331a2239896ff05ccbef723fa15c62da8250069",
+      "status": "TimedOut",
+      "elapsedSeconds": 1200.219,
+      "rightCensored": true,
+      "completeCounts": null,
+      "lastCase": "sx-instance-of-101",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "6c183943ab77272fb5a7e3b1bb28008eba5080ff02e95ea0f95782d84f24f178",
+      "engineFingerprint": "00d1bc863360875613f194379564046e25f5311e8c6b4a14634a19d77dbd4e6b",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "use-package-203c"
+        },
+        {
+          "seconds": 40,
+          "test": "normalize-unicode-008"
+        },
+        {
+          "seconds": 60,
+          "test": "result-document-1501"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 200,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 220,
+          "test": "catalog-012"
+        },
+        {
+          "seconds": 240,
+          "test": "docbook-001"
+        },
+        {
+          "seconds": 260,
+          "test": "regex-syntax-0149"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-avg-016"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-boolean-017"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 340,
+          "test": "sf-count-100"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-distinct-values-003"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-empty-016"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-exists-016"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-head-015"
+        },
+        {
+          "seconds": 581,
+          "test": "sf-max-020"
+        },
+        {
+          "seconds": 601,
+          "test": "sf-min-019"
+        },
+        {
+          "seconds": 621,
+          "test": "sf-not-016"
+        },
+        {
+          "seconds": 641,
+          "test": "sf-not-107"
+        },
+        {
+          "seconds": 661,
+          "test": "sf-sum-019"
+        },
+        {
+          "seconds": 681,
+          "test": "si-apply-imports-070"
+        },
+        {
+          "seconds": 701,
+          "test": "si-attribute-040"
+        },
+        {
+          "seconds": 721,
+          "test": "si-choose-012"
+        },
+        {
+          "seconds": 741,
+          "test": "si-element-216"
+        },
+        {
+          "seconds": 761,
+          "test": "si-fork-809"
+        },
+        {
+          "seconds": 781,
+          "test": "si-merge-001"
+        },
+        {
+          "seconds": 801,
+          "test": "si-try-018"
+        },
+        {
+          "seconds": 821,
+          "test": "si-try-120"
+        },
+        {
+          "seconds": 841,
+          "test": "si-value-of-020"
+        },
+        {
+          "seconds": 861,
+          "test": "si-lre-219"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-eq-011"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-eq-021"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-eq-120"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-ge-019"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-ge-118"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-gt-016"
+        },
+        {
+          "seconds": 1001,
+          "test": "sx-gc-gt-021"
+        },
+        {
+          "seconds": 1021,
+          "test": "sx-gc-gt-120"
+        },
+        {
+          "seconds": 1041,
+          "test": "sx-gc-le-019"
+        },
+        {
+          "seconds": 1061,
+          "test": "sx-gc-le-117"
+        },
+        {
+          "seconds": 1082,
+          "test": "sx-gc-lt-016"
+        },
+        {
+          "seconds": 1102,
+          "test": "sx-gc-lt-021"
+        },
+        {
+          "seconds": 1122,
+          "test": "sx-gc-lt-121"
+        },
+        {
+          "seconds": 1142,
+          "test": "sx-gc-ne-019"
+        },
+        {
+          "seconds": 1162,
+          "test": "sx-gc-ne-118"
+        },
+        {
+          "seconds": 1182,
+          "test": "sx-intersect-016"
+        }
+      ],
+      "sampleMedianGapSeconds": 20,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        "sf-": {
+          "seconds": 280,
+          "test": "sf-avg-016"
+        },
+        "si-": {
+          "seconds": 681,
+          "test": "si-apply-imports-070"
+        },
+        "sx-": {
+          "seconds": 881,
+          "test": "sx-gc-eq-011"
+        },
+        "date-020": null
+      },
+      "platform": {
+        "region": "westcentralus",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    },
+    {
+      "id": "pr483",
+      "runId": "43422693039",
+      "attempt": 1,
+      "workflowEvent": "pull_request",
+      "workflowHead": "e44979dc595a19e8cb4f8c767a29219b7a5610a1",
+      "checkoutCommit": "6541ff86ede796b3b805335ae685d03d59c369f9",
+      "sourceTree": "544f433e613873c7ba7dc2afb16b64e8bff17b80",
+      "status": "Completed",
+      "elapsedSeconds": 1086.36,
+      "rightCensored": false,
+      "completeCounts": {
+        "Passed": 10221,
+        "Failed": 0,
+        "Skipped": 4380
+      },
+      "lastCase": "type-0501",
+      "applicationFiles": 32,
+      "engineAssemblies": 9,
+      "applicationFingerprint": "d24a84e4c4c937db1d24569e93c6d452489dca20d0fd3162249de3fb920c8b62",
+      "engineFingerprint": "ff298544122d945855acd6d3f2b04296f77b5fb339159b341b8a0327f3e58ae3",
+      "corpusFingerprint": "f9697fbe60901f60d53044472fac7f11d6a8571899c2a0b1bc2ade90986b67bc",
+      "caseInventoryFingerprint": "ccdd3291ffaccf4b75d33919971328e37fe6179f7fab9afa832f2953f4138d6f",
+      "profile": "Legacy/Xslt30/basic/non-schema-aware",
+      "timeoutSeconds": 1200,
+      "memoryLimitBytes": 8589934592,
+      "samples": [
+        {
+          "seconds": 0,
+          "test": "(startup)"
+        },
+        {
+          "seconds": 20,
+          "test": "variable-0108"
+        },
+        {
+          "seconds": 40,
+          "test": "unparsed-text-2002"
+        },
+        {
+          "seconds": 60,
+          "test": "catalog-004"
+        },
+        {
+          "seconds": 80,
+          "test": "catalog-006"
+        },
+        {
+          "seconds": 100,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 120,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 140,
+          "test": "catalog-007"
+        },
+        {
+          "seconds": 160,
+          "test": "catalog-008"
+        },
+        {
+          "seconds": 180,
+          "test": "catalog-012"
+        },
+        {
+          "seconds": 200,
+          "test": "docbook-002"
+        },
+        {
+          "seconds": 220,
+          "test": "regex-syntax-0800"
+        },
+        {
+          "seconds": 240,
+          "test": "sf-boolean-016"
+        },
+        {
+          "seconds": 260,
+          "test": "sf-boolean-107"
+        },
+        {
+          "seconds": 280,
+          "test": "sf-count-103"
+        },
+        {
+          "seconds": 300,
+          "test": "sf-deep-equal-018"
+        },
+        {
+          "seconds": 320,
+          "test": "sf-distinct-values-012"
+        },
+        {
+          "seconds": 341,
+          "test": "sf-exists-002"
+        },
+        {
+          "seconds": 361,
+          "test": "sf-fold-left-016"
+        },
+        {
+          "seconds": 381,
+          "test": "sf-fold-left-018"
+        },
+        {
+          "seconds": 401,
+          "test": "sf-fold-left-019"
+        },
+        {
+          "seconds": 421,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 441,
+          "test": "sf-fold-left-020"
+        },
+        {
+          "seconds": 461,
+          "test": "sf-fold-left-021"
+        },
+        {
+          "seconds": 481,
+          "test": "sf-max-019"
+        },
+        {
+          "seconds": 501,
+          "test": "sf-min-015"
+        },
+        {
+          "seconds": 521,
+          "test": "sf-min-021"
+        },
+        {
+          "seconds": 541,
+          "test": "sf-not-102"
+        },
+        {
+          "seconds": 561,
+          "test": "sf-subsequence-018"
+        },
+        {
+          "seconds": 581,
+          "test": "sf-sum-021"
+        },
+        {
+          "seconds": 601,
+          "test": "si-attribute-021"
+        },
+        {
+          "seconds": 621,
+          "test": "si-choose-012"
+        },
+        {
+          "seconds": 641,
+          "test": "si-element-219"
+        },
+        {
+          "seconds": 661,
+          "test": "si-iterate-132"
+        },
+        {
+          "seconds": 681,
+          "test": "si-try-015"
+        },
+        {
+          "seconds": 701,
+          "test": "si-try-118"
+        },
+        {
+          "seconds": 721,
+          "test": "si-value-of-018"
+        },
+        {
+          "seconds": 741,
+          "test": "si-lre-216"
+        },
+        {
+          "seconds": 761,
+          "test": "su-absorbing-010"
+        },
+        {
+          "seconds": 781,
+          "test": "sx-gc-eq-021"
+        },
+        {
+          "seconds": 801,
+          "test": "sx-gc-eq-121"
+        },
+        {
+          "seconds": 821,
+          "test": "sx-gc-ge-020"
+        },
+        {
+          "seconds": 841,
+          "test": "sx-gc-ge-120"
+        },
+        {
+          "seconds": 861,
+          "test": "sx-gc-gt-019"
+        },
+        {
+          "seconds": 881,
+          "test": "sx-gc-gt-118"
+        },
+        {
+          "seconds": 901,
+          "test": "sx-gc-le-018"
+        },
+        {
+          "seconds": 921,
+          "test": "sx-gc-le-118"
+        },
+        {
+          "seconds": 941,
+          "test": "sx-gc-lt-016"
+        },
+        {
+          "seconds": 961,
+          "test": "sx-gc-lt-116"
+        },
+        {
+          "seconds": 981,
+          "test": "sx-gc-ne-015"
+        },
+        {
+          "seconds": 1002,
+          "test": "sx-gc-ne-021"
+        },
+        {
+          "seconds": 1022,
+          "test": "sx-gc-ne-121"
+        },
+        {
+          "seconds": 1042,
+          "test": "sx-instance-of-018"
+        },
+        {
+          "seconds": 1062,
+          "test": "sx-treat-017"
+        },
+        {
+          "seconds": 1082,
+          "test": "date-020"
+        }
+      ],
+      "sampleMedianGapSeconds": 20.0,
+      "firstObservedMilestones": {
+        "catalog-": {
+          "seconds": 60,
+          "test": "catalog-004"
+        },
+        "sf-": {
+          "seconds": 240,
+          "test": "sf-boolean-016"
+        },
+        "si-": {
+          "seconds": 601,
+          "test": "si-attribute-021"
+        },
+        "sx-": {
+          "seconds": 781,
+          "test": "sx-gc-eq-021"
+        },
+        "date-020": {
+          "seconds": 1082,
+          "test": "date-020"
+        }
+      },
+      "platform": {
+        "region": "westus3",
+        "image": "windows-2025-vs2026",
+        "imageVersion": "20261103.298.1"
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "left": "df16-timeout",
+      "right": "df16-success",
+      "comparison": "same-checkout-and-payload",
+      "applicationFilesIdentical": true
+    },
+    {
+      "left": "pr481-attempt1",
+      "right": "pr481-attempt2",
+      "comparison": "same-checkout-and-payload",
+      "applicationFilesIdentical": true
+    },
+    {
+      "left": "pr482",
+      "right": "main482-timeout",
+      "comparison": "equivalent-tree-different-payload",
+      "applicationFilesIdentical": false
+    }
+  ],
+  "newDiagnosticExecutions": 0,
+  "policyChanged": false,
+  "completeRuns": 4,
+  "timeouts": 3,
+  "rootCauseEstablished": false,
+  "hostRuntimeBinariesCaptured": false,
+  "cpuGcIoTelemetryCaptured": false,
+  "perCaseDurationsCaptured": false,
+  "samplingLimit": "First observed family/test at approximately 20-second intervals; not exact start or duration.",
+  "payloadLimit": "32 application/configuration files only; not the dotnet host, shared runtime/JIT, OS or machine state."
+}

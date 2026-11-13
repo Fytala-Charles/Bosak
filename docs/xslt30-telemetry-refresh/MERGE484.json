@@ -1,0 +1,51 @@
+{
+  "pr": {
+    "mergeCommit": {
+      "oid": "a40951308950b36970f10badc1d13e46833ed1f7"
+    },
+    "mergedAt": "2026-11-13T20:15:42Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/484"
+  },
+  "commit": {
+    "sha": "a40951308950b36970f10badc1d13e46833ed1f7",
+    "node_id": "C_kwDOShMl79oAKGE0MDk1MTMwODk1MGIzNjk3MGYxMGJhZGMxZDEzZTQ2ODMzZWQxZjc",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/a40951308950b36970f10badc1d13e46833ed1f7",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/a40951308950b36970f10badc1d13e46833ed1f7",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-13T20:15:41Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-13T20:15:41Z"
+    },
+    "tree": {
+      "sha": "7e432e13c12f0540fc840a1774348b933681b293",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/7e432e13c12f0540fc840a1774348b933681b293"
+    },
+    "message": "Merge pull request #484 from Fytala-Charles/docs/xslt30-hosted-timing\n\nPreserve hosted XSLT timing evidence on qualified main",
+    "parents": [
+      {
+        "sha": "0432de7c0a357eeeb748d05ec1e9f4148cb737f6",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/0432de7c0a357eeeb748d05ec1e9f4148cb737f6",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/0432de7c0a357eeeb748d05ec1e9f4148cb737f6"
+      },
+      {
+        "sha": "2e56414097c1426d1d9c8279b7e3b38c267b9a17",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/2e56414097c1426d1d9c8279b7e3b38c267b9a17",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/2e56414097c1426d1d9c8279b7e3b38c267b9a17"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq92/tCRC1aQ7uu5UhlAAABbcQACo+jWe6gvij7hkDJO+Tm+dW\nfjPf8Z373/PKYr2ALR0WxlVrQledFOfF6kMLmOZuIXx7/Zm2B2BJVj0lfRxQep8e\nvJZSEnDKTiy/ap7EssJXQt0WQ+mDb+x8xa5nhu/+iVTwoJrEpLXk2SQ8rW+2SDek\nLgCNpI6sH0k2xBjhej0yO186aI1gRPlyZaWD9kUnelRlXRoU+UteYtaMbCT3n3cX\nab8792Kc3J+OqR1wl+WU5Tz2eaC6cbEoIv9xEeSg9fle0tTt0Hpyt4aAkwa9N3iu\n6vzHbCak4HbUD8B5RuFHIpSKj12HxDpYhx0E4vVrgta9nOb4iYSj4kDTpl2WLwsQ\ndjR9tO5SiZHhRQbe5t47sn0k+dHo97n6agG/Nj59zhHzH7VOfaH7Its/9j2WWl5M\nni/uDPGCcz/4wffEkBIrSXj51JHEoPMT82ZDZm9AiFDn7XVQJVlpYNUYMZ0PYqn2\n8iohpErdwvvmovPvrEZNVnSTrKZQ0uIBU7HngGyxlArtqmzYdQUZT1dC8lkBbiU4\n+axy/SVV2Dfj1xwWeIZUKx8j6cmX4xgTTODtniRvU3r4w9DINxrEFZMdLycgW40s\nb89A8pwOZFGU049mehwVAxLSMnsVkqF8VzpkwbKXyS+Z271pJKXvRU5KyFuL3J/q\nyFmC1mLQ/oWXLJw2Wch3\n=bPIb\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 7e432e13c12f0540fc840a1774348b933681b293\nparent 0432de7c0a357eeeb748d05ec1e9f4148cb737f6\nparent 2e56414097c1426d1d9c8279b7e3b38c267b9a17\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794600941 +0100\ncommitter GitHub <noreply@github.com> 1794600941 +0100\n\nMerge pull request #484 from Fytala-Charles/docs/xslt30-hosted-timing\n\nPreserve hosted XSLT timing evidence on qualified main",
+      "verified_at": "2026-11-13T20:15:42Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

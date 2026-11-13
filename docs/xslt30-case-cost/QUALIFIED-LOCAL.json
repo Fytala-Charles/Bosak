@@ -1,0 +1,9 @@
+{
+  "sourceCommit": "a63dff0c612e8a5181eb21910cba7e66d82a1aa1",
+  "files": 23,
+  "bytes": 2038783,
+  "sha256": "b9808c88bcaa143590f04276eb2917e201e1c4e81c989cde459d93846d2fa018",
+  "completeCatalog": true,
+  "originalTimeoutSeconds": 1200,
+  "originalMemoryLimitBytes": 8589934592
+}

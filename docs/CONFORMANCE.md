@@ -6,7 +6,29 @@
 
 Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
+Observed diagnostic measurements now independently replay the adopted full result locally (817.285s) and hosted (1175.235s); the separate untouched required hosted gate passes in 1056.750s. These observations do not alter the conformance profile, exclusions or limits and do not establish a performance root cause.
+
+The [telemetry trigger correction](xslt30-telemetry-delivery/README.md) restricts automatic diagnostic execution to PR opening; later attempts require explicit dispatch. The unintended extra workflow was cancelled before qualification. Original measured outcomes and the required gate are unchanged.
+
+Operational timing diagnostics: the [separate telemetry candidate](xslt30-telemetry/README.md) preserves the adopted gate and exclusions. Diagnostic capture is not qualification success; no new conformance result is claimed.
+
+The [telemetry delivery refresh](xslt30-telemetry-refresh/README.md) preserves the original measurements and failed attempts while incorporating qualified main with the merged allocation fix. Refreshed required qualification is pending; no new diagnostic capture is launched.
+
+The copied-runner observation now reconciles all14,601 original outcomes (10,221/0/4,380) with11,224 measured cases and3,377 pre-loop exclusions explained by original reasons. It is diagnostic evidence, not an adopted qualification, benchmark or cause of the hosted failures.
+
+The separate [case-cost diagnostic](xslt30-case-cost/README.md) measures a copied runner against exact retained engine/native identities. It does not change the adopted profile or create new qualification/admissions.
+
+The [case-cost delivery refresh](xslt30-case-cost-refresh/README.md) incorporates qualified main while retaining the original diagnostic payload and measurements. No new copied sweep is run, and refreshed required qualification is pending.
+
+The selected stack observation now completes54 cases with52passes and2unchangedschema-aware exclusions;14,547 othercases are unselected. The same trace was reanalyzed for execution-worker stacks, with no new workload or qualification.
+
+The separate [sampled managed-stack investigation](xslt30-stack-profile/README.md) selects54 original comparison cases under exact caller/engine/native pins. It does not change the adopted profile, exclusions or qualification budgets; sampling weights are thread wall-time, not CPU percentages.
+
+The [sampled-stack delivery refresh](xslt30-stack-refresh/README.md) retains the original trace and attribution corrections on qualified main. No trace is recollected and no conformance admission is made; refreshed required qualification is pending.
+
 The [GC/allocation investigation](xslt30-gc-correlation/README.md) retains a failed broad trace and a completed54-case narrow capture (52passes/2unchanged schema-aware exclusions). It measures a copied caller without new gate qualification, admissions, exclusions or production-budget changes.
+
+The [GC/allocation delivery refresh](xslt30-gc-refresh/README.md) preserves original captures, corrections and failed attempts on qualified main. No capture or conformance admission is added; refreshed required qualification is pending.
 
 ## Results and scope
 
@@ -46,6 +68,12 @@ The legacy runner returned zero despite the failures; the qualification controll
 **Namespace follow-up:** the [separate 1.81.4 correction](xslt30-xml-version/README.md), based on delivered PR #474, resolves all eight XML-version failures. The complete 776.080-second rerun records **10,219 passed / 2 failed / 4,380 skipped**, with every original case accounted for and zero corpus writes. All skip identities and explanations are unchanged; `output-0707` and `try-022` remain failures. Raw namespace queries and serialized output have separate regression coverage. The legacy console's rounded `100.0%` line does not establish success: the independent controller rejects qualification. Earlier cohorts retain their own source hashes and receipts. No full-conformance claim or standalone gate adoption follows.
 
 **Final follow-up:** The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate. [All named exclusions and explanations](xslt30-final-cases/skips.csv) remain visible. The runner now prints selected-case results and counts; it retains its legacy exit behavior. Independent completeness and integrity checks establish this result. The rejected first attempt (10,220/1/4,380, namespace-2602) remains separate evidence; the corrected run includes a new nested-collector regression case.
+
+## Hosted gate timing evidence
+
+The [delivery refresh](xslt30-timing-refresh/README.md) incorporates merged PR #489 after independent hosted qualification. The earlier timing report and its original timeout remain historical evidence; the refreshed documentation PR awaits its own required check.
+
+The [hosted XSLT timing investigation](xslt30-hosted-timing/README.md) replays seven retained attempts without new diagnostic execution or gate changes. Two same-checkout comparisons have identical32-file application manifests yet include both a success and a1200-second timeout. Four complete runs each replay10,221/0/4,380; three incomplete timeouts remain failed. Equivalent-tree/different-payload comparisons are separate. Twenty-second progress samples show earlier delay, but cannot identify CPU/GC/I/O causes or individual test durations. No failure rate, regional cause or performance acceptance is inferred. Next prepare separate host/process telemetry under unchanged bounds before another semantic slice. PR483 merged04eea731 after all six checks and hosted replay passed; parent timeouts remain original evidence.
 
 ## Scoped named-template prefix reporting follow-up
 

@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "runId": "43495980056",
+  "head": "2e56414097c1426d1d9c8279b7e3b38c267b9a17",
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "totalCases": 14601,
+  "sourceCommit": "b5e3c3c01b950d596d59f28cfd9038be3492bcfa",
+  "sourceTree": "7e432e13c12f0540fc840a1774348b933681b293",
+  "sourceTreeMatchesHead": true,
+  "elapsedSeconds": 1028.266,
+  "corpusUnchanged": true,
+  "runtimeUnchanged": true,
+  "artifact": {
+    "id": 14072797860,
+    "node_id": "MDg6QXJ0aWZhY3QxNDA3Mjc5Nzg2MA==",
+    "name": "xslt30-pinned-gate",
+    "size_in_bytes": 1982501,
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14072797860",
+    "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14072797860/zip",
+    "expired": false,
+    "digest": "sha256:0e3f7cc6f18ee34cab1a91921fc4df05c2cc299fec57902273455ef8fcf0fc22",
+    "created_at": "2026-11-13T20:10:01Z",
+    "updated_at": "2026-11-13T20:10:01Z",
+    "expires_at": "2026-12-13T20:10:00Z",
+    "workflow_run": {
+      "id": 43495980056,
+      "repository_id": 1242768879,
+      "head_repository_id": 1242768879,
+      "head_branch": "docs/xslt30-hosted-timing",
+      "head_sha": "2e56414097c1426d1d9c8279b7e3b38c267b9a17"
+    }
+  }
+}

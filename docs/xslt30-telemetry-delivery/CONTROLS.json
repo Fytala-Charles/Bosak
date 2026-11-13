@@ -1,0 +1,13 @@
+{
+  "originalQualifiedSource": "a63dff0c612e8a5181eb21910cba7e66d82a1aa1",
+  "evidenceDeliverySource": "861eff1ff13af7462afc0234910d66f10ca77a5a",
+  "onlyWorkflowChange": "PR event types explicitly limited to opened; all original job/launcher/limit steps unchanged",
+  "qualificationCodeUnchanged": true,
+  "requiredGateUnchanged": true,
+  "unintendedRun": 43452915632,
+  "qualificationStepSkipped": true,
+  "automaticSynchronizeObservation": false,
+  "manualDispatchRetained": true,
+  "oldWorkflowSha256": "b3d4ac1e5d63658c3d861bccc1338e135413659606d518f253106c59a547d690",
+  "newWorkflowSha256": "c3803e1752939d4c9ecd15df5e347e5f906b459d7872eeb5b9da28d03eab014d"
+}

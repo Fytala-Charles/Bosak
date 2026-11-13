@@ -1,0 +1,60 @@
+{
+  "files": {
+    "CONTROLS.json": {
+      "bytes": 1523,
+      "sha256": "6e9c9ca0516ba7b51afa1f9e6033fe7d850f2de840b6a86724e15b68b2900390"
+    },
+    "DOCUMENTATION-CHECKS.json": {
+      "bytes": 5236,
+      "sha256": "7dabcaa99eb427a48329f65d90259321a4390172bcc6c78eee4cad3b91f4a852"
+    },
+    "MAIN-486.json": {
+      "bytes": 1301,
+      "sha256": "b35b7a5df19eb2bb03723b6653b7c35e71137afea8e695c70292c65c35aaaf5a"
+    },
+    "MAIN-486.zip": {
+      "bytes": 1982513,
+      "sha256": "f536cb74319ae17e407119fd205d67b37df9565c6972bb98c63f75bc4bb12f4f"
+    },
+    "MERGE487.json": {
+      "bytes": 3395,
+      "sha256": "ace89368f6e6bad33b886726d0de081dee69adc9f205a0ba0755485847094e6f"
+    },
+    "ORIGINAL-PR488.json": {
+      "bytes": 2299,
+      "sha256": "40acba6beea435572eec3991fcae6f171045bfa00a5e143aefc5d9b2758be85f"
+    },
+    "ORIGINAL-PR488.zip": {
+      "bytes": 1878549,
+      "sha256": "a4a86908f4308be35b30f80a068d9ad3e66f7200b877a285c146329fbd42b9a4"
+    },
+    "ORIGINAL-SOURCE.json": {
+      "bytes": 341,
+      "sha256": "da6462261ae2db8fb7c97b31c396831735cf5dd0edc473678bfb5c980c118381"
+    },
+    "QUALIFIED-PR487.json": {
+      "bytes": 1328,
+      "sha256": "5df66de0a41528111ef274e2819956367f4d3675bc71792c827d4ecc09dd09a8"
+    },
+    "QUALIFIED-PR487.zip": {
+      "bytes": 1982511,
+      "sha256": "581a3742cad239181a95f0f4fb50ab96ab082e5a38a3f5e790b03e6098b8de69"
+    },
+    "README.md": {
+      "bytes": 3467,
+      "sha256": "64e8b66fc745104a956b3f47eea4b696aa4ed5ef5e1c291de8985699e34c8b47"
+    },
+    "verify.py": {
+      "bytes": 5607,
+      "sha256": "a8839f8e7a5ae32099975641807df2a6e57c2b0d2f246441aed7bd1c19f59e95"
+    },
+    "WORKFLOWS.json": {
+      "bytes": 141,
+      "sha256": "b9ac954371eac8cd316497eb08c495e9b02cba61f9717dd0245f9d1d918f0d8a"
+    },
+    "WORKFLOWS.log": {
+      "bytes": 132,
+      "sha256": "7f1e8768b78229fd7cf2f68bfbfe6ee40884ef680fec21480b36f685146d6231"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "originalSourceHead": "116b8245ea7c5a2c54c345624415d0f900e51bea",
+  "sourceGitBlobSha256": {
+    "tools/xslt30_gc_analysis.py": "d1db1a5a37e36e84ab9e855d72b9da6330462969d0c4a58a43819d781ed8c88e",
+    "tools/test_xslt30_gc_analysis.py": "fdf05098b0b0b441e71397226e4bb092401d3abf3cf31a9f6866200679c6a431",
+    "tools/xslt30_gc_extract.py": "9d1a7d933fedfe81c06cf52a6ef0bd43290a249228b27e656ee02d45978ca291",
+    "tools/test_xslt30_gc_extract.py": "ee6b4cf547ff4fcaeb9135b9d784f051709c672c9d8a4b8a39125629ea78353a",
+    "tools/xslt30-gc/GcEvents.cs.in": "a3e0e55b6f180da27e0c442dd525e6ff5341678714cc3c430d928ece2f5a2d4e"
+  },
+  "ciBase": "728f092063fb2865ab1813e0b942ba8751aaec03",
+  "ciAddition": "          python -m unittest discover -s tools -p test_xslt30_gc_analysis.py\n          python -m unittest discover -s tools -p test_xslt30_gc_extract.py\n",
+  "tests": [
+    {
+      "suite": "GC-analysis",
+      "count": 12,
+      "exitCode": 0
+    },
+    {
+      "suite": "GC-extractor",
+      "count": 2,
+      "exitCode": 0
+    },
+    {
+      "suite": "inherited-stack",
+      "count": 16,
+      "exitCode": 0
+    },
+    {
+      "suite": "inherited-case-cost",
+      "count": 15,
+      "exitCode": 0
+    }
+  ],
+  "workflowValidator": {
+    "exitCode": 0,
+    "dependency": "PyYAML==6.0.3",
+    "reusedIsolatedDependencyDirectory": true,
+    "globalEnvironmentChanged": false
+  },
+  "originalBroadRawHashChecked": true,
+  "newCapture": false,
+  "newDotNetExecution": false,
+  "recordedFromSuccessfulToolResults": true
+}
