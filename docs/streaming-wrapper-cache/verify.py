@@ -28,6 +28,10 @@ def main():
   assert load('baseline/GATE.json')['success']
   assert hashlib.sha256(raw('source/StreamingWrapperCacheTests.cs.txt')).hexdigest()==baseline['testSourceSha256']
   for gate,count in [('QT3',424),('QT4',1918)]:
+   log=text('local/'+gate+'.log')
+   assert re.search(r'^Passed:\s+'+str({'QT3':31397,'QT4':8941}[gate])+r'\s*$',log,re.M)
+   assert re.search(r'^Failed:\s+0\s*$',log,re.M)
+   assert re.search(r'^Skipped:\s+'+str(count)+r'\s*$',log,re.M)
    def parse(s):
     result={}
     for n,reason,body in re.findall(r'=== (\d+) skipped: (.*?) ===\r?\n(.*?)(?=^===|\Z)',s,re.M|re.S):
