@@ -1,0 +1,20 @@
+{
+  "recordedBeforeImplementation": true,
+  "recordedUtc": "2026-11-13T18:47:23.051315+00:00",
+  "base": "04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf",
+  "specification": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+  "sections": [
+    "2.3 Node Identity",
+    "2.4 Document Order"
+  ],
+  "intentionalDeviations": [],
+  "scope": "Performance only: preserve wrapper identity, weak lifetime, source ownership, record index, navigation and order.",
+  "apiReview": "https://github.com/dotnet/dotnet/blob/b0f34d51fccc69fd334253924abd8d6853fad7aa/src/runtime/src/libraries/System.Private.CoreLib/src/System/Runtime/CompilerServices/ConditionalWeakTable.cs",
+  "apiSections": [
+    "GetValue",
+    "GetOrAdd<TArg>",
+    "TryGetValue"
+  ],
+  "reviewPinIsInstalledRuntimeBuildCommit": false,
+  "runtimeProvenanceGap": "Installed 10.0.11 short commit e2f47b0110 does not resolve in dotnet/runtime (HTTP 422). API review pin is independent; compilation and behavior checked locally."
+}
