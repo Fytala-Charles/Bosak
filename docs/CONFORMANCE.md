@@ -6,7 +6,9 @@
 
 Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
-The separate [case-cost diagnostic candidate](xslt30-case-cost/README.md) measures a copied runner against exact retained engine/native identities. It does not change the adopted profile or create new qualification/admissions; real diagnostic execution is pending at this checkpoint.
+The copied-runner observation now reconciles all14,601 original outcomes (10,221/0/4,380) with11,224 measured cases and3,377 pre-loop exclusions explained by original reasons. It is diagnostic evidence, not an adopted qualification, benchmark or cause of the hosted failures.
+
+The separate [case-cost diagnostic](xslt30-case-cost/README.md) measures a copied runner against exact retained engine/native identities. It does not change the adopted profile or create new qualification/admissions.
 
 ## Results and scope
 

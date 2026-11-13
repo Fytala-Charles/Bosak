@@ -1,3 +1,7 @@
+# Case-cost diagnostic renderer check - 13 November 2026
+
+The [case-cost receipt](xslt30-case-cost/DOCUMENTATION-CHECKS.json) checks timing/coverage tables, original exclusions, fixed native/engine identity, failure retention and preserved Fytala content. No screenshot/PDF acceptance is asserted.
+
 # Template-name renderer check — 13 November 2026
 
 The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.
