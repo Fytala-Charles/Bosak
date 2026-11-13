@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "kind": "Observational copied-runner case-cost accounting; no engine semantic adoption",
+  "documentationRepository": "dotnet/dotnet-api-docs",
+  "documentationRevision": "a010100852b71f33d67d913d7a9ed69f83a639b1",
+  "contracts": [
+    "Stopwatch.GetTimestamp/Frequency provide elapsed counter deltas; units do not establish measurement accuracy.",
+    "Process.TotalProcessorTime is cumulative user+kernel process CPU across threads, not case-exclusive CPU, scheduler delay or VM entitlement.",
+    "CPU tick units do not guarantee effective resolution; short cases may show zero CPU deltas.",
+    "Copied-runner observations are diagnostics, never production qualification or benchmark claims.",
+    "Case scope includes dependency/setup/compile/evaluate/assert work; no phase attribution without separate review.",
+    "Original watchdog1200s/memory8GiB/error-mode/owned job controls remain intact.",
+    "Pin installed runtime10.0.11 with exact host/native/full-framework file hashes; no download or global environment change.",
+    "Retain all full-catalog outcomes and compare exact exclusions; report missing timing rows explicitly if cases are excluded before the loop."
+  ],
+  "references": [
+    "https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.process.totalprocessortime?view=net-10.0",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.diagnostics.stopwatch.gettimestamp?view=net-10.0"
+  ],
+  "localNativePin": {
+    "dotnet.exe": {
+      "observedLoaded": true,
+      "path": "C:\\Program Files\\dotnet\\dotnet.exe",
+      "bytes": 167208,
+      "sha256": "ab1b71fd3dd71062e074c9fab8312081a81b7f2b3e0327c48c4d249c8d1a3135"
+    },
+    "hostfxr.dll": {
+      "observedLoaded": true,
+      "path": "C:\\Program Files\\dotnet\\host\\fxr\\10.0.11\\hostfxr.dll",
+      "bytes": 379728,
+      "sha256": "44f97e946b36415176dbc56a4426565a5e9b3e722c0ad579e20a749e3c0c7bcd"
+    },
+    "hostpolicy.dll": {
+      "observedLoaded": true,
+      "path": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.11\\hostpolicy.dll",
+      "bytes": 378664,
+      "sha256": "ded1d42c38688a1cacd20026b1f981c22fd583f621b7123296ef0f2af9cd656d"
+    },
+    "coreclr.dll": {
+      "observedLoaded": true,
+      "path": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.11\\coreclr.dll",
+      "bytes": 4614440,
+      "sha256": "c98c3078a4f2495dd7d3ced967c7a6981545194ed163454703580b740f435521"
+    },
+    "system.private.corelib.dll": {
+      "observedLoaded": false,
+      "relation": "Sibling of observed coreclr.dll",
+      "path": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.11\\System.Private.CoreLib.dll",
+      "bytes": 16033616,
+      "sha256": "ed80a1a5dd066c0407ad59686f9af90a4f3e55dbf3e4c973b53cc8c9d0706f82"
+    },
+    "clrjit.dll": {
+      "observedLoaded": true,
+      "path": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.11\\clrjit.dll",
+      "bytes": 2092328,
+      "sha256": "e7bf743e7bf9a01c8c2bcdc0d828212fd8dfc285be9d4ec21962becf456df648"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "evidence": "QUALIFIED-LOCAL.zip",
+  "evidenceSha256": "b9808c88bcaa143590f04276eb2917e201e1c4e81c989cde459d93846d2fa018",
+  "engineBuildSource": "04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf",
+  "observerQualificationSource": "a63dff0c612e8a5181eb21910cba7e66d82a1aa1",
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "meaning": "Retained unchanged production runner qualification; diagnostic runner will have a different identity, no adoption."
+}
