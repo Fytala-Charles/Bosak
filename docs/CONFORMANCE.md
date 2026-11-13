@@ -6,6 +6,8 @@
 
 Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
+Observed diagnostic measurements now independently replay the adopted full result locally (817.285s) and hosted (1175.235s); the separate untouched required hosted gate passes in 1056.750s. These observations do not alter the conformance profile, exclusions or limits and do not establish a performance root cause.
+
 Operational timing diagnostics: the [separate telemetry candidate](xslt30-telemetry/README.md) preserves the adopted gate and exclusions. Diagnostic capture is not qualification success; no new conformance result is claimed.
 
 ## Results and scope

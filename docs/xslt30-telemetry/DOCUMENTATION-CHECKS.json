@@ -3,8 +3,8 @@
   "pages": [
     {
       "source": "docs/xslt30-telemetry/README.md",
-      "sha256": "333b822273ad6728616087f08e8421f3545aaef00406f0adaa821ab69e82f04a",
-      "tables": 1
+      "sha256": "fe9a37ea30116c47b26056856a24f915873781bb4acecffdb5000f40053d6caf",
+      "tables": 2
     },
     {
       "source": "docs/xslt30-template-name-fix/README.md",
@@ -58,7 +58,7 @@
     },
     {
       "source": "docs/DEVELOPMENT_HISTORY.md",
-      "sha256": "f7aabdb85dd730feeb8ab9d1a66c3a1c83f48ed5c5e9f00bddca211208688bdc",
+      "sha256": "6b78b44905f033be111569967a10d9514d9373e2c651d9d02f361c3e2c1c695b",
       "tables": 12
     },
     {
@@ -78,7 +78,7 @@
     },
     {
       "source": "docs/CONFORMANCE.md",
-      "sha256": "72b215bfc24d8010333ea7263880095dc18a488afb31b7876277a7b6a7507829",
+      "sha256": "3ff2ee855aebcc7940af116e03d518f986c14c9e3d84e658b2ffb08860c81f32",
       "tables": 4
     },
     {
@@ -93,12 +93,12 @@
     },
     {
       "source": "docs/IMPLEMENTATION_STATUS.md",
-      "sha256": "20762224caa2eea88f5269fa9808f944a665aa0a21d1eaa413fc315ee20e499c",
+      "sha256": "4a22d1fc5f961af4cb3172f35ce5f496c0fcdfbc0e2e31db9a5ea53ff7af95d6",
       "tables": 2
     },
     {
       "source": "docs/AGENT_HANDOVER.md",
-      "sha256": "f066a556106d0a5175101b992807b702765a635ed9749c6532fdf53ea79cc82d",
+      "sha256": "924400c3a69c40762ec082cd4a08bda13dae45caa08304933c4b7eafa0179e19",
       "tables": 63
     },
     {
@@ -107,7 +107,7 @@
       "tables": 1
     }
   ],
-  "localDestinationsChecked": 4215,
+  "localDestinationsChecked": 4222,
   "inheritedDestinationsResolvedInOriginalLayout": 2,
   "renderedDirectory": "D:/Development/Bosak/.guard-tmp/xslt30-telemetry-20261113/render",
   "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
