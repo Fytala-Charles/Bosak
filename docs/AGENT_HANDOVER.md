@@ -1,3 +1,7 @@
+# Hosted timing PR refresh - 13 November 2026
+
+The [historical timing investigation](xslt30-hosted-timing/README.md) is refreshed onto merged main `0432de7c0a357eeeb748d05ec1e9f4148cb737f6`, incorporating PR #489's actual 1.81.9 wrapper-cache allocation fix. Its required hosted gate was independently replayed: 10,221 passed / 0 failed / 4,380 excluded across all 14,601 identities in 1,023.329 seconds, with unchanged fixtures/runtime and the original 1,200-second / 8 GiB bounds. All six checks passed before merge. The [refresh receipt](xslt30-timing-refresh/README.md) preserves the original PR #484 timeout and every sealed historical dossier. The refreshed PR #484 contains no engine, test, tool or workflow change relative to merged main; its new required qualification is pending. This is qualification of a different engine payload, not a retry of the original failed attempt. Later telemetry/profiling investigations remain in open PRs #485-#488. No whole-suite speedup or timeout-cause claim follows from the allocation microbenchmark or these separate hosted attempts. Development Core/server 1.81.9 remains unpublished.
+
 # Streaming wrapper-cache candidate — 13 November 2026
 
 Base: `04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf`; branch `perf/streaming-wrapper-factory`.
@@ -9,6 +13,12 @@ The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static s
 Owner checkout remains dirty at 18946b3125bf3187090877e00f22ea5a1e746118. Local qualification passed; hosted checks and artifact replay pending. No merge or publication.
 
 ---
+
+# Hosted XSLT timing evidence — 13 November 2026
+
+The [hosted XSLT timing investigation](xslt30-hosted-timing/README.md) replays seven retained attempts without new diagnostic execution or gate changes. Two same-checkout comparisons have identical32-file application manifests yet include both a success and a1200-second timeout. Four complete runs each replay10,221/0/4,380; three incomplete timeouts remain failed. Equivalent-tree/different-payload comparisons are separate. Twenty-second progress samples show earlier delay, but cannot identify CPU/GC/I/O causes or individual test durations. No failure rate, regional cause or performance acceptance is inferred. Next prepare separate host/process telemetry under unchanged bounds before another semantic slice. PR483 merged04eea731 after all six checks and hosted replay passed; parent timeouts remain original evidence.
+
+Documentation-only worktree `.worktrees/Bosak.TimingReview`, branch `docs/xslt30-hosted-timing`, base04eea731. Engine/source versions, runner/workflows, exclusions and1200-second/8GiB bounds unchanged. Core/server1.81.8 remains unpublished. Preserve original owner checkout and every sealed dossier.
 
 # Template-name reporting qualification — 13 November 2026
 

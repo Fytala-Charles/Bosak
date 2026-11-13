@@ -700,3 +700,6 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/xslt30-template-name-fix/** -text whitespace=cr-at-eol
 
 /docs/streaming-wrapper-cache/** -text whitespace=cr-at-eol
+/docs/xslt30-hosted-timing/** -text whitespace=cr-at-eol
+
+/docs/xslt30-timing-refresh/** -text whitespace=cr-at-eol
