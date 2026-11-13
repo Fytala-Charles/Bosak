@@ -4,6 +4,14 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Module-placement reporting qualification — 13 November 2026
+
+The [module-placement reporting correction](xslt30-module-placement-fix/README.md) chooses XTSE0170/XTSE0190 only where the existing validator rejects nested include/import declarations. Other structural codes, acceptance paths, use-package/override parent exemptions, preprocessing, module resolution and legacy matching stay unchanged. Twenty-one focused tests pass; identical sources against sealed 1.81.6 binaries give eight expected reporting failures and thirteen protective passes. All 26,394 solution tests pass in one invocation, including 8,369 XSLT cases; 90 separate language-server tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 stays 8,941/0/1,918 (including 11 experimental passes), with identical skip names/reasons. The complete pinned standalone gate stays 10,221/0/4,380 in 825.655 seconds, all 14,601 case identities accounted for and unchanged corpus/runtime bytes under the original 1,200-second/8 GiB limits.
+
+The same 579-case error audit remains 513/0/66. Six leading-code reports change on the shared placement path: error-0170b/0190b now match without aliases; four related cases already allow either the generic or specific code. Only two catalog-code assessments improve; no new pass or admission is claimed. Remaining 27 reported-code differences, 23 uncoded reports and 55 overlapping static-label/execute-call observations still require review. Specific diagnostics are chosen without blanket normative defect verdicts; generic/specific rules can overlap. Development Core/server 1.81.7 remains unpublished; no public signature, fixture, exclusion, gate-budget or ruleset change.
+
+
+
 ## Scoped regex reporting qualification — 13 November 2026
 
 The [scoped analyze-string correction](xslt30-analyze-string-fix/README.md) reports XTDE1140/XTDE1145 for invalid effective regex/flags while preserving XPath errors from AVTs, child instructions and ordinary functions. Fourteen focused tests pass; identical sources against sealed 1.81.5 binaries give four expected failures and ten passes. All 26,373 solution cases pass across the retained restricted run and authorized 47-case database retry; 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 (including 11 experimental passes), with every skip name/reason unchanged. The complete clean-source standalone gate remains 10,221/0/4,380 in 713.170 seconds, all 14,601 cases accounted for, with unchanged fixtures/runtime and original 1,200-second/8 GiB bounds.
@@ -31,7 +39,7 @@ The [final standalone corrections](xslt30-final-cases/README.md) resolve `output
 
 ## Release artifact boundary
 
-Core/server development metadata is now **1.81.6**, an unpublished follow-up for the [scoped analyze-string reporting correction](xslt30-analyze-string-fix/README.md). Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
+Core/server development metadata is now **1.81.7**, an unpublished follow-up for the [module-placement reporting correction](xslt30-module-placement-fix/README.md). Published Core remains 1.81.2; the extension manifest remains 0.2.6. Ten library packages and the framework-dependent language-server VSIX have separate preparation and publication paths. Normal pack metadata includes NOTICE; manifest validation binds artifact bytes to their source commit, versions and dependency set. Publication downloads a reviewed successful preparation run instead of rebuilding. [Release guide](RELEASING.md).
 
 The conformance runner uses an internal observed-execution helper to capture secondary outputs with logical URI, raw XDM and per-output serialization properties. It serializes at production time and compares only current captured outputs; golden fixture files remain independent inputs. The engine isolates explicit principal result-document content from enclosing sequence accumulators and gives that principal raw output precedence over the enclosing template result. Ordinary raw-template results and public API signatures retain their routes. [Immutable specification adoption](xslt30-isolation-candidate/ADOPTION.json).
 

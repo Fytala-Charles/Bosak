@@ -1,0 +1,111 @@
+{
+  "onlyChangedReportedIdentities": [
+    "error-0010x",
+    "error-0010z",
+    "error-0170a",
+    "error-0170b",
+    "error-0190a",
+    "error-0190b"
+  ],
+  "casesNewlyMatchingWithoutAliases": [
+    "error-0170b",
+    "error-0190b"
+  ],
+  "alreadyAcceptedAlternativeCases": [
+    "error-0010x",
+    "error-0010z",
+    "error-0170a",
+    "error-0190a"
+  ],
+  "all579StatusesAndSkipReasonsUnchanged": true,
+  "remainingCodeDifferences": 27,
+  "remainingUncodedReports": 23,
+  "remainingToleranceBranches": 50,
+  "namespaceProof": "Compile-time leading local codes only; namespace identity is not independently proved.",
+  "cases": [
+    {
+      "test": "error-0010x",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "after": {
+        "actual_code": "XTSE0170",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0010 | XTSE0170"
+    },
+    {
+      "test": "error-0010z",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "after": {
+        "actual_code": "XTSE0190",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0010 | XTSE0190"
+    },
+    {
+      "test": "error-0170a",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "after": {
+        "actual_code": "XTSE0170",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0010 | XTSE0170"
+    },
+    {
+      "test": "error-0170b",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTSE0170",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0170"
+    },
+    {
+      "test": "error-0190a",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "after": {
+        "actual_code": "XTSE0190",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0010 | XTSE0190"
+    },
+    {
+      "test": "error-0190b",
+      "before": {
+        "actual_code": "XTSE0010",
+        "catalog_code_assessment": "reported-code-mismatch",
+        "legacy_branch": "legacy-code-alias"
+      },
+      "after": {
+        "actual_code": "XTSE0190",
+        "catalog_code_assessment": "reported-code-exact",
+        "legacy_branch": "message-code-substring"
+      },
+      "allowedErrorCodes": "XTSE0190"
+    }
+  ]
+}
