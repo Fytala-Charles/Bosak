@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-13",
+  "postImplementationFixtureReview": true,
+  "scope": "Four additional cases traverse the same adopted rejection path; each already permits both generic and specific codes. No implementation/adoption scope expansion.",
+  "fixtures": {
+    "error-0010z": {
+      "sha256": "b4c3800936e2da36f48d8a5902cbca3a8715255229b4193a0807c2df5c2298cd",
+      "allowedCodes": "XTSE0010 | XTSE0190"
+    },
+    "error-0170a": {
+      "sha256": "a8fc3d163cbb2d37900f0684d1d9b20e7f17abe65357f0e6db1a56cdfaeb02f1",
+      "allowedCodes": "XTSE0010 | XTSE0170"
+    },
+    "error-0010x": {
+      "sha256": "01cbe5a1468f92e4962c1cfba14a23a46507b8a5862220c73dddae47e429d108",
+      "allowedCodes": "XTSE0010 | XTSE0170"
+    },
+    "error-0190a": {
+      "sha256": "c3b72819963256c2a7ca40171f5d8ab6d0016b3fe54315f56ed5e4ab54989da8",
+      "allowedCodes": "XTSE0010 | XTSE0190"
+    }
+  }
+}

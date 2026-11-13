@@ -1,3 +1,7 @@
+# Module-placement renderer check — 13 November 2026
+
+The [scoped reporting receipt](xslt30-module-placement-fix/DOCUMENTATION-CHECKS.json) checks rendered case/verification tables, exclusion links and unchanged historical/Fytala content. No screenshot/PDF acceptance is asserted.
+
 # Scoped reporting renderer check — 13 November 2026
 
 The [reporting-fix receipt](xslt30-analyze-string-fix/DOCUMENTATION-CHECKS.json) verifies rendered regression/original-case tables, complete pinned-gate counts, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.
