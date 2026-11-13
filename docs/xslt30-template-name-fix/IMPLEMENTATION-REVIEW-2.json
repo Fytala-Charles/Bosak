@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-13",
+  "beforeRevisedImplementation": true,
+  "unchangedImmutableAdoption": "ADOPTION.json",
+  "finding": "Caught stack proves BuildStaticContext -> ValidateNamedTemplateBindings -> CollectNamedTemplatesInDocumentOrder -> ExpandVariableName fails before ValidateNamedQName. The first guard did not resolve the ten regressions.",
+  "decision": "Remove ineffective shared validator guard and wrap only ExpandVariableName at the named-template binding-collection call. Translate only leading XPST0081 for well-formed lexical QNames; preserve malformed-name and other diagnostics and existing namespace resolution. Retain the original cause as InnerException.",
+  "noScopeExpansion": true,
+  "initialFocusedLogSha256": "24bf2e1e6ab199300166858a75d56d5d48d2145be994ecf9af9fdd1fe62d648e",
+  "caughtProbeSha256": "9c2d9305739ac74c2ffcb4c197145d2a5838b2f234c336035cd7a049f190d086"
+}

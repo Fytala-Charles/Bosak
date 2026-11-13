@@ -1,3 +1,7 @@
+# Template-name renderer check — 13 November 2026
+
+The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.
+
 # Module-placement renderer check — 13 November 2026
 
 The [scoped reporting receipt](xslt30-module-placement-fix/DOCUMENTATION-CHECKS.json) checks rendered case/verification tables, exclusion links and unchanged historical/Fytala content. No screenshot/PDF acceptance is asserted.
