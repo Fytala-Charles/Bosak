@@ -1,0 +1,54 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "ee738d7c5962778ab49c39cd62bd1bf98ca26cb2bd2f7291f35ee331933a83c8",
+      "htmlSha256": "e987a82969f56a46e6603c5758c31168cad3a0a0538118efe9e5e4c2bfd55286"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "a76fb4318cb53c61f46ca74657b09699e02c2c12d54dff5d34a671a6497cc67d",
+      "htmlSha256": "dfef67194518e5436abd0a408a7539376c3c20a99e181ba679f53145d5021901"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "99c9915313083bd0adb9b40af88573bfa7041a367cd07a96067461c7a77b1d24",
+      "htmlSha256": "172d3f1acaebf47772346222ecb8c92efc18c0ead76eff001a02da4ef0bd0047"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "c71bb95f93700629f2ebb6653c3b7c585a1cf96e3ddb1544523d445ecae1d7db",
+      "htmlSha256": "0ee3680ffdeb9979658c2a4bb94903d6a75794c36bd9db0caa8937bab6ff88d7"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "bf6013f2c6f85be38016d71a9787da7a9981c9a52c4c5da5de32fb23fb079249",
+      "htmlSha256": "1ce654e99f4d66a95166b8512d9806b17042c60659e0699485e17183bc44d73e"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "93d3c31658dc55f00d224cf44d1f2480d858e286d676befc1553b4803cf973ed",
+      "htmlSha256": "163ca9f917c187b01a16e16d63eef25182e1f129fe87ef04fa62d828e78ea238"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "e62d14eaa76d73e0a3b9807186c5466e097b34a06fe05f6ba549ea4a5c0c97e6",
+      "htmlSha256": "1f034f4249d4eddaeb29b18b50ec7a99c3c14cac2496bc31f2bd37126a0b9706"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "52d69c3a56b441b0b5fdf26a61c555149f62f9cf5d88dd09b2db227e4a0023c1",
+      "htmlSha256": "863bf4265b0120e708873bcc2ebaaa0a3cb2933eea3990e7c7c0d2ec6a774490"
+    },
+    {
+      "file": "docs/streaming-wrapper-cache/README.md",
+      "sourceSha256": "bdf43ab5517c3f848d4ec69884d8b19b94733689799a37d9ed33a0ace6c16526",
+      "htmlSha256": "b9e17370015b8bb3a10241239d2f0cfa96071aa3763a217a1eadde6aa1208c50"
+    }
+  ],
+  "localDestinations": 4088,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

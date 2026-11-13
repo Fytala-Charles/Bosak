@@ -1,3 +1,47 @@
+# Case-cost delivery refresh - 13 November 2026
+
+PR #485 merged as `2b292e81522d4246f3a546a1bf7528445133f146` after all six checks and independent hosted qualification: 10,221/0/4,380 across all 14,601 identities in 848.750 seconds. Prior main independently verifies the same result in 1,057.812 seconds. The [case-cost refresh](xslt30-case-cost-refresh/README.md) brings PR #486 onto that main, retaining its original 1.81.8 copied-runner measurements, source/native pins and failed attempts. Fifteen case-cost controls and release workflow validation pass. No new diagnostic execution, engine behavior, production runner, required-gate, fixture, exclusion or budget change; Core/server 1.81.9 is unpublished. Required hosted checks for the refreshed head are pending. Original dossiers remain sealed; these independent hosted times establish neither suite-wide speedup nor timeout cause.
+
+# Telemetry delivery refresh - 13 November 2026
+
+PR #484 merged as `a40951308950b36970f10badc1d13e46833ed1f7` after all six checks and independent hosted qualification (10,221/0/4,380 across all 14,601 identities in 1,028.266 seconds). The prior main qualification also independently verifies the same result in 1,038.500 seconds. The [telemetry refresh receipt](xslt30-telemetry-refresh/README.md) brings PR #485 onto that main, preserving original captures, failures and the opening-only/manual diagnostic trigger. Seventeen telemetry controls and fourteen gate controls pass. No new diagnostic capture or engine change relative to main; normal checks for the refreshed head are pending. All original dossiers remain sealed. The new head inherits the actual 1.81.9 allocation fix rather than retrying an unchanged failed engine payload. No suite-wide speedup, failure-rate or timeout-cause claim; no fixture, exclusion, required-gate or budget change. Development Core/server 1.81.9 remains unpublished.
+
+# Hosted timing PR refresh - 13 November 2026
+
+The [historical timing investigation](xslt30-hosted-timing/README.md) is refreshed onto merged main `0432de7c0a357eeeb748d05ec1e9f4148cb737f6`, incorporating PR #489's actual 1.81.9 wrapper-cache allocation fix. Its required hosted gate was independently replayed: 10,221 passed / 0 failed / 4,380 excluded across all 14,601 identities in 1,023.329 seconds, with unchanged fixtures/runtime and the original 1,200-second / 8 GiB bounds. All six checks passed before merge. The [refresh receipt](xslt30-timing-refresh/README.md) preserves the original PR #484 timeout and every sealed historical dossier. The refreshed PR #484 contains no engine, test, tool or workflow change relative to merged main; its new required qualification is pending. This is qualification of a different engine payload, not a retry of the original failed attempt. Later telemetry/profiling investigations remain in open PRs #485-#488. No whole-suite speedup or timeout-cause claim follows from the allocation microbenchmark or these separate hosted attempts. Development Core/server 1.81.9 remains unpublished.
+
+# Streaming wrapper-cache candidate — 13 November 2026
+
+Base: `04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf`; branch `perf/streaming-wrapper-factory`.
+
+## Streaming wrapper cache allocation candidate — 13 November 2026
+
+The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static state factory with the existing weak table. The same four focused tests pass against the candidate; the retained 1.81.8 binaries pass the three protective identity/race/collection checks and fail only the allocation check (9,600,000 bytes for 100,000 warmed hits, versus zero for the candidate). This local allocation result does not establish whole-suite speed or the cause of earlier hosted timeouts. All 26,426 solution tests and 90 language-server tests pass. Frozen QT3 remains 31,397/0/424 and gated qt4 remains 8,941/0/1,918 with identical skip names/reasons. The complete pinned standalone gate remains 10,221/0/4,380, all 14,601 case identities reconciled under the original 1,200-second / 8 GiB limits. Development Core/server 1.81.9 remains unpublished. Public signatures and streaming evaluation semantics are unchanged.
+
+Owner checkout remains dirty at 18946b3125bf3187090877e00f22ea5a1e746118. Local qualification passed; hosted checks and artifact replay pending. No merge or publication.
+
+---
+
+# Hosted XSLT timing evidence — 13 November 2026
+
+The [hosted XSLT timing investigation](xslt30-hosted-timing/README.md) replays seven retained attempts without new diagnostic execution or gate changes. Two same-checkout comparisons have identical32-file application manifests yet include both a success and a1200-second timeout. Four complete runs each replay10,221/0/4,380; three incomplete timeouts remain failed. Equivalent-tree/different-payload comparisons are separate. Twenty-second progress samples show earlier delay, but cannot identify CPU/GC/I/O causes or individual test durations. No failure rate, regional cause or performance acceptance is inferred. Next prepare separate host/process telemetry under unchanged bounds before another semantic slice. PR483 merged04eea731 after all six checks and hosted replay passed; parent timeouts remain original evidence.
+
+Documentation-only worktree `.worktrees/Bosak.TimingReview`, branch `docs/xslt30-hosted-timing`, base04eea731. Engine/source versions, runner/workflows, exclusions and1200-second/8GiB bounds unchanged. Core/server1.81.8 remains unpublished. Preserve original owner checkout and every sealed dossier.
+
+# Telemetry trigger delivery correction - 13 November 2026
+
+PR485 is ready for review with sealed local/hosted qualifications and original required-check success at tooling source a63dff0c. The [separate trigger correction](xslt30-telemetry-delivery/README.md) records an unintended automatic diagnostic queued by the evidence-only push: run43452915632 cancelled during SDK setup, qualification step skipped. Event selection is now one automatic observation on PR opening plus explicit manual dispatch; synchronize pushes do not launch diagnostics. All observer/job/engine/runner/required-gate/budget/exclusion/version bytes otherwise unchanged. Original 37-entry measurement evidence and seals stay intact; final-head normal checks run separately. No merge/publication; PR484 remains blocked by retained original timeout without retry.
+
+# Standalone telemetry evidence - 13 November 2026
+
+The [separate diagnostic lane](xslt30-telemetry/README.md) now has real local and hosted full-catalog evidence. Observed qualifications pass 10,221/0/4,380 in 817.285s locally and 1175.235s hosted; all 14,601 identities, exact exclusions and corpus/runtime integrity independently replay. Capture retains 810/1167 coherent samples, loaded native identities and no collection errors. The untouched required hosted gate passes in 1056.750s with the same 32-file hosted application manifest. All 26,422 hosted solution tests and 90 language-server tests pass; 17 observer controls, 14 gate controls and ten retained-evidence corruption checks pass. Prior frozen QT3/qt4 receipts remain historical, not fresh executions for this tooling-only slice.
+
+Hosted CLR/JIT 10.0.15 differs from local 10.0.11; separate workers/build manifests and unmeasured total observer overhead prevent a controlled A/B or root-cause claim. Proposed follow-up: bounded case-level CPU/elapsed attribution in a separately identified copied runner with a fixed native runtime. Production engine/runner/required gate/workflow, exclusions, 1200s/8GiB limits and unpublished Core/server1.81.8 stay unchanged. PR484 remains OPEN/BLOCKED by original timeout43437283485 (1200.156s), retained without retry/merge. Draft PR485 qualifies tooling source a63dff0c612e8a5181eb21910cba7e66d82a1aa1; later delivery changes only docs/evidence. The initial sandbox ownership refusal launched no .NET qualification; original refusal retained separately from the successful owner-context packet. Preserve dirty owner checkout and sealed history.
+
+# Separate standalone telemetry candidate - 13 November 2026
+
+The [diagnostic lane](xslt30-telemetry/README.md) observes one unchanged full standalone gate with one-second Windows process counters and loaded native runtime hashes. Seventeen observer controls and fourteen existing gate controls pass; real local and hosted measurements are pending. Production engine, runner, required gate/workflow, corpus, skip reasons, 1,200-second/8 GiB limits and unpublished 1.81.8 version remain unchanged. PR 484 remains blocked by original hosted timeout 43437283485 (1200.156 seconds), retained without retry. This is a separate candidate based on main 04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf, not a merge of PR 484.
+
 # Original PR486 required gate timed out - 13 November 2026
 
 The independent [case-cost diagnostic](xslt30-case-cost/README.md) completed with exact original outcomes and engine/native pins, but original PR486 required43459327822 timed out1200.063s at sx-instance-of-007. Original artifact14057017216/digest/logs retained with the two PR485 delivery timeouts; no retry or merge. Original fiveother checks pass. The diagnostic ranks workloads and is not qualification or a causal resolution. Finaldelivery adds only evidence/docs and fastPythonCIcontrols; new-head normal checks remain separate/pending. Nexttarget: boundedCPU-stackprofile of sx-GeneralComp-gt withsamecopiedengine/nativepins beforeoptimization. Productionstandalonegate/budget/exclusions remainunchanged.

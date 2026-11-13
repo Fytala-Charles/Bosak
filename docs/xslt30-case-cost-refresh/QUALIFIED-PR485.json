@@ -1,0 +1,37 @@
+{
+  "success": true,
+  "runId": "43501163101",
+  "head": "4933d02204e7622f27bc23bb043c9996f7fb857c",
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "totalCases": 14601,
+  "sourceCommit": "82e954e6602929efc4c778562bf388aa3297492d",
+  "sourceTree": "4fb2d81547bf50dde56f3c75ea5e35724652b008",
+  "sourceTreeMatchesHead": true,
+  "elapsedSeconds": 848.75,
+  "corpusUnchanged": true,
+  "runtimeUnchanged": true,
+  "artifact": {
+    "id": 14073888810,
+    "node_id": "MDg6QXJ0aWZhY3QxNDA3Mzg4ODgxMA==",
+    "name": "xslt30-pinned-gate",
+    "size_in_bytes": 1982516,
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14073888810",
+    "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14073888810/zip",
+    "expired": false,
+    "digest": "sha256:550d984e7dcec1715b69fca622154e6bb0dc75a1c342fa1bf517f72cc4bc1c79",
+    "created_at": "2026-11-13T20:40:02Z",
+    "updated_at": "2026-11-13T20:40:02Z",
+    "expires_at": "2026-12-13T20:40:01Z",
+    "workflow_run": {
+      "id": 43501163101,
+      "repository_id": 1242768879,
+      "head_repository_id": 1242768879,
+      "head_branch": "diagnostics/xslt30-telemetry",
+      "head_sha": "4933d02204e7622f27bc23bb043c9996f7fb857c"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "originalSourceHead": "2ad594cc9f5d021eb2075698e0fb69d041d0c3b0",
+  "sourceGitBlobSha256": {
+    "tools/xslt30_case_cost.py": "1da49f261b696b9f80b19dd77891d0d126f4ed232702de5d63bc7f782f745cbc",
+    "tools/test_xslt30_case_cost.py": "9637a5ac10259ef517d8be67a514e40e9ee10050e31613e8ae24ee910b8b6459",
+    "tools/xslt30-case-cost/CaseCosts.cs.in": "8e1bdf90cdc98ad7e350fa49d09798d0c813d977c6e9cc0323d760e6569792c8",
+    ".github/workflows/ci.yml": "911ab9d872f574a03a919b66e60a4a6d3c72d59628e323ee96388fd154e0824a"
+  },
+  "caseCostControls": {
+    "command": "python -m unittest discover -s tools -p test_xslt30_case_cost.py",
+    "tests": 15,
+    "exitCode": 0,
+    "recordedFromSuccessfulToolResult": true
+  },
+  "workflowValidator": {
+    "exitCode": 0,
+    "seconds": 0.1105496883392334,
+    "dependency": "PyYAML==6.0.3",
+    "isolatedDependencyDirectory": true,
+    "globalEnvironmentChanged": false,
+    "initialRefusal": "ModuleNotFoundError: yaml"
+  },
+  "dependency": {
+    "name": "PyYAML",
+    "version": "6.0.3",
+    "archiveHashes": {
+      "sha256": "4a2e8cebe2ff6ab7d1050ecd59c25d4c8bd7e6f400f5f82b96557ac0abafd0ac"
+    }
+  },
+  "newDiagnosticExecution": false,
+  "newDotNetExecution": false
+}

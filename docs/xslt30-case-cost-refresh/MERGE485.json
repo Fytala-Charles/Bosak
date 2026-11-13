@@ -1,0 +1,51 @@
+{
+  "pr": {
+    "mergeCommit": {
+      "oid": "2b292e81522d4246f3a546a1bf7528445133f146"
+    },
+    "mergedAt": "2026-11-13T20:41:15Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/485"
+  },
+  "commit": {
+    "sha": "2b292e81522d4246f3a546a1bf7528445133f146",
+    "node_id": "C_kwDOShMl79oAKDJiMjkyZTgxNTIyZDQyNDZmM2E1NDZhMWJmNzUyODQ0NTEzM2YxNDY",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/2b292e81522d4246f3a546a1bf7528445133f146",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/2b292e81522d4246f3a546a1bf7528445133f146",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-13T20:41:15Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-13T20:41:15Z"
+    },
+    "tree": {
+      "sha": "4fb2d81547bf50dde56f3c75ea5e35724652b008",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/4fb2d81547bf50dde56f3c75ea5e35724652b008"
+    },
+    "message": "Merge pull request #485 from Fytala-Charles/diagnostics/xslt30-telemetry\n\nObserve standalone qualification with separate bounded telemetry",
+    "parents": [
+      {
+        "sha": "a40951308950b36970f10badc1d13e46833ed1f7",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/a40951308950b36970f10badc1d13e46833ed1f7",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/a40951308950b36970f10badc1d13e46833ed1f7"
+      },
+      {
+        "sha": "4933d02204e7622f27bc23bb043c9996f7fb857c",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/4933d02204e7622f27bc23bb043c9996f7fb857c",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/4933d02204e7622f27bc23bb043c9996f7fb857c"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq93XrCRC1aQ7uu5UhlAAAhyEQAH18eekMEsAzzLVwaeHI0pid\nOXGAGckhZBY412YXNSHHAcz0QCtUVKZuxjaej/TRuKkfjKdYiHaQ09Rq5dpUq4/S\nTlGMhK5R+g7Enj0TrnKyrqO79XPh9eTv6oSUZWqsc1ub4I8oDfCuwu9CaN1ZtpNU\nCBgDrAYlS2bYsTisGCSzORsNBTxjRAHpbl1/lYt4aj97tbmce8kqRlQhcb/hTj6U\n2ATwJKU1q21Uc8Ek2S7Z8++tBdjXC4PSGX3uQOBQyoSuOQ3g8REiBZWSVt3fNtCT\nXudBhl9lMZO2pne6gP5hiKL6ZabBOt9UG0jBNQpaR2Y7vOXCivr7gwfCnI35u90P\nRJ0qRemGxtFTUP2eQ8xlNGH4CRgYZOcWXMioTGduhZ1yMmgEydB2NJ7lAlKEV2Fk\nM5yuoRt2KS9BcHqbz5WIciOZMkoFOBAsET1ibnFcx0+0IeUrMjX+84TYDD/imqc9\n1UqxjShwn+P7Qphnd/aWgJXrgsxhpYimAqMjPYDgeV5OGBAjyHsz+qx/pF1RsXC/\nMJFVsg83HnJQ7s+dRODULGpXCWPLbpPCFfQP0awsftIkB+mAMqmmrbwY2/6sXMX6\nR7r/Zc4iqxFf1V+/a6bqCNxgh/LOG1YgwX/AYAGeEo7ZMhrxDj5zX4k7OsxCE6YH\nIi+DzQ6Q9YDssOu3HKr/\n=BhBV\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 4fb2d81547bf50dde56f3c75ea5e35724652b008\nparent a40951308950b36970f10badc1d13e46833ed1f7\nparent 4933d02204e7622f27bc23bb043c9996f7fb857c\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794602475 +0100\ncommitter GitHub <noreply@github.com> 1794602475 +0100\n\nMerge pull request #485 from Fytala-Charles/diagnostics/xslt30-telemetry\n\nObserve standalone qualification with separate bounded telemetry",
+      "verified_at": "2026-11-13T20:41:15Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

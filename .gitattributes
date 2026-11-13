@@ -698,4 +698,15 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/xslt30-analyze-string-fix/** -text whitespace=cr-at-eol
 /docs/xslt30-module-placement-fix/** -text whitespace=cr-at-eol
 /docs/xslt30-template-name-fix/** -text whitespace=cr-at-eol
+
+/docs/streaming-wrapper-cache/** -text whitespace=cr-at-eol
+/docs/xslt30-hosted-timing/** -text whitespace=cr-at-eol
+
+/docs/xslt30-timing-refresh/** -text whitespace=cr-at-eol
+/docs/xslt30-telemetry/** -text whitespace=cr-at-eol
+/docs/xslt30-telemetry-delivery/** -text whitespace=cr-at-eol
+
+/docs/xslt30-telemetry-refresh/** -text whitespace=cr-at-eol
 /docs/xslt30-case-cost/** -text whitespace=cr-at-eol
+
+/docs/xslt30-case-cost-refresh/** -text whitespace=cr-at-eol

@@ -1,0 +1,22 @@
+{
+  "unchangedToolSourceHead": "7210b46900044bc61513e99d61e31cf742017eed",
+  "sourceGitBlobSha256": {
+    "tools/xslt30_telemetry.py": "0d608e91197642af1ec9984c5b1c105eba4050a73ca6a3c90aa0012edc74eeac",
+    "tools/test_xslt30_telemetry.py": "ad25b8ca1053e39d5407306fec0ccf159bf64d8028109af683dc8c7e921a5f45",
+    ".github/workflows/xslt30-telemetry.yml": "c3803e1752939d4c9ecd15df5e347e5f906b459d7872eeb5b9da28d03eab014d"
+  },
+  "results": [
+    {
+      "command": "python -m unittest discover -s tools -p test_xslt30_telemetry.py",
+      "tests": 17,
+      "exitCode": 0
+    },
+    {
+      "command": "python -m unittest discover -s tools -p test_xslt30_gate.py",
+      "tests": 14,
+      "exitCode": 0
+    }
+  ],
+  "newDiagnosticCapture": false,
+  "recordedFromSuccessfulToolResults": true
+}

@@ -1,0 +1,164 @@
+{
+  "local": {
+    "sourceCommit": "a63dff0c612e8a5181eb21910cba7e66d82a1aa1",
+    "status": "Completed",
+    "gateSuccess": true,
+    "telemetryCaptured": true,
+    "samples": 810,
+    "qualificationElapsedSeconds": 817.285,
+    "finalProcessCpuSeconds": 764.46875,
+    "cpuSecondsPerWallSecond": 0.9353759704387087,
+    "affinityCpuCount": 24,
+    "maximumObservedWorkingSetBytes": 1831366656,
+    "maximumObservedPrivateCommitBytes": 1772466176,
+    "maximumReportedPeakWorkingSetBytes": 2024157184,
+    "maximumReportedPeakCommitBytes": 1966264320,
+    "lastSampleIo": {
+      "read_ops": 184689,
+      "write_ops": 33161,
+      "other_ops": 174411,
+      "read_bytes": 1296069584,
+      "write_bytes": 663246,
+      "other_bytes": 613059
+    },
+    "maximumSampleGapSeconds": 1.0760617000050843,
+    "maximumCounterCollectionSeconds": 0.012490699999034405,
+    "sampleErrors": [],
+    "mostObservedMarkers": [
+      {
+        "case": "catalog-007",
+        "samples": 45
+      },
+      {
+        "case": "sf-deep-equal-018",
+        "samples": 23
+      },
+      {
+        "case": "catalog-006",
+        "samples": 21
+      },
+      {
+        "case": "catalog-004",
+        "samples": 20
+      },
+      {
+        "case": "sf-fold-left-021",
+        "samples": 18
+      },
+      {
+        "case": "normalize-unicode-008",
+        "samples": 17
+      },
+      {
+        "case": "sf-fold-left-019",
+        "samples": 14
+      },
+      {
+        "case": "sf-fold-left-020",
+        "samples": 13
+      }
+    ],
+    "nativeHashes": {
+      "dotnet.exe": "ab1b71fd3dd71062e074c9fab8312081a81b7f2b3e0327c48c4d249c8d1a3135",
+      "hostfxr.dll": "44f97e946b36415176dbc56a4426565a5e9b3e722c0ad579e20a749e3c0c7bcd",
+      "hostpolicy.dll": "ded1d42c38688a1cacd20026b1f981c22fd583f621b7123296ef0f2af9cd656d",
+      "coreclr.dll": "c98c3078a4f2495dd7d3ced967c7a6981545194ed163454703580b740f435521",
+      "system.private.corelib.dll": "ed80a1a5dd066c0407ad59686f9af90a4f3e55dbf3e4c973b53cc8c9d0706f82",
+      "clrjit.dll": "e7bf743e7bf9a01c8c2bcdc0d828212fd8dfc285be9d4ec21962becf456df648"
+    },
+    "interpretation": "CPU/wall is process core-equivalents, not percent host utilization or VM entitlement. Sample maxima and I/O counters are not allocation, GC or latency measures. Counter collection excludes module hashing and other observer overhead."
+  },
+  "hosted": {
+    "sourceCommit": "a296557d75e397985de4fcb8bacfa9bae905d54d",
+    "status": "Completed",
+    "gateSuccess": true,
+    "telemetryCaptured": true,
+    "samples": 1167,
+    "qualificationElapsedSeconds": 1175.235,
+    "finalProcessCpuSeconds": 1202.1875,
+    "cpuSecondsPerWallSecond": 1.0229337111301144,
+    "affinityCpuCount": 4,
+    "maximumObservedWorkingSetBytes": 1805017088,
+    "maximumObservedPrivateCommitBytes": 1751130112,
+    "maximumReportedPeakWorkingSetBytes": 1975332864,
+    "maximumReportedPeakCommitBytes": 1922146304,
+    "lastSampleIo": {
+      "read_ops": 184649,
+      "write_ops": 33052,
+      "other_ops": 218237,
+      "read_bytes": 1296011288,
+      "write_bytes": 661577,
+      "other_bytes": 652330
+    },
+    "maximumSampleGapSeconds": 1.0629999999999882,
+    "maximumCounterCollectionSeconds": 0.016000000000076398,
+    "sampleErrors": [],
+    "mostObservedMarkers": [
+      {
+        "case": "catalog-007",
+        "samples": 89
+      },
+      {
+        "case": "catalog-006",
+        "samples": 35
+      },
+      {
+        "case": "sf-fold-left-021",
+        "samples": 28
+      },
+      {
+        "case": "sf-fold-left-018",
+        "samples": 25
+      },
+      {
+        "case": "sf-deep-equal-018",
+        "samples": 23
+      },
+      {
+        "case": "normalize-unicode-008",
+        "samples": 21
+      },
+      {
+        "case": "catalog-012",
+        "samples": 20
+      },
+      {
+        "case": "sf-fold-left-016",
+        "samples": 20
+      }
+    ],
+    "nativeHashes": {
+      "dotnet.exe": "ab1b71fd3dd71062e074c9fab8312081a81b7f2b3e0327c48c4d249c8d1a3135",
+      "hostfxr.dll": "2c14e9b4a540d98971b60cbaffcdde4f22328bd24bf75b68aa9e6bee13c2ca25",
+      "hostpolicy.dll": "20405152b719ccb8d4e0361f3259db8875d8d4f3c97d1fbea4e1ca6cc6d21902",
+      "coreclr.dll": "a6988fc77326c245873986446de4f15218df929664750d333cb2d42486c071da",
+      "system.private.corelib.dll": "983f5c8957437aa38fcd239606e60dc2a4a6f551605311591a72e5b285eae957",
+      "clrjit.dll": "22231ec740134103c575c7869b060b4ba2250b4ab9b5f964b93e94298b53a1e1"
+    },
+    "interpretation": "CPU/wall is process core-equivalents, not percent host utilization or VM entitlement. Sample maxima and I/O counters are not allocation, GC or latency measures. Counter collection excludes module hashing and other observer overhead."
+  },
+  "required": {
+    "runId": 43448128961,
+    "success": true,
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "cases": 14601,
+    "elapsedSeconds": 1056.75,
+    "sourceCommit": "a296557d75e397985de4fcb8bacfa9bae905d54d",
+    "runtimeUnchanged": true,
+    "corpusUnchanged": true
+  },
+  "comparison": {
+    "hostedDiagnosticMatchesRequiredApplication": true,
+    "localMatchesHostedApplication": false,
+    "hostedRuntimePaths": {
+      "coreclr.dll": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.15\\coreclr.dll",
+      "clrjit.dll": "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\10.0.15\\clrjit.dll"
+    },
+    "limits": "Separate hosted workers, no CLR/JIT identity captured in untouched required lane; not an observer-overhead A/B or causal diagnosis."
+  },
+  "limits": "Selected independent attempts, not a controlled observer-overhead or runtime-version A/B. No causal diagnosis or original-failure erasure."
+}
