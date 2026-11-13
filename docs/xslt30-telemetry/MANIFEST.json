@@ -1,0 +1,186 @@
+{
+  "files": {
+    "API-REVIEW.json": {
+      "bytes": 1676,
+      "sha256": "cd0be75c83fe779e2f4add7012fb131d4c675f6f74467ce0e43d75284ad8e1a0"
+    },
+    "DOCUMENTATION-CHECKS.json": {
+      "bytes": 4015,
+      "sha256": "28bacad53bd0a4e6c4c77366e10da559d217e2815e6cbff476ea2b35c8d77091"
+    },
+    "EVIDENCE.zip": {
+      "bytes": 7908959,
+      "sha256": "28fcd568bb021e713372070a26a1690c4c9889bcf2c9cee7de9c47c9cf0f8974"
+    },
+    "README.md": {
+      "bytes": 8651,
+      "sha256": "fe9a37ea30116c47b26056856a24f915873781bb4acecffdb5000f40053d6caf"
+    },
+    "REPORT.json": {
+      "bytes": 5696,
+      "sha256": "6b7f48bd4c72a03835bcf0f68ffd0e2570255c7dbd513b65bd4e060d0a6fc816"
+    },
+    "SOURCE-TREE-MAP.json": {
+      "bytes": 415,
+      "sha256": "c8b75f4533ac480ad738f65b23cecb61e09034ce694a702ae6891885e17d867d"
+    },
+    "summarize.py": {
+      "bytes": 4909,
+      "sha256": "74acb3ae2df12ae6e9ebf33b551927e811be7f4a1441557d3d0c6863e1cfc30f"
+    },
+    "verify.py": {
+      "bytes": 6001,
+      "sha256": "c5c2b834355e6d038f8dba40b9d40907f3d68a546397da14df1ab8d4dd48d76d"
+    }
+  },
+  "archiveEntries": {
+    "BINARY-PROVENANCE.json": {
+      "bytes": 703,
+      "sha256": "39b6c329d2992fa72e775a8abf36c30e518bfbebba230c7258ec13c948bca40b"
+    },
+    "BUILD.log": {
+      "bytes": 7084,
+      "sha256": "c766732884efdeaebb57e08c4f8e82d9e35e342e8babc1d5bdaf2fb2e5c05b81"
+    },
+    "CI-LOGS.zip": {
+      "bytes": 71127,
+      "sha256": "254f877608ddfca66b87ba44c3c6d2c98fc3ac7e48b6eaf3868cf9923e0ea1a3"
+    },
+    "CI-META.json": {
+      "bytes": 14820,
+      "sha256": "e6eeb4f876dbc25044d15c984feb4fdd71de56ced1ae15201b089c88365ea923"
+    },
+    "CI-RESULTS.json": {
+      "bytes": 264,
+      "sha256": "8af480385c40f298cad1115874960cbf6288023bd9e1663c282fd4884607ef94"
+    },
+    "COMPARISON.json": {
+      "bytes": 476,
+      "sha256": "34c81905dcb0c80a68ea48fd2a40bf61d2e15cf708e571ac33c197ac71770819"
+    },
+    "HOSTED-LOGS.zip": {
+      "bytes": 24784,
+      "sha256": "8b23fb91107f95b222773c7c284d5def4c75d8240cec1a3e2c7a7198cd3c2169"
+    },
+    "HOSTED-META.json": {
+      "bytes": 16215,
+      "sha256": "25a70da0b1b4ee153e7df90c9ee333f20a7e2ce890784d91c28c8b71fa0afccc"
+    },
+    "HOSTED.zip": {
+      "bytes": 2049028,
+      "sha256": "731217c7fa85ffe1ca267e1007b131a48d4946ebd5a743b80b833c1113be9e35"
+    },
+    "LOCAL-META.json": {
+      "bytes": 283,
+      "sha256": "6408df7dc2cecfbdca668a73aa88df88de961dbca8b42d5ce7f74be01b0d2a65"
+    },
+    "LOCAL.zip": {
+      "bytes": 2038783,
+      "sha256": "b9808c88bcaa143590f04276eb2917e201e1c4e81c989cde459d93846d2fa018"
+    },
+    "PR484-FAILURE.json": {
+      "bytes": 17707,
+      "sha256": "36dd2bec5fabe38ba7b82667d12a8c2f7ec1c63a7f0c89e115ca6d7ff0e616c3"
+    },
+    "PR484-FAILURE.zip": {
+      "bytes": 1874521,
+      "sha256": "51aaac8790164000e82c319be574094f5eb9cd68878018455bedd9f43b92f203"
+    },
+    "PR484.json": {
+      "bytes": 1932,
+      "sha256": "c58569e86b089c1243612fec6e9d3a31a8581fcf4e42e96fb0f4541b8f63fe19"
+    },
+    "REPORT.json": {
+      "bytes": 5696,
+      "sha256": "6b7f48bd4c72a03835bcf0f68ffd0e2570255c7dbd513b65bd4e060d0a6fc816"
+    },
+    "REQUIRED-CHECKS.json": {
+      "bytes": 78,
+      "sha256": "3b624e4bab00766050ddb174c8326d4736dd6a1d2d3bced1f7337f6c541a753e"
+    },
+    "REQUIRED-LOGS.zip": {
+      "bytes": 26848,
+      "sha256": "b385a74fa7422d9472a64169d106c68f3b2f037e2faabf0334d9033e709f08dd"
+    },
+    "REQUIRED-META.json": {
+      "bytes": 16210,
+      "sha256": "b09c81486608328be0579705d643b1e3e9ed293641883c45d478996fe2abb85f"
+    },
+    "REQUIRED.zip": {
+      "bytes": 1982500,
+      "sha256": "f24e3fc4857a71f35ada1757fbe230a99e11e8c277f028e079ef5920c8703ce1"
+    },
+    "SOURCE-BOUNDARY.json": {
+      "bytes": 1659,
+      "sha256": "8fd3921702ae85f7eb0f4fcf25689504973b0b78b76557b9b331e36dceb952c3"
+    },
+    "SOURCE-TREE-MAP.json": {
+      "bytes": 415,
+      "sha256": "c8b75f4533ac480ad738f65b23cecb61e09034ce694a702ae6891885e17d867d"
+    },
+    "initial-refusal/APPLICATION-BEFORE.json": {
+      "bytes": 3083,
+      "sha256": "b415d0e708d3193bdada18739f96731e76a55adfda0854f5bc57f1bc634adc41"
+    },
+    "initial-refusal/HOST.json": {
+      "bytes": 1000,
+      "sha256": "9bec6a3ff1d10afc3c843be1f0a51939455a03603309a80a754c02898675a1ef"
+    },
+    "initial-refusal/OBSERVER.json": {
+      "bytes": 490,
+      "sha256": "8d396407ef45a497504e96e6bddc6a705e621ca90ea33b7da69ef8189ddd6e17"
+    },
+    "initial-refusal/TELEMETRY.json": {
+      "bytes": 911,
+      "sha256": "ac88a58fe5eaf5de4909cc7cd114814de4f0940b1b42d1cfd65fca149486e033"
+    },
+    "initial-refusal/dotnet-info.log": {
+      "bytes": 2029,
+      "sha256": "cc714d055ad0a75ec73e9d0fa915433f9928593d5defbb90d530344bd7a58ecd"
+    },
+    "initial-refusal/dotnet-runtimes.log": {
+      "bytes": 920,
+      "sha256": "91e02d0cc677fb2e9e0f4877b24af1f6e8b1624f997f01ea5892781f32dfc284"
+    },
+    "initial-refusal/dotnet-sdks.log": {
+      "bytes": 79,
+      "sha256": "439fe67c576f17d900bc765924687f2954ee7c79bf5e46bb4e4fe6e13b378806"
+    },
+    "initial-refusal/gate-controller.log": {
+      "bytes": 673,
+      "sha256": "62e103b85e80fdef59ffdbbf2eab812606e9140ec04aafa468f5785c29309da6"
+    },
+    "initial-refusal/samples.jsonl": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "observer/.github/workflows/xslt30-telemetry.yml": {
+      "bytes": 2812,
+      "sha256": "b3d4ac1e5d63658c3d861bccc1338e135413659606d518f253106c59a547d690"
+    },
+    "observer/tools/test_xslt30_telemetry.py": {
+      "bytes": 6841,
+      "sha256": "ad25b8ca1053e39d5407306fec0ccf159bf64d8028109af683dc8c7e921a5f45"
+    },
+    "observer/tools/xslt30_telemetry.py": {
+      "bytes": 19373,
+      "sha256": "0d608e91197642af1ec9984c5b1c105eba4050a73ca6a3c90aa0012edc74eeac"
+    },
+    "protected/.github/workflows/xslt30-gate.yml": {
+      "bytes": 2212,
+      "sha256": "c4dfd570b9a977650ce61f8c1baf7244f498a86130b50a0b0dc811e362b71dd6"
+    },
+    "protected/docs/xslt30-gate/BASELINE.json": {
+      "bytes": 808,
+      "sha256": "7169f840157b4ac3a24373c97a25136a9015ff5e4473c7b7d55db934a723fd11"
+    },
+    "protected/docs/xslt30-qualification/run.py": {
+      "bytes": 8617,
+      "sha256": "44536bb8653fe601a9ccb2bc3d42b14117f90c5f1d088756992a37810c32a7d3"
+    },
+    "protected/tools/xslt30_gate.py": {
+      "bytes": 8963,
+      "sha256": "803cd31c9da6172b2c924c3c958bc1eee50ca1812681b02f7d865279f6335ad0"
+    }
+  }
+}

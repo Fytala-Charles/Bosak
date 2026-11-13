@@ -1,0 +1,68 @@
+name: Standalone XSLT 3.0 telemetry
+
+on:
+  workflow_dispatch:
+  pull_request:
+    # One automatic observation on opening; later revisions require explicit dispatch.
+    types: [opened]
+    branches: [main]
+    paths:
+      - '.github/workflows/xslt30-telemetry.yml'
+      - 'tools/xslt30_telemetry.py'
+      - 'tools/test_xslt30_telemetry.py'
+
+permissions:
+  contents: read
+
+jobs:
+  telemetry:
+    name: Diagnostic XSLT 3.0 telemetry (separate from required gate)
+    runs-on: windows-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.301'
+      - name: Verify observer and gate controls
+        shell: pwsh
+        run: |
+          python -m unittest discover -s tools -p test_xslt30_telemetry.py
+          if ($LASTEXITCODE -ne 0) { throw 'Telemetry controls failed' }
+          python -m unittest discover -s tools -p test_xslt30_gate.py
+          if ($LASTEXITCODE -ne 0) { throw 'Gate controls failed' }
+      - name: Fetch exact corpus with LF bytes
+        shell: pwsh
+        run: |
+          $policy = Get-Content docs/xslt30-gate/BASELINE.json -Raw | ConvertFrom-Json
+          $fixture = Join-Path $env:RUNNER_TEMP 'xslt30-telemetry-input'
+          git -c core.autocrlf=false clone --no-checkout $policy.corpusUrl $fixture
+          if ($LASTEXITCODE -ne 0) { throw 'Corpus clone failed' }
+          git -C $fixture -c core.autocrlf=false checkout --detach $policy.corpusCommit
+          if ($LASTEXITCODE -ne 0) { throw 'Pinned corpus checkout failed' }
+      - name: Build unchanged conformance runner
+        run: dotnet build tests/Bosak.Xslt.Conformance -c Release
+      - name: Observe exactly one complete qualification attempt
+        shell: pwsh
+        run: |
+          python tools/xslt30_telemetry.py --corpus "$env:RUNNER_TEMP/xslt30-telemetry-input" --output "$env:RUNNER_TEMP/xslt30-telemetry-packet"
+          if ($LASTEXITCODE -ne 0) { throw 'See separate qualification and telemetry outcomes in retained receipts' }
+      - name: Retain original diagnostic attempt including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xslt30-telemetry
+          include-hidden-files: true
+          retention-days: 30
+          path: |
+            ${{ runner.temp }}/xslt30-telemetry-packet/*.json
+            ${{ runner.temp }}/xslt30-telemetry-packet/*.jsonl
+            ${{ runner.temp }}/xslt30-telemetry-packet/*.log
+            ${{ runner.temp }}/xslt30-telemetry-packet/gate/*.json
+            ${{ runner.temp }}/xslt30-telemetry-packet/gate/*.log
+            ${{ runner.temp }}/xslt30-telemetry-packet/gate/*.csv
+            ${{ runner.temp }}/xslt30-telemetry-packet/gate/*.zip
+            ${{ runner.temp }}/xslt30-telemetry-packet/gate/work/
