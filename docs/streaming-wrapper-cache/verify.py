@@ -24,6 +24,8 @@ def main():
   assert len(tests)==4 and tests.pop('Bosak.XPath.Providers.Tests.Streaming.StreamingWrapperCacheTests.WarmCacheHitsDoNotAllocate')=='Failed' and set(tests.values())=={'Passed'}
   assert 'Actual:   9600000' in text('local/BASELINE.log')
   baseline=load('local/BASELINE.json');assert len(baseline['engineHashes'])==9 and baseline['expectedAllocationFailureOnly']
+  retained=load('baseline/RUNTIME-HASHES.json');assert all(retained[name]==value for name,value in baseline['engineHashes'].items())
+  assert load('baseline/GATE.json')['success']
   assert hashlib.sha256(raw('source/StreamingWrapperCacheTests.cs.txt')).hexdigest()==baseline['testSourceSha256']
   for gate,count in [('QT3',424),('QT4',1918)]:
    def parse(s):
