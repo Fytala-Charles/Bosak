@@ -1,3 +1,7 @@
+# Streaming wrapper cache renderer check - 13 November 2026
+
+The [HTML receipt](streaming-wrapper-cache/DOCUMENTATION-CHECKS.json) checks the allocation/gate table and local destinations. No screenshot or PDF acceptance is asserted.
+
 # Template-name renderer check — 13 November 2026
 
 The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.

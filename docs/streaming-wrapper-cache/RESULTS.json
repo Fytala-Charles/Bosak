@@ -1,0 +1,83 @@
+{
+  "solutionPassed": 26426,
+  "solutionFailed": 0,
+  "languageServerPassed": 90,
+  "focusedPassed": 4,
+  "baselineProtectivePassed": 3,
+  "baselineAllocationFailureBytes": 9600000,
+  "candidateWarmHitAllocationBytes": 0,
+  "warmHitCount": 100000,
+  "frozen": [
+    {
+      "gate": "QT3",
+      "exitCode": 0,
+      "seconds": 75.69991683959961,
+      "skipCount": 424,
+      "allSkipNamesAndReasonsUnchanged": true
+    },
+    {
+      "gate": "QT4",
+      "exitCode": 0,
+      "seconds": 23.982450485229492,
+      "skipCount": 1918,
+      "allSkipNamesAndReasonsUnchanged": true
+    }
+  ],
+  "standalone": {
+    "success": true,
+    "scope": "Pinned basic/non-schema-aware Legacy/Xslt30; exclusions are not passes",
+    "corpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "sourceCorpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "af52e427ea122cdeef70ad125a90492ed585cc9e"
+  },
+  "standaloneRun": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-wrapper-cache-qualified-20261113\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\Development\\Bosak\\.guard-tmp\\xslt30-wrapper-cache-qualified-20261113\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": "af52e427ea122cdeef70ad125a90492ed585cc9e",
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": true,
+    "processId": 51120,
+    "startedUtc": "2026-11-13T19:02:30Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 863.603,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "1304e01e7eaed8b4305e9edcfd4ff1cc3cd2bcd90f8b1aef084bff08401c155d",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "wholeSuiteSpeedupClaimed": false,
+  "developmentVersion": "1.81.9",
+  "published": false
+}

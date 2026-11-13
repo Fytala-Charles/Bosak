@@ -23,6 +23,13 @@ def main():
   tests={x.attrib['testName']:x.attrib['outcome'] for x in trx.findall('.//t:UnitTestResult',ns)}
   assert len(tests)==4 and tests.pop('Bosak.XPath.Providers.Tests.Streaming.StreamingWrapperCacheTests.WarmCacheHitsDoNotAllocate')=='Failed' and set(tests.values())=={'Passed'}
   assert 'Actual:   9600000' in text('local/BASELINE.log')
+  candidateTrx=ET.fromstring(raw('local/candidate.trx'))
+  candidateTests=candidateTrx.findall('.//t:UnitTestResult',ns)
+  assert len(candidateTests)==4 and all(x.attrib['outcome']=='Passed' for x in candidateTests)
+  identity=load('local/CANDIDATE-EXACT-BINARY.json')
+  candidateHashes=load('standalone/RUNTIME-HASHES.json')
+  assert identity['allNineMatchQualifiedRuntime'] and identity['focusedPassed']==4 and len(identity['engineHashes'])==9
+  assert all(candidateHashes[name]==value for name,value in identity['engineHashes'].items())
   baseline=load('local/BASELINE.json');assert len(baseline['engineHashes'])==9 and baseline['expectedAllocationFailureOnly']
   retained=load('baseline/RUNTIME-HASHES.json');assert all(retained[name]==value for name,value in baseline['engineHashes'].items())
   assert load('baseline/GATE.json')['success']
@@ -48,6 +55,10 @@ def main():
   assert len(rows)==14601 and load('standalone/GATE.json')['success']
   assert load('standalone/CORPUS-BEFORE.json')==inputs==load('standalone/CORPUS-AFTER.json')
   assert run['success'] and run['status']=='Completed'
+ with zipfile.ZipFile(dossier/'REFERENCE.zip') as reference:
+  for prefix,hashes in [('baseline',retained),('candidate',candidateHashes)]:
+   assert {name[len(prefix)+1:] for name in reference.namelist() if name.startswith(prefix+'/')}==set(hashes)
+   for name,digest in hashes.items():assert hashlib.sha256(reference.read(prefix+'/'+name)).hexdigest()==digest
  print('Verified: 26,426 solution tests, 90 LSP tests, allocation regression, frozen skips and 14,601 standalone identities. No .NET executed.')
 
 if __name__=='__main__':main()

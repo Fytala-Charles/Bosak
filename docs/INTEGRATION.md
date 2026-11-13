@@ -6,7 +6,7 @@
 
 ## Streaming wrapper cache allocation candidate — 13 November 2026
 
-The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static state factory with the existing weak table. The same four focused tests pass against the candidate; the retained 1.81.8 binaries pass the three protective identity/race/collection checks and fail only the allocation check (9,600,000 bytes for 100,000 warmed hits, versus zero for the candidate). This local allocation result does not establish whole-suite speed or the cause of earlier hosted timeouts. Full solution and conformance qualification are pending. Development Core/server 1.81.9 remains unpublished. Public signatures and streaming evaluation semantics are unchanged.
+The [wrapper-cache candidate](streaming-wrapper-cache/README.md) uses a static state factory with the existing weak table. The same four focused tests pass against the candidate; the retained 1.81.8 binaries pass the three protective identity/race/collection checks and fail only the allocation check (9,600,000 bytes for 100,000 warmed hits, versus zero for the candidate). This local allocation result does not establish whole-suite speed or the cause of earlier hosted timeouts. All 26,426 solution tests and 90 language-server tests pass. Frozen QT3 remains 31,397/0/424 and gated qt4 remains 8,941/0/1,918 with identical skip names/reasons. The complete pinned standalone gate remains 10,221/0/4,380, all 14,601 case identities reconciled under the original 1,200-second / 8 GiB limits. Development Core/server 1.81.9 remains unpublished. Public signatures and streaming evaluation semantics are unchanged.
 
 ## Template-name reporting qualification — 13 November 2026
 
