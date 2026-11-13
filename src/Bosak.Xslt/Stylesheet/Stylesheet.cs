@@ -335,6 +335,7 @@
 //                      | Charles Korthout | 2.173 | 16-10-2026     | Require fallback statically for unknown future instructions in the draft processor.         |
 //                      | Charles Korthout | 2.174 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 2.175 | 20-10-2026     | Enforce trailing-only fallback children in switch content.                             |
+//                      | Charles Korthout | 2.176 | 13-11-2026     | Report specific include/import codes on the existing non-top-level rejection path.       |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -4309,7 +4310,15 @@ internal sealed class Stylesheet
                         bool insideUsePackage = parentName.NamespaceName == XslNamespace && parentName.LocalName == "use-package";
                         bool insideOverride = parentName.NamespaceName == XslNamespace && parentName.LocalName == "override";
                         if (!insideUsePackage && !insideOverride)
-                            throw new InvalidOperationException($"XTSE0010: xsl:{localName} must appear at the top level.");
+                        {
+                            string errorCode = localName switch
+                            {
+                                "include" => "XTSE0170",
+                                "import" => "XTSE0190",
+                                _ => "XTSE0010"
+                            };
+                            throw new InvalidOperationException($"{errorCode}: xsl:{localName} must appear at the top level.");
+                        }
                     }
                 }
 

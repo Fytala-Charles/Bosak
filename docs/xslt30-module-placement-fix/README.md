@@ -1,0 +1,5 @@
+# Scoped module-placement reporting — 13 November 2026
+
+The [module-placement reporting correction](ADOPTION.json) chooses XTSE0170/XTSE0190 only in the existing nested include/import rejection path. Other structural codes, acceptance paths and package-parent exemptions, preprocessing, module resolution and the legacy matcher remain unchanged. Twenty-one focused tests pass; identical sources against sealed 1.81.6 binaries produce eight expected reporting failures and thirteen boundary passes. Immutable specification adoption precedes implementation. Fresh solution/frozen/standalone qualification is pending. Development Core/server 1.81.7 is unpublished; no public signature, fixture, exclusion, admission, gate-budget or ruleset change.
+
+The [adoption record](ADOPTION.json) pins W3C XSLT 3.0 Recommendation 8 June 2017, sections 2.14, 3.11.2, 3.11.3 and 3.13. Existing generic context rules can overlap specific rules; this chooses a more specific report without claiming that every former generic code is a normative defect. All 579 error-set cases remain excluded from the required gate.

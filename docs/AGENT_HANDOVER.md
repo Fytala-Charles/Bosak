@@ -1,3 +1,9 @@
+# Module-placement reporting checkpoint — 13 November 2026
+
+The [module-placement reporting correction](xslt30-module-placement-fix/README.md) chooses XTSE0170/XTSE0190 only in the existing nested include/import rejection path. Other structural codes, acceptance paths and package-parent exemptions, preprocessing, module resolution and the legacy matcher remain unchanged. Twenty-one focused tests pass; identical sources against sealed 1.81.6 binaries produce eight expected reporting failures and thirteen boundary passes. Immutable specification adoption precedes implementation. Fresh solution/frozen/standalone qualification is pending. Development Core/server 1.81.7 is unpublished; no public signature, fixture, exclusion, admission, gate-budget or ruleset change.
+
+Base is PR #481 merge b435fcc5d9c0f7261f539ade0db857c4e6f6e185; isolated worktree `.worktrees/Bosak.ModulePlacementErrors`, branch `fix/xslt-module-placement-errors`. Preserve the dirty owner checkout and all sealed evidence.
+
 # Scoped analyze-string reporting — 13 November 2026
 
 The [scoped analyze-string correction](xslt30-analyze-string-fix/README.md) reports XTDE1140/XTDE1145 for invalid effective regex/flags while preserving XPath errors from AVTs, child instructions and ordinary functions. Fourteen focused tests pass; identical sources against sealed 1.81.5 binaries give four expected failures and ten passes. All 26,373 solution cases pass across the retained restricted run and authorized 47-case database retry; 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 (including 11 experimental passes), with every skip name/reason unchanged. The complete clean-source standalone gate remains 10,221/0/4,380 in 713.170 seconds, all 14,601 cases accounted for, with unchanged fixtures/runtime and original 1,200-second/8 GiB bounds.

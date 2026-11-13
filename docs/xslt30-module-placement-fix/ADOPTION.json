@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "sourceBaseCommit": "b435fcc5d9c0f7261f539ade0db857c4e6f6e185",
+  "specification": {
+    "immutableUrl": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+    "revision": "W3C Recommendation 8 June 2017",
+    "sections": [
+      "2.14 Error Handling",
+      "3.11.2 Stylesheet Inclusion",
+      "3.11.3 Stylesheet Import",
+      "3.13 Stylesheet Preprocessing"
+    ],
+    "affectedErrors": [
+      "XTSE0170",
+      "XTSE0190"
+    ]
+  },
+  "fixtureRevision": "w3c/xslt30-test@fddf1cf920087e791f13315d68dfbe874d97dc56",
+  "fixtureSha256": {
+    "error-0170b.xsl": "f98e715987f724a9e36747cde743a698320954c07e8ad11deb72e80cf80e9331",
+    "error-0190b.xsl": "088bef03464d13121f1a0fc74e44efa8be37e599ae18d93112a62b6307ee6492",
+    "_error-test-set.xml": "57f562c955b1a206f2b94b418db21eb1f5c854a0fe91adb7a55d40e2a1983e48"
+  },
+  "decision": "Choose XTSE0170 for include and XTSE0190 for import only where the existing top-level-only structural rejection currently reports XTSE0010. Existing rejection/acceptance paths, parent exemptions, preprocessing, module resolution and other declaration codes remain unchanged.",
+  "review": "Both original fixtures contain an otherwise ordinary named template and a nested module directive with href. Align the reported code with the specific placement rule and catalog; do not infer that every generic error, multiple-violation fixture or remaining audit difference establishes a conformance defect.",
+  "intentionalDeviations": [],
+  "excludedFromScope": [
+    "No global error rewrite or legacy matcher change.",
+    "No new rejection under existing use-package/override parent exemptions.",
+    "No fixture edit, skip/admission, gate bound, ruleset, public signature or publication change."
+  ],
+  "publication": "Unpublished development patch 1.81.7"
+}
