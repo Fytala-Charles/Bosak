@@ -14,6 +14,12 @@ Operational timing diagnostics: the [separate telemetry candidate](xslt30-teleme
 
 The [telemetry delivery refresh](xslt30-telemetry-refresh/README.md) preserves the original measurements and failed attempts while incorporating qualified main with the merged allocation fix. Refreshed required qualification is pending; no new diagnostic capture is launched.
 
+The copied-runner observation now reconciles all14,601 original outcomes (10,221/0/4,380) with11,224 measured cases and3,377 pre-loop exclusions explained by original reasons. It is diagnostic evidence, not an adopted qualification, benchmark or cause of the hosted failures.
+
+The separate [case-cost diagnostic](xslt30-case-cost/README.md) measures a copied runner against exact retained engine/native identities. It does not change the adopted profile or create new qualification/admissions.
+
+The [case-cost delivery refresh](xslt30-case-cost-refresh/README.md) incorporates qualified main while retaining the original diagnostic payload and measurements. No new copied sweep is run, and refreshed required qualification is pending.
+
 ## Results and scope
 
 The following release table uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate. The later standalone reference measurement is reported separately.

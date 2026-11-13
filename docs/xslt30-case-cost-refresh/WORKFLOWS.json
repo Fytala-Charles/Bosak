@@ -1,0 +1,8 @@
+{
+  "exitCode": 0,
+  "seconds": 0.1105496883392334,
+  "dependency": "PyYAML==6.0.3",
+  "isolatedDependencyDirectory": true,
+  "globalEnvironmentChanged": false,
+  "initialRefusal": "ModuleNotFoundError: yaml"
+}

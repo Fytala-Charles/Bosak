@@ -1,0 +1,21 @@
+{
+  "measuredWallSeconds": 848.5691514,
+  "comparisonSets": [
+    "sx-GeneralComp-eq",
+    "sx-GeneralComp-ge",
+    "sx-GeneralComp-gt",
+    "sx-GeneralComp-le",
+    "sx-GeneralComp-lt",
+    "sx-GeneralComp-ne"
+  ],
+  "comparisonCases": 325,
+  "comparisonWallSeconds": 186.8264153,
+  "comparisonCpuSeconds": 183.671875,
+  "comparisonShareOfMeasuredWall": 0.2201664001004126,
+  "unattributedWallSeconds": 1.5148485999999366,
+  "timedOutcomes": {
+    "Pass": 10221,
+    "Skip": 1003
+  },
+  "limits": "Non-case elapsed includes startup, set loading, observer and other between-case work; it is not an overhead estimate. Rankings are for this one diagnostic run, not a causal diagnosis."
+}

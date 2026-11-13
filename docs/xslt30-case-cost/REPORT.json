@@ -1,0 +1,431 @@
+{
+  "diagnosticOnly": true,
+  "qualification": false,
+  "counts": {
+    "Total": 14601,
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380,
+    "Unselected": 0,
+    "Selected": 14601,
+    "Selected skipped": 4380,
+    "Missing test sets": 0
+  },
+  "totalCases": 14601,
+  "timedCases": 11224,
+  "unmeasuredSetSkips": 3377,
+  "elapsedSeconds": 850.084,
+  "sumCaseWallSeconds": 848.5691514,
+  "sumCaseCpuSeconds": 793.15625,
+  "topCases": [
+    {
+      "ordinal": 6473,
+      "testSet": "catalog",
+      "test": "catalog-007",
+      "result": "Pass",
+      "startWall": 1524727807329,
+      "endWall": 1525269999220,
+      "frequency": 10000000,
+      "startCpuTicks": 794687500,
+      "endCpuTicks": 1300781250,
+      "wallSeconds": 54.2191891,
+      "cpuSeconds": 50.609375
+    },
+    {
+      "ordinal": 7972,
+      "testSet": "sf-deep-equal",
+      "test": "sf-deep-equal-018",
+      "result": "Pass",
+      "startWall": 1526213804932,
+      "endWall": 1526467083657,
+      "frequency": 10000000,
+      "startCpuTicks": 2224375000,
+      "endCpuTicks": 2474218750,
+      "wallSeconds": 25.3278725,
+      "cpuSeconds": 24.984375
+    },
+    {
+      "ordinal": 8083,
+      "testSet": "sf-fold-left",
+      "test": "sf-fold-left-021",
+      "result": "Pass",
+      "startWall": 1527401719182,
+      "endWall": 1527604779007,
+      "frequency": 10000000,
+      "startCpuTicks": 3403125000,
+      "endCpuTicks": 3584218750,
+      "wallSeconds": 20.3059825,
+      "cpuSeconds": 18.109375
+    },
+    {
+      "ordinal": 6471,
+      "testSet": "catalog",
+      "test": "catalog-006",
+      "result": "Pass",
+      "startWall": 1524540855900,
+      "endWall": 1524727805318,
+      "frequency": 10000000,
+      "startCpuTicks": 617656250,
+      "endCpuTicks": 794687500,
+      "wallSeconds": 18.6949418,
+      "cpuSeconds": 17.703125
+    },
+    {
+      "ordinal": 6468,
+      "testSet": "catalog",
+      "test": "catalog-004",
+      "result": "Pass",
+      "startWall": 1524374131406,
+      "endWall": 1524540852453,
+      "frequency": 10000000,
+      "startCpuTicks": 592031250,
+      "endCpuTicks": 617656250,
+      "wallSeconds": 16.6721047,
+      "cpuSeconds": 2.5625
+    },
+    {
+      "ordinal": 8082,
+      "testSet": "sf-fold-left",
+      "test": "sf-fold-left-020",
+      "result": "Pass",
+      "startWall": 1527236511711,
+      "endWall": 1527401718951,
+      "frequency": 10000000,
+      "startCpuTicks": 3245468750,
+      "endCpuTicks": 3403125000,
+      "wallSeconds": 16.520724,
+      "cpuSeconds": 15.765625
+    },
+    {
+      "ordinal": 4094,
+      "testSet": "normalize-unicode",
+      "test": "normalize-unicode-008",
+      "result": "Pass",
+      "startWall": 1523919876295,
+      "endWall": 1524071188421,
+      "frequency": 10000000,
+      "startCpuTicks": 238281250,
+      "endCpuTicks": 415937500,
+      "wallSeconds": 15.1312126,
+      "cpuSeconds": 17.765625
+    },
+    {
+      "ordinal": 6477,
+      "testSet": "catalog",
+      "test": "catalog-012",
+      "result": "Pass",
+      "startWall": 1525390931466,
+      "endWall": 1525531847731,
+      "frequency": 10000000,
+      "startCpuTicks": 1412500000,
+      "endCpuTicks": 1550781250,
+      "wallSeconds": 14.0916265,
+      "cpuSeconds": 13.828125
+    },
+    {
+      "ordinal": 8080,
+      "testSet": "sf-fold-left",
+      "test": "sf-fold-left-018",
+      "result": "Pass",
+      "startWall": 1526990355406,
+      "endWall": 1527129638734,
+      "frequency": 10000000,
+      "startCpuTicks": 3001093750,
+      "endCpuTicks": 3138906250,
+      "wallSeconds": 13.9283328,
+      "cpuSeconds": 13.78125
+    },
+    {
+      "ordinal": 8078,
+      "testSet": "sf-fold-left",
+      "test": "sf-fold-left-016",
+      "result": "Pass",
+      "startWall": 1526853578160,
+      "endWall": 1526990318860,
+      "frequency": 10000000,
+      "startCpuTicks": 2865625000,
+      "endCpuTicks": 3001093750,
+      "wallSeconds": 13.67407,
+      "cpuSeconds": 13.546875
+    },
+    {
+      "ordinal": 6474,
+      "testSet": "catalog",
+      "test": "catalog-008",
+      "result": "Pass",
+      "startWall": 1525269999469,
+      "endWall": 1525390912212,
+      "frequency": 10000000,
+      "startCpuTicks": 1300781250,
+      "endCpuTicks": 1412500000,
+      "wallSeconds": 12.0912743,
+      "cpuSeconds": 11.171875
+    },
+    {
+      "ordinal": 8081,
+      "testSet": "sf-fold-left",
+      "test": "sf-fold-left-019",
+      "result": "Pass",
+      "startWall": 1527129639028,
+      "endWall": 1527236511448,
+      "frequency": 10000000,
+      "startCpuTicks": 3138906250,
+      "endCpuTicks": 3245468750,
+      "wallSeconds": 10.687242,
+      "cpuSeconds": 10.65625
+    },
+    {
+      "ordinal": 8647,
+      "testSet": "si-choose",
+      "test": "si-choose-012",
+      "result": "Pass",
+      "startWall": 1528567347196,
+      "endWall": 1528669075831,
+      "frequency": 10000000,
+      "startCpuTicks": 4539218750,
+      "endCpuTicks": 4639062500,
+      "wallSeconds": 10.1728635,
+      "cpuSeconds": 9.984375
+    },
+    {
+      "ordinal": 6521,
+      "testSet": "docbook",
+      "test": "docbook-001",
+      "result": "Pass",
+      "startWall": 1525534457753,
+      "endWall": 1525607674872,
+      "frequency": 10000000,
+      "startCpuTicks": 1553125000,
+      "endCpuTicks": 1621562500,
+      "wallSeconds": 7.3217119,
+      "cpuSeconds": 6.84375
+    },
+    {
+      "ordinal": 8274,
+      "testSet": "sf-not",
+      "test": "sf-not-107",
+      "result": "Pass",
+      "startWall": 1528168944715,
+      "endWall": 1528230696262,
+      "frequency": 10000000,
+      "startCpuTicks": 4141875000,
+      "endCpuTicks": 4203125000,
+      "wallSeconds": 6.1751547,
+      "cpuSeconds": 6.125
+    },
+    {
+      "ordinal": 7987,
+      "testSet": "sf-distinct-values",
+      "test": "sf-distinct-values-003",
+      "result": "Pass",
+      "startWall": 1526499262495,
+      "endWall": 1526557466481,
+      "frequency": 10000000,
+      "startCpuTicks": 2508750000,
+      "endCpuTicks": 2565937500,
+      "wallSeconds": 5.8203986,
+      "cpuSeconds": 5.71875
+    },
+    {
+      "ordinal": 7886,
+      "testSet": "sf-boolean",
+      "test": "sf-boolean-107",
+      "result": "Pass",
+      "startWall": 1526042672148,
+      "endWall": 1526099147506,
+      "frequency": 10000000,
+      "startCpuTicks": 2052968750,
+      "endCpuTicks": 2110000000,
+      "wallSeconds": 5.6475358,
+      "cpuSeconds": 5.703125
+    },
+    {
+      "ordinal": 10563,
+      "testSet": "date",
+      "test": "date-020",
+      "result": "Pass",
+      "startWall": 1531928737092,
+      "endWall": 1531983730241,
+      "frequency": 10000000,
+      "startCpuTicks": 7856406250,
+      "endCpuTicks": 7910312500,
+      "wallSeconds": 5.4993149,
+      "cpuSeconds": 5.390625
+    },
+    {
+      "ordinal": 595,
+      "testSet": "match",
+      "test": "match-242",
+      "result": "Pass",
+      "startWall": 1523551272093,
+      "endWall": 1523605719352,
+      "frequency": 10000000,
+      "startCpuTicks": 18906250,
+      "endCpuTicks": 74843750,
+      "wallSeconds": 5.4447259,
+      "cpuSeconds": 5.59375
+    },
+    {
+      "ordinal": 8228,
+      "testSet": "sf-min",
+      "test": "sf-min-021",
+      "result": "Pass",
+      "startWall": 1527944255278,
+      "endWall": 1527992292839,
+      "frequency": 10000000,
+      "startCpuTicks": 3916562500,
+      "endCpuTicks": 3963750000,
+      "wallSeconds": 4.8037561,
+      "cpuSeconds": 4.71875
+    },
+    {
+      "ordinal": 9829,
+      "testSet": "sx-GeneralComp-gt",
+      "test": "sx-gc-gt-121",
+      "result": "Pass",
+      "startWall": 1530556798281,
+      "endWall": 1530603096665,
+      "frequency": 10000000,
+      "startCpuTicks": 6500625000,
+      "endCpuTicks": 6546093750,
+      "wallSeconds": 4.6298384,
+      "cpuSeconds": 4.546875
+    },
+    {
+      "ordinal": 9802,
+      "testSet": "sx-GeneralComp-gt",
+      "test": "sx-gc-gt-021",
+      "result": "Pass",
+      "startWall": 1530374613518,
+      "endWall": 1530419631221,
+      "frequency": 10000000,
+      "startCpuTicks": 6325937500,
+      "endCpuTicks": 6370156250,
+      "wallSeconds": 4.5017703,
+      "cpuSeconds": 4.421875
+    },
+    {
+      "ordinal": 9937,
+      "testSet": "sx-GeneralComp-lt",
+      "test": "sx-gc-lt-121",
+      "result": "Pass",
+      "startWall": 1531193340123,
+      "endWall": 1531238018087,
+      "frequency": 10000000,
+      "startCpuTicks": 7122812500,
+      "endCpuTicks": 7169218750,
+      "wallSeconds": 4.4677964,
+      "cpuSeconds": 4.640625
+    },
+    {
+      "ordinal": 9775,
+      "testSet": "sx-GeneralComp-ge",
+      "test": "sx-gc-ge-121",
+      "result": "Pass",
+      "startWall": 1530192352331,
+      "endWall": 1530236641538,
+      "frequency": 10000000,
+      "startCpuTicks": 6156875000,
+      "endCpuTicks": 6196875000,
+      "wallSeconds": 4.4289207,
+      "cpuSeconds": 4
+    },
+    {
+      "ordinal": 9910,
+      "testSet": "sx-GeneralComp-lt",
+      "test": "sx-gc-lt-021",
+      "result": "Pass",
+      "startWall": 1531025301066,
+      "endWall": 1531069004422,
+      "frequency": 10000000,
+      "startCpuTicks": 6955000000,
+      "endCpuTicks": 6999218750,
+      "wallSeconds": 4.3703356,
+      "cpuSeconds": 4.421875
+    }
+  ],
+  "topSetWallSeconds": [
+    [
+      "catalog",
+      120.08089310000001
+    ],
+    [
+      "sf-fold-left",
+      75.5588624
+    ],
+    [
+      "sx-GeneralComp-gt",
+      36.6520145
+    ],
+    [
+      "sx-GeneralComp-lt",
+      33.02335579999999
+    ],
+    [
+      "sx-GeneralComp-le",
+      30.4502018
+    ],
+    [
+      "sx-GeneralComp-ne",
+      30.1282987
+    ],
+    [
+      "sx-GeneralComp-ge",
+      29.80596689999999
+    ],
+    [
+      "si-try",
+      27.0773317
+    ],
+    [
+      "sx-GeneralComp-eq",
+      26.766577600000005
+    ],
+    [
+      "sf-deep-equal",
+      26.255104999999997
+    ],
+    [
+      "sf-not",
+      23.393962400000003
+    ],
+    [
+      "sf-boolean",
+      20.4894046
+    ],
+    [
+      "si-LRE",
+      19.070598500000003
+    ],
+    [
+      "sf-min",
+      17.295906900000002
+    ],
+    [
+      "si-element",
+      16.98666110000001
+    ],
+    [
+      "sf-max",
+      16.2268275
+    ],
+    [
+      "normalize-unicode",
+      15.248783899999998
+    ],
+    [
+      "sx-InstanceofExpr",
+      15.1953573
+    ],
+    [
+      "sx-TreatExpr",
+      14.956036099999999
+    ],
+    [
+      "sf-sum",
+      14.670719300000002
+    ]
+  ],
+  "originalCaseOutcomesAndSkipReasonsUnchanged": true,
+  "limits": "Whole-process CPU across threads; no exclusive case CPU, exact overhead estimate, phase or causal attribution. Short CPU deltas may be zero."
+}

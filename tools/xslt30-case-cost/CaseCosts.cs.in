@@ -1,0 +1,110 @@
+// Generated diagnostic helper; excluded from production builds.
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 13 November 2026
+// PURPOSE              : Record bounded copied-runner case costs without changing case outcomes.
+// SPECIAL NOTES        : Diagnostic only; process CPU includes all threads and observer overhead is unmeasured.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 13-11-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Diagnostics;
+using System.Security.Cryptography;
+using System.Text.Json;
+
+internal static class CaseCosts
+{
+    internal readonly record struct Stamp(long Wall, long? Cpu);
+    private static readonly Process Current = Process.GetCurrentProcess();
+    private static StreamWriter? Writer;
+    private static int Ordinal;
+    private static readonly List<string> Errors = new();
+
+    internal static bool Initialize(string pinPath)
+    {
+        try
+        {
+            using var pin = JsonDocument.Parse(File.ReadAllBytes(pinPath));
+            if (Environment.Version.ToString() != pin.RootElement.GetProperty("frameworkVersion").GetString())
+                throw new InvalidOperationException("Loaded framework version differs from the diagnostic pin.");
+            var expected = pin.RootElement.GetProperty("nativeFiles");
+            var observed = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            foreach (ProcessModule module in Current.Modules)
+            {
+                var name = module.ModuleName.ToLowerInvariant();
+                if (!expected.TryGetProperty(name, out var identity)) continue;
+                var path = Path.GetFullPath(module.FileName);
+                var hash = Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(path))).ToLowerInvariant();
+                if (!StringComparer.OrdinalIgnoreCase.Equals(path, identity.GetProperty("path").GetString()) ||
+                    hash != identity.GetProperty("sha256").GetString())
+                    throw new InvalidOperationException("Loaded module differs from pin: " + name);
+                observed[name] = new { path, sha256 = hash, observedLoaded = true };
+            }
+            foreach (var entry in expected.EnumerateObject())
+                if (!observed.ContainsKey(entry.Name))
+                    throw new InvalidOperationException("Pinned native module not observed: " + entry.Name);
+            File.WriteAllText("case-cost-runtime.json", JsonSerializer.Serialize(new
+            {
+                frameworkVersion = Environment.Version.ToString(), modules = observed,
+                frequency = Stopwatch.Frequency, highResolution = Stopwatch.IsHighResolution,
+                cpuScope = "Whole process, all threads; not exclusive case CPU or VM entitlement"
+            }));
+            Writer = new StreamWriter(new FileStream("case-costs.jsonl", FileMode.CreateNew, FileAccess.Write, FileShare.Read)) { AutoFlush = true };
+            AppDomain.CurrentDomain.ProcessExit += (_, _) => Close();
+            return true;
+        }
+        catch (Exception error)
+        {
+            // Refusals stay caught inside this diagnostic; never launch an unhandled negative case.
+            try { File.WriteAllText("case-cost-refusal.json", JsonSerializer.Serialize(new { error = error.ToString(), qualification = false })); }
+            catch (Exception) { /* The controller detects the absent receipt. */ }
+            Environment.ExitCode = 2;
+            return false;
+        }
+    }
+
+    private static long? Cpu()
+    {
+        try { Current.Refresh(); return Current.TotalProcessorTime.Ticks; }
+        catch (Exception error) { Errors.Add(error.ToString()); return null; }
+    }
+
+    internal static Stamp Begin()
+    {
+        long? cpu = Cpu();
+        return new Stamp(Stopwatch.GetTimestamp(), cpu);
+    }
+
+    internal static void End(Stamp stamp, string set, string name, string? result)
+    {
+        long wall = Stopwatch.GetTimestamp();
+        long? cpu = Cpu();
+        try
+        {
+            Writer!.WriteLine(JsonSerializer.Serialize(new
+            {
+                ordinal = ++Ordinal, testSet = set, test = name, result,
+                startWall = stamp.Wall, endWall = wall, frequency = Stopwatch.Frequency,
+                startCpuTicks = stamp.Cpu, endCpuTicks = cpu,
+                wallSeconds = (wall - stamp.Wall) / (double)Stopwatch.Frequency,
+                cpuSeconds = stamp.Cpu.HasValue && cpu.HasValue ? (cpu.Value - stamp.Cpu.Value) / (double)TimeSpan.TicksPerSecond : (double?)null
+            }));
+        }
+        catch (Exception error) { Errors.Add(error.ToString()); }
+    }
+
+    internal static void Close()
+    {
+        try
+        {
+            Writer?.Dispose(); Writer = null;
+            File.WriteAllText("case-cost-end.json", JsonSerializer.Serialize(new { rows = Ordinal, errors = Errors, diagnosticOnly = true }));
+        }
+        catch (Exception) { /* Missing/incomplete completion evidence is refused by the controller. */ }
+    }
+}
