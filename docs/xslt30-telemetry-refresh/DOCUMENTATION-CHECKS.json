@@ -1,0 +1,84 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "ee738d7c5962778ab49c39cd62bd1bf98ca26cb2bd2f7291f35ee331933a83c8",
+      "htmlSha256": "e987a82969f56a46e6603c5758c31168cad3a0a0538118efe9e5e4c2bfd55286"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "a76fb4318cb53c61f46ca74657b09699e02c2c12d54dff5d34a671a6497cc67d",
+      "htmlSha256": "dfef67194518e5436abd0a408a7539376c3c20a99e181ba679f53145d5021901"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "99c9915313083bd0adb9b40af88573bfa7041a367cd07a96067461c7a77b1d24",
+      "htmlSha256": "172d3f1acaebf47772346222ecb8c92efc18c0ead76eff001a02da4ef0bd0047"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "c71bb95f93700629f2ebb6653c3b7c585a1cf96e3ddb1544523d445ecae1d7db",
+      "htmlSha256": "0ee3680ffdeb9979658c2a4bb94903d6a75794c36bd9db0caa8937bab6ff88d7"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "084a60700d156a373c991369beaa805e721d1b345861c8b9756d291d810f247c",
+      "htmlSha256": "395108c1ac297d7e769accb836ba4ed4e3e68a92cbfafff89501241a22c48da1"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "680fcd869d6a99cea222007a405a5f2b216f36b2d6dddc4e3a08c1040c0045f9",
+      "htmlSha256": "9bf1eddb960b332fe94d972e81a067fa5cc676cf230d0a7b9361951eac7bab03"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "c318239988e316df52c385c09982c85d235373d8562c4a74a5826692c485023d",
+      "htmlSha256": "c47e2310b7508fbc0ce3d5d5efbde401085b59334e1c0092eb9e16c4fbc60b42"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "9117f7965ead39b2e18f641a7786d9e019144540779ae58e6d44c46cd73c806a",
+      "htmlSha256": "90d549966b19cb5a2fd2953d539e38a4cd8011015a73837b8e63e050c6fd9d56"
+    },
+    {
+      "file": "docs/streaming-wrapper-cache/README.md",
+      "sourceSha256": "bdf43ab5517c3f848d4ec69884d8b19b94733689799a37d9ed33a0ace6c16526",
+      "htmlSha256": "b9e17370015b8bb3a10241239d2f0cfa96071aa3763a217a1eadde6aa1208c50"
+    },
+    {
+      "file": "docs/CONFORMANCE.md",
+      "sourceSha256": "e00cc503a21bb0fd4a606b347f72db65e40e352a29c4cd795d3fe1ac36e63535",
+      "htmlSha256": "b4b7a883d485873ecf4fa09e8d51c7862c97c7fb90d901b5516ab2c10bc9d1b4"
+    },
+    {
+      "file": "docs/xslt30-hosted-timing/README.md",
+      "sourceSha256": "c68a7be4e8b230aade039eb1c0b55d8569fb6df4b0ebfa05daaa093295124a75",
+      "htmlSha256": "d7526386660e5d264fc5969a2c25c72769f6de8e2779345f6019c004279468d0"
+    },
+    {
+      "file": "docs/xslt30-timing-refresh/README.md",
+      "sourceSha256": "847cf2f5d5e4e3d4434cc915345c3f4b7ca71373e1d6bbc3d4ab71211d44729e",
+      "htmlSha256": "e4f203f01c1cfb48270fc649417e3f6c7bce966f3ec57ffb80a10330054aeded"
+    },
+    {
+      "file": "docs/xslt30-telemetry/README.md",
+      "sourceSha256": "fe9a37ea30116c47b26056856a24f915873781bb4acecffdb5000f40053d6caf",
+      "htmlSha256": "f7df6babd1fa932fa7119957f692b0abf1895bd2680b0df6ee1db45b0628efb7"
+    },
+    {
+      "file": "docs/xslt30-telemetry-delivery/README.md",
+      "sourceSha256": "cf6f4e925aad155391cc0f58dffdba87adf0ea5b09607fb49df440ed8338024e",
+      "htmlSha256": "edbe4102aff39863d5fd6f3d43fd7f872680e05126887866a69ccb8294570079"
+    },
+    {
+      "file": "docs/xslt30-telemetry-refresh/README.md",
+      "sourceSha256": "dc4e6aba587dd9728a1d2948455deef8fdae4334433be1932de33250dfc34b9d",
+      "htmlSha256": "4e3e949757107fd8dd702b8ae026d03afa087e1a1a7dd140e87636c1b3f05ad9"
+    }
+  ],
+  "localDestinations": 4192,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

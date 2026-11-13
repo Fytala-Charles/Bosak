@@ -1,0 +1,32 @@
+{
+  "files": {
+    "ADOPTION.json": {
+      "bytes": 1010,
+      "sha256": "8e3f5c6c621dbcde20a98f0a37c49763652aabcab80b69839f5e73237e02a3ef"
+    },
+    "DOCUMENTATION-CHECKS.json": {
+      "bytes": 2332,
+      "sha256": "4e7abb39259376c203e419e690c5ee7ffbe65aa318f0778fa684eeb5c0ade49c"
+    },
+    "EVIDENCE.zip": {
+      "bytes": 3944862,
+      "sha256": "55c1fd63c9c9ed1101c6ca4b9cf772a62b77f887c1493b145bce65d554237c29"
+    },
+    "README.md": {
+      "bytes": 2954,
+      "sha256": "bdf43ab5517c3f848d4ec69884d8b19b94733689799a37d9ed33a0ace6c16526"
+    },
+    "REFERENCE.zip": {
+      "bytes": 4682267,
+      "sha256": "c21e39a88916da0e03f8380a0b05cb5a66899c919f97b24615bd744c97264254"
+    },
+    "RESULTS.json": {
+      "bytes": 2550,
+      "sha256": "78ef4062ea7e86cfddf7639417bb31de7931dd24590d0cc3e9b250544222cd71"
+    },
+    "verify.py": {
+      "bytes": 4760,
+      "sha256": "55b362ea512695a990aef797672a9a8d668edafe9a33b1c5bb3f58157a8455f7"
+    }
+  }
+}

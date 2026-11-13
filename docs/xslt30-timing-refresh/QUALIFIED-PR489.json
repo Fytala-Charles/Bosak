@@ -1,0 +1,85 @@
+{
+  "qualificationVerified": true,
+  "runId": 43491196305,
+  "head": "5f3e4d412fbf93086129c8ae19e71a69bd6725ba",
+  "workflowConclusion": "success",
+  "run": {
+    "status": "Completed",
+    "command": [
+      "C:\\Program Files\\dotnet\\dotnet.EXE",
+      "D:\\a\\_temp\\xslt30-gate-packet\\runtime\\Bosak.Xslt.Conformance.dll",
+      "--processor-profile",
+      "legacy",
+      "D:\\a\\_temp\\xslt30-gate-packet\\corpus\\catalog.xml"
+    ],
+    "sourceCommit": "19d4bd6ad350fcda16074bc56f8ef94b66f7eba1",
+    "corpusCommit": "fddf1cf920087e791f13315d68dfbe874d97dc56",
+    "timeoutSeconds": 1200,
+    "memoryLimitBytes": 8589934592,
+    "errorModeScope": "Python runner and its child only",
+    "processorProfile": "Legacy",
+    "catalogProfile": "Xslt30",
+    "schemaAware": false,
+    "success": true,
+    "processId": 1064,
+    "startedUtc": "2026-11-13T19:23:59Z",
+    "runnerExitCode": 0,
+    "elapsedSeconds": 1023.329,
+    "counts": {
+      "Total": 14601,
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380,
+      "Unselected": 0,
+      "Selected": 14601,
+      "Selected skipped": 4380,
+      "Missing test sets": 0
+    },
+    "completeCatalogCounts": true,
+    "stdout.logSha256": "b284deca1e4f0d1c34d57d218bc0907b4a44324482401719e2115a126c3ace31",
+    "stderr.logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "gate": {
+    "success": true,
+    "scope": "Pinned basic/non-schema-aware Legacy/Xslt30; exclusions are not passes",
+    "corpusDifferences": {
+      "added": [],
+      "removed": [],
+      "changed": []
+    },
+    "sourceCorpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "19d4bd6ad350fcda16074bc56f8ef94b66f7eba1"
+  },
+  "artifact": {
+    "id": 14070068805,
+    "node_id": "MDg6QXJ0aWZhY3QxNDA3MDA2ODgwNQ==",
+    "name": "xslt30-pinned-gate",
+    "size_in_bytes": 1982513,
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14070068805",
+    "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14070068805/zip",
+    "expired": false,
+    "digest": "sha256:9f9ab409a0195dbef3886c5025f9ad231d38d7a82aa5a7621a3439c1bb60dc5c",
+    "created_at": "2026-11-13T19:41:09Z",
+    "updated_at": "2026-11-13T19:41:09Z",
+    "expires_at": "2026-12-13T19:41:07Z",
+    "workflow_run": {
+      "id": 43491196305,
+      "repository_id": 1242768879,
+      "head_repository_id": 1242768879,
+      "head_branch": "perf/streaming-wrapper-factory",
+      "head_sha": "5f3e4d412fbf93086129c8ae19e71a69bd6725ba"
+    }
+  },
+  "sourceTreeMatchesHead": true,
+  "transcriptsVerified": true,
+  "corpusUnchanged": true,
+  "runtimeUnchanged": true,
+  "lastStarted": "type-0501"
+}

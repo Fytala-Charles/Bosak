@@ -1,3 +1,19 @@
+# Telemetry refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-telemetry-refresh/DOCUMENTATION-CHECKS.json) checks retained/qualified attempt tables and local links. No screenshot/PDF acceptance asserted.
+
+# Hosted timing refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-timing-refresh/DOCUMENTATION-CHECKS.json) verifies the original/new qualification table and local links. No screenshot or PDF acceptance is asserted.
+
+# Streaming wrapper cache renderer check - 13 November 2026
+
+The [HTML receipt](streaming-wrapper-cache/DOCUMENTATION-CHECKS.json) checks the allocation/gate table and local destinations. No screenshot or PDF acceptance is asserted.
+
+# Hosted timing renderer check — 13 November 2026
+
+The [timing receipt](xslt30-hosted-timing/DOCUMENTATION-CHECKS.json) checks retained-attempt, controlled-comparison and sampled-progress tables; incomplete-result warnings; links and unchanged Fytala/historical content. No screenshot/PDF acceptance is asserted.
+
 # Telemetry trigger correction renderer check - 13 November 2026
 
 The [separate addendum receipt](xslt30-telemetry-delivery/DOCUMENTATION-CHECKS.json) checks corrected event behavior, cancellation provenance and preserved original evidence links. No screenshot/PDF acceptance is asserted.

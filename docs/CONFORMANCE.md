@@ -12,6 +12,8 @@ The [telemetry trigger correction](xslt30-telemetry-delivery/README.md) restrict
 
 Operational timing diagnostics: the [separate telemetry candidate](xslt30-telemetry/README.md) preserves the adopted gate and exclusions. Diagnostic capture is not qualification success; no new conformance result is claimed.
 
+The [telemetry delivery refresh](xslt30-telemetry-refresh/README.md) preserves the original measurements and failed attempts while incorporating qualified main with the merged allocation fix. Refreshed required qualification is pending; no new diagnostic capture is launched.
+
 ## Results and scope
 
 The following release table uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate. The later standalone reference measurement is reported separately.
@@ -50,6 +52,12 @@ The legacy runner returned zero despite the failures; the qualification controll
 **Namespace follow-up:** the [separate 1.81.4 correction](xslt30-xml-version/README.md), based on delivered PR #474, resolves all eight XML-version failures. The complete 776.080-second rerun records **10,219 passed / 2 failed / 4,380 skipped**, with every original case accounted for and zero corpus writes. All skip identities and explanations are unchanged; `output-0707` and `try-022` remain failures. Raw namespace queries and serialized output have separate regression coverage. The legacy console's rounded `100.0%` line does not establish success: the independent controller rejects qualification. Earlier cohorts retain their own source hashes and receipts. No full-conformance claim or standalone gate adoption follows.
 
 **Final follow-up:** The [final standalone corrections](xslt30-final-cases/README.md) resolve `output-0707` and `try-022`. The complete pinned W3C XSLT 3.0 catalog records **10,221 passed / 0 failed / 4,380 excluded** in 829.117 seconds, with all 14,601 cases accounted for, unchanged exclusion identities/reasons and zero corpus writes. All 26,359 solution tests and 90 separate language-server tests pass. Frozen QT3 remains 31,397/0/424 and selected qt4 remains 8,941/0/1,918 with identical named skip maps. Development Core/server metadata is 1.81.5, unpublished; published Core remains 1.81.2 and the extension remains 0.2.6. This qualifies the retained basic/non-schema-aware Legacy/Xslt30 profile; it does not establish complete conformance or adopt a standalone release gate. [All named exclusions and explanations](xslt30-final-cases/skips.csv) remain visible. The runner now prints selected-case results and counts; it retains its legacy exit behavior. Independent completeness and integrity checks establish this result. The rejected first attempt (10,220/1/4,380, namespace-2602) remains separate evidence; the corrected run includes a new nested-collector regression case.
+
+## Hosted gate timing evidence
+
+The [delivery refresh](xslt30-timing-refresh/README.md) incorporates merged PR #489 after independent hosted qualification. The earlier timing report and its original timeout remain historical evidence; the refreshed documentation PR awaits its own required check.
+
+The [hosted XSLT timing investigation](xslt30-hosted-timing/README.md) replays seven retained attempts without new diagnostic execution or gate changes. Two same-checkout comparisons have identical32-file application manifests yet include both a success and a1200-second timeout. Four complete runs each replay10,221/0/4,380; three incomplete timeouts remain failed. Equivalent-tree/different-payload comparisons are separate. Twenty-second progress samples show earlier delay, but cannot identify CPU/GC/I/O causes or individual test durations. No failure rate, regional cause or performance acceptance is inferred. Next prepare separate host/process telemetry under unchanged bounds before another semantic slice. PR483 merged04eea731 after all six checks and hosted replay passed; parent timeouts remain original evidence.
 
 ## Scoped named-template prefix reporting follow-up
 

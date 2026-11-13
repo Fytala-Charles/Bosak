@@ -1,0 +1,12 @@
+{
+  "kind": "HistoricalWorkingTreeScopeRefusal",
+  "initialCommand": "python docs/xslt30-timing-refresh/verify.py",
+  "exitCode": 1,
+  "exception": "AssertionError at the original documentation-only git diff guard",
+  "reason": "The current telemetry branch adds its original tool, test and diagnostic workflow relative to the historical documentation-only baseline.",
+  "historicalCheckpoint": "2e56414097c1426d1d9c8279b7e3b38c267b9a17",
+  "resolution": "Independently replay the same sealed attempts and check the original code boundary with a commit-to-commit diff; separately assert the current three-file telemetry boundary and byte-identical original tool source.",
+  "originalVerifierOrManifestModified": false,
+  "productionQualificationAffected": false,
+  "newDiagnosticCapture": false
+}
