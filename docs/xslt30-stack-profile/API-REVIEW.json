@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "kind": "Bounded sampled managed-stack investigation; no engine semantic adoption",
+  "tool": {
+    "version": "10.0.745401",
+    "url": "https://api.nuget.org/v3-flatcontainer/dotnet-trace/10.0.745401/dotnet-trace.10.0.745401.nupkg",
+    "bytes": 12198629,
+    "sha256": "55df6a6d4b7befa9bf8b43835bf7913add84738eccba2fcb0dd648c6c725a247",
+    "officialSha512": "HIvUVgO0DcDLobdTVcReR96sjjtutfamXyK9NBwQHwKjGJxpCnZBZFnkE2rrKaxdWCd/TO6q2jgI2UvI05etAQ==",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/dotnet/diagnostics",
+      "commit": "cef304c50763bf24f99566cb31d55540842e7ae9"
+    }
+  },
+  "documentationRevision": "94b7dca39d8dca4374f326176874381661f4dd59",
+  "documentationPath": "docs/core/diagnostics/dotnet-trace.md",
+  "contracts": [
+    "dotnet-sampled-thread-time samples thread stacks regardless of CPU usage; report metrics estimate thread wall-time, never exact CPU percentages.",
+    "Pinned tool help describes approximately100Hz; later docs describe a different default. Do not assume effective sample rate or infer precision from units.",
+    "Child-process launch traces the selected dotnet exec workload; validate outcomes and native identities separately from collector exit status.",
+    "Use exact existing copied caller and nine retained engines with target10.0.11/Disable; collector8.0.28/Disable is separately identified.",
+    "One selected set sx-GeneralComp-gt only; cases outside selection are unselected, not new skips. No full-catalog qualification claim.",
+    "180-second watchdog and8GiB aggregate owned job cover collector and target; collection/analysis overhead is unmeasured.",
+    "Use process-scoped Windows error modes and mocked refusals; no intentional unhandled negative.NET cases.",
+    "Retain original failures/partial data; never retry automatically or change production budgets, corpus, skip policy or rulesets."
+  ]
+}
