@@ -1,0 +1,304 @@
+{
+  "success": true,
+  "count": 13,
+  "controls": [
+    {
+      "name": "same-checkout-payload",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "same-checkout-and-payload",
+      "actual": "same-checkout-and-payload",
+      "success": true
+    },
+    {
+      "name": "same-checkout-rebuilt",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-b",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "same-checkout-different-payload",
+      "actual": "same-checkout-different-payload",
+      "success": true
+    },
+    {
+      "name": "equivalent-tree-payload",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-b",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "equivalent-tree-and-payload",
+      "actual": "equivalent-tree-and-payload",
+      "success": true
+    },
+    {
+      "name": "equivalent-tree-rebuilt",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-b",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-b",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "equivalent-tree-different-payload",
+      "actual": "equivalent-tree-different-payload",
+      "success": true
+    },
+    {
+      "name": "different-source",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-b",
+        "sourceTree": "tree-b",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "different-source-cohorts",
+      "actual": "different-source-cohorts",
+      "success": true
+    },
+    {
+      "name": "corpusFingerprint",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "different",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "not-comparable-policy-or-inputs",
+      "actual": "not-comparable-policy-or-inputs",
+      "success": true
+    },
+    {
+      "name": "caseInventoryFingerprint",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "different",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "not-comparable-policy-or-inputs",
+      "actual": "not-comparable-policy-or-inputs",
+      "success": true
+    },
+    {
+      "name": "profile",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "different",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "not-comparable-policy-or-inputs",
+      "actual": "not-comparable-policy-or-inputs",
+      "success": true
+    },
+    {
+      "name": "timeoutSeconds",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1,
+        "memoryLimitBytes": 8589934592
+      },
+      "expected": "not-comparable-policy-or-inputs",
+      "actual": "not-comparable-policy-or-inputs",
+      "success": true
+    },
+    {
+      "name": "memoryLimitBytes",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 1
+      },
+      "expected": "not-comparable-policy-or-inputs",
+      "actual": "not-comparable-policy-or-inputs",
+      "success": true
+    },
+    {
+      "name": "contradictory-checkout-refused",
+      "left": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "tree-a",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "right": {
+        "checkoutCommit": "commit-a",
+        "sourceTree": "contradictory",
+        "applicationFingerprint": "payload-a",
+        "corpusFingerprint": "corpus-a",
+        "caseInventoryFingerprint": "cases-a",
+        "profile": "profile-a",
+        "timeoutSeconds": 1200,
+        "memoryLimitBytes": 8589934592
+      },
+      "expectedException": "ValueError",
+      "success": true
+    },
+    {
+      "name": "nonmonotonic-progress",
+      "text": "Elapsed 0s; current test: a\nElapsed 20s; current test: b\nElapsed 10s; current test: c",
+      "expectedException": "AssertionError",
+      "success": true
+    },
+    {
+      "name": "missing-start",
+      "text": "Elapsed 20s; current test: a",
+      "expectedException": "AssertionError",
+      "success": true
+    }
+  ],
+  "scope": "Synthetic comparison/sampling refusal controls; no .NET execution or gate modification."
+}

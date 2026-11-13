@@ -1,3 +1,7 @@
+# Hosted timing renderer check — 13 November 2026
+
+The [timing receipt](xslt30-hosted-timing/DOCUMENTATION-CHECKS.json) checks retained-attempt, controlled-comparison and sampled-progress tables; incomplete-result warnings; links and unchanged Fytala/historical content. No screenshot/PDF acceptance is asserted.
+
 # Template-name renderer check — 13 November 2026
 
 The [prefix reporting receipt](xslt30-template-name-fix/DOCUMENTATION-CHECKS.json) verifies case/qualification tables, exclusion links and preserved historical/Fytala content. No screenshot/PDF acceptance is asserted.
