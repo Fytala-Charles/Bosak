@@ -1,3 +1,39 @@
+# Sampled-stack refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-stack-refresh/DOCUMENTATION-CHECKS.json) verifies retained/current delivery tables and local links. No screenshot/PDF acceptance asserted.
+
+# Case-cost refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-case-cost-refresh/DOCUMENTATION-CHECKS.json) checks original/current delivery tables and local links. No screenshot/PDF acceptance asserted.
+
+# Telemetry refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-telemetry-refresh/DOCUMENTATION-CHECKS.json) checks retained/qualified attempt tables and local links. No screenshot/PDF acceptance asserted.
+
+# Hosted timing refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-timing-refresh/DOCUMENTATION-CHECKS.json) verifies the original/new qualification table and local links. No screenshot or PDF acceptance is asserted.
+
+# Streaming wrapper cache renderer check - 13 November 2026
+
+The [HTML receipt](streaming-wrapper-cache/DOCUMENTATION-CHECKS.json) checks the allocation/gate table and local destinations. No screenshot or PDF acceptance is asserted.
+
+# Hosted timing renderer check — 13 November 2026
+
+The [timing receipt](xslt30-hosted-timing/DOCUMENTATION-CHECKS.json) checks retained-attempt, controlled-comparison and sampled-progress tables; incomplete-result warnings; links and unchanged Fytala/historical content. No screenshot/PDF acceptance is asserted.
+
+# Telemetry trigger correction renderer check - 13 November 2026
+
+The [separate addendum receipt](xslt30-telemetry-delivery/DOCUMENTATION-CHECKS.json) checks corrected event behavior, cancellation provenance and preserved original evidence links. No screenshot/PDF acceptance is asserted.
+
+# Standalone telemetry renderer check - 13 November 2026
+
+The [observer documentation receipt](xslt30-telemetry/DOCUMENTATION-CHECKS.json) checks operating instructions, outcome distinctions, limits and local links with unchanged Fytala CSS. No screenshot/PDF acceptance is asserted.
+
+# Case-cost diagnostic renderer check - 13 November 2026
+
+The [case-cost receipt](xslt30-case-cost/DOCUMENTATION-CHECKS.json) checks timing/coverage tables, original exclusions, fixed native/engine identity, failure retention and preserved Fytala content. No screenshot/PDF acceptance is asserted.
+
 # Managed-stack diagnostic renderer check - 13 November 2026
 
 The [stack receipt](xslt30-stack-profile/DOCUMENTATION-CHECKS.json) checks selected/unselected accounting, explained exclusions, sampling denominators, worker-selection correction and retained failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.

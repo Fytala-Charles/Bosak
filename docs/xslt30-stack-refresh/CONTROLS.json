@@ -1,0 +1,30 @@
+{
+  "originalSourceHead": "8fe48d697b84c01031d5135c247aee3c258f6a0b",
+  "sourceGitBlobSha256": {
+    "tools/xslt30_stack_profile.py": "ec99c45aba4749939bdeb44326e91690f7713901e8ce00b40d31e073afe05768",
+    "tools/test_xslt30_stack_profile.py": "462e2b08d93c4c23457e16bfc32c3887ad25edb8e386399731a5690b6aeb37cb"
+  },
+  "ciBase": "8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+  "ciAddition": "          python -m unittest discover -s tools -p test_xslt30_stack_profile.py\n",
+  "tests": [
+    {
+      "suite": "stack-profile",
+      "count": 16,
+      "exitCode": 0
+    },
+    {
+      "suite": "inherited-case-cost",
+      "count": 15,
+      "exitCode": 0
+    }
+  ],
+  "workflowValidator": {
+    "exitCode": 0,
+    "dependency": "PyYAML==6.0.3",
+    "reusedIsolatedDependencyDirectory": true,
+    "globalEnvironmentChanged": false
+  },
+  "newTraceCapture": false,
+  "newDotNetExecution": false,
+  "recordedFromSuccessfulToolResults": true
+}

@@ -1,0 +1,94 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "ee738d7c5962778ab49c39cd62bd1bf98ca26cb2bd2f7291f35ee331933a83c8",
+      "htmlSha256": "e987a82969f56a46e6603c5758c31168cad3a0a0538118efe9e5e4c2bfd55286"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "a76fb4318cb53c61f46ca74657b09699e02c2c12d54dff5d34a671a6497cc67d",
+      "htmlSha256": "dfef67194518e5436abd0a408a7539376c3c20a99e181ba679f53145d5021901"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "99c9915313083bd0adb9b40af88573bfa7041a367cd07a96067461c7a77b1d24",
+      "htmlSha256": "172d3f1acaebf47772346222ecb8c92efc18c0ead76eff001a02da4ef0bd0047"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "c71bb95f93700629f2ebb6653c3b7c585a1cf96e3ddb1544523d445ecae1d7db",
+      "htmlSha256": "0ee3680ffdeb9979658c2a4bb94903d6a75794c36bd9db0caa8937bab6ff88d7"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "2ba76945abcb92908d5c805a0021eb6cd8cc4e82a1269abe959bea36ef3285a0",
+      "htmlSha256": "e411eaf52c7749ced520d054d94fb1d38ec5bf99ddc5e9065655b86d24db70db"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "eb6cf86becbf19b49dda9a4d6a5fdeb697aed72ee96c2608df8decd7e060733d",
+      "htmlSha256": "45adf11cdab0626decb556109bb32ab7b69cd42db2b27743b98e81530c2da3ca"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "712bf6572c957bebcd312fbcb2fbc5f74841f2b0cd98449d704e64d5ccab0a12",
+      "htmlSha256": "ef3a227e7b592782f4346f5438fce70fb9a2b99de86ede638acdf2d26c1b6cfb"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "b86363373a687169bc26cd348c7798ef8e6589be23bbaed5c3d6029f5dfe8485",
+      "htmlSha256": "9cae44c626ebb21be104f73d9f094e0690469d2295acbaaee04e348840657b8b"
+    },
+    {
+      "file": "docs/streaming-wrapper-cache/README.md",
+      "sourceSha256": "bdf43ab5517c3f848d4ec69884d8b19b94733689799a37d9ed33a0ace6c16526",
+      "htmlSha256": "b9e17370015b8bb3a10241239d2f0cfa96071aa3763a217a1eadde6aa1208c50"
+    },
+    {
+      "file": "docs/CONFORMANCE.md",
+      "sourceSha256": "33f45ad7dfefdbc02055c43a165c68ced85c31b0e4fcab371af784bf1eba6509",
+      "htmlSha256": "7355f796221249f7d9735286834dbac4594bffa0c05ece30a9f6535c25de9d30"
+    },
+    {
+      "file": "docs/xslt30-hosted-timing/README.md",
+      "sourceSha256": "c68a7be4e8b230aade039eb1c0b55d8569fb6df4b0ebfa05daaa093295124a75",
+      "htmlSha256": "d7526386660e5d264fc5969a2c25c72769f6de8e2779345f6019c004279468d0"
+    },
+    {
+      "file": "docs/xslt30-timing-refresh/README.md",
+      "sourceSha256": "847cf2f5d5e4e3d4434cc915345c3f4b7ca71373e1d6bbc3d4ab71211d44729e",
+      "htmlSha256": "e4f203f01c1cfb48270fc649417e3f6c7bce966f3ec57ffb80a10330054aeded"
+    },
+    {
+      "file": "docs/xslt30-telemetry/README.md",
+      "sourceSha256": "fe9a37ea30116c47b26056856a24f915873781bb4acecffdb5000f40053d6caf",
+      "htmlSha256": "f7df6babd1fa932fa7119957f692b0abf1895bd2680b0df6ee1db45b0628efb7"
+    },
+    {
+      "file": "docs/xslt30-telemetry-delivery/README.md",
+      "sourceSha256": "cf6f4e925aad155391cc0f58dffdba87adf0ea5b09607fb49df440ed8338024e",
+      "htmlSha256": "edbe4102aff39863d5fd6f3d43fd7f872680e05126887866a69ccb8294570079"
+    },
+    {
+      "file": "docs/xslt30-telemetry-refresh/README.md",
+      "sourceSha256": "dc4e6aba587dd9728a1d2948455deef8fdae4334433be1932de33250dfc34b9d",
+      "htmlSha256": "4e3e949757107fd8dd702b8ae026d03afa087e1a1a7dd140e87636c1b3f05ad9"
+    },
+    {
+      "file": "docs/xslt30-case-cost/README.md",
+      "sourceSha256": "1c1e960ac4bb9f68726ee070ae17da83f53fc73af6c0e931c3d5abfa4868da67",
+      "htmlSha256": "cfa1a9b41f4f45aba8a674a69e886b4e8d6c38bf03d2c889905b55eedbb3689e"
+    },
+    {
+      "file": "docs/xslt30-case-cost-refresh/README.md",
+      "sourceSha256": "fa982a5cd1ad804f6a0be8f50c50f18d166878fb3ff613ff2e7f302f792bdcfd",
+      "htmlSha256": "b39ba5e24fc33df2443f74fa879412eb6f053daf481a414eb73c88365d33553e"
+    }
+  ],
+  "localDestinations": 4224,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

@@ -1,0 +1,42 @@
+{
+  "files": {
+    "CONTROLS.json": {
+      "bytes": 667,
+      "sha256": "d374f85ae130ac9ff515ba4d5bf4581386b6ec29398ce36a70baf7a3ea42aef2"
+    },
+    "DOCUMENTATION-CHECKS.json": {
+      "bytes": 4199,
+      "sha256": "786e9cdbcf1376fb429a2afe190b46ffd3039a06455aa564e4c7b98d6eaa3e61"
+    },
+    "EVIDENCE.zip": {
+      "bytes": 17055,
+      "sha256": "eaa465c6777242727c7fcd240e0cd70a08612c10c80f97ac3ff3a0ada505d784"
+    },
+    "README.md": {
+      "bytes": 2619,
+      "sha256": "cf6f4e925aad155391cc0f58dffdba87adf0ea5b09607fb49df440ed8338024e"
+    },
+    "verify.py": {
+      "bytes": 1477,
+      "sha256": "9dd4643ae0c0ba2c471766750142340816d7f4ca50604a4f01fae4e81e01393a"
+    }
+  },
+  "archiveEntries": {
+    "CANCELLED-RUN.json": {
+      "bytes": 2578,
+      "sha256": "b4f630b0bfe16bd162f3d4179171b3ac3d4773e3e2d961a138654daaa89029a8"
+    },
+    "CANCELLED-LOGS.zip": {
+      "bytes": 15893,
+      "sha256": "c6a87e9d7f9858451242657eea231edbf02f8266af4f85a76b3cf7c30fccd295"
+    },
+    "WORKFLOW-BEFORE.yml": {
+      "bytes": 2812,
+      "sha256": "b3d4ac1e5d63658c3d861bccc1338e135413659606d518f253106c59a547d690"
+    },
+    "WORKFLOW-AFTER.yml": {
+      "bytes": 2919,
+      "sha256": "c3803e1752939d4c9ecd15df5e347e5f906b459d7872eeb5b9da28d03eab014d"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "pr": {
+    "headRefOid": "5f3e4d412fbf93086129c8ae19e71a69bd6725ba",
+    "mergeCommit": {
+      "oid": "0432de7c0a357eeeb748d05ec1e9f4148cb737f6"
+    },
+    "mergedAt": "2026-11-13T19:43:29Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/489"
+  },
+  "commit": {
+    "sha": "0432de7c0a357eeeb748d05ec1e9f4148cb737f6",
+    "node_id": "C_kwDOShMl79oAKDA0MzJkZTdjMGEzNTdlZWViNzQ4ZDA1ZWMxZTlmNDE0OGNiNzM3ZjY",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/0432de7c0a357eeeb748d05ec1e9f4148cb737f6",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/0432de7c0a357eeeb748d05ec1e9f4148cb737f6",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-13T19:43:29Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-13T19:43:29Z"
+    },
+    "tree": {
+      "sha": "4fc9dd1ddcf751660fe9ace2be8210498178418c",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/4fc9dd1ddcf751660fe9ace2be8210498178418c"
+    },
+    "message": "Merge pull request #489 from Fytala-Charles/perf/streaming-wrapper-factory\n\nAvoid callback allocations in streaming wrapper cache",
+    "parents": [
+      {
+        "sha": "04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf"
+      },
+      {
+        "sha": "5f3e4d412fbf93086129c8ae19e71a69bd6725ba",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/5f3e4d412fbf93086129c8ae19e71a69bd6725ba",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/5f3e4d412fbf93086129c8ae19e71a69bd6725ba"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq92hhCRC1aQ7uu5UhlAAAUXcQABdlqgAutbQ5JzSMrBwjA0uA\nfHhACexzdKlwQG5X3FxInWumELbJCLeXkOxQVoSYROKuCuRaxNgnkE1XpOgsTvgQ\nqRB5X0Y6wqVvXRSOCnd0qaIYzf8ILxGnG7iFvAWRG6AmFe/q2VJid3hajBggbZX2\n7AYeBshxtHaIPHymXRCPfgy94IuWa6OqL9jqa54DvmAl32Y0ZMxq1AmOuxBC6IfI\nqrrKIfCHlzDZaqUVxHNZrN8YTIJpwKKnpWZ9Hp7Dp9Y3I2MCtbj456AcSthu3LtQ\nzyVOGIgdefNC80hYQrr4snzvSqa8teVfAwHBypCv1uRfHHpSz/h25/hkgnbp8bCW\nJBX9hZ0sJTX0C4a+RA7skGVYwkkFtMcJOos8XlfHIHldvQ+/Q4hILzNCWHciEi4J\n2Q1ZFtKkwkR0/T+oUJ/PIRDZMjklJ+svLa1NcH16WvTvmyHJug+4HkKdhZAB+NgP\nAjBmsF6wPkuv5ZTA0ImZLUOichjGyF3ym2j7fNIQJ2HL7EUd9I8s01VrO0tdo+Pt\nO5tqZe4+OBJndv3BlkqWNFrAMgZVbED/B9HwLh9TfVqke3lW5ANvBSVTbP12KsuN\nUYn11rIegLyKVfAH4ggDqriBpCPzOvdHAYF0OTrubcqF2R+8/otLChx22zCtrZiW\n8RQQQq9PWBzViSAmyWzN\n=TqcO\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 4fc9dd1ddcf751660fe9ace2be8210498178418c\nparent 04eea7317ab2f71f7f3644b1ebcc30076b9dbdaf\nparent 5f3e4d412fbf93086129c8ae19e71a69bd6725ba\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794599009 +0100\ncommitter GitHub <noreply@github.com> 1794599009 +0100\n\nMerge pull request #489 from Fytala-Charles/perf/streaming-wrapper-factory\n\nAvoid callback allocations in streaming wrapper cache",
+      "verified_at": "2026-11-13T19:43:29Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

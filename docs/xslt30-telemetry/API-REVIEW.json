@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-13",
+  "beforeImplementation": true,
+  "kind": "Observational tooling; no engine semantic adoption",
+  "windowsApiRevision": "656e9656bfaef34dd29cd7ee9e1146aec17e924c",
+  "windowsApiBranch": "docs",
+  "repository": "https://github.com/MicrosoftDocs/sdk-api",
+  "contracts": [
+    "GetProcessTimes: cumulative user/kernel CPU time in100ns units; not elapsed time",
+    "GetProcessMemoryInfo/PROCESS_MEMORY_COUNTERS_EX: working set/private commit/page faults; not allocation rate",
+    "GetProcessIoCounters: cumulative operation/transfer counts; not I/O latency",
+    "GetProcessAffinityMask: observable process affinity; not guaranteed VM entitlement",
+    "EnumProcessModulesEx: loaded module snapshot may race or fail; record gaps and hash only observed host/runtime files",
+    "QueryInformationJobObject(NULL): observer immediate job only, not automatically the child nested job"
+  ],
+  "scope": [
+    "Unmodified production gate invoked once with immutable corpus/profile/limits.",
+    "One-second external sampling; no case timing or GC-cause claim.",
+    "Allowlisted host metadata only, no environment/credential dump.",
+    "Lifetime-only observer job, no extra CPU/memory caps; production child keeps1200sec/8GiB.",
+    "Separate diagnostic workflow/check, never substitutes for required standalone gate; no retry loop.",
+    "Mock/caught Python controls for negative paths; no unhandled negative .NET launches."
+  ],
+  "unchanged": [
+    "engine",
+    "production runner",
+    "production workflow",
+    "gate verifier",
+    "exclusions",
+    "1200-second child timeout",
+    "8GiB child memory limit",
+    "versions/published artifacts"
+  ]
+}

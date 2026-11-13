@@ -1,0 +1,51 @@
+{
+  "pr": {
+    "mergeCommit": {
+      "oid": "8e2b58ebf6fad4473fbe527dfc19ee571134e84d"
+    },
+    "mergedAt": "2026-11-13T21:12:58Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/486"
+  },
+  "commit": {
+    "sha": "8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+    "node_id": "C_kwDOShMl79oAKDhlMmI1OGViZjZmYWQ0NDczZmJlNTI3ZGZjMTllZTU3MTEzNGU4NGQ",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/8e2b58ebf6fad4473fbe527dfc19ee571134e84d",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-13T21:12:57Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-13T21:12:57Z"
+    },
+    "tree": {
+      "sha": "ea205c1f712a084d3f4d815970a708fd9b1ae034",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/ea205c1f712a084d3f4d815970a708fd9b1ae034"
+    },
+    "message": "Merge pull request #486 from Fytala-Charles/diagnostics/xslt30-case-cost\n\nMeasure copied-runner case costs against retained qualified engines",
+    "parents": [
+      {
+        "sha": "2b292e81522d4246f3a546a1bf7528445133f146",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/2b292e81522d4246f3a546a1bf7528445133f146",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/2b292e81522d4246f3a546a1bf7528445133f146"
+      },
+      {
+        "sha": "cad7edafd63a02292aa7dd15a49e723595073f2c",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/cad7edafd63a02292aa7dd15a49e723595073f2c",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/cad7edafd63a02292aa7dd15a49e723595073f2c"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq931ZCRC1aQ7uu5UhlAAAeIUQABk/b94TEyy8W9g9sj7dnrJE\nfqsoSqUSy4iEtCwLXNWTHBxDp3drudMrIFgakdeWpU9P2PvH/fsM/rrcRFEuCzUr\noCqR7jtr54ZwIc6DGXJyIxsPM7JaHHnmRW467iXWvWSXMeaWG4Nfo0A159rY22mo\ndN8Zpr+HoCAScCru7Curz+0HMgdX+stHszXMgydP9QlPr8E1/gPonhzvjBUaq7cy\nOmuT5jhutoWQphLt8f/KHqNkVzg4KafHghN0cfHe6+We6N+jBjPEfkjJ/lJbo9aO\nEPlXZ3mpzH/IpzcgfIAxIHgvQYNYeWcWNMKglsGrA45kK3dyoi99fxyqe3lDZBuN\nF+eGEOQLR9pK5paHA8S0WC5MgvWDWY+k+erdTAuaC6b05Mxoi23wr1Yko03G/zHu\neFrmiRizVldjk+WXZCqKXdeKtci4RTlagoikoWGUDpappApCfRZh1ljKcHLZbnzE\nbXmsKxH0UzB1JSqIUcyITdhp2q/xqFkGmByl8ap67bpObEjcXhEtPtE/TJ57OWqo\nHGicSBV7AgAeJn6hYCU9PK/S9M0fyTmuH0+4dmahBWuoY4S3hWgJ+oweWiP/LBfg\nn4ThvLQQpRWaJhHX9OQuMSWQxtcregGKI5BSiqQh1KlvOe3e4axkZs4QA5aCHoDn\niFYLb4VflgjdyjWAuj2D\n=H4bW\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree ea205c1f712a084d3f4d815970a708fd9b1ae034\nparent 2b292e81522d4246f3a546a1bf7528445133f146\nparent cad7edafd63a02292aa7dd15a49e723595073f2c\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794604377 +0100\ncommitter GitHub <noreply@github.com> 1794604377 +0100\n\nMerge pull request #486 from Fytala-Charles/diagnostics/xslt30-case-cost\n\nMeasure copied-runner case costs against retained qualified engines",
+      "verified_at": "2026-11-13T21:12:58Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

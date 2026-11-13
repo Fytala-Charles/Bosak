@@ -31,6 +31,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.8   | 30-10-2026     | 1.34.2: Dispose owned reader on callback failure; retain dual errors                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9   | 13-11-2026     | Avoid capturing callback allocations on wrapper cache lookups.                          |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using System.Xml;
@@ -219,7 +221,9 @@ FoundRoot:
     /// the inner node, so wrappers of released records are collected with their record.
     /// </remarks>
     internal StreamingNode Wrap(XDocumentNode inner, int recordIndex)
-        => _wrapperCache.GetValue(inner, k => new StreamingNode(this, k, StreamingNodeRole.Record, recordIndex));
+        => _wrapperCache.GetOrAdd(inner,
+            static (node, state) => new StreamingNode(state.Source, node, StreamingNodeRole.Record, state.RecordIndex),
+            (Source: this, RecordIndex: recordIndex));
 
     /// <summary>
     /// Returns true when the pump is mid-flight owned by another enumerator, which means
