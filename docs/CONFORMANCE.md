@@ -8,6 +8,8 @@ Last updated: 13 November 2026. The frozen release results were recorded on **8 
 
 Observed diagnostic measurements now independently replay the adopted full result locally (817.285s) and hosted (1175.235s); the separate untouched required hosted gate passes in 1056.750s. These observations do not alter the conformance profile, exclusions or limits and do not establish a performance root cause.
 
+The [telemetry trigger correction](xslt30-telemetry-delivery/README.md) restricts automatic diagnostic execution to PR opening; later attempts require explicit dispatch. The unintended extra workflow was cancelled before qualification. Original measured outcomes and the required gate are unchanged.
+
 Operational timing diagnostics: the [separate telemetry candidate](xslt30-telemetry/README.md) preserves the adopted gate and exclusions. Diagnostic capture is not qualification success; no new conformance result is claimed.
 
 ## Results and scope

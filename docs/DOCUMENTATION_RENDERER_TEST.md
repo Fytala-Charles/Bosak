@@ -1,3 +1,7 @@
+# Telemetry trigger correction renderer check - 13 November 2026
+
+The [separate addendum receipt](xslt30-telemetry-delivery/DOCUMENTATION-CHECKS.json) checks corrected event behavior, cancellation provenance and preserved original evidence links. No screenshot/PDF acceptance is asserted.
+
 # Standalone telemetry renderer check - 13 November 2026
 
 The [observer documentation receipt](xslt30-telemetry/DOCUMENTATION-CHECKS.json) checks operating instructions, outcome distinctions, limits and local links with unchanged Fytala CSS. No screenshot/PDF acceptance is asserted.

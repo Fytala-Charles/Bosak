@@ -3,6 +3,8 @@ name: Standalone XSLT 3.0 telemetry
 on:
   workflow_dispatch:
   pull_request:
+    # One automatic observation on opening; later revisions require explicit dispatch.
+    types: [opened]
     branches: [main]
     paths:
       - '.github/workflows/xslt30-telemetry.yml'
