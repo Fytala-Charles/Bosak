@@ -1,3 +1,7 @@
+# Sampled-stack refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-stack-refresh/DOCUMENTATION-CHECKS.json) verifies retained/current delivery tables and local links. No screenshot/PDF acceptance asserted.
+
 # Case-cost refresh renderer check - 13 November 2026
 
 The [HTML receipt](xslt30-case-cost-refresh/DOCUMENTATION-CHECKS.json) checks original/current delivery tables and local links. No screenshot/PDF acceptance asserted.
@@ -29,6 +33,10 @@ The [observer documentation receipt](xslt30-telemetry/DOCUMENTATION-CHECKS.json)
 # Case-cost diagnostic renderer check - 13 November 2026
 
 The [case-cost receipt](xslt30-case-cost/DOCUMENTATION-CHECKS.json) checks timing/coverage tables, original exclusions, fixed native/engine identity, failure retention and preserved Fytala content. No screenshot/PDF acceptance is asserted.
+
+# Managed-stack diagnostic renderer check - 13 November 2026
+
+The [stack receipt](xslt30-stack-profile/DOCUMENTATION-CHECKS.json) checks selected/unselected accounting, explained exclusions, sampling denominators, worker-selection correction and retained failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.
 
 # Template-name renderer check — 13 November 2026
 

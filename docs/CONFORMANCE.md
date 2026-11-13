@@ -20,6 +20,12 @@ The separate [case-cost diagnostic](xslt30-case-cost/README.md) measures a copie
 
 The [case-cost delivery refresh](xslt30-case-cost-refresh/README.md) incorporates qualified main while retaining the original diagnostic payload and measurements. No new copied sweep is run, and refreshed required qualification is pending.
 
+The selected stack observation now completes54 cases with52passes and2unchangedschema-aware exclusions;14,547 othercases are unselected. The same trace was reanalyzed for execution-worker stacks, with no new workload or qualification.
+
+The separate [sampled managed-stack investigation](xslt30-stack-profile/README.md) selects54 original comparison cases under exact caller/engine/native pins. It does not change the adopted profile, exclusions or qualification budgets; sampling weights are thread wall-time, not CPU percentages.
+
+The [sampled-stack delivery refresh](xslt30-stack-refresh/README.md) retains the original trace and attribution corrections on qualified main. No trace is recollected and no conformance admission is made; refreshed required qualification is pending.
+
 ## Results and scope
 
 The following release table uses the successful hosted preparation of the **published Bosak 1.81.2** release. Passing the selected tests is evidence for the identified profile and corpus revision; it is not a claim of complete XPath, XQuery, XSLT, or XSD conformance. Skips are visible exclusions, not passes. Tests outside a selected gate are not counted as skips within that gate. The later standalone reference measurement is reported separately.

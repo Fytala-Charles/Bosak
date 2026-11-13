@@ -104,3 +104,4 @@ jobs:
           node .github/scripts/test-source-run.cjs
           python .github/scripts/check_workflows.py
           python -m unittest discover -s tools -p test_xslt30_case_cost.py
+          python -m unittest discover -s tools -p test_xslt30_stack_profile.py
