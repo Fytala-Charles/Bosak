@@ -1,0 +1,17 @@
+{
+  "recordedUtc": "2026-11-14T12:15:26.561445+00:00",
+  "beforeEdit": true,
+  "base": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03",
+  "kind": "Test-only correction; no engine/semantic/conformance-watchdog change",
+  "originalRun": 43592879249,
+  "expectedBytes": 4000000,
+  "actualBytes": 4000120,
+  "sourceOf120ByteExcessIdentified": false,
+  "newConversionUpperBoundBytes": 4001024,
+  "iterations": 100000,
+  "fixedAllowanceBytes": 1024,
+  "strictMatcherZeroAssertionRetained": true,
+  "rejectsOriginalClosureRegression": true,
+  "preserveOriginalReceipts": true,
+  "unchangedFailedHeadWillNotBeRetried": true
+}

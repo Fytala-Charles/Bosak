@@ -1,0 +1,60 @@
+{
+  "success": true,
+  "base": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03",
+  "scope": "Test and documentation only; no engine or conformance controls changed",
+  "solutionPassed": 26435,
+  "languageServerPassed": 90,
+  "originalRun": 43592879249,
+  "originalExpectedBytes": 4000000,
+  "originalActualBytes": 4000120,
+  "newUpperBoundBytes": 4001024,
+  "exactZeroMatchingRetained": true,
+  "sourceOfExcessKnown": false,
+  "originalFailureRemainsRecorded": true,
+  "priorStandalone": {
+    "success": true,
+    "runId": "43592879262",
+    "head": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03",
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03",
+    "sourceTree": "3062310f4c93a9091f5992db0f81259ede60f0f1",
+    "sourceTreeMatchesHead": true,
+    "elapsedSeconds": 631.688,
+    "corpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "artifact": {
+      "id": 14113921119,
+      "node_id": "MDg6QXJ0aWZhY3QxNDExMzkyMTExOQ==",
+      "name": "xslt30-pinned-gate",
+      "size_in_bytes": 1982513,
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14113921119",
+      "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14113921119/zip",
+      "expired": false,
+      "digest": "sha256:eb06a57359937f2c4c54ad8432304fd8eafdbd7c7dbd35c2d5119192bce242d1",
+      "created_at": "2026-11-14T12:15:49Z",
+      "updated_at": "2026-11-14T12:15:49Z",
+      "expires_at": "2026-12-14T12:15:48Z",
+      "workflow_run": {
+        "id": 43592879262,
+        "repository_id": 1242768879,
+        "head_repository_id": 1242768879,
+        "head_branch": "main",
+        "head_sha": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03"
+      }
+    }
+  },
+  "testFileSha256": "9f740cf5ca768b4a439b1cb2f4117214d48febbc3248ef4851944dbaa28b77f1",
+  "boundaryExamples": {
+    "0": true,
+    "4000000": true,
+    "4000120": true,
+    "4001024": true,
+    "4001025": false,
+    "11200000": false
+  }
+}

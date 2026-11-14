@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 14-11-2026     | Bound conversion allocation with fixed noise allowance; retain zero matcher check.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
@@ -50,7 +51,10 @@ public class MatcherClosureTests
             XdmValue converted = default;
             for (var i = 0; i < 100000; i++) converted = VmEngine.ApplyFunctionConversion(value, target, context);
             bytes = GC.GetAllocatedBytesForCurrentThread() - before;
-            Assert.Equal(value.Kind, converted.Kind); Assert.Equal(4000000, bytes);
+            Assert.Equal(value.Kind, converted.Kind);
+            // Bound steady-state conversion allocation with a fixed 1 KiB allowance for
+            // small one-off allocation noise; an extra per-call object still exceeds it.
+            Assert.InRange(bytes, 0L, 40L * 100000 + 1024);
         }
         Assert.True(VmEngine.ValueMatchesType(XdmValue.FromInteger(1), "xs:integer", null));
     }

@@ -1,3 +1,13 @@
+# Allocation assertion correction - 14 November 2026
+
+## Matcher allocation assertion correction - 14 November 2026
+
+The [test-only correction](matcher-allocation-check/README.md) preserves the original postmerge CI failure: conversion measured4,000,120 bytes against an exact4,000,000 assertion. Its120-byte excess has no identified cause. The corrected test keeps exact-zero matching and bounds100,000 conversions by4,001,024 bytes: the existing40bytes/call plus a fixed1KiB allowance. Original72-byte-per-match/112-byte-per-conversion closure regressions still fail. No engine, public API, schema validation, version, fixture or conformance watchdog change. Corrected full solution26,435 and separateLSP90 tests pass. Prior main standalone independently qualifies10,221/0/4,380 in631.688s; original main unit failure remains recorded. Hosted checks for the correction are pending.
+
+Base0eb66c65; branchtest/matcher-allocation-budget; originalfailure packet .guard-tmp/allocation-check-20261114.
+
+---
+
 # Matcher closure candidate - 14 November 2026
 
 Base9ffde22e; branch diagnostics/matching-conversion.
