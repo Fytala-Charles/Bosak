@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 14-11-2026     | Add isolated validator allocation rows.                                                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Reflection;
@@ -26,14 +27,14 @@ namespace Bosak.XPath.AllocationChecks;
 internal static class Program
 {
     /// <summary>Runs one fixed allocation workload and catches managed diagnostic errors.</summary>
-    /// <param name="args">The comparisons or matching workload name.</param>
+    /// <param name="args">The comparisons, matching or validation workload name.</param>
     /// <returns>Zero after a complete JSON report, otherwise two.</returns>
     public static int Main(string[] args)
     {
         try
         {
-            if (args.Length != 1 || args[0] is not ("comparisons" or "matching"))
-                throw new ArgumentException("Expected comparisons or matching.");
+            if (args.Length != 1 || args[0] is not ("comparisons" or "matching" or "validation"))
+                throw new ArgumentException("Expected comparisons, matching or validation.");
             // Resolve the engine-bearing type inside the guard, not at entry-point load.
             var type = typeof(Program).Assembly.GetType("Bosak.XPath.AllocationChecks.Workloads", true)!;
             var report = type.GetMethod("Run", BindingFlags.NonPublic | BindingFlags.Static)!.Invoke(null, new object[] { args[0] });
@@ -65,6 +66,14 @@ internal static class Workloads
             var one = XdmValue.FromInteger(1); var two = XdmValue.FromInteger(2);
             foreach (var op in new[] { "=", "!=", "<", "<=", ">", ">=" })
                 rows.Add(Measure(op, () => apply(op, one, two, context)));
+        }
+        else if (workload == "validation")
+        {
+            var validate = vm.GetMethod("ValidateFunctionConversionTarget", BindingFlags.NonPublic | BindingFlags.Static)!
+                .CreateDelegate<Action<string, EvaluationContext>>();
+            foreach (var target in new[] { "xs:integer", "xs:string", "xs:boolean", "xs:decimal", "xs:double", "xs:int", "xs:long",
+                "xs:INTEGER", "  xs:integer  ", "xs:integer?", "xs:anyAtomicType", "element(a)" })
+                rows.Add(Measure("validate/" + target, () => { validate(target, context); return XdmValue.FromBoolean(true); }));
         }
         else
         {

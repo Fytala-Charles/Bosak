@@ -440,6 +440,7 @@
 //                      | Charles Korthout | 2.211 | 29-10-2026     | Share actual schema-element membership across node matching and sequence subtyping.       |
 //                      | Charles Korthout | 2.212 | 14-11-2026     | Avoid enumeration buffers for non-compatibility primitive general comparisons (1.81.10). |
 //                      | Charles Korthout | 2.213 | 14-11-2026     | Remove incidental node-name predicate captures from type matching (1.81.11).                |
+//                      | Charles Korthout | 2.214 | 14-11-2026     | Classify validator bare type names without allocating a substring (1.81.12).               |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -11458,6 +11459,9 @@ internal static class VmEngine
     }
 
     private static bool IsKnownAtomicTypeName(string name)
+        => IsKnownAtomicTypeNameSpan(name.AsSpan());
+
+    private static bool IsKnownAtomicTypeNameSpan(ReadOnlySpan<char> name)
         => name is "string" or "normalizedstring" or "token" or "language" or "nmtoken" or "name"
             or "ncname" or "id" or "idref" or "entity" or "boolean" or "integer" or "int" or "long"
             or "short" or "byte" or "unsignedshort" or "unsignedint" or "unsignedlong" or "unsignedbyte"
@@ -11819,10 +11823,10 @@ internal static class VmEngine
             throw new InvalidOperationException($"XPST0051: '{type}' is not a type available to users.");
         if (IsKnownSequenceTypeName(name) || IsFunctionFamilyType(name))
             return;
-        var bare = name.StartsWith("xs:", StringComparison.Ordinal) ? name[3..] : name;
+        var bare = name.StartsWith("xs:", StringComparison.Ordinal) ? name.AsSpan(3) : name.AsSpan();
         if (bare is "nmtokens" or "idrefs" or "entities")
             throw new InvalidOperationException($"XPST0051: The list type '{type}' must not be used as an item type in a sequence type.");
-        if (IsKnownAtomicTypeName(bare) || !name.Contains(':'))
+        if (IsKnownAtomicTypeNameSpan(bare) || !name.Contains(':'))
             return;
         // Prefixed, non-xs name: a user-defined schema simple type must not be a list type
         // or a union containing/derived from a list (case-sensitive resolution on the

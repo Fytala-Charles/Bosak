@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 14-11-2026     | Validate isolated validator row protocol.                                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -68,6 +69,14 @@ internal static class AllocationProbeRunner
                 Assert.True(expectedComparisons.ContainsKey(name));
                 Assert.Equal(expectedComparisons[name], item.GetProperty("boolean").GetBoolean());
             }
+            else if (workload == "validation")
+            {
+                var targets = new[] { "xs:integer", "xs:string", "xs:boolean", "xs:decimal", "xs:double", "xs:int", "xs:long",
+                    "xs:INTEGER", "  xs:integer  ", "xs:integer?", "xs:anyAtomicType", "element(a)" };
+                Assert.StartsWith("validate/", name);
+                Assert.Contains(name[9..], targets);
+                Assert.True(item.GetProperty("boolean").GetBoolean());
+            }
             else if (name.StartsWith("match/", StringComparison.Ordinal))
             {
                 Assert.True(expectedKinds.ContainsKey(name[6..]));
@@ -80,7 +89,7 @@ internal static class AllocationProbeRunner
             }
         }
         var rows = items.ToDictionary(x => x.GetProperty("name").GetString()!, x => x.GetProperty("bytes").GetInt64());
-        Assert.Equal(workload == "comparisons" ? 6 : 10, rows.Count);
+        Assert.Equal(workload == "comparisons" ? 6 : workload == "validation" ? 12 : 10, rows.Count);
         return rows;
     }
 }

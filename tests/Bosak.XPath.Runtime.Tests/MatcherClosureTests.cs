@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 14-11-2026     | Bound conversion allocation with fixed noise allowance; retain zero matcher check.        |
 //                      | Charles Korthout | 0.3   | 14-11-2026     | Replace allowance with standalone allocation measurements.                               |
+//                      | Charles Korthout | 0.4   | 14-11-2026     | Require zero canonical conversion allocation after span validation.                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
@@ -31,7 +32,7 @@ public class MatcherClosureTests
 {
     /// <summary>Checks warmed matching and conversion allocations for five primitive kinds.</summary>
     [Fact]
-    public void PrimitiveMatching_AvoidsClosureAndRetainsValidationCost()
+    public void PrimitiveMatchingAndConversion_AvoidTemporaryAllocations()
     {
         var context = new EvaluationContext();
         var cases = new[] { (XdmValue.FromInteger(1), "xs:integer"),
@@ -46,7 +47,7 @@ public class MatcherClosureTests
         var rows = AllocationProbeRunner.Run("matching");
         foreach (var row in rows)
             if (row.Key.StartsWith("match/", StringComparison.Ordinal)) Assert.Equal(0, row.Value);
-            else Assert.InRange(row.Value, 0L, 40L * 100000);
+            else Assert.Equal(0, row.Value);
         Assert.True(VmEngine.ValueMatchesType(XdmValue.FromInteger(1), "xs:integer", null));
     }
 

@@ -4,6 +4,10 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Span-based validator candidate - 14 November 2026
+
+The [validator candidate](validator-span/README.md) uses spans for xs: bare-name checks and one shared existing47-name classification vocabulary, preserving normalization, list refusals, original-case schema lookup and mutable context. Five new regressions plus five matcher/six typed-list tests pass. Isolated canonical primitive conversion now allocates0bytes/call; normalization-only costs remain. No validity cache/newlanguageadoption. Full solution/frozen/pinned qualification pending. Development1.81.12 unpublished. Prior main493 unitchecks passed; main standalone pending at this checkpoint.
+
 ## Isolated allocation regressions - 14 November 2026
 
 The [allocation isolation correction](allocation-isolation/README.md) replaces the insufficient fixed allowance with a standalone measurement worker. Strict warmed comparison/matching zero and conversion ceiling40bytes/call remain, with60s watchdog and scoped256MiB managed-heap cap. Full solution26,435 and separateLSP90 tests pass; all worker rows and retained-engine regression controls verify. Both earlier hosted failures remain historical evidence, including the5512/7040-byte excesses. Source of parallel-test-host excess is not established. Engine1.81.11 and production conformance controls are unchanged; hosted checks for the new head are pending.

@@ -1,0 +1,5 @@
+# Span-based validator candidate
+
+The validator previously copied xs: bare names before built-in classification. It now slices a ReadOnlySpan<char> and shares the same frozen47-name classifier with existing string callers. NormalizeTypeName, list/none refusal order, original-spelling schema lookup and dynamic context remain unchanged. No global validity cache or new accepted type vocabulary.
+
+[ADOPTION.json](ADOPTION.json) predates implementation and pins XPath3.1 REC-xpath-31-20170321 sections2.5.5.2,2.5.2,3.1.5.2,2.3.4, with no intentional deviation/newtypeadoption. Five new tests cover the complete original vocabulary, raw nonmatches/null, normalization/refusals, namespace and SchemaSet mutation, user lists/list-containing unions/union restrictions and isolated allocation. Five matcher and six typed-list regressions pass. Canonical five primitive conversions now require exact0 allocation in the isolated worker; mixed-case/whitespace/occurrence normalization remains separate. Calling-thread micro-allocation evidence is not a full-workload speed claim. Full solution/frozen/pinned qualification pending. Development1.81.12 unpublished.
