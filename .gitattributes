@@ -724,3 +724,6 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 
 /docs/matching-conversion/** -text whitespace=cr-at-eol
 /docs/matcher-closure/** -text whitespace=cr-at-eol
+
+/docs/matcher-allocation-check/** -text whitespace=cr-at-eol
+/docs/allocation-isolation/** -text whitespace=cr-at-eol

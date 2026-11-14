@@ -26,4 +26,13 @@
     <ProjectReference Include="..\..\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../Bosak.XPath.AllocationChecks/Bosak.XPath.AllocationChecks.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+  <Target Name="CopyAllocationWorker" AfterTargets="Build">
+    <ItemGroup>
+      <AllocationWorkerFiles Include="$(MSBuildProjectDirectory)/../Bosak.XPath.AllocationChecks/bin/$(Configuration)/$(TargetFramework)/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AllocationWorkerFiles)" DestinationFiles="@(AllocationWorkerFiles->'$(OutDir)allocation-checks/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

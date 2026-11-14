@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "base": "0eb66c658eb3d17fb3695e7771ff30d438cd5c03",
+  "priorFailedPrHead": "864040e1e2fd32fbeed5ce97b998b9d84cb1f608",
+  "solutionPassed": 26435,
+  "languageServerPassed": 90,
+  "focusedPassed": 9,
+  "comparisonAndMatchBudgetPer100000Calls": 0,
+  "conversionCeilingPer100000Calls": 4000000,
+  "fixedAllowanceWithdrawn": true,
+  "workerTimeoutSeconds": 60,
+  "workerManagedHeapCapBytes": 268435456,
+  "engineUnchanged": true,
+  "sourceHashes": {
+    "tests/Bosak.XPath.AllocationChecks/Program.cs": "1463b0fdbfe3531f812418ae8a342a657845c5861e106808c301124b1f81edd5",
+    "tests/Bosak.XPath.AllocationChecks/Bosak.XPath.AllocationChecks.csproj": "8c05da005350f86c723e3c5570ea7878396c5db9542c37d7c4b149dd6e9a6760",
+    "tests/Bosak.XPath.Runtime.Tests/AllocationProbeRunner.cs": "5cb93c5d9cbf7587438c8ec8a09da2d6ff2f6e7894f607bc2926eeacab8e1aae",
+    "tests/Bosak.XPath.Runtime.Tests/Bosak.XPath.Runtime.Tests.csproj": "67e79ae2476ec8accedbd765f3c37c80c0391175a8e0a5d5aae38965ef468843",
+    "tests/Bosak.XPath.Runtime.Tests/PrimitiveGeneralComparisonTests.cs": "add6c0fb3454c0aaf81ca6dc853290beba4baca45fe9827f1c350b34c82ab1f2",
+    "tests/Bosak.XPath.Runtime.Tests/MatcherClosureTests.cs": "e564d8cf826e19933302849be3b9124c85a532c525b42592fb33f673138e3d94",
+    "Bosak.sln": "7f2e8abe2ed30a1bbef4e7e980de036e258c64c3b0985fc420b6ea2808655c0c"
+  },
+  "startupMismatchAttemptRetained": true,
+  "exactOriginOfTestHostExcessIdentified": false
+}

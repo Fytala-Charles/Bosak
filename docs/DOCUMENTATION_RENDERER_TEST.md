@@ -1,3 +1,11 @@
+# Allocation-isolation renderer check - 14 November 2026
+
+The [HTML receipt](allocation-isolation/DOCUMENTATION-CHECKS.json) checks isolated-worker regression tables and local links. Programmatic HTML only; no screenshot/PDF acceptance.
+
+# Matcher allocation-check renderer test - 14 November 2026
+
+The [HTML receipt](matcher-allocation-check/DOCUMENTATION-CHECKS.json) checks failure/correction budget boundaries and local links. Programmatic HTML only; no screenshot/PDF acceptance.
+
 # Matcher-closure renderer check - 14 November 2026
 
 The [HTML receipt](matcher-closure/DOCUMENTATION-CHECKS.json) checks allocation/qualification tables and local links. Programmatic HTML only; no screenshot/PDF acceptance claimed.

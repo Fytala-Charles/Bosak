@@ -1,0 +1,14 @@
+{
+  "recordedUtc": "2026-11-14T12:37:53.266130+00:00",
+  "beforeEdit": true,
+  "base": "864040e1e2fd32fbeed5ce97b998b9d84cb1f608",
+  "scope": "Test harness only; move allocation loops into bounded standalone .NET worker, retaining exact-zero comparison/matching and conversion ceiling without noise allowance. Original engine unchanged.",
+  "reason": "Parallel test-host measurements reported5512 extra comparisonbytes and7040 extra conversionbytes; root source not established. Isolation supported by earlier standalone diagnostic evidence; do not keep increasing budget.",
+  "workerWatchdogSeconds": 60,
+  "workerManagedHeapLimitBytes": 268435456,
+  "workerReportsAllMeasurements": true,
+  "noRetryOrMinimumSelection": true,
+  "catchesAllManagedWorkerErrors": true,
+  "runtimeVersionUnchanged": "1.81.11",
+  "productionConformanceLimitsUnchanged": true
+}

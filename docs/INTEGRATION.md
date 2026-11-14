@@ -4,6 +4,14 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Isolated allocation regressions - 14 November 2026
+
+The [allocation isolation correction](allocation-isolation/README.md) replaces the insufficient fixed allowance with a standalone measurement worker. Strict warmed comparison/matching zero and conversion ceiling40bytes/call remain, with60s watchdog and scoped256MiB managed-heap cap. Full solution26,435 and separateLSP90 tests pass; all worker rows and retained-engine regression controls verify. Both earlier hosted failures remain historical evidence, including the5512/7040-byte excesses. Source of parallel-test-host excess is not established. Engine1.81.11 and production conformance controls are unchanged; hosted checks for the new head are pending.
+
+## Matcher allocation assertion correction - 14 November 2026
+
+The [test-only correction](matcher-allocation-check/README.md) preserves the original postmerge CI failure: conversion measured4,000,120 bytes against an exact4,000,000 assertion. Its120-byte excess has no identified cause. The corrected test keeps exact-zero matching and bounds100,000 conversions by4,001,024 bytes: the existing40bytes/call plus a fixed1KiB allowance. Original72-byte-per-match/112-byte-per-conversion closure regressions still fail. No engine, public API, schema validation, version, fixture or conformance watchdog change. Corrected full solution26,435 and separateLSP90 tests pass. Prior main standalone independently qualifies10,221/0/4,380 in631.688s; original main unit failure remains recorded. Hosted checks for the correction are pending.
+
 ## Type-matcher closure qualification - 14 November 2026
 
 The [matcher closure candidate](matcher-closure/README.md) replaces two capturing node-name predicates with ordered matching loops. Five new regressions and six existing typed-list tests pass. Warmed primitive matching allocates 0 bytes/call and matching conversion 40, down from 72 and 112 respectively. The same new tests on qualified 1.81.10 binaries pass four behavior checks and fail only the expected allocation check. Full solution: 26,435 passed; separate language server: 90 passed. Frozen QT3 remains 31,397/0/424 and gated qt4 8,941/0/1,918, with all skip names/reasons unchanged. Standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in 803.274s under original 1200s/8GiB limits. Development Core/server 1.81.11 remains unpublished. Hosted qualification is required before merge; no full-workload speed claim.
