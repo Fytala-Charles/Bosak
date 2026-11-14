@@ -1,0 +1,279 @@
+{
+  "success": true,
+  "diagnosticOnly": true,
+  "engineChanged": false,
+  "framework": "10.0.11",
+  "iterations": 100000,
+  "warmup": 10000,
+  "allocationScope": "GC.GetAllocatedBytesForCurrentThread; delegates and inputs prepared before measured loops",
+  "rows": [
+    {
+      "name": "array/scalar/integer",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/integer",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/string",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/string",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/boolean",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/boolean",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/decimal",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/decimal",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/double",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/double",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/undefined",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "view/undefined",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/materialized-array",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "view/materialized-array",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/materialized-list",
+      "iterations": 100000,
+      "bytes": 12000000,
+      "bytesPerCall": 120
+    },
+    {
+      "name": "view/materialized-list",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/singleton-sequence",
+      "iterations": 100000,
+      "bytes": 39200000,
+      "bytesPerCall": 392
+    },
+    {
+      "name": "view/singleton-sequence",
+      "iterations": 100000,
+      "bytes": 32000000,
+      "bytesPerCall": 320
+    },
+    {
+      "name": "array/empty-sequence",
+      "iterations": 100000,
+      "bytes": 3200000,
+      "bytesPerCall": 32
+    },
+    {
+      "name": "view/empty-sequence",
+      "iterations": 100000,
+      "bytes": 3200000,
+      "bytesPerCall": 32
+    },
+    {
+      "name": "strict-comparison/primitive-integers",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "general-comparison/primitive-integers",
+      "iterations": 100000,
+      "bytes": 100800000,
+      "bytesPerCall": 1008
+    },
+    {
+      "name": "function-conversion/matching-integer",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "function-conversion/integer-to-double",
+      "iterations": 100000,
+      "bytes": 88800000,
+      "bytesPerCall": 888
+    },
+    {
+      "name": "strict-comparison/materialized-singletons",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "function-conversion/materialized-singleton",
+      "iterations": 100000,
+      "bytes": 49600000,
+      "bytesPerCall": 496
+    }
+  ],
+  "checks": [
+    {
+      "name": "helper-scalar-integer",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-string",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-boolean",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-decimal",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-double",
+      "success": true
+    },
+    {
+      "name": "materialized-array-reused",
+      "success": true
+    },
+    {
+      "name": "materialized-list-view-reused",
+      "success": true
+    },
+    {
+      "name": "list-copy-versus-view-alias",
+      "success": true
+    },
+    {
+      "name": "array/lazy-construction",
+      "success": true
+    },
+    {
+      "name": "array/single-pass-once",
+      "success": true
+    },
+    {
+      "name": "array/fault-before-return",
+      "success": true
+    },
+    {
+      "name": "array/observed-events",
+      "success": true,
+      "normal": [
+        "get",
+        "move:0",
+        "move:1",
+        "move:2"
+      ],
+      "fault": [
+        "get",
+        "move:0",
+        "move:1"
+      ]
+    },
+    {
+      "name": "view/lazy-construction",
+      "success": true
+    },
+    {
+      "name": "view/single-pass-once",
+      "success": true
+    },
+    {
+      "name": "view/fault-before-return",
+      "success": true
+    },
+    {
+      "name": "view/observed-events",
+      "success": true,
+      "normal": [
+        "get",
+        "move:0",
+        "move:1",
+        "move:2"
+      ],
+      "fault": [
+        "get",
+        "move:0",
+        "move:1"
+      ]
+    },
+    {
+      "name": "strict-scalar-result",
+      "success": true
+    },
+    {
+      "name": "general-scalar-result",
+      "success": true
+    },
+    {
+      "name": "typed-list-node-preserved-by-helpers",
+      "success": true
+    },
+    {
+      "name": "typed-list-expands-when-materialized",
+      "success": true
+    },
+    {
+      "name": "conversion-atomizes-typed-list",
+      "success": true
+    },
+    {
+      "name": "general-comparison-typed-list",
+      "success": true
+    }
+  ]
+}

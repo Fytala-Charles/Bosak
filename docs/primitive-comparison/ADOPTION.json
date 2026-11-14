@@ -1,0 +1,19 @@
+{
+  "recordedUtc": "2026-11-14T09:02:16.866545+00:00",
+  "beforeImplementation": true,
+  "base": "cef6df3720cc30cda98bf96ac7a7f6d8c3975a7e",
+  "specification": {
+    "revision": "REC-xpath-31-20170321",
+    "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+    "sections": [
+      "2.4.2 Atomization",
+      "3.7.1 Value Comparisons",
+      "3.7.2 General Comparisons",
+      "2.3.4 Errors and Optimization"
+    ]
+  },
+  "scope": "Only non-backwards-compatible scalar String/Integer/Decimal/Double/Float/Boolean pairs; reuse existing untyped coercion and CompareCore with both node-origin flags false. No conversion rules changed.",
+  "intentionalDeviations": [],
+  "excluded": "Undefined, nodes, sequence wrappers, arrays, functions, maps, external/JNode values, other atomic kinds, and backwards compatibility keep prior paths. Existing precision/type semantics unchanged.",
+  "version": "1.81.10 unpublished"
+}

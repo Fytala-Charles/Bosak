@@ -438,6 +438,7 @@
 //                      | Charles Korthout | 2.209 | 28-10-2026     | Pass constructor-local namespace-copy modes to provider node-content cloning (1.31.0). |
 //                      | Charles Korthout | 2.210 | 28-10-2026     | Carry construction mode and original attribute metadata through provider hooks (1.32.0). |
 //                      | Charles Korthout | 2.211 | 29-10-2026     | Share actual schema-element membership across node matching and sequence subtyping.       |
+//                      | Charles Korthout | 2.212 | 14-11-2026     | Avoid enumeration buffers for non-compatibility primitive general comparisons (1.81.10). |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -8560,6 +8561,18 @@ internal static class VmEngine
         // XPath 3.1 §17.3: if one operand is an empty sequence, the result is false.
         if (left.IsUndefined || right.IsUndefined)
             return XdmValue.FromBoolean(false);
+
+        // Already-atomic singleton pairs need neither enumeration nor atomization buffers.
+        // Keep compatibility mode and every node/sequence/array route unchanged.
+        if (!context.BackwardsCompatible &&
+            left.Kind is >= XdmValueKind.String and <= XdmValueKind.Boolean &&
+            right.Kind is >= XdmValueKind.String and <= XdmValueKind.Boolean)
+        {
+            CastUntypedForGeneralComparison(ref left, ref right, context);
+            return XdmValue.FromBoolean(CompareCore(
+                MapGeneralToStrictOp(op), left, right, strict: true,
+                false, false, context));
+        }
 
         // Fast path: '=' / '!=' between a single xs:integer and a large all-integer
         // sequence (e.g. $validrange[not(. = $c)] with 1.1M x 2k comparisons): use a

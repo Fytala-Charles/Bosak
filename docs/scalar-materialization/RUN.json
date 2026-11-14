@@ -1,0 +1,41 @@
+{
+  "command": [
+    "C:/Program Files/dotnet/dotnet.exe",
+    "exec",
+    "--fx-version",
+    "10.0.11",
+    "--roll-forward",
+    "Disable",
+    "D:\\Development\\Bosak\\.guard-tmp\\scalar-materialization-20261114\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.Tests.dll",
+    "D:\\Development\\Bosak\\.guard-tmp\\scalar-materialization-20261114\\RESULT.json"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "elapsedSeconds": 0.9038808000041172,
+  "memoryLimitBytes": 536870912,
+  "watchdogSeconds": 60,
+  "engineHashesBefore": {
+    "Bosak.XPath.Api.dll": "2a5c8edbc73a5897478252abfb840b77ab4bc310cadca5f6d6dd1f0a44f79006",
+    "Bosak.XPath.Compiler.dll": "0b0f6ff074af618dbad8632252f25d234b4d47b1c6d04484add48ff9a3fac6d1",
+    "Bosak.XPath.Core.dll": "798b02235f686b32180b649b6f7df617d64450049c03b039e7fb6fa2ebe207f7",
+    "Bosak.XPath.Parser.dll": "c80f9f291b78f042214dce7b28abe195051e1d09ea6570a27bac3a8403307b0d",
+    "Bosak.XPath.Providers.dll": "0a8738e4fe34a26daeb28a1c80846b06b82d88e9023e9b7bdc904e8e972ecf32",
+    "Bosak.XPath.Runtime.dll": "0b0706546b0a5d3469b30dddf542a90e335d0cd7194c7df0eb549a38e97924e0",
+    "Bosak.XPath.Standard.dll": "a7506af4426fe0f11f2aea6899a5d94ca524b1dd8af164afe613b59e0a3af6ca",
+    "Bosak.XQuery.dll": "4793036c7976b975813f59009e924783f26cb0da003ca089d13ce07f74ba69c1",
+    "Bosak.Xslt.dll": "ebb8361ad5031fa3cd651b6596843be38e633c4a5e8dbf6577128adacf5b1876"
+  },
+  "engineHashesAfter": {
+    "Bosak.XPath.Api.dll": "2a5c8edbc73a5897478252abfb840b77ab4bc310cadca5f6d6dd1f0a44f79006",
+    "Bosak.XPath.Compiler.dll": "0b0f6ff074af618dbad8632252f25d234b4d47b1c6d04484add48ff9a3fac6d1",
+    "Bosak.XPath.Core.dll": "798b02235f686b32180b649b6f7df617d64450049c03b039e7fb6fa2ebe207f7",
+    "Bosak.XPath.Parser.dll": "c80f9f291b78f042214dce7b28abe195051e1d09ea6570a27bac3a8403307b0d",
+    "Bosak.XPath.Providers.dll": "0a8738e4fe34a26daeb28a1c80846b06b82d88e9023e9b7bdc904e8e972ecf32",
+    "Bosak.XPath.Runtime.dll": "0b0706546b0a5d3469b30dddf542a90e335d0cd7194c7df0eb549a38e97924e0",
+    "Bosak.XPath.Standard.dll": "a7506af4426fe0f11f2aea6899a5d94ca524b1dd8af164afe613b59e0a3af6ca",
+    "Bosak.XQuery.dll": "4793036c7976b975813f59009e924783f26cb0da003ca089d13ce07f74ba69c1",
+    "Bosak.Xslt.dll": "ebb8361ad5031fa3cd651b6596843be38e633c4a5e8dbf6577128adacf5b1876"
+  },
+  "probeSourceSha256": "d2db8c05e84c3f71f58dc065bf1dd029005c296f6e00cf2f77738946da92cacb",
+  "probeBinarySha256": "482ce55fb0a49ba637b910727cb6ebb8573a38a37a1832877b35a9a07b7bcd17"
+}
