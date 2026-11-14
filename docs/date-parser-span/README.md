@@ -20,3 +20,5 @@ Frozen QT3 is 31,397/0/424 and gated qt4 is 8,941/0/1,918, including 11 experime
 Build passed. The initial sandboxed solution run hit 45 local HTTP fixture setup failures; its receipt is preserved in `.guard-tmp/date-span-engine-20261114/UNIT.log`. Those 47 database tests pass outside the sandbox. The unrestricted solution run and pinned standalone qualification are pending at this source checkpoint. Language server: 90 passed.
 
 No release, public export or PR publication is included. Original diagnostics and validation logs remain in `.guard-tmp/date-span-engine-20261114`.
+
+The first standalone attempt ran inside the restricted sandbox and failed required W3C HTTP cases. It was terminated after recording the failures; no success is claimed. [Environment correction](ENVIRONMENT-CORRECTION.json) records the fresh full run outside the sandbox, with unchanged corpus, exclusions and 1,200-second/8-GiB limits. Original attempt receipts remain retained separately.

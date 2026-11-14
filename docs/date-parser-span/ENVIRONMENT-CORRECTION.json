@@ -1,0 +1,18 @@
+{
+  "kind": "Environment correction before fresh full qualification",
+  "previousSourceCommit": "79230478afce5f75458071466fd171e147e079c8",
+  "previousPacket": ".guard-tmp/date-span-qualified-20261114",
+  "previousAttempt": "Failed required HTTP fetches in sandbox; owned worker terminated after recording errors; preserve all receipts",
+  "observedFailures": [
+    "unparsed-text-2002: socket access forbidden to www.w3.org:443",
+    "unparsed-text-2003: remote-resource availability mismatch"
+  ],
+  "newEnvironment": "Outside sandbox; required outbound requests and local loopback available",
+  "engineChanges": false,
+  "corpusChanges": false,
+  "exclusionChanges": false,
+  "filtered": false,
+  "wallTimeoutSeconds": 1200,
+  "memoryLimitBytes": 8589934592,
+  "publicExportAuthorized": false
+}
