@@ -1,0 +1,77 @@
+{
+  "kind": "Production date-only span optimization",
+  "engineVersion": "1.81.13",
+  "engineHashes": {
+    "Bosak.XPath.Api.dll": "e3d17ccfe014957c2691052c0bd00c3991de63e7a8d665b79ccff801271a96fa",
+    "Bosak.XPath.Compiler.dll": "46a3ea2776a9b8a9d466a1e5f2eb0385a8be5a7c1cd0b461866b4c73d5fa52e8",
+    "Bosak.XPath.Core.dll": "2eb7fa628fd44d9f31eb1200d5bada457b1a83363d11d1c8d8ee1b0f3badea28",
+    "Bosak.XPath.Parser.dll": "38f81855b2fdde446f53fe1ca325aed302f2e1ce7584037281fc6a601e3da9e6",
+    "Bosak.XPath.Providers.dll": "c63bee13128445e78607fad79ec75467ad7b4efcee5e58cfc59683dea5728c33",
+    "Bosak.XPath.Runtime.dll": "36452d4028268f73c3228e888607ae98380e6d4546575cc21c622c58c2d1d658",
+    "Bosak.XPath.Standard.dll": "e74923d95c6c377ff06ed0b07d3c2aa0024a946c01281664f426dfaeda7b6b9a",
+    "Bosak.XQuery.dll": "d41872907ced3aa5fe0a8245e086a94b8c1837fcb0673c99fd18e3dea55089ca",
+    "Bosak.Xslt.dll": "0eaed3c542d0da650d8a609c9190e1415db4932d4c627fbc2dd7f562f1eec4e7"
+  },
+  "qualifiedRuntimeHashes": {
+    "Bosak.XPath.Api.dll": "e3d17ccfe014957c2691052c0bd00c3991de63e7a8d665b79ccff801271a96fa",
+    "Bosak.XPath.Api.pdb": "86ba2bf5169e89435653b6fdc5fc5f8abc9af602911b924cc36b83708a7b9cf1",
+    "Bosak.XPath.Api.xml": "88b0dd6a0c17a38f7f873380d1a426d84218a34c653c6e340426b88107f01623",
+    "Bosak.XPath.Compiler.dll": "46a3ea2776a9b8a9d466a1e5f2eb0385a8be5a7c1cd0b461866b4c73d5fa52e8",
+    "Bosak.XPath.Compiler.pdb": "106813b77861e263c14a80cda3d226b7be233cd66a86a3254d749d56b8817744",
+    "Bosak.XPath.Compiler.xml": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05",
+    "Bosak.XPath.Core.dll": "2eb7fa628fd44d9f31eb1200d5bada457b1a83363d11d1c8d8ee1b0f3badea28",
+    "Bosak.XPath.Core.pdb": "b98a0733ed4aebda2bffbd714af3c9287a1ec2aac780745d07d288d38b4eb7c3",
+    "Bosak.XPath.Core.xml": "7dca1d9a2d19facebd85c2f63c74c7d0d2662c277585db4d0b2dc2bb0c399aaf",
+    "Bosak.XPath.Parser.dll": "38f81855b2fdde446f53fe1ca325aed302f2e1ce7584037281fc6a601e3da9e6",
+    "Bosak.XPath.Parser.pdb": "5823f1b8deb6bb906e0807d0881bd2dcef75b877b4948eac591028f0c40d0deb",
+    "Bosak.XPath.Parser.xml": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade",
+    "Bosak.XPath.Providers.dll": "c63bee13128445e78607fad79ec75467ad7b4efcee5e58cfc59683dea5728c33",
+    "Bosak.XPath.Providers.pdb": "c8f14242f422fa81a4da8dda6ebfd67018f8963d0be18951f16b0c566bb1bc7b",
+    "Bosak.XPath.Providers.xml": "7c30c33c77a283c6532aca89cf8f65dc4afc2fa3d838ec94c6fd6a1f333f3529",
+    "Bosak.XPath.Runtime.dll": "36452d4028268f73c3228e888607ae98380e6d4546575cc21c622c58c2d1d658",
+    "Bosak.XPath.Runtime.pdb": "0ed32dca7220f94970c69b9380973d39894172f4ee3bf3d06b5ce93cd25d9114",
+    "Bosak.XPath.Runtime.xml": "571dc63b12792f6ca32f177f6fa52c1d473163cb87da68eccd293435b7f66f67",
+    "Bosak.XPath.Standard.dll": "e74923d95c6c377ff06ed0b07d3c2aa0024a946c01281664f426dfaeda7b6b9a",
+    "Bosak.XPath.Standard.pdb": "3b21812b761b54547b0ebf3f005b572fd768dbcb9f918ae5123463491f7560fc",
+    "Bosak.XPath.Standard.xml": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa",
+    "Bosak.XQuery.dll": "d41872907ced3aa5fe0a8245e086a94b8c1837fcb0673c99fd18e3dea55089ca",
+    "Bosak.XQuery.pdb": "935b78abe05fea80e36f76c51ef17db14d7e316a8dbaa88ff5ebf0a7aeb689e5",
+    "Bosak.XQuery.xml": "e178474252bc2b3e2d3ef578643870d89357e7a640831b83a5fb28955ebafbf9",
+    "Bosak.Xslt.Conformance.deps.json": "22edd010a7820ae5b62805d2d341983047a4a65032bd30fd8bcbc9d15bb1cd6b",
+    "Bosak.Xslt.Conformance.dll": "5509a0bd0b28d724891d9b1e5135501066be071faa9df76f690d07a41fabbe3c",
+    "Bosak.Xslt.Conformance.exe": "c7a2a2a33145eb4a08447a154e3106efa1e9a613b6294919fb842bdf16bdbfe7",
+    "Bosak.Xslt.Conformance.pdb": "d296842301c941901852138f3c209985cc69f3da84354b818ee4fc7a214f94a4",
+    "Bosak.Xslt.Conformance.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+    "Bosak.Xslt.dll": "0eaed3c542d0da650d8a609c9190e1415db4932d4c627fbc2dd7f562f1eec4e7",
+    "Bosak.Xslt.pdb": "5567275504fb78cd64865b143cb7ad18a1a608d8b508f2ccaa9e1869995241be",
+    "Bosak.Xslt.xml": "c65ea55096ae85dbabf461b24fcb7a38b7bc0d018a5a0cf19bbfb81c38263cbf"
+  },
+  "warmup": 10000,
+  "iterations": 100000,
+  "timeoutSeconds": 60,
+  "memoryLimitBytes": 8589934592,
+  "retry": false,
+  "publicExportAuthorized": false,
+  "recordedBeforeImplementation": true,
+  "specificationSources": [
+    {
+      "revision": "REC-xmlschema11-2-20120405",
+      "uri": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/#date",
+      "sections": [
+        "3.3.9 date",
+        "date lexical mapping and timezone representation"
+      ]
+    },
+    {
+      "revision": "REC-xpath-functions-31-20170321",
+      "uri": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/#casting-to-dates",
+      "sections": [
+        "18.1.1 casting from strings to dates and times"
+      ]
+    }
+  ],
+  "intentionalSemanticDeviations": [],
+  "compatibilityBoundary": "Preserve existing engine behavior including historical limitations; differential parity is not normative conformance",
+  "base": "df17f9401ad5b397a3c373fd59a3591a1d7e3d79",
+  "sharedDateTimeAndTimeHelpersUnchanged": true
+}

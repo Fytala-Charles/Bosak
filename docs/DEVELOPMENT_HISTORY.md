@@ -1,3 +1,7 @@
+## Date parser span candidate - 14 November 2026
+
+Local 1.81.13 candidate uses spans for date regex groups and date-only timezone helpers; shared dateTime/time string helpers remain unchanged. Immutable adoption sources and compatibility boundary are recorded in docs/date-parser-span/ADOPTION.json before implementation. Three focused value/refusal/error tests added. Full qualification pending. No release or public export.
+
 ## Span-based validator qualification - 14 November 2026
 
 The [validator candidate](validator-span/README.md) avoids xs: bare-name strings with a shared span classifier preserving the frozen 47-name vocabulary, normalization, list refusals and dynamic schema context. Five new regressions pass. Identical-source compatible worker controls measure canonical primitive conversion 40 -> 0 bytes/call and short-name validation 32 -> 0; existing normalization costs remain separate. Full solution 26,440 and language-server 90 tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380/all 14,601 identities in 784.991s under original 1200s/8GiB limits. Development 1.81.12 is unpublished. No validity cache or full-workload speed claim; hosted checks remain required before merge.

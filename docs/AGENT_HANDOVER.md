@@ -1,3 +1,7 @@
+## Date parser span candidate - 14 November 2026
+
+Local 1.81.13 candidate uses spans for date regex groups and date-only timezone helpers; shared dateTime/time string helpers remain unchanged. Immutable adoption sources and compatibility boundary are recorded in docs/date-parser-span/ADOPTION.json before implementation. Three focused value/refusal/error tests added. Full qualification pending. No release or public export.
+
 # Validator span candidate - 14 November 2026
 
 Base d29429c2, perf/validator-bare-name.
