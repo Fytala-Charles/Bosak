@@ -154,6 +154,8 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
+Allocation regression tests build and launch a bounded .NET worker automatically.
+
 See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XSLT test workaround. Standalone XSLT summaries report selected-case results, executed counts and exclusions rather than a conformance percentage. See the [pinned standalone CI gate](docs/xslt30-gate-adoption/README.md) for its exact profile and local command.
 
 ## Support and contribute

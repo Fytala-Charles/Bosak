@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 14-11-2026     | Isolate allocation loops from the parallel test host.                                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -35,14 +36,10 @@ public class PrimitiveGeneralComparisonTests
         for (var op = 0; op < operators.Length; op++)
         {
             Assert.Equal(expected[op], VmEngine.ApplyBinaryOperator(operators[op], left, right, context).BooleanValue);
-            for (var i = 0; i < 10000; i++) _ = VmEngine.ApplyBinaryOperator(operators[op], left, right, context);
-            var before = GC.GetAllocatedBytesForCurrentThread();
-            bool result = false;
-            for (var i = 0; i < 100000; i++) result = VmEngine.ApplyBinaryOperator(operators[op], left, right, context).BooleanValue;
-            var bytes = GC.GetAllocatedBytesForCurrentThread() - before;
-            Assert.Equal(expected[op], result);
-            Assert.Equal(0, bytes);
+
         }
+        foreach (var bytes in AllocationProbeRunner.Run("comparisons").Values)
+            Assert.Equal(0, bytes);
     }
 
     /// <summary>Checks numeric promotion, untyped coercion, NaN and type errors against the sequence path.</summary>

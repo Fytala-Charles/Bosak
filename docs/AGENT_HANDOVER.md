@@ -1,3 +1,7 @@
+## Isolated allocation regressions - 14 November 2026
+
+The [allocation isolation correction](allocation-isolation/README.md) replaces the insufficient fixed allowance with a standalone measurement worker. Strict warmed comparison/matching zero and conversion ceiling40bytes/call remain, with60s watchdog and scoped256MiB managed-heap cap. Full solution26,435 and separateLSP90 tests pass; all worker rows and retained-engine regression controls verify. Both earlier hosted failures remain historical evidence, including the5512/7040-byte excesses. Source of parallel-test-host excess is not established. Engine1.81.11 and production conformance controls are unchanged; hosted checks for the new head are pending.
+
 # Allocation assertion correction - 14 November 2026
 
 ## Matcher allocation assertion correction - 14 November 2026

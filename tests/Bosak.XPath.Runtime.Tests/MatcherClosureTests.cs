@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-11-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 14-11-2026     | Bound conversion allocation with fixed noise allowance; retain zero matcher check.        |
+//                      | Charles Korthout | 0.3   | 14-11-2026     | Replace allowance with standalone allocation measurements.                               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml;
@@ -40,22 +41,12 @@ public class MatcherClosureTests
         {
             Assert.True(VmEngine.ValueMatchesType(value, target, context));
             Assert.Equal(value.Kind, VmEngine.ApplyFunctionConversion(value, target, context).Kind);
-            for (var i = 0; i < 10000; i++) _ = VmEngine.ValueMatchesType(value, target, context);
-            var before = GC.GetAllocatedBytesForCurrentThread();
-            bool matched = false;
-            for (var i = 0; i < 100000; i++) matched = VmEngine.ValueMatchesType(value, target, context);
-            var bytes = GC.GetAllocatedBytesForCurrentThread() - before;
-            Assert.True(matched); Assert.Equal(0, bytes);
-            for (var i = 0; i < 10000; i++) _ = VmEngine.ApplyFunctionConversion(value, target, context);
-            before = GC.GetAllocatedBytesForCurrentThread();
-            XdmValue converted = default;
-            for (var i = 0; i < 100000; i++) converted = VmEngine.ApplyFunctionConversion(value, target, context);
-            bytes = GC.GetAllocatedBytesForCurrentThread() - before;
-            Assert.Equal(value.Kind, converted.Kind);
-            // Bound steady-state conversion allocation with a fixed 1 KiB allowance for
-            // small one-off allocation noise; an extra per-call object still exceeds it.
-            Assert.InRange(bytes, 0L, 40L * 100000 + 1024);
+
         }
+        var rows = AllocationProbeRunner.Run("matching");
+        foreach (var row in rows)
+            if (row.Key.StartsWith("match/", StringComparison.Ordinal)) Assert.Equal(0, row.Value);
+            else Assert.InRange(row.Value, 0L, 40L * 100000);
         Assert.True(VmEngine.ValueMatchesType(XdmValue.FromInteger(1), "xs:integer", null));
     }
 
