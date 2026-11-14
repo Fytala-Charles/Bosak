@@ -1,0 +1,54 @@
+{
+  "success": true,
+  "qualifiedSourceCommit": "6f6829955f53b2f084bf66836b0abbbf1139b4d2",
+  "base": "cef6df3720cc30cda98bf96ac7a7f6d8c3975a7e",
+  "version": "1.81.10 unpublished",
+  "solutionPassed": 26430,
+  "languageServerPassed": 90,
+  "newTestsPassed": 4,
+  "typedListTestsPassed": 6,
+  "baselineProtectivePassed": 3,
+  "baselineAllocationFailureExpected": true,
+  "baselineBytesPerCall": 1008,
+  "candidateWarmedIntegerBytesPerCall": 0,
+  "frozenQT3": [
+    31397,
+    0,
+    424
+  ],
+  "gatedQT4": [
+    8941,
+    0,
+    1918
+  ],
+  "allFrozenSkipNamesAndReasonsUnchanged": true,
+  "standaloneCounts": {
+    "Total": 14601,
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380,
+    "Unselected": 0,
+    "Selected": 14601,
+    "Selected skipped": 4380,
+    "Missing test sets": 0
+  },
+  "standaloneElapsedSeconds": 834.212,
+  "standaloneTimeoutSeconds": 1200,
+  "standaloneMemoryLimitBytes": 8589934592,
+  "candidateNineHashes": {
+    "Bosak.XPath.Api.dll": "ac253dd52785813204c362428ebc0479fdbd028faa8412e2f7c67f0dbb6fcc2a",
+    "Bosak.XPath.Compiler.dll": "429f419bbe983e0085fade2792f568929dded94291b92fe913fda3162fa9c7c1",
+    "Bosak.XPath.Core.dll": "a7e7bc4814fef620df5b01d7eb8c1ee199dd6da75c601b208e973cee515bd01e",
+    "Bosak.XPath.Parser.dll": "ed30926ff45aed076b511e22c22ef33019c26136fbea26253c4043b74ad48c53",
+    "Bosak.XPath.Providers.dll": "ea5ea72f7539e7ac6f998d68a76359bb672b19956ea3bf50bf51dd1ab7486bad",
+    "Bosak.XPath.Runtime.dll": "e1cb07324ae88c90f2aa4de8d92ac2e5eeaa3e2b2a5190532ed5655b78da7bd6",
+    "Bosak.XPath.Standard.dll": "1e0081889954f5d5243173701d146eeca522d68d3c70f9ad2c7a343d40fb153a",
+    "Bosak.XQuery.dll": "9e94a28ddf92f124dcbf4e4e1962eac0963cc0bae5af8116e999bc0da8a4d6e0",
+    "Bosak.Xslt.dll": "3b5ba0c4f485dce94ad43b8672202c7d40b984eb19c45b5fe1ef9876150685d4"
+  },
+  "publicReferenceBinariesAdded": false,
+  "engineDiffPaths": [
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+    "src/Directory.Build.props"
+  ]
+}

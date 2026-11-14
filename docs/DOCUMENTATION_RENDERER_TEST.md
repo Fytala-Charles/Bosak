@@ -1,3 +1,7 @@
+# Primitive comparison renderer check - 14 November 2026
+
+The [HTML receipt](primitive-comparison/DOCUMENTATION-CHECKS.json) checks qualification/allocation tables and local destinations. Programmatic HTML only; no screenshot/PDF acceptance asserted.
+
 # Current allocation renderer check - 14 November 2026
 
 The [HTML receipt](current-allocation/DOCUMENTATION-CHECKS.json) checks scope/comparison/qualification tables and local links. No screenshot/PDF acceptance asserted.

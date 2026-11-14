@@ -1,0 +1,59 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "4fd0c615efd02cf69c7f1c1dc0b6c03282efda1dc523b885f324560ade380241",
+      "htmlSha256": "461ea0e95879650844a50ea5d9a499269d1619a18ee170adeb7007fde9d9aa06"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "c7d4351e61edc9f9541560d06c8c2a6eaa6ee8ddf82381987267c98f1c293f82",
+      "htmlSha256": "85babe84a5d4c336b6a232763c394a19d1ff50f7dfd69afd63fc24f95ee632a6"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "6c978dfd3e8da5c4c5058ea88ce76bc50bf81be9475d080ff4a353a6533b3b42",
+      "htmlSha256": "48259e5bede39ed876fd7faed294fdff0012953fd73fda6228d4023c4fb3bbe4"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "eb210808f2d468799398ba421de384bd5ad7d7c8f1b6bc16ec50e75292f50fa4",
+      "htmlSha256": "920ed73cf2f6c18838a720d0c258b58d77b7237dc681887b7a8ffd1b669b22b8"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "5c55683519893d5302e3285cdcb6dadbeb00f10ff7b990b1babc68575dc54ddb",
+      "htmlSha256": "8686b3868635c61c31c63adcab383939f458d0aa5db994fac53f8207dcc886e6"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "97dbe617950bb74e09f2ac4caa923b6691ee54ab2406f848073c7078ab0139ce",
+      "htmlSha256": "9219d79a1c28ac94e7279f956fa9a987b355b381f1c6f786a183dc08018e7a10"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "e7e06aa16f5e729b1071dd62d200f884604c2aae9482b3daea7d6b2324c957dc",
+      "htmlSha256": "c92b628059513a5fb0cf431efc441722b1b9a65ca40d2e7071db4440ddd26da6"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "e5be152d64a842267b97625638216e84abda2e91384fe234b22b6c0742d64400",
+      "htmlSha256": "826b86c460435779708fda3dee1f0330493a56c3b88dbb77fe8ffb3f36da8e64"
+    },
+    {
+      "file": "docs/primitive-comparison/README.md",
+      "sourceSha256": "c5f5ab070faf62f5df3c3d84928374566c25fea87eaa207e0f292f7cc45a2a90",
+      "htmlSha256": "60a5a219e4f817f770685160b94722e63eb8c93fc5f557c20de28c9aa6d11e80"
+    },
+    {
+      "file": "docs/scalar-materialization/README.md",
+      "sourceSha256": "88ad3859df4b8776feb37cd6ed89e652f6a4faa8d217d0f8541e8121c36f4d3d",
+      "htmlSha256": "0f91532aaa6a388ea415031b9ac6fcce4b59c4dc8b957246fec6c8f2fb35c0f2"
+    }
+  ],
+  "localDestinations": 4168,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

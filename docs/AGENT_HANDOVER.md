@@ -1,10 +1,10 @@
 # Primitive general-comparison candidate - 14 November 2026
 
-## Primitive general-comparison candidate - 14 November 2026
+## Primitive general-comparison qualification - 14 November 2026
 
-The [primitive comparison candidate](primitive-comparison/README.md) bypasses enumeration/buffers only for non-backwards-compatible primitive scalar pairs, reusing existing untyped coercion and comparison logic. Four new tests and six existing typed-list regressions pass. Warmed integer comparisons allocate zero bytes; the qualified 1.81.9 observation was 1,008 bytes/call. No suite-wide performance claim, public API or language-feature change. Full solution/frozen/pinned standalone qualification is pending. Development Core/server 1.81.10 is unpublished; released artifacts remain unchanged. PR490 postmerge independently reconciles10,221/0/4,380 in1124.188s with all inputs/exclusions intact.
+The [primitive comparison candidate](primitive-comparison/README.md) avoids sequence iterators and atomization buffers for non-backwards-compatible primitive scalar pairs, reusing existing coercion and comparison rules. Four new regressions pass; the same tests on retained qualified 1.81.9 binaries give three behavior passes and only the expected allocation failure: 1,008 bytes/call versus zero for warmed candidate integer comparisons. Full solution 26,430 and separate language-server 90 tests pass. Frozen QT3 remains 31,397/0/424; gated qt4 remains 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in834.212s under original 1200s/8GiB limits. Source checkpoint 6f682995 and all exact engine hashes are retained. No suite-wide speed claim. Development Core/server 1.81.10 remains unpublished; hosted checks and independent artifact replay remain required before merge.
 
-Base cef6df37, branch diagnostics/scalar-materialization. Packet .guard-tmp/primitive-comparison-20261114. No gate result inferred yet.
+Base cef6df37, branch diagnostics/scalar-materialization. Packet .guard-tmp/primitive-comparison-20261114. All required local gates pass; hosted review qualification pending.
 
 ---
 
@@ -2026,7 +2026,7 @@ What was built: immutable-source release notes/readiness, ten exact-merge local 
 
 # Index-of empty-collation correction - 21 October 2026
 
-**Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](xpath40-catalog/INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
+**Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](xpath40-catalog/INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath 3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
 
 Base `7c33728c7aa34fca5ccdc21d8310f36894d77f09` is the approved PR398 merge; its workflow39610977211 succeeds at c247af68. What was built: IsXPath40-only default-on-empty branch in IndexOf_3,27 meaningful public-call regressions, one corrected catalog row with3.1 baseline error, separate historical audit correction and source1.23.2. Red15/12/0; green27/0/0; full10,331/0/0; exact manual gates unchanged. No other runtime/harness/API change, package publication or Braid change. All original source/docs findings, test/restore failures and hashes retained. Next: review and exact-head CI before merging this engine correction; defer deep-equal options and broader keyword work. Preserve root pending PR33 notes, sweep data, stashes/worktrees and untouched PR132.
 
