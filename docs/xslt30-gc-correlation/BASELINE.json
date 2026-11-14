@@ -1,0 +1,21 @@
+{
+  "allowedTraces": {
+    "original": {
+      "sha256": "26e7d71bf665a9b7c822d16278513200ac54decb8b17e4daebd1354f3d647b44",
+      "complete": true,
+      "kind": "Sampled-stack/informationalGC"
+    },
+    "narrow": {
+      "sha256": "9906449fe1bd8b37cc04e4ae64722801e7374f0f58fad60f27e99cc7e56d8c21",
+      "complete": true,
+      "kind": "GCkeyword1/Verbose5, no stack sampler"
+    }
+  },
+  "readerFramework": "8.0.28",
+  "watchdogSeconds": 120,
+  "memoryLimitBytes": 8589934592,
+  "dotnet": {
+    "path": "C:/Program Files/dotnet/dotnet.exe",
+    "sha256": "ab1b71fd3dd71062e074c9fab8312081a81b7f2b3e0327c48c4d249c8d1a3135"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-13",
+  "beforeCollection": true,
+  "priorAttempt": "GC-verbose profile TraceSizeExceeded; failed, not retried",
+  "priorTraceBytes": 272139284,
+  "priorTraceSha256": "5ad2aa94e4f31e8df256e633d1ad26c499a34c508af345e7ae616cd57ebee6fe",
+  "sourceRevision": "cef304c50763bf24f99566cb31d55540842e7ae9",
+  "sourcePath": "src/Tools/dotnet-trace/CommandLine/Commands/ListProfilesCommandHandler.cs",
+  "finding": "gc-verbose enables GC|GCHandle|Exception; GCHandle is not required for allocation-tick correlation.",
+  "newExperiment": "Microsoft-Windows-DotNETRuntime:0x1:5 only, GC keyword at Verbose; no handles, exceptions or thread sampler.",
+  "boundsUnchanged": {
+    "seconds": 180,
+    "memoryBytes": 8589934592,
+    "traceThresholdBytes": 268435456
+  },
+  "selectionUnchanged": "54 sx-GeneralComp-gt cases; target9engines/caller/nativepins unchanged",
+  "rules": [
+    "New provider configuration, not a repeat of the failed broad capture.",
+    "Retain broad failed trace locally by hash and all failure receipts.",
+    "No performance A/B or overhead attribution across these separate captures."
+  ]
+}

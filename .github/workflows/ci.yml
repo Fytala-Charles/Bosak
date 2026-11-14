@@ -105,3 +105,5 @@ jobs:
           python .github/scripts/check_workflows.py
           python -m unittest discover -s tools -p test_xslt30_case_cost.py
           python -m unittest discover -s tools -p test_xslt30_stack_profile.py
+          python -m unittest discover -s tools -p test_xslt30_gc_analysis.py
+          python -m unittest discover -s tools -p test_xslt30_gc_extract.py

@@ -1,3 +1,7 @@
+# GC/allocation refresh renderer check - 13 November 2026
+
+The [HTML receipt](xslt30-gc-refresh/DOCUMENTATION-CHECKS.json) verifies retained/current delivery tables and local links. No screenshot/PDF acceptance asserted.
+
 # Sampled-stack refresh renderer check - 13 November 2026
 
 The [HTML receipt](xslt30-stack-refresh/DOCUMENTATION-CHECKS.json) verifies retained/current delivery tables and local links. No screenshot/PDF acceptance asserted.
@@ -37,6 +41,10 @@ The [case-cost receipt](xslt30-case-cost/DOCUMENTATION-CHECKS.json) checks timin
 # Managed-stack diagnostic renderer check - 13 November 2026
 
 The [stack receipt](xslt30-stack-profile/DOCUMENTATION-CHECKS.json) checks selected/unselected accounting, explained exclusions, sampling denominators, worker-selection correction and retained failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.
+
+# GC/allocation renderer check - 13 November 2026
+
+The [GC receipt](xslt30-gc-correlation/DOCUMENTATION-CHECKS.json) checks event-domain boundaries, failed-trace retention, approximate allocation semantics, coverage and original failure links with unchanged Fytala assets. No screenshot/PDF acceptance is asserted.
 
 # Template-name renderer check — 13 November 2026
 
