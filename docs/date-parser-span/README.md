@@ -1,10 +1,21 @@
-# Date parser span candidate
+# Date parser span qualification
 
-Development 1.81.13, unpublished. Date regex-group numeric parsing and date-only timezone helpers use spans, preserving validation order, parsed values and error construction. Shared dateTime/time helpers remain unchanged. No new semantic behavior or intentional deviation is proposed.
+Development 1.81.13, unpublished. The date parser reads regex groups and timezone slices as spans, avoiding temporary strings. The existing regex, validation order, parsed values and error construction remain unchanged. Shared dateTime/time helpers are byte-for-byte unchanged. No semantic deviation, new API or language coverage is proposed.
 
-[Adoption evidence](ADOPTION.json) records immutable XSD 1.1 and F&O 3.1 revisions before implementation. Three new tests cover calendar/timezone fields, invalid forms and distinct bounded-year/numeric overflow diagnostics.
+[Adoption evidence](ADOPTION.json) records immutable XSD 1.1 and F&O 3.1 references before implementation. Three added tests cover calendar/timezone fields, invalid forms, and bounded-year versus numeric overflow diagnostics.
 
-The rebuilt engine matched the copied original implementation in 3,164 differential cases, comparing Boolean acceptance, every parsed field, timezone flags, and caught exception type/message. The same guarded worker measured 10,000 warmup and 100,000 calls per row/variant:
+| Verification | Result |
+|---|---|
+| Solution tests | 26,443 passed |
+| Language server tests | 90 passed |
+| QT3 | 31,397 passed / 0 failed / 424 skipped |
+| Gated qt4 | 8,941 passed / 0 failed / 1,918 skipped; 11 experimental passes |
+| Pinned standalone XSLT 3.0 | 10,221 passed / 0 failed / 4,380 skipped |
+| Differential date checks | 3,164 matched |
+
+All frozen skip names/reasons are exact. Standalone reconciles all 14,601 identities against corpus `fddf1cf920087e791f13315d68dfbe874d97dc56` in 780.187 seconds, under unchanged 1,200-second/8-GiB limits. The basic non-schema-aware Legacy/Xslt30 profile remains unchanged; exclusions are not passes. Qualified source checkpoint: `c477f1424157de76148c09563db50107c769566b`.
+
+The rebuilt engine matched a copied original implementation across acceptance, every date/time field, timezone flags, and caught exception type/message. Each allocation row used 10,000 warmup and one 100,000-call measurement per variant in one guarded worker:
 
 | Input | Original bytes/call | Candidate bytes/call |
 |---|---:|---:|
@@ -13,12 +24,12 @@ The rebuilt engine matched the copied original implementation in 3,164 different
 | Numeric timezone | 1,072 | 736 |
 | Obvious non-date / dateTime probe | 0 | 0 |
 
-[Allocation results](ALLOCATION.json), [assembly identity](ALLOCATION-IDENTITY.json) and [bounded launch](ALLOCATION-RUN.json) retain the observations. The watchdog was 60 seconds with an 8 GiB aggregate job; engine hashes were checked before and after. Differential compatibility is not independent normative conformance; allocation measurements are calling-thread observations, not an end-to-end speed claim. Regex allocations remain.
+[Allocation results](ALLOCATION.json), [assembly identity](ALLOCATION-IDENTITY.json), and [bounded launch](ALLOCATION-RUN.json) retain the observations. Its 60-second/8-GiB controls and before/after engine hashes are recorded. These are calling-thread allocation observations, not end-to-end speed measurements. Regex allocations remain. Differential compatibility does not independently establish normative correctness.
 
-Frozen QT3 is 31,397/0/424 and gated qt4 is 8,941/0/1,918, including 11 experimental passes. All skip names/reasons remain exact. See [frozen receipts](FROZEN-CHECKS.json).
+The original sandboxed solution run failed 45 local HTTP fixture setups; all 26,443 tests passed outside the sandbox. The first standalone attempt failed required W3C HTTP cases because outbound sockets were forbidden, and its owned worker was terminated after those failures. It remains a failed, incomplete attempt. [Environment correction](ENVIRONMENT-CORRECTION.json) predates the fresh full run outside the sandbox, retaining the same corpus, exclusions and limits. No failed attempt was overwritten, filtered or represented as a pass. Two diagnostic preparation refusals occurred before launching the allocation worker and are recorded separately.
 
-Build passed. The initial sandboxed solution run hit 45 local HTTP fixture setup failures; its receipt is preserved in `.guard-tmp/date-span-engine-20261114/UNIT.log`. Those 47 database tests pass outside the sandbox. The unrestricted solution run and pinned standalone qualification are pending at this source checkpoint. Language server: 90 passed.
+[Results](RESULTS.json) · [Sealed evidence](EVIDENCE.zip) · [Offline verifier](verify.py) · [Manifest](MANIFEST.json) · [Frozen receipts](FROZEN-CHECKS.json) · [Documentation checks](DOCUMENTATION-CHECKS.json)
 
-No release, public export or PR publication is included. Original diagnostics and validation logs remain in `.guard-tmp/date-span-engine-20261114`.
+Run `python docs/date-parser-span/verify.py` to verify all case identities, frozen exclusions, solution results, source hashes, allocation rows and retained sandbox failure without launching .NET. The evidence archive contains original successful and failed receipts, transcripts, test reports, diagnostic source and engine source snapshots. Binaries remain local in the ignored qualification packets.
 
-The first standalone attempt ran inside the restricted sandbox and failed required W3C HTTP cases. It was terminated after recording the failures; no success is claimed. [Environment correction](ENVIRONMENT-CORRECTION.json) records the fresh full run outside the sandbox, with unchanged corpus, exclusions and 1,200-second/8-GiB limits. Original attempt receipts remain retained separately.
+No release, push, PR or public export has been performed. The earlier publication approvals do not authorize this new dossier. Next: review this bounded candidate and its sealed evidence for publication.
