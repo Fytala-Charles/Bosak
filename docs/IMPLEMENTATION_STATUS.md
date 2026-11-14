@@ -1,6 +1,6 @@
-## Span-based validator candidate - 14 November 2026
+## Span-based validator qualification - 14 November 2026
 
-The [validator candidate](validator-span/README.md) uses spans for xs: bare-name checks and one shared existing47-name classification vocabulary, preserving normalization, list refusals, original-case schema lookup and mutable context. Five new regressions plus five matcher/six typed-list tests pass. Isolated canonical primitive conversion now allocates0bytes/call; normalization-only costs remain. No validity cache/newlanguageadoption. Full solution/frozen/pinned qualification pending. Development1.81.12 unpublished. Prior main493 unitchecks passed; main standalone pending at this checkpoint.
+The [validator candidate](validator-span/README.md) avoids xs: bare-name strings with a shared span classifier preserving the frozen 47-name vocabulary, normalization, list refusals and dynamic schema context. Five new regressions pass. Identical-source compatible worker controls measure canonical primitive conversion 40 -> 0 bytes/call and short-name validation 32 -> 0; existing normalization costs remain separate. Full solution 26,440 and language-server 90 tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380/all 14,601 identities in 784.991s under original 1200s/8GiB limits. Development 1.81.12 is unpublished. No validity cache or full-workload speed claim; hosted checks remain required before merge.
 
 ## Isolated allocation regressions - 14 November 2026
 

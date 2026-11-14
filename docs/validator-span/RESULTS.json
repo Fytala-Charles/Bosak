@@ -1,0 +1,59 @@
+{
+  "success": true,
+  "qualifiedSourceCommit": "deae35494cf2f575a074d5dd1d02269cb2eb4eed",
+  "base": "d29429c2726bb2a19e7b8d086d565aa554f6152c",
+  "version": "1.81.12 unpublished",
+  "solutionPassed": 26440,
+  "languageServerPassed": 90,
+  "focusedPassed": 16,
+  "newValidatorTests": 5,
+  "frozenVocabularyCount": 47,
+  "candidateCanonicalConversionBytesPerCall": 0,
+  "baselineCanonicalConversionBytesPerCall": 40,
+  "frozenQT3": [
+    31397,
+    0,
+    424
+  ],
+  "gatedQT4": [
+    8941,
+    0,
+    1918
+  ],
+  "allSkipNamesAndReasonsUnchanged": true,
+  "standaloneCounts": {
+    "Total": 14601,
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380,
+    "Unselected": 0,
+    "Selected": 14601,
+    "Selected skipped": 4380,
+    "Missing test sets": 0
+  },
+  "standaloneElapsedSeconds": 784.991,
+  "standaloneLimits": [
+    1200,
+    8589934592
+  ],
+  "candidateNineHashes": {
+    "Bosak.XPath.Api.dll": "e3d17ccfe014957c2691052c0bd00c3991de63e7a8d665b79ccff801271a96fa",
+    "Bosak.XPath.Compiler.dll": "46a3ea2776a9b8a9d466a1e5f2eb0385a8be5a7c1cd0b461866b4c73d5fa52e8",
+    "Bosak.XPath.Core.dll": "2eb7fa628fd44d9f31eb1200d5bada457b1a83363d11d1c8d8ee1b0f3badea28",
+    "Bosak.XPath.Parser.dll": "38f81855b2fdde446f53fe1ca325aed302f2e1ce7584037281fc6a601e3da9e6",
+    "Bosak.XPath.Providers.dll": "c63bee13128445e78607fad79ec75467ad7b4efcee5e58cfc59683dea5728c33",
+    "Bosak.XPath.Runtime.dll": "36452d4028268f73c3228e888607ae98380e6d4546575cc21c622c58c2d1d658",
+    "Bosak.XPath.Standard.dll": "e74923d95c6c377ff06ed0b07d3c2aa0024a946c01281664f426dfaeda7b6b9a",
+    "Bosak.XQuery.dll": "d41872907ced3aa5fe0a8245e086a94b8c1837fcb0673c99fd18e3dea55089ca",
+    "Bosak.Xslt.dll": "0eaed3c542d0da650d8a609c9190e1415db4932d4c627fbc2dd7f562f1eec4e7"
+  },
+  "sourceHashes": {
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "fae0d06d7b7697a60562208d203548c73bb32bf08e90b0ce91417b0ed29235f3",
+    "src/Directory.Build.props": "fbad6efec55aee81103d2f36a9662df3b33404cafe82fb26b13ad01bbba8f41c",
+    "tests/Bosak.XPath.AllocationChecks/Program.cs": "9bfdc990f5ba9ed2a46c5f976492f9cd1e46cb80afab6bb4b3d0a0899c3eaa76",
+    "tests/Bosak.XPath.Runtime.Tests/AllocationProbeRunner.cs": "9846dfc770d765e6046d288e8a87f4c3083b944b7968295ad4884d012f0077fd",
+    "tests/Bosak.XPath.Runtime.Tests/MatcherClosureTests.cs": "856f4dca18b1bcb9aa30f905b5251b14a39ce88b7a542f27986e7cae99310545",
+    "tests/Bosak.XPath.Runtime.Tests/ValidatorSpanTests.cs": "9d17374f23682124da36d08a472a9dbfcf98f0221f0d4b3c902766d04394711e"
+  },
+  "compatibleWorkerCalibrationVerified": true
+}
