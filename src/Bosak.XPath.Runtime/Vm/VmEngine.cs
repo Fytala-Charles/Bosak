@@ -439,6 +439,7 @@
 //                      | Charles Korthout | 2.210 | 28-10-2026     | Carry construction mode and original attribute metadata through provider hooks (1.32.0). |
 //                      | Charles Korthout | 2.211 | 29-10-2026     | Share actual schema-element membership across node matching and sequence subtyping.       |
 //                      | Charles Korthout | 2.212 | 14-11-2026     | Avoid enumeration buffers for non-compatibility primitive general comparisons (1.81.10). |
+//                      | Charles Korthout | 2.213 | 14-11-2026     | Remove incidental node-name predicate captures from type matching (1.81.11).                |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -13054,8 +13055,15 @@ internal static class VmEngine
             var nodeParts = SplitNodeTestParts(cpInner, ',');
             var names = SplitNodeTestParts(nodeParts[0], '|');
             if (names.Length > 1)
-                return names.Any(name => ValueMatchesType(value, "element(" + name +
-                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            {
+                foreach (var name in names)
+                {
+                    if (ValueMatchesType(value, "element(" + name +
+                        (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context))
+                        return true;
+                }
+                return false;
+            }
             var namePart = nodeParts[0];
             if (namePart != "*")
             {
@@ -13130,8 +13138,15 @@ internal static class VmEngine
             var nodeParts = SplitNodeTestParts(cpInner, ',');
             var names = SplitNodeTestParts(nodeParts[0], '|');
             if (names.Length > 1)
-                return names.Any(name => ValueMatchesType(value, "attribute(" + name +
-                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            {
+                foreach (var name in names)
+                {
+                    if (ValueMatchesType(value, "attribute(" + name +
+                        (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context))
+                        return true;
+                }
+                return false;
+            }
             var namePart = nodeParts[0];
             if (namePart != "*")
             {

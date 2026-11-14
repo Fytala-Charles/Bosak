@@ -1,3 +1,27 @@
+# Matcher closure candidate - 14 November 2026
+
+Base9ffde22e; branch diagnostics/matching-conversion.
+
+## Type-matcher closure qualification - 14 November 2026
+
+The [matcher closure candidate](matcher-closure/README.md) replaces two capturing node-name predicates with ordered matching loops. Five new regressions and six existing typed-list tests pass. Warmed primitive matching allocates 0 bytes/call and matching conversion 40, down from 72 and 112 respectively. The same new tests on qualified 1.81.10 binaries pass four behavior checks and fail only the expected allocation check. Full solution: 26,435 passed; separate language server: 90 passed. Frozen QT3 remains 31,397/0/424 and gated qt4 8,941/0/1,918, with all skip names/reasons unchanged. Standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in 803.274s under original 1200s/8GiB limits. Development Core/server 1.81.11 remains unpublished. Hosted qualification is required before merge; no full-workload speed claim.
+
+Packet .guard-tmp/matcher-closure-20261114; no merge/release.
+
+---
+
+# Local matching-conversion investigation - 14 November 2026
+
+Base9ffde22e, branch diagnostics/matching-conversion. No engine change or publication.
+
+## Matching-conversion allocation investigation - 14 November 2026
+
+The [local bounded investigation](matching-conversion/README.md) reproduces112 bytes/call for five matching primitive conversions on unchanged qualified1.81.10 binaries: validation40 and matching72. Compiled matcher IL constructs a value/context closure at entry for node-test lambdas. Next propose ordered loops removing those incidental captures, with normative review and regression/qualification before any engine edit. Keep schema validation caching separate. Main9ffde22e independently qualifies10,221/0/4,380 in800.890s and all six checks pass. Development1.81.10 remains unpublished; no new implementation or release.
+
+See ignored packet .guard-tmp/matching-conversion-20261114.
+
+---
+
 # Primitive general-comparison candidate - 14 November 2026
 
 ## Primitive general-comparison qualification - 14 November 2026

@@ -4,6 +4,10 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Type-matcher closure qualification - 14 November 2026
+
+The [matcher closure candidate](matcher-closure/README.md) replaces two capturing node-name predicates with ordered matching loops. Five new regressions and six existing typed-list tests pass. Warmed primitive matching allocates 0 bytes/call and matching conversion 40, down from 72 and 112 respectively. The same new tests on qualified 1.81.10 binaries pass four behavior checks and fail only the expected allocation check. Full solution: 26,435 passed; separate language server: 90 passed. Frozen QT3 remains 31,397/0/424 and gated qt4 8,941/0/1,918, with all skip names/reasons unchanged. Standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in 803.274s under original 1200s/8GiB limits. Development Core/server 1.81.11 remains unpublished. Hosted qualification is required before merge; no full-workload speed claim.
+
 ## Primitive general-comparison qualification - 14 November 2026
 
 The [primitive comparison candidate](primitive-comparison/README.md) avoids sequence iterators and atomization buffers for non-backwards-compatible primitive scalar pairs, reusing existing coercion and comparison rules. Four new regressions pass; the same tests on retained qualified 1.81.9 binaries give three behavior passes and only the expected allocation failure: 1,008 bytes/call versus zero for warmed candidate integer comparisons. Full solution 26,430 and separate language-server 90 tests pass. Frozen QT3 remains 31,397/0/424; gated qt4 remains 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in834.212s under original 1200s/8GiB limits. Source checkpoint 6f682995 and all exact engine hashes are retained. No suite-wide speed claim. Development Core/server 1.81.10 remains unpublished; hosted checks and independent artifact replay remain required before merge.

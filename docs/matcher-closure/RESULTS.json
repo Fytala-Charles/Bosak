@@ -1,0 +1,57 @@
+{
+  "sameCompiledAllocationProbeVerified": true,
+  "success": true,
+  "qualifiedSourceCommit": "7106ec760101a0aea3cffaf9d4766eb3a79285b3",
+  "base": "9ffde22e0910990c0380c1e9d0a50b7e2c446b97",
+  "version": "1.81.11 unpublished",
+  "solutionPassed": 26435,
+  "languageServerPassed": 90,
+  "newTestsPassed": 5,
+  "typedListTestsPassed": 6,
+  "baselineProtectivePassed": 4,
+  "baselineAllocationFailureExpected": true,
+  "baselineTypeMatchBytesPerCall": 72,
+  "candidateTypeMatchBytesPerCall": 0,
+  "baselineConversionBytesPerCall": 112,
+  "candidateConversionBytesPerCall": 40,
+  "frozenQT3": [
+    31397,
+    0,
+    424
+  ],
+  "gatedQT4": [
+    8941,
+    0,
+    1918
+  ],
+  "allFrozenSkipNamesAndReasonsUnchanged": true,
+  "standaloneCounts": {
+    "Total": 14601,
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380,
+    "Unselected": 0,
+    "Selected": 14601,
+    "Selected skipped": 4380,
+    "Missing test sets": 0
+  },
+  "standaloneElapsedSeconds": 803.274,
+  "standaloneTimeoutSeconds": 1200,
+  "standaloneMemoryLimitBytes": 8589934592,
+  "candidateNineHashes": {
+    "Bosak.XPath.Api.dll": "11a336902d35e3aed0331e740d2c51b526c7fd8b002bc93dc1ee7154b77bd052",
+    "Bosak.XPath.Compiler.dll": "77bc03be6ad67ab51fd7735dfb342653f8d95907a44551e52dfa7a5f8dba73c3",
+    "Bosak.XPath.Core.dll": "f7b5ad8230f31a8096e7a8a5a352c545e0ff91f41200f26f8ae05c48069e3ec9",
+    "Bosak.XPath.Parser.dll": "afd5afbfa1578c05b2f09db58c9543c12de11ec077e01835805ddf9860ddb864",
+    "Bosak.XPath.Providers.dll": "7250aa118776f5ff1027177c87bd2ef90b798eab650e5dcef338feb02d263a9f",
+    "Bosak.XPath.Runtime.dll": "28b1b396e42ff92190d67d3780b8b05af2f4bc5d40e259539d79a419495e19f3",
+    "Bosak.XPath.Standard.dll": "826fb684ab621402635bb6eecd2ad618158e1b5f353511c9c1a55e2e9f44fd4a",
+    "Bosak.XQuery.dll": "6a406cb80b918df9b8d1e89d3cf4448a1a543a3ffd3c6a3b4bf8ead8ebcf74e7",
+    "Bosak.Xslt.dll": "735936b360f8d1606b8bc62659c14b5a6ce93514c56552dada8eda4080cfddd1"
+  },
+  "publicReferenceBinariesAdded": false,
+  "engineDiffPaths": [
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+    "src/Directory.Build.props"
+  ]
+}

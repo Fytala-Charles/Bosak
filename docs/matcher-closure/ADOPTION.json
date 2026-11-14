@@ -1,0 +1,18 @@
+{
+  "recordedUtc": "2026-11-14T11:16:01.280060+00:00",
+  "beforeImplementation": true,
+  "base": "9ffde22e0910990c0380c1e9d0a50b7e2c446b97",
+  "specification": {
+    "revision": "REC-xpath-31-20170321",
+    "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+    "sections": [
+      "2.5.5.3 Element Test",
+      "2.5.5.5 Attribute Test",
+      "3.1.5.2 Function Conversion Rules",
+      "2.3.4 Errors and Optimization"
+    ]
+  },
+  "scope": "Replace two capturing Enumerable.Any predicates with ordered foreach matching calls; preserve first true return, exception order, nodeParts suffix and evaluation context. No grammar/name-alternative/choice/schema semantics newly adopted.",
+  "intentionalDeviations": [],
+  "version": "1.81.11 unpublished"
+}

@@ -1,0 +1,608 @@
+{
+  "success": true,
+  "diagnosticOnly": true,
+  "engineChanged": false,
+  "framework": "10.0.11",
+  "iterations": 100000,
+  "warmup": 10000,
+  "allocationScope": "GC.GetAllocatedBytesForCurrentThread; delegates and inputs prepared before measured loops",
+  "rows": [
+    {
+      "name": "array/scalar/integer",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/integer",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/string",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/string",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/boolean",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/boolean",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/decimal",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/decimal",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/scalar/double",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "view/scalar/double",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "array/undefined",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "view/undefined",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/materialized-array",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "view/materialized-array",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/materialized-list",
+      "iterations": 100000,
+      "bytes": 12000000,
+      "bytesPerCall": 120
+    },
+    {
+      "name": "view/materialized-list",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "array/singleton-sequence",
+      "iterations": 100000,
+      "bytes": 39200000,
+      "bytesPerCall": 392
+    },
+    {
+      "name": "view/singleton-sequence",
+      "iterations": 100000,
+      "bytes": 32000000,
+      "bytesPerCall": 320
+    },
+    {
+      "name": "array/empty-sequence",
+      "iterations": 100000,
+      "bytes": 3200000,
+      "bytesPerCall": 32
+    },
+    {
+      "name": "view/empty-sequence",
+      "iterations": 100000,
+      "bytes": 3200000,
+      "bytesPerCall": 32
+    },
+    {
+      "name": "strict-comparison/primitive-integers",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "general-comparison/primitive-integers",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "function-conversion/matching-integer",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "function-conversion/integer-to-double",
+      "iterations": 100000,
+      "bytes": 88800000,
+      "bytesPerCall": 888
+    },
+    {
+      "name": "strict-comparison/materialized-singletons",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "function-conversion/materialized-singleton",
+      "iterations": 100000,
+      "bytes": 49600000,
+      "bytesPerCall": 496
+    },
+    {
+      "name": "validation/integer",
+      "iterations": 100000,
+      "bytes": 4000000,
+      "bytesPerCall": 40
+    },
+    {
+      "name": "normalization/integer",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "atomic-normalization/integer-uncached",
+      "iterations": 100000,
+      "bytes": 4000000,
+      "bytesPerCall": 40
+    },
+    {
+      "name": "choice-check/integer",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "nominal-record-lookup/integer",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "name": "value-matches/integer",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/integer",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "value-matches/string",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/string",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "value-matches/boolean",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/boolean",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "value-matches/decimal",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/decimal",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "value-matches/double",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/double",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "value-matches/integer-null-context",
+      "iterations": 100000,
+      "bytes": 7200000,
+      "bytesPerCall": 72
+    },
+    {
+      "name": "conversion/integer-null-context",
+      "iterations": 100000,
+      "bytes": 11200000,
+      "bytesPerCall": 112
+    },
+    {
+      "name": "constructor-inventory",
+      "iterations": 100000,
+      "bytes": 0,
+      "bytesPerCall": 0
+    }
+  ],
+  "checks": [
+    {
+      "name": "helper-scalar-integer",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-string",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-boolean",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-decimal",
+      "success": true
+    },
+    {
+      "name": "helper-scalar-double",
+      "success": true
+    },
+    {
+      "name": "materialized-array-reused",
+      "success": true
+    },
+    {
+      "name": "materialized-list-view-reused",
+      "success": true
+    },
+    {
+      "name": "list-copy-versus-view-alias",
+      "success": true
+    },
+    {
+      "name": "array/lazy-construction",
+      "success": true
+    },
+    {
+      "name": "array/single-pass-once",
+      "success": true
+    },
+    {
+      "name": "array/fault-before-return",
+      "success": true
+    },
+    {
+      "name": "array/observed-events",
+      "success": true,
+      "normal": [
+        "get",
+        "move:0",
+        "move:1",
+        "move:2"
+      ],
+      "fault": [
+        "get",
+        "move:0",
+        "move:1"
+      ]
+    },
+    {
+      "name": "view/lazy-construction",
+      "success": true
+    },
+    {
+      "name": "view/single-pass-once",
+      "success": true
+    },
+    {
+      "name": "view/fault-before-return",
+      "success": true
+    },
+    {
+      "name": "view/observed-events",
+      "success": true,
+      "normal": [
+        "get",
+        "move:0",
+        "move:1",
+        "move:2"
+      ],
+      "fault": [
+        "get",
+        "move:0",
+        "move:1"
+      ]
+    },
+    {
+      "name": "strict-scalar-result",
+      "success": true
+    },
+    {
+      "name": "general-scalar-result",
+      "success": true
+    },
+    {
+      "name": "typed-list-node-preserved-by-helpers",
+      "success": true
+    },
+    {
+      "name": "typed-list-expands-when-materialized",
+      "success": true
+    },
+    {
+      "name": "conversion-atomizes-typed-list",
+      "success": true
+    },
+    {
+      "name": "general-comparison-typed-list",
+      "success": true
+    },
+    {
+      "name": "matching-integer",
+      "success": true
+    },
+    {
+      "name": "matching-string",
+      "success": true
+    },
+    {
+      "name": "matching-boolean",
+      "success": true
+    },
+    {
+      "name": "matching-decimal",
+      "success": true
+    },
+    {
+      "name": "matching-double",
+      "success": true
+    },
+    {
+      "name": "value-matches-constructor-il",
+      "success": true,
+      "method": "Boolean ValueMatchesType(Bosak.XPath.Core.Xdm.XdmValue, System.String, Bosak.XPath.Runtime.Vm.EvaluationContext)",
+      "constructors": [
+        {
+          "offset": 0,
+          "type": "Bosak.XPath.Runtime.Vm.VmEngine\u002B\u003C\u003Ec__DisplayClass258_0",
+          "fields": [
+            {
+              "Name": "value",
+              "type": "Bosak.XPath.Core.Xdm.XdmValue"
+            },
+            {
+              "Name": "context",
+              "type": "Bosak.XPath.Runtime.Vm.EvaluationContext"
+            }
+          ]
+        },
+        {
+          "offset": 714,
+          "type": "System.Collections.Generic.List\u00601[[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.81.10.0, Culture=neutral, PublicKeyToken=null]]",
+          "fields": [
+            {
+              "Name": "_items",
+              "type": "Bosak.XPath.Core.Xdm.XdmValue[]"
+            },
+            {
+              "Name": "_size",
+              "type": "System.Int32"
+            },
+            {
+              "Name": "_version",
+              "type": "System.Int32"
+            }
+          ]
+        },
+        {
+          "offset": 950,
+          "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "fields": [
+            {
+              "Name": "_target",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodBase",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodPtr",
+              "type": "System.IntPtr"
+            },
+            {
+              "Name": "_methodPtrAux",
+              "type": "System.IntPtr"
+            }
+          ]
+        },
+        {
+          "offset": 1140,
+          "type": "Bosak.XPath.Runtime.Vm.VmEngine\u002B\u003C\u003Ec__DisplayClass258_1",
+          "fields": [
+            {
+              "Name": "nodeParts",
+              "type": "System.String[]"
+            },
+            {
+              "Name": "CS$\u003C\u003E8__locals1",
+              "type": "Bosak.XPath.Runtime.Vm.VmEngine\u002B\u003C\u003Ec__DisplayClass258_0"
+            }
+          ]
+        },
+        {
+          "offset": 1415,
+          "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "fields": [
+            {
+              "Name": "_target",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodBase",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodPtr",
+              "type": "System.IntPtr"
+            },
+            {
+              "Name": "_methodPtrAux",
+              "type": "System.IntPtr"
+            }
+          ]
+        },
+        {
+          "offset": 1826,
+          "type": "System.InvalidOperationException",
+          "fields": [
+            {
+              "Name": "_message",
+              "type": "System.String"
+            }
+          ]
+        },
+        {
+          "offset": 2018,
+          "type": "Bosak.XPath.Runtime.Vm.VmEngine\u002B\u003C\u003Ec__DisplayClass258_2",
+          "fields": [
+            {
+              "Name": "nodeParts",
+              "type": "System.String[]"
+            },
+            {
+              "Name": "CS$\u003C\u003E8__locals2",
+              "type": "Bosak.XPath.Runtime.Vm.VmEngine\u002B\u003C\u003Ec__DisplayClass258_0"
+            }
+          ]
+        },
+        {
+          "offset": 2269,
+          "type": "System.Func\u00602[[System.String, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Boolean, System.Private.CoreLib, Version=10.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+          "fields": [
+            {
+              "Name": "_target",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodBase",
+              "type": "System.Object"
+            },
+            {
+              "Name": "_methodPtr",
+              "type": "System.IntPtr"
+            },
+            {
+              "Name": "_methodPtrAux",
+              "type": "System.IntPtr"
+            }
+          ]
+        },
+        {
+          "offset": 2680,
+          "type": "System.InvalidOperationException",
+          "fields": [
+            {
+              "Name": "_message",
+              "type": "System.String"
+            }
+          ]
+        },
+        {
+          "offset": 2942,
+          "type": "System.Collections.Generic.List\u00601[[Bosak.XPath.Core.Xdm.XdmValue, Bosak.XPath.Core, Version=1.81.10.0, Culture=neutral, PublicKeyToken=null]]",
+          "fields": [
+            {
+              "Name": "_items",
+              "type": "Bosak.XPath.Core.Xdm.XdmValue[]"
+            },
+            {
+              "Name": "_size",
+              "type": "System.Int32"
+            },
+            {
+              "Name": "_version",
+              "type": "System.Int32"
+            }
+          ]
+        },
+        {
+          "offset": 4333,
+          "type": "System.InvalidOperationException",
+          "fields": [
+            {
+              "Name": "_message",
+              "type": "System.String"
+            }
+          ]
+        },
+        {
+          "offset": 4430,
+          "type": "System.InvalidOperationException",
+          "fields": [
+            {
+              "Name": "_message",
+              "type": "System.String"
+            }
+          ]
+        },
+        {
+          "offset": 4864,
+          "type": "System.InvalidOperationException",
+          "fields": [
+            {
+              "Name": "_message",
+              "type": "System.String"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
