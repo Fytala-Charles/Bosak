@@ -1,3 +1,7 @@
+# Matching-conversion renderer check - 14 November 2026
+
+The [HTML receipt](matching-conversion/DOCUMENTATION-CHECKS.json) checks the local observation table and document links. Programmatic HTML only; no screenshot/PDF acceptance claimed.
+
 # Primitive comparison renderer check - 14 November 2026
 
 The [HTML receipt](primitive-comparison/DOCUMENTATION-CHECKS.json) checks qualification/allocation tables and local destinations. Programmatic HTML only; no screenshot/PDF acceptance asserted.

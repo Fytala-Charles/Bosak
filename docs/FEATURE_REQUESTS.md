@@ -4,6 +4,10 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Type-matcher closure candidate - 14 November 2026
+
+The [matcher closure candidate](matcher-closure/README.md) replaces two capturing element/attribute name-alternative predicates with ordered loops using the same matching calls. Five new regressions and six existing typed-list tests pass. Warmed primitive type matching allocates zero bytes/call and matching conversion40 bytes/call, retaining validation while removing the prior72-byte matcher cost. Full solution and conformance qualification are pending. Development Core/server1.81.11 is unpublished. No full-workload speed claim or schema-validity cache change.
+
 ## Primitive general-comparison qualification - 14 November 2026
 
 The [primitive comparison candidate](primitive-comparison/README.md) avoids sequence iterators and atomization buffers for non-backwards-compatible primitive scalar pairs, reusing existing coercion and comparison rules. Four new regressions pass; the same tests on retained qualified 1.81.9 binaries give three behavior passes and only the expected allocation failure: 1,008 bytes/call versus zero for warmed candidate integer comparisons. Full solution 26,430 and separate language-server 90 tests pass. Frozen QT3 remains 31,397/0/424; gated qt4 remains 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in834.212s under original 1200s/8GiB limits. Source checkpoint 6f682995 and all exact engine hashes are retained. No suite-wide speed claim. Development Core/server 1.81.10 remains unpublished; hosted checks and independent artifact replay remain required before merge.

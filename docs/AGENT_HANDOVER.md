@@ -1,3 +1,27 @@
+# Matcher closure candidate - 14 November 2026
+
+Base9ffde22e; branch diagnostics/matching-conversion.
+
+## Type-matcher closure candidate - 14 November 2026
+
+The [matcher closure candidate](matcher-closure/README.md) replaces two capturing element/attribute name-alternative predicates with ordered loops using the same matching calls. Five new regressions and six existing typed-list tests pass. Warmed primitive type matching allocates zero bytes/call and matching conversion40 bytes/call, retaining validation while removing the prior72-byte matcher cost. Full solution and conformance qualification are pending. Development Core/server1.81.11 is unpublished. No full-workload speed claim or schema-validity cache change.
+
+Packet .guard-tmp/matcher-closure-20261114; no merge/release.
+
+---
+
+# Local matching-conversion investigation - 14 November 2026
+
+Base9ffde22e, branch diagnostics/matching-conversion. No engine change or publication.
+
+## Matching-conversion allocation investigation - 14 November 2026
+
+The [local bounded investigation](matching-conversion/README.md) reproduces112 bytes/call for five matching primitive conversions on unchanged qualified1.81.10 binaries: validation40 and matching72. Compiled matcher IL constructs a value/context closure at entry for node-test lambdas. Next propose ordered loops removing those incidental captures, with normative review and regression/qualification before any engine edit. Keep schema validation caching separate. Main9ffde22e independently qualifies10,221/0/4,380 in800.890s and all six checks pass. Development1.81.10 remains unpublished; no new implementation or release.
+
+See ignored packet .guard-tmp/matching-conversion-20261114.
+
+---
+
 # Primitive general-comparison candidate - 14 November 2026
 
 ## Primitive general-comparison qualification - 14 November 2026
