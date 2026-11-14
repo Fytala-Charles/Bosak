@@ -4,6 +4,10 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Span-based validator qualification - 14 November 2026
+
+The [validator candidate](validator-span/README.md) avoids xs: bare-name strings with a shared span classifier preserving the frozen 47-name vocabulary, normalization, list refusals and dynamic schema context. Five new regressions pass. Identical-source compatible worker controls measure canonical primitive conversion 40 -> 0 bytes/call and short-name validation 32 -> 0; existing normalization costs remain separate. Full solution 26,440 and language-server 90 tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380/all 14,601 identities in 784.991s under original 1200s/8GiB limits. Development 1.81.12 is unpublished. No validity cache or full-workload speed claim; hosted checks remain required before merge.
+
 ## Type-matcher closure qualification - 14 November 2026
 
 The [matcher closure candidate](matcher-closure/README.md) replaces two capturing node-name predicates with ordered matching loops. Five new regressions and six existing typed-list tests pass. Warmed primitive matching allocates 0 bytes/call and matching conversion 40, down from 72 and 112 respectively. The same new tests on qualified 1.81.10 binaries pass four behavior checks and fail only the expected allocation check. Full solution: 26,435 passed; separate language server: 90 passed. Frozen QT3 remains 31,397/0/424 and gated qt4 8,941/0/1,918, with all skip names/reasons unchanged. Standalone reconciles 10,221/0/4,380 and all 14,601 identities/exclusions in 803.274s under original 1200s/8GiB limits. Development Core/server 1.81.11 remains unpublished. Hosted qualification is required before merge; no full-workload speed claim.

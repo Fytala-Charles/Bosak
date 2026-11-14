@@ -1,3 +1,7 @@
+# Validator-span renderer check - 14 November 2026
+
+The [HTML receipt](validator-span/DOCUMENTATION-CHECKS.json) checks allocation/qualification tables and local links. Programmatic HTML only; no screenshot/PDF acceptance claimed.
+
 # Allocation-isolation renderer check - 14 November 2026
 
 The [HTML receipt](allocation-isolation/DOCUMENTATION-CHECKS.json) checks isolated-worker regression tables and local links. Programmatic HTML only; no screenshot/PDF acceptance.
