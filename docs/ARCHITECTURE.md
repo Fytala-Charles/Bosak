@@ -4,6 +4,10 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Primitive general-comparison candidate - 14 November 2026
+
+The [primitive comparison candidate](primitive-comparison/README.md) bypasses enumeration/buffers only for non-backwards-compatible primitive scalar pairs, reusing existing untyped coercion and comparison logic. Four new tests and six existing typed-list regressions pass. Warmed integer comparisons allocate zero bytes; the qualified 1.81.9 observation was 1,008 bytes/call. No suite-wide performance claim, public API or language-feature change. Full solution/frozen/pinned standalone qualification is pending. Development Core/server 1.81.10 is unpublished; released artifacts remain unchanged. PR490 postmerge independently reconciles10,221/0/4,380 in1124.188s with all inputs/exclusions intact.
+
 ## Bounded current-engine observations - 14 November 2026
 
 The [current allocation observation](current-allocation/README.md) binds a qualified implementation, exact binary/native identities and a declared selected workload. It adds no public API, supported language feature or production conformance admission. Historical diagnostic baselines stay immutable; new data is labeled by its own implementation/checkpoint and execution scope.

@@ -1,0 +1,9 @@
+# Primitive general-comparison candidate
+
+A guarded non-backwards-compatible path handles only scalar String/Integer/Decimal/Double/Float/Boolean pairs. It reuses CastUntypedForGeneralComparison and CompareCore, with false node-origin flags, before allocating sequence iterators and temporary buffers. Nodes, typed lists, lazy sources, arrays, maps/functions, empty values, other atomic kinds and compatibility mode keep existing routes. Materialization helpers and mutable list ownership are unchanged.
+
+The [adoption record](ADOPTION.json) was written before engine edits and pins XPath 3.1 REC-xpath-31-20170321 sections2.4.2,3.7.1,3.7.2 and2.3.4; no intentional deviations. This is an implementation optimization with no new semantic adoption or public API. Existing numeric precision boundaries remain.
+
+Four new regression tests exercise six operators with explicit integer expectations and zero warmed allocations,726 primitive-pair/operator differential checks against the existing wrapped-sequence route, explicit collation/NaN/untyped/errors, excluded empty/array/multi-item/compatibility routes and lazy early-match/fault order. Six existing typed-list tests also pass. An initial collation assertion lacked FunctionLibrary.Populate; the test setup was corrected to install the existing collation delegate. One compilation failure from a missing XdmSequence.FromSource wrapper was corrected before the final ten-test pass. Original attempts remain in the ignored local packet.
+
+The original bounded qualified1.81.9 probe measured1,008 bytes/call for general integer comparison. The candidate warmed test measures zero across100,000 calls per operator. This says nothing about full-suite speed, exclusive CPU or hosted timeout causes. Full solution, frozen gates and standalone qualification are pending. Development Core/server1.81.10 is unpublished. Hosted qualification and artifact replay remain required before merge.

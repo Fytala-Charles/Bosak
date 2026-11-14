@@ -1,3 +1,22 @@
+# Primitive general-comparison candidate - 14 November 2026
+
+## Primitive general-comparison candidate - 14 November 2026
+
+The [primitive comparison candidate](primitive-comparison/README.md) bypasses enumeration/buffers only for non-backwards-compatible primitive scalar pairs, reusing existing untyped coercion and comparison logic. Four new tests and six existing typed-list regressions pass. Warmed integer comparisons allocate zero bytes; the qualified 1.81.9 observation was 1,008 bytes/call. No suite-wide performance claim, public API or language-feature change. Full solution/frozen/pinned standalone qualification is pending. Development Core/server 1.81.10 is unpublished; released artifacts remain unchanged. PR490 postmerge independently reconciles10,221/0/4,380 in1124.188s with all inputs/exclusions intact.
+
+Base cef6df37, branch diagnostics/scalar-materialization. Packet .guard-tmp/primitive-comparison-20261114. No gate result inferred yet.
+
+---
+
+<!-- scalar-probe-complete-20261114 -->
+# Scalar call-site allocation reproduction - 14 November 2026
+
+The [local bounded reproduction](scalar-materialization/README.md) uses unchanged qualified 1.81.9 binaries: 22 protective checks pass. Both scalar helpers allocate 72 bytes/call; strict integer comparison allocates zero, general integer comparison 1,008, and matching integer conversion 112. The sequence view changes list alias/snapshot semantics and does not remove scalar arrays. Next propose a primitive-atomic general-comparison guard, with normative review and semantic regressions before engine changes. No implementation or publication is included. PR490 merged cef6df37 after independent 818.969s qualification; postmerge standalone run43573964047 pending. Core/server1.81.9 remains unpublished.
+
+Local worktree .worktrees/Bosak.ScalarProbe, branch diagnostics/scalar-materialization, base cef6df3720cc30cda98bf96ac7a7f6d8c3975a7e. New source/review/controller/results sealed in docs/scalar-materialization; full ignored packet .guard-tmp/scalar-materialization-20261114. Probe source SHA d2db8c05e84c3f71f58dc065bf1dd029005c296f6e00cf2f77738946da92cacb; binary482ce55fb0a49ba637b910727cb6ebb8573a38a37a1832877b35a9a07b7bcd17. One bounded 0.904s launch, 60s/512MiB, exact nine DLLs before/after; build zero warnings/errors. Arrays/list-view alias difference, single-pass/fault ordering, typed-list node and atomization checks passed. No engine change, no retained caller or machine WER change, no new raw/binary export. Local docs uncommitted; source/project/controller retain executed paths. Next semantic slice needs immutable normative adoption review before implementation and all required gates. PR490 hosted artifact verified before merge; merge tree/parents verified; receipts PR490/MERGE490/PREMERGE490 in packet. Main CI43573964014/schema43573964027 success; standalone43573964047 still in progress at checkpoint. Do not claim final main qualification until downloaded/reconciled. Root owner HEAD remains18946b3125bf3187090877e00f22ea5a1e746118; other owner hashes verified unchanged; all prior handover bytes preserved. Never reset/FF owner root.
+
+---
+
 # Current implementation allocation observation - 14 November 2026
 
 The [bounded current-engine capture](current-allocation/README.md) uses the exact locally qualified 1.81.9 nine-DLL set from checkpoint af52e427, whose engine/runner source is identical to merged main375f2a01. The diagnostic retains52 passes/2 original schema-aware exclusions across54 selected cases;14,547 other original cases are outside the selected set (derived scope, not the filtered runner's console Unselected count). One GC-keyword/Verbose capture reports36,353 allocation ticks, about4.874GB of allocation intervals,227 collections and13.100s of fully suspended phases, with unchanged corpus/application/runtime/profiler identities. Separate historical/current captures are not a controlled speed or causal comparison; ticks/types are not exact object counts or per-type bytes. Seven mocked-launch refusal/positive guard tests pass; no engine change or default whitelist replacement.
