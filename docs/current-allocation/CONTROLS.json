@@ -1,0 +1,13 @@
+{
+  "producerGuardTests": 4,
+  "readerGuardTests": 3,
+  "allPassed": true,
+  "negativeLauncherMocked": true,
+  "unhandledNegativeDotNetLaunched": false,
+  "sourceHashes": {
+    "measure.py": "230500b9cba7c9148712370271a6bc48dade0527ed991c329434ef45009e60c9",
+    "read-current.py": "a8675fc505ab1428254da9b40aa790203f33ee4c37b3fc20edfdff104b2a9429",
+    "test_measure.py": "f64ae648ed95d1fca41830d19b3e9983ac87585bcce75a7697e77d09c475f7e5",
+    "test_reader_guard.py": "63ccc1a16ad1779c19e8565f33b91964d36c2ac591ecebbfa0675f6c407c38e8"
+  }
+}

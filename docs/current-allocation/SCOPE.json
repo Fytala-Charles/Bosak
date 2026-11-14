@@ -1,0 +1,37 @@
+{
+  "filteredRunnerCounts": {
+    "total": 54,
+    "passed": 52,
+    "failed": 0,
+    "skipped": 2,
+    "unselected": 0
+  },
+  "fullPinnedCatalogCases": 14601,
+  "selectedSetCases": 54,
+  "otherOriginalCasesOutsideSelectedSet": 14547,
+  "outsideCountSource": "Derived from full pinned catalog minus selected set; not the filtered runner console Unselected field",
+  "producerResultUnselectedField": "Derived outside-set scope, not a producer console count",
+  "skipReasons": [
+    {
+      "test_set": "sx-GeneralComp-gt",
+      "test": "sx-gc-gt-100",
+      "status": "Skipped",
+      "reason": "Requires feature=schema_aware, excluded by this runner profile",
+      "recorded_reason": "",
+      "reason_source": "DerivedFromPinnedPolicyAndCatalog",
+      "evidence_line": "19208",
+      "catalog_file": "tests/strm/sx-GeneralComp-gt/_sx-GeneralComp-gt-test-set.xml"
+    },
+    {
+      "test_set": "sx-GeneralComp-gt",
+      "test": "sx-gc-gt-101",
+      "status": "Skipped",
+      "reason": "Requires feature=schema_aware, excluded by this runner profile",
+      "recorded_reason": "",
+      "reason_source": "DerivedFromPinnedPolicyAndCatalog",
+      "evidence_line": "19209",
+      "catalog_file": "tests/strm/sx-GeneralComp-gt/_sx-GeneralComp-gt-test-set.xml"
+    }
+  ],
+  "skipReasonSource": "Original pinned catalog/policy; runner does not print individual case skip explanations"
+}

@@ -4,7 +4,7 @@
   <p>Recorded results, tested profiles, and reasons for excluded tests</p>
 </div>
 
-Last updated: 13 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
+Last updated: 14 November 2026. The frozen release results were recorded on **8 November 2026**. The separate standalone XSLT 3.0 reference qualification below was executed on **12 November 2026**, with its own source, corpus and platform pins.
 
 Observed diagnostic measurements now independently replay the adopted full result locally (817.285s) and hosted (1175.235s); the separate untouched required hosted gate passes in 1056.750s. These observations do not alter the conformance profile, exclusions or limits and do not establish a performance root cause.
 
@@ -29,6 +29,8 @@ The [sampled-stack delivery refresh](xslt30-stack-refresh/README.md) retains the
 The [GC/allocation investigation](xslt30-gc-correlation/README.md) retains a failed broad trace and a completed54-case narrow capture (52passes/2unchanged schema-aware exclusions). It measures a copied caller without new gate qualification, admissions, exclusions or production-budget changes.
 
 The [GC/allocation delivery refresh](xslt30-gc-refresh/README.md) preserves original captures, corrections and failed attempts on qualified main. No capture or conformance admission is added; refreshed required qualification is pending.
+
+The [current allocation observation](current-allocation/README.md) is a54-case diagnostic, not a new conformance admission. Post-PR488 main independently retains10,221/0/4,380 across14,601 identities under unchanged policy; the original exclusion map remains authoritative.
 
 ## Results and scope
 

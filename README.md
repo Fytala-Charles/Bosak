@@ -141,6 +141,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Provider qualification](docs/foundation-provider-qualification/GUIDE.md) | Candidate-bound owner workload receipts and evidence checks. |
 | [Native Schema compatibility](docs/foundation-native-schema-lane/GUIDE.md) | Source and unchanged-binary qualification scope. |
+| [Performance observations](docs/current-allocation/README.md) | Bounded diagnostic evidence, workload scope and measurement limitations. |
 | [Implementation status](docs/IMPLEMENTATION_STATUS.md) | Source candidates, qualification and open technical boundaries. |
 | [Foundation integration readiness](docs/foundation-readiness/README.md) | Qualified candidate identities, integration evidence and pending consumer acceptance. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived checkpoints and earlier roadmap snapshots. |

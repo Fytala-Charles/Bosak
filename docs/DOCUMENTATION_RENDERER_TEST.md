@@ -1,3 +1,7 @@
+# Current allocation renderer check - 14 November 2026
+
+The [HTML receipt](current-allocation/DOCUMENTATION-CHECKS.json) checks scope/comparison/qualification tables and local links. No screenshot/PDF acceptance asserted.
+
 # GC/allocation refresh renderer check - 13 November 2026
 
 The [HTML receipt](xslt30-gc-refresh/DOCUMENTATION-CHECKS.json) verifies retained/current delivery tables and local links. No screenshot/PDF acceptance asserted.

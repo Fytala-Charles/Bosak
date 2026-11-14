@@ -1,0 +1,51 @@
+{
+  "pr": {
+    "mergeCommit": {
+      "oid": "375f2a0158b3c2a0059f52a4ee0adcd5306a6c00"
+    },
+    "mergedAt": "2026-11-14T02:33:13Z",
+    "state": "MERGED",
+    "url": "https://github.com/Fytala-Charles/Bosak/pull/488"
+  },
+  "commit": {
+    "sha": "375f2a0158b3c2a0059f52a4ee0adcd5306a6c00",
+    "node_id": "C_kwDOShMl79oAKDM3NWYyYTAxNThiM2MyYTAwNTlmNTJhNGVlMGFkY2Q1MzA2YTZjMDA",
+    "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/375f2a0158b3c2a0059f52a4ee0adcd5306a6c00",
+    "html_url": "https://github.com/Fytala-Charles/Bosak/commit/375f2a0158b3c2a0059f52a4ee0adcd5306a6c00",
+    "author": {
+      "name": "Fytala-Charles",
+      "email": "charles.korthout@fytala.com",
+      "date": "2026-11-14T02:33:12Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-14T02:33:12Z"
+    },
+    "tree": {
+      "sha": "dd47c008da5491a9736a537f10fa8655b3c430d4",
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/trees/dd47c008da5491a9736a537f10fa8655b3c430d4"
+    },
+    "message": "Merge pull request #488 from Fytala-Charles/diagnostics/xslt30-gc-correlation\n\nAnalyze retained GC suspension and allocation evidence with pinned readers",
+    "parents": [
+      {
+        "sha": "728f092063fb2865ab1813e0b942ba8751aaec03",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/728f092063fb2865ab1813e0b942ba8751aaec03",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/728f092063fb2865ab1813e0b942ba8751aaec03"
+      },
+      {
+        "sha": "6993e29d6aecb30e308aa740b3e6b78e297dd709",
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/git/commits/6993e29d6aecb30e308aa740b3e6b78e297dd709",
+        "html_url": "https://github.com/Fytala-Charles/Bosak/commit/6993e29d6aecb30e308aa740b3e6b78e297dd709"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq98hoCRC1aQ7uu5UhlAAAmsMQAI6/DEyqmB710UNZDeEGeEse\ngJBXTvq/xmFe3wypWl14QW8QFzLhYtA61EpUOjp/shwMkpHO+pDcuof6Y9LtDuxH\nDNkULMvSKMfYAuA3VCOu1Zce8kPGw/u4c5Ej4Qjvg/ZhSu773JSXakIUFvHOU0Uw\nCLUh42jrO8I2K8p+WpUh9flzMUjm2blzXLWTBhj1p6kTSWdsgN/udkQJGYWZrh3e\nmx1+507YqHF3Qeo62LHPZFKnQwSbfA6qEhArj4c7LbNrC2f35Yv2DX/Jn7ouGkKL\neES+U2Fvk1U/4Iih2e8yQEcW5vQU9TgT6du7rio4WKcTGAp05Se6RLYE5Psm8whJ\n2J15QNWMADz/3muEC9J/g0ToGqK0nbsJ4g0kAiLmC/uD5a+GG6TFNGYzLI12Ul2S\ntLjefT8BP/yjSOJKYmmb768b5eNTBFEi4ANHOi4E5DRk+hfEYVMPQnuio4mi1WDj\nJ7t/SX3d4bez/5SF7KvlK6myOjid8Sz9t4oneOBDYIjycX3yEdV6pLSlX77AZOOH\nk6BfJkcPtC8lNCsp52Xr+hHHr3v5vPt2tCNEkfLD4p2/g3yaOK75kE2I7ToEaiLO\n9Hcs+E/BRprcZJiigNFFlZzbkhWfRSibQNheS/QgiQZDjskvUQR09MApGXT7fis+\nt2UevbNiC32uUrXdr1gS\n=IGtO\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree dd47c008da5491a9736a537f10fa8655b3c430d4\nparent 728f092063fb2865ab1813e0b942ba8751aaec03\nparent 6993e29d6aecb30e308aa740b3e6b78e297dd709\nauthor Fytala-Charles <charles.korthout@fytala.com> 1794623592 +0100\ncommitter GitHub <noreply@github.com> 1794623592 +0100\n\nMerge pull request #488 from Fytala-Charles/diagnostics/xslt30-gc-correlation\n\nAnalyze retained GC suspension and allocation evidence with pinned readers",
+      "verified_at": "2026-11-14T02:33:12Z"
+    }
+  },
+  "sourceTreeMatchesQualifiedPr": true
+}

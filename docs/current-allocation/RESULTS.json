@@ -1,0 +1,21 @@
+{
+  "diagnosticOnly": true,
+  "qualification": false,
+  "version": "1.81.9",
+  "qualifiedEngineCheckpoint": "af52e427ea122cdeef70ad125a90492ed585cc9e",
+  "engineCodeMatchesMain": "375f2a0158b3c2a0059f52a4ee0adcd5306a6c00",
+  "selectedPassed": 52,
+  "selectedExcluded": 2,
+  "outsideSelectedSetDerived": 14547,
+  "collections": 227,
+  "allocationTicks": 36353,
+  "approxReportedAllocationIntervalBytes": 4874098336,
+  "fullySuspendedPhaseUnionMs": 13100.11609999998,
+  "traceBytes": 9597530,
+  "traceSha256": "39d4cf323aa32d9eb0c266202ce46a6a809801538305580eebe93acf14263fae",
+  "unmatched": [],
+  "controls": 7,
+  "nextLead": "Investigate primitive-scalar materialization at comparison/conversion call sites with a bounded allocation reproduction before proposing a fast path; preserve typed-node/list atomization, lazy/error order and sequence lifetime.",
+  "engineChanged": false,
+  "published": false
+}

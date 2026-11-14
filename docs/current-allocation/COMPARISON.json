@@ -1,0 +1,45 @@
+{
+  "historicalVersion": "1.81.8",
+  "currentImplementationVersion": "1.81.9",
+  "sameRequestedProvider": true,
+  "sameSelectedCaseIdentitiesAndExpectedResults": true,
+  "controlledBenchmark": false,
+  "causalDeltaClaimed": false,
+  "rows": [
+    {
+      "metric": "collections",
+      "historical": 239,
+      "current": 227
+    },
+    {
+      "metric": "gcFullySuspendedPhaseUnionMs",
+      "historical": 14429.017799999998,
+      "current": 13100.11609999998
+    },
+    {
+      "metric": "allocationTicks",
+      "historical": 39308,
+      "current": 36353
+    },
+    {
+      "metric": "reportedAllocationIntervalBytes",
+      "historical": 5192467272,
+      "current": 4874098336
+    }
+  ],
+  "thresholdNameSamples": {
+    "CreateValueCallback": {
+      "historical": 1131,
+      "current": 0
+    },
+    "DisplayClass50_0": {
+      "historical": 1869,
+      "current": 0
+    }
+  },
+  "limitations": [
+    "Independent fresh-process captures have different caller reference metadata and heap/cache/timing histories.",
+    "Allocation interval bytes are approximate. Threshold names and ticks are not exact object counts or per-type byte ownership.",
+    "Generated display-class names can change; use the exact warmed-hit allocation regression as direct proof of the factory change."
+  ]
+}
