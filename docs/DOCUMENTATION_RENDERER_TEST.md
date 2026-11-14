@@ -1,3 +1,7 @@
+# Matcher-closure renderer check - 14 November 2026
+
+The [HTML receipt](matcher-closure/DOCUMENTATION-CHECKS.json) checks allocation/qualification tables and local links. Programmatic HTML only; no screenshot/PDF acceptance claimed.
+
 # Matching-conversion renderer check - 14 November 2026
 
 The [HTML receipt](matching-conversion/DOCUMENTATION-CHECKS.json) checks the local observation table and document links. Programmatic HTML only; no screenshot/PDF acceptance claimed.
