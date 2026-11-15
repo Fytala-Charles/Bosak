@@ -1,3 +1,7 @@
+## Date parser span candidate - 14 November 2026
+
+The local 1.81.13 [date parser span candidate](date-parser-span/README.md) is qualified: 26,443 solution and 90 language-server tests passed; QT3 31,397/0/424 and gated qt4 8,941/0/1,918 retain exact skips; pinned standalone 10,221/0/4,380 completed in 780.187s. All 3,164 differential cases matched. Plain-date allocation 800 -> 704 B/call; numeric timezone 1,072 -> 736 B/call. Shared dateTime/time helpers and unrelated VM code remain unchanged. Original sandbox HTTP failures are retained separately from successful unrestricted qualification. No release, public export or PR.
+
 # Validator span candidate - 14 November 2026
 
 Base d29429c2, perf/validator-bare-name.

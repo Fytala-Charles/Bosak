@@ -1,0 +1,247 @@
+{
+  "parityCases": 3164,
+  "runtime": "10.0.11",
+  "engine": "1.81.13.0",
+  "rows": [
+    {
+      "variant": "engine",
+      "label": "date",
+      "input": "2026-11-14",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 70400000,
+      "bytesPerCall": 704
+    },
+    {
+      "variant": "original-copy",
+      "label": "date",
+      "input": "2026-11-14",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 80000000,
+      "bytesPerCall": 800
+    },
+    {
+      "variant": "engine",
+      "label": "utc",
+      "input": "2026-11-14Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "utc",
+      "input": "2026-11-14Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 85600000,
+      "bytesPerCall": 856
+    },
+    {
+      "variant": "engine",
+      "label": "offset",
+      "input": "2026-11-14+05:30",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "offset",
+      "input": "2026-11-14+05:30",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 107200000,
+      "bytesPerCall": 1072
+    },
+    {
+      "variant": "engine",
+      "label": "year-zero",
+      "input": "0000-02-29Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "year-zero",
+      "input": "0000-02-29Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 85600000,
+      "bytesPerCall": 856
+    },
+    {
+      "variant": "engine",
+      "label": "extended",
+      "input": "10000-02-29Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "extended",
+      "input": "10000-02-29Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 85600000,
+      "bytesPerCall": 856
+    },
+    {
+      "variant": "engine",
+      "label": "negative-year",
+      "input": "-0001-01-01Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "negative-year",
+      "input": "-0001-01-01Z",
+      "expected": true,
+      "accepted": 100000,
+      "iterations": 100000,
+      "allocatedBytes": 85600000,
+      "bytesPerCall": 856
+    },
+    {
+      "variant": "engine",
+      "label": "wrong-shape",
+      "input": "not-a-date",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "variant": "original-copy",
+      "label": "wrong-shape",
+      "input": "not-a-date",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "variant": "engine",
+      "label": "datetime-probe",
+      "input": "2026-11-14T12:00:00Z",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "variant": "original-copy",
+      "label": "datetime-probe",
+      "input": "2026-11-14T12:00:00Z",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 0,
+      "bytesPerCall": 0
+    },
+    {
+      "variant": "engine",
+      "label": "invalid-month",
+      "input": "2026-13-14",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 70400000,
+      "bytesPerCall": 704
+    },
+    {
+      "variant": "original-copy",
+      "label": "invalid-month",
+      "input": "2026-13-14",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 80000000,
+      "bytesPerCall": 800
+    },
+    {
+      "variant": "engine",
+      "label": "invalid-day",
+      "input": "2026-02-29",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 70400000,
+      "bytesPerCall": 704
+    },
+    {
+      "variant": "original-copy",
+      "label": "invalid-day",
+      "input": "2026-02-29",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 80000000,
+      "bytesPerCall": 800
+    },
+    {
+      "variant": "engine",
+      "label": "invalid-zone",
+      "input": "2026-11-14+14:01",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    },
+    {
+      "variant": "original-copy",
+      "label": "invalid-zone",
+      "input": "2026-11-14+14:01",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 93600000,
+      "bytesPerCall": 936
+    },
+    {
+      "variant": "engine",
+      "label": "leading-plus",
+      "input": "+2026-11-14",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 70400000,
+      "bytesPerCall": 704
+    },
+    {
+      "variant": "original-copy",
+      "label": "leading-plus",
+      "input": "+2026-11-14",
+      "expected": false,
+      "accepted": 0,
+      "iterations": 100000,
+      "allocatedBytes": 73600000,
+      "bytesPerCall": 736
+    }
+  ]
+}

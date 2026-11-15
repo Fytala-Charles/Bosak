@@ -441,6 +441,7 @@
 //                      | Charles Korthout | 2.212 | 14-11-2026     | Avoid enumeration buffers for non-compatibility primitive general comparisons (1.81.10). |
 //                      | Charles Korthout | 2.213 | 14-11-2026     | Remove incidental node-name predicate captures from type matching (1.81.11).                |
 //                      | Charles Korthout | 2.214 | 14-11-2026     | Classify validator bare type names without allocating a substring (1.81.12).               |
+//                      | Charles Korthout | 2.215 | 14-11-2026     | Parse date regex groups and timezone slices with spans.                                  |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -15703,18 +15704,18 @@ internal static class VmEngine
         var m = XPathDateRegex.Match(s);
         if (!m.Success) return false;
 
-        string yearStr = m.Groups["year"].Value;
+        var yearStr = m.Groups["year"].ValueSpan;
         long year = long.Parse(yearStr, CultureInfo.InvariantCulture);
         // Lexically valid but outside the implementation-defined year range: FODT0001
         // (date/time overflow), not FORG0001 (date-094e/f, date-095e/f).
         if (year > int.MaxValue || year < int.MinValue)
-            throw new InvalidOperationException($"FODT0001: The year '{yearStr}' is outside the supported range.");
+            throw new InvalidOperationException($"FODT0001: The year '{yearStr.ToString()}' is outside the supported range.");
         // Reject + sign and leading zeros for years longer than 4 digits
-        if (yearStr.StartsWith('+')) return false;
+        if (yearStr[0] == '+') return false;
         if (yearStr.Length > 4 && yearStr[0] == '0') return false;
 
-        int month = int.Parse(m.Groups["month"].Value, CultureInfo.InvariantCulture);
-        int day = int.Parse(m.Groups["day"].Value, CultureInfo.InvariantCulture);
+        int month = int.Parse(m.Groups["month"].ValueSpan, CultureInfo.InvariantCulture);
+        int day = int.Parse(m.Groups["day"].ValueSpan, CultureInfo.InvariantCulture);
         if (month < 1 || month > 12) return false;
         if (day < 1 || day > 31) return false;
         if (day > DaysInMonth(year, month)) return false;
@@ -15723,18 +15724,34 @@ internal static class VmEngine
         hasTz = m.Groups["tz"].Success;
         if (hasTz)
         {
-            string tz = m.Groups["tz"].Value;
-            if (tz == "Z" || tz == "z")
+            var tz = m.Groups["tz"].ValueSpan;
+            if (tz.SequenceEqual("Z") || tz.SequenceEqual("z"))
                 tzMinutes = 0;
             else
             {
-                if (!IsValidTimezone(tz)) return false;
-                tzMinutes = ParseTimezoneOffset(tz);
+                if (!IsValidDateTimezone(tz)) return false;
+                tzMinutes = ParseDateTimezoneOffset(tz);
             }
         }
 
         xdt = new XPathDateTime(year, month, day, 0, 0, 0, 0, tzMinutes, hasTz);
         return true;
+    }
+    private static bool IsValidDateTimezone(ReadOnlySpan<char> tz)
+    {
+        // tz is like "+14:00" or "-05:00"
+        int hours = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+        int minutes = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+        return hours <= 14 && !(hours == 14 && minutes > 0) && minutes <= 59;
+    }
+    private static int ParseDateTimezoneOffset(ReadOnlySpan<char> tz)
+    {
+        // tz is like "+14:00" or "-05:00"
+        bool negative = tz[0] == '-';
+        int hours = int.Parse(tz[1..3], CultureInfo.InvariantCulture);
+        int minutes = int.Parse(tz[4..6], CultureInfo.InvariantCulture);
+        int total = hours * 60 + minutes;
+        return negative ? -total : total;
     }
 
     private static bool TryParseXPathTime(string s, out XPathDateTime xdt, out bool hasTz)

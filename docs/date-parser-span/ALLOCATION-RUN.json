@@ -1,0 +1,21 @@
+{
+  "status": "Completed",
+  "success": true,
+  "command": [
+    "C:/Program Files/dotnet/dotnet.exe",
+    "exec",
+    "--fx-version",
+    "10.0.11",
+    "--roll-forward",
+    "Disable",
+    "D:\\Development\\Bosak\\.guard-tmp\\date-span-engine-20261114\\actual-probe\\bin\\Release\\net10.0\\ActualProbe.dll"
+  ],
+  "timeoutSeconds": 60,
+  "memoryLimitBytes": 8589934592,
+  "diagnosticOnly": true,
+  "qualification": false,
+  "memoryScope": "Aggregate collector and owned target process tree",
+  "processId": 49916,
+  "exitCode": 0,
+  "elapsedSeconds": 1.009485999995377
+}

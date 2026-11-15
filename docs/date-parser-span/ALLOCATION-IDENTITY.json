@@ -1,0 +1,18 @@
+{
+  "engineHashes": {
+    "Bosak.XPath.Api.dll": "991002971794fb1d56c928a760cb324a60a5bc2b7fc53e3bac9197e4ada1f99f",
+    "Bosak.XPath.Compiler.dll": "19a9a4b18bd980de6d67b846ff453a60c2e65056ccce20e6addc6b741433b7a6",
+    "Bosak.XPath.Core.dll": "ea5622cf7455d02973e698036336fafd2b1e61a56f8526187aa900d5a437bbda",
+    "Bosak.XPath.Parser.dll": "6036ca274a8719914ef07c08ebfe6a1a4fe9b931a4fa0aa96c13b71c29014e47",
+    "Bosak.XPath.Providers.dll": "e10fc10b791a90040380a7c7e91ac26f6134a57af400c9dbfb3592916b7b90fb",
+    "Bosak.XPath.Runtime.dll": "e3936e802ee832898507274abb3c77d15d7d3e3492d856c6889d96e0996babe1",
+    "Bosak.XPath.Standard.dll": "1200465aceb0ed1cb9a610f19769b841b9cade330bfc183fd635b3091d3fcb6e",
+    "Bosak.XQuery.dll": "7f5bca306f829bf752a8c8023bb32d4bc729e3aeab160e7ed77d60228f2eb691",
+    "Bosak.Xslt.dll": "0d9a44a74e955a7ecf147b3eb532d8fb999d689601cb4ca7d8442321b7f5343f"
+  },
+  "sourceSha256": "ea616d7fc6b42553e18105a7faacea6fdf3d2d4635b1fcb346bbcdaf3826abd5",
+  "comparison": "actual modified engine versus copied original method",
+  "timeoutSeconds": 60,
+  "memoryLimitBytes": 8589934592,
+  "publicExportAuthorized": false
+}

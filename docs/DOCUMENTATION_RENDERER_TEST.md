@@ -1,3 +1,5 @@
+<!-- 14 November 2026: Final date parser span dossier and canonical pages checked with local markdown-it rendering. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: date-parser-span/DOCUMENTATION-CHECKS.json. -->
+<!-- 14 November 2026: date parser candidate: ten pages rendered; 4,196 local links checked. Programmatic HTML only, no screenshot or PDF acceptance. Receipt: date-parser-span/DOCUMENTATION-CHECKS.json. -->
 # Validator-span renderer check - 14 November 2026
 
 The [HTML receipt](validator-span/DOCUMENTATION-CHECKS.json) checks allocation/qualification tables and local links. Programmatic HTML only; no screenshot/PDF acceptance claimed.
