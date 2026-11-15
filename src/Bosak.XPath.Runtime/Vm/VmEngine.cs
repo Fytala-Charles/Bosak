@@ -442,6 +442,7 @@
 //                      | Charles Korthout | 2.213 | 14-11-2026     | Remove incidental node-name predicate captures from type matching (1.81.11).                |
 //                      | Charles Korthout | 2.214 | 14-11-2026     | Classify validator bare type names without allocating a substring (1.81.12).               |
 //                      | Charles Korthout | 2.215 | 14-11-2026     | Parse date regex groups and timezone slices with spans.                                  |
+//                      | Charles Korthout | 2.216 | 15-11-2026     | Use direct XDM enumerators for lazy node filtering.                                      |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -5677,25 +5678,8 @@ internal static class VmEngine
         if (seq is null)
             return XdmValue.FromSequence(XdmSequence.Empty);
 
-        // A filtered subset of a single-pass (streamed) sequence keeps its order and
-        // stays duplicate-free, so the marker propagates.
-        if (seq is ISinglePassSequence)
-        {
-            return XdmValue.FromSequence(XdmSequence.FromSource(
-                new SinglePassXdmSequence(FilterNodesLazyIterator(seq, predicate))));
-        }
-
-        return XdmValue.FromSequence(XdmSequence.FromSource(
-            new EnumerableXdmSequence(FilterNodesLazyIterator(seq, predicate))));
-    }
-
-    private static IEnumerable<XdmValue> FilterNodesLazyIterator(IXdmSequence source, Func<IXdmNode, bool> predicate)
-    {
-        foreach (var item in XdmSequence.FromSource(source))
-        {
-            if (item.IsNode && predicate(item.NodeValue))
-                yield return item;
-        }
+        // Preserve laziness and the source marker without intermediate IEnumerable adapters.
+        return XdmValue.FromSequence(XdmSequence.FromSource(FilteredNodeSequence.Create(seq, predicate)));
     }
 
     // ------------------------------------------------------------------

@@ -1,0 +1,8 @@
+{
+  "kind": "Test-file generation path mistake retained separately",
+  "initialFocusedReceipt": "focused-results/focused.trx",
+  "initialMatchingTests": 0,
+  "qualifiedAsSuccess": false,
+  "correction": "Created intended regression source in explicit worktree path; corrected focused invocation passed 10 tests",
+  "actualFocusedReceipt": "focused-actual-results/focused.trx"
+}
