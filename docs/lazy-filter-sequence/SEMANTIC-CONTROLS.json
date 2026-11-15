@@ -1,0 +1,89 @@
+{
+  "success": true,
+  "sameCompatibleWorker": true,
+  "allocationLoopsExecuted": false,
+  "runs": [
+    {
+      "label": "baseline",
+      "exitCode": 0,
+      "workerSha256": "1466da0455777a4558cf0894237b47f5af395bd0c5fa58af5f490b1966a0e1f7",
+      "engineHashes": {
+        "Bosak.XPath.Api.dll": "991002971794fb1d56c928a760cb324a60a5bc2b7fc53e3bac9197e4ada1f99f",
+        "Bosak.XPath.Compiler.dll": "19a9a4b18bd980de6d67b846ff453a60c2e65056ccce20e6addc6b741433b7a6",
+        "Bosak.XPath.Core.dll": "ea5622cf7455d02973e698036336fafd2b1e61a56f8526187aa900d5a437bbda",
+        "Bosak.XPath.Parser.dll": "6036ca274a8719914ef07c08ebfe6a1a4fe9b931a4fa0aa96c13b71c29014e47",
+        "Bosak.XPath.Providers.dll": "e10fc10b791a90040380a7c7e91ac26f6134a57af400c9dbfb3592916b7b90fb",
+        "Bosak.XPath.Runtime.dll": "e3936e802ee832898507274abb3c77d15d7d3e3492d856c6889d96e0996babe1",
+        "Bosak.XPath.Standard.dll": "1200465aceb0ed1cb9a610f19769b841b9cade330bfc183fd635b3091d3fcb6e",
+        "Bosak.XQuery.dll": "7f5bca306f829bf752a8c8023bb32d4bc729e3aeab160e7ed77d60228f2eb691",
+        "Bosak.Xslt.dll": "0d9a44a74e955a7ecf147b3eb532d8fb999d689601cb4ca7d8442321b7f5343f"
+      },
+      "result": {
+        "success": true,
+        "comparisonCases": 139,
+        "engine": "1.81.13.0",
+        "runtime": "10.0.11",
+        "warmup": 10000,
+        "iterations": 100000,
+        "rows": [],
+        "checks": [
+          "filter construction and GetEnumerator defer pulls/predicates; node identity preserved",
+          "predicate failure deferred to MoveNext and caught inside diagnostic",
+          "ordinary source mutations visible before first and repeated enumeration",
+          "predicate observes XML value changes made after filter construction",
+          "single-pass marker and refusal preserved after acquisition and partial pull",
+          "wrapper reference identity and underlying node identity stable across enumeration",
+          "filter construction and GetEnumerator defer pulls/predicates; node identity preserved",
+          "predicate failure deferred to MoveNext and caught inside diagnostic",
+          "ordinary source mutations visible before first and repeated enumeration",
+          "predicate observes XML value changes made after filter construction",
+          "single-pass marker and refusal preserved after acquisition and partial pull",
+          "wrapper reference identity and underlying node identity stable across enumeration",
+          "partial wrapper disposal leaves caller-owned reader usable",
+          "caller reader disposal preserves CloseInput=false stream ownership"
+        ]
+      }
+    },
+    {
+      "label": "candidate",
+      "exitCode": 0,
+      "workerSha256": "1466da0455777a4558cf0894237b47f5af395bd0c5fa58af5f490b1966a0e1f7",
+      "engineHashes": {
+        "Bosak.XPath.Api.dll": "0f2befb4cd7cc8a265eee71e0e53a70f82d6f81f6c90c29b8e413610e7454a11",
+        "Bosak.XPath.Compiler.dll": "893b9182ae9e2d6f018befd2c981d4ea84b6203bdd9b43f299ddcb85ea4c6a99",
+        "Bosak.XPath.Core.dll": "380908aa4c0c829cdbb02e56e5e32f272fbf2b9c2225c9a4dcbc19c43a9a020f",
+        "Bosak.XPath.Parser.dll": "3bfb09bed713758f906e451500b559d366fd7f80e4007073b60fb085a5adb839",
+        "Bosak.XPath.Providers.dll": "c637bc54f287ad6a5655fbbc7fef2c83e9ee427e88046dda5fd7a554bc5922a5",
+        "Bosak.XPath.Runtime.dll": "edb8f4b857b6a97d64c99dd2edb4a9bfdd5740851cd87e0f7b2dbd3dfead8812",
+        "Bosak.XPath.Standard.dll": "63096626e289d09d17ed50ac971e1d4877fd6acf28bd7a989f05f0c439bd477e",
+        "Bosak.XQuery.dll": "d1b9bbdac4c78e7c30dc02556032dd9ee42c878102887723b7dc6aac4a37d877",
+        "Bosak.Xslt.dll": "00d6d680a03a41270ef7508e075fc71a905b721374ff670b7770329b8f6a14cc"
+      },
+      "result": {
+        "success": true,
+        "comparisonCases": 139,
+        "engine": "1.81.14.0",
+        "runtime": "10.0.11",
+        "warmup": 10000,
+        "iterations": 100000,
+        "rows": [],
+        "checks": [
+          "filter construction and GetEnumerator defer pulls/predicates; node identity preserved",
+          "predicate failure deferred to MoveNext and caught inside diagnostic",
+          "ordinary source mutations visible before first and repeated enumeration",
+          "predicate observes XML value changes made after filter construction",
+          "single-pass marker and refusal preserved after acquisition and partial pull",
+          "wrapper reference identity and underlying node identity stable across enumeration",
+          "filter construction and GetEnumerator defer pulls/predicates; node identity preserved",
+          "predicate failure deferred to MoveNext and caught inside diagnostic",
+          "ordinary source mutations visible before first and repeated enumeration",
+          "predicate observes XML value changes made after filter construction",
+          "single-pass marker and refusal preserved after acquisition and partial pull",
+          "wrapper reference identity and underlying node identity stable across enumeration",
+          "partial wrapper disposal leaves caller-owned reader usable",
+          "caller reader disposal preserves CloseInput=false stream ownership"
+        ]
+      }
+    }
+  ]
+}

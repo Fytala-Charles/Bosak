@@ -4,6 +4,10 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Specialized lazy node filter candidate - 15 November 2026
+
+The [1.81.14 filter candidate](lazy-filter-sequence/README.md) replaces generated enumerable/adapter layers with direct XDM filtering. Scalar/empty paths, deferred acquisition/errors, Current/end behavior, single-pass refusal, identity/mutation and the existing non-disposal protocol are preserved. Immutable specification/protocol pins and fixed allocation budgets were recorded before implementation. Ten focused regressions, 26,453 solution tests and 90 language-server tests passed. QT3 31,397/0/424 and gated qt4 8,941/0/1,918 retain exact exclusions. Identical old/new allocation controls reject legacy/accept candidate against all five fixed budgets; separate compatible semantic controls pass 139 scenarios and 14 checks per version. Pinned standalone 10,221/0/4,380 completed in 746.143s with all 14,601 identities/exclusions and hashes reconciled at 6ccb4c83. Candidate qualification complete locally; no release, push or publication.
+
 ## Date parser span candidate - 14 November 2026
 
 The local 1.81.13 [date parser span candidate](date-parser-span/README.md) is qualified: 26,443 solution and 90 language-server tests passed; QT3 31,397/0/424 and gated qt4 8,941/0/1,918 retain exact skips; pinned standalone 10,221/0/4,380 completed in 780.187s. All 3,164 differential cases matched. Plain-date allocation 800 -> 704 B/call; numeric timezone 1,072 -> 736 B/call. Shared dateTime/time helpers and unrelated VM code remain unchanged. Original sandbox HTTP failures are retained separately from successful unrestricted qualification. No release, public export or PR.

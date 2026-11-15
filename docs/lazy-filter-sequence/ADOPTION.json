@@ -1,0 +1,206 @@
+{
+  "recordedBeforeImplementation": true,
+  "recordedBeforeCapture": true,
+  "clientDate": "2026-11-15",
+  "recordedUtc": "2026-11-15T13:34:07.147543+00:00",
+  "kind": "Production specialized lazy node filter candidate",
+  "main": "912190370194fe4b50ae8deae6972cf0591c06c9",
+  "qualifiedEngineCheckpoint": "c477f1424157de76148c09563db50107c769566b",
+  "engineAndRunnerSourceIdentical": true,
+  "engineVersion": "1.81.14",
+  "qualifiedDossierManifestSha256": "9e772a98a8cfc5c44011c644c0d9a7e648c8e4b5949deeb588552cdd94f4f736",
+  "qualifiedRuntimeHashes": {
+    "Bosak.XPath.Api.dll": "991002971794fb1d56c928a760cb324a60a5bc2b7fc53e3bac9197e4ada1f99f",
+    "Bosak.XPath.Api.pdb": "0d31b3a5e84791f6dfc1f3fcbc0c4981271c0aa8e2449a670ec84f235681d9bd",
+    "Bosak.XPath.Api.xml": "88b0dd6a0c17a38f7f873380d1a426d84218a34c653c6e340426b88107f01623",
+    "Bosak.XPath.Compiler.dll": "19a9a4b18bd980de6d67b846ff453a60c2e65056ccce20e6addc6b741433b7a6",
+    "Bosak.XPath.Compiler.pdb": "3e8a18d1d06a43b272adfe6a0bece71c90066a97bee4ebf5d95036ddbeba4d74",
+    "Bosak.XPath.Compiler.xml": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05",
+    "Bosak.XPath.Core.dll": "ea5622cf7455d02973e698036336fafd2b1e61a56f8526187aa900d5a437bbda",
+    "Bosak.XPath.Core.pdb": "06c5e8c3d85edacac009b0e62d7ffb19deeba66d3b68b253af28ffbc74183b25",
+    "Bosak.XPath.Core.xml": "7dca1d9a2d19facebd85c2f63c74c7d0d2662c277585db4d0b2dc2bb0c399aaf",
+    "Bosak.XPath.Parser.dll": "6036ca274a8719914ef07c08ebfe6a1a4fe9b931a4fa0aa96c13b71c29014e47",
+    "Bosak.XPath.Parser.pdb": "e38c40f86b58cddfff9ff3a74a9f9d8a15da55f4ebab74b9e9de39b2076461e5",
+    "Bosak.XPath.Parser.xml": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade",
+    "Bosak.XPath.Providers.dll": "e10fc10b791a90040380a7c7e91ac26f6134a57af400c9dbfb3592916b7b90fb",
+    "Bosak.XPath.Providers.pdb": "459b507d4db38a170be77bd6faa1eaecefb335dee5f35e663600bfe08b80b79a",
+    "Bosak.XPath.Providers.xml": "7c30c33c77a283c6532aca89cf8f65dc4afc2fa3d838ec94c6fd6a1f333f3529",
+    "Bosak.XPath.Runtime.dll": "e3936e802ee832898507274abb3c77d15d7d3e3492d856c6889d96e0996babe1",
+    "Bosak.XPath.Runtime.pdb": "61aca5692b4bb15fb68fb926520202c3860a374e3b46c8d0ee6c4874875906fe",
+    "Bosak.XPath.Runtime.xml": "571dc63b12792f6ca32f177f6fa52c1d473163cb87da68eccd293435b7f66f67",
+    "Bosak.XPath.Standard.dll": "1200465aceb0ed1cb9a610f19769b841b9cade330bfc183fd635b3091d3fcb6e",
+    "Bosak.XPath.Standard.pdb": "c1113b4d12e7bab124581709ec3184f672a2458a29ba52bf9b82121bd2469c70",
+    "Bosak.XPath.Standard.xml": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa",
+    "Bosak.XQuery.dll": "7f5bca306f829bf752a8c8023bb32d4bc729e3aeab160e7ed77d60228f2eb691",
+    "Bosak.XQuery.pdb": "7ea45d888a8ddff5ff39a5820e77594916351be54ac7763fbdaacaf8da487b27",
+    "Bosak.XQuery.xml": "e178474252bc2b3e2d3ef578643870d89357e7a640831b83a5fb28955ebafbf9",
+    "Bosak.Xslt.Conformance.deps.json": "cd93516150006f34cfe2996f284d881cab32602f8843ec06fe6b6f27bc80194c",
+    "Bosak.Xslt.Conformance.dll": "0158d119fe9f12cb36bcea4a2da93d9aef04fc39b019b6121415b4bd7c803a49",
+    "Bosak.Xslt.Conformance.exe": "20f042fde64eee654d6483116229a1f0ce814b6e0fb6720f1a1b85c35d96cd66",
+    "Bosak.Xslt.Conformance.pdb": "6b3c8c7f32a27f178641915872a9f25ab1c2deb0d4ac8c13f9caadbe25c4d5ed",
+    "Bosak.Xslt.Conformance.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+    "Bosak.Xslt.dll": "0d9a44a74e955a7ecf147b3eb532d8fb999d689601cb4ca7d8442321b7f5343f",
+    "Bosak.Xslt.pdb": "3bf21853e6ea5c3a6b61004c256d4cf137ea768379d914dd031b08785ff3705b",
+    "Bosak.Xslt.xml": "c65ea55096ae85dbabf461b24fcb7a38b7bc0d018a5a0cf19bbfb81c38263cbf"
+  },
+  "engineHashes": {
+    "Bosak.XPath.Api.dll": "991002971794fb1d56c928a760cb324a60a5bc2b7fc53e3bac9197e4ada1f99f",
+    "Bosak.XPath.Compiler.dll": "19a9a4b18bd980de6d67b846ff453a60c2e65056ccce20e6addc6b741433b7a6",
+    "Bosak.XPath.Core.dll": "ea5622cf7455d02973e698036336fafd2b1e61a56f8526187aa900d5a437bbda",
+    "Bosak.XPath.Parser.dll": "6036ca274a8719914ef07c08ebfe6a1a4fe9b931a4fa0aa96c13b71c29014e47",
+    "Bosak.XPath.Providers.dll": "e10fc10b791a90040380a7c7e91ac26f6134a57af400c9dbfb3592916b7b90fb",
+    "Bosak.XPath.Runtime.dll": "e3936e802ee832898507274abb3c77d15d7d3e3492d856c6889d96e0996babe1",
+    "Bosak.XPath.Standard.dll": "1200465aceb0ed1cb9a610f19769b841b9cade330bfc183fd635b3091d3fcb6e",
+    "Bosak.XQuery.dll": "7f5bca306f829bf752a8c8023bb32d4bc729e3aeab160e7ed77d60228f2eb691",
+    "Bosak.Xslt.dll": "0d9a44a74e955a7ecf147b3eb532d8fb999d689601cb4ca7d8442321b7f5343f"
+  },
+  "selection": "sx-GeneralComp-gt, original54 cases, expected52Pass/2schema-awareSkip;14547unselected",
+  "provider": "Microsoft-Windows-DotNETRuntime:0x1:5",
+  "targetFramework": "10.0.11/Disable",
+  "collectorFramework": "8.0.28/Disable",
+  "wallTimeoutSeconds": 180,
+  "memoryLimitBytes": 8589934592,
+  "traceLimitBytes": 268435456,
+  "readerTimeoutSeconds": 120,
+  "apiReviews": [
+    {
+      "path": "docs/xslt30-case-cost/API-REVIEW.json",
+      "revision": "a010100852b71f33d67d913d7a9ed69f83a639b1"
+    },
+    {
+      "path": "docs/xslt30-gc-correlation/API-REVIEW.json",
+      "revision": "94b7dca39d8dca4374f326176874381661f4dd59",
+      "traceEventReview": "bc9c1c6811d2ac9a4ad1e97a7fd8de01bea09a26"
+    }
+  ],
+  "deviations": [],
+  "scope": "Cached typed delegates to qualified private FilterNodesLazy and WrapEach; construction/first/repeat/cross-thread first enumeration; ordinary and marked sources; caught semantic diagnostics. No engine implementation or disposal API change.",
+  "notClaimed": [
+    "qualification success",
+    "benchmark",
+    "causal before/after comparison",
+    "exclusive CPU",
+    "per-type allocation bytes",
+    "failure rate"
+  ],
+  "retryOnFailure": false,
+  "published": false,
+  "qualifiedRuntimeDirectory": "D:\\Development\\Bosak\\.guard-tmp\\allocation-refresh13-execution-20261115\\measurement\\qualified-runtime",
+  "publicExportAuthorized": false,
+  "comparisonBaselineVersion": "1.81.12",
+  "comparisonControlled": false,
+  "priorCaptureTraceSha256": "32f7b57a3c97761db351d1f22e4163487905e8fd7f7aeafaf33f5d491a23a923",
+  "priorCaptureReportSha256": "51793a34742ea6ec293be54a16e7096f04170b4c2102d5fb26ac06970d8b8c1d",
+  "independentMainQualification": {
+    "success": true,
+    "runId": "43691596997",
+    "head": "912190370194fe4b50ae8deae6972cf0591c06c9",
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "912190370194fe4b50ae8deae6972cf0591c06c9",
+    "sourceTree": "a1623d0156a37c47340a58aaf3de717a3469e9df",
+    "sourceTreeMatchesHead": true,
+    "elapsedSeconds": 802.156,
+    "corpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "artifact": {
+      "id": 14152709174,
+      "node_id": "MDg6QXJ0aWZhY3QxNDE1MjcwOTE3NA==",
+      "name": "xslt30-pinned-gate",
+      "size_in_bytes": 1982510,
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14152709174",
+      "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14152709174/zip",
+      "expired": false,
+      "digest": "sha256:2e2c7490ff6252a8ae5d67c389e35fc7f32da7735bf95b8d8851ca2f701c484e",
+      "created_at": "2026-11-15T08:03:55Z",
+      "updated_at": "2026-11-15T08:03:55Z",
+      "expires_at": "2026-12-15T08:03:54Z",
+      "workflow_run": {
+        "id": 43691596997,
+        "repository_id": 1242768879,
+        "head_repository_id": 1242768879,
+        "head_branch": "main",
+        "head_sha": "912190370194fe4b50ae8deae6972cf0591c06c9"
+      }
+    }
+  },
+  "preparationCorrection": {
+    "priorPacket": "D:\\Development\\Bosak\\.guard-tmp\\allocation-refresh13-20261115",
+    "priorBuildLogSha256": "3343f2b6e6368df41cc048524989bfdbc8994c9da07c347ad5927605cd36eb05",
+    "failure": "CS0016 XML output access denied before any diagnostic workload launch",
+    "change": "UseSharedCompilation=false for the copied diagnostic caller only; run compiler inside current sandbox identity",
+    "engineChanges": false,
+    "workloadExecutionsBeforeCorrection": 0
+  },
+  "warmup": 10000,
+  "iterations": 100000,
+  "timeoutSeconds": 120,
+  "semanticAdoption": false,
+  "measurementLimitations": [
+    "Calling-thread managed bytes only",
+    "Fixture nodes and cached wrapper identities prepared before measurement",
+    "Cross-thread sequential handoff, not concurrent provider safety",
+    "IXdmSequenceEnumerator has no Dispose contract; provider/reader ownership checks separate"
+  ],
+  "diagnosticEvidenceCommit": "8a6fa9fb901929bc11f953c57623acfb29ad178e",
+  "intentionalDeviations": [],
+  "specificationSources": [
+    {
+      "revision": "REC-xpath-31-20170321",
+      "uri": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/#id-errors-and-opt",
+      "sections": [
+        "2.3.4 Errors and Optimization",
+        "3.3 Path Expressions and node tests"
+      ]
+    },
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "uri": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/#sequences",
+      "sections": [
+        "2.3 Node Identity",
+        "2.5 Sequences"
+      ]
+    }
+  ],
+  "compatibilitySources": [
+    {
+      "revision": "912190370194fe4b50ae8deae6972cf0591c06c9",
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "gitBlobSha256": "5c7b06d6898c9a626bcc9474d9c8fb4cc9c7961f3a1190ca164f4a3b019f2791"
+    },
+    {
+      "revision": "912190370194fe4b50ae8deae6972cf0591c06c9",
+      "path": "src/Bosak.XPath.Core/Xdm/ISinglePassSequence.cs",
+      "gitBlobSha256": "61bc4ea97202853e71415c308c8e6b218e6e8a2c2611d47c2e6ad6e81f81b1d9"
+    },
+    {
+      "revision": "912190370194fe4b50ae8deae6972cf0591c06c9",
+      "path": "src/Bosak.XPath.Core/Xdm/EnumerableXdmSequence.cs",
+      "gitBlobSha256": "bd66be7f647afa66b9843a5e5d717aea1fd3d05f573a00d315e88f4f5a5fa447"
+    },
+    {
+      "revision": "912190370194fe4b50ae8deae6972cf0591c06c9",
+      "path": "src/Bosak.XPath.Runtime/Vm/SinglePassXdmSequence.cs",
+      "gitBlobSha256": "af08e6c5bdf869c3ff12a2f6d0ff965aaa7c840438e730b06e770096d3bc4df9"
+    },
+    {
+      "revision": "912190370194fe4b50ae8deae6972cf0591c06c9",
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "gitBlobSha256": "2faffe245dd443d7bfaef21609b713f41d05ed64f1a6aa848e2ee3c29dc344d9"
+    }
+  ],
+  "base": "912190370194fe4b50ae8deae6972cf0591c06c9",
+  "prototypeCommit": "6043419e4c1ea0bbfd612dadefa485036fb5b2c6",
+  "allocationRegressionBudgetsBytesPerCall": {
+    "create": 48,
+    "create-marked": 56,
+    "once": 192,
+    "replay": 160,
+    "cross-first": 160
+  },
+  "budgetRationale": "Fixed before engine implementation: above observed prototype costs, below legacy baseline; no repeated measurement/minimum selection or post-failure widening"
+}
