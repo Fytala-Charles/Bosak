@@ -1,0 +1,8 @@
+{
+  "documentShellAxisDispatchAndHelpersByteIdentical": true,
+  "innerAxisAndWrapEachBodiesByteIdentical": true,
+  "sourceWrapperCacheByteIdentical": true,
+  "xdmProtocolByteIdentical": true,
+  "xdocumentSnapshotAndAxisSemanticsByteIdentical": true,
+  "recordEligibility": "captured nonnegative arrival index; no owner fields added"
+}

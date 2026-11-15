@@ -1,0 +1,192 @@
+{
+  "recordedBeforeImplementation": true,
+  "recordedBeforeCapture": true,
+  "clientDate": "2026-11-15",
+  "recordedUtc": "2026-11-15T18:29:43.400750+00:00",
+  "kind": "Production in-record wrapper sequence candidate",
+  "main": "909b9c47008f7b4998f93746c77fad0947200081",
+  "qualifiedEngineCheckpoint": "6ccb4c83ba81dcff3e934058304ed52e01eb6f6c",
+  "engineAndRunnerSourceIdentical": true,
+  "engineVersion": "1.81.15",
+  "qualifiedDossierManifestSha256": "6deea65e9c586a18d35d7767a707e72ac81b58be3171f173ae4e176e2ced2947",
+  "qualifiedRuntimeHashes": {
+    "Bosak.XPath.Api.dll": "0f2befb4cd7cc8a265eee71e0e53a70f82d6f81f6c90c29b8e413610e7454a11",
+    "Bosak.XPath.Api.pdb": "66e5e4509d772b5699431b9603285af940627ead316804aa9b897a6f00dc2f4f",
+    "Bosak.XPath.Api.xml": "88b0dd6a0c17a38f7f873380d1a426d84218a34c653c6e340426b88107f01623",
+    "Bosak.XPath.Compiler.dll": "893b9182ae9e2d6f018befd2c981d4ea84b6203bdd9b43f299ddcb85ea4c6a99",
+    "Bosak.XPath.Compiler.pdb": "b9974732f8db302ae56afbc13b61b0ba4f57e9fea2a5e9d8a356397cbd98f3ab",
+    "Bosak.XPath.Compiler.xml": "9221def328e63a44a5851b3dbee422e175aecb81a9939b50e32729c40d242a05",
+    "Bosak.XPath.Core.dll": "380908aa4c0c829cdbb02e56e5e32f272fbf2b9c2225c9a4dcbc19c43a9a020f",
+    "Bosak.XPath.Core.pdb": "e7a589b663124bbe87be6d06b8fd41f2907bcc613e33363b17b8b02a8889b808",
+    "Bosak.XPath.Core.xml": "7dca1d9a2d19facebd85c2f63c74c7d0d2662c277585db4d0b2dc2bb0c399aaf",
+    "Bosak.XPath.Parser.dll": "3bfb09bed713758f906e451500b559d366fd7f80e4007073b60fb085a5adb839",
+    "Bosak.XPath.Parser.pdb": "d3c2970da52436ea57d52192899b70e6af5b8715f18b109b154ad65effd80f74",
+    "Bosak.XPath.Parser.xml": "25f99f111c993128fd95acd0776c490e4ab8b581ee0cae383cf909540496fade",
+    "Bosak.XPath.Providers.dll": "c637bc54f287ad6a5655fbbc7fef2c83e9ee427e88046dda5fd7a554bc5922a5",
+    "Bosak.XPath.Providers.pdb": "71c5b8c22e84acc97b08548826aaf7f940e6ecd6239f5df66dd3079e2757e76d",
+    "Bosak.XPath.Providers.xml": "7c30c33c77a283c6532aca89cf8f65dc4afc2fa3d838ec94c6fd6a1f333f3529",
+    "Bosak.XPath.Runtime.dll": "edb8f4b857b6a97d64c99dd2edb4a9bfdd5740851cd87e0f7b2dbd3dfead8812",
+    "Bosak.XPath.Runtime.pdb": "0a5bf5ce7d46985f6f3f7dc8831df638798033c8c0d851d514995ca5ca1cc55e",
+    "Bosak.XPath.Runtime.xml": "53f7437850c50b9596d286d966564cba147237555cdabe098b0f7d130ca8c67a",
+    "Bosak.XPath.Standard.dll": "63096626e289d09d17ed50ac971e1d4877fd6acf28bd7a989f05f0c439bd477e",
+    "Bosak.XPath.Standard.pdb": "da903fc4ba0acbf760980708f55c5c47f1ebc9c0f4e64d603010f78e96d5826d",
+    "Bosak.XPath.Standard.xml": "e94152aff535701b1b9b34d7a908fb6787e1fcb00be70f87547842e163d724fa",
+    "Bosak.XQuery.dll": "d1b9bbdac4c78e7c30dc02556032dd9ee42c878102887723b7dc6aac4a37d877",
+    "Bosak.XQuery.pdb": "5ebb7ad5f4a312c6cf72e60dbeaa3ef8618400d074bd02a3938ecce32765a18b",
+    "Bosak.XQuery.xml": "e178474252bc2b3e2d3ef578643870d89357e7a640831b83a5fb28955ebafbf9",
+    "Bosak.Xslt.Conformance.deps.json": "f13a27f703a0d7d16d8c32e61c2edef297f776305261a07ee20d2420ab64d8bd",
+    "Bosak.Xslt.Conformance.dll": "5ab344a5441f2c7f6bbdd2d9556f05bdad5ac199ba4d24b2370fba85a58a18aa",
+    "Bosak.Xslt.Conformance.exe": "461d823ee5affcd5929fc78b12b5c19f92a741ea83419f03c89f5450c1c5080f",
+    "Bosak.Xslt.Conformance.pdb": "051405bba6c9c5c968650f3cdc8b88ec8086dc9ee6182c8838a01e1b98394ac8",
+    "Bosak.Xslt.Conformance.runtimeconfig.json": "c230a317a54dd960bcbeb5f347f52e18dc665a26f7efda2159fced9a5ac7e097",
+    "Bosak.Xslt.dll": "00d6d680a03a41270ef7508e075fc71a905b721374ff670b7770329b8f6a14cc",
+    "Bosak.Xslt.pdb": "d443c8fa1956ff551051a7d8831b953fe9848ea9972aced0479bec9f6d0a588f",
+    "Bosak.Xslt.xml": "c65ea55096ae85dbabf461b24fcb7a38b7bc0d018a5a0cf19bbfb81c38263cbf"
+  },
+  "engineHashes": {
+    "Bosak.XPath.Api.dll": "0f2befb4cd7cc8a265eee71e0e53a70f82d6f81f6c90c29b8e413610e7454a11",
+    "Bosak.XPath.Compiler.dll": "893b9182ae9e2d6f018befd2c981d4ea84b6203bdd9b43f299ddcb85ea4c6a99",
+    "Bosak.XPath.Core.dll": "380908aa4c0c829cdbb02e56e5e32f272fbf2b9c2225c9a4dcbc19c43a9a020f",
+    "Bosak.XPath.Parser.dll": "3bfb09bed713758f906e451500b559d366fd7f80e4007073b60fb085a5adb839",
+    "Bosak.XPath.Providers.dll": "c637bc54f287ad6a5655fbbc7fef2c83e9ee427e88046dda5fd7a554bc5922a5",
+    "Bosak.XPath.Runtime.dll": "edb8f4b857b6a97d64c99dd2edb4a9bfdd5740851cd87e0f7b2dbd3dfead8812",
+    "Bosak.XPath.Standard.dll": "63096626e289d09d17ed50ac971e1d4877fd6acf28bd7a989f05f0c439bd477e",
+    "Bosak.XQuery.dll": "d1b9bbdac4c78e7c30dc02556032dd9ee42c878102887723b7dc6aac4a37d877",
+    "Bosak.Xslt.dll": "00d6d680a03a41270ef7508e075fc71a905b721374ff670b7770329b8f6a14cc"
+  },
+  "selection": "sx-GeneralComp-gt, original54 cases, expected52Pass/2schema-awareSkip;14547unselected",
+  "provider": "Microsoft-Windows-DotNETRuntime:0x1:5",
+  "targetFramework": "10.0.11/Disable",
+  "collectorFramework": "8.0.28/Disable",
+  "wallTimeoutSeconds": 180,
+  "memoryLimitBytes": 8589934592,
+  "traceLimitBytes": 268435456,
+  "readerTimeoutSeconds": 120,
+  "apiReviews": [
+    {
+      "path": "docs/xslt30-case-cost/API-REVIEW.json",
+      "revision": "a010100852b71f33d67d913d7a9ed69f83a639b1"
+    },
+    {
+      "path": "docs/xslt30-gc-correlation/API-REVIEW.json",
+      "revision": "94b7dca39d8dca4374f326176874381661f4dd59",
+      "traceEventReview": "bc9c1c6811d2ac9a4ad1e97a7fd8de01bea09a26"
+    }
+  ],
+  "deviations": [],
+  "scope": "Compare actual qualified EnumerableXdmSequence(WrapEach) with direct XDM mapper on in-record sequences. Existing source.Wrap cache accessed through cached typed delegate. No engine change or shell/document/InnerAxis contract adoption.",
+  "notClaimed": [
+    "qualification success",
+    "benchmark",
+    "causal before/after comparison",
+    "exclusive CPU",
+    "per-type allocation bytes",
+    "failure rate"
+  ],
+  "retryOnFailure": false,
+  "published": false,
+  "qualifiedRuntimeDirectory": "D:\\Development\\Bosak\\.guard-tmp\\lazy-filter-qualified-20261115\\runtime",
+  "publicExportAuthorized": false,
+  "comparisonBaselineVersion": "1.81.13",
+  "comparisonControlled": false,
+  "priorCaptureTraceSha256": "1307971361b0dde5ddc6c0990793e6fdb02437c0565e76776dbee687434d8f31",
+  "priorCaptureReportSha256": "db30a9b46984e18ff25dadc9f24b16dac1acf27328ff17a7d5db8b55697033da",
+  "independentMainQualification": {
+    "success": true,
+    "runId": "43737751243",
+    "head": "909b9c47008f7b4998f93746c77fad0947200081",
+    "counts": {
+      "Passed": 10221,
+      "Failed": 0,
+      "Skipped": 4380
+    },
+    "totalCases": 14601,
+    "sourceCommit": "909b9c47008f7b4998f93746c77fad0947200081",
+    "sourceTree": "2a3e0d1270d67270188980aee2ac994cd390bdf2",
+    "sourceTreeMatchesHead": true,
+    "elapsedSeconds": 932.594,
+    "corpusUnchanged": true,
+    "runtimeUnchanged": true,
+    "artifact": {
+      "id": 14171527293,
+      "node_id": "MDg6QXJ0aWZhY3QxNDE3MTUyNzI5Mw==",
+      "name": "xslt30-pinned-gate",
+      "size_in_bytes": 1982520,
+      "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14171527293",
+      "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14171527293/zip",
+      "expired": false,
+      "digest": "sha256:bb96cf1e8a77c8b143653431f85cd30f5bf83ac5d5dddc18a9433045efb95763",
+      "created_at": "2026-11-15T17:08:49Z",
+      "updated_at": "2026-11-15T17:08:49Z",
+      "expires_at": "2026-12-15T17:08:48Z",
+      "workflow_run": {
+        "id": 43737751243,
+        "repository_id": 1242768879,
+        "head_repository_id": 1242768879,
+        "head_branch": "main",
+        "head_sha": "909b9c47008f7b4998f93746c77fad0947200081"
+      }
+    }
+  },
+  "intentionalDeviations": [],
+  "timeoutSeconds": 120,
+  "warmup": 10000,
+  "iterations": 100000,
+  "specificationSources": [
+    {
+      "revision": "REC-xpath-31-20170321",
+      "uri": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/#axes",
+      "sections": [
+        "3.3.2.1 Axes",
+        "3.3.2.2 Node Tests",
+        "2.3.4 Errors and Optimization"
+      ]
+    },
+    {
+      "revision": "REC-xpath-datamodel-31-20170321",
+      "uri": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/#namespace-nodes",
+      "sections": [
+        "2.3 Node Identity",
+        "2.5 Sequences",
+        "6 Nodes including attribute/namespace behavior"
+      ]
+    }
+  ],
+  "compatibilitySources": [
+    {
+      "revision": "909b9c47008f7b4998f93746c77fad0947200081",
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingSource.cs",
+      "gitBlobSha256": "54b2b161328a236eed01286e1f9f76b305232ae0a3311e11f9c86945db924227"
+    },
+    {
+      "revision": "909b9c47008f7b4998f93746c77fad0947200081",
+      "path": "src/Bosak.XPath.Providers/Streaming/StreamingNode.cs",
+      "gitBlobSha256": "70f59ca10d4b6e6c66856ae082a1a65bbe8b6b2d8bd66f9712d840750814df4d"
+    },
+    {
+      "revision": "909b9c47008f7b4998f93746c77fad0947200081",
+      "path": "src/Bosak.XPath.Core/Xdm/XdmSequence.cs",
+      "gitBlobSha256": "e81a3ff7fad9edfc71d916d2db58523bc982f8eec5c05b12cbb2e9d7f66c792d"
+    },
+    {
+      "revision": "909b9c47008f7b4998f93746c77fad0947200081",
+      "path": "src/Bosak.XPath.Core/Xdm/EnumerableXdmSequence.cs",
+      "gitBlobSha256": "bd66be7f647afa66b9843a5e5d717aea1fd3d05f573a00d315e88f4f5a5fa447"
+    },
+    {
+      "revision": "909b9c47008f7b4998f93746c77fad0947200081",
+      "path": "src/Bosak.XPath.Core/Xdm/IXdmSequence.cs",
+      "gitBlobSha256": "5c7b06d6898c9a626bcc9474d9c8fb4cc9c7961f3a1190ca164f4a3b019f2791"
+    }
+  ],
+  "base": "909b9c47008f7b4998f93746c77fad0947200081",
+  "prototypeCommit": "8891fe801152ea5dae56127098ee98c5d5ec14b6",
+  "allocationRegressionBudgetsBytesPerCall": {
+    "create": 48,
+    "once": 192,
+    "replay": 160,
+    "cross-first": 160
+  },
+  "budgetRationale": "Fixed above expected direct-owner costs and below qualified legacy costs before implementation; no post-failure widening or minimum selection",
+  "eligibleScope": "Nonnegative captured record index on record-role children, attributes and four direct RecordAxis paths; shell/document routes and InnerAxis IEnumerable body unchanged"
+}

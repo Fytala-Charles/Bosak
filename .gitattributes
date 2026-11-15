@@ -733,3 +733,5 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/date-parser-span/** -text whitespace=cr-at-eol
 
 /docs/lazy-filter-sequence/** -text whitespace=cr-at-eol
+
+/docs/in-record-wrapper-sequence/** -text whitespace=cr-at-eol

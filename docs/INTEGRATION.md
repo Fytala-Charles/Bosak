@@ -4,6 +4,10 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Direct in-record wrapper candidate - 15 November 2026
+
+The [1.81.15 provider candidate](in-record-wrapper-sequence/README.md) uses direct XDM wrapping for nonnegative captured record indices on record children, attributes and four direct axes. Document/shell-root routes and InnerAxis IEnumerable remain unchanged. Thirteen focused semantic/allocation regressions pass. Initial two test expectation errors are retained: Children/Attributes method inputs are snapshots while axis iterators remain lazy; engine/budgets unchanged during correction. Full solution 26,466 and LSP 90 passed; exact QT3 31,397/0/424 and gated qt4 8,941/0/1,918 retain all skip names/reasons. Compatible old/new allocation controls reject baseline/accept candidate, and semantic controls pass 52 cases per version. Pinned standalone 10,221/0/4,380 completed in 800.631s with all 14,601 identities/exclusions and hashes reconciled at 5f553e02. Local qualification complete. No push, release or publication.
+
 ## Specialized lazy node filter candidate - 15 November 2026
 
 The [1.81.14 filter candidate](lazy-filter-sequence/README.md) replaces generated enumerable/adapter layers with direct XDM filtering. Scalar/empty paths, deferred acquisition/errors, Current/end behavior, single-pass refusal, identity/mutation and the existing non-disposal protocol are preserved. Immutable specification/protocol pins and fixed allocation budgets were recorded before implementation. Ten focused regressions, 26,453 solution tests and 90 language-server tests passed. QT3 31,397/0/424 and gated qt4 8,941/0/1,918 retain exact exclusions. Identical old/new allocation controls reject legacy/accept candidate against all five fixed budgets; separate compatible semantic controls pass 139 scenarios and 14 checks per version. Pinned standalone 10,221/0/4,380 completed in 746.143s with all 14,601 identities/exclusions and hashes reconciled at 6ccb4c83. Candidate qualification complete locally; no release, push or publication.
