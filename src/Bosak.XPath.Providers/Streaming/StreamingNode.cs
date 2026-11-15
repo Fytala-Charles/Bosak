@@ -21,6 +21,8 @@
 //                      |                  |       |                | serialization); shell-level wrappers route parent/ancestor/following-sibling to the      |
 //                      |                  |       |                | document/root correctly                                                                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 15-11-2026     | Use direct XDM sequences for nonnegative in-record wrapper paths.                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Xml.Linq;
 using Bosak.XPath.Core.Xdm;
@@ -199,7 +201,9 @@ internal class StreamingNode : IXdmNode, IStreamingNode
     {
         StreamingNodeRole.Document => DocumentChildren(kind),
         StreamingNodeRole.ShellRoot => _source.ChildRecords(kind),
-        _ => XdmSequence.FromSource(new EnumerableXdmSequence(WrapEach(_inner.Children(kind)))),
+        _ => _recordIndex >= 0
+            ? WrapInRecord(_inner.Children(kind))
+            : XdmSequence.FromSource(new EnumerableXdmSequence(WrapEach(_inner.Children(kind)))),
     };
 
     /// <summary>
@@ -241,7 +245,9 @@ internal class StreamingNode : IXdmNode, IStreamingNode
     public XdmSequence Attributes(string? localName = null, string? namespaceUri = null) =>
         _role == StreamingNodeRole.Document
             ? XdmSequence.Empty
-            : XdmSequence.FromSource(new EnumerableXdmSequence(WrapEach(_inner.Attributes(localName, namespaceUri))));
+            : _role == StreamingNodeRole.Record && _recordIndex >= 0
+                ? WrapInRecord(_inner.Attributes(localName, namespaceUri))
+                : XdmSequence.FromSource(new EnumerableXdmSequence(WrapEach(_inner.Attributes(localName, namespaceUri))));
 
     public XdmSequence Axis(XdmAxis axis)
     {
@@ -292,7 +298,9 @@ internal class StreamingNode : IXdmNode, IStreamingNode
             case XdmAxis.Descendant:
             case XdmAxis.Attribute:
             case XdmAxis.Namespace:
-                return XdmSequence.FromSource(new EnumerableXdmSequence(InnerAxis(axis)));
+                return _recordIndex >= 0
+                    ? WrapInRecord(_inner.Axis(axis))
+                    : XdmSequence.FromSource(new EnumerableXdmSequence(InnerAxis(axis)));
             case XdmAxis.DescendantOrSelf:
                 return XdmSequence.FromSource(new EnumerableXdmSequence(EnumerateSelfThen(InnerAxis(XdmAxis.Descendant))));
             case XdmAxis.Parent:
@@ -421,6 +429,53 @@ internal class StreamingNode : IXdmNode, IStreamingNode
         yield return XdmValue.FromNode(this);
         foreach (var item in rest)
             yield return item;
+    }
+
+    /// <summary>Wraps materialized record results through the existing owner/cache and XDM protocol.</summary>
+    private XdmSequence WrapInRecord(XdmSequence input)
+        => XdmSequence.FromSource(new InRecordSequence(input.Source, this));
+
+    private sealed class InRecordSequence : IXdmSequence
+    {
+        private readonly IXdmSequence? _source;
+        private readonly StreamingNode _owner;
+        internal InRecordSequence(IXdmSequence? source, StreamingNode owner) { _source = source; _owner = owner; }
+        /// <inheritdoc/>
+        public bool TryGetLength(out int length) { length = 0; return false; }
+        /// <inheritdoc/>
+        public IXdmSequenceEnumerator GetEnumerator() => new Enumerator(_source, _owner);
+        private sealed class Enumerator : IXdmSequenceEnumerator
+        {
+            private readonly IXdmSequence? _source;
+            private readonly StreamingNode _owner;
+            private IXdmSequenceEnumerator? _inner;
+            private XdmValue _current;
+            private int _state;
+            internal Enumerator(IXdmSequence? source, StreamingNode owner) { _source = source; _owner = owner; }
+            /// <inheritdoc/>
+            public XdmValue Current => _current;
+            /// <inheritdoc/>
+            public bool MoveNext()
+            {
+                if (_state == 2) return false;
+                try
+                {
+                    if (_state == 0) { _state = 1; _inner = _source?.GetEnumerator(); }
+                    while (_inner is not null && _inner.MoveNext())
+                    {
+                        var item = _inner.Current;
+                        if (item.IsNode)
+                        {
+                            _current = XdmValue.FromNode(_owner._source.Wrap((XDocumentNode)item.NodeValue!, _owner._recordIndex));
+                            return true;
+                        }
+                    }
+                    _state = 2;
+                    return false;
+                }
+                catch { _state = 2; throw; }
+            }
+        }
     }
 
     /// <summary>Wraps the results of an inner (in-record) axis, preserving record index.</summary>

@@ -1,0 +1,16 @@
+[
+  {
+    "gate": "QT3",
+    "exitCode": 0,
+    "seconds": 93.38441634178162,
+    "skipCount": 424,
+    "allSkipNamesAndReasonsUnchanged": true
+  },
+  {
+    "gate": "QT4",
+    "exitCode": 0,
+    "seconds": 21.68625783920288,
+    "skipCount": 1918,
+    "allSkipNamesAndReasonsUnchanged": true
+  }
+]

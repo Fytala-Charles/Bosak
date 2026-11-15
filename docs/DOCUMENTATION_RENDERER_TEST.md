@@ -1,3 +1,4 @@
+<!-- 15 November 2026: In-record wrapper candidate/canonical documentation rendered with local links checked. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: in-record-wrapper-sequence/DOCUMENTATION-CHECKS.json. -->
 <!-- 15 November 2026: Final specialized lazy filter dossier/canonical pages rendered and local destinations checked. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: lazy-filter-sequence/DOCUMENTATION-CHECKS.json. -->
 <!-- 15 November 2026: Lazy filter candidate and canonical documentation rendered programmatically with local destinations checked; no screenshot/PDF acceptance. Receipt: lazy-filter-sequence/DOCUMENTATION-CHECKS.json. -->
 <!-- 14 November 2026: Final date parser span dossier and canonical pages checked with local markdown-it rendering. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: date-parser-span/DOCUMENTATION-CHECKS.json. -->

@@ -1,0 +1,10 @@
+{
+  "originalFailure": "Two new tests assumed live Children/Attributes method input; baseline source materializes those method results",
+  "originalFocusedLog": "PROVIDERS-FOCUSED.log",
+  "originalFocusedTrx": "focused-results/PROVIDERS.trx",
+  "failedTests": 2,
+  "passedTests": 10,
+  "correction": "Assert unchanged method snapshots, lazy axis visibility, and subsequent fresh method calls separately",
+  "engineSourceChanged": false,
+  "allocationBudgetsChanged": false
+}
