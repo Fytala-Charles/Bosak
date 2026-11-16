@@ -1,3 +1,7 @@
+## Extension 0.2.7 preparation — 16 November 2026
+
+The owner approved source delivery, Core tag creation and an extension release. Extension metadata and lock now pin 0.2.7, bundling unchanged Core/server 1.81.17. Hosted compilation, extension/server tests, artifact review and exact-artifact Marketplace delivery remain required; this entry does not claim publication.
+
 ## NuGet 1.81.17 published — 16 November 2026
 
 The [publication receipt](release-1.81.17-publication/README.md) records ten successful pushes from preparation run 43861115818, publisher run 43867426381, public payload/signature verification and 53 passing fresh NuGet.org consumer checks. Source remains 6a7618e9; no rebuild, source push, tag or extension release. Earlier candidate entries below remain historical.

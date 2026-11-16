@@ -1,8 +1,12 @@
-# Bosak XPath / XSLT — VS Code Extension
+# Bosak XPath / XSLT â€” VS Code Extension
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Current release (0.2.6)
+## Release candidate (0.2.7)
+
+Version 0.2.7 bundles engine/server 1.81.17, including the qualified compatibility fixes and allocation reductions since 1.81.2. Requires .NET 10. Existing editor, experimental 4.0, numeric and schema/provider coverage limits remain. No new editor UI or performance guarantee is introduced. Hosted VSIX preparation and exact-artifact Marketplace verification are required before claiming publication.
+
+## Previous release (0.2.6)
 
 Version0.2.6 targets engine/server1.81.2 and corrects Windows URI handling for XPath and XQuery evaluation commands, including paths with spaces, Unicode and percent signs. Requires .NET10. Experimental4.0 and bounded numeric support retain their documented limits; production Schema/XmlDb/Braid adoption is outside this release scope. Existing editor module/signature coverage limits remain. Published as [fytala.vscode-bosak 0.2.6](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). See the [publication record](../docs/release-1.81.2-publication/README.md) and [maintainer release guide](../docs/RELEASING.md).
 
@@ -39,17 +43,17 @@ Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visu
 ## Features
 
 - **Syntax highlighting** for XPath (`.xpath`), XSLT (`.xsl`, `.xslt`), and XQuery (`.xq`, `.xqy`, `.xquery`) files
-- **Realtime diagnostics** — compile errors for XPath expressions, XSLT stylesheets, and XQuery documents
-- **Auto-completion** — XPath functions, axes, keywords, XSLT instructions, and XQuery keywords
-- **Hover** — function signatures and descriptions for XPath/XQuery functions
-- **Go to definition** — jump to user-defined XSLT functions, variables, parameters, and named templates; XQuery functions and variables
-- **Semantic highlighting** — function names, variables, namespace prefixes, keywords, and type names in XPath, XQuery, and XSLT
-- **Code actions** — quick fixes for common diagnostics (e.g. declaring a default element namespace)
-- **Code lens** — inline evaluation results for XPath/XQuery expressions, plus one-click "Run XSLT transformation" and "Run initial template" actions
-- **Document outline** — top-level XSLT declarations (templates, functions, variables, keys, output, imports) and XQuery declarations (modules, imports, functions, variables)
-- **Evaluate XPath** — run the current `.xpath` file and show the result
-- **Run XSLT Transformation** — run the current stylesheet against a selected source XML document
-- **Run XQuery** — run the current `.xq` file and show the result
+- **Realtime diagnostics** â€” compile errors for XPath expressions, XSLT stylesheets, and XQuery documents
+- **Auto-completion** â€” XPath functions, axes, keywords, XSLT instructions, and XQuery keywords
+- **Hover** â€” function signatures and descriptions for XPath/XQuery functions
+- **Go to definition** â€” jump to user-defined XSLT functions, variables, parameters, and named templates; XQuery functions and variables
+- **Semantic highlighting** â€” function names, variables, namespace prefixes, keywords, and type names in XPath, XQuery, and XSLT
+- **Code actions** â€” quick fixes for common diagnostics (e.g. declaring a default element namespace)
+- **Code lens** â€” inline evaluation results for XPath/XQuery expressions, plus one-click "Run XSLT transformation" and "Run initial template" actions
+- **Document outline** â€” top-level XSLT declarations (templates, functions, variables, keys, output, imports) and XQuery declarations (modules, imports, functions, variables)
+- **Evaluate XPath** â€” run the current `.xpath` file and show the result
+- **Run XSLT Transformation** â€” run the current stylesheet against a selected source XML document
+- **Run XQuery** â€” run the current `.xq` file and show the result
 
 ---
 
@@ -65,13 +69,13 @@ Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visu
 
 ## Installation
 
-### Option 1 — Install from the VS Code Marketplace (recommended for users)
+### Option 1 â€” Install from the VS Code Marketplace (recommended for users)
 
 Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
 [marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
-Published versions: **0.2.3** (2026-10-15) - engine 1.7.1 bundle alignment; **0.2.2** (2026-10-15) - engine 1.7.0 bundle alignment; **0.2.1** (2026-10-15) - engine 1.6.0 bundle alignment; **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+Published versions: **0.2.3** (2026-10-15) - engine 1.7.1 bundle alignment; **0.2.2** (2026-10-15) - engine 1.7.0 bundle alignment; **0.2.1** (2026-10-15) - engine 1.6.0 bundle alignment; **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) â€” TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) â€” refreshed language-server bundle.
 
-### Option 2 — Development / Sideload (recommended for contributors)
+### Option 2 â€” Development / Sideload (recommended for contributors)
 
 1. **Build the language server**
    ```bash
@@ -93,7 +97,7 @@ Published versions: **0.2.3** (2026-10-15) - engine 1.7.1 bundle alignment; **0.
 4. **Open in VS Code** and press `F5`  
    This opens a new **Extension Development Host** window with Bosak loaded.
 
-### Option 3 — Install from VSIX
+### Option 3 â€” Install from VSIX
 
 1. **Build the extension package**
    ```bash
@@ -104,11 +108,11 @@ Published versions: **0.2.3** (2026-10-15) - engine 1.7.1 bundle alignment; **0.
    ```
 
 2. **Install the VSIX in VS Code**
-   - Open VS Code → Extensions view (`Ctrl+Shift+X`)
-   - Click **⋯** (More Actions) → **Install from VSIX…**
+   - Open VS Code â†’ Extensions view (`Ctrl+Shift+X`)
+   - Click **â‹¯** (More Actions) â†’ **Install from VSIXâ€¦**
    - Select `vscode-bosak-0.1.5.vsix`
 
-### Option 4 — Custom server path
+### Option 4 â€” Custom server path
 
 If the extension cannot find the language server automatically, set the path manually:
 
@@ -139,16 +143,16 @@ The extension activates automatically when an XPath, XSLT, or XQuery file is ope
 
 Errors appear in the **Problems** panel (`Ctrl+Shift+M`) as you type:
 
-- **XPath files** — parser errors when the expression is invalid
-- **XSLT files** — XML well-formedness errors, missing root element (`xsl:stylesheet` / `xsl:transform`), and invalid XPath in `select`, `test`, `match`, and `use-when` attributes
-- **XQuery files** — prolog and expression compile errors
+- **XPath files** â€” parser errors when the expression is invalid
+- **XSLT files** â€” XML well-formedness errors, missing root element (`xsl:stylesheet` / `xsl:transform`), and invalid XPath in `select`, `test`, `match`, and `use-when` attributes
+- **XQuery files** â€” prolog and expression compile errors
 
 ### Completions
 
 Press `Ctrl+Space` to trigger suggestions:
 
-- In **XPath** files: standard `fn:*` functions, axes (`child::`, `descendant::`, …), and keywords (`for`, `let`, `if`, …)
-- In **XSLT** files: all of the above plus XSLT instructions (`xsl:template`, `xsl:apply-templates`, …)
+- In **XPath** files: standard `fn:*` functions, axes (`child::`, `descendant::`, â€¦), and keywords (`for`, `let`, `if`, â€¦)
+- In **XSLT** files: all of the above plus XSLT instructions (`xsl:template`, `xsl:apply-templates`, â€¦)
 
 ### Commands
 
@@ -179,7 +183,7 @@ Results are evaluated by the language server and shown in a preview editor; erro
 }
 ```
 
-Open **Output** panel (`Ctrl+Shift+U`) → select **Bosak XPath / XSLT** to view the LSP traffic.
+Open **Output** panel (`Ctrl+Shift+U`) â†’ select **Bosak XPath / XSLT** to view the LSP traffic.
 
 ---
 
@@ -202,7 +206,7 @@ The extension could not locate `Bosak.LanguageServer.exe` (or `.dll`). Make sure
 ### No diagnostics showing
 
 1. Check that the file has the correct extension (`.xpath`, `.xsl`, `.xslt`, `.xq`, `.xqy`, `.xquery`).
-2. Open **Output** → **Bosak XPath / XSLT** and look for connection errors.
+2. Open **Output** â†’ **Bosak XPath / XSLT** and look for connection errors.
 3. Enable `"bosak.trace.server": "verbose"` to inspect LSP messages.
 
 ### Server crashes on startup
@@ -223,14 +227,14 @@ If it exits immediately, check for missing dependencies (`dotnet --info`).
 
 ```
 vscode-bosak/
-├── package.json              # Extension manifest
-├── tsconfig.json             # TypeScript config
-├── src/
-│   └── extension.ts          # Client entry point
-├── syntaxes/
-│   ├── xpath.tmLanguage.json # XPath TextMate grammar
-│   └── xslt.tmLanguage.json  # XSLT TextMate grammar
-└── language-configuration.json # Bracket/symbol config
+â”œâ”€â”€ package.json              # Extension manifest
+â”œâ”€â”€ tsconfig.json             # TypeScript config
+â”œâ”€â”€ src/
+â”‚   â””â”€â”€ extension.ts          # Client entry point
+â”œâ”€â”€ syntaxes/
+â”‚   â”œâ”€â”€ xpath.tmLanguage.json # XPath TextMate grammar
+â”‚   â””â”€â”€ xslt.tmLanguage.json  # XSLT TextMate grammar
+â””â”€â”€ language-configuration.json # Bracket/symbol config
 ```
 
 The language server itself lives in `../src/Bosak.LanguageServer/` (C# / .NET 10).
@@ -247,4 +251,4 @@ Then reload the VS Code Extension Development Host (`Ctrl+R` or **Developer: Rel
 
 ## License
 
-Dual Usage License — See the root `LICENSE.md` for details.
+Dual Usage License â€” See the root `LICENSE.md` for details.
