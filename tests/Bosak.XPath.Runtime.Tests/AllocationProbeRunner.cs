@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 14-11-2026     | Validate isolated validator row protocol.                                                |
 //                      | Charles Korthout | 0.3   | 15-11-2026     | Validate lazy filter allocation row identities and results.                              |
 //                      | Charles Korthout | 0.4   | 15-11-2026     | Validate provider wrapper allocation row protocol.                                      |
+//                      | Charles Korthout | 0.5   | 16-11-2026     | Validate singleton atomization allocation protocol and outcomes.                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -71,6 +72,12 @@ internal static class AllocationProbeRunner
                 Assert.True(expectedComparisons.ContainsKey(name));
                 Assert.Equal(expectedComparisons[name], item.GetProperty("boolean").GetBoolean());
             }
+            else if (workload == "atomization")
+            {
+                Assert.Contains(name, new[] { "empty", "singleton" });
+                Assert.Equal(name == "empty" ? "Undefined" : "Integer", item.GetProperty("kind").GetString());
+                Assert.Equal(name == "empty" ? 0L : 7L, item.GetProperty("items").GetInt64());
+            }
             else if (workload == "wrapping")
             {
                 Assert.Contains(name, new[] { "create", "once", "replay", "cross-first" });
@@ -111,7 +118,7 @@ internal static class AllocationProbeRunner
             }
         }
         var rows = items.ToDictionary(x => x.GetProperty("name").GetString()!, x => x.GetProperty("bytes").GetInt64());
-        Assert.Equal(workload == "comparisons" ? 6 : workload == "validation" ? 12 : workload == "filtering" ? 5 : workload == "wrapping" ? 4 : 10, rows.Count);
+        Assert.Equal(workload == "atomization" ? 2 : workload == "comparisons" ? 6 : workload == "validation" ? 12 : workload == "filtering" ? 5 : workload == "wrapping" ? 4 : 10, rows.Count);
         return rows;
     }
 }

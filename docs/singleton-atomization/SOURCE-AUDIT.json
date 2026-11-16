@@ -1,0 +1,6 @@
+{
+  "allVmCodeOutsideAtomizeByteIdenticalAfterHistoryNormalization": true,
+  "scalarNodeArrayJNodeAndMaterializedBranchesUnchanged": true,
+  "arithmeticCallersUnchanged": true,
+  "baselineVmGitBlobSha256": "5f41482b28f7fa2c16d15accdf83606d65f01786e3bae4b9a8bbc7d171db1c9a"
+}

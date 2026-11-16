@@ -1,0 +1,9 @@
+{
+  "initialFocusedProviderPassed": 2,
+  "initialFocusedRuntimePassed": 13,
+  "initialFocusedRuntimeFailed": 1,
+  "reason": "General comparison may call TryGetLength; caller fixture now returns unknown instead of refusing. Direct Atomize fixture still refuses shortcuts.",
+  "engineUnchanged": true,
+  "budgetsUnchanged": true,
+  "engineSha256": "d72cb6fc814a1c8881494c0208b437bb3772836494e1d34d5920f5bad329a989"
+}

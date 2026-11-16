@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "developmentVersion": "1.81.16",
+  "qualifiedSourceCommit": "5a85c75230b5bc1e2b09e046c0a58bb6d6ba96c4",
+  "solutionPassed": 26482,
+  "languageServerPassed": 90,
+  "focusedPassed": 16,
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "standaloneSeconds": 776.575,
+  "sourceHashes": {
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "d72cb6fc814a1c8881494c0208b437bb3772836494e1d34d5920f5bad329a989",
+    "src/Directory.Build.props": "19dbe05e8ff86a704bc9a0b75166ac769ce1a0c74a5ca6502cf3b8186915a197",
+    "tests/Bosak.XPath.AllocationChecks/Program.cs": "4a7ae709167666ffaa2c91f47776cf9ced32bf2e85f42a693d69f04249fe2959",
+    "tests/Bosak.XPath.AllocationChecks/SingletonAtomizationAllocationWorkload.cs": "9d695769b661bb40bfa9911dbf53b74c9b65f8323d7aa71ecfd2f29546d2771a",
+    "tests/Bosak.XPath.Runtime.Tests/AllocationProbeRunner.cs": "7ce91e848f1194ea50236af66a28f58139f27119abcb396c88e31735e4a950dc",
+    "tests/Bosak.XPath.Runtime.Tests/SingletonAtomizationTests.cs": "994a8e1bf1da895773f90df1fa94bcab13ac0a66f374f23d1c477fd4420df57e",
+    "tests/Bosak.XPath.Providers.Tests/SingletonAtomizationProviderTests.cs": "618c39418fabfc810f4935e74d9c3067ca0f73001b73fc86ce9e18588c8ac3bf"
+  },
+  "candidateNineHashes": {
+    "Bosak.XPath.Api.dll": "5f43085f634e71b5a8cec53b452196fd71a2a68d30d52c121ba0cc0f8ba16f9d",
+    "Bosak.XPath.Compiler.dll": "e8642dddb58c44add13d0775a7936daf824bebcea3698a906b9dc7f085c3539b",
+    "Bosak.XPath.Core.dll": "5cf762d2f7dc744d168153ddc114393e39751aacc9bd234e3cd8e06b208332d3",
+    "Bosak.XPath.Parser.dll": "072f9da94653bdd77c488dabf915692f263fe06eaa87c0d09cca9e51a955b153",
+    "Bosak.XPath.Providers.dll": "12c0c0e47227979b5240711766b4519d66bba059c55dffe38be14abe14411c14",
+    "Bosak.XPath.Runtime.dll": "7de157247a3a3ced24b4d6a96c2296efa137fcb873c65f3559351aa4091af4f8",
+    "Bosak.XPath.Standard.dll": "4e90d9c4b578d14eefc70e9d88368f483e2754625e0b5d74ea4d755cc4f67f82",
+    "Bosak.XQuery.dll": "4a1c2474dfebab7927fb49bc5de72c91c275cca4ba395035e1ebf99ec16d45e2",
+    "Bosak.Xslt.dll": "fa5678f2ed40e91aa2fa706a4df390cb9c39a11366ad4f7604820e6eca65f3b4"
+  },
+  "sameCompatibleAllocationWorker": true,
+  "oldRejectedByAllFixedBudgets": true,
+  "candidateAcceptedByAllFixedBudgets": true,
+  "semanticCasesPerVersion": 84,
+  "allSemanticCasesEqualAcrossVersions": true,
+  "initialFixtureFailureRetained": true,
+  "engineAndBudgetsUnchangedDuringFixtureCorrection": true,
+  "published": false
+}

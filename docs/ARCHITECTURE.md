@@ -96,6 +96,12 @@ Literal-result namespace collection now honors provider undeclaration metadata a
 
 ---
 
+## Singleton atomization engine candidate - 16 November 2026
+
+The [1.81.16 candidate](singleton-atomization/README.md) removes only the lazy singleton Atomize temporary buffer while preserving complete source consumption, exact cardinality/tail error order and existing materialized/scalar/PSVI behavior. Sixteen focused regressions pass. Same compatible production worker measures empty64->32 and singleton352->32 B/call; pre-recorded48/64 ceilings reject baseline and accept candidate. Identical semantic control passes84 cases per version with exact results/events. Initial caller-fixture failure and prelaunch loader-path correction retained separately; production/budgets unchanged. Full solution 26,482 and LSP 90 passed; frozen QT3 exact 31,397/0/424 and gated qt4 exact 8,941/0/1,918, all skip names/reasons unchanged. Pinned standalone 10,221/0/4,380 completed in 776.575s with all 14,601 identities/exclusions and source/corpus/runtime hashes reconciled at 5a85c752. Local qualification complete; no push or publication. No publication or release.
+
+
+
 # Current checkpoint - 6 November 2026
 
 [TA-44 native Schema compatibility lanes](foundation-native-schema-lane/README.md) run fresh **451/0 frozen baseline, 451/0 isolated source and 451/0 unchanged-binary** native regression cases against the exact candidate. The same **451 distinct case identities** agree across lanes; counts are not additive. All nine observed engine DLL hashes match their lane in Default noncollectible contexts. The binary candidate changes only nine engine DLLs; consumer/test/configuration/fixture bytes stay unchanged. Native worktree and Core production remain unchanged at **1.81.0**. Initial diagnostic restore NU1900 is retained; command-scoped offline retry builds with zero warnings/errors. Prior Core **26,338/0**, frozen gates and **318 types/6,465 declarations** are inherited after exact hash checks, not rerun. This qualifies the exercised existing native document-assessment source/binary lanes, not the new public provider binding or owner/performance budgets. Next **PV-Q03 actual public Schema provider adapter feasibility and immutable adoption**. R3/NU-01/SC-01, broader native/persistent/construction/nil/no-value, C45/freeze and R4-R7 remain open. No product pin, package, external source edit, commit, push or publication.
