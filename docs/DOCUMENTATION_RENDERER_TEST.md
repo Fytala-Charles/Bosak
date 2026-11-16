@@ -1,3 +1,7 @@
+## Extension 0.3.0 delivery - 16 November 2026
+
+Canonical pages, the current snippet user guide and publication receipts are rendered with unchanged Fytala CSS and checked local destinations. Programmatic HTML only; no screenshot or PDF acceptance. Actual VS Code editor-command checks are retained separately from documentation rendering. [Receipt](extension-0.3.0-publication/DOCUMENTATION-CHECKS.json).
+
 ## Snippet candidate documentation - 16 November 2026
 
 Canonical pages, extension usage and the snippet guide are rendered with the existing Fytala CSS; local destinations are checked. Programmatic HTML only; no screenshot, PDF or interactive editor acceptance is claimed. [Receipt](vscode-snippets/DOCUMENTATION-CHECKS.json).

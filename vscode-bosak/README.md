@@ -2,11 +2,11 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Development: snippets (0.3.0)
+## Current release (0.3.0)
 
-The next extension adds 20 language-scoped XPath, XQuery and XSLT snippets with `bosak-` prefixes. Use Insert Snippet or Ctrl+Space, then Tab through editable placeholders. See the [prefix and placement guide](../docs/vscode-snippets/README.md). This collection is not yet Marketplace-published.
+Version 0.3.0 adds 20 XPath, XQuery and XSLT snippets with `bosak-` prefixes, editable defaults and linked names. Use Insert Snippet or Ctrl+Space, then Tab/Shift+Tab through placeholders. See the [user guide](../docs/VSCODE_SNIPPETS.md) and [verified publication](../docs/extension-0.3.0-publication/README.md). Bundles engine/server 1.81.17; requires .NET 10 for language-server features. Snippet insertion itself is independent of the server. Existing language/editor/profile limits remain.
 
-## Current release (0.2.7)
+## Previous release (0.2.7)
 
 Version 0.2.7 bundles engine/server 1.81.17, including the qualified compatibility fixes and allocation reductions since 1.81.2. Requires .NET 10. Existing editor, experimental 4.0, numeric and schema/provider coverage limits remain. No new editor UI or performance guarantee is introduced. Hosted preparation and exact-artifact Marketplace verification passed. See the [publication receipt](../docs/extension-0.2.7-publication/README.md).
 

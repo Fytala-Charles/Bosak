@@ -1,0 +1,74 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "b622e5b84e8d9ab9aa9d6329b0e8b9a854186cc9ffacb1d4b7b922b2f842671d",
+      "htmlSha256": "314e0870447a656f8a0894f58f11910e2d5ec7e2bc3fe34b359cb91ba5d7eab1"
+    },
+    {
+      "file": "vscode-bosak/README.md",
+      "sourceSha256": "968f253e66cc8e99d3c02e28d5f1e330f8186c88e26e6116f7811201e5b1e478",
+      "htmlSha256": "99b94ceab618f59082988865f2e668c28e4ea6a3a175aa34f7815eedd450886a"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "d95b635b678d18379d7f1b1065138e4d9f57cc23270c669af229488ce98cc9b1",
+      "htmlSha256": "2d00bea79c38e141bf5777d5945df27af695b07fdbf9e9c6650d2539d188fe74"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "7fa617f66f46a6a0263e3380a46db74ffbc4fd111b041449e7ff83fe6e0801fe",
+      "htmlSha256": "8e8532d28e97011364e1ce4b90926fa299f8f68e1c0b4844c278ec3713310cc3"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "e2c12cc896f2000ce0e1d74189190044f46fd44de2d54202a6f40f8a5de5d63d",
+      "htmlSha256": "7d2b5524327db7aa41eeb95fcb9989bfa8281d2ec1afe6994249147c46f903ca"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "7a0b8870d4dca9dfc8b2c3b0ff30e99368b62a799b209294989570d10807677b",
+      "htmlSha256": "4efb17bc63965d3965ed570a51d692e32e8d95c5cdf079ad0578541b92dd6874"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "9d1c40e3e89defccd6d20d6ee80d4a0aa0c01a51776d7b31f75d73768e267408",
+      "htmlSha256": "b2cb9230d32404578940390ff80ead38421706d708d32bcab6e24ee918945dfa"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "be6a0270e281731d6a209261ae56da2fd9201de092752fd7d7724dad12b66e15",
+      "htmlSha256": "ef38c3b6eb40db18c5b31112cf948705661e8de1866e24697c0c6a6174391c4b"
+    },
+    {
+      "file": "docs/RELEASING.md",
+      "sourceSha256": "56e0d5e7830c675c4f94849957a6cbd61a5749e33b91180048809d54a66abd24",
+      "htmlSha256": "e6a1f4962900c552a24a74d7f61b59307807ab4a4c0be9b8cb24f93f8a1b9632"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "37af94c419b2581c9dce725a653a27b1dc35ca86a8ec5389a59dae4a3b4f8969",
+      "htmlSha256": "39ba119139429f48f93c77274a7a8c8fe08bb96a2ffe475f4b4f2628e65fabca"
+    },
+    {
+      "file": "docs/vscode-snippets/README.md",
+      "sourceSha256": "fac21fa708950d17bf587bf4608bce82b36ad089bef9f84dc47bbaea0ee21fe4",
+      "htmlSha256": "8e9209f58115acb74ff548dd0e85c58bc665952a87aad79b8b7831f940071d1c"
+    },
+    {
+      "file": "docs/VSCODE_SNIPPETS.md",
+      "sourceSha256": "6a9be271a161d0d6f6edfa276d311c55dc2857ce677f475f6f9b5132838eb3f7",
+      "htmlSha256": "87af323eb3018ce84e28d730e99430fddbb8412d14ca26a461167587b4504215"
+    },
+    {
+      "file": "docs/extension-0.3.0-publication/README.md",
+      "sourceSha256": "4cffef043afe341f19eb13c931f551dcbca8087759d27ab815eadf038fdbdf45",
+      "htmlSha256": "5147412a6007dbcf10c7e17bb1b71e212c4133c4de6d325674ad0795e25fa319"
+    }
+  ],
+  "localDestinations": 4267,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

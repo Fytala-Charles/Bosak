@@ -4,14 +4,13 @@
   <p>Separate artifact preparation, review and exact-artifact publication</p>
 </div>
 
-## Extension snippet candidate
+## Extension snippets 0.3.0
 
-Development extension 0.3.0 adds snippets; Core/server remains 1.81.17. Marketplace 0.2.7 is still the published baseline. The [snippet guide](vscode-snippets/README.md) lists the candidate scope and insertion review. This PR does not prepare or publish a new VSIX.
-
+Extension 0.3.0 is published and byte-verified; Core/server remains 1.81.17. See the [user guide](VSCODE_SNIPPETS.md) and [delivery receipt](extension-0.3.0-publication/README.md). The existing preparation/review/exact-artifact publication workflow remains unchanged.
 
 ## Current scope and prerequisites
 
-The current Core/language server version is **1.81.17** (NuGet published); VS Code extension **0.2.7** is Marketplace-published and byte-verified. See the [extension receipt](extension-0.2.7-publication/README.md). [The release configuration](../.github/release-config.json) lists exactly ten NuGet libraries, including the existing Database REST-loader package. The language server is a bundled executable, not an eleventh NuGet library. Proprietary XmlDb/Braid integrations are separate delivery work.
+The current Core/language server version is **1.81.17** (NuGet published); VS Code extension **0.3.0** is Marketplace-published and byte-verified. See the [extension receipt](extension-0.3.0-publication/README.md). [The release configuration](../.github/release-config.json) lists exactly ten NuGet libraries, including the existing Database REST-loader package. The language server is a bundled executable, not an eleventh NuGet library. Proprietary XmlDb/Braid integrations are separate delivery work.
 
 These pins do not announce a public release. [The release checklist](RELEASE-READINESS-1.81.1.md) still requires applicable owner workload/baseline/budget decisions, disposition of deferred requirements, C45/API acceptance, signing/provenance review and approval over concrete final artifact hashes. Preparing an artifact, pushing a commit or creating a tag does not grant those decisions.
 

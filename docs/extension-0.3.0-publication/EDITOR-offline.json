@@ -1,0 +1,31 @@
+{
+  "success": true,
+  "phase": "offline",
+  "vscodeVersion": "1.146.0",
+  "extensionVersion": "0.3.0",
+  "extensionPath": "D:\\Development\\Bosak\\.guard-tmp\\extension-snippets-release-20261116\\extensions-offline\\fytala.vscode-bosak-0.3.0",
+  "automatedEditorCommands": true,
+  "humanVisualAcceptance": false,
+  "cases": [
+    {
+      "case": "xpath registered insertion, linked edit, forward/backward stops, final cursor",
+      "text": "for $entry in (7, 8) return $entry"
+    },
+    {
+      "case": "xquery registration and all dollar-prefixed mirrors",
+      "text": "for $entry in (3, 1, 2)\r\nlet $amount := $entry\r\nwhere $amount gt 0\r\norder by $amount\r\nreturn $amount"
+    },
+    {
+      "case": "xslt stylesheet registration, replacement and final cursor",
+      "text": "<xsl:stylesheet version=\"3.0\"\r\n    xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"\r\n    xmlns:xs=\"http://www.w3.org/2001/XMLSchema\"\r\n    xmlns:local=\"urn:local\" exclude-result-prefixes=\"xs local\">\r\n    <xsl:template match=\"/\">\r\n        <output/>\r\n    </xsl:template>\r\n</xsl:stylesheet>"
+    },
+    {
+      "case": "xslt function namespace and literal-dollar mirror",
+      "text": "<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:local=\"urn:local\">\n<xsl:function name=\"local:echo\" as=\"item()*\">\n    <xsl:param name=\"argument\" as=\"item()*\"/>\n    <xsl:sequence select=\"$argument\"/>\n</xsl:function>\n</xsl:stylesheet>"
+    },
+    {
+      "case": "xpath prefix suggestion acceptance",
+      "text": "map { 'key': 1 }"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "phase": "normal",
+  "cases": [],
+  "error": "AssertionError [ERR_ASSERTION]: owner extension directory must not be used",
+  "stack": "AssertionError [ERR_ASSERTION]: owner extension directory must not be used\n\tat exports.run (d:\\Development\\Bosak\\.guard-tmp\\extension-snippets-release-20261116\\harness\\test.cjs:14:10)\n\tat file:///c:/Program%20Files/Microsoft%20VS%20Code/69047191fc/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:172:22533\n\tat new Promise (<anonymous>)\n\tat UD._doHandleExtensionTests (file:///c:/Program%20Files/Microsoft%20VS%20Code/69047191fc/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:172:22226)\n\tat async UD.$extensionTestsExecute (file:///c:/Program%20Files/Microsoft%20VS%20Code/69047191fc/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:172:21735)"
+}
