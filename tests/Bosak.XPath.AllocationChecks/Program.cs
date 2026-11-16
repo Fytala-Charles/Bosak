@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 14-11-2026     | Add isolated validator allocation rows.                                                  |
 //                      | Charles Korthout | 0.3   | 15-11-2026     | Add isolated lazy filter workload dispatch.                                              |
 //                      | Charles Korthout | 0.4   | 15-11-2026     | Add isolated provider wrapper workload dispatch.                                        |
+//                      | Charles Korthout | 0.5   | 16-11-2026     | Add isolated singleton atomization allocation workload.                                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Reflection;
@@ -29,14 +30,14 @@ namespace Bosak.XPath.AllocationChecks;
 internal static class Program
 {
     /// <summary>Runs one fixed allocation workload and catches managed diagnostic errors.</summary>
-    /// <param name="args">The comparisons, matching, validation, filtering or wrapping workload name.</param>
+    /// <param name="args">The comparisons, matching, validation, filtering, wrapping or atomization workload name.</param>
     /// <returns>Zero after a complete JSON report, otherwise two.</returns>
     public static int Main(string[] args)
     {
         try
         {
-            if (args.Length != 1 || args[0] is not ("comparisons" or "matching" or "validation" or "filtering" or "wrapping"))
-                throw new ArgumentException("Expected comparisons, matching, validation, filtering or wrapping.");
+            if (args.Length != 1 || args[0] is not ("comparisons" or "matching" or "validation" or "filtering" or "wrapping" or "atomization"))
+                throw new ArgumentException("Expected comparisons, matching, validation, filtering, wrapping or atomization.");
             // Resolve the engine-bearing type inside the guard, not at entry-point load.
             var type = typeof(Program).Assembly.GetType("Bosak.XPath.AllocationChecks.Workloads", true)!;
             var report = type.GetMethod("Run", BindingFlags.NonPublic | BindingFlags.Static)!.Invoke(null, new object[] { args[0] });
@@ -58,6 +59,7 @@ internal static class Workloads
 
     internal static object Run(string workload)
     {
+        if (workload == "atomization") return SingletonAtomizationAllocationWorkload.Run();
         var vm = typeof(EvaluationContext).Assembly.GetType("Bosak.XPath.Runtime.Vm.VmEngine", true)!;
         var context = new EvaluationContext();
         var rows = new List<object>();

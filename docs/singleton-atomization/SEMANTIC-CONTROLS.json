@@ -1,0 +1,2582 @@
+{
+  "success": true,
+  "sameCompatibleWorker": true,
+  "allocationLoopsExecuted": false,
+  "all84CasesIdenticalAcrossVersions": true,
+  "runs": [
+    {
+      "label": "baseline",
+      "workerSha256": "8f9a11a9951c10c59a8728ede27db36338e8f9b898137723c78e762f12500159",
+      "result": {
+        "success": true,
+        "engine": "1.81.15.0",
+        "comparisonCases": 84,
+        "cases": [
+          {
+            "name": "scalar/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "source/0/none/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/current0/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/currentLast/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/none/False",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "source/1/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/1/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/1"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "source/1/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/1/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/1/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/none/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length 2"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2"
+            ]
+          },
+          {
+            "name": "source/2/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/2/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/2"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2"
+            ]
+          },
+          {
+            "name": "source/2/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/2/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/1"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1"
+            ]
+          },
+          {
+            "name": "source/2/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/none/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length 5"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5"
+            ]
+          },
+          {
+            "name": "source/5/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/5/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/5"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5"
+            ]
+          },
+          {
+            "name": "source/5/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/5/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/4"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4"
+            ]
+          },
+          {
+            "name": "source/5/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "acquire"
+            ]
+          },
+          {
+            "name": "nested-single",
+            "result": {
+              "kind": "Integer",
+              "text": "3",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          }
+        ],
+        "warmup": 10000,
+        "iterations": 100000,
+        "rows": []
+      },
+      "engineHashesBeforeAfter": {
+        "Bosak.XPath.Api.dll": "4529ad550873e9797edd8b9600582b9cdf8da258abae4fdadd3bb89d7631a9d1",
+        "Bosak.XPath.Compiler.dll": "68a1376ed1978d8ab7300b99bb82e41b7655ec503a6ea0e47e25453831f99153",
+        "Bosak.XPath.Core.dll": "095aecc478f4405f0c3659368f57861f15d958b9397da295988dbeeb3615af57",
+        "Bosak.XPath.Parser.dll": "469382bbf6adcec2ab44fb4e2057a8931c4af8e4119116c9ae8f45adf27f81e6",
+        "Bosak.XPath.Providers.dll": "346e2c95cb6675322b8204f051cb0f9b5c98da6a97ff984d67f95917015145b4",
+        "Bosak.XPath.Runtime.dll": "e72d45479dc92dbf6adba3b5eb9954b34fb668b939b9f114971e345d415981a7",
+        "Bosak.XPath.Standard.dll": "df3808c586b611293dc0fc755b75257653bdbc17b0ee3dbb34b68270234a2ad3",
+        "Bosak.XQuery.dll": "cb69733aeb14c4e41ebeda04a3239007140c748186b0b6c54907db0666ac6f11",
+        "Bosak.Xslt.dll": "63c564749f2725265fe77f2f0b2a5b14deb52d0d363f6bc8ecfdbe7b3d9556bd"
+      }
+    },
+    {
+      "label": "candidate",
+      "workerSha256": "8f9a11a9951c10c59a8728ede27db36338e8f9b898137723c78e762f12500159",
+      "result": {
+        "success": true,
+        "engine": "1.81.16.0",
+        "comparisonCases": 84,
+        "cases": [
+          {
+            "name": "scalar/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/0",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/1",
+            "result": {
+              "kind": "Integer",
+              "text": "9",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/2",
+            "result": {
+              "kind": "String",
+              "text": "hello",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/3",
+            "result": {
+              "kind": "String",
+              "text": "7",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/4",
+            "result": {
+              "kind": "String",
+              "text": "9",
+              "schema": "untypedAtomic",
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/5",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/6",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/7",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values."
+            },
+            "events": null
+          },
+          {
+            "name": "scalar/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "lazy-single/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "materialized/8",
+            "result": {
+              "kind": "Map",
+              "text": "(map)",
+              "schema": null,
+              "error": ""
+            },
+            "events": null
+          },
+          {
+            "name": "source/0/none/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/current0/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/0/currentLast/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/0/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/none/False",
+            "result": {
+              "kind": "Integer",
+              "text": "7",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "source/1/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/1/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/1"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          },
+          {
+            "name": "source/1/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/1/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/1/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/1/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/none/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length 2"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2"
+            ]
+          },
+          {
+            "name": "source/2/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/2/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/2"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2"
+            ]
+          },
+          {
+            "name": "source/2/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/2/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/2/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/1"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1"
+            ]
+          },
+          {
+            "name": "source/2/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/none/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length 5"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5"
+            ]
+          },
+          {
+            "name": "source/5/none/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/acquire/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:acquire"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/acquire/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/null/False",
+            "result": {
+              "kind": "Undefined",
+              "text": "()",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/null/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/move0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire",
+              "move/0"
+            ]
+          },
+          {
+            "name": "source/5/move0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/moveEnd/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:move/5"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5"
+            ]
+          },
+          {
+            "name": "source/5/moveEnd/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "move/5",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/current0/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/0"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire",
+              "move/0",
+              "current/0"
+            ]
+          },
+          {
+            "name": "source/5/current0/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "acquire"
+            ]
+          },
+          {
+            "name": "source/5/currentLast/False",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:current/4"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4"
+            ]
+          },
+          {
+            "name": "source/5/currentLast/True",
+            "result": {
+              "kind": "",
+              "text": "",
+              "schema": null,
+              "error": "System.InvalidOperationException:single-pass"
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1",
+              "current/1",
+              "move/2",
+              "current/2",
+              "move/3",
+              "current/3",
+              "move/4",
+              "current/4",
+              "acquire"
+            ]
+          },
+          {
+            "name": "nested-single",
+            "result": {
+              "kind": "Integer",
+              "text": "3",
+              "schema": null,
+              "error": ""
+            },
+            "events": [
+              "acquire",
+              "move/0",
+              "current/0",
+              "move/1"
+            ]
+          }
+        ],
+        "warmup": 10000,
+        "iterations": 100000,
+        "rows": []
+      },
+      "engineHashesBeforeAfter": {
+        "Bosak.XPath.Api.dll": "5f43085f634e71b5a8cec53b452196fd71a2a68d30d52c121ba0cc0f8ba16f9d",
+        "Bosak.XPath.Compiler.dll": "e8642dddb58c44add13d0775a7936daf824bebcea3698a906b9dc7f085c3539b",
+        "Bosak.XPath.Core.dll": "5cf762d2f7dc744d168153ddc114393e39751aacc9bd234e3cd8e06b208332d3",
+        "Bosak.XPath.Parser.dll": "072f9da94653bdd77c488dabf915692f263fe06eaa87c0d09cca9e51a955b153",
+        "Bosak.XPath.Providers.dll": "12c0c0e47227979b5240711766b4519d66bba059c55dffe38be14abe14411c14",
+        "Bosak.XPath.Runtime.dll": "7de157247a3a3ced24b4d6a96c2296efa137fcb873c65f3559351aa4091af4f8",
+        "Bosak.XPath.Standard.dll": "4e90d9c4b578d14eefc70e9d88368f483e2754625e0b5d74ea4d755cc4f67f82",
+        "Bosak.XQuery.dll": "4a1c2474dfebab7927fb49bc5de72c91c275cca4ba395035e1ebf99ec16d45e2",
+        "Bosak.Xslt.dll": "fa5678f2ed40e91aa2fa706a4df390cb9c39a11366ad4f7604820e6eca65f3b4"
+      }
+    }
+  ]
+}

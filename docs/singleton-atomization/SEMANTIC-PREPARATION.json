@@ -1,0 +1,5 @@
+{
+  "error": "Support-source loader called with a path from a different worktree",
+  "workloadsLaunched": 0,
+  "correction": "Use the loader-owned pinned worktree path; reuse the already-built identical worker"
+}

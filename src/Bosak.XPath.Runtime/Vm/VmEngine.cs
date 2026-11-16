@@ -443,6 +443,7 @@
 //                      | Charles Korthout | 2.214 | 14-11-2026     | Classify validator bare type names without allocating a substring (1.81.12).               |
 //                      | Charles Korthout | 2.215 | 14-11-2026     | Parse date regex groups and timezone slices with spans.                                  |
 //                      | Charles Korthout | 2.216 | 15-11-2026     | Use direct XDM enumerators for lazy node filtering.                                      |
+//                      | Charles Korthout | 2.217 | 16-11-2026     | Avoid temporary buffers in lazy singleton atomization; retain full consumption.        |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -5228,6 +5229,26 @@ internal static class VmEngine
 
         if (value.IsSequence)
         {
+            // Preserve complete source consumption and tail errors before cardinality
+            // checks or node atomization, without buffering nonmaterialized items.
+            if (value.SequenceValue is not null and not MaterializedSequence)
+            {
+                var first = XdmValue.Undefined;
+                var count = 0;
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                {
+                    if (count == 0)
+                        first = item;
+                    count = checked(count + 1);
+                }
+                if (count == 1)
+                    return Atomize(first);
+                if (count == 0)
+                    return XdmValue.Undefined;
+                throw new InvalidOperationException(
+                    "XPTY0004: Atomization requires a singleton or empty sequence, but got a sequence of length " + count);
+            }
+
             var items = MaterializeSequence(value);
             if (items.Length == 1)
                 return Atomize(items[0]);
