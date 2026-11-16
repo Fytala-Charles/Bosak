@@ -6,7 +6,7 @@
 
 ## Current scope and prerequisites
 
-The current Core/language server version is **1.81.17** (NuGet published); the VS Code extension candidate is **0.2.7**. Extension 0.2.6 remains the previous Marketplace baseline until verified publication. [The release configuration](../.github/release-config.json) lists exactly ten NuGet libraries, including the existing Database REST-loader package. The language server is a bundled executable, not an eleventh NuGet library. Proprietary XmlDb/Braid integrations are separate delivery work.
+The current Core/language server version is **1.81.17** (NuGet published); VS Code extension **0.2.7** is Marketplace-published and byte-verified. See the [extension receipt](extension-0.2.7-publication/README.md). [The release configuration](../.github/release-config.json) lists exactly ten NuGet libraries, including the existing Database REST-loader package. The language server is a bundled executable, not an eleventh NuGet library. Proprietary XmlDb/Braid integrations are separate delivery work.
 
 These pins do not announce a public release. [The release checklist](RELEASE-READINESS-1.81.1.md) still requires applicable owner workload/baseline/budget decisions, disposition of deferred requirements, C45/API acceptance, signing/provenance review and approval over concrete final artifact hashes. Preparing an artifact, pushing a commit or creating a tag does not grant those decisions.
 

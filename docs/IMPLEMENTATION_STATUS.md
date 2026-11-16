@@ -1,3 +1,7 @@
+## Extension 0.2.7 published — 16 November 2026
+
+The [publication receipt](extension-0.2.7-publication/README.md) records hosted preparation, 90 language-server tests, exact-artifact publisher success, byte-identical Marketplace download and three packaged stdio diagnostic checks. Tags v1.81.17 and vscode-v0.2.7 identify the separate immutable Core/extension sources. Prior pending entries remain historical.
+
 ## Extension 0.2.7 preparation — 16 November 2026
 
 The owner approved source delivery, Core tag creation and an extension release. Extension metadata and lock now pin 0.2.7, bundling unchanged Core/server 1.81.17. Hosted compilation, extension/server tests, artifact review and exact-artifact Marketplace delivery remain required; this entry does not claim publication.
