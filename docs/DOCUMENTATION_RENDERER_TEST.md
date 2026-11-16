@@ -1,3 +1,7 @@
+## Snippet candidate documentation - 16 November 2026
+
+Canonical pages, extension usage and the snippet guide are rendered with the existing Fytala CSS; local destinations are checked. Programmatic HTML only; no screenshot, PDF or interactive editor acceptance is claimed. [Receipt](vscode-snippets/DOCUMENTATION-CHECKS.json).
+
 ## Extension 0.2.7 publication ? 16 November 2026
 
 Programmatic HTML rendering checked thirteen pages and 4,248 local destinations. Canonical branding assets are unchanged. No screenshot or PDF acceptance is claimed. Receipt: [extension documentation checks](extension-0.2.7-publication/DOCUMENTATION-CHECKS.json).

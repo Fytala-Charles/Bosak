@@ -1,0 +1,50 @@
+{
+  "Main module": {
+    "prefix": "bosak-xquery-main",
+    "description": "XQuery 3.1 main module",
+    "body": [
+      "xquery version \"3.1\";",
+      "",
+      "${1:1 + 1}$0"
+    ]
+  },
+  "Library module": {
+    "prefix": "bosak-xquery-module",
+    "description": "XQuery library module with a public function",
+    "body": [
+      "xquery version \"3.1\";",
+      "module namespace ${1:example} = \"${2:urn:example}\";",
+      "",
+      "declare function $1:${3:identity}(\\$${4:value} as item()*) as item()* {",
+      "\t\\$$4",
+      "};$0"
+    ]
+  },
+  "Function": {
+    "prefix": "bosak-xquery-function",
+    "description": "XQuery local function declaration",
+    "body": [
+      "declare function local:${1:identity}(\\$${2:value} as item()*) as item()* {",
+      "\t\\$$2",
+      "};$0"
+    ]
+  },
+  "FLWOR": {
+    "prefix": "bosak-flwor",
+    "description": "XQuery for/let/where/order/return expression",
+    "body": [
+      "for \\$${1:item} in (${2:3, 1, 2})",
+      "let \\$${3:value} := \\$$1",
+      "where \\$$3 gt ${4:0}",
+      "order by \\$$3",
+      "return \\$$3$0"
+    ]
+  },
+  "Variable": {
+    "prefix": "bosak-xquery-variable",
+    "description": "XQuery prolog variable declaration",
+    "body": [
+      "declare variable \\$${1:value} := ${2:1};$0"
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "success": true,
+  "solutionBuild": {
+    "errors": 0,
+    "warnings": 12,
+    "receipt": "SOLUTION-BUILD.log"
+  },
+  "solutionTests": {
+    "passed": 26488,
+    "failed": 0,
+    "projects": [
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_08_net10.0.trx",
+        "sha256": "fe91b0894506abe3357da5520c8229a241ef38e8e9bcb0e31a0d19480cc41d0e",
+        "passed": 66
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_08_net10.0[1].trx",
+        "sha256": "d49fc6db9fc57c696ff5e4958adc4ec86c10f3a65f6db4f91740d5ed42025dfa",
+        "passed": 202
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_08_net10.0[2].trx",
+        "sha256": "b8974fa49b304a0c2e988fc99928ad140d43a18d2fe141d62766fb7f4484d60b",
+        "passed": 266
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_08_net10.0[3].trx",
+        "sha256": "f4f6ec1cc7f6ec3c861cecc2f87e292534cbb8c82732f971930d798d63daa219",
+        "passed": 47
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_09_net10.0.trx",
+        "sha256": "82472327a8a4138441db219bb319d3d45d2ce20466922a5f1eea33e4a1ef3bb4",
+        "passed": 681
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_09_net10.0[1].trx",
+        "sha256": "0faf58be0ac9df6254d98ba96bc07b5100932996bc7e5608c3be674e05e6213c",
+        "passed": 841
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_09_net10.0[2].trx",
+        "sha256": "8ee136a01c4200ea974d7ba35b9fb374bd1d5bfd5166fed1c3e17c31dc80579f",
+        "passed": 241
+      },
+      {
+        "receipt": "runtime-fixtures-corrected\\charl_CHARLES_2026-11-16_15_01_49_net10.0.trx",
+        "sha256": "54eef1093bf6356e329caca7ee4e7815056e3752eb522a4f9fa5aa2b515f44b8",
+        "passed": 1947
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_11_net10.0.trx",
+        "sha256": "1f48e75af8f4ef354768944a097fdbc02e632e0ee977eae0bb41dcd31671670f",
+        "passed": 13800
+      },
+      {
+        "receipt": "solution-final\\charl_CHARLES_2026-11-16_14_58_12_net10.0.trx",
+        "sha256": "ea480525757ae34b0c4186d840134ce9dd7cbd1b9b9a7ce55006678c1ee12cad",
+        "passed": 8397
+      }
+    ],
+    "initialAttempt": "solution-final includes 51 missing-fixture runtime failures; exact 1947 runtime identities replaced by successful corrected receipt after pinned submodule initialization"
+  },
+  "languageServer": {
+    "passed": 111,
+    "failed": 0,
+    "newSnippetCases": 21,
+    "receipt": "language-server-final\\charl_CHARLES_2026-11-16_14_56_34_net10.0.trx"
+  },
+  "nodeChecks": [
+    "compile",
+    "highlighting",
+    "launch",
+    "snippet registration/placeholders"
+  ],
+  "packagerFileList": "VSIX-FILE-LIST.txt",
+  "sourceBase": "8a0e5e2fbe1e2112c06662496a2b65f7a48aed12",
+  "coreVersion": "1.81.17",
+  "extensionCandidate": "0.3.0",
+  "engineTouched": false,
+  "manualEditorAcceptance": false,
+  "published": false,
+  "inputSha256": {
+    "vscode-bosak/package.json": "a5cbc7bb50ede852017bb2a39a1f96104bdc1703514ce545750accdc87fdd073",
+    "vscode-bosak/package-lock.json": "d20290714111be3e2104db4c60ca3c905421ba7d981e70e4010a55519dd28f01",
+    "vscode-bosak/test/snippets.cjs": "096096b7f117cbb4b2022efae145af4050b70ae751b4c90604963f00ea7663d2",
+    "tests/Bosak.LanguageServer.Tests/SnippetExpansionTests.cs": "ae0b6de304c66a7d5abcd5f32c2d80da9f2e15d1f3a67b2ef2269365b5906795",
+    "tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj": "cb02db957a62936f573b787afa1067b7c0633a117b0023b9b1512b9404841e08",
+    "vscode-bosak/snippets/xslt.json": "10b0cc01e979e7f03650cf25f7cd8376d95e199e45fab79483811899af51c1f4",
+    "vscode-bosak/snippets/xquery.json": "22d15ef49778deb1f32ae3c89b1812b75098f5564312c8407da0cc544c3ace7a",
+    "vscode-bosak/snippets/xpath.json": "2fb24f080b10948a4f76024ff63dda5589df9cfa2b70cd48de4db17da7b8848b"
+  }
+}

@@ -138,6 +138,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Exact terminating division](docs/foundation-exact-division/GUIDE.md) | Decimal division with explicit quotas and refusal instead of rounding. |
 | [Primitive numeric constructors](docs/foundation-exact-constructors/GUIDE.md) | Bounded integer/decimal conversion over the exact numeric grammar. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
+| [Editor snippets](docs/vscode-snippets/README.md) | Development collection, prefixes and insertion guide. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Provider qualification](docs/foundation-provider-qualification/GUIDE.md) | Candidate-bound owner workload receipts and evidence checks. |
 | [Native Schema compatibility](docs/foundation-native-schema-lane/GUIDE.md) | Source and unchanged-binary qualification scope. |

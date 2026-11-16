@@ -1,0 +1,27 @@
+{
+  "scope": "Editor examples only; no engine semantic adoption or deviation",
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+      "sha256": "ca1f8b00f9626e3e73589a371d702acf6bf0f4708c96a2cb0e87ca7a5ad3b88c",
+      "bytes": 1107652
+    },
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+      "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+      "bytes": 1946378
+    },
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xslt-30-20170608/",
+      "sha256": "d9626241dc8e53380a30fb4c4f37a46c72ddc997548b65ee2ae641d20a350ab7",
+      "bytes": 4945348
+    }
+  ],
+  "reviewedUtc": "2026-11-16T14:03:14.562821+00:00",
+  "snippetSyntaxSource": {
+    "repository": "microsoft/vscode-docs",
+    "commit": "0cc882e924eaf8239013fea1d6840be4179cfdb0",
+    "path": "docs/editing/userdefinedsnippets.md",
+    "url": "https://github.com/microsoft/vscode-docs/blob/0cc882e924eaf8239013fea1d6840be4179cfdb0/docs/editing/userdefinedsnippets.md"
+  }
+}

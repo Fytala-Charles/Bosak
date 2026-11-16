@@ -4,6 +4,11 @@
   <p>Separate artifact preparation, review and exact-artifact publication</p>
 </div>
 
+## Extension snippet candidate
+
+Development extension 0.3.0 adds snippets; Core/server remains 1.81.17. Marketplace 0.2.7 is still the published baseline. The [snippet guide](vscode-snippets/README.md) lists the candidate scope and insertion review. This PR does not prepare or publish a new VSIX.
+
+
 ## Current scope and prerequisites
 
 The current Core/language server version is **1.81.17** (NuGet published); VS Code extension **0.2.7** is Marketplace-published and byte-verified. See the [extension receipt](extension-0.2.7-publication/README.md). [The release configuration](../.github/release-config.json) lists exactly ten NuGet libraries, including the existing Database REST-loader package. The language server is a bundled executable, not an eleventh NuGet library. Proprietary XmlDb/Braid integrations are separate delivery work.

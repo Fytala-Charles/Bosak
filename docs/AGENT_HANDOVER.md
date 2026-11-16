@@ -1,3 +1,10 @@
+
+
+## REQ-141 snippet candidate ? 16 November 2026
+
+Local qualification: 26,488 solution tests and 111 language-server tests pass, including 21 snippet cases. Node compile/highlighting/launch/snippet checks and packager file inclusion pass. Initial missing-fixture failures and corrected exact-case runtime results are retained in [validation](vscode-snippets/VALIDATION.json). Full build: zero errors, twelve warnings in unchanged files/dependency auditing. Hosted review and interactive editor checks remain separate.
+
+Isolated branch feature/extension-snippets is based on merged release main 8a0e5e2f. Twenty snippets, extension-only feature version 0.3.0, Node metadata checks and 21 expansion tests; local validation is retained in VALIDATION.json; hosted review remains pending. Owner root checkout is preserved. Core source/version unchanged; no new publication authorized by the snippets PR recommendation. [Guide](vscode-snippets/README.md).
 ## Extension 0.2.7 published — 16 November 2026
 
 The [publication receipt](extension-0.2.7-publication/README.md) records hosted preparation, 90 language-server tests, exact-artifact publisher success, byte-identical Marketplace download and three packaged stdio diagnostic checks. Tags v1.81.17 and vscode-v0.2.7 identify the separate immutable Core/extension sources. Prior pending entries remain historical.

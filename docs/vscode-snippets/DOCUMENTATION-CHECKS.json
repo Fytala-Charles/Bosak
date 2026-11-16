@@ -1,0 +1,64 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "330a726fefc8e276f7f08f41a7b950705c26447f114cefbdfa448bbf1f651ad8",
+      "htmlSha256": "9f078b0d2736c9eafdb8578d1921c0f34dfb8db56894a813b95063f053c2171a"
+    },
+    {
+      "file": "vscode-bosak/README.md",
+      "sourceSha256": "13b465fdc6e6ff1ab97a8604016d2487278ee27ef45f72be31ee5392ac42718a",
+      "htmlSha256": "e3419db595cb7193ee5274d29607c523173f7d283d7f5b179985433792968269"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "fb48f69a5d340725eece223c525c78fe36d56949041345130c61f9552efddf0e",
+      "htmlSha256": "444ae7134eff9b930ea8844a62d965c7e9753e4872e9c1a38f7db158b58ef44b"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "d6f3d52dbe26cd4feeee400bfc8aec2934696750eb9c669912b363009c21d1ec",
+      "htmlSha256": "8a058a2c8b14a3a4a13d6cdbed6f24d3283ebc6a8c87095a15ebd7b7311aac2d"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "9923cfb07e83d87f534437ccf27d90d0be9fac1ea635c831ccc4e3a8d9e8e698",
+      "htmlSha256": "6300c2d2d2cebc882513c0f99229cc94ea7a3f26e02aa80e1a3eb9243dbaed82"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "9a3c8a5e672cf6a0b1d4a53039796651dce81d12567d4a35553ec0aa997f4d8a",
+      "htmlSha256": "0f09158697ce24c7f8cf47258bbed0d828993fabe9f2c2ff18cc36e31ccad5f9"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "0158b15eea3041d04e3313878cdf0d06ad327147dc03cd07492478625499a97f",
+      "htmlSha256": "2602ad9478f5502ed795aa11f9a7d4a8210fadbb67c686ea5fb9fb30ee25cf4c"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "941941532223a63f07bb63a7110961ee8a70bac9c6917373829cb2ab8489a431",
+      "htmlSha256": "f6db8dddb4f2d25fcb99172b68bff5b0c26c0e15ad9976cccff40e7b4b738ab1"
+    },
+    {
+      "file": "docs/RELEASING.md",
+      "sourceSha256": "6a01edc79acb5c49cfee8035cd7cbe09d1d9279fe23b079468d60e0269f6ea3e",
+      "htmlSha256": "ec78f97c3e010369a708af4d932169e55720f163e819bf7c055b86b02920f353"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "742bcba4cec4b66b9632cf8a8f57edbd5e15b355c940e650079f1a0ba1145465",
+      "htmlSha256": "e526b90bef5211f0aa748242226447c76493da8ef99b76a0d0b126291925253c"
+    },
+    {
+      "file": "docs/vscode-snippets/README.md",
+      "sourceSha256": "fac21fa708950d17bf587bf4608bce82b36ad089bef9f84dc47bbaea0ee21fe4",
+      "htmlSha256": "8e9209f58115acb74ff548dd0e85c58bc665952a87aad79b8b7831f940071d1c"
+    }
+  ],
+  "localDestinations": 4252,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}
