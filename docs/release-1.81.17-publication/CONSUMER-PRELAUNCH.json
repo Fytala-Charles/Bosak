@@ -1,0 +1,18 @@
+{
+  "reviewSha256": "6fabc08230abb232985df1e0311dccea3fe1e3420f297f3ac37a4474d5ab453a",
+  "sourceSha256": "cd506af5a6ea4f021b79a2e8e45f3183c8e9442260fe4f408f829c605be7f684",
+  "consumerBinarySha256": "056a30305df9fac1f8f1c665177112a9a481d7626e7d8fcd5b744839b155addc",
+  "packageDlls": {
+    "Bosak.XPath.Api": "3605bdaa9dce03dcd11406e89d659f3dbd471305f9f2681bd5923fd90426331a",
+    "Bosak.XPath.Compiler": "054ca41e299d493ea7629c66b03406df9ac608dd499aa511429046c3e20820f7",
+    "Bosak.XPath.Core": "ba3e59e82dc81bd7632eec33dcb6c993c47946400dacb0506110c64239be6785",
+    "Bosak.XPath.Parser": "ec54d86918edb0d0914440331c84d39e9cb573450824495993d6fd739794b4a3",
+    "Bosak.XPath.Providers": "2ea7785e6c56aee04713309217269a357b22aa772c0dc3e7c897f5f54b2f7c2c",
+    "Bosak.XPath.Providers.Database": "92f823e08356157b41540d16bba23a2e675c4afe55f76236a74614983011f24a",
+    "Bosak.XPath.Runtime": "da817b59c327323cf9e3b09319d3d15cff647b644bc3433750aa1d578fe2dc58",
+    "Bosak.XPath.Standard": "df819acd05f899f5ff145846af3b21df2534f382f5e0ed81c64809db44142e5f",
+    "Bosak.XQuery": "467f03e569cca75320c340b9ce520266b7150701371c3685e48c8ac5030dcbe4",
+    "Bosak.Xslt": "e1088bddb10f766ed4e9ba9f641853855858ece1ae9017ff42912adc7de8545f"
+  },
+  "nativePinsVerified": true
+}

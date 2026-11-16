@@ -1,0 +1,132 @@
+{
+  "success": true,
+  "sourceCommit": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d",
+  "preparationRunId": 43861115818,
+  "runAttempt": 1,
+  "manifestSha256": "2ad34e65ade407a914dac93b551caf703a9cfc298ecb82921bd750de3dade2ca",
+  "manifest": {
+    "artifacts": [
+      {
+        "bytes": 153596,
+        "file": "Bosak.XPath.Api.1.81.17.nupkg",
+        "sha256": "c9dabb285f66a41701f622c0d1e69874f859c9551f198bae7b98adcde3e378e9"
+      },
+      {
+        "bytes": 130062,
+        "file": "Bosak.XPath.Compiler.1.81.17.nupkg",
+        "sha256": "aba1ddd4895e46ad1de93aff8703562093d337c89ea40d0aecf00f9944dc6ecf"
+      },
+      {
+        "bytes": 130546,
+        "file": "Bosak.XPath.Core.1.81.17.nupkg",
+        "sha256": "80c91988467ce21a5235ccf12b16b7c420538f4668340d6bac29d63ce4c1e8d8"
+      },
+      {
+        "bytes": 160049,
+        "file": "Bosak.XPath.Parser.1.81.17.nupkg",
+        "sha256": "2b2b60dac3c05e2f2cb8ed8ef9fed8fcaeeb7c05be2969d6ff3b6b8e7f4e49c9"
+      },
+      {
+        "bytes": 157081,
+        "file": "Bosak.XPath.Providers.1.81.17.nupkg",
+        "sha256": "3c9ff1e208018e573af1d1201d7e795d163706f707b33cdf18a1712b9730b3f4"
+      },
+      {
+        "bytes": 80140,
+        "file": "Bosak.XPath.Providers.Database.1.81.17.nupkg",
+        "sha256": "384cf4a698da834b97acefe505f0dc1e186210980baf2890dd242095aefdc16e"
+      },
+      {
+        "bytes": 277768,
+        "file": "Bosak.XPath.Runtime.1.81.17.nupkg",
+        "sha256": "cafbc7180aec6390b96ab6a5c6815c793c8fbed411344e38b2b7f5ba59c4d546"
+      },
+      {
+        "bytes": 354449,
+        "file": "Bosak.XPath.Standard.1.81.17.nupkg",
+        "sha256": "dfb707c823be278161ab7dd6e4ac0581ad683eacf7b20dc08c02cbfde5458334"
+      },
+      {
+        "bytes": 137271,
+        "file": "Bosak.XQuery.1.81.17.nupkg",
+        "sha256": "5078eb69394f61f2c97a83dbd2c49a6e2b2d8d76d1dfb1f0cbded6be8fcee302"
+      },
+      {
+        "bytes": 724915,
+        "file": "Bosak.Xslt.1.81.17.nupkg",
+        "sha256": "c185cd3ace067793ad9055708ab63c1669fa031a89a888ec86a5772e28a8718e"
+      }
+    ],
+    "coreVersion": "1.81.17",
+    "extensionVersion": "0.2.6",
+    "formatVersion": 1,
+    "kind": "nuget",
+    "sourceCommit": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d"
+  },
+  "downloads": [
+    {
+      "artifact": {
+        "id": 14224571206,
+        "node_id": "MDg6QXJ0aWZhY3QxNDIyNDU3MTIwNg==",
+        "name": "nuget-6a7618e9dcf70eb8a67d5d1789ff7b787133b52d",
+        "size_in_bytes": 2296776,
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14224571206",
+        "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14224571206/zip",
+        "expired": false,
+        "digest": "sha256:1466f3676f186d6f18e5895a0ca5b7f0a3e156acd73c5c96243b8b91dc0fcd36",
+        "created_at": "2026-11-16T11:59:21Z",
+        "updated_at": "2026-11-16T11:59:21Z",
+        "expires_at": "2027-02-14T11:49:33Z",
+        "workflow_run": {
+          "id": 43861115818,
+          "repository_id": 1242768879,
+          "head_repository_id": 1242768879,
+          "head_branch": "main",
+          "head_sha": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d"
+        }
+      },
+      "downloadSha256": "1466f3676f186d6f18e5895a0ca5b7f0a3e156acd73c5c96243b8b91dc0fcd36",
+      "downloadBytes": 2296776,
+      "directory": "packages"
+    },
+    {
+      "artifact": {
+        "id": 14223043757,
+        "node_id": "MDg6QXJ0aWZhY3QxNDIyMzA0Mzc1Nw==",
+        "name": "nuget-qualification-6a7618e9dcf70eb8a67d5d1789ff7b787133b52d-1",
+        "size_in_bytes": 5905231,
+        "url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14223043757",
+        "archive_download_url": "https://api.github.com/repos/Fytala-Charles/Bosak/actions/artifacts/14223043757/zip",
+        "expired": false,
+        "digest": "sha256:f14d3873bd1dc615ba9182c47633c17ef09c2981a6d19eab8965231e5610c141",
+        "created_at": "2026-11-16T11:59:22Z",
+        "updated_at": "2026-11-16T11:59:22Z",
+        "expires_at": "2027-02-14T11:49:33Z",
+        "workflow_run": {
+          "id": 43861115818,
+          "repository_id": 1242768879,
+          "head_repository_id": 1242768879,
+          "head_branch": "main",
+          "head_sha": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d"
+        }
+      },
+      "downloadSha256": "f14d3873bd1dc615ba9182c47633c17ef09c2981a6d19eab8965231e5610c141",
+      "downloadBytes": 5905231,
+      "directory": "qualification"
+    }
+  ],
+  "solutionPassed": 26488,
+  "qt3": [
+    31397,
+    0,
+    424
+  ],
+  "qt4": [
+    8941,
+    0,
+    1918
+  ],
+  "experimentalPassed": 11,
+  "exactSkipMapsVerified": true,
+  "published": false
+}

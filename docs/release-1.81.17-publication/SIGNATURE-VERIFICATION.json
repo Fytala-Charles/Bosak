@@ -1,0 +1,7 @@
+{
+  "success": true,
+  "packages": 10,
+  "commandReceipt": "SIGNATURE-VERIFY.json",
+  "source": "NuGet.org delivered nupkg files",
+  "allPackageSignaturesVerified": true
+}

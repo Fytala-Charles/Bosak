@@ -1,0 +1,28 @@
+{
+  "status": "Completed",
+  "success": true,
+  "command": [
+    "C:/Program Files/dotnet/dotnet.exe",
+    "nuget",
+    "verify",
+    "--all",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Api.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Compiler.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Core.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Parser.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Providers.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Providers.Database.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Runtime.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XPath.Standard.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.XQuery.1.81.17.nupkg",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\delivered\\Bosak.Xslt.1.81.17.nupkg"
+  ],
+  "timeoutSeconds": 120,
+  "memoryLimitBytes": 8589934592,
+  "diagnosticOnly": true,
+  "qualification": false,
+  "memoryScope": "Aggregate collector and owned target process tree",
+  "processId": 29460,
+  "exitCode": 0,
+  "elapsedSeconds": 0.7133048999821767
+}

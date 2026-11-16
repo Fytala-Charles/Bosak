@@ -1,0 +1,16 @@
+{
+  "status": "Completed",
+  "success": true,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\extension\\smoke.py"
+  ],
+  "timeoutSeconds": 120,
+  "memoryLimitBytes": 8589934592,
+  "diagnosticOnly": true,
+  "qualification": false,
+  "memoryScope": "Aggregate collector and owned target process tree",
+  "processId": 52368,
+  "exitCode": 0,
+  "elapsedSeconds": 4.226531200052705
+}

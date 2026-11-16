@@ -1,0 +1,31 @@
+{
+  "sourceCommit": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d",
+  "preparationRunId": 43861115818,
+  "manifestSha256": "2ad34e65ade407a914dac93b551caf703a9cfc298ecb82921bd750de3dade2ca",
+  "consumerSourceSha256": "cd506af5a6ea4f021b79a2e8e45f3183c8e9442260fe4f408f829c605be7f684",
+  "consumerProjectSha256": "b2e974cd75b56c012951a8842f66d6afc7dead65658e930dd62b89b415bf9342",
+  "nugetConfigSha256": "29302847aca63a9bc28f91c850579bc7128b1865c691a706d9195add08750766",
+  "packageHashes": {
+    "Bosak.XPath.Api.1.81.17.nupkg": "c9dabb285f66a41701f622c0d1e69874f859c9551f198bae7b98adcde3e378e9",
+    "Bosak.XPath.Compiler.1.81.17.nupkg": "aba1ddd4895e46ad1de93aff8703562093d337c89ea40d0aecf00f9944dc6ecf",
+    "Bosak.XPath.Core.1.81.17.nupkg": "80c91988467ce21a5235ccf12b16b7c420538f4668340d6bac29d63ce4c1e8d8",
+    "Bosak.XPath.Parser.1.81.17.nupkg": "2b2b60dac3c05e2f2cb8ed8ef9fed8fcaeeb7c05be2969d6ff3b6b8e7f4e49c9",
+    "Bosak.XPath.Providers.1.81.17.nupkg": "3c9ff1e208018e573af1d1201d7e795d163706f707b33cdf18a1712b9730b3f4",
+    "Bosak.XPath.Providers.Database.1.81.17.nupkg": "384cf4a698da834b97acefe505f0dc1e186210980baf2890dd242095aefdc16e",
+    "Bosak.XPath.Runtime.1.81.17.nupkg": "cafbc7180aec6390b96ab6a5c6815c793c8fbed411344e38b2b7f5ba59c4d546",
+    "Bosak.XPath.Standard.1.81.17.nupkg": "dfb707c823be278161ab7dd6e4ac0581ad683eacf7b20dc08c02cbfde5458334",
+    "Bosak.XQuery.1.81.17.nupkg": "5078eb69394f61f2c97a83dbd2c49a6e2b2d8d76d1dfb1f0cbded6be8fcee302",
+    "Bosak.Xslt.1.81.17.nupkg": "c185cd3ace067793ad9055708ab63c1669fa031a89a888ec86a5772e28a8718e"
+  },
+  "packageSources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "cache": "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\consumer-cache",
+  "projectReferences": false,
+  "workloadRuns": 1,
+  "timeoutSeconds": 120,
+  "memoryLimitBytes": 8589934592,
+  "expectedCases": 53,
+  "liveDatabaseAcceptance": false,
+  "publicationAuthorized": false
+}

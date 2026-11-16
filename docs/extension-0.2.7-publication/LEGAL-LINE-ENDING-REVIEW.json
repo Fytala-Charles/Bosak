@@ -1,0 +1,17 @@
+[
+  {
+    "file": "NOTICE",
+    "checkoutSha256": "a5b8435d1981220f43c7a90839f37cd9f32169a6c88c02be337884aa7804bd26",
+    "gitBlobAndPackageSha256": "cdca91e8e312dad1c9f890cc8048f9871f4243a784b7a9d1481d2299c9a4605d"
+  },
+  {
+    "file": "vscode-bosak/LICENSE.md",
+    "checkoutSha256": "71b55bd05649abd741010f8e3a300ae8a0f98abf598b243111f5d76929213ea2",
+    "gitBlobAndPackageSha256": "1ad2f7f6948445d9462ea4b8ecae8de892ecb6c7bb2d43175b38e668c5702654"
+  },
+  {
+    "file": "src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt",
+    "checkoutSha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+    "gitBlobAndPackageSha256": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+  }
+]

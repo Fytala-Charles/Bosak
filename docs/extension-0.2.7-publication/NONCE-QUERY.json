@@ -1,0 +1,517 @@
+{
+  "response": {
+    "results": [
+      {
+        "extensions": [
+          {
+            "publisher": {
+              "publisherId": "7c91d7ec-79b8-4efd-8fc3-3c8937918fa3",
+              "publisherName": "Fytala",
+              "displayName": "Fytala",
+              "flags": "verified",
+              "domain": null,
+              "isDomainVerified": false
+            },
+            "extensionId": "76b4a5f0-2c2a-47c2-bff0-21789d74e3b5",
+            "extensionName": "vscode-bosak",
+            "displayName": "Bosak XPath / XSLT",
+            "flags": "validated, public",
+            "lastUpdated": "2026-11-16T13:19:29.953Z",
+            "publishedDate": "2026-10-05T08:36:12.247Z",
+            "releaseDate": "2026-10-05T08:36:12.247Z",
+            "shortDescription": "Language support for XPath 3.1 and XSLT 3.0 using the Bosak engine",
+            "versions": [
+              {
+                "version": "0.2.7",
+                "flags": "validated",
+                "lastUpdated": "2026-11-16T13:19:29.953Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.7/1794834715366",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.7/assetbyname"
+              },
+              {
+                "version": "0.2.6",
+                "flags": "validated",
+                "lastUpdated": "2026-11-08T18:39:56.177Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.6/1794162940739",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.6/assetbyname"
+              },
+              {
+                "version": "0.2.5",
+                "flags": "validated",
+                "lastUpdated": "2026-10-17T04:55:15.307Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.5/1792212625939",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.5/assetbyname"
+              },
+              {
+                "version": "0.2.4",
+                "flags": "validated",
+                "lastUpdated": "2026-10-16T06:16:56.197Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.4/1792131004838",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.4/assetbyname"
+              },
+              {
+                "version": "0.2.3",
+                "flags": "validated",
+                "lastUpdated": "2026-10-15T17:20:47.293Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.3/1792084499377",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.3/assetbyname"
+              },
+              {
+                "version": "0.2.2",
+                "flags": "validated",
+                "lastUpdated": "2026-10-15T15:20:56.02Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.2/1792077310602",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.2/assetbyname"
+              },
+              {
+                "version": "0.2.1",
+                "flags": "validated",
+                "lastUpdated": "2026-10-15T09:01:39.143Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.1/1792054611961",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.1/assetbyname"
+              },
+              {
+                "version": "0.2.0",
+                "flags": "validated",
+                "lastUpdated": "2026-10-14T19:24:10.933Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.2.0/1792005505757",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.2.0/assetbyname"
+              },
+              {
+                "version": "0.1.6",
+                "flags": "validated",
+                "lastUpdated": "2026-10-14T09:28:14.95Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.6/1791969719091",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.1.6/assetbyname"
+              },
+              {
+                "version": "0.1.5",
+                "flags": "validated",
+                "lastUpdated": "2026-10-07T09:14:49.963Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.5/1791364237806",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.1.5/assetbyname"
+              },
+              {
+                "version": "0.1.4",
+                "flags": "validated",
+                "lastUpdated": "2026-10-05T08:42:27.903Z",
+                "files": [
+                  {
+                    "assetType": "Microsoft.VisualStudio.Code.Manifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Code.Manifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.Details",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.Content.Details"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Content.License",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.Content.License"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Default",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.Icons.Default"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.Icons.Small",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.Icons.Small"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixManifest",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.VsixManifest"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VSIXPackage",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.VSIXPackage"
+                  },
+                  {
+                    "assetType": "Microsoft.VisualStudio.Services.VsixSignature",
+                    "source": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445/Microsoft.VisualStudio.Services.VsixSignature"
+                  }
+                ],
+                "assetUri": "https://Fytala.gallerycdn.vsassets.io/extensions/fytala/vscode-bosak/0.1.4/1791189372445",
+                "fallbackAssetUri": "https://Fytala.gallery.vsassets.io/_apis/public/gallery/publisher/Fytala/extension/vscode-bosak/0.1.4/assetbyname"
+              }
+            ],
+            "versionsTruncated": false,
+            "deploymentType": 0
+          }
+        ],
+        "pagingToken": null,
+        "resultMetadata": [
+          {
+            "metadataType": "ResultCount",
+            "metadataItems": [
+              {
+                "name": "TotalCount",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "headers": {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Content-Length": "22432",
+    "Content-Type": "application/json; charset=utf-8; api-version=7.2-preview.1",
+    "Expires": "-1",
+    "P3P": "CP=\"CAO DSP COR ADMa DEV CONo TELo CUR PSA PSD TAI IVDo OUR SAMi BUS DEM NAV STA UNI COM INT PHY ONL FIN PUR LOC CNT\"",
+    "Set-Cookie": "VstsSession=%7B%22PersistentSessionId%22%3A%2288a3034a-2087-4a3b-aedd-0b0d4a634781%22%2C%22PendingAuthenticationSessionId%22%3A%2200000000-0000-0000-0000-000000000000%22%2C%22CurrentAuthenticationSessionId%22%3A%2200000000-0000-0000-0000-000000000000%22%2C%22SignInState%22%3A%7B%7D%7D;SameSite=None; domain=.visualstudio.com; expires=Tue, 16-Nov-2027 13:20:15 GMT; path=/; secure; HttpOnly",
+    "X-TFS-ProcessId": "74fed70a-8154-4c9e-b69e-e45ef7574778",
+    "ActivityId": "13e368e7-569b-47cc-88ac-81b67a9b3696",
+    "X-TFS-Session": "13e368e7-569b-47cc-88ac-81b67a9b3696",
+    "X-VSS-E2EID": "13e368e7-569b-47cc-88ac-81b67a9b3696",
+    "X-VSS-SenderDeploymentId": "2663b13f-50e3-a655-a159-22f6f4725fab",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+    "Request-Context": "appId=cid-v1:84715e31-583a-4723-a46d-946169b2f4a8",
+    "Access-Control-Expose-Headers": "Request-Context",
+    "X-Content-Type-Options": "nosniff",
+    "X-Cache": "CONFIG_NOCACHE",
+    "X-MSEdge-Ref": "Ref A: BCCFB077130A4CD7B1B438DE12521CF4 Ref B: VIEAA3060305037 Ref C: 2026-11-16T13:20:15Z",
+    "Date": "Mon, 16 Nov 2026 13:20:15 GMT",
+    "Connection": "close"
+  }
+}

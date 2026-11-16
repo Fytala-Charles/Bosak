@@ -2,7 +2,11 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Current release (0.2.6)
+## Current release (0.2.7)
+
+Version 0.2.7 bundles engine/server 1.81.17, including the qualified compatibility fixes and allocation reductions since 1.81.2. Requires .NET 10. Existing editor, experimental 4.0, numeric and schema/provider coverage limits remain. No new editor UI or performance guarantee is introduced. Hosted preparation and exact-artifact Marketplace verification passed. See the [publication receipt](../docs/extension-0.2.7-publication/README.md).
+
+## Previous release (0.2.6)
 
 Version0.2.6 targets engine/server1.81.2 and corrects Windows URI handling for XPath and XQuery evaluation commands, including paths with spaces, Unicode and percent signs. Requires .NET10. Experimental4.0 and bounded numeric support retain their documented limits; production Schema/XmlDb/Braid adoption is outside this release scope. Existing editor module/signature coverage limits remain. Published as [fytala.vscode-bosak 0.2.6](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). See the [publication record](../docs/release-1.81.2-publication/README.md) and [maintainer release guide](../docs/RELEASING.md).
 

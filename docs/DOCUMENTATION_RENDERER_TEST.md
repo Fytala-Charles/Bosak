@@ -1,3 +1,11 @@
+## Extension 0.2.7 publication ? 16 November 2026
+
+Programmatic HTML rendering checked thirteen pages and 4,248 local destinations. Canonical branding assets are unchanged. No screenshot or PDF acceptance is claimed. Receipt: [extension documentation checks](extension-0.2.7-publication/DOCUMENTATION-CHECKS.json).
+
+## NuGet 1.81.17 publication ? 16 November 2026
+
+Programmatic HTML rendering checked ten pages and 4,231 local destinations, including the publication dossier and updated installation instructions. Canonical branding assets are unchanged. No screenshot or PDF acceptance is claimed. Receipt: [publication documentation checks](release-1.81.17-publication/DOCUMENTATION-CHECKS.json).
+
 <!-- 16 November 2026: ASCII date candidate/canonical pages rendered and local links checked. Programmatic HTML only; no screenshot/PDF acceptance. Receipt: ascii-date-fast-path/DOCUMENTATION-CHECKS.json. -->
 <!-- 16 November 2026: Singleton atomization dossier/canonical pages rendered and local links checked. Programmatic HTML only; no screenshot/PDF acceptance. Receipt: singleton-atomization/DOCUMENTATION-CHECKS.json. -->
 <!-- 15 November 2026: In-record wrapper candidate/canonical documentation rendered with local links checked. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: in-record-wrapper-sequence/DOCUMENTATION-CHECKS.json. -->

@@ -1,0 +1,21 @@
+{
+  "status": "Completed",
+  "success": true,
+  "command": [
+    "C:\\Program Files\\dotnet\\dotnet.exe",
+    "exec",
+    "--fx-version",
+    "10.0.11",
+    "--roll-forward",
+    "Disable",
+    "D:\\Development\\Bosak\\.guard-tmp\\release-1.81.17-20261116\\publication\\consumer\\bin\\Release\\net10.0\\ReleaseConsumer.dll"
+  ],
+  "timeoutSeconds": 120,
+  "memoryLimitBytes": 8589934592,
+  "diagnosticOnly": true,
+  "qualification": false,
+  "memoryScope": "Aggregate collector and owned target process tree",
+  "processId": 35212,
+  "exitCode": 0,
+  "elapsedSeconds": 0.8140553000266664
+}
