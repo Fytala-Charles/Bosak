@@ -1,0 +1,99 @@
+{
+  "XSLT stylesheet": {
+    "prefix": "bosak-stylesheet",
+    "description": "XSLT 3.0 stylesheet with a root template",
+    "body": [
+      "<xsl:stylesheet version=\"3.0\"",
+      "\txmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\"",
+      "\txmlns:xs=\"http://www.w3.org/2001/XMLSchema\"",
+      "\txmlns:local=\"urn:local\" exclude-result-prefixes=\"xs local\">",
+      "\t<xsl:template match=\"/\">",
+      "\t\t${1:<result/>}",
+      "\t</xsl:template>",
+      "</xsl:stylesheet>$0"
+    ]
+  },
+  "Match template": {
+    "prefix": "bosak-template",
+    "description": "XSLT template matching a node pattern",
+    "body": [
+      "<xsl:template match=\"${1:item}\">",
+      "\t<xsl:value-of select=\"${2:.}\"/>",
+      "</xsl:template>$0"
+    ]
+  },
+  "Named template": {
+    "prefix": "bosak-named-template",
+    "description": "XSLT named template",
+    "body": [
+      "<xsl:template name=\"${1:main}\">",
+      "\t${2:<result/>}",
+      "</xsl:template>$0"
+    ]
+  },
+  "Function": {
+    "prefix": "bosak-xslt-function",
+    "description": "XSLT function using local and xs namespace bindings",
+    "body": [
+      "<xsl:function name=\"local:${1:identity}\" as=\"item()*\">",
+      "\t<xsl:param name=\"${2:value}\" as=\"item()*\"/>",
+      "\t<xsl:sequence select=\"\\$$2\"/>",
+      "</xsl:function>$0"
+    ]
+  },
+  "Parameter": {
+    "prefix": "bosak-param",
+    "description": "XSLT parameter with a default expression",
+    "body": [
+      "<xsl:param name=\"${1:value}\" as=\"${2:xs:string}\" select=\"${3:'default'}\"/>$0"
+    ]
+  },
+  "Variable": {
+    "prefix": "bosak-xslt-variable",
+    "description": "XSLT variable with a select expression",
+    "body": [
+      "<xsl:variable name=\"${1:value}\" select=\"${2:1}\"/>$0"
+    ]
+  },
+  "Choose": {
+    "prefix": "bosak-choose",
+    "description": "XSLT conditional instruction",
+    "body": [
+      "<xsl:choose>",
+      "\t<xsl:when test=\"${1:true()}\">",
+      "\t\t${2:<yes/>}",
+      "\t</xsl:when>",
+      "\t<xsl:otherwise>",
+      "\t\t${3:<no/>}",
+      "\t</xsl:otherwise>",
+      "</xsl:choose>$0"
+    ]
+  },
+  "For each": {
+    "prefix": "bosak-for-each",
+    "description": "XSLT iteration over a selected sequence",
+    "body": [
+      "<xsl:for-each select=\"${1:*}\">",
+      "\t<xsl:value-of select=\"${2:.}\"/>",
+      "</xsl:for-each>$0"
+    ]
+  },
+  "For each group": {
+    "prefix": "bosak-group",
+    "description": "XSLT grouping by an expression",
+    "body": [
+      "<xsl:for-each-group select=\"${1:item}\" group-by=\"${2:@category}\">",
+      "\t<xsl:sequence select=\"current-group()\"/>",
+      "</xsl:for-each-group>$0"
+    ]
+  },
+  "Iterate": {
+    "prefix": "bosak-iterate",
+    "description": "XSLT 3.0 iteration with a sequence body",
+    "body": [
+      "<xsl:iterate select=\"${1:1 to 3}\">",
+      "\t<xsl:sequence select=\"${2:.}\"/>",
+      "</xsl:iterate>$0"
+    ]
+  }
+}

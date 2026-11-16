@@ -4,6 +4,11 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## REQ-141 ? VS Code snippets (16 November 2026)
+
+Status: implemented candidate; local qualification passed, hosted review pending. Adds 20 declarative snippets and expansion checks under extension 0.3.0; Core remains 1.81.17. No semantic/API changes. [Usage and qualification](vscode-snippets/README.md). Last updated: 16 November 2026.
+
+
 ## Span-based validator qualification - 14 November 2026
 
 The [validator candidate](validator-span/README.md) avoids xs: bare-name strings with a shared span classifier preserving the frozen 47-name vocabulary, normalization, list refusals and dynamic schema context. Five new regressions pass. Identical-source compatible worker controls measure canonical primitive conversion 40 -> 0 bytes/call and short-name validation 32 -> 0; existing normalization costs remain separate. Full solution 26,440 and language-server 90 tests pass. Frozen QT3 stays 31,397/0/424 and gated qt4 8,941/0/1,918 with all skip names/reasons unchanged. Pinned standalone reconciles 10,221/0/4,380/all 14,601 identities in 784.991s under original 1200s/8GiB limits. Development 1.81.12 is unpublished. No validity cache or full-workload speed claim; hosted checks remain required before merge.
@@ -1444,6 +1449,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-139 | Bosak.Schema | [Minimal core/schema contract disposition and guarded implementation owner packages C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) | Execute core API/provenance/compatibility and immutable delivery work independently of Braid product gates; reconcile existing bounded bridge and Apache Schema ownership | In Progress | TBD after owner scope | Bosak core maintainers; individual assignment pending | 2026-11-03 |
 
 | REQ-140 | Bosak.Schema / Bosak.XmlDb | [Shared foundation and versioned public API freeze](FOUNDATION-API-FREEZE-PLAN.md) | Qualify both actual consumers against one stable core contract before publication/freeze; keep provider implementations separate | In Progress | Named foundation release TBD | Bosak maintainers + Schema/XmlDb owner sign-offs | 2026-11-03 |
+| REQ-141 | VS Code extension | [Language-scoped XPath/XQuery/XSLT snippets](vscode-snippets/README.md) | Reduce repeated authoring with tested editable templates | Implemented candidate; review pending | Extension 0.3.0 | Bosak maintainers | 2026-11-16 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.

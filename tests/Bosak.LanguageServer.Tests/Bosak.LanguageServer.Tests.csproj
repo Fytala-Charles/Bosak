@@ -21,4 +21,8 @@
     <ProjectReference Include="..\..\src\Bosak.LanguageServer\Bosak.LanguageServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\vscode-bosak\snippets\*.json" Link="Snippets\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>
