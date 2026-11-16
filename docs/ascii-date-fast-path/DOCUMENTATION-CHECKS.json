@@ -7,8 +7,8 @@
     },
     {
       "file": "docs/ARCHITECTURE.md",
-      "sourceSha256": "e234e574b59f5634e18137b7cb5d9f915b06f940697deb8a55f756e0cf14213c",
-      "htmlSha256": "f1e149317ea1e51f701d1561df84b989a778ab3c2b78f0b998ce4f58f93facfa"
+      "sourceSha256": "68b03c9d352db3fa733cdd225a35560ff8f868b7c9727e06c985608d8bced606",
+      "htmlSha256": "760f055da2e62dd18c31cc2d893a6249c19d4b838591456035545f34cd89ea7e"
     },
     {
       "file": "docs/FEATURE_REQUESTS.md",
@@ -17,23 +17,23 @@
     },
     {
       "file": "docs/INTEGRATION.md",
-      "sourceSha256": "40f4c58c4793243be9cf6bb2a09779ceba67440a617b945f8a32b4f8d31fd26f",
-      "htmlSha256": "cab080178e3a505611aadb41d3d2d7fa1a9087414ce7446e63980ee108220c30"
+      "sourceSha256": "7009440c9376d4157b49a6843ab7f3c53f7a890be72ec0c6754203da12b69bff",
+      "htmlSha256": "2ac7c0ff58f3d58e850252155178553fa1555f574608c57abdf88961dca74990"
     },
     {
       "file": "docs/IMPLEMENTATION_STATUS.md",
-      "sourceSha256": "33c36038e6e40c7d221ead67b5a7240e945236f7f9e631ae90d84368ee54f3cd",
-      "htmlSha256": "d014bb899ba7b72567c675b4b7a48a3a953ac2e354fc9d79e0bab58389371d9d"
+      "sourceSha256": "90a8f260ca316c54cd92d742444375254ee20f2e958528d74ff4e01c3d978145",
+      "htmlSha256": "f1056b3fa74c3931193dc7ec2b2c3a7beeae9c9e11dd915323b2f026ea1073a7"
     },
     {
       "file": "docs/DEVELOPMENT_HISTORY.md",
-      "sourceSha256": "b40e4af1c47c6b277f3362e505868ee93709b866f4ce7ff6e235cd1a700c950b",
-      "htmlSha256": "8c6c4a31041f073c0b63d211f7174874b036241f5ba65b630f4bdec1a2596238"
+      "sourceSha256": "092efca4d44b4515ec254888691a76862217cb6bb8590ce72db104e7e61fd1d9",
+      "htmlSha256": "ec5ad628cd8fd08cd72e15c6d70d8c9b2a528cc5af259295c6b427925c4818aa"
     },
     {
       "file": "docs/AGENT_HANDOVER.md",
-      "sourceSha256": "f2fbfe453da28cdc7a50ec6071255d8bffba42777d2b3692606aceedb9b4d030",
-      "htmlSha256": "20830e1badd3dc9c7e52005f3b503ab2510aa171d61e0ba9aa1f6b8f362c7f63"
+      "sourceSha256": "d125593dda21aaf3a2c1186d803aaa6847ac8a9370405f075869156a1d3e5336",
+      "htmlSha256": "3622089f1f0ea68c3a1e38fc89aa465a3d9b759fbfd333fc978c0745a387f808"
     },
     {
       "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
@@ -42,8 +42,8 @@
     },
     {
       "file": "docs/ascii-date-fast-path/README.md",
-      "sourceSha256": "9bd0024019db0dc559e737fead815e6ccdf0d9757a80d6fbf1042070912a588d",
-      "htmlSha256": "7249b46ae95792e25b3c7655d7dfec925cffb5ba1f3a6434c8e517678b6b21e0"
+      "sourceSha256": "7eb1525ee3ee2185857a0ed220bf24fbcdc9fe508291cbadd9ef4fd09073b413",
+      "htmlSha256": "654bcd19a5b23676447c49df23575da4715927d44424f84e7a38dc8eb007e8d1"
     },
     {
       "file": "docs/matching-conversion/README.md",
@@ -51,7 +51,7 @@
       "htmlSha256": "630be42acee715d6bee84588f2f80efed86d71e93a924ca2d5c91f73e5f75ae1"
     }
   ],
-  "localDestinations": 4223,
+  "localDestinations": 4228,
   "inheritedOwnerDestinations": 2,
   "programmaticHtmlOnly": true,
   "screenshotOrPdfAcceptance": false,

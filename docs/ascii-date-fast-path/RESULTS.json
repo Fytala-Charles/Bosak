@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "developmentVersion": "1.81.17",
+  "qualifiedSourceCommit": "f733d828d523c272c2445a6dd34e607c3d7ec852",
+  "solutionPassed": 26488,
+  "languageServerPassed": 90,
+  "focusedPassed": 9,
+  "counts": {
+    "Passed": 10221,
+    "Failed": 0,
+    "Skipped": 4380
+  },
+  "standaloneSeconds": 811.353,
+  "sourceHashes": {
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "1e4e3e2d6a01b28b94407470b5d5e3463c65114f63529915371b606993859df8",
+    "src/Directory.Build.props": "b9c3b506dfae68d6e7898ef3904d1c0c48fe791f54f412c9e897e47cb8055ff6",
+    "tests/Bosak.XPath.AllocationChecks/Program.cs": "20a25daad0b94ae804a662f8388446e3c803519cfd23d059cf0ecc21b820c572",
+    "tests/Bosak.XPath.AllocationChecks/DateParsingAllocationWorkload.cs": "5dbd00cb64b1e4d93713df718b999f7532fb058c6e9948b7f886bac88c8101bb",
+    "tests/Bosak.XPath.Runtime.Tests/AllocationProbeRunner.cs": "d3efd6639b49f81ad67a991b1cb5589478acc4c28fb20231667b1b27ba4d1eb5",
+    "tests/Bosak.XPath.Runtime.Tests/DateFastPathTests.cs": "f3fecf90d0b73dd567989b7857a0f76532a5a638d90d7892cc6b760248fe1896"
+  },
+  "candidateNineHashes": {
+    "Bosak.XPath.Api.dll": "3ff39a2e5dbe57a8a079d12aa9b7bc5d94bb2f00d3fc44b7d1e4321719a77050",
+    "Bosak.XPath.Compiler.dll": "1acacc4b7a5113d48512ec11c5273adb9bd420ac0d4cca28c6b035f063a49be8",
+    "Bosak.XPath.Core.dll": "1e2852cad5c76927d1388af567ec1d39bc08af3def5dce69717dfc4e818b81f4",
+    "Bosak.XPath.Parser.dll": "a2b5d6166af4c3507b305f745f508b18b312552d6818ffd5a52ea11a59adc100",
+    "Bosak.XPath.Providers.dll": "6568ec42e50e5c9ac3f78694b02f189e8d3e1e7de0b2fc0a59e782a283b1fb6f",
+    "Bosak.XPath.Runtime.dll": "a94e03ad6013dd7dec741f86b994556d80364f5d94ea301d535da01225170f19",
+    "Bosak.XPath.Standard.dll": "2d6ff41f064201bb895646b048a0d29283485ac43f967b8ebbc32589beb43222",
+    "Bosak.XQuery.dll": "947be2f5a224b46f304a007e5a1d6d8f6016db93f678f6153bdc70d05e2e24f3",
+    "Bosak.Xslt.dll": "e5dd698fbe0f702618528d342bed7a2dcd208e4cd3e8716772254ee0c42b8bf7"
+  },
+  "sameCompatibleAllocationWorker": true,
+  "oldRejectedByAllFixedBudgets": true,
+  "candidateAcceptedByAllFixedBudgets": true,
+  "semanticCasesPerVersion": 37068,
+  "localeCasesPerVersion": 330,
+  "concurrentCasesPerVersion": 1024,
+  "allSemanticCasesEqualAcrossVersions": true,
+  "fallbackCostsUnchanged": true,
+  "published": false
+}
