@@ -1,0 +1,22 @@
+[
+  {
+    "step": "BUILD",
+    "exitCode": 0,
+    "seconds": 16.660124799993355
+  },
+  {
+    "step": "CONFORMANCE-BUILD",
+    "exitCode": 0,
+    "seconds": 3.9669209999847226
+  },
+  {
+    "step": "UNIT",
+    "exitCode": 0,
+    "seconds": 354.9056497000274
+  },
+  {
+    "step": "LSP",
+    "exitCode": 0,
+    "seconds": 11.35270569997374
+  }
+]

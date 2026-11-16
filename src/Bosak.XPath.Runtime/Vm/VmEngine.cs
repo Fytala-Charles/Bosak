@@ -444,6 +444,7 @@
 //                      | Charles Korthout | 2.215 | 14-11-2026     | Parse date regex groups and timezone slices with spans.                                  |
 //                      | Charles Korthout | 2.216 | 15-11-2026     | Use direct XDM enumerators for lazy node filtering.                                      |
 //                      | Charles Korthout | 2.217 | 16-11-2026     | Avoid temporary buffers in lazy singleton atomization; retain full consumption.        |
+//                      | Charles Korthout | 2.218 | 16-11-2026     | Add valid ASCII date fast path; preserve regex fallback verbatim.                      |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -15704,6 +15705,9 @@ internal static class VmEngine
 
     private static bool TryParseXPathDate(string s, out XPathDateTime xdt, out bool hasTz)
     {
+        if (TryParseValidAsciiDate(s, out xdt, out hasTz))
+            return true;
+
         xdt = default;
         hasTz = false;
         var m = XPathDateRegex.Match(s);
@@ -15742,6 +15746,49 @@ internal static class VmEngine
         xdt = new XPathDateTime(year, month, day, 0, 0, 0, 0, tzMinutes, hasTz);
         return true;
     }
+    /// <summary>Parses only valid four-digit ASCII dates; all other inputs use the existing fallback.</summary>
+    /// <param name="text">The input lexical form.</param>
+    /// <param name="value">The parsed date when this fast path accepts the input.</param>
+    /// <param name="hasTimezone">Whether the accepted input has an explicit timezone.</param>
+    /// <returns>True only for valid four-digit ASCII dates with a supported timezone spelling.</returns>
+    private static bool TryParseValidAsciiDate(string? text, out XPathDateTime value, out bool hasTimezone)
+    {
+        value = default;
+        hasTimezone = false;
+        if (text is null || text.Length is not (10 or 11 or 16))
+            return false;
+        var s = text.AsSpan();
+        if (s[4] != '-' || s[7] != '-'
+            || !char.IsAsciiDigit(s[0]) || !char.IsAsciiDigit(s[1])
+            || !char.IsAsciiDigit(s[2]) || !char.IsAsciiDigit(s[3])
+            || !char.IsAsciiDigit(s[5]) || !char.IsAsciiDigit(s[6])
+            || !char.IsAsciiDigit(s[8]) || !char.IsAsciiDigit(s[9]))
+            return false;
+        int year = (s[0] - '0') * 1000 + (s[1] - '0') * 100 + (s[2] - '0') * 10 + s[3] - '0';
+        int month = (s[5] - '0') * 10 + s[6] - '0';
+        int day = (s[8] - '0') * 10 + s[9] - '0';
+        if (month < 1 || month > 12 || day < 1 || day > DaysInMonth(year, month))
+            return false;
+        int offset = 0;
+        if (s.Length == 11 && s[10] != 'Z')
+            return false;
+        if (s.Length == 16)
+        {
+            if (s[10] is not ('+' or '-') || s[13] != ':'
+                || !char.IsAsciiDigit(s[11]) || !char.IsAsciiDigit(s[12])
+                || !char.IsAsciiDigit(s[14]) || !char.IsAsciiDigit(s[15]))
+                return false;
+            int hours = (s[11] - '0') * 10 + s[12] - '0';
+            int minutes = (s[14] - '0') * 10 + s[15] - '0';
+            if (hours > 14 || minutes > 59 || (hours == 14 && minutes != 0))
+                return false;
+            offset = (hours * 60 + minutes) * (s[10] == '-' ? -1 : 1);
+        }
+        hasTimezone = s.Length != 10;
+        value = new XPathDateTime(year, month, day, 0, 0, 0, 0, offset, hasTimezone);
+        return true;
+    }
+
     private static bool IsValidDateTimezone(ReadOnlySpan<char> tz)
     {
         // tz is like "+14:00" or "-05:00"

@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 15-11-2026     | Validate lazy filter allocation row identities and results.                              |
 //                      | Charles Korthout | 0.4   | 15-11-2026     | Validate provider wrapper allocation row protocol.                                      |
 //                      | Charles Korthout | 0.5   | 16-11-2026     | Validate singleton atomization allocation protocol and outcomes.                       |
+//                      | Charles Korthout | 0.6   | 16-11-2026     | Validate date parser allocation row identities and out-state controls.                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Diagnostics;
@@ -72,6 +73,15 @@ internal static class AllocationProbeRunner
                 Assert.True(expectedComparisons.ContainsKey(name));
                 Assert.Equal(expectedComparisons[name], item.GetProperty("boolean").GetBoolean());
             }
+            else if (workload == "dates")
+            {
+                Assert.Contains(name, new[] { "plain", "utc", "offset", "fallback-extended", "fallback-invalid-timezone", "fallback-lowercase-z" });
+                bool valid = name is not ("fallback-invalid-timezone" or "fallback-lowercase-z");
+                Assert.Equal(valid, item.GetProperty("parsed").GetBoolean());
+                Assert.Equal(name == "fallback-extended" ? 10000L : valid ? 2026L : 0L, item.GetProperty("year").GetInt64());
+                Assert.Equal(name is "utc" or "offset" or "fallback-invalid-timezone", item.GetProperty("timezone").GetBoolean());
+                Assert.Equal(name == "offset" ? 330 : 0, item.GetProperty("offsetMinutes").GetInt32());
+            }
             else if (workload == "atomization")
             {
                 Assert.Contains(name, new[] { "empty", "singleton" });
@@ -118,7 +128,7 @@ internal static class AllocationProbeRunner
             }
         }
         var rows = items.ToDictionary(x => x.GetProperty("name").GetString()!, x => x.GetProperty("bytes").GetInt64());
-        Assert.Equal(workload == "atomization" ? 2 : workload == "comparisons" ? 6 : workload == "validation" ? 12 : workload == "filtering" ? 5 : workload == "wrapping" ? 4 : 10, rows.Count);
+        Assert.Equal(workload == "dates" ? 6 : workload == "atomization" ? 2 : workload == "comparisons" ? 6 : workload == "validation" ? 12 : workload == "filtering" ? 5 : workload == "wrapping" ? 4 : 10, rows.Count);
         return rows;
     }
 }

@@ -1,3 +1,4 @@
+<!-- 16 November 2026: ASCII date candidate/canonical pages rendered and local links checked. Programmatic HTML only; no screenshot/PDF acceptance. Receipt: ascii-date-fast-path/DOCUMENTATION-CHECKS.json. -->
 <!-- 16 November 2026: Singleton atomization dossier/canonical pages rendered and local links checked. Programmatic HTML only; no screenshot/PDF acceptance. Receipt: singleton-atomization/DOCUMENTATION-CHECKS.json. -->
 <!-- 15 November 2026: In-record wrapper candidate/canonical documentation rendered with local links checked. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: in-record-wrapper-sequence/DOCUMENTATION-CHECKS.json. -->
 <!-- 15 November 2026: Final specialized lazy filter dossier/canonical pages rendered and local destinations checked. Programmatic HTML only; no screenshot or PDF acceptance. Receipt: lazy-filter-sequence/DOCUMENTATION-CHECKS.json. -->
