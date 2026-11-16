@@ -6,7 +6,7 @@
 
 ## Editor snippet integration
 
-The extension 0.3.0 candidate adds 20 language-scoped snippets; published 0.2.7 remains the current Marketplace baseline. No Core package upgrade or API migration is required. See [prefixes, placement and qualification](vscode-snippets/README.md).
+Published extension 0.3.0 adds 20 language-scoped snippets; 0.2.7 is the previous Marketplace baseline. See the [current user guide](VSCODE_SNIPPETS.md). No Core package upgrade or API migration is required. See [prefixes, placement and qualification](vscode-snippets/README.md).
 
 
 ## Direct in-record wrapper candidate - 15 November 2026

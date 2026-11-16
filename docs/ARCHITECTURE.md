@@ -6,7 +6,7 @@
 
 ## Declarative editor snippets
 
-The extension 0.3.0 candidate contributes language-scoped JSON snippets directly through VS Code metadata. Insertion is independent of the LSP process; no protocol or engine changes are required. Existing language-server tests execute the actual default expansions. See the [snippet guide](vscode-snippets/README.md).
+Published extension 0.3.0 contributes language-scoped JSON snippets directly through VS Code metadata. Insertion is independent of the LSP process; no protocol or engine changes are required. Existing language-server tests execute the actual default expansions. See the [snippet guide](VSCODE_SNIPPETS.md).
 
 
 ## Direct in-record wrapper candidate - 15 November 2026

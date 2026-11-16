@@ -1,0 +1,20 @@
+{
+  "status": "Completed",
+  "success": false,
+  "command": [
+    "powershell.exe",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "D:\\Development\\Bosak\\.guard-tmp\\extension-snippets-release-20261116\\launch-normal-electron-fixed.ps1"
+  ],
+  "timeoutSeconds": 150,
+  "memoryLimitBytes": 8589934592,
+  "diagnosticOnly": true,
+  "qualification": false,
+  "memoryScope": "Aggregate collector and owned target process tree",
+  "processId": 57144,
+  "exitCode": 1,
+  "elapsedSeconds": 3.3375600000144914
+}

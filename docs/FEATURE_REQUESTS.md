@@ -6,7 +6,7 @@
 
 ## REQ-141 ? VS Code snippets (16 November 2026)
 
-Status: implemented candidate; local qualification passed, hosted review pending. Adds 20 declarative snippets and expansion checks under extension 0.3.0; Core remains 1.81.17. No semantic/API changes. [Usage and qualification](vscode-snippets/README.md). Last updated: 16 November 2026.
+Status: implemented and published in extension 0.3.0 after hosted and actual editor qualification. [Publication receipt](extension-0.3.0-publication/README.md). Adds 20 declarative snippets and expansion checks under extension 0.3.0; Core remains 1.81.17. No semantic/API changes. [Usage](VSCODE_SNIPPETS.md) and [original qualification](vscode-snippets/README.md). Last updated: 16 November 2026.
 
 
 ## Span-based validator qualification - 14 November 2026
@@ -1449,7 +1449,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-139 | Bosak.Schema | [Minimal core/schema contract disposition and guarded implementation owner packages C139-01–04](REQ-139-OWNER-WORK-PACKAGES.md) | Execute core API/provenance/compatibility and immutable delivery work independently of Braid product gates; reconcile existing bounded bridge and Apache Schema ownership | In Progress | TBD after owner scope | Bosak core maintainers; individual assignment pending | 2026-11-03 |
 
 | REQ-140 | Bosak.Schema / Bosak.XmlDb | [Shared foundation and versioned public API freeze](FOUNDATION-API-FREEZE-PLAN.md) | Qualify both actual consumers against one stable core contract before publication/freeze; keep provider implementations separate | In Progress | Named foundation release TBD | Bosak maintainers + Schema/XmlDb owner sign-offs | 2026-11-03 |
-| REQ-141 | VS Code extension | [Language-scoped XPath/XQuery/XSLT snippets](vscode-snippets/README.md) | Reduce repeated authoring with tested editable templates | Implemented candidate; review pending | Extension 0.3.0 | Bosak maintainers | 2026-11-16 |
+| REQ-141 | VS Code extension | [Language-scoped XPath/XQuery/XSLT snippets](VSCODE_SNIPPETS.md) | Reduce repeated authoring with tested editable templates | Implemented and published | Extension 0.3.0 | Bosak maintainers | 2026-11-16 |
 
 > **Legend:
 > - `Pending` — Under review, no decision yet.

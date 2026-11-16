@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "manifestSha256": "32dcfde6954ad34048aec0f1a40166fd2e48a20ac4052cf2d56eb879ada0807d",
+  "sourceCommit": "1dbfbc34d4dd3c7844d399ac67aaf6a706c4301e",
+  "preparationRun": 43883918663,
+  "artifact": {
+    "bytes": 4810616,
+    "file": "vscode-bosak-0.3.0.vsix",
+    "sha256": "25216ff6067e585c3966bfec34901c173533678b6f027f286dc5219be0ca661e"
+  },
+  "snippetFilesExact": true,
+  "legalFilesExactGitBlobs": true,
+  "editorNormalPassed": true,
+  "editorOfflinePassed": true,
+  "publishAuthorizedBy": "User accepted review, editor checks, merge and release recommendation"
+}

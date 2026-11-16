@@ -1,3 +1,7 @@
+## Extension snippets 0.3.0 published — 16 November 2026
+
+REQ-141 is delivered. [PR #501](https://github.com/Fytala-Charles/Bosak/pull/501) merged after all six checks passed. Hosted preparation43883918663 and exact-artifact publisher43891666461 passed; Marketplace download and GitHub asset match the reviewed VSIX. Five actual editor scenarios pass in each of two isolated VS Code1.146.0 profiles, including prefix suggestions, mirrors, forward/backward stops and final cursor, with and without bundled server. Core/server remains1.81.17; no NuGet or engine change. Earlier candidate notices are historical. [User guide](VSCODE_SNIPPETS.md) and [publication receipts](extension-0.3.0-publication/README.md).
+
 
 
 ## Extension snippets ? 16 November 2026

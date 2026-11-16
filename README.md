@@ -99,7 +99,7 @@ Run `dotnet run`. For other languages, use the matching package:
 | [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.81.17) | Compile XSLT and transform documents. |
 | [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.81.17) | Compile and evaluate XQuery. |
 
-Version 1.81.17 is the [verified published baseline](docs/release-1.81.17-publication/README.md). VS Code extension [0.2.7](docs/extension-0.2.7-publication/README.md) bundles engine/server 1.81.17. Numerical workload budgets are deferred for this release; no performance guarantees are claimed. Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
+Version 1.81.17 is the [verified published baseline](docs/release-1.81.17-publication/README.md). VS Code extension [0.3.0](docs/extension-0.3.0-publication/README.md) bundles engine/server 1.81.17 and includes language snippets. Numerical workload budgets are deferred for this release; no performance guarantees are claimed. Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
 <a id="bosak-ecosystem"></a>
 
@@ -138,7 +138,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Exact terminating division](docs/foundation-exact-division/GUIDE.md) | Decimal division with explicit quotas and refusal instead of rounding. |
 | [Primitive numeric constructors](docs/foundation-exact-constructors/GUIDE.md) | Bounded integer/decimal conversion over the exact numeric grammar. |
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
-| [Editor snippets](docs/vscode-snippets/README.md) | Development collection, prefixes and insertion guide. |
+| [Editor snippets](docs/VSCODE_SNIPPETS.md) | Language snippets, prefixes and insertion guide. |
 | [Roadmap](ROADMAP.md) | Current direction and upcoming work. |
 | [Provider qualification](docs/foundation-provider-qualification/GUIDE.md) | Candidate-bound owner workload receipts and evidence checks. |
 | [Native Schema compatibility](docs/foundation-native-schema-lane/GUIDE.md) | Source and unchanged-binary qualification scope. |
