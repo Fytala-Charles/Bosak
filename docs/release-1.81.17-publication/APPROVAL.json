@@ -1,0 +1,23 @@
+{
+  "userInstruction": "Approved. Please publish the packages.",
+  "registry": "NuGet.org",
+  "packages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Providers.Database",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt"
+  ],
+  "coreVersion": "1.81.17",
+  "sourceRunId": 43861115818,
+  "sourceCommit": "6a7618e9dcf70eb8a67d5d1789ff7b787133b52d",
+  "manifestSha256": "2ad34e65ade407a914dac93b551caf703a9cfc298ecb82921bd750de3dade2ca",
+  "rebuildAuthorized": false,
+  "tagOrExtensionDeliveryAuthorized": false,
+  "recordedUtc": "2026-11-16T12:31:55.439450+00:00"
+}

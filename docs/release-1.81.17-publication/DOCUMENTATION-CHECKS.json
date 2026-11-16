@@ -1,0 +1,59 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceSha256": "fa5015c3554fdf4085a336516b4e2aa421577b7278b787222ea554c1719e1370",
+      "htmlSha256": "6df8baf2f73a882f140da80b863bcd9f9b68f6b2db18abf57d29085db5323e3d"
+    },
+    {
+      "file": "ROADMAP.md",
+      "sourceSha256": "a25d5d5a99f518f1cf5fe2db117b6327fd3acc684ac1c49ee7a28e4e3e480dc4",
+      "htmlSha256": "d874b8ce4b6de86dfda2cefbb48057c2b871f60aacae4b2d76d49eb37ed89056"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceSha256": "68b03c9d352db3fa733cdd225a35560ff8f868b7c9727e06c985608d8bced606",
+      "htmlSha256": "760f055da2e62dd18c31cc2d893a6249c19d4b838591456035545f34cd89ea7e"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceSha256": "5c6b6e9e355ae596baac05acec83b874d332eb53cf724694b8f10dfb57b174eb",
+      "htmlSha256": "2033121332e512c62139cd71f82d449132145d0fa4f37dcc2d776d8a91ede0d2"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceSha256": "7009440c9376d4157b49a6843ab7f3c53f7a890be72ec0c6754203da12b69bff",
+      "htmlSha256": "2ac7c0ff58f3d58e850252155178553fa1555f574608c57abdf88961dca74990"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceSha256": "efcb35fa653639488346502a919e279b8b9bba38564b0ca7393f3d865b59773a",
+      "htmlSha256": "7cde755a572a7c26e16d9de767c5afee7e7a309d67ec85396df8fac623a7f0ec"
+    },
+    {
+      "file": "docs/DEVELOPMENT_HISTORY.md",
+      "sourceSha256": "89551b62367d56e166dfff4cf54dff6bb4fa47608c2027a78188babe465122d3",
+      "htmlSha256": "402f6e1a32cf2b01e6537f6ebb163cc7702edbf6b6d6ce936f3f6aadb37db1b9"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceSha256": "ccd519c3e8297c279e6c76b4b23df4d9afe6e03b9c76ee517a9b662c613b069a",
+      "htmlSha256": "045d11b2e2e7315043c0ee190cdf8306dcdf362100e557a95c34cb758b14ddee"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceSha256": "18b8b3f8c26acf2a53311951d5c06844dc259de6e36d144dbfd652d5b7aeeba9",
+      "htmlSha256": "f61005dad5e55b17022dc127161affea58e2e63374b2f5b9bde242d6677f03b2"
+    },
+    {
+      "file": "docs/release-1.81.17-publication/README.md",
+      "sourceSha256": "d3c9d2a6fdcb6255648e126d0d5b4e3e3cc5858460760afd737d7655a11b8903",
+      "htmlSha256": "71e6b21782745e4fd5283ddad310cfe27acbd6e531e935ce6afa445ac2359977"
+    }
+  ],
+  "localDestinations": 4231,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

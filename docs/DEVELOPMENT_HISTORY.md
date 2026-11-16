@@ -1,3 +1,7 @@
+## NuGet 1.81.17 published — 16 November 2026
+
+The [publication receipt](release-1.81.17-publication/README.md) records ten successful pushes from preparation run 43861115818, publisher run 43867426381, public payload/signature verification and 53 passing fresh NuGet.org consumer checks. Source remains 6a7618e9; no rebuild, source push, tag or extension release. Earlier candidate entries below remain historical.
+
 ## Valid ASCII date fast-path candidate - 16 November 2026
 
 The [1.81.17 candidate](ascii-date-fast-path/README.md) directly parses only valid four-digit ASCII dates while retaining the existing fallback verbatim. All other VM/dateTime/time code and public cast normalization remain unchanged. Nine focused checks pass. Same compatible production worker shows plain704->0, UTC/offset736->0 B/call; three pre-recorded16-byte ceilings reject baseline/accept candidate, three fallback costs unchanged. Identical semantic worker matches37,068 inputs plus330 locale/1,024 concurrent checks per version and the immutable prototype digest. Full solution 26,488 and LSP 90 passed; frozen QT3 exact 31,397/0/424 and gated qt4 exact 8,941/0/1,918, all skip names/reasons unchanged. Pinned standalone 10,221/0/4,380 completed in 811.353s with all 14,601 identities/exclusions and source/corpus/runtime hashes reconciled at f733d828. Local qualification complete; no push or publication. No publication or release.

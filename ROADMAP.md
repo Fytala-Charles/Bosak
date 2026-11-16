@@ -4,11 +4,11 @@
   <p>Next steps for the published engine and its XML ecosystem</p>
 </div>
 
-Updated 9 November 2026.
+Updated 16 November 2026.
 
 ## Published baseline
 
-**Bosak 1.81.2** and **VS Code extension 0.2.6** are published. The ten Core NuGet libraries, extension and public downloads are verified in the [publication record](docs/release-1.81.2-publication/README.md); [GitHub release notes](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.81.2) describe the shipping scope.
+**Bosak 1.81.17** is published and verified in the [publication record](docs/release-1.81.17-publication/README.md). The separately published **VS Code extension 0.2.6** remains unchanged; its original delivery is recorded in the [1.81.2 publication record](docs/release-1.81.2-publication/README.md).
 
 The release includes the documented ordinary-source, bounded numeric and typed foundation profiles. The release owner approved the scoped API and delivery. Numerical workload budgets were explicitly deferred for this release, with **no performance guarantees claimed**. Production Schema/XmlDb/Braid adoption and broader schema/all-host coverage remain separate work.
 

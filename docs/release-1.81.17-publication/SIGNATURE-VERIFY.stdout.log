@@ -1,0 +1,80 @@
+
+Verifying Bosak.XPath.Api.1.81.17
+Content hash: hyhZR4HRyPmdobRX+Yh7ogu6MlviRmAm8y0HBZKRVjMtVcohe/97aalz2hTBNA6ixo1xzS04I2bZQdL200rkaQ==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Compiler.1.81.17
+Content hash: Vzepv6joWoiM4zxA7kcewe6+fDXs5ZJv6hanRyZ8FjhOzIt4BqxX1lGS6Q9RP0LUecd8EL8g7fjVthhzYth3wg==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Core.1.81.17
+Content hash: uY/dXf4U7QO4vAG7uCCml9tww0vddVVM91Y7nUbd0ZIQVCEitf6ql5nUUYSZlRY4/AvLnxw/l2AqYmWL9mUbyw==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Parser.1.81.17
+Content hash: j7H55OxqdJOXTON0HEwfH0TGfbsh4XtOZnPpVd0/91zxqeKyUjlJ2iZ51I8E8L1K6EhGm2YoBehm4VmndPB8FA==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Providers.1.81.17
+Content hash: K0qguMIYSJX49L2mhLLlC+fY9+ryqT7VxbV5TAatLg0X340FKRasmQMyl+Ei+qlJ7IjqwkgpRMyHNhy4XEbH2w==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Providers.Database.1.81.17
+Content hash: 4U7nW5Qizh+C3T34Lm2QwtaPkeZNAGBceylAYAUjj3rnUJbLL/yf7r77dCN/qUAFqfQYh1R5pJzr5pW8c68Vyg==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Runtime.1.81.17
+Content hash: inmhFIMhplFfvC990Pa2C09n4XzMIxjLUDtLKBLDDSK0Lo2sFPxgEEJSOJSGewuxq89AxXt3Szf7Q4DEKqkqDA==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XPath.Standard.1.81.17
+Content hash: /m1z5uL3WpVyd1mD57P3zwcnl2AdpC9rnjzGElmOMhqRSbB++0xFe/uqwa5FdqVdzMQyWcIoo+EheWpX21z4Wg==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.XQuery.1.81.17
+Content hash: TyJDXQw7n5TCGecf6xJFyq/YECcbLx7K5zSgn/7PhbuBpSvSvhfiLI5q2cD+VlZp1Ygb/nzQpCcV17fE16qh8w==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
+
+Verifying Bosak.Xslt.1.81.17
+Content hash: EzAOsim0cu0q6I4mXtSalUY1B9kgirfVrK8zErklSmu5XRXwDL5fzF4beHqZwrLrOW4vjkEGgPAcMypXDxNNxw==
+
+Signature type: Repository
+  Subject Name: CN=NuGet.org Repository by Microsoft, O=NuGet.org Repository by Microsoft, L=Redmond, S=Washington, C=US
+  SHA256 hash: 1F4B311D9ACC115C8DC8018B5A49E00FCE6DA8E2855F9F014CA6F34570BC482D
+  Valid from: 2/23/2024 1:00:00 AM to 5/19/2027 1:59:59 AM
