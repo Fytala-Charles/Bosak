@@ -7,8 +7,8 @@
     },
     {
       "file": "docs/ARCHITECTURE.md",
-      "sourceSha256": "15311fbc84e654bea87574952d8ffaae29a142d2a3223497ce31eaf4c763dd14",
-      "htmlSha256": "e6e3eed93078955cd7ab0f8e915c38f6a05738d9f3d6fc20a28e7e8d8c259129"
+      "sourceSha256": "4d2c0688b08648eb8af002105b7532431d90e5c9a7be1f2741bbdd0b1bcff0cd",
+      "htmlSha256": "b1e7e84d1e91f133ba703f3fc9edd510fc8204cee365c1c303612b2bbff22f27"
     },
     {
       "file": "docs/FEATURE_REQUESTS.md",
@@ -17,23 +17,23 @@
     },
     {
       "file": "docs/INTEGRATION.md",
-      "sourceSha256": "5de792cbf3f5bd068e559d666da6b26eb7ff2a15d9dc6b625c53919ef545b174",
-      "htmlSha256": "074c0afac713cd1d028a0d9be9865824937d4807df21e6cd74fc1cd5ac6885ce"
+      "sourceSha256": "8b472b6820f69a26a5114d394e597181dc6642557c61a25a06b27e9db66d84de",
+      "htmlSha256": "d56b1a888654dca3c53f4388765aee9753b8202bcf9fb95d26e5b1ebbc313278"
     },
     {
       "file": "docs/IMPLEMENTATION_STATUS.md",
-      "sourceSha256": "af199765daa80ba5851bd81d9967dd07b803ab2633414016b7266a63c860071b",
-      "htmlSha256": "01f4e8e229f8af91b7eb7d39bb78a168e485b9d64132832ab123644fc26ee77d"
+      "sourceSha256": "46b3c3a979fe62371f82b7b3b2da9fa84ae5bedd54b7d4c730069dc066b1cec8",
+      "htmlSha256": "e055338b3c9a52ece2fb3254d1bb55f5e12b54201a36978477489798d666e8b9"
     },
     {
       "file": "docs/DEVELOPMENT_HISTORY.md",
-      "sourceSha256": "28f506dceafdacf27603cb0d5c3ecb7b40ecf2a5f2c1ca5353274f0fb36c587f",
-      "htmlSha256": "16d0e99e5abb4bb3ab3213ebede01751e766f5a1c354d3b4167c11f980d44b84"
+      "sourceSha256": "a24ac5c98d3e2e5809660c1aaddad9733683e07af962399c21778ac8012af7b9",
+      "htmlSha256": "86b8a69d8f17beb9b63b6b3076f91353c1bf8492f4edfcb614e15a826d38637d"
     },
     {
       "file": "docs/AGENT_HANDOVER.md",
-      "sourceSha256": "6df4eed43c1a3bd4e8f3ead8522d340a2d6d0e8c8c3f70d5ca7d826473ac000b",
-      "htmlSha256": "391f44f4d81039fab8de91b5fc9d8d5299daadd66eccdf8f0bcfdbedc15fdd7c"
+      "sourceSha256": "d118c584b22458cf1b34e76335cb8c93c8d680f0fb0bd59344f5fa5804871301",
+      "htmlSha256": "d2ae30eb74f405b70693aca1dd9621cf5753ea47c90f454fd6720f00489f0853"
     },
     {
       "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
@@ -42,8 +42,8 @@
     },
     {
       "file": "docs/singleton-atomization/README.md",
-      "sourceSha256": "e34c8bede1d56559dd6ae5750ce5c54126ca2a536dd3b05e5b6664b8c1bd60c1",
-      "htmlSha256": "1ee3b607661a9ae84fcc1ac867620aa4aa42a9c19e7b63a08ef9d773c5f92b95"
+      "sourceSha256": "ac48b0efcee10f9b3dec25f6ade5bfa342b01dc19adc441e96621c98b7a29a1f",
+      "htmlSha256": "1ce02735c6586fae24fb23a0c091147bfe3398097ed436a026d2d5769edaa1ad"
     },
     {
       "file": "docs/matching-conversion/README.md",
@@ -51,7 +51,7 @@
       "htmlSha256": "630be42acee715d6bee84588f2f80efed86d71e93a924ca2d5c91f73e5f75ae1"
     }
   ],
-  "localDestinations": 4219,
+  "localDestinations": 4224,
   "inheritedOwnerDestinations": 2,
   "programmaticHtmlOnly": true,
   "screenshotOrPdfAcceptance": false,
