@@ -1,0 +1,7 @@
+{
+  "legacyDateFallbackByteIdentical": true,
+  "allOtherVmCodeByteIdenticalAfterHistoryNormalization": true,
+  "dateTimeAndTimeParsersUnchanged": true,
+  "publicCastNormalizationAndWrappingUnchanged": true,
+  "baselineVmGitBlobSha256": "e91f894299a3cbb70ac60a0bf741ce6796409de300a613d86487a496cc98056e"
+}

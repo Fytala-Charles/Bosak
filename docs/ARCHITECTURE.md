@@ -96,6 +96,12 @@ Literal-result namespace collection now honors provider undeclaration metadata a
 
 ---
 
+## Valid ASCII date fast-path candidate - 16 November 2026
+
+The [1.81.17 candidate](ascii-date-fast-path/README.md) directly parses only valid four-digit ASCII dates while retaining the existing fallback verbatim. All other VM/dateTime/time code and public cast normalization remain unchanged. Nine focused checks pass. Same compatible production worker shows plain704->0, UTC/offset736->0 B/call; three pre-recorded16-byte ceilings reject baseline/accept candidate, three fallback costs unchanged. Identical semantic worker matches37,068 inputs plus330 locale/1,024 concurrent checks per version and the immutable prototype digest. Full solution 26,488 and LSP 90 passed; frozen QT3 exact 31,397/0/424 and gated qt4 exact 8,941/0/1,918, all skip names/reasons unchanged. Pinned standalone 10,221/0/4,380 completed in 811.353s with all 14,601 identities/exclusions and source/corpus/runtime hashes reconciled at f733d828. Local qualification complete; no push or publication. No publication or release.
+
+
+
 ## Singleton atomization engine candidate - 16 November 2026
 
 The [1.81.16 candidate](singleton-atomization/README.md) removes only the lazy singleton Atomize temporary buffer while preserving complete source consumption, exact cardinality/tail error order and existing materialized/scalar/PSVI behavior. Sixteen focused regressions pass. Same compatible production worker measures empty64->32 and singleton352->32 B/call; pre-recorded48/64 ceilings reject baseline and accept candidate. Identical semantic control passes84 cases per version with exact results/events. Initial caller-fixture failure and prelaunch loader-path correction retained separately; production/budgets unchanged. Full solution 26,482 and LSP 90 passed; frozen QT3 exact 31,397/0/424 and gated qt4 exact 8,941/0/1,918, all skip names/reasons unchanged. Pinned standalone 10,221/0/4,380 completed in 776.575s with all 14,601 identities/exclusions and source/corpus/runtime hashes reconciled at 5a85c752. Local qualification complete; no push or publication. No publication or release.

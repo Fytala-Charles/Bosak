@@ -737,3 +737,5 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/in-record-wrapper-sequence/** -text whitespace=cr-at-eol
 
 /docs/singleton-atomization/** -text whitespace=cr-at-eol
+
+/docs/ascii-date-fast-path/** -text whitespace=cr-at-eol
