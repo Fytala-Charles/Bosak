@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: Fytala-Charles/Bosak.Schema
-          ref: c953ebe0057bea1616d3e4f891f7b0a5fc4bd99b
+          ref: 9fd4e6acd20b34446d736ab0ec3fa2d439f9e337
           path: Bosak.Schema.Public
       - uses: actions/setup-dotnet@v4
         with:
@@ -30,6 +30,12 @@ jobs:
       - name: Test actual Schema source and the bounded integration
         working-directory: bosak
         run: dotnet test integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj -c Release --logger trx --results-directory TestResults/Schema
+      - name: Test the public native decimal consumer without friend access
+        working-directory: bosak
+        run: dotnet test integrations/Schema/PublicConsumer/Bosak.Schema.CoreConsumer.Tests.csproj -c Release --logger trx --results-directory TestResults/SchemaPublic
+      - name: Run the native decimal example
+        working-directory: bosak
+        run: dotnet run --project integrations/Schema/Example/Bosak.Schema.Example.csproj -c Release --no-build -- --native
       - name: Run the typed-price example
         working-directory: bosak
         run: dotnet run --project integrations/Schema/Example/Bosak.Schema.Example.csproj -c Release --no-build
@@ -37,4 +43,6 @@ jobs:
         if: always()
         with:
           name: schema-integration-results
-          path: bosak/TestResults/Schema
+          path: |
+            bosak/TestResults/Schema
+            bosak/TestResults/SchemaPublic

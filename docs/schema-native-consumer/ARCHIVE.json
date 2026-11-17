@@ -1,0 +1,510 @@
+{
+  "sha256": "df688d1a926b1c9996b9d004551b776386273aae87195c52a67647903631b160",
+  "entries": [
+    {
+      "path": "schema-inputs/LICENSE.md",
+      "sha256": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+      "bytes": 10366
+    },
+    {
+      "path": "schema-inputs/NOTICE",
+      "sha256": "8670f7c16ff6525f65f6c29deef2b5804dcc9989d3233245006a72fc246e7b7a",
+      "bytes": 285
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/ActivatedLicense.cs",
+      "sha256": "09d5b1bb72afa35f2a29d39f61f8e5ebcd8b42a31d7f1df762612b6d08f00a6d",
+      "bytes": 3331
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/AssemblyInfo.cs",
+      "sha256": "871497abea86b9f17205198d8b41faab72178c9f738b5d40abcf71e732cce57e",
+      "bytes": 2283
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeCleanup.cs",
+      "sha256": "c93abff1f3919b329d72d1b893e8bb280adea9afe89c6c12afb0351224de6480",
+      "bytes": 2289
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalAssertion.cs",
+      "sha256": "215e4616ebc82e1fa9d4c1bedc585f21bccfd97d4811dace145bf07888fa4c2b",
+      "bytes": 8506
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalAssessmentContext.cs",
+      "sha256": "156aeb962a5182029f436be349193956b5406ba4f388844f8baa17a5dbcb724e",
+      "bytes": 2915
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalDocument.cs",
+      "sha256": "83de496eab2b7abece997017084886bac77fceac8daffa9994737e7fd84cbfa3",
+      "bytes": 4741
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalResult.cs",
+      "sha256": "021f8165bb27a2ad1d38a9437f4c2d981c2171b7bb61131e354132769f075dfb",
+      "bytes": 4704
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+      "sha256": "9b3d49a4174419c083c9c171d6dfe24210c8bfce10576a8d82fc7991615bf7bf",
+      "bytes": 17407
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalSession.cs",
+      "sha256": "9859eef8c4467e3a724fce7c55459822f4bf7dfaadde644dfd785689f213bd7d",
+      "bytes": 5846
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalSessionCore.cs",
+      "sha256": "dcdad894e781560546b5baa8e0a1fa54a9da76ba804054585f3f0d58f5d7080a",
+      "bytes": 9546
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeDecimalSessionOptions.cs",
+      "sha256": "3129e08ac2d56901fed84ba597fac7f11967018bf4edc9cdb924f6aebfa4febf",
+      "bytes": 5297
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeSchemaInput.cs",
+      "sha256": "62625bf7215bbd75228d5c3cb400c514781cce4998accb4a6e203fc9763141c7",
+      "bytes": 7936
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeSchemaProvider.cs",
+      "sha256": "50659488ceb871c4bc0956cf4a531f7c496716cd193c635582ca9ecb182a9718",
+      "bytes": 19015
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeSessionNode.cs",
+      "sha256": "7fce81a5ae39d05eb5555e75f702eb392cba78f2e47b14454d5b0e1a65a7a9c2",
+      "bytes": 6425
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Assessment/NativeSessionRunner.cs",
+      "sha256": "357d52147e0f61e39cba48b065d2c10d4d4b8db6625b85c1940030cb2fb5a8da",
+      "bytes": 3033
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Compilation/SchemaCompileOptions.cs",
+      "sha256": "a56d952d0f07fb499dc94c4c5a1fd8f916b5888d659b577fb448bc11fc9f46e7",
+      "bytes": 5295
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Compilation/SchemaCompiler.cs",
+      "sha256": "83a3ace93ddca05351535372e7d7fdd60074bcc03a2cbdf07779e2a6149afe08",
+      "bytes": 45448
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Compilation/SchemaResolution.cs",
+      "sha256": "390a0c139a24f98b1c8befddeb9d9238ed52332a54f798a7c625d5068cfff4c0",
+      "bytes": 9154
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/License.cs",
+      "sha256": "f82b3fde0d1776e42379a96b0290c76b414bad667e0148749626d01643e5e703",
+      "bytes": 3509
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/LicenseTier.cs",
+      "sha256": "2b3487d3de457ecf0906ad5f2b25ae5e94d64f7b8f5a76330dc1438277966f63",
+      "bytes": 3001
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/LicenseValidationException.cs",
+      "sha256": "2563c0beb9e8fd6894093626821fb8f8b7cfb8ae89e9ab2269f76c80f3681be5",
+      "bytes": 3058
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/AssertionDefinition.cs",
+      "sha256": "75b7d77f174318dd884625bb39980f1950cd106e1cfaa10d4e383eae468f046e",
+      "bytes": 6552
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/CompiledSchema.cs",
+      "sha256": "ccef226e935304bdf3860691c33ce821de12fdbf0aae19eba7b9d4be4f6c724d",
+      "bytes": 7595
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/DefaultAttributesDefinition.cs",
+      "sha256": "4f040169309f78c1bfe73913db2d1a36b5893bdfb4e51b92ec26d64fb7af225a",
+      "bytes": 3614
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/ElementDeclaration.cs",
+      "sha256": "c86ff8709d7af45536e5910b60af0802aedbc1788c5c03774d5f12aa1da9c8a1",
+      "bytes": 3180
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/OpenContentDefinition.cs",
+      "sha256": "80e72b4f89227bcfba2a6d7d2a0a1928ffa68724c6ac75c7925b4fc6d238a55c",
+      "bytes": 6239
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/SchemaDiagnostic.cs",
+      "sha256": "6bec427cb6f391e2eab259c825687770be980d478b8662b3a90690228eb49239",
+      "bytes": 7342
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/SimpleTypeDeclaration.cs",
+      "sha256": "b88bd001146b801d9afb9323dea035a69fc001e8858de885b3ade6ae8b1674fa",
+      "bytes": 3488
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Model/XsdLanguageVersion.cs",
+      "sha256": "a4d56c055c2c76b5676f0f79dcd7ac0ef93cf1731014dde871b91584748d6ed0",
+      "bytes": 2555
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/SchemaAwareXslt.cs",
+      "sha256": "4c7d17763d41c3ad04c2ebf61158dff64e8eaf1a283d439cdd12c9984f2fea37",
+      "bytes": 4591
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/SchemaServices.cs",
+      "sha256": "176f2dd3944e4f3498ac5d0536dff3f1ad4fa3cfc81774752ee321b9dd0229ec",
+      "bytes": 4050
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Validation/SchemaValidationResult.cs",
+      "sha256": "c2bdebbb1b3e1c0208665a3ddfcdeac38fd2566e85cc72bdbc388ea499a280dc",
+      "bytes": 2807
+    },
+    {
+      "path": "schema-inputs/src/Bosak.Schema/Validation/XsdValidationService.cs",
+      "sha256": "e0c3f1a9b31404ef68c4c01fdf0352f61bc20ff2b10fc10fd2ca7e8d8edf9b09",
+      "bytes": 30358
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/ApacheLicenseTests.cs",
+      "sha256": "232456b353f6829637594b9a9094ec4524d92e6f231e8249b7342b8ee72397eb",
+      "bytes": 4890
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/ComplexTypeValidationTests.cs",
+      "sha256": "e1a39a19644bc7df78f8ada8df5477a82c6fb3a8bb5f86ef17c67f69ae0609c1",
+      "bytes": 10257
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/ImportSchemaSliceTests.cs",
+      "sha256": "3178c0ac6cb2294d80ee8a2e4c786ecc8234129ace1afe8eb523f31286622a77",
+      "bytes": 3645
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/NativeDecimalBackendTests.cs",
+      "sha256": "e6902d49661bcb547c4ac45b156fe1b5743d49d346bfe17afebf316f14d01c64",
+      "bytes": 22527
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/NativeDecimalLifecycleTests.cs",
+      "sha256": "7321345f562ad539605304be187d226a3d46d828c53d28174e4b4a3da3bfc84d",
+      "bytes": 6233
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/NativeDecimalSessionTests.cs",
+      "sha256": "19ec676cc338040140ba0519d86d8e515e28eb977e48870f309569688a985833",
+      "bytes": 9384
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/NativeSchemaAdapterTests.cs",
+      "sha256": "db64ed20c4f9ac8733144ace8feb783b59bb4dd436feddf2f92ece716c284c26",
+      "bytes": 33844
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/NativeSessionProbeTests.cs",
+      "sha256": "a88df4ea00e42e411a415b806d3db5efe49b58a8af83a24c5d4b11c8c7034e7d",
+      "bytes": 15074
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/AlternativeApplicabilityTests.cs",
+      "sha256": "5511dbeab9f95615295f8d84f6aa389f35261c37ec781bcee5602ea896b90488",
+      "bytes": 14261
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/AlternativeCompileTests.cs",
+      "sha256": "8311c1e79a280d6b9d93943e05a14c7febb2d2ec1642bda9fef203915435f325",
+      "bytes": 12847
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/AssertionEvaluationTests.cs",
+      "sha256": "5650a13cc4cae1ad8ec7c55251df011bfb44e5abfb170e76edf6648686630c01",
+      "bytes": 10447
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/AssertionFacetTests.cs",
+      "sha256": "d2726f1ab20fcf8d640ce7425d9b2af116c37de7ada48e1511377b57ef299769",
+      "bytes": 9092
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/CompatibilityTests.cs",
+      "sha256": "9a9cc5f011d64dd86e6f6ce0b7404e9343de8da2264320f7b82689af44e39e7d",
+      "bytes": 4681
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/DefaultAttributesTests.cs",
+      "sha256": "64536c6dae6d3ea6b6c89245a9cbac61e79e3efae2992090f6217eca8f50b8e2",
+      "bytes": 8183
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/OpenContentTests.cs",
+      "sha256": "bdceaab15a680c536487def60606083a0c90e971281a752a5b850ad28ad74a81",
+      "bytes": 16670
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/SchemaComponentTests.cs",
+      "sha256": "234e11a1eb1f1eaafe845e94304660ff2c3cc5d8efb6cfa045ed27eff9e10f60",
+      "bytes": 9371
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/SecurityTests.cs",
+      "sha256": "8db55b98c3c2b823efdd004f441cee01432ae359034bde7d8f610af0560904c5",
+      "bytes": 9603
+    },
+    {
+      "path": "schema-inputs/tests/Bosak.Schema.Tests/Xsd11/WildcardConstraintTests.cs",
+      "sha256": "05428ac20637c10f3575e499f043e14731818ec0297ed9c90ec76fa959c1044f",
+      "bytes": 11960
+    },
+    {
+      "path": "schema-inputs/tests/TestData/Schemas/native-decimal.expected.xml",
+      "sha256": "658b2e72ed5783fc081c84aadc864c653133047272da11b0012fce3a645b7950",
+      "bytes": 68
+    },
+    {
+      "path": "schema-inputs/tests/TestData/Schemas/native-decimal.xml",
+      "sha256": "658b2e72ed5783fc081c84aadc864c653133047272da11b0012fce3a645b7950",
+      "bytes": 68
+    },
+    {
+      "path": "schema-inputs/tests/TestData/Schemas/native-decimal.xsd",
+      "sha256": "de79b85dea83ee1e11b46042260cd19ddf4fda3df8bfc95e25a5ab294a45df93",
+      "bytes": 434
+    },
+    {
+      "path": "schema-inputs/tests/TestData/Schemas/orders.xsd",
+      "sha256": "77ced737908c9d98552ba423eb092bb498a6f695db35b350ce6b53335ee61efb",
+      "bytes": 1451
+    },
+    {
+      "path": "schema-inputs/tests/TestData/Schemas/sku.xsd",
+      "sha256": "e531b7e5d56c269dabe6434cc60ac523ce1e3bbe9b52758118651f0942e4c347",
+      "bytes": 450
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Directory.Build.props",
+      "sha256": "bd977b07cbae94873950fb838a005ce0d3cd7d42e84119e1b6c590f59bda0781",
+      "bytes": 484
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Example/Bosak.Schema.Example.csproj",
+      "sha256": "75a18d9d7091972ac022f0d0b74d0ed05d8af761077c9f7a56cfbb619d70dea4",
+      "bytes": 407
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Example/NativeDecimalExample.cs",
+      "sha256": "d5e0527c54e1bd92380a24ba5d55c427c6d1f3f1901a7fde7db2f41067192da2",
+      "bytes": 3829
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Example/PriceExample.cs",
+      "sha256": "43cb99c3ffd526934357f93a626d07d372fc4e8a094412ed29edbaa0bc66e29e",
+      "bytes": 4866
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Example/Program.cs",
+      "sha256": "edf49cfef5d29abb87cc40f415f3cc3ed0616d81cabd4264602237479e6c3ae1",
+      "bytes": 2508
+    },
+    {
+      "path": "core-inputs/integrations/Schema/PublicConsumer/Bosak.Schema.CoreConsumer.Tests.csproj",
+      "sha256": "ae69e27a075934c38f668b56ac2617de2ce629c9b9d665a852cfff4194419801",
+      "bytes": 791
+    },
+    {
+      "path": "core-inputs/integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs",
+      "sha256": "72875c76df989f4c6061f42538d172eae6c6a3fa7f9c622abdd7d7a4a37399d5",
+      "bytes": 7676
+    },
+    {
+      "path": "core-inputs/integrations/Schema/README.md",
+      "sha256": "bcb3f6a3c637ef5fd20c1c19b0ce3c53a9999db0623f5554f554f41ada745e27",
+      "bytes": 4309
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Source/Bosak.Schema.Source.csproj",
+      "sha256": "5ac536e413009de3fc6beffac737734f747b64412810f52de6748623e7f4e00c",
+      "bytes": 1540
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Source/Schema.Source.Files.props",
+      "sha256": "adf7e7ab7f20f985a8f65a6d2cde447a884483b4327ac060374cb9d6f42ab51b",
+      "bytes": 15817
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Tests/Bosak.Schema.Integration.Tests.csproj",
+      "sha256": "657cc82f70eac51f5e2cd68bed79ef62a70703125d05bbd1bab85334d6f38b52",
+      "bytes": 834
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Tests/OpenSchemaIntegrationTests.cs",
+      "sha256": "87eb078aac38f840a56d8126533124c59219e1082eab675308f17952aa4eb9fe",
+      "bytes": 7607
+    },
+    {
+      "path": "core-inputs/integrations/Schema/Tests/SchemaOwnershipTests.cs",
+      "sha256": "9e2fd39d3c75c63c86a66193dd854e46c39c3364851470c90aad15743e5a9c55",
+      "bytes": 4801
+    },
+    {
+      "path": "core-inputs/.github/workflows/schema-integration.yml",
+      "sha256": "9e432c5c2ca540fca9d3af9a261b254b8e7d07e96802b0772a2b40af4dc4044d",
+      "bytes": 1844
+    },
+    {
+      "path": "logs/CORE-BUILD.log",
+      "sha256": "24340c67742d1bbba777fb98597562f2250df9a221faa47b8ac56f49142527e5",
+      "bytes": 15753
+    },
+    {
+      "path": "logs/CORE-TEST.log",
+      "sha256": "7a45cad009566d678f95aee2bb7327d0bdb42f8bab4739435b348dd55fe584be",
+      "bytes": 5057
+    },
+    {
+      "path": "logs/crlf-implementation.log",
+      "sha256": "bc0bdbc4f0b896317297ff11f38237bb5ba673efcd7e1b35171765b261b9c9df",
+      "bytes": 2295
+    },
+    {
+      "path": "logs/crlf-public.log",
+      "sha256": "a54b5dc25cf15c5401671cb14ec80d8dcc6924a523b1c95e1ae963cd786eed2d",
+      "bytes": 2345
+    },
+    {
+      "path": "logs/lf-implementation.log",
+      "sha256": "978120e0a70d41eb34664b356cb9d547da348024c2bbbb5d18f1f0a8cc0005ba",
+      "bytes": 2290
+    },
+    {
+      "path": "logs/lf-public.log",
+      "sha256": "92b579adfe411d0563d9fcfdb5bade905c6db41d36568b82720e519016aad444",
+      "bytes": 2343
+    },
+    {
+      "path": "logs/mutated-fixture.log",
+      "sha256": "e70ef5596ddcc67f49d5c14aa1e6a882349a84e88110815e0bed1d71ba1ef7fb",
+      "bytes": 801
+    },
+    {
+      "path": "logs/mutated-legal.log",
+      "sha256": "1fa81fbf272f4169cf7d6a3e4dc84ec53801b93e60738425ec88995a0249a626",
+      "bytes": 727
+    },
+    {
+      "path": "logs/mutated-source.log",
+      "sha256": "8cf9726871ccced160216e2c9c97643c114e30ea6b9ae22b989c2829f697a353",
+      "bytes": 817
+    },
+    {
+      "path": "logs/NATIVE-EXAMPLE.log",
+      "sha256": "c8c9396f2cebf26fc6fce3dd32b791b921fcf217562211a3a7ba606f9767e990",
+      "bytes": 398
+    },
+    {
+      "path": "logs/PRICE-EXAMPLE.log",
+      "sha256": "fd7d0311bf166116c071a5e445553f5dc189b00142f5b9a9620d72c53f192fa8",
+      "bytes": 160
+    },
+    {
+      "path": "logs/PUBLIC.log",
+      "sha256": "4c19e40bdbcfe5a17f68089518fd1d33057030c2dacdf2eb6605b06450a1f888",
+      "bytes": 2580
+    },
+    {
+      "path": "logs/UPSTREAM.log",
+      "sha256": "cc230d19ced04eb0e4bc3a2ae07e385eaa4027a0ccf79aaf48730fd5b4488199",
+      "bytes": 3918
+    },
+    {
+      "path": "results/upstream-tests/charl_CHARLES_2026-11-17_10_02_21_net10.0.trx",
+      "sha256": "2ccb82a6aae318baa51d3b2f6a513cbdf07800d23127787421fb9395e9f0f0b5",
+      "bytes": 390861
+    },
+    {
+      "path": "results/public-tests/charl_CHARLES_2026-11-17_10_03_01_net10.0.trx",
+      "sha256": "b01ff5972e9e0c9b562acfa7ffa4f9c866916db27e20cfa623269a0a330983c2",
+      "bytes": 16072
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_01_net10.0.trx",
+      "sha256": "95453aeef24b07964c01aa3c07d8dab56ea65acc54e39eb7b7016bab2c7f8ce4",
+      "bytes": 92718
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_01_net10.0[1].trx",
+      "sha256": "5f505da411aa3490919eadc1f7807e58773727c3e9115e12a194c60e89b38720",
+      "bytes": 282311
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_01_net10.0[2].trx",
+      "sha256": "46af45c15f407a7349390345e4f0cda0f5945534b600a59cf70d4e4e261e9239",
+      "bytes": 376380
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_02_net10.0.trx",
+      "sha256": "876b5c0122da33fd3a03208c3ad8ff5b835bfb36a6abb996e809fb2ce8d207cd",
+      "bytes": 992540
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_02_net10.0[1].trx",
+      "sha256": "87e033c89052b4dffae8cb5c371a1112ea7bd36049399158f5527e222023682c",
+      "bytes": 1218729
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_02_net10.0[2].trx",
+      "sha256": "752c468ee3e733e6e51b408e264529bf7bb7d04b9e187b4fb2eddbb5580e0693",
+      "bytes": 75104
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_02_net10.0[3].trx",
+      "sha256": "08c0ee925c26f3091a86d9233fc71b2e2af4d2a34c1a7a0fbb1aa6dea205939d",
+      "bytes": 361922
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_02_net10.0[4].trx",
+      "sha256": "c1c36a647e7e1fa1b60b4e576f6e5dfa3c85ef311d413769afd4d19cd68083bd",
+      "bytes": 2795483
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_03_net10.0.trx",
+      "sha256": "060d8d241acfa74de12d9624b84abc6a11b93574bfe9f63af5e71c8ff9a00b63",
+      "bytes": 22571919
+    },
+    {
+      "path": "results/core-tests/charl_CHARLES_2026-11-17_10_04_05_net10.0.trx",
+      "sha256": "48c2029678aed64b2b339b0eaf817f3d744eb645642ab21124f319a492698fbb",
+      "bytes": 12416243
+    },
+    {
+      "path": "results/lf-implementation-results/charl_CHARLES_2026-11-17_10_06_57_net10.0.trx",
+      "sha256": "5d2933ca142c6c5f4eef3ffc42f65a2bc16fac8d0b88b495ebb3cf73146ad1c8",
+      "bytes": 390875
+    },
+    {
+      "path": "results/lf-public-results/charl_CHARLES_2026-11-17_10_07_02_net10.0.trx",
+      "sha256": "6b0514c33c07c060ff7bac89c2a399db4cbff767363879c186a5b46e75fc0a5d",
+      "bytes": 16086
+    },
+    {
+      "path": "results/crlf-implementation-results/charl_CHARLES_2026-11-17_10_07_07_net10.0.trx",
+      "sha256": "1d74cc28a71843af811e8230213cb756a8d38a8facd3f1e866aac4d8d0834f21",
+      "bytes": 390875
+    },
+    {
+      "path": "results/crlf-public-results/charl_CHARLES_2026-11-17_10_07_11_net10.0.trx",
+      "sha256": "e8c8082981637fa7ef0cac80bf7aee783355677b97b9e906afd978ae5d745170",
+      "bytes": 16086
+    }
+  ]
+}

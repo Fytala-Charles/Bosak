@@ -117,7 +117,7 @@ Schema's public source has its own version and compatibility lifecycle; the Apac
 
 Bosak.XmlDb is a separate storage product in development, starting with embedded use. It is distinct from the published [Bosak.XPath.Providers.Database](https://www.nuget.org/packages/Bosak.XPath.Providers.Database/1.81.17) REST-loader package; the native database is not included in the Core packages.
 
-Try the [schema-aware price example](integrations/Schema/README.md) to validate XML and transform its typed values using the public Schema source.
+Try the [optional Schema examples](integrations/Schema/README.md) for schema-aware price transformation or bounded native decimal assessment, exact reads and detached XML export using the public Schema source.
 
 ## Work in VS Code
 

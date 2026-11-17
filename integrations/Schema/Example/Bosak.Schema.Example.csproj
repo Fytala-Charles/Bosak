@@ -1,6 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>
+  <Import Project="../Source/Schema.Source.Files.props" />
   <ItemGroup>
+    <None Include="@(SchemaTestDataFile)" Link="TestData/Schemas/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <ProjectReference Include="../Source/Bosak.Schema.Source.csproj" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,18 @@
+﻿{
+    "scope":  "Source/test/fixture/legal pin refresh plus public-only native example and consumer; no engine or Schema semantic changes",
+    "schemaRevision":  "9fd4e6acd20b34446d736ab0ec3fa2d439f9e337",
+    "coreBase":  "cfcc06a9a4f3060f73ea889fce6a9f86cc82e1c6",
+    "date":  "2026-11-17",
+    "boundaries":  [
+                       "Core source 1.81.17; standalone Schema package references stay1.81.2",
+                       "Existing legacy staged-validation extra-child limitation remains explicit",
+                       "249 upstream friend tests unchanged plus11existing consumer/ownership cases",
+                       "New public-only consumer has no InternalsVisibleTo grant; do not weaken upstream public consumer exactCore1.81.2assertion",
+                       "No grammar expansion, new schema namespace/type adoption, API freeze, package publication or positive universe compatibility",
+                       "Preserve original historical dossiers byte-identically; new current source pin lives here"
+                   ],
+    "specManifestSha256":  "6D2562D952CCB79E3AB9A6D3AAC37AB02C72BC34E5314B30FA276DA495BA1165",
+    "consumer":  "Existing optional Core Schema source-wrapper, legacy typed-price and public native decimal workflow",
+    "specificationBasis":  "Retain merged Schema NATIVE-DECIMAL-SPECIFICATION-ADOPTION.md and its immutable body hashes/sections/deviations unchanged",
+    "adoptionSha256":  "0FE70970C701F3FD1B6AE543CE23E2D0C3A657AC7322E5D3C717A3BD3FEB69FC"
+}
