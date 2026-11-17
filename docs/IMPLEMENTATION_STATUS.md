@@ -1,3 +1,7 @@
+## Native public Schema consumer qualification - 17 November 2026
+
+The [optional native Schema consumer](schema-native-consumer/README.md) now pins merged Schema9fd4e6a, including its public owned decimal-session entry. The current-Core lane runs260 implementation/legacy cases plus nine separate public-consumer cases without friend access. Source/test/fixture/legal hash guards bind58 inputs in exact LF/CRLF forms; altered source, fixture and legal copies refuse before compilation. Both the original typed-price output and the new native decimal example are verified. Schema's standalone package pins remain1.81.2; the wrapper tests Core1.81.17 without changing either engine. Full XSD1.1, positive universe compatibility, general API acceptance/freeze, performance budgets and publication remain separate. Historical integration dossiers are unchanged.
+
 ## Extension snippets 0.3.0 published — 16 November 2026
 
 REQ-141 is delivered. [PR #501](https://github.com/Fytala-Charles/Bosak/pull/501) merged after all six checks passed. Hosted preparation43883918663 and exact-artifact publisher43891666461 passed; Marketplace download and GitHub asset match the reviewed VSIX. Five actual editor scenarios pass in each of two isolated VS Code1.146.0 profiles, including prefix suggestions, mirrors, forward/backward stops and final cursor, with and without bundled server. Core/server remains1.81.17; no NuGet or engine change. Earlier candidate notices are historical. [User guide](VSCODE_SNIPPETS.md) and [publication receipts](extension-0.3.0-publication/README.md).

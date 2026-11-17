@@ -1,0 +1,55 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceLfSha256": "eb427ef68d2640bbebe277cdb422010e61705a5bfd332fc4f8578865b1795b59",
+      "htmlSha256": "e7396561a548d6ea7c13eef0a473e103b04e70b5b4ba7b5ba53d3b387a23ea1a"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceLfSha256": "4ddfdb5e49db5263c428c7720f53c6236867d7b1d5555583a5c1c1adbe0639c0",
+      "htmlSha256": "f92024dd7a5776119f58afa8498934c156423451b3992c0df2ada8800abe1ba8"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceLfSha256": "69f4c009377c467d9e83bf71131804f2a50ac792870f56f485041134b680e446",
+      "htmlSha256": "21414a823dfaf6befa6c1b04f4d89b8a77ad39624b1a69b6705cba47bcf55e14"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceLfSha256": "b9ca4b79ea9745e6c4a509146a31a15cdc653407b6f6c9ea28cb985deae9195a",
+      "htmlSha256": "dd11c148d4165c5a4b23a0de05acf2176e65ce03ca0bd70027296eef47ff5a27"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "sourceLfSha256": "09b65efb56e5fce568e3be666ae6b26e0613b3d4a652eb7c8d3d50257450bd76",
+      "htmlSha256": "553ae08db47b1324c97d3dc60656951baad970b458a049928fecf1ac88f8f9f2"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceLfSha256": "880fb0b66821a70ccf55e001427efcda3de374258b9906429c1683e2a261269f",
+      "htmlSha256": "d1918f4ca58f36eacf83a9cabaa26451e23bb978c332627740ad6d2ba001bb0b"
+    },
+    {
+      "file": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sourceLfSha256": "b9c0c1d16be91e8e52459922db4a779e134bed6b5cc8e81d9f527d651bcb102b",
+      "htmlSha256": "f59ec3f175d1b751115373b46d62ceb42636f4db24ec6452338c18a1e7a38283"
+    },
+    {
+      "file": "integrations/Schema/README.md",
+      "sourceLfSha256": "7d1180cbef40e029b1ba7ff4785783b98c2468a1bcfa25fcf1ae03ff8021fce9",
+      "htmlSha256": "280ba0079667743d1a0e266c0a096cb850677fdef474ab0954f98e6811e567d6"
+    },
+    {
+      "file": "docs/schema-native-consumer/README.md",
+      "sourceLfSha256": "5ac4bed1c9b2fb0916e4f66669742e8db3774c581b8dec1ab5c142256baabf3d",
+      "htmlSha256": "0653e3153810e38393b796779e3e77fe9193972aea59cb2d7a3acc84b43388d9"
+    }
+  ],
+  "localDestinations": 3574,
+  "inheritedOwnerDestinations": 2,
+  "programmaticHtmlOnly": true,
+  "screenshotOrPdfAcceptance": false,
+  "managedAssetsChanged": false,
+  "cssSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb"
+}

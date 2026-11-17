@@ -1,0 +1,160 @@
+{
+  "date": "2026-11-17",
+  "base": "cfcc06a9a4f3060f73ea889fce6a9f86cc82e1c6",
+  "branch": "integration/schema-native-decimal",
+  "schemaRevision": "9fd4e6acd20b34446d736ab0ec3fa2d439f9e337",
+  "files": [
+    {
+      "path": ".github/workflows/schema-integration.yml",
+      "sha256": "4c1ba2eeed8260b289d2bec8981ab900c208718d10c2e4c16f55a2d02c42453a",
+      "mode": "lf",
+      "bytes": 1806
+    },
+    {
+      "path": "README.md",
+      "sha256": "eb427ef68d2640bbebe277cdb422010e61705a5bfd332fc4f8578865b1795b59",
+      "mode": "lf",
+      "bytes": 11853
+    },
+    {
+      "path": "docs/AGENT_HANDOVER.md",
+      "sha256": "880fb0b66821a70ccf55e001427efcda3de374258b9906429c1683e2a261269f",
+      "mode": "lf",
+      "bytes": 2778347
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "sha256": "4ddfdb5e49db5263c428c7720f53c6236867d7b1d5555583a5c1c1adbe0639c0",
+      "mode": "lf",
+      "bytes": 635188
+    },
+    {
+      "path": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "sha256": "b9c0c1d16be91e8e52459922db4a779e134bed6b5cc8e81d9f527d651bcb102b",
+      "mode": "lf",
+      "bytes": 152315
+    },
+    {
+      "path": "docs/FEATURE_REQUESTS.md",
+      "sha256": "b9ca4b79ea9745e6c4a509146a31a15cdc653407b6f6c9ea28cb985deae9195a",
+      "mode": "lf",
+      "bytes": 1373635
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.md",
+      "sha256": "09b65efb56e5fce568e3be666ae6b26e0613b3d4a652eb7c8d3d50257450bd76",
+      "mode": "lf",
+      "bytes": 254251
+    },
+    {
+      "path": "docs/INTEGRATION.md",
+      "sha256": "69f4c009377c467d9e83bf71131804f2a50ac792870f56f485041134b680e446",
+      "mode": "lf",
+      "bytes": 1086180
+    },
+    {
+      "path": "docs/schema-native-consumer/ADOPTION.json",
+      "sha256": "76dd2008eed4799b2302bdd1c69109ed150dc5df44925928be12b0271a2a07f8",
+      "mode": "lf",
+      "bytes": 1529
+    },
+    {
+      "path": "docs/schema-native-consumer/ARCHIVE.json",
+      "sha256": "a9f98993e167196d14193d56c5fe02905c8102997c1e62c984616970e6477310",
+      "mode": "lf",
+      "bytes": 20037
+    },
+    {
+      "path": "docs/schema-native-consumer/DOCUMENTATION-CHECKS.json",
+      "sha256": "362de0cd4500e70c78a352fcb46393e5362fc88aee3a87279b1c9461c4e4e61b",
+      "mode": "lf",
+      "bytes": 2384
+    },
+    {
+      "path": "docs/schema-native-consumer/EXECUTION-RECEIPTS.zip",
+      "sha256": "df688d1a926b1c9996b9d004551b776386273aae87195c52a67647903631b160",
+      "mode": "raw",
+      "bytes": 6226246
+    },
+    {
+      "path": "docs/schema-native-consumer/HISTORICAL-PRESERVATION.json",
+      "sha256": "bc12bf3e394a59774338bcc7e797e38671a91e5bfb5b1e4b7948233d1731217e",
+      "mode": "lf",
+      "bytes": 9173
+    },
+    {
+      "path": "docs/schema-native-consumer/README.md",
+      "sha256": "5ac4bed1c9b2fb0916e4f66669742e8db3774c581b8dec1ab5c142256baabf3d",
+      "mode": "lf",
+      "bytes": 3973
+    },
+    {
+      "path": "docs/schema-native-consumer/RESULTS.json",
+      "sha256": "a47b899eaff8493876fe37d59e2bca75125ce879dffdcab971660d65f6e348f4",
+      "mode": "lf",
+      "bytes": 6231689
+    },
+    {
+      "path": "docs/schema-native-consumer/SOURCE-PIN.json",
+      "sha256": "27f42f09d937f0de28bafc40d1dbe67a7a26cb42aa4cf45baa3136d9830c9433",
+      "mode": "lf",
+      "bytes": 17204
+    },
+    {
+      "path": "docs/schema-native-consumer/verify.py",
+      "sha256": "bdb88dbc24858ca66fd3798189d57e383605028123f93204f9092ce1f9311ddb",
+      "mode": "lf",
+      "bytes": 2914
+    },
+    {
+      "path": "integrations/Schema/Example/Bosak.Schema.Example.csproj",
+      "sha256": "3bd378c9a27edab0c746b988b251afce9a889d834906df59053e22153a6faf87",
+      "mode": "lf",
+      "bytes": 401
+    },
+    {
+      "path": "integrations/Schema/Example/NativeDecimalExample.cs",
+      "sha256": "e318d3d0d904a60dc20ac9701bbc4bee777744a082e83cbbb43580838d22fad7",
+      "mode": "lf",
+      "bytes": 3829
+    },
+    {
+      "path": "integrations/Schema/Example/Program.cs",
+      "sha256": "4278ed034276db1fed401ab3f563f970e99908124167da4dda8be92bcfa3dcef",
+      "mode": "lf",
+      "bytes": 2486
+    },
+    {
+      "path": "integrations/Schema/PublicConsumer/Bosak.Schema.CoreConsumer.Tests.csproj",
+      "sha256": "7747292770ec2cb1af3e356df06b6a4d35e9fe0aa0d5532bf52e9b76376262a7",
+      "mode": "lf",
+      "bytes": 791
+    },
+    {
+      "path": "integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs",
+      "sha256": "d245a853b140aa56558c358e8273ebf9612a0bd5d6325a0565bbbc9709dc5adf",
+      "mode": "lf",
+      "bytes": 7676
+    },
+    {
+      "path": "integrations/Schema/README.md",
+      "sha256": "7d1180cbef40e029b1ba7ff4785783b98c2468a1bcfa25fcf1ae03ff8021fce9",
+      "mode": "lf",
+      "bytes": 4281
+    },
+    {
+      "path": "integrations/Schema/Source/Bosak.Schema.Source.csproj",
+      "sha256": "da2b643248288d05492f01332ea798dcfad8dbc36d21a63b4562a22cce92040e",
+      "mode": "lf",
+      "bytes": 1518
+    },
+    {
+      "path": "integrations/Schema/Source/Schema.Source.Files.props",
+      "sha256": "404e54be1f1c3a067e48056057a514c000dd8d7bf2f42420493628ecec51292e",
+      "mode": "lf",
+      "bytes": 15776
+    }
+  ],
+  "scope": "Local consumer qualification; no commit/push/tag/package publication",
+  "excluded": "This manifest excludes itself; raw built binaries/packages are not in the payload."
+}

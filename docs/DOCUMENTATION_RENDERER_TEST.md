@@ -1,3 +1,7 @@
+## Native Schema consumer documentation - 17 November 2026
+
+Current optional integration instructions, canonical documentation and the new qualification dossier are rendered with existing Fytala CSS and local destinations checked. Programmatic HTML only, no screenshot/PDF acceptance. Managed assets are unchanged. [Receipt](schema-native-consumer/DOCUMENTATION-CHECKS.json).
+
 ## Extension 0.3.0 delivery - 16 November 2026
 
 Canonical pages, the current snippet user guide and publication receipts are rendered with unchanged Fytala CSS and checked local destinations. Programmatic HTML only; no screenshot or PDF acceptance. Actual VS Code editor-command checks are retained separately from documentation rendering. [Receipt](extension-0.3.0-publication/DOCUMENTATION-CHECKS.json).

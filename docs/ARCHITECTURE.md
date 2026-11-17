@@ -2966,3 +2966,8 @@ The [isolated public Schema dependency candidate](schema-core-1.81.2-adoption/RE
 The dependency-only Schema candidate is now local commit9d1881e, freshly qualified with124 source cases and11 additional integration/ownership cases. [Committed checkpoint](schema-core-1.81.2-adoption/committed/README.md) records exact identities and retained binary-lane reuse. It has not been pushed or adopted into the original Schema checkout.
 
 The [optional Schema source integration](schema-integration-1812/README.md) now pins mergedc953ebe and135 cases (124 upstream, eight price/assertion, three ownership). Its source/asset hash guard accepts only the recorded LF/CRLF forms and refuses modified input before compilation. This refresh changes neither Core engine semantics nor standalone Schema packaging; the original integration dossier remains historical and unchanged.
+
+
+## Native public Schema consumer qualification - 17 November 2026
+
+The [optional native Schema consumer](schema-native-consumer/README.md) now pins merged Schema9fd4e6a, including its public owned decimal-session entry. The current-Core lane runs260 implementation/legacy cases plus nine separate public-consumer cases without friend access. Source/test/fixture/legal hash guards bind58 inputs in exact LF/CRLF forms; altered source, fixture and legal copies refuse before compilation. Both the original typed-price output and the new native decimal example are verified. Schema's standalone package pins remain1.81.2; the wrapper tests Core1.81.17 without changing either engine. Full XSD1.1, positive universe compatibility, general API acceptance/freeze, performance budgets and publication remain separate. Historical integration dossiers are unchanged.
