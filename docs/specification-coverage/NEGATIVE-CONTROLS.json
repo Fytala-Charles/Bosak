@@ -1,0 +1,36 @@
+{
+  "validInventoryAccepted": true,
+  "negativeControls": [
+    {
+      "control": "invented_percentage",
+      "refused": true,
+      "message": "No unreviewed denominator or completion percentage"
+    },
+    {
+      "control": "invented_conformance",
+      "refused": true,
+      "message": "Normative qualification requires a separately reviewed case mapping"
+    },
+    {
+      "control": "refusal_claimed_positive",
+      "refused": true,
+      "message": "Refusal/metadata is not positive native support"
+    },
+    {
+      "control": "invented_case",
+      "refused": true,
+      "message": "Unknown historical test ID"
+    },
+    {
+      "control": "duplicate_feature",
+      "refused": true,
+      "message": "Expected 24 distinct reviewed feature areas"
+    },
+    {
+      "control": "missing_specification",
+      "refused": true,
+      "message": "Missing specification reference"
+    }
+  ],
+  "productTests": false
+}

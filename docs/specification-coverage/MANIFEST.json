@@ -1,0 +1,44 @@
+{
+  "repository": "core",
+  "sourceBaseline": "f7b6c9959b46b67919c7f4677ff67e3fbf6bc03d",
+  "runtimeUnchanged": true,
+  "implementationOrConformanceAcceptance": false,
+  "files": [
+    {
+      "path": "docs/specification-coverage/BASELINE.json",
+      "sourceLfSha256": "3b096732ee84122b44a3e0f6c08629a50a77df625c17cd14a8bfecd31e4a3767"
+    },
+    {
+      "path": "docs/specification-coverage/CATALOG.json",
+      "sourceLfSha256": "cd5f3990352bfe948ce0d1e4480a162a64f55b3cde67272da48738e5436ce437"
+    },
+    {
+      "path": "docs/specification-coverage/DOCS-CHECK.txt",
+      "sourceLfSha256": "d9a09a42db4518a95ba2359300ddad85639026f7a714a9585a675ce5ddf4d231"
+    },
+    {
+      "path": "docs/specification-coverage/DOCUMENTATION-CHECKS.json",
+      "sourceLfSha256": "9cf8cf6b9e402132c9bfbdd1b4eab3ae16e6d6d80508a50f1d0618e435b41df2"
+    },
+    {
+      "path": "docs/specification-coverage/MATRIX.json",
+      "sourceLfSha256": "01d1cfc97cc69b8305b4ebba7b2ce20139689af1cf7874fb7d187840c22fccf8"
+    },
+    {
+      "path": "docs/specification-coverage/NEGATIVE-CONTROLS.json",
+      "sourceLfSha256": "c81b9d5897982545bb2102dfa068e52d76171f5594dc7f80489080c59fc99a9b"
+    },
+    {
+      "path": "docs/specification-coverage/PROGRAM.md",
+      "sourceLfSha256": "ddf3724d9cb7df913d4c4d9ede2e87daf93d52cc7e5308155685c59750c4ad76"
+    },
+    {
+      "path": "docs/specification-coverage/validate.py",
+      "sourceLfSha256": "2687aa97c53cb68fdb258cc6c167a05fdbd16b0cadfc910786bdfd3d2cd935da"
+    },
+    {
+      "path": "docs/specification-coverage/VALIDATION.json",
+      "sourceLfSha256": "0041265ff0fbe59e2a05e7b39f7d63fefb0283f357c3f765cde07967543b303a"
+    }
+  ]
+}

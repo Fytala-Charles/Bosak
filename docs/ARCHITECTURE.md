@@ -4,6 +4,16 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## M1 namespace candidate - 19 November 2026
+
+The local M1 candidate adds namespace-aware expanded declaration names, qualified/unqualified local forms, QName assertion binding and zero-to-eight assertions within the finite decimal shape. All409source cases pass (315implementation/94public), including41authored clause-mapped cases and three real Core-session controls. Package-only94cases pass with Core1.81.2; a separate42case public lane passes with published Core1.81.17. Retained124/23/33binary catalogs pass with onlySchema.dll replaced; these lanes overlap. No Core runtime/API/source-wrapper pin, published package, version/tag or release-controller change. [Evidence](specification-coverage/M1-CANDIDATE-DELTA.json).
+
+
+## Shared specification coverage priority - 19 November 2026
+
+Owner priority is specification coverage and useful external application workflows across Bosak and Bosak.Schema. The shared24-area matrix separates bounded native behavior, legacy/descriptor support, refusal and unassessed work;365historical Schema case IDs are indexed without claiming conformance. M1 proposes namespace-aware decimal documents with optional assertions, followed by coherent named-type/attribute/datatype and structural slices. No runtime or release change. [Programme](specification-coverage/PROGRAM.md), [owner requirement](REQ-142-SCHEMA-SPECIFICATION-COVERAGE.md).
+
+
 ## Declarative editor snippets
 
 Published extension 0.3.0 contributes language-scoped JSON snippets directly through VS Code metadata. Insertion is independent of the LSP process; no protocol or engine changes are required. Existing language-server tests execute the actual default expansions. See the [snippet guide](VSCODE_SNIPPETS.md).

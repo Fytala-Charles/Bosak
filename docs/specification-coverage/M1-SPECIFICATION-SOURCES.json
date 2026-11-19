@@ -1,0 +1,23 @@
+[
+  {
+    "bytes": 2021328,
+    "reviewDate": "2026-11-19",
+    "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+    "sha256": "5ffb773f81fb81cfc9ac54dfb871c333cefb12fbdffe4caeb28170054b21fc6a",
+    "id": "structures"
+  },
+  {
+    "bytes": 490562,
+    "reviewDate": "2026-11-19",
+    "url": "https://www.w3.org/TR/2010/REC-xpath20-20101214/",
+    "sha256": "8f570fb5f09ee66b5a645a7d7e3f185d6314379eb2c4d80ac944dc66d2fe8e0a",
+    "id": "xpath20"
+  },
+  {
+    "bytes": 51390,
+    "reviewDate": "2026-11-19",
+    "url": "https://www.w3.org/TR/2009/REC-xml-names-20091208/",
+    "sha256": "b4a649e5fdab9852d68eca21442481599164949bcdee5549f2ec7e38fb3cd3a8",
+    "id": "namespaces"
+  }
+]

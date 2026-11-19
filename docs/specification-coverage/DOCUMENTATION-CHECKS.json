@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "sourceLfSha256": "b4eb958073eedf3e2da06916edd8baa81892bb41ac979b44944688e96f85550f",
+      "htmlSha256": "fc714456b153a04e0e5232892e3de5f068db098470a48cf4e8672d93c432b23a"
+    },
+    {
+      "file": "ROADMAP.md",
+      "sourceLfSha256": "315a4b181e124cae46a269a2364146c6f8ae7ff8bcd24baa61ef8acc8e4358d6",
+      "htmlSha256": "f4557c137060c1b896d3bd1907ec09f5e159221f5a138761abc8dcd99f8a6406"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "sourceLfSha256": "f2ff4605bbd1584859c897acca977b5f5c3b0d407d3c34c0315c49aeffaaa604",
+      "htmlSha256": "5e52c5d6f5735d986ab929a099e92f60297170fc3905ae982505b9922f4fc125"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "sourceLfSha256": "0eca7cf9419052f201e2df062da82d553e3d25bb2c6e439cb0f35422bf98049c",
+      "htmlSha256": "cf14ea315c6ce0f2593abef6f360c93d318525d19d4f685b0a054b240c9b722d"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "sourceLfSha256": "0b7bfe6aa5249ac498fe0a63b3d0736601598c8b23554a49fcff27c2cd048d6a",
+      "htmlSha256": "9c9464ba8ffe3707bbf14ed1f096932f752b56c118055162f26693c9461a2451"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "sourceLfSha256": "ab403bf5efecf6fd0161dbed5f36e16aa257ea5c193d0cad68dc037ed3e02baf",
+      "htmlSha256": "93d67ded1433e1fe35246e2e836e90bc8d45638e1b32514cc91359bb952aa9ed"
+    },
+    {
+      "file": "docs/REQ-142-SCHEMA-SPECIFICATION-COVERAGE.md",
+      "sourceLfSha256": "042fb8bc0b6b6e808f4c7e99044bfbefe62094980e7bbb54c1457b605d28aa06",
+      "htmlSha256": "86511d052d57fa4c8408532444b1bfa0bbd7cb5a7b75aeec5d8dfa2a24190e57"
+    },
+    {
+      "file": "docs/specification-coverage/PROGRAM.md",
+      "sourceLfSha256": "ddf3724d9cb7df913d4c4d9ede2e87daf93d52cc7e5308155685c59750c4ad76",
+      "htmlSha256": "d3d28b4a13f2a79fdc6300e26195db9526b600bf1d644cb600208096a4e2ae74"
+    }
+  ],
+  "existingLocalDestinations": 3059,
+  "newBrokenDestinations": 0,
+  "preexistingMissingDestinations": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "programmaticHtmlOnly": true,
+  "screenshotAcceptance": false,
+  "pdfAcceptance": false,
+  "managedAssetsChanged": false
+}

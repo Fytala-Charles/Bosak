@@ -1,0 +1,27 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 19 November 2026
+// PURPOSE              : Tests specification-mapped namespace assessment through the public API.
+// SPECIAL NOTES        : Bounded native decimal profile; published Core 1.81.2; no general XSD conformance claim.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 19-11-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Reflection;
+using Bosak.XPath.Api.Schema;
+using Xunit;
+/// <summary>Verifies the separate current-Core lane rather than rewriting the minimum-version consumer.</summary>
+public sealed class CoreIdentityTests
+{
+    /// <summary>Requires actual published current-Core runtime metadata and no project override.</summary>
+    [Fact]
+    public void Runtime_UsesPublishedCore18117() => Assert.StartsWith("1.81.17+",typeof(SchemaQuerySession).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!.InformationalVersion);
+}

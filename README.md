@@ -164,3 +164,7 @@ See [AGENTS.md](AGENTS.md) for conformance runners and the documented Windows XS
 Use [Discussions](https://github.com/Fytala-Charles/Bosak/discussions) for questions and [Issues](https://github.com/Fytala-Charles/Bosak/issues) for bugs. [Commercial support](COMMERCIAL.md) and [GitHub Sponsors](https://github.com/sponsors/Fytala-Charles) support development; schema access and conformance fixes are not paywalled.
 
 Maintainers can find artifact preparation and publication instructions in the [release guide](docs/RELEASING.md).
+
+The [shared specification coverage programme](docs/specification-coverage/PROGRAM.md) defines the next Schema/Core interoperability milestones and the evidence required for supported profiles.
+
+The [shared coverage programme](docs/specification-coverage/PROGRAM.md) now records a local namespace/optional-assertion candidate with separate minimum/current-Core consumers; see its [bounded progress](docs/specification-coverage/M1-CANDIDATE-DELTA.json).

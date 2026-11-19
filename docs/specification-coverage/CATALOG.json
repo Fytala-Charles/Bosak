@@ -1,0 +1,2198 @@
+{
+  "sourceRevision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc",
+  "count": 365,
+  "freshRun": false,
+  "normativeCoverage": false,
+  "cases": [
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 1, invalid: -1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"attribute\", reason: Attributes)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_MultipleUnsupportedAttributes_UsesFirstDetectedRefusal(attributes: \"secret='PRIVATE-MARKER' targetNamespace='urn:PRIVA\"\u00b7\u00b7\u00b7, reason: Attributes)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.PublicLegacyExamples_AreStillUnsupportedWithNamespaceReason(file: \"orders.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"namespace\", reason: Namespace)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<!DOCTYPE r SYSTEM 'https://PRIVATE-MARKER.invalid\"\u00b7\u00b7\u00b7, outcome: Unsupported, reason: Unspecified)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r xmlns='urn:PRIVATE-MARKER'><a>1</a></r>\", outcome: Invalid, reason: Unspecified)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"assertion\", reason: AssertionGrammar)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r><a>bad</a></r>\", outcome: Invalid, reason: Unspecified)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_MultipleUnsupportedAttributes_UsesFirstDetectedRefusal(attributes: \"targetNamespace='urn:PRIVATE-MARKER' secret='PRIVA\"\u00b7\u00b7\u00b7, reason: Namespace)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"assertion-length\", reason: RepresentationCapacity)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.PublicSurface_NoFriendGrantOrPublicFactoriesForAuthority",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 0, invalid: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Context_TimezoneBound_IsExplicit(minutes: -840, valid: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.NumericLimits_NoRoundingAndNormalizationBypass_RemainExplicit",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.PublicWorkflow_GoldenInput_ReturnsDetachedValuesAndXml",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 2, invalid: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.PublicLegacyExamples_AreStillUnsupportedWithNamespaceReason(file: \"sku.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r\", outcome: Invalid, reason: Unspecified)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Admission_QuotaExceeded_ThrowsAndDisposeAllowsReuse",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r><a>0</a></r>\", outcome: Invalid, reason: Unspecified)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Context_TimezoneBound_IsExplicit(minutes: -841, valid: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 6, invalid: -1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"shape\", reason: DeclarationShape)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.LegacyValidation_CompileFindings_ReturnFalseBeforeWork(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.LegacyValidation_CleanUnmatchedRoot_RemainsAssertionOnly",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Create_RefusedSchema_UsesStableSchemaDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.DescriptorSnapshot_RecordCopy_CannotMutateOriginal",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.InputCapacity_ByteAndLexicalLimits_PreserveCapacityReason",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.ArgumentsAndCancellation_RejectBeforeInputAndLeaveSessionUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.DescriptorSnapshot_NestedBindingsAndFacets_RefuseMutation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Dispose_MultipleDocuments_RevokesOnlyTheOwningSession",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.LegacyValidation_CompileFindings_ReturnFalseBeforeWork(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Assess_RefusedInput_HasNoOwnedValue(input: \"<order><tax>1</tax></order>\", outcome: Invalid, code: \"BSK-NATIVE-INSTANCE-INVALID\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.ValidWorkflow_HasNoDiagnosticAndKeepsDetachedOutput",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Context_TimezoneBound_IsExplicit(minutes: 841, valid: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_UnsupportedSchema_PreservesStageAndReportsDetectedReason(change: \"type\", reason: ValueType)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.RestrictedCompiler_ContainedSchema_Compiles",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 5, invalid: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.NumericCapacity_SchemaAndInstance_PreservesCapacityReason",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 4, invalid: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.RestrictedResolver_ContainedFile_ReturnsReadonlyBytes",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Assess_RefusedInput_HasNoOwnedValue(input: \"<order flag='PRIVATE-CALLER-TEXT'/>\", outcome: Unsupported, code: \"BSK-NATIVE-INSTANCE-UNSUPPORTED\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Context_TimezoneBound_IsExplicit(minutes: 840, valid: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.DescriptorSnapshot_OuterCollections_RefuseMutation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Assess_RefusedInput_HasNoOwnedValue(input: \"<order\", outcome: Invalid, code: \"BSK-NATIVE-INSTANCE-INVALID\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.RestrictedResolver_OutsideFile_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Assess_RefusedInput_HasNoOwnedValue(input: \"<!DOCTYPE order SYSTEM 'https://invalid.example/pr\"\u00b7\u00b7\u00b7, outcome: Unsupported, code: \"BSK-NATIVE-INSTANCE-UNSUPPORTED\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r secret='PRIVATE-MARKER'><a>1</a></r>\", outcome: Unsupported, reason: Attributes)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.OptionalEmptyRoot_HasNoFabricatedScalar",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.Options_InvalidBound_ThrowsAtConstruction(index: 3, invalid: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalConsumerTests.LegacyValidation_CompileFindings_ReturnFalseBeforeWork(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Assess_RefusedInstance_ReportsOnlyTheDetectedCategory(input: \"<r><a secret='PRIVATE-MARKER'>1</a></r>\", outcome: Unsupported, reason: Attributes)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_57_58_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_Alternative_RecordsOwnerStaticContextAndResolvedType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Open_DocumentWithDoctypeUnderDtdAllowPolicy_OpensStream",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_QueryOrFragment_Refuses(suffix: \"?query=1\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_NonvalidNativeInput_PublishesNoRoot(xml: \"<order flag='x'><amount>1</amount><amount>2</amoun\"\u00b7\u00b7\u00b7, expected: Unsupported)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CompileFailure_SkipsOtherModelCollections(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.CompileAndAssess_InvalidLimitsAndCancellation_Throw",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_AlternativeUnderXsd10_RejectedWithBskXsd002",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<wrong><tax>1</tax></wrong>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax eq -0.50\", xml: \"<order><tax>-.5</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_DecimalComparison_IsNumericNotLexicographic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_CtaDefaultAlternative_RunsDefaultTypeAssertions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"empty(amount) or amount eq 1\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentOnComplexContentExtension_RecordsDefinition",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompatibilityTests.CreateValidationService_BeforeActivation_ReturnsService",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.AssertionValidation_WithoutActivation_PreservesResults(quantity: 3, expectedValid: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_RuntimeConversionError_ReportsAssertionEvaluationError",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_SourceXmlMutation_DoesNotRewriteSnapshot",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax gt 0 trailing\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"amount eq 1\", xml: \"<order><amount>1</amount><amount>1</amount><tax>1<\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CallerDiagnostics_AreCopiedOnceWithoutTranslation(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CleanModel_NoApplicableTests_RetainsScopedSuccess(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax eq 1e0\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_ModesBudgetsAndCancellation_RefusesOrThrowsWithoutPartialSuccess",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_OpenContentAnyWithoutNegativeConstraints_RecordsEmptyLists",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"count(unknown) eq 0\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_PercentEncodedParentTraversal_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesUnderXsd10_EmitsConstructRequiresXsd11ForBothConstructs",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CleanModel_NoApplicableTests_RetainsScopedSuccess(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Open_UriOutsideAllowedPrefixes_ThrowsResolutionDenied",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"not(exists(tax))\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_FacetAssertions_FreezeAndRetainSharedIdentity",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.CompileXPath_UnsupportedFunction_ReturnsUnsupported",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Compile_ImportUnderDenyAllResolver_EmitsResolutionDeniedDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"count(amount) eq 2 and tax ge 0\", xml: \"<order><amount>1</amount><amount>2</amount><tax>0<\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CompileFailure_SkipsOtherModelCollections(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_OneByteOverCapacity_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Close_AdmittedWork_WaitsAndRevokesAfterConsumption(closeSession: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Close_AdmittedWork_WaitsAndRevokesAfterConsumption(closeSession: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.PublicAssembly_DoesNotContainSigningOrBillingInfrastructure",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.Assess_InvalidTimezone_ThrowsAndKeepsAdmissionAvailable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Capture_InvalidOrUnsupportedXml_PublishesNoInput(xml: \"<!DOCTYPE order><order/>\", outcome: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.LegacyActivation_RepeatedIgnoredValues_DoesNotRestrictSchema",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"amount ne 0\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.ReadDecimal_QueryCapacityExceeded_RefusesWithoutCoercionOrGateLeak",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax eq +.5\", xml: \"<order><tax><![CDATA[ +.50 ]]></tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_ContextItemIsTheTypedValue",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax ne 1\", xml: \"<order><tax>2</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_ViolatingValue_ReturnsAssertionViolated",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesApplyFalseOnAnonymousType_RecordsOptOutWithoutTypeName",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_OutsideRootOrSiblingPrefix_Refuses(relative: \"outside.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentInvalidWildcardValues_EmitInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Cleanup_FaultAtAnyResource_AttemptsAllAndReportsSanitizedFailure(failing: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>INF</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.BindAndAssess_ForeignObjects_RefuseBeforeGetters",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Dispose_InputOwner_RevokesBorrowedNodesFactsAndDeferredValues",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.LegacyCompiler_RestrictedImport_OpensAllowedAndDiagnosesEscape",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.StrictCopyOf_SourceViolatingComplexType_RaisesXtte1510",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Constructor_RelativeOrMissingDirectory_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax eq 0\", xml: \"<order><tax>-0.000</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_ViolatingInstance_ReturnsAssertionViolated",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompatibilityTests.Factories_BeforeActivation_AreAllAvailable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Enter_LeaseCancellationAndDoubleDispose_KeepsBalancedOwnership",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesApplyFalse_RecordsOptOutWithTypeName",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<order><tax>1<!--comment--></tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_MatchingValue_ReturnsValid",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Run_OverlappingSameInput_RefusesAndKeepsOriginalAdmissionUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentInvalidMode_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_ForbiddenExternalResourceFunction_RefusesWithBskXsd007",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_NumericCapacityBoundaries_RefusesWithoutRoundingOrNormalizationBypass",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_NumericBase_ParsesValuePerBuiltInBase",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_EmptyOrInvalidModel_RefusesCollectionMutation(xml: \"<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSch\"\u00b7\u00b7\u00b7, diagnostics: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_NotASchemaRoot_EmitsRootNotSchemaDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.ReadTypedValue_UnissuedContainer_RejectsBeforePayloadAccess",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CompileFailure_DoesNotParseMalformedValueOrLookupMissingType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.OpenAndRead_RealNativeQuotaBoundaries_RefuseWithoutLeakingAdmissions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_AnonymousInlineType_AssertionMatchesByOwnerElement",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_RepeatedSchema_PreservesDigestOrderAndIndependentSnapshot",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_Xsd10Document_ProducesXsd10ModelWithoutDiagnostics",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CallerDiagnostics_AreCopiedOnceWithoutTranslation(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DefaultOpenContent_RecordsAppliesToEmptyAndMode",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.ComplexTypeStylesheet_OrdinaryCompilerPath_RejectedWithXtse1650",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_RefusedAndErroringFacets_ProduceExplicitDiagnostics",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax gt 0 !\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_GoldenOptionalRepeatedDocument_PreservesOriginalStateAndOwnedExports",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"<xs:complexType>\", after: \"<xs:complexType mixed='true'>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentModeNoneWithAny_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_TypeQNameAndKeywordNames_UsesNamespaceContextAndGrammarPosition",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentOnComplexContentRestriction_RecordsDefinition",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><amount>1</amount><amount>2</amount><amount\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"exists(tax, amount)\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_DeniedOrMissingSchema_NeverUsesConvenienceFallback(hint: \"https://example.invalid/schema.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"$value eq 1\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.RecordWith_CallerOwnedReplacement_DoesNotAliasOriginalCollections",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_WindowsAmbiguousComponents_Refuse(name: \"schema.xsd:stream\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_NoAlternativeMatchWithoutDefault_ReportsBskXsd015",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.DataOn_ValidatedElementOnlyContent_RaisesFoty0012",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_QueryOrFragment_Refuses(suffix: \"#fragment\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DefaultOpenContentModeNone_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Authority_OwnedAndForeignComponents_AnswersOrRefusesExplicitly",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><other>1</other><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Run_ForeignOrClosedNativeAdmission_RejectsBeforeCallback",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_NonlocalOrRelativeUri_RefusesBeforeIo(uri: \"relative.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.Create_InvalidSchemaOrCapacities_RefusesOrThrowsWithoutSession",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Dispose_Snapshot_ExpiresScalarReceiptButKeepsProviderOwnerAlive",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_NonFinalDefaultAlternative_RecordsBskXsd014",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_AnyWithDisallowedNotNamespaceToken_EmitsInvalidWildcard",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_UserDefinedSimpleType_TypedViewResolvesRestrictionChain",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentSuffixMode_RecordsSuffixWithWildcardDefaults",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_NestedSchemaReferences_UseSamePolicy(hint: \"nested/child.xsd\", allowed: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.InstanceOf_PlainSourceNode_DoesNotMatchNamedComplexType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_UserDefinedSimpleTypeChain_MultipleHopsToBuiltInBase",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_CapturesStaticContextFromAlternativeLocation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.ReadTypedValue_RealNativeValueBeyondQueryCapacity_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>1</tax><amount>2</amount></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.Dispose_DocumentsAndSession_ReleaseAdmissionsAndRejectFurtherUse",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompatibilityTests.CreateSchemaCompiler_BeforeActivation_ReturnsCompiler",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_CompiledAssertions_CaptureNamespaceBindingsAndDefaultNamespace",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.ReadTypedValue_SnapshotOutsideRun_Rejects",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"exists(tax\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.EmptySchemaDirectory_ThrowsArgumentException(directory: \"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.AssessAndRun_RealNativeDecimal_PreservesOriginalAuthorityAndValue",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_AllOptionalAbsent_PublishesOnlyElementOnlyRootState",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Constructor_NonpositiveCapacity_Throws(capacity: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order xmlns='urn:foreign'><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_XsiTypePreemptsCta_GoverningTypeFromInstance",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DefaultOpenContentAfterComponent_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>NaN</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Advisor_CopiedOrCrossBoundEvidence_RefusesWithoutForeignGetters",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax + 1 gt 0\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.OpenCompatibleSnapshot_IndependentEqualSchemas_ReturnsUnsupportedWithoutView",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_AssertionAndAlternativeBindings_RefuseMutation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesApplyTrue_RecordsNothing",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ImportSchemaSliceTests.ImportSchema_WithoutActivation_CompilesResolvesSchemaAndCastsUserType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.TreatAs_PlainNode_RaisesXpdy0050",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Compile_ImportChainExceedingDepthLimit_EmitsResolutionLimitDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_Xsd11DocumentInXsd10Mode_EmitsRequiresXsd11DiagnosticsAndRecordsNothing",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.ConstructedElement_TypeAttribute_ValidatesAgainstNamedComplexType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.Arguments_InvalidReferences_ThrowBeforeCompileGuard",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_Xsd11DocumentInXsd11Mode_RecordsAssertionAndAlternativeComponents",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.CompileXPath_DefaultLimits_Rejects",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_NonvalidNativeInput_PublishesNoRoot(xml: \"<order><tax>1</tax></order>\", expected: Invalid)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_DeniedOrMissingSchema_NeverUsesConvenienceFallback(hint: \"missing.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_MissingFile_ReturnsUnavailableWithoutFallback",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_UserTypeBaseChain_ResolvesThroughIntermediateType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.RunAsync_CanceledDrainWait_RetainsHostResourcesUntilRawCompletion",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_MissingTestAttribute_RefusesWithAssertionRefused",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_ContentModelAnyWithNotQName_EmitsUnsupportedConstruct",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<?xml version='1.1'?><order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ImportSchemaSliceTests.ImportSchema_OrdinaryCompilerPath_RejectedWithXtse1650",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax><nested/></tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_NoAlternatives_ReturnsValid",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_MultipleAssertions_ReportsEachFailingAssertion",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_NonlocalOrRelativeUri_RefusesBeforeIo(uri: \"https://example.invalid/schema.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.Compile_RecordsSimpleTypeDeclarationsWithOwnedFacets",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax eq 1 OR tax eq 2\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_NamedDeclaredType_RunsOnlyOwningTypeAssertions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<order xmlns:xsi='http://www.w3.org/2001/XMLSchema\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.TreatAs_ValidatedNode_SucceedsAndExposesTypedContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"amount eq tax\", xml: \"<order><amount>1</amount><amount>2</amount><tax>1<\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_MalformedOrDtdIncludingUtf16_Refuses(content: \"<!DOCTYPE schema><schema/>\", utf16: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_SameDocumentDifferentFormatting_ProducesIdenticalDigest",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.ValidateValue_UnknownSimpleType_ReturnsSimpleTypeNotFound",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_TwoDefaultAlternatives_RecordsBskXsd014",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.AssertionValidation_WithoutActivation_PreservesResults(quantity: 0, expectedValid: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"child::tax eq 1\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_AnyWithMalformedNotQNameToken_EmitsInvalidWildcard",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_AlternativeUnresolvableTypePrefix_RecordsBskXsd013",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_DefaultAlternativeOnly_SkippedAsValid",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Capture_InvalidOrUnsupportedXml_PublishesNoInput(xml: \"<order\", outcome: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CleanModel_MissingSimpleType_RetainsOriginalDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_OpenContentAnyWithNotQName_RecordsKeywordAndQNameTokens",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_MalformedOrDtdIncludingUtf16_Refuses(content: \"<schema\", utf16: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Compile_StreamWithDoctype_ThrowsXmlException",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax le 1\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Compile_ImportWithoutResolver_EmitsResolutionUnavailableDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_InvalidXPath_RefusesWithAssertionRefused",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"name=\\\"order\\\"\", after: \"name=\\\"p:order\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.Assess_AllOptionalAbsent_ReturnsEmptyDecimalViewWithoutSyntheticValue",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_AnyDocument_ProducesStableSchemaIdAndDigest",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.CompileXPath_IssuedDecimalIdentity_PreservesValueAndProvenance",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>1 2</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.ConstructedElement_TypeAttribute_ContentViolatingType_ThrowsXsltRuntimeExceptionWithCode",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompatibilityTests.CreateSchemaCompiler_WithoutActivation_ReturnsWorkingCompiler",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Open_DocumentWithDoctypeUnderDtdDenyPolicy_ThrowsResolutionDenied",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<order><tax><?leaf test?>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.DeniedImport_OriginalResolutionFinding_BlocksEveryRoute(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"(empty(amount) or count(amount) eq 2) and tax eq 1\", xml: \"<order><!--root--><?root ok?><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_OpenAndDefaultWildcards_RefuseTokenMutation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax gt -2\", xml: \"<order><tax>-1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.Factories_WithoutActivation_AreAvailable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.Assess_InvalidAndUnsupportedInputs_ReturnNoDocumentAndKeepSessionUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_SchemaCountBoundaries_AcceptsLimitsAndRefusesOneBeyond",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CompileFailure_SkipsOtherModelCollections(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.DeniedImport_OriginalResolutionFinding_BlocksEveryRoute(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Open_HttpUriUnderLocalFilesPolicy_ThrowsResolutionDenied",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_Xsd10OpenContentAnyWithNotNamespace_RequiresXsd11Only",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.ReadDecimal_InvalidIndexOrCancellation_LeavesDocumentUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.Xsd10_RequiresXsd11Finding_BlocksEveryRoute(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.Run_ClosedSnapshot_Rejects",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_LocalOwnerElement_UnprefixedNameStaysUnqualifiedByDefault",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.InvalidRoot_AllEntryPoints_ReturnCompileFindings(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Compile_ResolutionCountExceedingPerCompileLimit_EmitsResolutionLimitDiagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_ConcurrentIndependentInputs_KeepsSnapshotsAndValuesIndependent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentWithoutAny_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSessionProbeTests.CompileXPath_PreCanceled_Throws",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompatibilityTests.CreateValidationService_WithoutActivation_ReturnsWorkingService",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_NonvalidNativeInput_PublishesNoRoot(xml: \"<order><amount>1</amount><amount>2</amount><tax>-1\"\u00b7\u00b7\u00b7, expected: Invalid)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentOnSimpleContent_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.RunAsync_CallbackFault_ReleasesGateAfterActualCompletion",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"minOccurs=\\\"0\\\"\", after: \"minOccurs=\\\"2\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Cleanup_FaultAtAnyResource_AttemptsAllAndReportsSanitizedFailure(failing: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_GrammarBounds_RejectsBeyondEachCeiling",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_DeniedOrMissingSchema_NeverUsesConvenienceFallback(hint: \"../outside.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_WindowsAmbiguousComponents_Refuse(name: \"schema.xsd \")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.Xsd10_RequiresXsd11Finding_BlocksEveryRoute(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesApplyInvalidBoolean_EmitsInvalidDefaultAttributes",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_CtaEvaluationError_ReportsBskXsd008AndSkipsAssertions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_DefaultOpenContentWithNotNamespace_RecordsTokens",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"unknown eq 1\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_CtaFirstMatch_SelectsOwningTypeAndRunsOnlyItsAssertions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionFacetTests.Validate_ElementCandidate_IgnoresSimpleTypeFacets",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"<xs:element name=\\\"order\\\">\", after: \"<xs:include schemaLocation='https://example.invali\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_AnyWithNamespaceAndNotNamespace_EmitsInvalidWildcardAndRecordsNothing",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_OpenContentAnyWithNotNamespace_RecordsTokensAndEmptyPositiveConstraint",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Snapshot_ParallelFacetReaders_RetainValues",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_AllowedSchema_CompilesThroughControlledPolicy",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_ForbiddenExternalResourceFunction_RefusesWithAssertionRefused",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesOnSchema_RecordsResolvedReference",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_MalformedOrDtdIncludingUtf16_Refuses(content: \"<!DOCTYPE schema><schema/>\", utf16: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_XsiTypeUnprefixed_ResolvesToNoNamespace",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Work_ReentryAndCancellationOrFault_ReleaseAdmission",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.GuardedFailure_DoesNotPoisonLaterValidOrInvalidFacetChecks",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"tax gt 0\", xml: \"<order><tax>-1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Run_CallbackFault_ReleasesRunnerGateAndKeepsSnapshotUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Constructor_NonpositiveCapacity_Throws(capacity: -1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order/>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.TreatAs_ValidatedNodeOfOtherComplexType_RaisesXpdy0050",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.Xsd10_RequiresXsd11Finding_BlocksEveryRoute(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.ConstructedElement_TypeAttribute_ContentViolatingType_RaisesXtte1540",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_NonlocalOrRelativeUri_RefusesBeforeIo(uri: \"file://remote-host/share/schema.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_OpenContentInXsd11Mode_RecordsOpenContentComponent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"empty(amount) and exists(tax)\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SecurityTests.Open_DocumentExceedingByteCap_ThrowsResolutionDenied",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"name=\\\"tax\\\" type=\\\"xs:decimal\\\"\", after: \"name=\\\"tax\\\" type=\\\"xs:decimal\\\" nillable=\\\"true\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DefaultOpenContentWithoutAny_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_EmptyOrInvalidModel_RefusesCollectionMutation(xml: \"<not-schema/>\", diagnostics: True)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DefaultAttributesTests.Compile_DefaultAttributesUnprefixed_RecordsEmptyNamespace",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_LogicalPrecedenceAndEmptyRepeatedOperands_PreservesXPathRules",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_WindowsAmbiguousComponents_Refuse(name: \"schema.xsd.\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.InstanceOf_ComplexWithSimpleContentTypedValue_MatchesAndSuppliesDecimalValue",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax eq 9999999999999999999999999999999999999999.1\", xml: \"<order><tax>99999999999999999999999999999999999999\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_DtdAfterLongProlog_Refuses",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentModeNone_RecordsDefinitionWithoutWildcard",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_SatisfyingInstance_ReturnsValidWithoutDiagnostics",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<order><tax flag='yes'>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.WildcardConstraintTests.Compile_AnyWithUnknownNotQNameToken_EmitsInvalidWildcard",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_OutsideRootOrSiblingPrefix_Refuses(relative: \"allowed-sibling/schema.xsd\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>1e2</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.ReadTypedValue_ScaleBoundary_AdmitsExactValueAndRefusesExcess",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Resolve_DefaultExpandedName_RejectsInvalidArgument",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>1</tax><tax>2</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentAfterParticle_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedAssertion_RefusesBeforeAssessment(expression: \"tax = 1\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_CompilableTests_ReturnsValid",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<!DOCTYPE order [<!ENTITY value '1'>]><order><tax>\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CleanModel_NoApplicableTests_RetainsScopedSuccess(route: 2)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_OtherAcquisitionRoutes_Deny",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"<xs:schema\", after: \"<xs:schema targetNamespace='urn:foreign'\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_NestedSchemaReferences_UseSamePolicy(hint: \"../outside.xsd\", allowed: False)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.InvalidRoot_AllEntryPoints_ReturnCompileFindings(route: 1)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"maxOccurs=\\\"2\\\"\", after: \"maxOccurs=\\\"unbounded\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"tax lt 2\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Open_ContainedFile_ReturnsDetachedReadonlyExactBytes",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DuplicateOpenContent_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Run_PreCanceled_LeavesGateAndAdmissionUsable",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_PrefixedExpressionWithRootBindings_ResolvesPrefix",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ApacheLicenseTests.EmptySchemaDirectory_ThrowsArgumentException(directory: \" \")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_SupportedAssertionAndExactDecimals_ReturnsValid(expression: \"count(amount) eq 2 or amount eq 1\", xml: \"<order><amount>1</amount><amount>2</amount><tax>1<\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax>1</order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.CompileAndAssess_Utf8ByteBoundaries_CountWholeInput",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.CallerDiagnostics_AreCopiedOnceWithoutTranslation(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"</xs:sequence>\", after: \"<xs:any/></xs:sequence>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order>mixed<tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"name=\\\"tax\\\" type=\\\"xs:decimal\\\"\", after: \"name=\\\"tax\\\" type=\\\"xs:string\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.ValidateAlternativeTests_InvalidXPath_RefusesWithXpst0003",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_AlreadyAssessedInput_RefusesAndPreservesOriginalFacts",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Atomize_ElementOnlyRoot_ThrowsFoty0012",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_InvalidStructureOrLexicalValue_ReturnsInvalidWithoutDocument(xml: \"<order><tax/></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"name=\\\"tax\\\"\", after: \"name=\\\"amount\\\"\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.InstanceOf_ValidatedMixedContentNode_MatchesNamedComplexType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalSessionTests.CreateAssessRead_GoldenDocument_ReturnsDetachedValuesAndOwnedXml",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.Assess_CancellationDuringEpisodeCapture_ThrowsAndReleasesLease",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeSchemaAdapterTests.ReadTypedContainer_RawOperationEnds_ExpiresBorrowedAdapterOnly",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AssertionEvaluationTests.Validate_XPath31OnlyOperator_RefusedUnderXPath20Compatibility",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeCompileTests.Compile_AlternativeUnprefixedType_ResolvesToTargetNamespace",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"exists(amount) and tax gt 0\", xml: \"<order><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.InstanceOf_ValidatedSourceNode_MatchesNamedComplexType",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_DecimalLexicalBoundaries_AcceptsExactMaximumAndZeroScale",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalLifecycleTests.Cleanup_FaultAtAnyResource_AttemptsAllAndReportsSanitizedFailure(failing: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.DeniedImport_OriginalResolutionFinding_BlocksEveryRoute(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_UnsupportedInstance_ReturnsUnsupportedWithoutDocument(xml: \"<order flag='yes'><tax>1</tax></order>\")",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.SchemaComponentTests.Compile_OpenContentInXsd10Mode_EmitsRequiresXsd11Diagnostic",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.DescriptorSnapshotTests.Compile_AllOuterCollections_RefuseMutation",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.RestrictedXslt_DeniedNestedTypeIsRequired_CompilationFails",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_OpenContentUnderXsd10_EmitsConstructRequiresXsd11ForBothConstructs",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.CompileDiagnosticValidationTests.InvalidRoot_AllEntryPoints_ReturnCompileFindings(route: 0)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.NativeDecimalBackendTests.Assess_FalseOrTypeErrorAssertion_ReturnsInvalidWithoutDocument(expression: \"amount eq 1 or count(amount) eq 2\", xml: \"<order><amount>1</amount><amount>2</amount><tax>1<\"\u00b7\u00b7\u00b7)",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.ComplexTypeValidationTests.LiteralResultElement_ValidationStrict_ProducesPsviTypedNodeWithAccessibleTypedValue",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.OpenContentTests.Compile_DefaultOpenContentInsideComplexType_EmitsInvalidOpenContent",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.AlternativeApplicabilityTests.Validate_UnrelatedCandidate_RunsNoNamedTypeAssertions",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    },
+    {
+      "caseId": "Bosak.Schema.Tests.RestrictedResolutionTests.Links_RootAndNestedDirectoryReparsePoints_Refuse",
+      "receipt": "docs/unsupported-reasons/evidence/full/charl_CHARLES_2026-11-19_10_58_00_net10.0.trx",
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+    }
+  ]
+}
