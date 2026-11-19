@@ -1,0 +1,22 @@
+{
+  "sourceCases": 409,
+  "distinctSourceCases": 409,
+  "authoredM1Cases": 41,
+  "authoredCaseKinds": {
+    "positive": 18,
+    "supported-invalid": 7,
+    "profile-refusal": 16
+  },
+  "directCoreTests": 3,
+  "originalCaseIdsWithDeliberateAdmissionChange": [
+    "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_MultipleUnsupportedAttributes_UsesFirstDetectedRefusal(attributes: \"secret='PRIVATE-MARKER' targetNamespace='urn:PRIVA\"\u00b7\u00b7\u00b7, reason: Attributes)",
+    "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.Create_MultipleUnsupportedAttributes_UsesFirstDetectedRefusal(attributes: \"targetNamespace='urn:PRIVATE-MARKER' secret='PRIVA\"\u00b7\u00b7\u00b7, reason: Namespace)",
+    "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.PublicLegacyExamples_AreStillUnsupportedWithNamespaceReason(file: \"orders.xsd\")",
+    "Bosak.Schema.PublicConsumer.Tests.NativeDecimalDiagnosticReasonTests.PublicLegacyExamples_AreStillUnsupportedWithNamespaceReason(file: \"sku.xsd\")",
+    "Bosak.Schema.Tests.NativeDecimalBackendTests.Compile_UnsupportedSchemaConstruct_Refuses(before: \"<xs:schema\", after: \"<xs:schema targetNamespace='urn:foreign'\")"
+  ],
+  "newCaseIds": 49,
+  "fullConformance": false,
+  "officialW3cCaseIds": 0,
+  "peerEvidenceIdentical": true
+}

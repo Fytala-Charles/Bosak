@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-19",
+  "schemaBase": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc",
+  "coreBase": "f7b6c9959b46b67919c7f4677ff67e3fbf6bc03d",
+  "initialMatrixUnchanged": true,
+  "changes": [
+    {
+      "area": "SC01",
+      "candidateStatus": "bounded namespace settings/expanded names"
+    },
+    {
+      "area": "SC03",
+      "candidateStatus": "zero-to-eight assertions"
+    },
+    {
+      "area": "SC14",
+      "candidateStatus": "bounded QName operand resolution"
+    },
+    {
+      "area": "SC21",
+      "candidateStatus": "root declaration namespace plus original facts/provenance verified"
+    }
+  ],
+  "sourceCases": 409,
+  "publicCases": 94,
+  "currentCorePackageCases": 42,
+  "officialW3cCases": 0,
+  "fullConformance": false,
+  "releaseOperations": false
+}

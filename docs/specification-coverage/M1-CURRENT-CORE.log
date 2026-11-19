@@ -1,0 +1,6 @@
+  Consumer -> D:\Development\Bosak\.guard-tmp\schema-m1-namespaces-20261119\current-core-consumer\bin\Release\net10.0\Consumer.dll
+Test run for D:\Development\Bosak\.guard-tmp\schema-m1-namespaces-20261119\current-core-consumer\bin\Release\net10.0\Consumer.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\schema-m1-namespaces-20261119\current-core-consumer-results\charl_CHARLES_2026-11-19_13_06_58_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    42, Skipped:     0, Total:    42, Duration: 1 s - Consumer.dll (net10.0)

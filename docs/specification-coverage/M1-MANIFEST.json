@@ -1,0 +1,50 @@
+{
+  "runtimeCoreUnchanged": true,
+  "initialBaselineMatrixUnchanged": true,
+  "files": [
+    {
+      "path": "CoreIdentityTests.cs.txt",
+      "sourceLfSha256": "9f7d070a9855dc93246e484b0810d7af01fcdcb587573a0045951edacb380af7"
+    },
+    {
+      "path": "CurrentCoreConsumer.csproj.txt",
+      "sourceLfSha256": "e124a740e53536cee66e2411507716d655e1c963229745f28d4a5867745ec759"
+    },
+    {
+      "path": "M1-CANDIDATE-DELTA.json",
+      "sourceLfSha256": "9300a4d335ab98b238de9f0c077dc45f91bb40c0fc58dda24d928f9125c57295"
+    },
+    {
+      "path": "M1-CANDIDATE-VALIDATION.json",
+      "sourceLfSha256": "161e3c255339a75b9572ec9d4a4bb0e79df49b8419a3c09172207f9b44404ec0"
+    },
+    {
+      "path": "M1-CASE-MAP.json",
+      "sourceLfSha256": "90ce66d7371a4ceb137751edb492efb979bee2e551bfce02ae4360b097bcc7f7"
+    },
+    {
+      "path": "M1-CURRENT-CORE.log",
+      "sourceLfSha256": "fecf3a7abdaa4750ba8a6939d18cabdd96f3fda04692d4dd5c8cbd57da053012"
+    },
+    {
+      "path": "M1-CURRENT-CORE.trx",
+      "sourceLfSha256": "db44ab6f6b81a479a0692fbae1ed3ba6dba877bae354d799d6bcd2c5380ac612"
+    },
+    {
+      "path": "M1-DOCUMENTATION-CHECKS.json",
+      "sourceLfSha256": "23dd1d0ec4c9339292ba661841f8e4d805cee1f60f7c9eb798e320eab4f6ce6c"
+    },
+    {
+      "path": "M1-IDENTITY.json",
+      "sourceLfSha256": "9d5ce098dd27cdef30ff38f55af9fd979254c17186290a001243f0d267cccaed"
+    },
+    {
+      "path": "M1-SPECIFICATION-SOURCES.json",
+      "sourceLfSha256": "392fc3cf89bfb89ae98d9f3ae6ba2508b7955c4dbce9f1c44a9636d5e46e7a19"
+    },
+    {
+      "path": "NativeNamespaceConsumerTests.cs.txt",
+      "sourceLfSha256": "a83b3a2e9d19369c829c01df37569ce7298c7c2e5b172251eae04a02afa070c2"
+    }
+  ]
+}

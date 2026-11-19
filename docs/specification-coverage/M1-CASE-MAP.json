@@ -1,0 +1,954 @@
+{
+  "caseType": "Authored clause-mapped regressions; not an official W3C suite",
+  "cases": [
+    {
+      "id": "M1-01",
+      "label": "qualified prefix independence",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-01\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-01\\\",\\r\\n    \\\"label\\\": \\\"qu\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-02",
+      "label": "default namespace instance",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-02\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-02\\\",\\r\\n    \\\"label\\\": \\\"de\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-03",
+      "label": "implicit unqualified local",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-03\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-03\\\",\\r\\n    \\\"label\\\": \\\"im\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-04",
+      "label": "explicit unqualified default",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-04\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-04\\\",\\r\\n    \\\"label\\\": \\\"ex\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-05",
+      "label": "local unqualified override",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-05\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-05\\\",\\r\\n    \\\"label\\\": \\\"lo\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-06",
+      "label": "local qualified override",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-06\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-06\\\",\\r\\n    \\\"label\\\": \\\"lo\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-07",
+      "label": "default namespace undeclaration",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-07\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-07\\\",\\r\\n    \\\"label\\\": \\\"de\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-08",
+      "label": "preserve no namespace profile",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-08\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-08\\\",\\r\\n    \\\"label\\\": \\\"pr\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-09",
+      "label": "qualified form without target",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-09\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-09\\\",\\r\\n    \\\"label\\\": \\\"qu\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-10",
+      "label": "wrong root namespace",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-10\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-10\\\",\\r\\n    \\\"label\\\": \\\"wr\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-11",
+      "label": "wrong child namespace",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-11\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-11\\\",\\r\\n    \\\"label\\\": \\\"wr\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-12",
+      "label": "qualified child required",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-12\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-12\\\",\\r\\n    \\\"label\\\": \\\"qu\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-13",
+      "label": "unqualified child required",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-13\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-13\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-14",
+      "label": "namespace URI case significant",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-14\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-14\\\",\\r\\n    \\\"label\\\": \\\"na\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-15",
+      "label": "namespace URI escape significant",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-15\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-15\\\",\\r\\n    \\\"label\\\": \\\"na\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-16",
+      "label": "assertion default ##targetNamespace",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-16\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-16\\\",\\r\\n    \\\"label\\\": \\\"as\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-17",
+      "label": "assertion default urn:orders",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-17\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-17\\\",\\r\\n    \\\"label\\\": \\\"as\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-18",
+      "label": "assertion default ##defaultNamespace",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-18\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-18\\\",\\r\\n    \\\"label\\\": \\\"as\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-19",
+      "label": "local assertion default",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-19\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-19\\\",\\r\\n    \\\"label\\\": \\\"lo\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-20",
+      "label": "assertion override",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-20\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-20\\\",\\r\\n    \\\"label\\\": \\\"as\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-21",
+      "label": "local QName prefix",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-21\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-21\\\",\\r\\n    \\\"label\\\": \\\"lo\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-22",
+      "label": "false namespaced assertion",
+      "kind": "supported-invalid",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-22\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-22\\\",\\r\\n    \\\"label\\\": \\\"fa\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Invalid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-23",
+      "label": "schema default binding captured",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-23\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-23\\\",\\r\\n    \\\"label\\\": \\\"sc\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-24",
+      "label": "same local different expanded declarations",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-24\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-24\\\",\\r\\n    \\\"label\\\": \\\"sa\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-25",
+      "label": "unsupported target ",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-25\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-25\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-26",
+      "label": "unsupported target relative/path",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-26\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-26\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-27",
+      "label": "unsupported target urn:two words",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-27\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-27\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-28",
+      "label": "unsupported target http://www.w3.org/2001/XMLSchema",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-28\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-28\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-29",
+      "label": "unsupported form/context elementFormDefault='invalid'",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-29\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-29\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-30",
+      "label": "unsupported form/context form='invalid'",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-30\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-30\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-31",
+      "label": "unsupported form/context xpathDefaultNamespace='##unknown'",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-31\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-31\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-32",
+      "label": "unsupported QName x:amount gt 0",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-32\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-32\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-33",
+      "label": "unsupported QName p:amount gt 0xmlns:p='urn:other'",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-33\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-33\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-34",
+      "label": "unsupported QName p:missing gt 0",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-34\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-34\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-35",
+      "label": "unsupported QName :amount gt 0",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-35\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-35\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-36",
+      "label": "unsupported QName p: gt 0",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-36\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-36\\\",\\r\\n    \\\"label\\\": \\\"un\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-37",
+      "label": "application attributes still refused",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-37\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-37\\\",\\r\\n    \\\"label\\\": \\\"ap\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Unsupported",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-38",
+      "label": "named type still refused",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-38\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-38\\\",\\r\\n    \\\"label\\\": \\\"na\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-39",
+      "label": "import still refused",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-39\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-39\\\",\\r\\n    \\\"label\\\": \\\"im\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-40",
+      "label": "eight assertions allowed",
+      "kind": "positive",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-40\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-40\\\",\\r\\n    \\\"label\\\": \\\"ei\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Valid",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    },
+    {
+      "id": "M1-41",
+      "label": "nine assertions refuse",
+      "kind": "profile-refusal",
+      "testCaseId": "Bosak.Schema.PublicConsumer.Tests.NativeNamespaceConsumerTests.NamespaceAssessment_MappedCase_PreservesCompleteOutcome(id: \"M1-41\", payload: \"{\\r\\n    \\\"id\\\": \\\"M1-41\\\",\\r\\n    \\\"label\\\": \\\"ni\"\u00b7\u00b7\u00b7)",
+      "outcome": "Passed",
+      "expectedCompile": "Unsupported",
+      "expectedAssessment": "Valid",
+      "specification": "SPECIFICATION-SOURCES.json",
+      "sections": [
+        "3.3",
+        "3.4",
+        "3.13"
+      ],
+      "namespaceSections": [
+        "2.1",
+        "2.3",
+        "4",
+        "6.1",
+        "6.2"
+      ],
+      "officialW3cCaseId": null
+    }
+  ],
+  "counts": {
+    "positive": 18,
+    "supported-invalid": 7,
+    "profile-refusal": 16
+  },
+  "fullConformance": false
+}

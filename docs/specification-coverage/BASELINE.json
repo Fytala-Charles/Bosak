@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-19",
+  "repository": "core",
+  "baselines": {
+    "core": "f7b6c9959b46b67919c7f4677ff67e3fbf6bc03d",
+    "schema": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc"
+  },
+  "sourceMode": "Planning only; old adoption hashes preserved",
+  "sourceInputs": [
+    {
+      "repository": "schema",
+      "revision": "3ff8cb6d6a0f14bf81f6e0f25a498c301580dcdc",
+      "path": "docs/NATIVE-DECIMAL-GRAMMAR.md",
+      "gitBlobSha256": "9419d939ca24689d55ff785380440a6a9ae4e7aa540d9a7535ec74f7da604305"
+    },
+    {
+      "repository": "core",
+      "revision": "f7b6c9959b46b67919c7f4677ff67e3fbf6bc03d",
+      "path": "docs/schema-native-consumer/README.md",
+      "gitBlobSha256": "5ac4bed1c9b2fb0916e4f66669742e8db3774c581b8dec1ab5c142256baabf3d"
+    }
+  ],
+  "releaseOperations": false
+}

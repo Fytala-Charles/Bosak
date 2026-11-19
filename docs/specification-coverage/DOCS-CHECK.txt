@@ -1,0 +1,1 @@
+Core: programmatic HTML/new-link and git whitespace checks pass. Two pre-existing local destinations are recorded in DOCUMENTATION-CHECKS.json. The baseline .fytala-docs.json references absent docs-kit/manifest.json; no kit asset validation or fix is claimed. Managed assets remain unchanged.

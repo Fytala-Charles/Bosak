@@ -4,6 +4,11 @@
   <p>Next steps for the published engine and its XML ecosystem</p>
 </div>
 
+## Specification coverage priority - 19 November 2026
+
+Prioritize the [shared specification programme](docs/specification-coverage/PROGRAM.md): an accountable coverage ledger, then namespace-aware decimal assessment and optional assertions, followed by coherent named types, attributes, datatypes and structural/application profiles. Release packaging is secondary to demonstrated coverage.
+
+
 Updated 16 November 2026.
 
 ## Published baseline
@@ -38,3 +43,7 @@ Bosak and Bosak.Schema are Apache-2.0; Schema services require no activation. Bo
 ## Engineering detail and history
 
 Use [implementation status](docs/IMPLEMENTATION_STATUS.md), [integration guidance](docs/INTEGRATION.md) and the [feature registry](docs/FEATURE_REQUESTS.md) for exact profiles, engineering checkpoints and unresolved requirements. The [release guide](docs/RELEASING.md) describes the current preparation/publication process. Earlier R0-R7 planning snapshots remain in [release planning](docs/release-planning/README.md) and [development history](docs/DEVELOPMENT_HISTORY.md); they retain their original candidate identities and do not override the published release disposition.
+
+## M1 local progress
+
+The [bounded namespace/optional-assertion candidate](docs/specification-coverage/M1-CANDIDATE-DELTA.json) is implemented and locally qualified. Wider component/attribute/datatype and structural milestones remain open; official W3C suite selection/admission remains separate from authored controls.
