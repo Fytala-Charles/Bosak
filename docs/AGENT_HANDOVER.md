@@ -1,4 +1,12 @@
+## Exact calendar comparison qualified - 25 November 2026
+
+Base53e53ee91a3684c7f2f5f4083db56a6e1c9e5496; feature/exact-calendar-comparison-batch. Twenty related explicit comparison contracts,44new source cases;26,634solution/111LS/44no-friend package/260+9Schema integration and both examples pass. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918. Three new Core types/15additive rows preserve592old rows. New APIs distinguish XPath implicit context, XSD partial order and exact-only CLR same-key semantics; old representation/authority binding, existing maps and default operators remain unchanged. Source1.84.0unpublished; no signed/Schema pin or native admission/C45 change. See [dossier](exact-calendar-comparison/README.md).
+
 ## Exact calendar transport qualification - 25 November 2026
+
+## Exact calendar comparison candidate - 25 November 2026
+
+The [explicit comparison APIs](exact-calendar-comparison/README.md) distinguish XPath implicit-timezone comparison, XSD partial order and exact-only CLR same-key semantics. BigInteger timeline arithmetic retains fractional precision and UTC day displacement. Representation identity/authority binding, existing maps/default expression operators and native Schema admissions are unchanged. Source1.84.0 is unpublished; no signed-pin or registry change.
 
 Base3a74b0e5de46bc3312b2dd84eca2c8b482cc76a0; feature/exact-calendar-transport-batch. Twenty related contracts,51new source cases,26,590solution/111language-server/42package/260+9Schema integration and both examples pass. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918. Exactly3additive Core API rows; no removals. Final comment-only header/XML corrections are rebuilt and independently requalified. Source1.83.0 unpublished; signed and Schema pins unchanged. Public typed identity authority is preserved, plain factories mint none, legacy narrowing/map semantics refuse new payloads. No broader calendar execution/native Schema admission/C45 claim. See [dossier](exact-calendar-transport/README.md).
 

@@ -1,3 +1,7 @@
+## Core1.84.0 current-source candidate - 25 November 2026
+
+The consumer asserts exact1.84.0.0 for the explicit calendar comparison candidate. The pinned public Schema source/hash guards and historical standalone assertions are unchanged.
+
 ## Core 1.83.0 current-source candidate - 25 November 2026
 
 The current-source consumer asserts exact1.83.0.0 for the atomic calendar transport candidate. The public Schema source pin, its hash guards and standalone package assertions remain unchanged. Historical1.81.17/1.82.0 receipts are retained.

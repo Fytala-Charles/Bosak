@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+See [explicit exact calendar comparisons](docs/exact-calendar-comparison/README.md) for timezone, partial-order and key semantics.
+
 See [exact calendar atomic transport](docs/exact-calendar-transport/README.md) for precision, authority and execution limits.
 
 See the [exact calendar value objects](docs/exact-calendar-batch/README.md) for opt-in bounded precision and conversion limits.

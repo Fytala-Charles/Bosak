@@ -1,0 +1,27 @@
+{
+  "preservedRows": 592,
+  "currentRows": 607,
+  "removedOrChangedRows": [],
+  "addedRows": [
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer|Instance|Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer|readonly=True",
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Equal|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|0",
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Greater|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|1",
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Indeterminate|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|2",
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Less|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|-1",
+    "F|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|value__|System.Int32|readonly=False",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarComparison|CompareXPath|System.Int32|Bosak.XPath.Core.Xdm.XdmExactCalendarValue left,Bosak.XPath.Core.Xdm.XdmExactCalendarValue right,System.Int32 implicitTimezoneMinutes",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarComparison|CompareXsd|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Bosak.XPath.Core.Xdm.XdmExactCalendarValue left,Bosak.XPath.Core.Xdm.XdmExactCalendarValue right",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarComparison|GetSameKeyHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmExactCalendarValue value",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarComparison|SameKey|System.Boolean|Bosak.XPath.Core.Xdm.XdmExactCalendarValue left,Bosak.XPath.Core.Xdm.XdmExactCalendarValue right",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer|Equals|System.Boolean|Bosak.XPath.Core.Xdm.XdmExactCalendarValue left,Bosak.XPath.Core.Xdm.XdmExactCalendarValue right",
+    "M|Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer|GetHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmExactCalendarValue value",
+    "T|Bosak.XPath.Core.Xdm.XdmExactCalendarComparison",
+    "T|Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer",
+    "T|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder"
+  ],
+  "newTypes": [
+    "Bosak.XPath.Core.Xdm.XdmExactCalendarComparison",
+    "Bosak.XPath.Core.Xdm.XdmExactCalendarKeyComparer",
+    "Bosak.XPath.Core.Xdm.XdmExactCalendarOrder"
+  ]
+}

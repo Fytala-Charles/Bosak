@@ -1,0 +1,106 @@
+{
+  "maximumContracts": 20,
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Aware XPath instant comparison",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C02",
+      "contract": "Offset normalization across day/month/year",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C03",
+      "contract": "Explicit implicit timezone for absent offsets",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C04",
+      "contract": "Invalid implicit-context offset refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C05",
+      "contract": "dateTimeStamp and dateTime common family",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C06",
+      "contract": "Uninitialized and incompatible family refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C07",
+      "contract": "Time comparison on one reference date without modulo wrap",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C08",
+      "contract": "Submillisecond and high-scale exact order",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C09",
+      "contract": "Extended/BCE/year-zero Gregorian timeline",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C10",
+      "contract": "Normalized end-of-day comparison",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C11",
+      "contract": "XSD two-aware comparison",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C12",
+      "contract": "XSD two-absent local comparison",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C13",
+      "contract": "Mixed timezone definite less-than",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C14",
+      "contract": "Mixed timezone definite greater-than",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C15",
+      "contract": "Mixed timezone indeterminacy and exact endpoints",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C16",
+      "contract": "Exact same-key timezone-presence distinction",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C17",
+      "contract": "Equal-instant same-key hashes and dictionary replacement",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C18",
+      "contract": "Time-family key normalization and separation",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C19",
+      "contract": "Comparison must not relax representation/authority binding",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C20",
+      "contract": "Independent oracle, algebraic laws and public/package integration",
+      "status": "implemented-qualified"
+    }
+  ],
+  "delivery": "qualified-ready-for-pr"
+}
