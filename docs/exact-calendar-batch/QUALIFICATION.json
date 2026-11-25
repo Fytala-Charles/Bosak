@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-25",
+  "contractGroups": 20,
+  "focusedAndPackageCases": 51,
+  "solutionDistinctPassingAfterEnvironmentRetry": 26539,
+  "initialSolutionFailures": 45,
+  "initialFailure": "Sandbox HttpListener invalid handle; all 47 database cases pass in host retry",
+  "lanes": {
+    "solution-results": [
+      {
+        "assembly": "Bosak.XPath.Core.Tests.dll",
+        "total": 317,
+        "passed": 317,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Providers.Database.Tests.dll",
+        "total": 47,
+        "passed": 2,
+        "failed": 45
+      },
+      {
+        "assembly": "Bosak.XPath.Compiler.Tests.dll",
+        "total": 66,
+        "passed": 66,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Parser.Tests.dll",
+        "total": 202,
+        "passed": 202,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Api.Tests.dll",
+        "total": 681,
+        "passed": 681,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XQuery.Tests.dll",
+        "total": 841,
+        "passed": 841,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Providers.Tests.dll",
+        "total": 241,
+        "passed": 241,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Runtime.Tests.dll",
+        "total": 1947,
+        "passed": 1947,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Standard.Tests.dll",
+        "total": 13800,
+        "passed": 13800,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.Xslt.Tests.dll",
+        "total": 8397,
+        "passed": 8397,
+        "failed": 0
+      }
+    ],
+    "database-host-results": [
+      {
+        "assembly": "Bosak.XPath.Providers.Database.Tests.dll",
+        "total": 47,
+        "passed": 47,
+        "failed": 0
+      }
+    ],
+    "language-server-results": [
+      {
+        "assembly": "Bosak.LanguageServer.Tests.dll",
+        "total": 111,
+        "passed": 111,
+        "failed": 0
+      }
+    ],
+    "package-results": [
+      {
+        "assembly": "Consumer.dll",
+        "total": 51,
+        "passed": 51,
+        "failed": 0
+      }
+    ]
+  },
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "gatedQt4": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918
+  },
+  "build": {
+    "errors": 0,
+    "warnings": 32
+  },
+  "package": {
+    "version": "1.82.0",
+    "sha256": "e1ea8032860123273ca187363665547ff0eba4eb1f3cb4ff0ae9776f1714cc69",
+    "dllSha256": "f8bc720637c529a04825367686116beed83b7c11eb5ecd3e778acc1abe91e13e",
+    "sourcePackageRuntimeIdentical": true,
+    "unsignedLocalOnly": true,
+    "published": false
+  },
+  "existingXdmValueOrEngineSemanticsChanged": false,
+  "schemaPinsChanged": false
+}

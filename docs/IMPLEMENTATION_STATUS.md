@@ -1,5 +1,11 @@
 ## Native public Schema consumer qualification - 17 November 2026
 
+
+## Exact calendar foundation candidate - 25 November 2026
+
+The [exact calendar foundation](exact-calendar-batch/README.md) adds explicit bounded decimal-second/calendar value objects with lossless conversions. Twenty contract groups cover precision, Gregorian/extended-year components, timezone presence, lexical forms, 24:00 rollover and representation identity. Candidate 1.82.0 is unpublished. Existing XdmValue/expression routes and signed 1.81.17/Schema pins remain unchanged; full exact atomic transport and Schema dateTime/time/dateTimeStamp admission are pending. No arithmetic, instant-comparison or PSVI authority support is inferred.
+
+
 The [optional native Schema consumer](schema-native-consumer/README.md) now pins merged Schema9fd4e6a, including its public owned decimal-session entry. The current-Core lane runs260 implementation/legacy cases plus nine separate public-consumer cases without friend access. Source/test/fixture/legal hash guards bind58 inputs in exact LF/CRLF forms; altered source, fixture and legal copies refuse before compilation. Both the original typed-price output and the new native decimal example are verified. Schema's standalone package pins remain1.81.2; the wrapper tests Core1.81.17 without changing either engine. Full XSD1.1, positive universe compatibility, general API acceptance/freeze, performance budgets and publication remain separate. Historical integration dossiers are unchanged.
 
 ## Extension snippets 0.3.0 published — 16 November 2026

@@ -4,6 +4,12 @@
   <p>Next steps for the published engine and its XML ecosystem</p>
 </div>
 
+## Exact calendar foundation candidate - 25 November 2026
+
+The [exact calendar foundation](docs/exact-calendar-batch/README.md) adds explicit bounded decimal-second/calendar value objects with lossless conversions. Twenty contract groups cover precision, Gregorian/extended-year components, timezone presence, lexical forms, 24:00 rollover and representation identity. Candidate 1.82.0 is unpublished. Existing XdmValue/expression routes and signed 1.81.17/Schema pins remain unchanged; full exact atomic transport and Schema dateTime/time/dateTimeStamp admission are pending. No arithmetic, instant-comparison or PSVI authority support is inferred.
+
+
+
 ## Specification coverage priority - 19 November 2026
 
 Prioritize the [shared specification programme](docs/specification-coverage/PROGRAM.md): an accountable coverage ledger, then namespace-aware decimal assessment and optional assertions, followed by coherent named types, attributes, datatypes and structural/application profiles. Release packaging is secondary to demonstrated coverage.

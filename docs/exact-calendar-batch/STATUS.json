@@ -1,0 +1,126 @@
+{
+  "maximumContracts": 20,
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Fraction capacity checked before normalization",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C01"
+    },
+    {
+      "id": "C02",
+      "contract": "Second range zero inclusive sixty exclusive",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C02"
+    },
+    {
+      "id": "C03",
+      "contract": "Fraction trailing-zero normalization",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C03"
+    },
+    {
+      "id": "C04",
+      "contract": "ASCII decimal second lexical grammar",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C04"
+    },
+    {
+      "id": "C05",
+      "contract": "Bounded invariant fraction formatting",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C05"
+    },
+    {
+      "id": "C06",
+      "contract": "Normalized fractional equality and hash",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C06"
+    },
+    {
+      "id": "C07",
+      "contract": "Exact fractional ordering",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C07"
+    },
+    {
+      "id": "C08",
+      "contract": "Exact tick conversion and refusal",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C08"
+    },
+    {
+      "id": "C09",
+      "contract": "Exact millisecond conversion and refusal",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C09"
+    },
+    {
+      "id": "C10",
+      "contract": "Gregorian month/day and leap-year validation",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C10"
+    },
+    {
+      "id": "C11",
+      "contract": "Extended-year representation and bounded overflow refusal",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C11"
+    },
+    {
+      "id": "C12",
+      "contract": "Time fields and leap-second rejection",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C12"
+    },
+    {
+      "id": "C13",
+      "contract": "Timezone presence and fourteen-hour boundary",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C13"
+    },
+    {
+      "id": "C14",
+      "contract": "24:00 normalization and rollover",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C14"
+    },
+    {
+      "id": "C15",
+      "contract": "dateTime lexical parsing",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C15"
+    },
+    {
+      "id": "C16",
+      "contract": "time lexical parsing",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C16"
+    },
+    {
+      "id": "C17",
+      "contract": "dateTimeStamp required timezone",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C17"
+    },
+    {
+      "id": "C18",
+      "contract": "Stable invariant calendar formatting and roundtrip",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C18"
+    },
+    {
+      "id": "C19",
+      "contract": "Lossless DTO and legacy carrier interoperability",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C19"
+    },
+    {
+      "id": "C20",
+      "contract": "Calendar representation identity and legacy integration boundary",
+      "status": "implemented-qualified",
+      "testGroup": "XdmExactCalendarTests.C20"
+    }
+  ],
+  "delivery": "qualified-ready-for-pr"
+}

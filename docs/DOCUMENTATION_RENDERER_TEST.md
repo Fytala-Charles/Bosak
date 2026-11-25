@@ -1,3 +1,7 @@
+## Exact calendar candidate - 25 November 2026
+
+Ten current pages are rendered programmatically with unchanged branding assets. New links resolve; two historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance. See [receipt](exact-calendar-batch/DOCUMENTATION-CHECKS.json).
+
 ## Native Schema consumer documentation - 17 November 2026
 
 Current optional integration instructions, canonical documentation and the new qualification dossier are rendered with existing Fytala CSS and local destinations checked. Programmatic HTML only, no screenshot/PDF acceptance. Managed assets are unchanged. [Receipt](schema-native-consumer/DOCUMENTATION-CHECKS.json).

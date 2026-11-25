@@ -1,5 +1,11 @@
 ## Native Schema consumer qualified locally - 17 November 2026
 
+
+## Exact calendar foundation candidate - 25 November 2026
+
+The [exact calendar foundation](exact-calendar-batch/README.md) adds explicit bounded decimal-second/calendar value objects with lossless conversions. Twenty contract groups cover precision, Gregorian/extended-year components, timezone presence, lexical forms, 24:00 rollover and representation identity. Candidate 1.82.0 is unpublished. Existing XdmValue/expression routes and signed 1.81.17/Schema pins remain unchanged; full exact atomic transport and Schema dateTime/time/dateTimeStamp admission are pending. No arithmetic, instant-comparison or PSVI authority support is inferred. Qualification: 26,539 distinct solution cases pass after the scoped host database retry; 111 language-server and 51 package cases pass; QT3 31,397/0/424 and gated qt4 8,941/0/1,918. Evidence retains the initial 45 sandbox listener failures.
+
+
 ## M1 namespace candidate - 19 November 2026
 
 The local M1 candidate adds namespace-aware expanded declaration names, qualified/unqualified local forms, QName assertion binding and zero-to-eight assertions within the finite decimal shape. All409source cases pass (315implementation/94public), including41authored clause-mapped cases and three real Core-session controls. Package-only94cases pass with Core1.81.2; a separate42case public lane passes with published Core1.81.17. Retained124/23/33binary catalogs pass with onlySchema.dll replaced; these lanes overlap. No Core runtime/API/source-wrapper pin, published package, version/tag or release-controller change. [Evidence](specification-coverage/M1-CANDIDATE-DELTA.json).

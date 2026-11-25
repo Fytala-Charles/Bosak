@@ -751,3 +751,5 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 # Preserve immutable shared specification coverage and consumer receipts.
 /docs/specification-coverage/** -text whitespace=cr-at-eol
 /docs/specification-coverage/*.log -text whitespace=cr-at-eol,-blank-at-eol
+
+/docs/exact-calendar-batch/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

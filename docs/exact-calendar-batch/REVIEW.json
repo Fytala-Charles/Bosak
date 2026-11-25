@@ -1,0 +1,24 @@
+{
+  "blockingFindings": [],
+  "scope": "Twenty bounded component/fraction contracts, one cohesive additive foundation PR",
+  "resolvedFindings": [
+    {
+      "finding": "DTO explicit local components can have an out-of-range UTC instant at .NET boundaries",
+      "resolution": "Exact conversion catches representability failures and refuses with NotSupportedException; boundary case added to C19"
+    },
+    {
+      "finding": "Formatting initially used ambient interpolation culture",
+      "resolution": "Calendar numeric formatting uses invariant culture; C18 exercises fr-FR"
+    },
+    {
+      "finding": "Initial documentation write normalized historical mixed line endings",
+      "resolution": "Reapplied additions against original Git bytes, preserving historical content"
+    }
+  ],
+  "deferred": [
+    "XdmValue exact payload and typed authority transport",
+    "Expression parsing/operators/functions and calendar arithmetic",
+    "Instant equality/hash and canonical UTC serializer",
+    "Signed package publication and Schema datatype admission"
+  ]
+}

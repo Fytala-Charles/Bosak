@@ -206,3 +206,8 @@ The active Apache-2.0 schema engine is https://github.com/Fytala-Charles/Bosak.S
 The native assessment candidate is a separate persistent public-repository worktree at `D:/Development/Bosak/.worktrees/Bosak.Schema.Assessment`, branch `feature/bounded-document-assessment`; `.worktrees/` is ignored by this core repository. Its original public checkout/pins remain unchanged. Read that worktree's AGENTS.md and current assessment guide before edits; its rule forbids commit/push unless explicitly requested. Preserve earlier sealed integration evidence; current candidate state belongs in `docs/schema-assessment` and the handover.
 
 The reviewed whole-document checkpoint and delivery identities are in `docs/schema-document-bridge/api-review`; original sealed bridge and assessment dossiers remain historical evidence. Trusted-host attachment carries supplied state and does not perform schema validation.
+
+
+## Exact calendar foundation candidate (25 November 2026)
+
+See docs/exact-calendar-batch/README.md and ADOPTION.json. New bounded value objects are opt-in component carriers only; do not infer XdmValue/Schema/PSVI admission. Source version 1.82.0 is unpublished. Preserve signed 1.81.17 and Schema pins. The twenty-contract batch has no registry/tag authorization.
