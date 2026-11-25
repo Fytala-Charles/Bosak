@@ -1,0 +1,6 @@
+{
+  "ciRun": 45560192519,
+  "failure": "Only current-source public consumer version assertion: expected1.81.17.0, actual1.82.0.0",
+  "correction": "Assert exact1.82.0.0 in the current-source integration consumer, append C# history, document candidate. Preserve historical upstream/standalone package assertions and sealed Schema source pin9fd4e6acd20b34446d736ab0ec3fa2d439f9e337.",
+  "productSemanticChange": false
+}

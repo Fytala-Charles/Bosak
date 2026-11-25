@@ -1,0 +1,12 @@
+{
+  "CORRECTION.json": "bc577e7517f1f1c3b947ecf4b0492d313cf0e220ac90af31921ab7bb32e531e4",
+  "QUALIFICATION.json": "b3d241b35dfab98ce4b1038c89fa73c44f9740f1f84cd9e65322c8b5ad225aec",
+  "schema-ci-failure.log.gz": "327db9079b9a26af9255769ffc8e5770cecee61fbb485150a43c6174bd5bcc6e",
+  "SCHEMA-IDENTITY-CORRECTION.json": "4fa863cacdb696e9aca2b97659e7e6e12a4c30b3ef5d9e8a9d05fc05ecbf5efd",
+  "schema-integration.log.gz": "bfc49c62e44282042f2fac8ba681e3cab634280d88f63596cb937755ff946494",
+  "schema-integration.trx.gz": "8df461e1371f8441e022800ac42ef2ee571913d49e40a8d843376871a2be1c2d",
+  "schema-native-example.log.gz": "d7332b1d193dd9d2b32127083adc93a7f37ea95b5a4235edbc14581e2ba908f9",
+  "schema-price-example.log.gz": "69a2b2c0a067b8e6a1c6bf6fd433417936c2c3aaa9a181271503c60ced3d1019",
+  "schema-public.log.gz": "df734b7cefca3e84af958e29591a2d1264cd4063855f58300791eb0c1efb6bbc",
+  "schema-public.trx.gz": "94bde6c902b8519d3d955820b941b9e6444b3e24fd38e47fc271fa8021a1a259"
+}
