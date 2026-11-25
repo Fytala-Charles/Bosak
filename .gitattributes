@@ -771,3 +771,11 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /tests/Bosak.XPath.Runtime.Tests/CalendarTransportSupport.cs text eol=lf
 /tests/Bosak.XPath.Runtime.Tests/ExactCalendarPublicTransportTests.cs text eol=lf
 /docs/exact-calendar-transport/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+# Stable comparison source/evidence bytes.
+/src/Bosak.XPath.Core/Xdm/XdmExactCalendarComparison.cs text eol=lf
+/tests/Bosak.XPath.Core.Tests/ExactCalendarComparisonTests.cs text eol=lf
+/tests/Bosak.XPath.Core.Tests/ExactCalendarComparisonAuthorityTests.cs text eol=lf
+/tests/Bosak.XPath.Runtime.Tests/ExactCalendarPublicComparisonTests.cs text eol=lf
+/integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs text eol=lf
+/docs/exact-calendar-comparison/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

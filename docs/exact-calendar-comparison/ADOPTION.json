@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-25",
+  "base": "53e53ee91a3684c7f2f5f4083db56a6e1c9e5496",
+  "recordedBeforeImplementation": true,
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "bytes": 2650378,
+      "sections": [
+        "9.4.1-9.4.3 dateTime comparisons",
+        "9.4.7-9.4.9 time comparisons",
+        "17.1.1 same-key timezone-presence/deep-equal rule"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "sha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8",
+      "bytes": 1508774,
+      "sections": [
+        "3.3.7 dateTime",
+        "3.3.8 time",
+        "3.4.28 dateTimeStamp",
+        "D.2.1 seven-property model",
+        "E.3.4 time on timeline"
+      ]
+    }
+  ],
+  "scope": "Explicit exact-calendar value comparisons, XSD partial order and exact-only CLR same-key comparer",
+  "intentionalBounds": [
+    "Existing exact-calendar input range and256-digit/scale limits remain",
+    "Internal timeline arithmetic uses BigInteger under a fixed320-digit/256-scale bound",
+    "Explicit implicit timezone is always validated, even for aware operands",
+    "Time uses1972-12-31 reference date; timezone normalization is not modulo24hours",
+    "Invalid/default values and time/dateTime family comparison refuse; same-key returnsfalse across valid incompatible families",
+    "Process-local hashes only, not stable serialization or authority fingerprints"
+  ],
+  "notAdopted": [
+    "Existing XdmValue map comparer/legacy interop or default expression comparison changes",
+    "Calendar arithmetic, UTC canonicalization, native Schema datatype/facet admissions or C45",
+    "Registry/tag publication or signed/Schema pin migration"
+  ],
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Aware XPath instant comparison",
+      "status": "planned"
+    },
+    {
+      "id": "C02",
+      "contract": "Offset normalization across day/month/year",
+      "status": "planned"
+    },
+    {
+      "id": "C03",
+      "contract": "Explicit implicit timezone for absent offsets",
+      "status": "planned"
+    },
+    {
+      "id": "C04",
+      "contract": "Invalid implicit-context offset refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C05",
+      "contract": "dateTimeStamp and dateTime common family",
+      "status": "planned"
+    },
+    {
+      "id": "C06",
+      "contract": "Uninitialized and incompatible family refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C07",
+      "contract": "Time comparison on one reference date without modulo wrap",
+      "status": "planned"
+    },
+    {
+      "id": "C08",
+      "contract": "Submillisecond and high-scale exact order",
+      "status": "planned"
+    },
+    {
+      "id": "C09",
+      "contract": "Extended/BCE/year-zero Gregorian timeline",
+      "status": "planned"
+    },
+    {
+      "id": "C10",
+      "contract": "Normalized end-of-day comparison",
+      "status": "planned"
+    },
+    {
+      "id": "C11",
+      "contract": "XSD two-aware comparison",
+      "status": "planned"
+    },
+    {
+      "id": "C12",
+      "contract": "XSD two-absent local comparison",
+      "status": "planned"
+    },
+    {
+      "id": "C13",
+      "contract": "Mixed timezone definite less-than",
+      "status": "planned"
+    },
+    {
+      "id": "C14",
+      "contract": "Mixed timezone definite greater-than",
+      "status": "planned"
+    },
+    {
+      "id": "C15",
+      "contract": "Mixed timezone indeterminacy and exact endpoints",
+      "status": "planned"
+    },
+    {
+      "id": "C16",
+      "contract": "Exact same-key timezone-presence distinction",
+      "status": "planned"
+    },
+    {
+      "id": "C17",
+      "contract": "Equal-instant same-key hashes and dictionary replacement",
+      "status": "planned"
+    },
+    {
+      "id": "C18",
+      "contract": "Time-family key normalization and separation",
+      "status": "planned"
+    },
+    {
+      "id": "C19",
+      "contract": "Comparison must not relax representation/authority binding",
+      "status": "planned"
+    },
+    {
+      "id": "C20",
+      "contract": "Independent oracle, algebraic laws and public/package integration",
+      "status": "planned"
+    }
+  ]
+}

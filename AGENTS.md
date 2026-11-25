@@ -215,3 +215,7 @@ See docs/exact-calendar-batch/README.md and ADOPTION.json. New bounded value obj
 ## Exact calendar transport candidate (25 November 2026)
 
 See docs/exact-calendar-transport for the twenty-contract batch. New XdmValue payloads retain exact components and existing authority protocols. Legacy getters and map-key semantics refuse these payloads; general calendar execution and Schema datatype admissions are not implied. Source1.83.0 is unpublished; preserve historical seals and signed/Schema pins. No registry/tag publication authorized.
+
+## Exact calendar comparison candidate (25 November 2026)
+
+See docs/exact-calendar-comparison. Twenty contracts add explicit comparison/partial-order/exact-only CLR key APIs. Existing XdmValue maps, default expression operators, identity/authority binding and native Schema admissions remain unchanged. Source1.84.0 unpublished; no registry/tag or signed-pin migration. Preserve historical seals.

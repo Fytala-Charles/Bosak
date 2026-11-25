@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "htmlSha256": "de876bb6cfb9b57ecee052c84d13b21b7460ff40e2c231cd8549f907abfd2501"
+    },
+    {
+      "file": "ROADMAP.md",
+      "htmlSha256": "600acb5f7a4f9d87cacb2f75b2b8453c0a4ab8a3bd157e92299392d2ba575b77"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "htmlSha256": "d5a8f7c5809871fe37f293ad160333f9d10892664c497ef3eefd812a2716f2e2"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "9e9966fa8db11ffc31e0327e7f73148d9848a682fb7d51f56a04af8ce6b7899c"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "htmlSha256": "925585b539f0682883695c8e800fa606d51728fefc947c24f1cdf829c56de6a3"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "c700b26902601613b21b93732860712b1795924b2733efd37c027b5227d4cd36"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "e8d56b2933350785ad41e3fe3375da0ba286ee158314856e3c67391e43f8ccf4"
+    },
+    {
+      "file": "docs/exact-calendar-comparison/README.md",
+      "htmlSha256": "ff32d2b70462e14f05dc7ba0389cc274ab1ad82806e65048c3905a96011670a2"
+    },
+    {
+      "file": "docs/exact-calendar-comparison/CONTRACT.md",
+      "htmlSha256": "4b775f389272bef5ed1c23de71612d3c6361d3d16bcf3d4af08f65e9f0433bc1"
+    },
+    {
+      "file": "docs/exact-calendar-comparison/API-REVIEW.md",
+      "htmlSha256": "5608cbdf608d7e94e3542059f47c10422c47f3772f0890779213bdd05acc8cbb"
+    }
+  ],
+  "checkedLinks": 3451,
+  "preexistingUnresolved": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "allNewLinksResolve": true,
+  "stylesheetSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "programmaticHtmlOnly": true,
+  "visualAcceptance": false,
+  "managedAssetsChanged": false
+}

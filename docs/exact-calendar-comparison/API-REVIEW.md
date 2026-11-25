@@ -1,0 +1,9 @@
+# Explicit comparison API review
+
+Adds three public Core types: XdmExactCalendarOrder, XdmExactCalendarComparison and XdmExactCalendarKeyComparer. The enum has Less/Equal/Greater/Indeterminate. Static comparison functions take explicit initialized value objects; XPath context offset is mandatory and always validated. Same-key functions and the singleton CLR comparer operate only on exact calendar objects. No existing public member, instance layout or expression dispatch changes.
+
+Gregorian day calculation uses signed BigInteger floor division, including negative years/year zero. Decimal timeline construction stays under fixed320-digit/256-scale limits for the existing bounded model; no DateTimeOffset or millisecond narrowing occurs. The common time reference date is1972-12-31, and UTC day displacement is retained. XSD mixed-timezone ordering uses strict interval separation; endpoint equality is indeterminate. Same-key hashes include primitive family and timezone presence with normalized exact timeline values.
+
+Representation equality and SchemaTransportMatches continue to compare actual components/kind/annotations. An equal instant cannot reuse another value's marker. Pure data comparisons remain possible after source expiry, while original borrowed type/provenance views expire normally; outputs grant no authority. Public typed-read tests preserve separate actual type handles for equal values.
+
+Existing XdmValue map integration is deliberately not inferred. Its legacy key path uses millisecond and embedded-date representations, so mixed-representation equality/hash migration and default query context handling require independent adoption. Native Schema admissions, arithmetic, canonical UTC serialization, C45 and package publication remain separate. The source candidate is1.84.0; current-source integration asserts that exact version while historical package pins remain untouched.

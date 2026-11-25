@@ -1,0 +1,16 @@
+{
+  "blockingFindings": [],
+  "verified": [
+    "Immutable specification and source/body pins recorded before implementation",
+    "Time reference date retains UTC day displacement; no modulo24wrap",
+    "BigInteger floor division handles astronomical negative/zero/extended years",
+    "XSD mixed timezone uses strict interval separation and indeterminate equality endpoints",
+    "Exact normalized timeline keys use same family/presence/value for equality and hash",
+    "Invalid/default/incompatible comparison operands refuse explicitly",
+    "Independent DTO oracles cover500dateTime and500time vectors plus laws; high precision/wide years use separate vectors",
+    "Equal instants cannot exchange representation-bound markers or actual type evidence",
+    "Private source C19 is not imported into public no-friend package consumer",
+    "Current-source integration exact1.84.0 and prior seals/published pins preserved"
+  ],
+  "scopeBoundary": "Existing legacy millisecond/embedded-date key interoperability and default expression dispatch require a separate adoption; their guards remain unchanged."
+}

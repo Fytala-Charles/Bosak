@@ -1,3 +1,7 @@
+## Exact calendar comparison - 25 November 2026
+
+Canonical pages and comparison guide are rendered programmatically with unchanged Fytala CSS. New links resolve; historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance. [Receipt](exact-calendar-comparison/DOCUMENTATION-CHECKS.json).
+
 ## Exact calendar atomic transport - 25 November 2026
 
 Current guide/canonical pages are rendered programmatically; new links resolve and historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance or branding asset changes. [Receipt](exact-calendar-transport/DOCUMENTATION-CHECKS.json).
