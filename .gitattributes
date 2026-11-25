@@ -753,3 +753,9 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /docs/specification-coverage/*.log -text whitespace=cr-at-eol,-blank-at-eol
 
 /docs/exact-calendar-batch/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+# Retain the exact qualified calendar source bytes.
+/src/Bosak.XPath.Core/Xdm/XdmExactSecond.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Core/Xdm/XdmExactCalendarValue.cs -text whitespace=cr-at-eol
+/tests/Bosak.XPath.Core.Tests/XdmExactCalendarTests.cs -text whitespace=cr-at-eol
+/docs/exact-calendar-batch-delivery/** -text whitespace=cr-at-eol
