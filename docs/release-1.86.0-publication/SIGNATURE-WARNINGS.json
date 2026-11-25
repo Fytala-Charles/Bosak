@@ -1,0 +1,42 @@
+[
+  {
+    "package": "Bosak.XPath.Api",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Compiler",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Core",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Parser",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Providers",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Providers.Database",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Runtime",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XPath.Standard",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.XQuery",
+    "warnings": []
+  },
+  {
+    "package": "Bosak.Xslt",
+    "warnings": []
+  }
+]

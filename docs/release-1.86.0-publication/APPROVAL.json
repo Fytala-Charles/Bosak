@@ -1,0 +1,9 @@
+{
+  "userMessage": "Approved",
+  "approvedVersion": "1.86.0",
+  "sourceRunId": 45657153789,
+  "manifestSha256": "b7421f5e9524b463493574ba5108b59dc404720769d0ba1d71e60a6b6f24f120",
+  "sourceCommit": "2d353912954f03caa44ba2d6e96a8a6224a077d5",
+  "utc": "2026-11-25T17:16:31.230532+00:00",
+  "scope": "Publish exact ten prepared NuGet archives; no tag or GitHub Release"
+}

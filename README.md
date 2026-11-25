@@ -91,7 +91,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10), then
 ```bash
 dotnet new console -n BosakDemo
 cd BosakDemo
-dotnet add package Bosak.XPath.Api --version 1.81.17
+dotnet add package Bosak.XPath.Api --version 1.86.0
 ```
 
 Replace `Program.cs` with:
@@ -109,11 +109,11 @@ Run `dotnet run`. For other languages, use the matching package:
 
 | Package | Purpose |
 |---|---|
-| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.81.17) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.81.17) | Compile XSLT and transform documents. |
-| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.81.17) | Compile and evaluate XQuery. |
+| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.86.0) | Compile and evaluate XPath. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.86.0) | Compile XSLT and transform documents. |
+| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.86.0) | Compile and evaluate XQuery. |
 
-Version 1.81.17 is the [verified published baseline](docs/release-1.81.17-publication/README.md). VS Code extension [0.3.0](docs/extension-0.3.0-publication/README.md) bundles engine/server 1.81.17 and includes language snippets. Numerical workload budgets are deferred for this release; no performance guarantees are claimed. Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
+Version 1.86.0 is the [verified published baseline](docs/release-1.86.0-publication/README.md). VS Code extension [0.3.0](docs/extension-0.3.0-publication/README.md) bundles engine/server 1.81.17 and includes language snippets. Numerical workload budgets are deferred for this release; no performance guarantees are claimed. Source candidates and technical qualification are tracked separately in [implementation status](docs/IMPLEMENTATION_STATUS.md).
 
 <a id="bosak-ecosystem"></a>
 
@@ -129,7 +129,7 @@ Version 1.81.17 is the [verified published baseline](docs/release-1.81.17-public
 
 Schema's public source has its own version and compatibility lifecycle; the Apache transition did not publish a new Schema NuGet package. See its [integration guide](https://github.com/Fytala-Charles/Bosak.Schema/blob/main/docs/INTEGRATION.md) and the [ecosystem overview](docs/ECOSYSTEM.md).
 
-Bosak.XmlDb is a separate storage product in development, starting with embedded use. It is distinct from the published [Bosak.XPath.Providers.Database](https://www.nuget.org/packages/Bosak.XPath.Providers.Database/1.81.17) REST-loader package; the native database is not included in the Core packages.
+Bosak.XmlDb is a separate storage product in development, starting with embedded use. It is distinct from the published [Bosak.XPath.Providers.Database](https://www.nuget.org/packages/Bosak.XPath.Providers.Database/1.86.0) REST-loader package; the native database is not included in the Core packages.
 
 Try the [optional Schema examples](integrations/Schema/README.md) for schema-aware price transformation or bounded native decimal assessment, exact reads and detached XML export using the public Schema source.
 

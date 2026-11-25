@@ -1,0 +1,42 @@
+[
+  {
+    "id": "bosak.xpath.api",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.compiler",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.core",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.parser",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.providers",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.providers.database",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.runtime",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xpath.standard",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xquery",
+    "targetAbsent": true
+  },
+  {
+    "id": "bosak.xslt",
+    "targetAbsent": true
+  }
+]

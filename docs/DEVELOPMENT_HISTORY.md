@@ -1,3 +1,7 @@
+## Core 1.86.0 published - 25 November 2026
+
+All ten packages are now published and verified from the approved preparation artifacts without rebuilding. Repository signatures and exact payloads pass, as do fresh NuGet.org-only consumers: 53 smoke checks, 73 guarded calendar checks and two packaged examples. See the [publication record](release-1.86.0-publication/README.md). This supersedes earlier unpublished calendar candidate notices. Native Schema admission/pin migration and C45 acceptance remain separate; the extension still bundles 1.81.17. Historical qualification packets remain unchanged.
+
 ## Extension snippets 0.3.0 published — 16 November 2026
 
 REQ-141 is delivered. [PR #501](https://github.com/Fytala-Charles/Bosak/pull/501) merged after all six checks passed. Hosted preparation43883918663 and exact-artifact publisher43891666461 passed; Marketplace download and GitHub asset match the reviewed VSIX. Five actual editor scenarios pass in each of two isolated VS Code1.146.0 profiles, including prefix suggestions, mirrors, forward/backward stops and final cursor, with and without bundled server. Core/server remains1.81.17; no NuGet or engine change. Earlier candidate notices are historical. [User guide](VSCODE_SNIPPETS.md) and [publication receipts](extension-0.3.0-publication/README.md).

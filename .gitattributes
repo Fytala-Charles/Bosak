@@ -1,4 +1,6 @@
 # Preserve imported consumer evidence byte-for-byte, including original line endings.
+# Preserve exact Core 1.86.0 publication receipts and manifest hashes.
+/docs/release-1.86.0-publication/** -text whitespace=cr-at-eol
 /docs/REQ-129-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
 /docs/REQ-130-source-preserving-value-of-deletion.md -text whitespace=cr-at-eol
 /docs/REQ-130-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
