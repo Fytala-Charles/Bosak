@@ -15,7 +15,7 @@ class ArtifactReviewTests(unittest.TestCase):
             target = self.root / 'src' / name / (name + '.csproj'); target.parent.mkdir(parents=True)
             target.write_bytes((m.ROOT / 'src' / name / (name + '.csproj')).read_bytes())
         for name in ['NOTICE', 'license.md']: (self.root / name).write_bytes((m.ROOT / name).read_bytes())
-        for name in ['src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt', 'vscode-bosak/LICENSE.md']:
+        for name in ['src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt', 'vscode-bosak/LICENSE.md', 'docs/NUGET_README.md']:
             target = self.root / name; target.parent.mkdir(parents=True, exist_ok=True); target.write_bytes((m.ROOT / name).read_bytes())
         m.ROOT = self.root; self.folder = self.root / 'artifacts'; self.folder.mkdir()
     def tearDown(self):
@@ -24,11 +24,11 @@ class ArtifactReviewTests(unittest.TestCase):
         for name in self.names:
             project = m.ET.parse(self.root / 'src' / name / (name + '.csproj'))
             deps = [Path(x.attrib['Include'].replace('\\', '/')).stem for x in project.findall('.//ProjectReference')]
-            metadata = '<package><metadata><id>' + name + '</id><version>' + self.core + '</version><repository commit="' + self.source + '"/><dependencies>' + ''.join('<dependency id="' + x + '" version="' + self.core + '"/>' for x in deps) + '</dependencies></metadata></package>'
+            metadata = '<package><metadata><id>' + name + '</id><version>' + self.core + '</version><readme>README.md</readme><repository commit="' + self.source + '"/><dependencies>' + ''.join('<dependency id="' + x + '" version="' + self.core + '"/>' for x in deps) + '</dependencies></metadata></package>'
             with zipfile.ZipFile(self.folder / (name + '.' + self.core + '.nupkg'), 'w') as z:
                 z.writestr(name + '.nuspec', metadata)
                 for asset in ['license.md', 'README.md', 'icon.png', 'lib/net10.0/' + name + '.dll', 'lib/net10.0/' + name + '.xml']:
-                    z.writestr(asset, (self.root / 'license.md').read_bytes() if asset == 'license.md' else b'control fixture')
+                    z.writestr(asset, (self.root / 'license.md').read_bytes() if asset == 'license.md' else (self.root / 'docs/NUGET_README.md').read_bytes() if asset == 'README.md' else b'control fixture')
                 if not omit_notice: z.writestr('NOTICE', (self.root / 'NOTICE').read_bytes())
                 if name == 'Bosak.XPath.Standard': z.writestr('licenses/Unicode17-LICENSE.txt', (self.root / 'src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt').read_bytes())
     def vsix(self, publisher='fytala'):
@@ -72,6 +72,25 @@ class ArtifactReviewTests(unittest.TestCase):
     def test_version_mismatch_is_refused(self):
         self.nuget()
         with self.assertRaises(ValueError): m.validate('nuget', self.folder, '0.0.0', self.extension, self.source, self.names)
+    def test_changed_readme_is_refused(self):
+        self.nuget(); path = next(self.folder.glob('*.nupkg')); files = m.zip_contents(path); files['README.md'] = b'stale instructions'
+        with zipfile.ZipFile(path, 'w') as z:
+            for name, value in files.items(): z.writestr(name, value)
+        with self.assertRaisesRegex(ValueError, 'Package README differs'): m.validate('nuget', self.folder, self.core, self.extension, self.source, self.names)
+    def test_source_readme_with_stale_install_version_is_refused(self):
+        path = self.root / 'docs/NUGET_README.md'; path.write_bytes(path.read_bytes().replace(('--version ' + self.core).encode(), b'--version 0.0.0'))
+        self.nuget()
+        with self.assertRaisesRegex(ValueError, 'README version differs'): m.validate('nuget', self.folder, self.core, self.extension, self.source, self.names)
+    def test_readme_version_prefix_is_not_an_exact_version(self):
+        path = self.root / 'docs/NUGET_README.md'; path.write_bytes(path.read_bytes().replace(self.core.encode(), (self.core + '0').encode()))
+        self.nuget()
+        with self.assertRaisesRegex(ValueError, 'README version differs'): m.validate('nuget', self.folder, self.core, self.extension, self.source, self.names)
+    def test_wrong_readme_metadata_is_refused(self):
+        self.nuget(); path = next(self.folder.glob('*.nupkg')); files = m.zip_contents(path)
+        key = next(x for x in files if x.endswith('.nuspec')); files[key] = files[key].replace(b'<readme>README.md</readme>', b'<readme>other.md</readme>')
+        with zipfile.ZipFile(path, 'w') as z:
+            for name, value in files.items(): z.writestr(name, value)
+        with self.assertRaisesRegex(ValueError, 'README metadata mismatch'): m.validate('nuget', self.folder, self.core, self.extension, self.source, self.names)
     def test_exact_vsix_verifies(self):
         self.vsix(); digest = self.seal('vscode')
         self.assertEqual(len(m.verify('vscode', self.folder, digest, self.core, self.extension, self.source, self.names)['artifacts']), 1)

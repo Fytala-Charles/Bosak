@@ -227,3 +227,7 @@ Read docs/calendar-interop before extending plain legacy/exact conversion. All a
 ## Guarded calendar query candidate (25 November 2026)
 
 See docs/guarded-calendar-query. CompileCalendarComparison is a closed assessor-bound profile; use selected-authority actual type proof and existing raw lifetime checks. The plain interop adapter still refuses authority carriers. Source1.86.0 unpublished; no native Schema admission, C45, default operator/map or signed-pin change.
+
+## Release candidate package guidance (25 November 2026)
+
+Keep docs/NUGET_README.md aligned with the source Core version; it is packed as README.md. The release verifier checks exact bytes, installation version and nuspec metadata. Preserve immutable source/preparation/manifest identity; preparation does not authorize publication or tags. Current coverage audit lives in docs/specification-coverage-current; original matrix remains historical.

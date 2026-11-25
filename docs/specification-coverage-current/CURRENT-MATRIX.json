@@ -1,0 +1,1176 @@
+{
+  "schemaVersion": 2,
+  "date": "2026-11-25",
+  "purpose": "Current feature-boundary and section-evidence audit; not new semantic adoption",
+  "sourceRevisions": {
+    "core": "0649d9f44395aa59eef8b04091c68f0ee8ea3435",
+    "schema": "5715afeadb6b3a998398c32f22d95f66f8e48891"
+  },
+  "historicalMatrix": {
+    "date": "2026-11-19",
+    "preserved": true
+  },
+  "inventoryExhaustive": false,
+  "normativeDenominator": null,
+  "conformancePercentage": null,
+  "reviewMethod": "Reconcile qualified feature receipts and declared refusals against dated section references. This review adopts no semantics or new corpus/retained qualification; fresh repository regression checks are reported separately in VALIDATION.json.",
+  "availability": {
+    "schemaDevelopment": "0.6 development source; unpublished",
+    "schemaLastVerifiedPublished": "0.5.0-beta.1 bounded decimal profile",
+    "coreDevelopment": "1.86.0 merged source; unpublished",
+    "calendarNativeAdmission": "Pending verified signed Core availability and separate Schema adoption",
+    "publicCoreC45": "Pending",
+    "schemaDevelopmentSignedCorePin": "1.81.17",
+    "schemaPublishedBetaCoreMinimum": "1.81.2"
+  },
+  "qualification": {
+    "freshRun": false,
+    "schemaSourceCases": 10248,
+    "schemaPublicPackageCases": 8778,
+    "countsAreNotSpecificationCoverage": true,
+    "selectedCorpus": [
+      {
+        "lane": "pilot",
+        "cases": 21,
+        "counts": {
+          "match": 21,
+          "unsupported": 0,
+          "mismatch": 0,
+          "harnessError": 0
+        }
+      },
+      {
+        "lane": "expanded1",
+        "cases": 68,
+        "counts": {
+          "match": 10,
+          "unsupported": 58,
+          "mismatch": 0,
+          "harnessError": 0
+        }
+      },
+      {
+        "lane": "expanded2",
+        "cases": 61,
+        "counts": {
+          "match": 9,
+          "unsupported": 52,
+          "mismatch": 0,
+          "harnessError": 0
+        }
+      }
+    ],
+    "expandedCombined": {
+      "cases": 129,
+      "match": 19,
+      "unsupported": 110,
+      "mismatch": 0,
+      "harnessError": 0
+    },
+    "coreSourceCases": 26750,
+    "corePublicPackageCases": 73,
+    "caseSetsAndRepeatLanesOverlap": true,
+    "basis": "Reused feature qualification; fresh repository regression checks are reported separately in VALIDATION.json"
+  },
+  "specificationReviewPins": {
+    "xsd11-structures": {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "originalBodySha256": "5ffb773f81fb81cfc9ac54dfb871c333cefb12fbdffe4caeb28170054b21fc6a",
+      "basis": "Immutable review pin; each feature retains its original adoption evidence. This audit adopts no new semantics."
+    },
+    "xsd11-datatypes": {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "originalBodySha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8",
+      "basis": "Immutable review pin; each feature retains its original adoption evidence. This audit adopts no new semantics."
+    },
+    "xdm31": {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "originalBodySha256": "a157e098f0de2fefd81ce95bb934762ff5a1f616a4745854f0340d177082acd3",
+      "basis": "Immutable review pin; each feature retains its original adoption evidence. This audit adopts no new semantics."
+    }
+  },
+  "rows": [
+    {
+      "id": "SC01",
+      "area": "Expanded names and schema target namespaces",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Namespace-aware expanded names, target namespaces and local qualified/unqualified forms.",
+      "remaining": "Chameleon assembly and unrestricted namespace/schema composition.",
+      "reviewedSections": [
+        "structures:3.3",
+        "structures:4.2"
+      ],
+      "evidence": [
+        "schema:docs/m1-namespaces/README.md",
+        "schema:docs/namespace-form-review/README.md"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC02",
+      "area": "Element declarations and ordered decimal content",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Finite scalar/simple-content and structural element declarations with original identity.",
+      "remaining": "General recursive graphs, arbitrary content and implicit anyType breadth.",
+      "reviewedSections": [
+        "structures:3.3",
+        "structures:3.4",
+        "structures:3.9"
+      ],
+      "evidence": [
+        "schema:docs/global-element-references/README.md",
+        "schema:docs/global-element-references/SUMMARY.json",
+        "schema:docs/global-element-references/ADOPTION.json",
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC03",
+      "area": "Schemas without assertions",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Assertions may be absent in admitted schema shapes.",
+      "remaining": "This does not admit arbitrary schemas without assertions.",
+      "reviewedSections": [
+        "structures:3.4",
+        "structures:3.13"
+      ],
+      "evidence": [
+        "schema:docs/m1-namespaces/README.md",
+        "schema:docs/structural-assertions/README.md"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC04",
+      "area": "Attribute declarations and uses",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Closed local/global attributes, optional/required uses and acyclic attribute groups.",
+      "remaining": "Attribute wildcards, full group recursion semantics and automatic missing-attribute insertion.",
+      "reviewedSections": [
+        "structures:3.2",
+        "structures:3.5",
+        "structures:3.6"
+      ],
+      "evidence": [
+        "schema:docs/m2e-attributes/README.md",
+        "schema:docs/global-attribute-references/README.md",
+        "schema:docs/global-attribute-references/SUMMARY.json",
+        "schema:docs/global-attribute-references/ADOPTION.json",
+        "schema:docs/attribute-groups-review/README.md",
+        "schema:docs/attribute-groups-review/SUMMARY.json",
+        "schema:docs/attribute-groups-review/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC05",
+      "area": "Named types, component references and derivation",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Named simple/complex types, selected derivation chains and shared component references.",
+      "remaining": "General complex derivation, arbitrary extension/restriction combinations and recursive models.",
+      "reviewedSections": [
+        "structures:3.4",
+        "structures:3.16",
+        "structures:3.17"
+      ],
+      "evidence": [
+        "schema:docs/m2a-named-types/README.md",
+        "schema:docs/decimal-chains/README.md",
+        "schema:docs/decimal-chains/SUMMARY.json",
+        "schema:docs/decimal-chains/ADOPTION.json",
+        "schema:docs/date-chains/README.md",
+        "schema:docs/date-chains/SUMMARY.json",
+        "schema:docs/date-chains/ADOPTION.json",
+        "schema:docs/boolean-chains/README.md",
+        "schema:docs/boolean-chains/SUMMARY.json",
+        "schema:docs/boolean-chains/ADOPTION.json",
+        "schema:docs/model-groups/README.md",
+        "schema:docs/model-groups/SUMMARY.json",
+        "schema:docs/model-groups/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC06",
+      "area": "Choice, all, nested models and occurrence breadth",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Finite sequence/choice/all models, occurrence bounds, named sequence groups and sequence mixed content.",
+      "remaining": "Full recursive model language; mixed all/choice/empty/derivation and mixed-plus-assertion combinations.",
+      "reviewedSections": [
+        "structures:3.4",
+        "structures:3.7",
+        "structures:3.8",
+        "structures:3.9"
+      ],
+      "evidence": [
+        "schema:docs/particles/README.md",
+        "schema:docs/all-particles/README.md",
+        "schema:docs/model-groups/README.md",
+        "schema:docs/model-groups/SUMMARY.json",
+        "schema:docs/model-groups/ADOPTION.json",
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC07",
+      "area": "Built-in datatype families beyond decimal",
+      "schemaNative": "bounded-native",
+      "implementedBound": "String, Boolean, decimal, integer families and date in admitted placements.",
+      "remaining": "Native dateTime/time/dateTimeStamp, duration, floating/binary/QName/Gregorian-fragment breadth. Core exact calendar prerequisites are merged but unpublished.",
+      "reviewedSections": [
+        "datatypes:3.3",
+        "datatypes:3.4"
+      ],
+      "evidence": [
+        "schema:docs/derived-integer-types/README.md",
+        "schema:docs/native-date-implementation/README.md",
+        "schema:docs/native-date-implementation/SUMMARY.json",
+        "schema:docs/calendar-transport-prerequisites/README.md",
+        "schema:docs/calendar-transport-prerequisites/SUMMARY.json",
+        "core:docs/guarded-calendar-query/README.md",
+        "core:docs/guarded-calendar-query/QUALIFICATION.json",
+        "core:docs/calendar-interop/README.md",
+        "core:docs/calendar-interop/QUALIFICATION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC08",
+      "area": "Exact decimal lexical/value mapping",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Exact integer/decimal lexical/value handling under explicit representation capacities.",
+      "remaining": "Unbounded precision or every legacy XPath numeric route.",
+      "reviewedSections": [
+        "datatypes:3.3.3",
+        "datatypes:3.4.13",
+        "datatypes:4.3"
+      ],
+      "evidence": [
+        "schema:docs/m2b-decimal-restrictions/README.md",
+        "schema:docs/decimal-enumeration/README.md",
+        "schema:docs/decimal-enumeration/SUMMARY.json",
+        "schema:docs/decimal-enumeration/ADOPTION.json",
+        "schema:docs/decimal-chains/README.md",
+        "schema:docs/decimal-chains/SUMMARY.json",
+        "schema:docs/decimal-chains/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC09",
+      "area": "Restriction facets, normalization and validation",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Selected length/pattern/enumeration/range/digit/whitespace/timezone facets by datatype and placement.",
+      "remaining": "Full Unicode/XSD regex grammar, all fixed facets and arbitrary facet/type combinations.",
+      "reviewedSections": [
+        "datatypes:4.1",
+        "datatypes:4.3.1",
+        "datatypes:4.3.4",
+        "datatypes:4.3.5",
+        "datatypes:4.3.6",
+        "datatypes:4.3.7",
+        "datatypes:4.3.11",
+        "datatypes:4.3.14"
+      ],
+      "evidence": [
+        "schema:docs/m2d-string-restrictions/README.md",
+        "schema:docs/string-patterns/README.md",
+        "schema:docs/integer-enumeration/README.md",
+        "schema:docs/date-bounds/README.md",
+        "schema:docs/date-bounds/SUMMARY.json",
+        "schema:docs/date-bounds/ADOPTION.json",
+        "schema:docs/date-patterns/README.md",
+        "schema:docs/date-patterns/SUMMARY.json",
+        "schema:docs/date-patterns/ADOPTION.json",
+        "schema:docs/boolean-patterns/README.md",
+        "schema:docs/boolean-patterns/SUMMARY.json",
+        "schema:docs/boolean-patterns/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC10",
+      "area": "Lists and unions",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "No native list/union admission is qualified by these production receipts.",
+      "remaining": "Lists/unions and member-selection semantics remain follow-on work.",
+      "reviewedSections": [
+        "datatypes:2.4",
+        "datatypes:4.1"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC11",
+      "area": "Default, fixed, nil and abstract elements",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Simple nillability/empty typed values and constraints on provided default/fixed values.",
+      "remaining": "Automatic default augmentation, abstract/substitution breadth, complex nil and excluded assertion combinations.",
+      "reviewedSections": [
+        "structures:3.3",
+        "structures:3.4",
+        "structures:5.2"
+      ],
+      "evidence": [
+        "schema:docs/simple-nillability/README.md",
+        "schema:docs/simple-nillability/SUMMARY.json",
+        "schema:docs/simple-nillability/ADOPTION.json",
+        "schema:docs/element-value-constraints/README.md",
+        "schema:docs/element-value-constraints/SUMMARY.json",
+        "schema:docs/element-value-constraints/ADOPTION.json",
+        "schema:docs/attribute-value-constraints/README.md",
+        "schema:docs/attribute-value-constraints/SUMMARY.json",
+        "schema:docs/attribute-value-constraints/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC12",
+      "area": "Include/import and component assembly",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Closed same-namespace includes and named-simple-type imports with shared identities.",
+      "remaining": "Chameleon schemas, foreign global elements/complex owners/attributes and unrestricted assembly.",
+      "reviewedSections": [
+        "structures:3.17",
+        "structures:4.2",
+        "structures:4.3"
+      ],
+      "evidence": [
+        "schema:docs/closed-includes/README.md",
+        "schema:docs/closed-includes/SUMMARY.json",
+        "schema:docs/closed-includes/ADOPTION.json",
+        "schema:docs/simple-type-imports/README.md",
+        "schema:docs/simple-type-imports/SUMMARY.json",
+        "schema:docs/simple-type-imports/ADOPTION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC13",
+      "area": "Override/redefine and version controls",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "No broad native override/redefine/version-control implementation is qualified.",
+      "remaining": "Override/redefine and associated component/version rules.",
+      "reviewedSections": [
+        "structures:4.2"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC14",
+      "area": "Complex-type assertion semantics and context",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Finite assertions on admitted scalar/structural owners with explicit namespace/context rules.",
+      "remaining": "General assertion XPath, arbitrary traversal/functions and excluded mixed/nil/attribute combinations.",
+      "reviewedSections": [
+        "structures:3.13"
+      ],
+      "evidence": [
+        "schema:docs/m1-namespaces/README.md",
+        "schema:docs/string-assertions-delivery/README.md",
+        "schema:docs/contextual-assertions/README.md",
+        "schema:docs/structural-assertions/README.md"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC15",
+      "area": "Simple-type assertion facets",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "Legacy assertion-facet helpers are not native admission evidence.",
+      "remaining": "General native simple-type assertion facets.",
+      "reviewedSections": [
+        "datatypes:4.3.13"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC16",
+      "area": "Conditional type assignment",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "Legacy alternative/applicability helpers are not native structural validation.",
+      "remaining": "General native conditional type assignment.",
+      "reviewedSections": [
+        "structures:3.12"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC17",
+      "area": "Open content and wildcard structural enforcement",
+      "schemaNative": "descriptor-only",
+      "implementedBound": "Legacy descriptor metadata does not enforce native structural open content.",
+      "remaining": "Native open content and wildcard structural enforcement.",
+      "reviewedSections": [
+        "structures:3.4",
+        "structures:3.10"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC18",
+      "area": "Wildcard negative constraints and matching",
+      "schemaNative": "descriptor-only",
+      "implementedBound": "Recorded wildcard descriptors do not prove native negative-constraint matching.",
+      "remaining": "Native wildcard negative constraints and validation matching.",
+      "reviewedSections": [
+        "structures:3.10"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC19",
+      "area": "Default attribute application",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "Provided attribute constraints are supported elsewhere; automatic default attribute application is separate.",
+      "remaining": "Default attribute groups/application and missing-attribute augmentation.",
+      "reviewedSections": [
+        "structures:3.4",
+        "structures:3.5",
+        "structures:3.6"
+      ],
+      "evidence": [
+        "schema:docs/attribute-value-constraints/README.md",
+        "schema:docs/attribute-value-constraints/SUMMARY.json",
+        "schema:docs/attribute-value-constraints/ADOPTION.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC20",
+      "area": "Identity constraints and substitution groups",
+      "schemaNative": "not-native-qualified",
+      "implementedBound": "No native identity-constraint/substitution-group coverage is qualified here.",
+      "remaining": "key, keyref, unique and general substitution groups.",
+      "reviewedSections": [
+        "structures:3.3",
+        "structures:3.11"
+      ],
+      "evidence": [
+        "schema:docs/specification-coverage/MATRIX.json",
+        "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+        "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC21",
+      "area": "PSVI and typed atomization transport",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Actual declaration/governing/atomic facts and original-node atomization for admitted shapes, with expiry guards.",
+      "remaining": "Full PSVI, augmented trees, general public Core C45 acceptance and cross-universe compatibility.",
+      "reviewedSections": [
+        "structures:5.2",
+        "xdm31:3.3",
+        "xdm31:6.2"
+      ],
+      "evidence": [
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json",
+        "schema:docs/simple-nillability/README.md",
+        "schema:docs/simple-nillability/SUMMARY.json",
+        "schema:docs/simple-nillability/ADOPTION.json",
+        "schema:docs/date-simple-content-implementation/README.md",
+        "schema:docs/date-simple-content-implementation/SUMMARY.json",
+        "core:docs/guarded-calendar-query/README.md",
+        "core:docs/guarded-calendar-query/QUALIFICATION.json",
+        "core:docs/calendar-interop/README.md",
+        "core:docs/calendar-interop/QUALIFICATION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC22",
+      "area": "Schema-aware XPath/XQuery/XSLT application use",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Bounded native original-node consumers and explicit guarded typed query profiles.",
+      "remaining": "General schema-aware XPath/XQuery/XSLT validation integration and arbitrary typed queries.",
+      "reviewedSections": [
+        "xdm31:2.7",
+        "xdm31:3.3"
+      ],
+      "evidence": [
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json",
+        "schema:docs/calendar-transport-prerequisites/README.md",
+        "schema:docs/calendar-transport-prerequisites/SUMMARY.json",
+        "core:docs/guarded-calendar-query/README.md",
+        "core:docs/guarded-calendar-query/QUALIFICATION.json",
+        "core:docs/calendar-interop/README.md",
+        "core:docs/calendar-interop/QUALIFICATION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC23",
+      "area": "Conformance, defined limits and unsupported behavior",
+      "schemaNative": "bounded-evidence",
+      "implementedBound": "Explicit Invalid/Unsupported and finite selected corpus outcomes; no full normative denominator.",
+      "remaining": "Exhaustive clause-to-case inventory and complete W3C conformance qualification.",
+      "reviewedSections": [
+        "structures:2.4",
+        "structures:5.2",
+        "datatypes:5.4"
+      ],
+      "evidence": [
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json",
+        "schema:docs/calendar-transport-prerequisites/README.md",
+        "schema:docs/calendar-transport-prerequisites/SUMMARY.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    },
+    {
+      "id": "SC24",
+      "area": "Host acquisition, cancellation, cleanup and reproducibility",
+      "schemaNative": "bounded-native",
+      "implementedBound": "Owned acquisition, cancellation, source identity, invalid-fact refusal and deterministic release boundaries.",
+      "remaining": "General performance/total-memory SLAs and unrestricted provider acceptance.",
+      "reviewedSections": [
+        "structures:4.3",
+        "structures:5.4"
+      ],
+      "evidence": [
+        "schema:docs/mixed-sequences/README.md",
+        "schema:docs/mixed-sequences/SUMMARY.json",
+        "schema:docs/mixed-sequences/ADOPTION.json",
+        "schema:docs/simple-nillability/README.md",
+        "schema:docs/simple-nillability/SUMMARY.json",
+        "schema:docs/simple-nillability/ADOPTION.json",
+        "core:docs/guarded-calendar-query/README.md",
+        "core:docs/guarded-calendar-query/QUALIFICATION.json",
+        "core:docs/calendar-interop/README.md",
+        "core:docs/calendar-interop/QUALIFICATION.json"
+      ],
+      "fullyConformant": false,
+      "normativeRequirementEnumerationComplete": false
+    }
+  ],
+  "evidence": {
+    "schema:docs/m1-namespaces/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/m1-namespaces/README.md",
+      "sha256": "33d2a01b5b13978e48699f5b1c307baea4c4a3db0bd4360bc9f7b4733be8a880",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/m1-namespaces/README.md"
+    },
+    "schema:docs/namespace-form-review/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/namespace-form-review/README.md",
+      "sha256": "c56ae223804af91ed031c7520294db653ffd072a59463dca2edd8ad5c8b6ce70",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/namespace-form-review/README.md"
+    },
+    "schema:docs/global-element-references/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-element-references/README.md",
+      "sha256": "1d5fca871c3e0bb02cd3b2e3dd3bd32787c758f9a290ab0b8cf21dbf09d53515",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-element-references/README.md"
+    },
+    "schema:docs/global-element-references/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-element-references/SUMMARY.json",
+      "sha256": "5226430266b14c0bd3b74f188a261b4c310290cd23e59617adc5f99344390e60",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-element-references/SUMMARY.json"
+    },
+    "schema:docs/global-element-references/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-element-references/ADOPTION.json",
+      "sha256": "8f9a83be901004a44543eba3733608c8db5caaecb9caafc57e25a9f6471a52e5",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-element-references/ADOPTION.json"
+    },
+    "schema:docs/mixed-sequences/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/mixed-sequences/README.md",
+      "sha256": "b63431091279f38c22f192bcb96ecd16ecd29470ec6095bf6e69b5d9d37cdc76",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/mixed-sequences/README.md"
+    },
+    "schema:docs/mixed-sequences/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/mixed-sequences/SUMMARY.json",
+      "sha256": "1ba5a8f04192865ed3e5b7852ce4509c5339f59af20c7b4ed98bcc8589d1e98b",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/mixed-sequences/SUMMARY.json"
+    },
+    "schema:docs/mixed-sequences/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/mixed-sequences/ADOPTION.json",
+      "sha256": "c60d9bb687fa91dad5f525fa4e73a79af55e91ef6306be0117017ba75d593ab2",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/mixed-sequences/ADOPTION.json"
+    },
+    "schema:docs/structural-assertions/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/structural-assertions/README.md",
+      "sha256": "d57ea7c9fd0d802df937a6322498cbee2a4454e4f5cfbc2bb62cec60bc636533",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/structural-assertions/README.md"
+    },
+    "schema:docs/m2e-attributes/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/m2e-attributes/README.md",
+      "sha256": "2940dc355d9b6d3edd8d0fed1e847242c2f7d594c719732010e6c76ceb0a3c8f",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/m2e-attributes/README.md"
+    },
+    "schema:docs/global-attribute-references/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-attribute-references/README.md",
+      "sha256": "016ce401f91be7f23e097a65e0c96f555cedb0d00f855530e26a808afee11a4b",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-attribute-references/README.md"
+    },
+    "schema:docs/global-attribute-references/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-attribute-references/SUMMARY.json",
+      "sha256": "b92e8e0e60bc3d6137334815bf623d3006518bbdd1798d01232c20b3923514f9",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-attribute-references/SUMMARY.json"
+    },
+    "schema:docs/global-attribute-references/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/global-attribute-references/ADOPTION.json",
+      "sha256": "38d8526c73ef315d485c32f124d46150f2a491683a549fe4610c45e3dbd5efd7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/global-attribute-references/ADOPTION.json"
+    },
+    "schema:docs/attribute-groups-review/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-groups-review/README.md",
+      "sha256": "ba6327ed22f7c76fd498c9f46a6b57ee9c50a484441d7d7ba796229fe71c1f11",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-groups-review/README.md"
+    },
+    "schema:docs/attribute-groups-review/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-groups-review/SUMMARY.json",
+      "sha256": "f5caa22996fd09bc6cde13fbcf2e0c1096211ff07f2e4862b43d2a27ac1b40a5",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-groups-review/SUMMARY.json"
+    },
+    "schema:docs/attribute-groups-review/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-groups-review/ADOPTION.json",
+      "sha256": "1ac78118b8559242e77c6c4f6feafc57848d9f5688612a38c2f46c13caa1e3e9",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-groups-review/ADOPTION.json"
+    },
+    "schema:docs/m2a-named-types/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/m2a-named-types/README.md",
+      "sha256": "0d8bcc93b63df613f9ce278bdaaedf6ac741cb9b543e42ce40cb246dd69ba335",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/m2a-named-types/README.md"
+    },
+    "schema:docs/decimal-chains/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-chains/README.md",
+      "sha256": "2d61428255f1015f6f5ee4225e2a42c2950d9a7c45f2000447e99b24f1ddd7b2",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-chains/README.md"
+    },
+    "schema:docs/decimal-chains/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-chains/SUMMARY.json",
+      "sha256": "39110f63e35b1feefa657b5938011df8689f9c1b2aa8a65c9e8fe0dbabf5898f",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-chains/SUMMARY.json"
+    },
+    "schema:docs/decimal-chains/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-chains/ADOPTION.json",
+      "sha256": "f942052e8d16ee9d3630780abf4ed7e37715f44003d1c038629950506f65a5a7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-chains/ADOPTION.json"
+    },
+    "schema:docs/date-chains/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-chains/README.md",
+      "sha256": "bdd52586baa33ff16b93aa0350e80c16278118c86d58c40ef0d2526dbca9dba2",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-chains/README.md"
+    },
+    "schema:docs/date-chains/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-chains/SUMMARY.json",
+      "sha256": "7f032bb53977a7646d5133f3b2262681aaefc7769082656fcff382c1a84d03b4",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-chains/SUMMARY.json"
+    },
+    "schema:docs/date-chains/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-chains/ADOPTION.json",
+      "sha256": "db393396984bd98cf7da091d749b91f0a51086d03623bd1ec650dc862da155e9",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-chains/ADOPTION.json"
+    },
+    "schema:docs/boolean-chains/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-chains/README.md",
+      "sha256": "7629677ea263ca8684009bffd0528f4bf20f8c6a4b61bc56fad0d67f4adf5f3b",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-chains/README.md"
+    },
+    "schema:docs/boolean-chains/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-chains/SUMMARY.json",
+      "sha256": "c19ec5c81b39fdae2508d781763d0e1dfad11ae6d6ae33b9bf1a84c5664b69d1",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-chains/SUMMARY.json"
+    },
+    "schema:docs/boolean-chains/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-chains/ADOPTION.json",
+      "sha256": "1c8ee4d5a97c5ce970e32956d02051bf9fc1a07a044bc258b86f36a3c2f3593f",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-chains/ADOPTION.json"
+    },
+    "schema:docs/model-groups/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/model-groups/README.md",
+      "sha256": "1c6fd08b0770f427a14a97f61356f8e6e1c54ded4c981bcc445da5d36b566b1f",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/model-groups/README.md"
+    },
+    "schema:docs/model-groups/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/model-groups/SUMMARY.json",
+      "sha256": "6fff3526d62075b166b8b4ff82e0253e43bb8f0101459e91de2905ee2b1529f7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/model-groups/SUMMARY.json"
+    },
+    "schema:docs/model-groups/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/model-groups/ADOPTION.json",
+      "sha256": "aefd30d3bf02db09c39d16d95733ac4038f680b3e456892f24021ac890469534",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/model-groups/ADOPTION.json"
+    },
+    "schema:docs/particles/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/particles/README.md",
+      "sha256": "31e88ab070d992485c766e7ac3ce98ad6e24076d1b7bc20b27afca734df88397",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/particles/README.md"
+    },
+    "schema:docs/all-particles/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/all-particles/README.md",
+      "sha256": "3b06f906dd1a7761ec004d5f4e413811866eb024161ba660568e1c3e09a04dfe",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/all-particles/README.md"
+    },
+    "schema:docs/derived-integer-types/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/derived-integer-types/README.md",
+      "sha256": "8b5ebc46de969b5c6a1047a9333d9bf2cc384ff21a0a3f33ea57b049022cd55c",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/derived-integer-types/README.md"
+    },
+    "schema:docs/native-date-implementation/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/native-date-implementation/README.md",
+      "sha256": "2c86b8c4e9a4d33dc4aac0288110e2e6bd8588903d63953cf3c832ae6b52233f",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/native-date-implementation/README.md"
+    },
+    "schema:docs/native-date-implementation/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/native-date-implementation/SUMMARY.json",
+      "sha256": "85f7b05fc5faed4ed9aa16ae2cb2309e9f3f5005568fd171f46da8fbb8eb891c",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/native-date-implementation/SUMMARY.json"
+    },
+    "schema:docs/calendar-transport-prerequisites/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/calendar-transport-prerequisites/README.md",
+      "sha256": "7d4f141eae218288b24f0d8fe86d5a6ba3ab27a368232433f60df6eedcefa181",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/calendar-transport-prerequisites/README.md"
+    },
+    "schema:docs/calendar-transport-prerequisites/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/calendar-transport-prerequisites/SUMMARY.json",
+      "sha256": "c91e25431ea0a6e119b35223044f4b912c250b836e4b5b41945988f7aa1a7bd3",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/calendar-transport-prerequisites/SUMMARY.json"
+    },
+    "core:docs/guarded-calendar-query/README.md": {
+      "repository": "core",
+      "revision": "0649d9f44395aa59eef8b04091c68f0ee8ea3435",
+      "path": "docs/guarded-calendar-query/README.md",
+      "sha256": "6bf85609707562ba39eb7613d6f5c5ea5a9bc19b827451260ccf5ae40e748168",
+      "url": "https://github.com/Fytala-Charles/Bosak/blob/0649d9f44395aa59eef8b04091c68f0ee8ea3435/docs/guarded-calendar-query/README.md"
+    },
+    "core:docs/guarded-calendar-query/QUALIFICATION.json": {
+      "repository": "core",
+      "revision": "0649d9f44395aa59eef8b04091c68f0ee8ea3435",
+      "path": "docs/guarded-calendar-query/QUALIFICATION.json",
+      "sha256": "32b1556278f1ce0c9f6998ab282bf1106008df61db7fe5ae34dcfb7c24adf4c0",
+      "url": "https://github.com/Fytala-Charles/Bosak/blob/0649d9f44395aa59eef8b04091c68f0ee8ea3435/docs/guarded-calendar-query/QUALIFICATION.json"
+    },
+    "core:docs/calendar-interop/README.md": {
+      "repository": "core",
+      "revision": "0649d9f44395aa59eef8b04091c68f0ee8ea3435",
+      "path": "docs/calendar-interop/README.md",
+      "sha256": "02f4d98728e17e53c84c9da930bdd48714f92c392bffde24b4dfdc3f92b102c3",
+      "url": "https://github.com/Fytala-Charles/Bosak/blob/0649d9f44395aa59eef8b04091c68f0ee8ea3435/docs/calendar-interop/README.md"
+    },
+    "core:docs/calendar-interop/QUALIFICATION.json": {
+      "repository": "core",
+      "revision": "0649d9f44395aa59eef8b04091c68f0ee8ea3435",
+      "path": "docs/calendar-interop/QUALIFICATION.json",
+      "sha256": "81e0f7a1054f2253b6ac5ff4abd53acf958f6615c289915f3f2b49c2f89c1aa6",
+      "url": "https://github.com/Fytala-Charles/Bosak/blob/0649d9f44395aa59eef8b04091c68f0ee8ea3435/docs/calendar-interop/QUALIFICATION.json"
+    },
+    "schema:docs/m2b-decimal-restrictions/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/m2b-decimal-restrictions/README.md",
+      "sha256": "09bb30db37c7efd45673c92a9cc498297c66387dee45ecd6bbd96219f9f60a4a",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/m2b-decimal-restrictions/README.md"
+    },
+    "schema:docs/decimal-enumeration/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-enumeration/README.md",
+      "sha256": "9bce0a774a194293af6e901e1c6dec6542e8af4375ca8f4938ef9b3e03a165fc",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-enumeration/README.md"
+    },
+    "schema:docs/decimal-enumeration/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-enumeration/SUMMARY.json",
+      "sha256": "d55f8dc2ae65920ecd81f37ffe921ad4c63fdf3bac7736cb71221d86b46c3692",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-enumeration/SUMMARY.json"
+    },
+    "schema:docs/decimal-enumeration/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/decimal-enumeration/ADOPTION.json",
+      "sha256": "f7cbe38a7d1002276a95be855d6569e1b9f6401b22c1754b7255fa2bfced69e7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/decimal-enumeration/ADOPTION.json"
+    },
+    "schema:docs/m2d-string-restrictions/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/m2d-string-restrictions/README.md",
+      "sha256": "31ad38ff0c10c141bb885c87b13af2a9550dfb974bb81660f666f31995ee08e1",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/m2d-string-restrictions/README.md"
+    },
+    "schema:docs/string-patterns/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/string-patterns/README.md",
+      "sha256": "f8112b96a313fdaa6492b07457101ac2c9f4a21e837886326d4f3fecaae3e6f7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/string-patterns/README.md"
+    },
+    "schema:docs/integer-enumeration/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/integer-enumeration/README.md",
+      "sha256": "8fd94f55cf7b9b4b0bf9ea40d9ad9edfb0f4a4b10a884de70edba003d19b5c27",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/integer-enumeration/README.md"
+    },
+    "schema:docs/date-bounds/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-bounds/README.md",
+      "sha256": "f3a99b0199d01d5b44c846088ea540e7f2a5f166fedcc12077577290293207f6",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-bounds/README.md"
+    },
+    "schema:docs/date-bounds/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-bounds/SUMMARY.json",
+      "sha256": "16e9252e10f54b4fa8d4a634f46c0c120a5ef43f3e88db1cf90082b69f263edd",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-bounds/SUMMARY.json"
+    },
+    "schema:docs/date-bounds/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-bounds/ADOPTION.json",
+      "sha256": "f48a76ae3f13e7fe08a0685ea6f27cf5e71159a693799b19a4865dee2e8230a3",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-bounds/ADOPTION.json"
+    },
+    "schema:docs/date-patterns/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-patterns/README.md",
+      "sha256": "9b70e99b355f1e9792d9d64ca293eebb003f08a2d0bfe208d8d5352e907f863c",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-patterns/README.md"
+    },
+    "schema:docs/date-patterns/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-patterns/SUMMARY.json",
+      "sha256": "77ba880136209f031fbc6296727a6cc43d33abd375a72b9bb34255ec28730395",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-patterns/SUMMARY.json"
+    },
+    "schema:docs/date-patterns/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-patterns/ADOPTION.json",
+      "sha256": "cdd6dab163a90852d68037fe7dba29635c880c2beff692023a88ae9426002b88",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-patterns/ADOPTION.json"
+    },
+    "schema:docs/boolean-patterns/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-patterns/README.md",
+      "sha256": "f5a9b9b502a17380ef1f74ddb87eb4424b4158cb4f5a5ff354260439f9247c24",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-patterns/README.md"
+    },
+    "schema:docs/boolean-patterns/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-patterns/SUMMARY.json",
+      "sha256": "15505ec5d361b9c5e16466adea3769238e6d5528dbf958cd5acb9a66b0938199",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-patterns/SUMMARY.json"
+    },
+    "schema:docs/boolean-patterns/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/boolean-patterns/ADOPTION.json",
+      "sha256": "accb2b1c32754d66e3a76d5dd48ff9879edaa6aca83d184832e6c766b718438c",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/boolean-patterns/ADOPTION.json"
+    },
+    "schema:docs/specification-coverage/MATRIX.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/specification-coverage/MATRIX.json",
+      "sha256": "d1535b18b049fcf3c0fd5752f4756f8e7ef52279a57085e3a1314f6959c94368",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/specification-coverage/MATRIX.json"
+    },
+    "schema:docs/simple-nillability/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-nillability/README.md",
+      "sha256": "0bad78a91e1afa963db2242f00ba56b40912a199e7143fea12ee18c6086553e3",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-nillability/README.md"
+    },
+    "schema:docs/simple-nillability/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-nillability/SUMMARY.json",
+      "sha256": "1623334d53151dd685f5a7b28ba59db1a050376cbe5bcad3382fa678203b7ac8",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-nillability/SUMMARY.json"
+    },
+    "schema:docs/simple-nillability/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-nillability/ADOPTION.json",
+      "sha256": "0f71c5137f63ebbb3e490e249df7a338bdd4549079123b6f65922c64f1746304",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-nillability/ADOPTION.json"
+    },
+    "schema:docs/element-value-constraints/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/element-value-constraints/README.md",
+      "sha256": "cb2f3433aad893a60e130a5a6237577d9fc9455f72e188602786c7a3b6d1d8ca",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/element-value-constraints/README.md"
+    },
+    "schema:docs/element-value-constraints/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/element-value-constraints/SUMMARY.json",
+      "sha256": "9a3dba817307975ddbd3029f079c17de747ed3da9674d9721fd85f22434a2ae7",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/element-value-constraints/SUMMARY.json"
+    },
+    "schema:docs/element-value-constraints/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/element-value-constraints/ADOPTION.json",
+      "sha256": "6d6e3e593b07d73fdd4123f23479fa91dea16c3a553a5d106fa5c628f6dc0cce",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/element-value-constraints/ADOPTION.json"
+    },
+    "schema:docs/attribute-value-constraints/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-value-constraints/README.md",
+      "sha256": "50c6d0f02810330d98c894afdca2b7bfcac7fa3462c4be57389756a5946f5f22",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-value-constraints/README.md"
+    },
+    "schema:docs/attribute-value-constraints/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-value-constraints/SUMMARY.json",
+      "sha256": "14cbf3dfec31f53573e9c7e048cdc2a1cb848ac6364826399ea4de6474604d91",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-value-constraints/SUMMARY.json"
+    },
+    "schema:docs/attribute-value-constraints/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/attribute-value-constraints/ADOPTION.json",
+      "sha256": "b41bf1da0f069715c646709079f531a509e49959074761d1477b0529d108aa63",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/attribute-value-constraints/ADOPTION.json"
+    },
+    "schema:docs/closed-includes/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/closed-includes/README.md",
+      "sha256": "bfef2482bf9fc8687c663727c4215af8a811760737c7f63d3aa385893ae38775",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/closed-includes/README.md"
+    },
+    "schema:docs/closed-includes/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/closed-includes/SUMMARY.json",
+      "sha256": "22e568c5bcc7986042e2b3f5030bd5e1e93538cda87acc6f5b5c63e5a6fdebdf",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/closed-includes/SUMMARY.json"
+    },
+    "schema:docs/closed-includes/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/closed-includes/ADOPTION.json",
+      "sha256": "b6c3fd8e740f624f4b2bdf9ece9f7905111be1add8552ba6f44311121fac349e",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/closed-includes/ADOPTION.json"
+    },
+    "schema:docs/simple-type-imports/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-type-imports/README.md",
+      "sha256": "7bea5e74266d0d70ed64f1e2caea00dc941fceffe9b82518c1551bd14e769522",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-type-imports/README.md"
+    },
+    "schema:docs/simple-type-imports/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-type-imports/SUMMARY.json",
+      "sha256": "c9fe63e3a30b77d5082524afada3fdbcb6b62ecc047f2f5dcf13747632e5fc0d",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-type-imports/SUMMARY.json"
+    },
+    "schema:docs/simple-type-imports/ADOPTION.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/simple-type-imports/ADOPTION.json",
+      "sha256": "f095d487872debff0a313b21a1591741a70a256b136f8ce966b8151fda393018",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/simple-type-imports/ADOPTION.json"
+    },
+    "schema:docs/string-assertions-delivery/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/string-assertions-delivery/README.md",
+      "sha256": "c35ac0911831cd70018807616f2a8208ea282c9568a8daeb34c94096a19249e2",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/string-assertions-delivery/README.md"
+    },
+    "schema:docs/contextual-assertions/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/contextual-assertions/README.md",
+      "sha256": "e593cdae8902e1db96529960b1fc956760f605be0a7b04f18d1daae6db33c9a5",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/contextual-assertions/README.md"
+    },
+    "schema:docs/date-simple-content-implementation/README.md": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-simple-content-implementation/README.md",
+      "sha256": "da50e77f5209fc1348d783d7e2d95d78082ec83415da9ac26e57af27255468e2",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-simple-content-implementation/README.md"
+    },
+    "schema:docs/date-simple-content-implementation/SUMMARY.json": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "docs/date-simple-content-implementation/SUMMARY.json",
+      "sha256": "fc135db4dd83899257c1bf52a5b3dfa28b7eae844dd369346fc71d1e32119a14",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/docs/date-simple-content-implementation/SUMMARY.json"
+    },
+    "schema:src/Bosak.Schema/Assessment/NativeDecimalSchema.cs": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "src/Bosak.Schema/Assessment/NativeDecimalSchema.cs",
+      "sha256": "4333936a9275848ee0e7c8411610c6fcb1704c2d52ab424f9c928f536a9cbcc1",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/src/Bosak.Schema/Assessment/NativeDecimalSchema.cs"
+    },
+    "schema:src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs",
+      "sha256": "13db84100d5aa8bfa9d77208db7728a4f427fbe442e866b170648f30ed72e995",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/src/Bosak.Schema/Assessment/NativeSimpleRestriction.cs"
+    },
+    "schema:src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs": {
+      "repository": "schema",
+      "revision": "5715afeadb6b3a998398c32f22d95f66f8e48891",
+      "path": "src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs",
+      "sha256": "e13c6c3413051e1c318d1e763fe0bae9d9bdd7758a146624ca2c15bfc883a123",
+      "url": "https://github.com/Fytala-Charles/Bosak.Schema/blob/5715afeadb6b3a998398c32f22d95f66f8e48891/src/Bosak.Schema/Assessment/NativeSchemaIncludes.cs"
+    }
+  }
+}

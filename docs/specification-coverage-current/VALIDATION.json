@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-25",
+  "scope": "Current coverage audit plus package README/release guard preparation; no product C# semantics/API/version change",
+  "sourceTestsPassed": 26750,
+  "releaseControlsPassed": 18,
+  "oldVerifierRegressionFailures": 4,
+  "packageConsumerPassed": 73,
+  "smokeConsumerPassed": 53,
+  "readmeExamplesPassed": 2,
+  "localPackages": 10,
+  "localPackagesAreHostedReleaseArtifacts": false,
+  "productSourceChanged": false,
+  "packagingChanged": true,
+  "mirroredMatrixAndGuide": true,
+  "pairedEvidenceFiles": 79,
+  "reviewedSectionReferences": 38,
+  "historicalMatrixPreserved": true,
+  "initialFixtureFailuresPreserved": 51,
+  "published": false,
+  "tagCreated": false,
+  "preparationApprovalIsNotPublicationApproval": true
+}

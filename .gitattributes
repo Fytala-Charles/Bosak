@@ -797,3 +797,10 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs -text whitespace=cr-at-eol
 /integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs text eol=lf
 /docs/guarded-calendar-query/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+# Preserve current cross-repository coverage audit bytes.
+/docs/specification-coverage-current/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+/docs/NUGET_README.md -text whitespace=cr-at-eol
+/.github/scripts/release_artifacts.py text eol=lf
+/.github/scripts/test_release_artifacts.py text eol=lf

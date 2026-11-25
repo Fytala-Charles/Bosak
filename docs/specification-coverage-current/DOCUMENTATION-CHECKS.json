@@ -1,0 +1,59 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "htmlSha256": "bd80f89b80cc81ffa5f852faa34d9af13966c3e8198d8c3d4ed4b8c78b4b5ebb"
+    },
+    {
+      "file": "ROADMAP.md",
+      "htmlSha256": "417a03d0818150c822f86fc5a617c8c723e2f3314a1505194218b0a73bd459ad"
+    },
+    {
+      "file": "AGENTS.md",
+      "htmlSha256": "f8563988a41a1f2e680dce353171afd483a433c26a25b333eaf1ced67dbf4c5f"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "htmlSha256": "f72e0e157c5ff8b3e77765cc5cea05ba6a5433ed7a3c120fd7e86f6cb13d10a7"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "fa43c924d3095492927b914cf7bf8a6181389d2b6576d0b86b0a9220c05ae41c"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "htmlSha256": "964f5a3618d17db46cac2a9854ecc709cb602fbf5c1dea0242e63105ef79d3eb"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "95068b5de052cb76e1a93d5298c5c976158f487e068729c27a1ec963eb540cb8"
+    },
+    {
+      "file": "docs/specification-coverage-current/README.md",
+      "htmlSha256": "44bd7cdbfd847cfcf473d8d57973a76c59d4375197be87f582d3df5a18f965f3"
+    },
+    {
+      "file": "docs/NUGET_README.md",
+      "htmlSha256": "c0a91314bdcd07320eb52698222360ef0cd024b7392bdefdbac6dfd627eb763a"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "71a94bb942d7514055fa4a02e4c130622ec3d42df59fa8be36b214534e0cf4ea"
+    }
+  ],
+  "localLinks": 3471,
+  "preexistingUnresolved": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "allNewLinksResolve": true,
+  "programmaticHtmlOnly": true,
+  "visualAcceptance": false,
+  "managedAssetsChanged": false
+}

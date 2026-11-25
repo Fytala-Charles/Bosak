@@ -4,6 +4,11 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Current XSD 1.1 coverage audit - 25 November 2026
+
+The [current audit](specification-coverage-current/README.md) reconciles 24 areas against qualified source revisions, normative section references and hashed evidence. It distinguishes bounded native support, legacy descriptors, explicit refusals and unpublished Core prerequisites. Selected expanded sample: 19 matches / 110 Unsupported / zero mismatches or harness errors; no conformance percentage. Schema native calendars await signed Core availability and separate adoption. The 19 November matrix remains historical and unchanged.
+
+
 ## Guarded calendar comparison candidate - 25 November 2026
 
 The [guarded calendar query profile](guarded-calendar-query/README.md) compares two admitted dateTime/dateTimeStamp or time scalars with a fixed implicit timezone, owned actual-type proof and cancellation/lifetime checks. Exact precision is retained; results are plain booleans. The new explicit CompileCalendarComparison factory leaves default query/map behavior unchanged. Source1.86.0 is unpublished; native Schema admission and C45 remain separate.
@@ -28,7 +33,7 @@ The [exact calendar foundation](exact-calendar-batch/README.md) adds explicit bo
 
 ## M1 namespace candidate - 19 November 2026
 
-The local M1 candidate adds namespace-aware expanded declaration names, qualified/unqualified local forms, QName assertion binding and zero-to-eight assertions within the finite decimal shape. All409source cases pass (315implementation/94public), including41authored clause-mapped cases and three real Core-session controls. Package-only94cases pass with Core1.81.2; a separate42case public lane passes with published Core1.81.17. Retained124/23/33binary catalogs pass with onlySchema.dll replaced; these lanes overlap. No Core runtime/API/source-wrapper pin, published package, version/tag or release-controller change. [Evidence](specification-coverage/M1-CANDIDATE-DELTA.json).
+The local M1 candidate adds namespace-aware expanded declaration names, qualified/unqualified local forms, QName assertion binding and zero-to-eight assertions within the finite decimal shape. All409source cases pass (315implementation/94public), including41authored clause-mapped cases and three real Core-session controls. Package-only94cases pass with Core1.81.2; a separate42case public lane passes with published Core 1.81.17. Retained124/23/33binary catalogs pass with onlySchema.dll replaced; these lanes overlap. No Core runtime/API/source-wrapper pin, published package, version/tag or release-controller change. [Evidence](specification-coverage/M1-CANDIDATE-DELTA.json).
 
 
 ## Shared specification coverage priority - 19 November 2026
@@ -38,7 +43,7 @@ Owner priority is specification coverage and useful external application workflo
 
 ## Native public Schema consumer qualification - 17 November 2026
 
-The [optional native Schema consumer](schema-native-consumer/README.md) now pins merged Schema9fd4e6a, including its public owned decimal-session entry. The current-Core lane runs260 implementation/legacy cases plus nine separate public-consumer cases without friend access. Source/test/fixture/legal hash guards bind58 inputs in exact LF/CRLF forms; altered source, fixture and legal copies refuse before compilation. Both the original typed-price output and the new native decimal example are verified. Schema's standalone package pins remain1.81.2; the wrapper tests Core1.81.17 without changing either engine. Full XSD1.1, positive universe compatibility, general API acceptance/freeze, performance budgets and publication remain separate. Historical integration dossiers are unchanged.
+The [optional native Schema consumer](schema-native-consumer/README.md) now pins merged Schema9fd4e6a, including its public owned decimal-session entry. The current-Core lane runs260 implementation/legacy cases plus nine separate public-consumer cases without friend access. Source/test/fixture/legal hash guards bind58 inputs in exact LF/CRLF forms; altered source, fixture and legal copies refuse before compilation. Both the original typed-price output and the new native decimal example are verified. Schema's standalone package pins remain1.81.2; the wrapper tests Core 1.81.17 without changing either engine. Full XSD1.1, positive universe compatibility, general API acceptance/freeze, performance budgets and publication remain separate. Historical integration dossiers are unchanged.
 
 
 
