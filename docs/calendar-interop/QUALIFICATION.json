@@ -1,0 +1,247 @@
+{
+  "date": "2026-11-25",
+  "sourceVersion": "1.85.0",
+  "newSourceCases": 44,
+  "newCoreCases": 42,
+  "newPublicRuntimeCases": 2,
+  "oracleIterations": 500,
+  "oracleIterationsAreSeparateCases": false,
+  "solutionPassed": 26678,
+  "packagePassed": 45,
+  "packageCasesAreRecompiledPublicConsumers": true,
+  "retainedBinaryQualificationClaim": false,
+  "lanes": {
+    "solution": [
+      {
+        "assembly": "bosak.xpath.core.tests.dll",
+        "passed": 437,
+        "total": 437,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.runtime.tests.dll",
+        "passed": 1966,
+        "total": 1966,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.compiler.tests.dll",
+        "passed": 66,
+        "total": 66,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.parser.tests.dll",
+        "passed": 202,
+        "total": 202,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.providers.database.tests.dll",
+        "passed": 47,
+        "total": 47,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xquery.tests.dll",
+        "passed": 841,
+        "total": 841,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.api.tests.dll",
+        "passed": 681,
+        "total": 681,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.providers.tests.dll",
+        "passed": 241,
+        "total": 241,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xpath.standard.tests.dll",
+        "passed": 13800,
+        "total": 13800,
+        "failed": 0
+      },
+      {
+        "assembly": "bosak.xslt.tests.dll",
+        "passed": 8397,
+        "total": 8397,
+        "failed": 0
+      }
+    ],
+    "language-server": [
+      {
+        "assembly": "bosak.languageserver.tests.dll",
+        "passed": 111,
+        "total": 111,
+        "failed": 0
+      }
+    ],
+    "package": [
+      {
+        "assembly": "calendarinterop.publicconsumer.dll",
+        "passed": 45,
+        "total": 45,
+        "failed": 0
+      }
+    ],
+    "schema-integration": [
+      {
+        "assembly": "bosak.schema.tests.dll",
+        "passed": 260,
+        "total": 260,
+        "failed": 0
+      }
+    ],
+    "schema-public": [
+      {
+        "assembly": "bosak.schema.coreconsumer.tests.dll",
+        "passed": 9,
+        "total": 9,
+        "failed": 0
+      }
+    ]
+  },
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.85.0",
+      "archiveSha256": "97e976e98c1b9c371b6a4e3677e36d749e2a397c40e2ccfca2ca3bf2983a2145",
+      "dllSha256": "6f48773f216af6551e51e714d05dec8b040deb42b1eb83a83ea416b60d7d6a0b",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.85.0",
+      "archiveSha256": "7827c2f224fdf0727c3468b890489e8f48bf409f0a78e13b9e306220ded07d20",
+      "dllSha256": "3cdbd93014ed35eb29848f1fd6063c35790438dddf5f670b249bea940c848e77",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.85.0",
+      "archiveSha256": "c69b479b6f57b6706824e39e17debf75f9ec1726878d92e2e03001bcc42664c9",
+      "dllSha256": "a536384a4a2660fe1b6da7ba108405239e61e76acd52ce60277c83d32142f170",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.85.0",
+      "archiveSha256": "226df8bb3f3c13aed3cc416f5378a2791d137677709762fe244663f3db64b3e1",
+      "dllSha256": "89b9751db37133c4ac20263368d81b4dbb609921a13867b2ecd26e3e523b31ca",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.85.0",
+      "archiveSha256": "5f9dc0207c0e96940bdaa8348a487668fd0da01e5ab471082731f8b3d03fea67",
+      "dllSha256": "b888d8a8e7e7a9d1e0069a2255dd633c2f9a300998b769526bd882f90db545be",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.85.0",
+      "archiveSha256": "1754106b72e44ce39508ab0cd69c23e1a2a42c284807a5527a4beaa910e59e73",
+      "dllSha256": "9ba08919badd16b8f471fb94edbcdf7c7f9ee280203704667d434d796175ce0b",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.85.0",
+      "archiveSha256": "9d11504a015b68c0846fad9f80dced599a1262a82590b7160c63b5de51c4ac72",
+      "dllSha256": "fb218a7d24461c1a0881be5d306acd483cc91c2efff1e2f35d636ae5944ac2c2",
+      "sourceMatches": true,
+      "consumerPresent": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.85.0",
+      "archiveSha256": "6f84c51afb0c189ac4b4e716f112aa3f8a6bc620760e7b70a33c78b7f945e8de",
+      "dllSha256": "4d31eaa21139354951f4d4e85f8be92651ec32c7765e32c6c2ee97ff232f0749",
+      "sourceMatches": true,
+      "consumerPresent": false,
+      "consumerMatches": null,
+      "unsignedLocalOnly": true
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.85.0",
+      "archiveSha256": "40fdb3ca54cb911bc45cbcccb3ea707711466ab64014010d59124719b07e451e",
+      "dllSha256": "271334d8a70bb6f6b18b09be9069898ad5b93ff0a9ebbbf36a8df6fbc7f53874",
+      "sourceMatches": true,
+      "consumerPresent": false,
+      "consumerMatches": null,
+      "unsignedLocalOnly": true
+    }
+  ],
+  "coreApiDelta": {
+    "preservedRows": 607,
+    "currentRows": 617,
+    "removedOrChangedRows": [],
+    "addedRows": [
+      "F|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|Instance|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|readonly=True",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|Equals|System.Boolean|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|GetHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmValue value",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|CompareXPath|System.Int32|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right,System.Int32 implicitTimezoneMinutes",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|CompareXsd|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|GetSameKeyHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmValue value",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|Read|Bosak.XPath.Core.Xdm.XdmExactCalendarValue|Bosak.XPath.Core.Xdm.XdmValue value",
+      "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|SameKey|System.Boolean|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+      "T|Bosak.XPath.Core.Xdm.XdmCalendarInterop",
+      "T|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer"
+    ],
+    "newTypes": [
+      "Bosak.XPath.Core.Xdm.XdmCalendarInterop",
+      "Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer"
+    ]
+  },
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "gatedQt4": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918
+  },
+  "build": {
+    "warnings": 16,
+    "errors": 0
+  },
+  "initialDiagnostic": {
+    "passed": 41,
+    "failed": 1,
+    "cause": "Fixture coefficient exceeded existing 256digit capacity; corrected whole seconds to zero for256scale vector",
+    "preserved": true
+  },
+  "schemaSourcePin": "9fd4e6acd20b34446d736ab0ec3fa2d439f9e337",
+  "schemaExamplesPassed": 2,
+  "published": false,
+  "schemaNativeAdmissionsChanged": false,
+  "legacyMapAndExpressionDispatchChanged": false
+}

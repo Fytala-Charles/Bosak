@@ -1,0 +1,21 @@
+{
+  "preservedRows": 607,
+  "currentRows": 617,
+  "removedOrChangedRows": [],
+  "addedRows": [
+    "F|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|Instance|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|readonly=True",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|Equals|System.Boolean|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer|GetHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmValue value",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|CompareXPath|System.Int32|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right,System.Int32 implicitTimezoneMinutes",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|CompareXsd|Bosak.XPath.Core.Xdm.XdmExactCalendarOrder|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|GetSameKeyHashCode|System.Int32|Bosak.XPath.Core.Xdm.XdmValue value",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|Read|Bosak.XPath.Core.Xdm.XdmExactCalendarValue|Bosak.XPath.Core.Xdm.XdmValue value",
+    "M|Bosak.XPath.Core.Xdm.XdmCalendarInterop|SameKey|System.Boolean|Bosak.XPath.Core.Xdm.XdmValue left,Bosak.XPath.Core.Xdm.XdmValue right",
+    "T|Bosak.XPath.Core.Xdm.XdmCalendarInterop",
+    "T|Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer"
+  ],
+  "newTypes": [
+    "Bosak.XPath.Core.Xdm.XdmCalendarInterop",
+    "Bosak.XPath.Core.Xdm.XdmCalendarInteropKeyComparer"
+  ]
+}

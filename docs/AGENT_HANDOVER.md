@@ -1,6 +1,17 @@
+## Calendar interoperability qualified - 25 November 2026
+
+Base6142be76487f928c7efea27598287d384a4f23ba; feature/calendar-interop-query-batch. Twenty plain legacy/exact projection and mixed comparison/key contracts are qualified:44new source cases(42Core/2public Runtime),26,678solution/111LS/45no-friend package/260+9Schema integration and both examples pass.500DTO oracle iterations are assertions, not extra cases. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918 and grouped skip reasons unchanged.607old Core API rows preserved;10additive rows in2new types. Nine local unsigned package DLLs match source/consumers. Build16warnings(existing code/audit retrieval),0errors. Initial invalid coefficient-capacity fixture and corrected final runs retained separately. [Dossier](calendar-interop/README.md).
+
+All authority carriers refuse plain projection without provider calls, including after expiry. Time discards its incidental date; legacy milliseconds cannot recover previously discarded ticks. Guarded query calendar comparison and native Schema admission remain separate next work. Default operators/maps/getters/representation binding and signed pins unchanged. Source1.85.0unpublished; no registry/tag publication. Delivery pending exact-head PR checks and owner-authorized automatic passing merge.
+
 ## Exact calendar comparison qualified - 25 November 2026
 
 Base53e53ee91a3684c7f2f5f4083db56a6e1c9e5496; feature/exact-calendar-comparison-batch. Twenty related explicit comparison contracts,44new source cases;26,634solution/111LS/44no-friend package/260+9Schema integration and both examples pass. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918. Three new Core types/15additive rows preserve592old rows. New APIs distinguish XPath implicit context, XSD partial order and exact-only CLR same-key semantics; old representation/authority binding, existing maps and default operators remain unchanged. Source1.84.0unpublished; no signed/Schema pin or native admission/C45 change. See [dossier](exact-calendar-comparison/README.md).
+
+## Calendar interoperability candidate - 25 November 2026
+
+The [explicit calendar interoperability API](calendar-interop/README.md) converts plain legacy/exact atoms, preserves stored precision and timezone presence, and supports mixed exact comparisons plus an opt-in CLR key comparer. Legacy time drops its incidental date; inconsistent timezone fields and all authority-bearing carriers refuse. Guarded query comparison and native Schema admission remain next work. Source1.85.0 is unpublished; existing maps/operators and signed pins are unchanged.
+
 
 ## Exact calendar transport qualification - 25 November 2026
 

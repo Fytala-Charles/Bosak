@@ -1,5 +1,10 @@
 ## Native public Schema consumer qualification - 17 November 2026
 
+## Calendar interoperability candidate - 25 November 2026
+
+The [explicit calendar interoperability API](calendar-interop/README.md) converts plain legacy/exact atoms, preserves stored precision and timezone presence, and supports mixed exact comparisons plus an opt-in CLR key comparer. Legacy time drops its incidental date; inconsistent timezone fields and all authority-bearing carriers refuse. Guarded query comparison and native Schema admission remain next work. Source1.85.0 is unpublished; existing maps/operators and signed pins are unchanged.
+
+
 ## Exact calendar comparison candidate - 25 November 2026
 
 The [explicit comparison APIs](exact-calendar-comparison/README.md) distinguish XPath implicit-timezone comparison, XSD partial order and exact-only CLR same-key semantics. BigInteger timeline arithmetic retains fractional precision and UTC day displacement. Representation identity/authority binding, existing maps/default expression operators and native Schema admissions are unchanged. Source1.84.0 is unpublished; no signed-pin or registry change.
