@@ -65,6 +65,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.13  | 04-11-2026     | Retain supplied CLR decimal scale/coefficient for numeric limit admission (1.48.0).      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.14  | 25-11-2026     | Add explicit exact calendar payload, safe legacy refusals and exact evidence binding     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Numerics;
@@ -229,6 +230,34 @@ public readonly struct XdmValue
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static XdmValue FromJNode(XdmJNode jnode)
         => new(XdmValueKind.JNode, reference: jnode);
+
+    /// <summary>Creates an opt-in exact calendar atomic value; this does not grant schema authority.</summary>
+    /// <param name="value">Validated nondefault calendar components.</param>
+    /// <param name="userSchemaTypeName">Optional descriptive user type annotation, without authority.</param>
+    /// <returns>A DateTime or Time atomic value preserving exact components and builtin family.</returns>
+    /// <exception cref="ArgumentException">The calendar value is uninitialized.</exception>
+    public static XdmValue FromExactCalendar(XdmExactCalendarValue value, string? userSchemaTypeName = null)
+    {
+        var annotation = value.Kind switch
+        {
+            XdmExactCalendarKind.DateTime => "dateTime",
+            XdmExactCalendarKind.DateTimeStamp => "dateTimeStamp",
+            XdmExactCalendarKind.Time => "time",
+            _ => throw new ArgumentException("An initialized exact calendar value is required.", nameof(value))
+        };
+        return new(value.Kind == XdmExactCalendarKind.Time ? XdmValueKind.Time : XdmValueKind.DateTime,
+            reference: new ExactCalendarPayload(value), schemaTypeName: annotation, userSchemaTypeName: userSchemaTypeName);
+    }
+    /// <summary>Gets whether this atomic carrier uses opt-in exact calendar representation.</summary>
+    public bool IsExactCalendar => SchemaTransportPayload is ExactCalendarPayload;
+    /// <summary>Gets exact calendar components without narrowing or inferring schema authority.</summary>
+    /// <exception cref="InvalidOperationException">This is not an exact calendar carrier.</exception>
+    public XdmExactCalendarValue ExactCalendarValue => SchemaTransportPayload is ExactCalendarPayload payload
+        ? payload.Value : throw new InvalidOperationException("An exact calendar carrier is required.");
+    private void RefuseExactCalendarNarrowing()
+    {
+        if (IsExactCalendar) throw new NotSupportedException("Exact calendar payload requires the explicit exact accessor; legacy calendar execution is not admitted.");
+    }
 
     /// <summary>Creates an xs:dateTime value with a timezone.</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -521,12 +550,14 @@ public readonly struct XdmValue
     }
 
     /// <summary>Gets the dateTime payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
+    /// <exception cref="NotSupportedException">Exact calendar carriers require the explicit exact accessor.</exception>
     public DateTimeOffset DateTimeValue
     {
         get
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeValue));
+            RefuseExactCalendarNarrowing();
             return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
@@ -543,12 +574,14 @@ public readonly struct XdmValue
     }
 
     /// <summary>Gets the time payload as a <see cref="DateTimeOffset"/>; throws for extended years outside its range.</summary>
+    /// <exception cref="NotSupportedException">Exact calendar carriers require the explicit exact accessor.</exception>
     public DateTimeOffset TimeValue
     {
         get
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeValue));
+            RefuseExactCalendarNarrowing();
             return SchemaTransportPayload is DateTimeWrapper w ? w.Value.ToDateTimeOffset() : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true).ToDateTimeOffset();
         }
     }
@@ -557,12 +590,14 @@ public readonly struct XdmValue
     /// Returns the underlying <see cref="XPathDateTime"/> for dateTime values,
     /// including support for extended years that cannot be represented by <see cref="DateTimeOffset"/>.
     /// </summary>
+    /// <exception cref="NotSupportedException">Exact calendar carriers require the explicit exact accessor.</exception>
     public XPathDateTime DateTimeXPathValue
     {
         get
         {
             if (_kind != XdmValueKind.DateTime)
                 ThrowInvalidAccess(nameof(DateTimeXPathValue));
+            RefuseExactCalendarNarrowing();
             return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
         }
     }
@@ -585,12 +620,14 @@ public readonly struct XdmValue
     /// Returns the underlying <see cref="XPathDateTime"/> for time values,
     /// including support for extended years that cannot be represented by <see cref="DateTimeOffset"/>.
     /// </summary>
+    /// <exception cref="NotSupportedException">Exact calendar carriers require the explicit exact accessor.</exception>
     public XPathDateTime TimeXPathValue
     {
         get
         {
             if (_kind != XdmValueKind.Time)
                 ThrowInvalidAccess(nameof(TimeXPathValue));
+            RefuseExactCalendarNarrowing();
             return SchemaTransportPayload is DateTimeWrapper w ? w.Value : ((DateTimeOffset)SchemaTransportPayload!).ToXPathDateTime(hasTimezone: true);
         }
     }
@@ -602,6 +639,7 @@ public readonly struct XdmValue
         {
             if (_kind is not (XdmValueKind.DateTime or XdmValueKind.Date or XdmValueKind.Time))
                 return false;
+            if (SchemaTransportPayload is ExactCalendarPayload exact) return exact.Value.HasTimezone;
             return SchemaTransportPayload is not DateTimeWrapper w || w.HasTimezone;
         }
     }
@@ -725,11 +763,12 @@ public readonly struct XdmValue
             "FORG0006: Invalid argument type for fn:boolean() / effective boolean value");
     }
 
-    /// <summary>Formats the value using the existing legacy representation profile.</summary>
-    /// <returns>The legacy numeric or ordinary value text.</returns>
+    /// <summary>Formats ordinary values or opt-in exact calendar components.</summary>
+    /// <returns>Ordinary or exact component text; not canonical UTC serialization.</returns>
     /// <exception cref="OverflowException">An exact numeric value cannot be narrowed to the legacy formatting range. Use its exact accessor for explicit formatting.</exception>
     public override string ToString()
     {
+        if (SchemaTransportPayload is ExactCalendarPayload exact) return exact.Value.ToInvariantString(1024);
         return _kind switch
         {
             XdmValueKind.Undefined => "()",
@@ -1004,6 +1043,8 @@ public readonly struct XdmValue
                 return left is XsQName q && right is XsQName r
                     && q.LocalName == r.LocalName && q.NamespaceUri == r.NamespaceUri && q.Prefix == r.Prefix;
             case XdmValueKind.Date: case XdmValueKind.Time: case XdmValueKind.DateTime:
+                if (left is ExactCalendarPayload || right is ExactCalendarPayload)
+                    return left is ExactCalendarPayload aCalendar && right is ExactCalendarPayload bCalendar && aCalendar.Value.Equals(bCalendar.Value);
                 if (left is not DateTimeWrapper x || right is not DateTimeWrapper y) return false;
                 var d = x.Value; var e = y.Value;
                 return x.HasTimezone == y.HasTimezone && d.Year == e.Year && d.Month == e.Month && d.Day == e.Day
@@ -1039,6 +1080,7 @@ public readonly struct XdmValue
     private sealed record SchemaTransportBox(object? Payload, object Marker);
     private sealed record ExactIntegerPayload(BigInteger Value);
     private sealed record ExactDecimalPayload(XdmExactDecimal Value);
+    private sealed record ExactCalendarPayload(XdmExactCalendarValue Value);
     /// <summary>Internal atomic marker attachment; admission belongs to the evidence kernel.</summary>
     /// <param name="value">The plain atomic value.</param>
     /// <param name="marker">The private marker.</param>

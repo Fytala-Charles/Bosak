@@ -759,3 +759,15 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /src/Bosak.XPath.Core/Xdm/XdmExactCalendarValue.cs -text whitespace=cr-at-eol
 /tests/Bosak.XPath.Core.Tests/XdmExactCalendarTests.cs -text whitespace=cr-at-eol
 /docs/exact-calendar-batch-delivery/** -text whitespace=cr-at-eol
+
+# Stable LF bytes for exact calendar transport qualification.
+/src/Bosak.XPath.Core/Xdm/XdmValue.cs text eol=lf
+/src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs text eol=lf
+/src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs text eol=lf
+/src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs text eol=lf
+/integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs text eol=lf
+/tests/Bosak.XPath.Core.Tests/ExactCalendarAtomicTests.cs text eol=lf
+/tests/Bosak.XPath.Core.Tests/ExactCalendarAuthorityTests.cs text eol=lf
+/tests/Bosak.XPath.Runtime.Tests/CalendarTransportSupport.cs text eol=lf
+/tests/Bosak.XPath.Runtime.Tests/ExactCalendarPublicTransportTests.cs text eol=lf
+/docs/exact-calendar-transport/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

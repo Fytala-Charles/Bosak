@@ -1,0 +1,236 @@
+{
+  "date": "2026-11-25",
+  "sourceVersion": "1.83.0",
+  "newSourceCases": 51,
+  "publicRuntimeCases": 16,
+  "solutionPassed": 26590,
+  "packagePassed": 42,
+  "packageCasesAreRecompiledPublicConsumers": true,
+  "retainedBinaryQualificationClaim": false,
+  "lanes": {
+    "solution": [
+      {
+        "assembly": "Bosak.XPath.Core.Tests.dll",
+        "total": 352,
+        "passed": 352,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Runtime.Tests.dll",
+        "total": 1963,
+        "passed": 1963,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Compiler.Tests.dll",
+        "total": 66,
+        "passed": 66,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Parser.Tests.dll",
+        "total": 202,
+        "passed": 202,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Api.Tests.dll",
+        "total": 681,
+        "passed": 681,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Providers.Database.Tests.dll",
+        "total": 47,
+        "passed": 47,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Providers.Tests.dll",
+        "total": 241,
+        "passed": 241,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XQuery.Tests.dll",
+        "total": 841,
+        "passed": 841,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.XPath.Standard.Tests.dll",
+        "total": 13800,
+        "passed": 13800,
+        "failed": 0
+      },
+      {
+        "assembly": "Bosak.Xslt.Tests.dll",
+        "total": 8397,
+        "passed": 8397,
+        "failed": 0
+      }
+    ],
+    "language-server": [
+      {
+        "assembly": "Bosak.LanguageServer.Tests.dll",
+        "total": 111,
+        "passed": 111,
+        "failed": 0
+      }
+    ],
+    "package": [
+      {
+        "assembly": "CalendarTransport.PublicConsumer.dll",
+        "passed": 42,
+        "total": 42,
+        "failed": 0
+      }
+    ],
+    "schema-integration": [
+      {
+        "assembly": "Bosak.Schema.Tests.dll",
+        "total": 260,
+        "passed": 260,
+        "failed": 0
+      }
+    ],
+    "schema-public": [
+      {
+        "assembly": "Bosak.Schema.CoreConsumer.Tests.dll",
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      }
+    ]
+  },
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.83.0",
+      "archiveSha256": "2009077ea12aebdda8cfa450bf814468c997c9ba564f039dfa21d95cf8588a6f",
+      "dllSha256": "fe8c68a86aefa45376c5a057e089ccf87d1aa5c048b48f4f8c76be026744c55f",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.83.0",
+      "archiveSha256": "c1d08ea03a8f6ccb695f25cb41a3c935647cb17b279e00a7e375692bd3deafe7",
+      "dllSha256": "906e3e7b8c6cb677debc5bec4d8c7bbfba829321583875a84173f36c951aa82c",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.83.0",
+      "archiveSha256": "51ed68f6c97da57175d7294d38c6c275fb1c2700a9d80df93cba2335f303685b",
+      "dllSha256": "f2d80b070d20100711f5b3e32e83538cdd93afbc2e02ca32b346cbf74f2ac0e0",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.83.0",
+      "archiveSha256": "7a5c3c99e5bdfbee5b61f41a8fae4c33432339156e6e0c3512fa8288885adafc",
+      "dllSha256": "2030b73a6630da32cae2097e5089fc4f8d9039aa7c3261d197dae3a31e4f6f61",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.83.0",
+      "archiveSha256": "34d9a9abeaacc1d8bd2cb7c28d8236239504a4a234b824d8ab0a2a9ab174488e",
+      "dllSha256": "e8461ce70da661a4e5a1161b84e5fa7487847f42c992a4deba5517691ca8963d",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.83.0",
+      "archiveSha256": "f12fe56e2b3c3f47910d2d30fbf6fc397f9f01386b048af3670965bd3e7a2ef9",
+      "dllSha256": "3535a10cbce7bc8005f10c53ba96b09fc67621a8eeb8b13152dfe1c3f7a52986",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.83.0",
+      "archiveSha256": "f87344fae55eb7a1890eac912d1b775a292c58c9dd368b8fab72137b3c7686ff",
+      "dllSha256": "00694e8c175f9e271c4447db6af5806f734c11e2f046ad8e19f59f257e617103",
+      "sourceMatches": true,
+      "consumerMatches": true,
+      "unsignedLocalOnly": true,
+      "consumerPresent": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.83.0",
+      "archiveSha256": "fa7da8b5bfab3ffb92a975bc2e7c55afc1be24e3441cb04e698d42b9e6015031",
+      "dllSha256": "60422e90dd0df3d9f3d921ad95c89fe8aa84df5ef9d9c3965708803373fa8192",
+      "sourceMatches": true,
+      "consumerMatches": null,
+      "unsignedLocalOnly": true,
+      "consumerPresent": false
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.83.0",
+      "archiveSha256": "2b695034dbd32822710e63443211fe9ffa5da33fd179a72d205a0416dbd4a820",
+      "dllSha256": "4f0a5be06b445755ef76ff65d24e455da2e15982ff4e70ddd8dc75e572dd9713",
+      "sourceMatches": true,
+      "consumerMatches": null,
+      "unsignedLocalOnly": true,
+      "consumerPresent": false
+    }
+  ],
+  "coreApiDelta": {
+    "oldRows": 589,
+    "currentRows": 592,
+    "types": 65,
+    "removedOrChangedRows": [],
+    "addedRows": [
+      "M|Bosak.XPath.Core.Xdm.XdmValue|FromExactCalendar|Bosak.XPath.Core.Xdm.XdmValue|Bosak.XPath.Core.Xdm.XdmExactCalendarValue value,System.String userSchemaTypeName=null",
+      "P|Bosak.XPath.Core.Xdm.XdmValue|ExactCalendarValue|Bosak.XPath.Core.Xdm.XdmExactCalendarValue|True|False",
+      "P|Bosak.XPath.Core.Xdm.XdmValue|IsExactCalendar|System.Boolean|True|False"
+    ],
+    "newTypes": []
+  },
+  "qt3": {
+    "passed": 31397,
+    "failed": 0,
+    "skipped": 424
+  },
+  "gatedQt4": {
+    "passed": 8941,
+    "failed": 0,
+    "skipped": 1918
+  },
+  "build": {
+    "warnings": 16,
+    "errors": 0
+  },
+  "schemaSourcePin": "9fd4e6acd20b34446d736ab0ec3fa2d439f9e337",
+  "examplesPassed": 2,
+  "published": false,
+  "schemaNativeAdmissionsChanged": false,
+  "newCoreCases": 35,
+  "privateKernelCases": 10,
+  "publicCoreAtomicCases": 25,
+  "commentOnlyFinalCorrections": [
+    "SchemaQueryLimits history increment0.4",
+    "XdmValue.ToString XML formatting documentation"
+  ],
+  "fullSolutionAndConformanceSemanticBodiesUnchangedAfterQualification": true
+}

@@ -1,0 +1,37 @@
+{
+  "blockingFindings": [],
+  "reviewed": [
+    "Existing XdmValue instance fields and kinds unchanged; exactly three additive Core API rows",
+    "Exact representation bound before private marker authorization; legacy/exact representations never conflated",
+    "Legacy narrowing getters and map-key shortcuts refuse opt-in payloads",
+    "Selected provider/component/origin identity, private marker forgery, snapshot/session expiry and plain-copy refusal",
+    "Receiving query capacities check normalized stored seconds before cache/publication",
+    "Independent package assembly has no Core/Api/Runtime friend access",
+    "Unchanged signed pins, native Schema admissions and historical seals"
+  ],
+  "resolvedFindings": [
+    {
+      "finding": "Test used a nonexistent sequence constructor",
+      "resolution": "Used public Singleton factory and sequence enumerator; focused tests pass"
+    },
+    {
+      "finding": "Public test fixture imported two SchemaQuerySession types",
+      "resolution": "Explicitly aliased the public API session; independent package consumer compiles without friend access"
+    },
+    {
+      "finding": "New exact fractions needed explicit receiving-capacity policy",
+      "resolution": "Recorded CAPACITY-ADDENDUM before adding runtime guard and tested refusal/recovery"
+    },
+    {
+      "finding": "Final review identified header-history and ToString XML documentation alignment",
+      "resolution": "Comment-only corrections, nonsemantic source identity checks, rebuilt nine candidates and another fresh-cache42-case public pass; original qualification preserved."
+    }
+  ],
+  "notAdopted": [
+    "General calendar execution/casts/arithmetic",
+    "Instant equality/same-key hashing",
+    "UTC canonical serialization",
+    "Native Schema datatype or constructed-value admission",
+    "C45 general API acceptance/freeze"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "oldRows": 589,
+  "currentRows": 592,
+  "types": 65,
+  "removedOrChangedRows": [],
+  "addedRows": [
+    "M|Bosak.XPath.Core.Xdm.XdmValue|FromExactCalendar|Bosak.XPath.Core.Xdm.XdmValue|Bosak.XPath.Core.Xdm.XdmExactCalendarValue value,System.String userSchemaTypeName=null",
+    "P|Bosak.XPath.Core.Xdm.XdmValue|ExactCalendarValue|Bosak.XPath.Core.Xdm.XdmExactCalendarValue|True|False",
+    "P|Bosak.XPath.Core.Xdm.XdmValue|IsExactCalendar|System.Boolean|True|False"
+  ],
+  "newTypes": []
+}

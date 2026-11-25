@@ -22,6 +22,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 04-11-2026     | Compare/hash normalized exact numeric pairs without scale-expanded strings (1.49.0).     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 25-11-2026     | Refuse unadopted exact-calendar map equality and hashing before shortcuts                |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Core.Xdm;
@@ -41,6 +42,7 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
     /// <summary>Compares two values with op:same-key semantics (numeric promotion, string/URI comparability).</summary>
     public bool Equals(XdmValue x, XdmValue y)
     {
+        if (x.IsExactCalendar || y.IsExactCalendar) throw new NotSupportedException("Exact calendar map-key semantics are not admitted.");
         if (IsNumeric(x) && IsNumeric(y))
             return NumericEquals(x, y);
 
@@ -74,6 +76,7 @@ public sealed class XdmValueEqualityComparer : IEqualityComparer<XdmValue>
     /// <summary>Returns a hash code consistent with op:same-key equality, so equal keys hash alike.</summary>
     public int GetHashCode(XdmValue obj)
     {
+        if (obj.IsExactCalendar) throw new NotSupportedException("Exact calendar map-key semantics are not admitted.");
         if (IsNumeric(obj))
         {
             // Normalized exact pairs share hashes without padding a supplied decimal scale.

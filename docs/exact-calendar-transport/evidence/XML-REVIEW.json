@@ -1,0 +1,7 @@
+{
+  "file": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+  "correction": "ToString XML summary/returns describe exact component formatting",
+  "xmlCommentsOnly": true,
+  "nonXmlSourceIdentical": true,
+  "nonXmlSha256": "46993c32482f0add7079b8cffa03587454db4ffb5a8ffe6888ef22cd74f240b3"
+}

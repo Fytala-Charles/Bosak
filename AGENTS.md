@@ -211,3 +211,7 @@ The reviewed whole-document checkpoint and delivery identities are in `docs/sche
 ## Exact calendar foundation candidate (25 November 2026)
 
 See docs/exact-calendar-batch/README.md and ADOPTION.json. New bounded value objects are opt-in component carriers only; do not infer XdmValue/Schema/PSVI admission. Source version 1.82.0 is unpublished. Preserve signed 1.81.17 and Schema pins. The twenty-contract batch has no registry/tag authorization.
+
+## Exact calendar transport candidate (25 November 2026)
+
+See docs/exact-calendar-transport for the twenty-contract batch. New XdmValue payloads retain exact components and existing authority protocols. Legacy getters and map-key semantics refuse these payloads; general calendar execution and Schema datatype admissions are not implied. Source1.83.0 is unpublished; preserve historical seals and signed/Schema pins. No registry/tag publication authorized.

@@ -4,6 +4,10 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Exact calendar transport candidate - 25 November 2026
+
+The [exact atomic transport](exact-calendar-transport/README.md) adds explicit XdmValue exact calendar storage and authenticated typed identity/container transport, with fractional precision, actual authority and expiry retained. Legacy getters/map-key operations refuse the new payloads; normalized stored seconds obey receiving capacities. Source1.83.0 is unpublished. No general calendar execution, native Schema datatype admission, signed-pin change or C45 acceptance is inferred.
+
 ## Exact calendar foundation candidate - 25 November 2026
 
 The [exact calendar foundation](exact-calendar-batch/README.md) adds explicit bounded decimal-second/calendar value objects with lossless conversions. Twenty contract groups cover precision, Gregorian/extended-year components, timezone presence, lexical forms, 24:00 rollover and representation identity. Candidate 1.82.0 is unpublished. Existing XdmValue/expression routes and signed 1.81.17/Schema pins remain unchanged; full exact atomic transport and Schema dateTime/time/dateTimeStamp admission are pending. No arithmetic, instant-comparison or PSVI authority support is inferred.

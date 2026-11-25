@@ -1,0 +1,8 @@
+{
+  "date": "2026-11-25",
+  "recordedBeforeRuntimeChange": true,
+  "contract": "C19/C20 existing query capacities",
+  "normativeSources": "ADOPTION.json immutable source pins; implementation capacity policy, not new XSD semantic adoption",
+  "decision": "At authenticated typed reads, existing numeric digit/scale limits also bound the exact calendar second coefficient/scale stored in the atomic payload. The calendar constructor already enforces its own supplied bounds before normalization. Receiver checks normalized stored representation and refuses before cache/publication; no claim to reconstruct earlier lexical scale.",
+  "unchanged": "Legacy calendar, integer and decimal routes keep existing behavior."
+}

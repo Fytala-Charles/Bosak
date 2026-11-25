@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 17-11-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 25-11-2026     | Pin current source consumer to additive Core 1.82.0 candidate                             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 25-11-2026     | Pin current-source integration to exact calendar transport candidate 1.83.0              |
 // ===========================================================================================================================================================
 
 using System.Runtime.CompilerServices;
@@ -109,7 +110,7 @@ public sealed class NativeDecimalCoreConsumerTests
     [Fact]
     public void Identity_CurrentCoreAndNoFriendAccess_AreExplicit()
     {
-        Assert.Equal(new Version(1, 82, 0, 0), typeof(XdmExactDecimal).Assembly.GetName().Version);
+        Assert.Equal(new Version(1, 83, 0, 0), typeof(XdmExactDecimal).Assembly.GetName().Version);
         var name = typeof(NativeDecimalCoreConsumerTests).Assembly.GetName().Name;
         var friends = typeof(NativeDecimalSession).Assembly.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false)
             .Cast<InternalsVisibleToAttribute>();

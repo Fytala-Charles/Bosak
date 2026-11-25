@@ -1,4 +1,12 @@
+## Exact calendar transport qualification - 25 November 2026
+
+Base3a74b0e5de46bc3312b2dd84eca2c8b482cc76a0; feature/exact-calendar-transport-batch. Twenty related contracts,51new source cases,26,590solution/111language-server/42package/260+9Schema integration and both examples pass. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918. Exactly3additive Core API rows; no removals. Final comment-only header/XML corrections are rebuilt and independently requalified. Source1.83.0 unpublished; signed and Schema pins unchanged. Public typed identity authority is preserved, plain factories mint none, legacy narrowing/map semantics refuse new payloads. No broader calendar execution/native Schema admission/C45 claim. See [dossier](exact-calendar-transport/README.md).
+
 ## Native Schema consumer qualified locally - 17 November 2026
+
+## Exact calendar transport candidate - 25 November 2026
+
+The [exact atomic transport](exact-calendar-transport/README.md) adds explicit XdmValue exact calendar storage and authenticated typed identity/container transport, with fractional precision, actual authority and expiry retained. Legacy getters/map-key operations refuse the new payloads; normalized stored seconds obey receiving capacities. Source1.83.0 is unpublished. No general calendar execution, native Schema datatype admission, signed-pin change or C45 acceptance is inferred.
 
 
 ## Exact calendar foundation candidate - 25 November 2026
