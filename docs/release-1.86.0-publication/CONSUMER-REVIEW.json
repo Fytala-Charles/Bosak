@@ -1,0 +1,193 @@
+{
+  "recompiledSourceConsumers": true,
+  "retainedBinaryQualification": false,
+  "smoke": {
+    "success": true,
+    "passed": 53,
+    "failed": 0,
+    "cases": [
+      "xpath/arithmetic",
+      "xpath/empty",
+      "xpath/map",
+      "date/castable/2026-11-16",
+      "date/construct/2026-11-16",
+      "date/castable/0000-02-29Z",
+      "date/construct/0000-02-29Z",
+      "date/castable/ 2026-11-16+05:30 ",
+      "date/construct/ 2026-11-16+05:30 ",
+      "date/castable/10000-01-01",
+      "date/construct/10000-01-01",
+      "date/castable/-0004-02-29",
+      "date/construct/-0004-02-29",
+      "date/castable/1900-02-29",
+      "date/refusal/1900-02-29",
+      "date/castable/2026-11-16+14:01",
+      "date/refusal/2026-11-16+14:01",
+      "date/castable/2026-11-16z",
+      "date/refusal/2026-11-16z",
+      "date/empty",
+      "xquery/flwor",
+      "xquery/empty",
+      "xslt/sourcefree",
+      "xslt/materialized",
+      "xslt/streaming",
+      "xslt/input-ownership",
+      "provider/first",
+      "provider/attribute",
+      "provider/namespace",
+      "provider/second",
+      "provider/held-record",
+      "provider/end",
+      "provider/reader-ownership",
+      "database/schemes",
+      "database/materialized-load",
+      "database/streaming/first",
+      "database/streaming/attribute",
+      "database/streaming/namespace",
+      "database/streaming/second",
+      "database/streaming/held-record",
+      "database/streaming/end",
+      "database/rest-paths",
+      "database/non-database-dispatch",
+      "assembly/Bosak.XPath.Api",
+      "assembly/Bosak.XPath.Compiler",
+      "assembly/Bosak.XPath.Core",
+      "assembly/Bosak.XPath.Parser",
+      "assembly/Bosak.XPath.Providers",
+      "assembly/Bosak.XPath.Runtime",
+      "assembly/Bosak.XPath.Standard",
+      "assembly/Bosak.XQuery",
+      "assembly/Bosak.Xslt",
+      "assembly/Bosak.XPath.Providers.Database"
+    ],
+    "assemblies": [
+      {
+        "name": "Bosak.XPath.Api",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+        "sha256": "b141c9d0651042a4fcf19e100053321ae5ddd7675d0b02ed1fdd8708a2069f36"
+      },
+      {
+        "name": "Bosak.XPath.Compiler",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+        "sha256": "d5b5147a9a89fca763df5ac3926a57bd41415b0e06b964a45fdada7ba62ebc36"
+      },
+      {
+        "name": "Bosak.XPath.Core",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+        "sha256": "ac68574ac1a955183b4c5f4c178beadbd600774cbf7b8f3393f245c7f159bbb8"
+      },
+      {
+        "name": "Bosak.XPath.Parser",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+        "sha256": "aeb484f0ba9cb4b96a900ef716fdec1225619b931207f9bacd2301360e552920"
+      },
+      {
+        "name": "Bosak.XPath.Providers",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+        "sha256": "27bdb7f6a8f10cfab7c3510966a91488005b6a7c22d12047f8cda39af3ae5abb"
+      },
+      {
+        "name": "Bosak.XPath.Runtime",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+        "sha256": "a8d87bbe5ca2980569bc9037c240445ca18d45724dc324dd0dcafd30e8901d04"
+      },
+      {
+        "name": "Bosak.XPath.Standard",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+        "sha256": "bc24e95122c5180f97c15819a2ce24e576238d19e296377f299fa3afd252cb67"
+      },
+      {
+        "name": "Bosak.XQuery",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XQuery.dll",
+        "sha256": "cec0509394ce580a8dc3ab836a5d308d8bd370ecfc8ac9f326ca7cf998ead8f0"
+      },
+      {
+        "name": "Bosak.Xslt",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.Xslt.dll",
+        "sha256": "22fbb7d9d7f23b26b912efa281cf4290a04489412f7a5ac33a1ebe4ea7cc9572"
+      },
+      {
+        "name": "Bosak.XPath.Providers.Database",
+        "version": "1.86.0.0",
+        "path": "D:\\Development\\Bosak\\.guard-tmp\\coverage-release-186\\registry186-consumer-smoke\\bin\\Release\\net10.0\\Bosak.XPath.Providers.Database.dll",
+        "sha256": "a6ffe98760da0b6a8b14cbc3cac01dfdaffa3b31c76395fe69bddb69d04065b2"
+      }
+    ],
+    "framework": "10.0.11",
+    "databaseScope": "Loopback BaseX REST fixture plus scheme/dispatch checks; no live BaseX/eXist/MarkLogic acceptance",
+    "schemaAwareAcceptance": false,
+    "performanceGuarantee": false,
+    "packagePublicationAuthorized": false
+  },
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "packageSha256": "c0e3f14d2cb371a5ce39473272c404e28ce902ceabb1e004091253c29a4fcecd",
+      "dllSha256": "b141c9d0651042a4fcf19e100053321ae5ddd7675d0b02ed1fdd8708a2069f36",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "packageSha256": "b3b035b69e2b1015a154abc07bf6d895baa37aaacd8f3308635ce6c5db8c5b8b",
+      "dllSha256": "d5b5147a9a89fca763df5ac3926a57bd41415b0e06b964a45fdada7ba62ebc36",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "packageSha256": "0e18903053869899a1e13054131cc9ae6a7aff82e02d0a9096bf820149fddaea",
+      "dllSha256": "ac68574ac1a955183b4c5f4c178beadbd600774cbf7b8f3393f245c7f159bbb8",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "packageSha256": "7893757be0d40a0c7bea9b285281ef0f68c0c24018ddb59aefa5ca4b86e5d0a8",
+      "dllSha256": "aeb484f0ba9cb4b96a900ef716fdec1225619b931207f9bacd2301360e552920",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "packageSha256": "adccb4201a33e243ecf3feaa99365511c6e0d5f73772477f78caf12a50e3240e",
+      "dllSha256": "27bdb7f6a8f10cfab7c3510966a91488005b6a7c22d12047f8cda39af3ae5abb",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "packageSha256": "bf33bc2667cb8df8c955bfafba665676297035dcbc5db0f72ad4f6880f6f6d51",
+      "dllSha256": "a6ffe98760da0b6a8b14cbc3cac01dfdaffa3b31c76395fe69bddb69d04065b2",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "packageSha256": "4acdbe845ab4b7b8755e983945c25de54385eee92b499b9fea43e10da9a85856",
+      "dllSha256": "a8d87bbe5ca2980569bc9037c240445ca18d45724dc324dd0dcafd30e8901d04",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "packageSha256": "cb8fa802cd8648c184c83bd65a382b72a495abeee12a38b184aa4cdc2992c7b2",
+      "dllSha256": "bc24e95122c5180f97c15819a2ce24e576238d19e296377f299fa3afd252cb67",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "packageSha256": "9daf3b89633cf920bef8e31f9828b0e664d1b4ef88db0960a0c0dee3f25e993e",
+      "dllSha256": "cec0509394ce580a8dc3ab836a5d308d8bd370ecfc8ac9f326ca7cf998ead8f0",
+      "readmeMatches": true
+    },
+    {
+      "id": "Bosak.Xslt",
+      "packageSha256": "18bdbe9e8342221bed3430b4bd3e236aa78c04e92872edcb7053a4f5143f9f40",
+      "dllSha256": "22fbb7d9d7f23b26b912efa281cf4290a04489412f7a5ac33a1ebe4ea7cc9572",
+      "readmeMatches": true
+    }
+  ]
+}

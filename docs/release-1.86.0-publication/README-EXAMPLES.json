@@ -1,0 +1,12 @@
+[
+  {
+    "example": 1,
+    "expected": "60",
+    "passed": true
+  },
+  {
+    "example": 2,
+    "expected": "-1",
+    "passed": true
+  }
+]

@@ -1,0 +1,133 @@
+{
+  "conclusion": "success",
+  "headSha": "2d353912954f03caa44ba2d6e96a8a6224a077d5",
+  "jobs": [
+    {
+      "completedAt": "2026-11-25T17:17:47Z",
+      "conclusion": "success",
+      "databaseId": 139377599758,
+      "name": "publish",
+      "startedAt": "2026-11-25T17:16:38Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-11-25T17:16:40Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-11-25T17:16:39Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:16Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-11-25T17:16:40Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:17Z",
+          "conclusion": "success",
+          "name": "Validate preparation run",
+          "number": 3,
+          "startedAt": "2026-11-25T17:17:16Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:18Z",
+          "conclusion": "success",
+          "name": "Run actions/download-artifact@v4",
+          "number": 4,
+          "startedAt": "2026-11-25T17:17:17Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:20Z",
+          "conclusion": "success",
+          "name": "Checkout the artifact's source commit",
+          "number": 5,
+          "startedAt": "2026-11-25T17:17:18Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:28Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-dotnet@v4",
+          "number": 6,
+          "startedAt": "2026-11-25T17:17:20Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:28Z",
+          "conclusion": "success",
+          "name": "Verify the exact reviewed artifact set",
+          "number": 7,
+          "startedAt": "2026-11-25T17:17:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:31Z",
+          "conclusion": "success",
+          "name": "NuGet login (OIDC)",
+          "number": 8,
+          "startedAt": "2026-11-25T17:17:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:45Z",
+          "conclusion": "success",
+          "name": "Push the verified packages without rebuilding",
+          "number": 9,
+          "startedAt": "2026-11-25T17:17:31Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:45Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-dotnet@v4",
+          "number": 16,
+          "startedAt": "2026-11-25T17:17:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:45Z",
+          "conclusion": "success",
+          "name": "Post Checkout the artifact's source commit",
+          "number": 17,
+          "startedAt": "2026-11-25T17:17:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:45Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 18,
+          "startedAt": "2026-11-25T17:17:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-11-25T17:17:45Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 19,
+          "startedAt": "2026-11-25T17:17:45Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/45663011066/job/139377599758"
+    },
+    {
+      "completedAt": "2026-11-25T17:16:36Z",
+      "conclusion": "skipped",
+      "databaseId": 139377602639,
+      "name": "prepare",
+      "startedAt": "2026-11-25T17:16:37Z",
+      "status": "completed",
+      "steps": [],
+      "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/45663011066/job/139377602639"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/45663011066"
+}

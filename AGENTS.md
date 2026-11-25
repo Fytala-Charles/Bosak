@@ -1,3 +1,7 @@
+## Core 1.86.0 published - 25 November 2026
+
+All ten packages are now published and verified from the approved preparation artifacts without rebuilding. Repository signatures and exact payloads pass, as do fresh NuGet.org-only consumers: 53 smoke checks, 73 guarded calendar checks and two packaged examples. See the [publication record](docs/release-1.86.0-publication/README.md). This supersedes earlier unpublished calendar candidate notices. Native Schema admission/pin migration and C45 acceptance remain separate; the extension still bundles 1.81.17. Historical qualification packets remain unchanged.
+
 # Agent Instructions — Bosak XPath
 
 ## File Headers

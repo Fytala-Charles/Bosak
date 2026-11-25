@@ -4,6 +4,10 @@
   <p>Living feature registry and implementation status</p>
 </div>
 
+## Core 1.86.0 published - 25 November 2026
+
+All ten packages are now published and verified from the approved preparation artifacts without rebuilding. Repository signatures and exact payloads pass, as do fresh NuGet.org-only consumers: 53 smoke checks, 73 guarded calendar checks and two packaged examples. See the [publication record](release-1.86.0-publication/README.md). This supersedes earlier unpublished calendar candidate notices. Native Schema admission/pin migration and C45 acceptance remain separate; the extension still bundles 1.81.17. Historical qualification packets remain unchanged.
+
 ## Current XSD 1.1 coverage audit - 25 November 2026
 
 The [current audit](specification-coverage-current/README.md) reconciles 24 areas against qualified source revisions, normative section references and hashed evidence. It distinguishes bounded native support, legacy descriptors, explicit refusals and unpublished Core prerequisites. Selected expanded sample: 19 matches / 110 Unsupported / zero mismatches or harness errors; no conformance percentage. Schema native calendars await signed Core availability and separate adoption. The 19 November matrix remains historical and unchanged.

@@ -4,6 +4,10 @@
   <p>Supported consumer flows and lifetime boundaries</p>
 </div>
 
+## Core 1.86.0 published - 25 November 2026
+
+All ten packages are now published and verified from the approved preparation artifacts without rebuilding. Repository signatures and exact payloads pass, as do fresh NuGet.org-only consumers: 53 smoke checks, 73 guarded calendar checks and two packaged examples. See the [publication record](release-1.86.0-publication/README.md). This supersedes earlier unpublished calendar candidate notices. Native Schema admission/pin migration and C45 acceptance remain separate; the extension still bundles 1.81.17. Historical qualification packets remain unchanged.
+
 ## Core 1.86.0 release preparation - 25 November 2026
 
 Packages use the version-specific docs/NUGET_README.md as README.md. Release verification checks its exact source bytes, pinned installation version and NuGet metadata. Repository installation guidance remains at the verified published baseline until publication. The manual release workflow prepares ten immutable artifacts; publication consumes a separately approved manifest without rebuilding. No registry push, tag or native Schema pin change is authorized by preparation.

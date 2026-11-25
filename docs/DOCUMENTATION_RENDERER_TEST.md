@@ -1,3 +1,7 @@
+## NuGet 1.86.0 publication - 25 November 2026
+
+Current installation guidance and publication receipts are rendered programmatically with unchanged Fytala CSS; local links are checked. No screenshot or PDF acceptance is claimed. [Receipt](release-1.86.0-publication/DOCUMENTATION-CHECKS.json).
+
 ## Guarded calendar query documentation - 25 November 2026
 
 Canonical pages and the new query guide/contract/API review use unchanged Fytala CSS and local-link checking. Programmatic HTML only; no visual acceptance claim. [Receipt](guarded-calendar-query/DOCUMENTATION-CHECKS.json).
