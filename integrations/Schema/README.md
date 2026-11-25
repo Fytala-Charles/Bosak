@@ -1,3 +1,7 @@
+# Core 1.82.0 source candidate - 25 November 2026
+
+The current-source native consumer asserts exact Core 1.82.0.0 for the additive calendar foundation candidate. The Schema source revision/hash guards and standalone package pins remain unchanged. Historical Core 1.81.17 qualification is retained separately in docs/schema-native-consumer.
+
 # Open Schema integration example
 
 This development harness compiles the actual **Apache-2.0 Bosak.Schema source** against the current Bosak projects. It validates a price with XSD 1.0, exposes its named schema type and decimal typed value inside an XSLT transformation, and calculates a total. No activation is required.

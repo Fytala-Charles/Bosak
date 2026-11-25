@@ -1,0 +1,137 @@
+{
+  "date": "2026-11-25",
+  "recordedBeforeImplementation": true,
+  "base": "43935c34b7658a0365e3eecbef7815a950ce2d15",
+  "normativeSources": [
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "sha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8"
+    },
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "sha256": "5ffb773f81fb81cfc9ac54dfb871c333cefb12fbdffe4caeb28170054b21fc6a"
+    },
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sha256": "a157e098f0de2fefd81ce95bb934762ff5a1f616a4745854f0340d177082acd3"
+    }
+  ],
+  "sections": [
+    "Datatypes 3.3.7 dateTime",
+    "Datatypes 3.3.8 time",
+    "Datatypes 3.4.28 dateTimeStamp",
+    "Datatypes D.2 calendar operations",
+    "XDM 3.3.1.2 typed values (future transport boundary)"
+  ],
+  "scope": "Additive explicit bounded value objects; no expression-engine/Schema datatype admission",
+  "intentionalBounds": [
+    "256 supplied decimal digits/scale maximum; explicit per-call limits",
+    "Signed 64-bit years excluding minimum; no unbounded years",
+    "Leap seconds unsupported and invalid seconds refused",
+    "No implicit timezone or lossy DTO/legacy conversion",
+    "Invariant component formatting is not XSD canonical UTC serialization",
+    "No arithmetic, instant comparison, XdmValue transport or PSVI authority adoption"
+  ],
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Fraction capacity checked before normalization",
+      "status": "planned"
+    },
+    {
+      "id": "C02",
+      "contract": "Second range zero inclusive sixty exclusive",
+      "status": "planned"
+    },
+    {
+      "id": "C03",
+      "contract": "Fraction trailing-zero normalization",
+      "status": "planned"
+    },
+    {
+      "id": "C04",
+      "contract": "ASCII decimal second lexical grammar",
+      "status": "planned"
+    },
+    {
+      "id": "C05",
+      "contract": "Bounded invariant fraction formatting",
+      "status": "planned"
+    },
+    {
+      "id": "C06",
+      "contract": "Normalized fractional equality and hash",
+      "status": "planned"
+    },
+    {
+      "id": "C07",
+      "contract": "Exact fractional ordering",
+      "status": "planned"
+    },
+    {
+      "id": "C08",
+      "contract": "Exact tick conversion and refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C09",
+      "contract": "Exact millisecond conversion and refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C10",
+      "contract": "Gregorian month/day and leap-year validation",
+      "status": "planned"
+    },
+    {
+      "id": "C11",
+      "contract": "Extended-year representation and bounded overflow refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C12",
+      "contract": "Time fields and leap-second rejection",
+      "status": "planned"
+    },
+    {
+      "id": "C13",
+      "contract": "Timezone presence and fourteen-hour boundary",
+      "status": "planned"
+    },
+    {
+      "id": "C14",
+      "contract": "24:00 normalization and rollover",
+      "status": "planned"
+    },
+    {
+      "id": "C15",
+      "contract": "dateTime lexical parsing",
+      "status": "planned"
+    },
+    {
+      "id": "C16",
+      "contract": "time lexical parsing",
+      "status": "planned"
+    },
+    {
+      "id": "C17",
+      "contract": "dateTimeStamp required timezone",
+      "status": "planned"
+    },
+    {
+      "id": "C18",
+      "contract": "Stable invariant calendar formatting and roundtrip",
+      "status": "planned"
+    },
+    {
+      "id": "C19",
+      "contract": "Lossless DTO and legacy carrier interoperability",
+      "status": "planned"
+    },
+    {
+      "id": "C20",
+      "contract": "Calendar representation identity and legacy integration boundary",
+      "status": "planned"
+    }
+  ]
+}

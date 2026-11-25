@@ -1,0 +1,6 @@
+{
+  "src/Directory.Build.props": "86c4770e9ca902efeeee9469116f327988d974d4042df0408994c8add26924be",
+  "src/Bosak.XPath.Core/Xdm/XdmExactSecond.cs": "6c1722abb893573f80574ddad5d256df5711c704e8024ea90c4e3d5190ac3da6",
+  "src/Bosak.XPath.Core/Xdm/XdmExactCalendarValue.cs": "d4c4bec97e64847dde2500ddbd26b253223d613389888526661b2c296fe4ffb3",
+  "tests/Bosak.XPath.Core.Tests/XdmExactCalendarTests.cs": "6227c87271b15dc27c64218e35b88f233cb69e13ecccf25b9302862302ca452d"
+}

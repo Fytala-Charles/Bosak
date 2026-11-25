@@ -1,0 +1,18 @@
+{
+  "schemaSourcePin": "9fd4e6acd20b34446d736ab0ec3fa2d439f9e337",
+  "currentSourceCoreVersion": "1.82.0.0",
+  "lanes": [
+    {
+      "lane": "schema-integration",
+      "passed": 260
+    },
+    {
+      "lane": "schema-public",
+      "passed": 9
+    }
+  ],
+  "nativeAndPriceExamplesPass": true,
+  "productionSemanticChange": false,
+  "standaloneAndPublishedSchemaPinsUnchanged": true,
+  "initialCiIdentityFailurePreserved": true
+}

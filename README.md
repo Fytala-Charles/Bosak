@@ -4,6 +4,10 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+See the [exact calendar value objects](docs/exact-calendar-batch/README.md) for opt-in bounded precision and conversion limits.
+
+
+
 > Named after **Jon Bosak**, the "father of XML" who led the W3C working group that created
 > XML 1.0 — making structured business documents interoperable across every system.
 > Full story: [Fytala Hall of Fame](../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak)

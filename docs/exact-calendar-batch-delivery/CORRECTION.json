@@ -1,0 +1,8 @@
+{
+  "firstHead": "10cffc10",
+  "finding": "Git text normalization changed CRLF source bytes to LF while qualification recorded original raw CRLF hashes. A PowerShell command sequence continued after the Python assertion, so the initial commit/PR was created before correction.",
+  "resolution": "Explicit per-file byte preservation for the three new source/test files; restage original qualified bytes and require all staged seal/source assertions before committing. Original sealed packet remains unchanged.",
+  "productionSemanticChange": false,
+  "requalificationNeeded": false,
+  "reason": "Original qualified source content and DLL payload are unchanged; correction preserves the qualified raw bytes in Git."
+}

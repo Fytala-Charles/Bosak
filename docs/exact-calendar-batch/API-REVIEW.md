@@ -1,0 +1,7 @@
+# Additive API and compatibility review
+
+New public types are `XdmExactSecond`, `XdmExactCalendarKind` and `XdmExactCalendarValue` in Bosak.XPath.Core.Xdm. Existing public types and method bodies are unchanged. Calendar constructor/Parse validates bounded components; second constructor checks supplied capacities before normalization. Factories and exact conversion methods describe when representation is refused. Default second is zero; default calendar is Unspecified and refuses serialization/conversion. Record equality is normalized component identity including kind and timezone, not instant equality or XPath value comparison.
+
+No implicit conversion operators, XdmValue payloads, query atomization, provider admission or authority markers are added. No existing decimal, millisecond or DateTimeOffset route is silently upgraded. No consumer should infer arithmetic, canonical UTC serialization or full Schema support from these types. Legacy time interop requires date components to be zero, matching the explicit time-only carrier contract; it does not silently select a reference date. Existing XdmValue callers remain on their original routes.
+
+Version 1.82.0 records an additive minor source candidate, not publication. A local package-only consumer exercises every C01-C20 contract against the candidate. Existing solution tests and unchanged QT3/qt4 gates establish legacy behavior separately. Future exact atomic transport will need its own semantic/API/authority review and Schema qualification against signed packages.

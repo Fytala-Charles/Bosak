@@ -1,0 +1,59 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "htmlSha256": "1135cc97f80599d911d332443aaa95767644d9ceab941c89ed3c5fc1ea36335c"
+    },
+    {
+      "file": "ROADMAP.md",
+      "htmlSha256": "6370eb73e0388a9ee056e39fd556fd7d0efd0d61580f3c8ad29a95a35b4e2393"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "htmlSha256": "fec92469864b9105b2f28ce21cf16b800a5c4ed202c72b390cc8d864aadfebbe"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "f04b73ad8a9fd06f8c5d38bd19455f077c153db6e430f24a9998b7fac4444cf5"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "htmlSha256": "93084eee8d3d900ea89a1d69164be8786bc21b46016a4e1897027fec1c617117"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "456b66b8aa7435d3ee3133c8affbf7f0a315256f96f6e6366ddfdfbba7f04bff"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "73cf135b9640f7cc4f4281283111119e925f68f4e8c2dfbbd49d3e11b7bd3352"
+    },
+    {
+      "file": "docs/exact-calendar-batch/README.md",
+      "htmlSha256": "42e26f5e34394b4307803701597133b5dd62887b61e3c635bdb16326ff17991c"
+    },
+    {
+      "file": "docs/exact-calendar-batch/CONTRACT.md",
+      "htmlSha256": "b4fc8b82350ba752cf1bcb0b4a18488873c2cddc321efd2371fbc68d8d9c80f3"
+    },
+    {
+      "file": "docs/exact-calendar-batch/API-REVIEW.md",
+      "htmlSha256": "e3f0db8c9f0c9b88b72a73e9f8f5f09de0f8da965e19b645210d4a5e8f55bedf"
+    }
+  ],
+  "checkedLinks": 3434,
+  "preexistingUnresolved": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "allNewLinksResolve": true,
+  "programmaticHtmlOnly": true,
+  "visualAcceptance": false,
+  "managedAssetsChanged": false
+}
