@@ -223,3 +223,7 @@ See docs/exact-calendar-comparison. Twenty contracts add explicit comparison/par
 ## Calendar interoperability candidate (25 November 2026)
 
 Read docs/calendar-interop before extending plain legacy/exact conversion. All authority carriers refuse that adapter; guarded query projection remains separate. Existing map/operator and signed-pin semantics are unchanged.
+
+## Guarded calendar query candidate (25 November 2026)
+
+See docs/guarded-calendar-query. CompileCalendarComparison is a closed assessor-bound profile; use selected-authority actual type proof and existing raw lifetime checks. The plain interop adapter still refuses authority carriers. Source1.86.0 unpublished; no native Schema admission, C45, default operator/map or signed-pin change.

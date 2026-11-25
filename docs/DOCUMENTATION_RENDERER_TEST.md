@@ -1,3 +1,7 @@
+## Guarded calendar query documentation - 25 November 2026
+
+Canonical pages and the new query guide/contract/API review use unchanged Fytala CSS and local-link checking. Programmatic HTML only; no visual acceptance claim. [Receipt](guarded-calendar-query/DOCUMENTATION-CHECKS.json).
+
 ## Calendar interoperability documentation - 25 November 2026
 
 Canonical pages and the new interoperability guide/contract/API review use unchanged Fytala CSS with local links checked. Programmatic HTML only; no visual acceptance claim. [Receipt](calendar-interop/DOCUMENTATION-CHECKS.json).

@@ -785,3 +785,15 @@ docs/foundation-native-schema-lane/** -text whitespace=cr-at-eol,-blank-at-eof,-
 /tests/Bosak.XPath.Core.Tests/CalendarInteropTests.cs text eol=lf
 /tests/Bosak.XPath.Runtime.Tests/CalendarInteropPublicTests.cs text eol=lf
 /docs/calendar-interop/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof
+
+# Stable guarded calendar query source and evidence bytes.
+/src/Bosak.XPath.Api/Schema/CalendarComparisonPlan.cs text eol=lf
+/tests/Bosak.XPath.Runtime.Tests/CalendarQuerySupport.cs text eol=lf
+/tests/Bosak.XPath.Runtime.Tests/GuardedCalendarQueryTests.cs text eol=lf
+/src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs -text whitespace=cr-at-eol
+/src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs text eol=lf
+/src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs -text whitespace=cr-at-eol
+/integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs text eol=lf
+/docs/guarded-calendar-query/** -text whitespace=cr-at-eol,-blank-at-eol,-blank-at-eof

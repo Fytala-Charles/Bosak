@@ -23,6 +23,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6 | 06-11-2026     | Observe registered ordinary scalar metadata without provider callbacks (1.77.0). |
 //                      | Charles Korthout | 0.7 | 06-11-2026     | Read exact immutable compatible metadata under API-owned live proof validation (1.78.0). |
+//                      | Charles Korthout | 0.8 | 25-11-2026     | Add bounded guarded calendar comparison profile (1.86.0).                               |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using System.Runtime.CompilerServices;
@@ -267,6 +268,12 @@ internal sealed class QueryRegisteredTypedContainer
     }
     internal object GetIdentity(int index){Check();return _group.Entries[index];}
     internal XdmValue GetTransport(int index){Check();return _group.Entries[index].Transport;}
+    internal XdmExactCalendarValue ProjectCalendar(XdmValue value)
+    {
+        Check();
+        if(XdmValue.SchemaTransportMarker(value) is not QueryTypedScalarCache.Entry entry||!ReferenceEquals(entry.Group,_group))throw new ArgumentException("Foreign calendar evidence.");
+        var result=_reader.ProjectCalendar(_group.Cells[entry.Ordinal]);Check();return result;
+    }
     internal XdmValue ProjectNumeric(XdmValue value)
     {
         Check();

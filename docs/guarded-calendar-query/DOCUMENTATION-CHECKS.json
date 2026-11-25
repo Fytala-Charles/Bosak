@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "htmlSha256": "7a014b4d2e39c499bf3cfd26827f3c4cea0a02e2e2a827dda9613df36ef15b1f"
+    },
+    {
+      "file": "ROADMAP.md",
+      "htmlSha256": "f3ba72438d168708d2e576444bbe94ead8c7fbde33fe0907a992108197913d6b"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "htmlSha256": "90ff01443500eb23e6e1f87cda157caa35697ae11a93cc80b6578924a6f02079"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "bb75fd7a3f676e4756fe4ec38f14b0bef13de3992b148339017a62349dc9b81b"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "htmlSha256": "3a4057c874597a150e619bd9f51a47aac7d92e0208f1df7bfd769ae50a24164b"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "31a7362ad37ed612c542f0cfff87550f4ed6eeda516ed5930845e6803eed24ed"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "68dfe6e12566aee17ee4fb6c26fd30a1abe96e253a405fd5bc882ea00aff88a5"
+    },
+    {
+      "file": "docs/guarded-calendar-query/README.md",
+      "htmlSha256": "037b184cda8735158a5435b1f9beb654c219c99151b33cd02bf08061fa9da02a"
+    },
+    {
+      "file": "docs/guarded-calendar-query/CONTRACT.md",
+      "htmlSha256": "15b7a92e580c407d9a1051d50bba4c179355b7020e2cefa8e18d9eb3097cf9d0"
+    },
+    {
+      "file": "docs/guarded-calendar-query/API-REVIEW.md",
+      "htmlSha256": "2afa82f86051971fda43ac81c522ffb4c64cf3c8ee6a54a3aff2c56fc1b586e2"
+    }
+  ],
+  "checkedLinks": 3468,
+  "preexistingUnresolved": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "allNewLinksResolve": true,
+  "stylesheetSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "programmaticHtmlOnly": true,
+  "visualAcceptance": false,
+  "managedAssetsChanged": false
+}

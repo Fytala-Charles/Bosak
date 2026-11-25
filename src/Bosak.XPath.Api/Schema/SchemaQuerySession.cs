@@ -56,6 +56,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.24 | 06-11-2026     | Document wider complete-container transport without execution expansion (1.81.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.25 | 25-11-2026     | Add bounded guarded calendar comparison profile (1.86.0).                               |
 // ===========================================================================================================================================================
 using System;
 using System.Text.Json;
@@ -67,7 +68,7 @@ using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
 namespace Bosak.XPath.Api.Schema;
 /// <summary>Engine-created query session with an explicit ordinary, numeric, typed or captured host profile.</summary>
-/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. Assessor-bound typed profiles support single-atomic identity, bounded exact numeric computation and original-node nilled metadata/ordered atomization. A source-free operation-local construction profile is selected by $constructed; bounded compatible singleton identity uses an engine-issued source handoff; profiles do not impose a hard time/graph-size budget.</remarks>
+/// <remarks>String/boolean queries and selected exact arithmetic/comparison/string profiles are supported. The explicit calendar factory freezes two guarded operands and their implicit timezone. Assessor-bound typed profiles support single-atomic identity, bounded exact numeric computation, explicit guarded calendar comparisons and original-node nilled metadata/ordered atomization. A source-free operation-local construction profile is selected by $constructed; bounded compatible singleton identity uses an engine-issued source handoff; profiles do not impose a hard time/graph-size budget.</remarks>
 public sealed class SchemaQuerySession : IDisposable
 {
     private bool _closed;
@@ -77,6 +78,7 @@ public sealed class SchemaQuerySession : IDisposable
     private readonly SchemaQueryLimits _limits;
     private readonly CapturedHostBinding? _host;
     private readonly bool _numeric;
+    private readonly CalendarComparisonPlan? _calendar;
     private readonly bool _constructed;
     private readonly bool _compatiblePublic;
     private readonly bool _compatibleCandidate;
@@ -84,8 +86,8 @@ public sealed class SchemaQuerySession : IDisposable
     private readonly bool _nilled;
     private readonly bool _data;
     private SchemaAdvisorBinding? _binding;
-    private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null,CapturedHostBinding? host=null)
-    { _host=host;_runtime=runtime;_limits=limits;_numeric=numeric;_compatiblePublic=profile==CompatibleAdmissionPlan.PublicProfile;_compatibleCandidate=profile is CompatibleAdmissionPlan.Profile or CompatibleAdmissionPlan.IdentityProfile;_compatibleIdentityCandidate=profile==CompatibleAdmissionPlan.IdentityProfile;_constructed=profile==ConstructedAtomicPlan.Profile;_nilled=profile==OriginalNodeNilledPlan.Profile;_data=profile==OriginalNodeDataPlan.Profile;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name),host?.Host??QueryHostLanguage.XPath); }
+    private SchemaQuerySession(QuerySourceSession runtime,SchemaQueryLimits limits,bool numeric=false,string? profile=null,CapturedHostBinding? host=null,CalendarComparisonPlan? calendar=null)
+    { _calendar=calendar;_host=host;_runtime=runtime;_limits=limits;_numeric=numeric;_compatiblePublic=profile==CompatibleAdmissionPlan.PublicProfile;_compatibleCandidate=profile is CompatibleAdmissionPlan.Profile or CompatibleAdmissionPlan.IdentityProfile;_compatibleIdentityCandidate=profile==CompatibleAdmissionPlan.IdentityProfile;_constructed=profile==ConstructedAtomicPlan.Profile;_nilled=profile==OriginalNodeNilledPlan.Profile;_data=profile==OriginalNodeDataPlan.Profile;Environment=new SemanticEnvironment(runtime.Environment,profile??(numeric?ExactArithmeticPlan.Profile:OrdinaryQueryProfile.Name),host?.Host??QueryHostLanguage.XPath); }
     internal void RequireHostOperation(QuerySourceSession.Operation operation)=>operation.RequireOwner(_runtime);
     internal static SchemaQuerySession CreateHostCandidate(CapturedHostBinding host,SchemaQueryLimits limits)
     {
@@ -179,6 +181,7 @@ public sealed class SchemaQuerySession : IDisposable
     internal static SchemaResult<T> UnsupportedNumeric<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-NUMERIC-UNSUPPORTED");
     internal static SchemaResult<T> UnsupportedData<T>() => new Outcome<T>(default!,false,"BOSAK-ORIGINAL-DATA-UNSUPPORTED");
     internal static SchemaResult<T> UnsupportedNilled<T>() => new Outcome<T>(default!,false,"BOSAK-ORIGINAL-NILLED-UNSUPPORTED");
+    internal static SchemaResult<T> UnsupportedCalendar<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-CALENDAR-UNSUPPORTED");
     internal static SchemaResult<T> UnsupportedTyped<T>() => new Outcome<T>(default!,false,"BOSAK-TYPED-IDENTITY-UNSUPPORTED");
     internal static SchemaResult<T> UnsupportedConstructed<T>()=>new Outcome<T>(default!,false,"BOSAK-CONSTRUCTED-ATOMIC-UNSUPPORTED");
     internal static SchemaResult<XdmValue> InvalidConstruction()=>new InvalidConstructionOutcome();
@@ -252,6 +255,33 @@ public sealed class SchemaQuerySession : IDisposable
         }
         try { cancellationToken.ThrowIfCancellationRequested(); return Supported(new SchemaQuerySession(runtime!,limits,numeric,profile)); }
         catch { runtime!.Dispose(); throw; }
+    }
+    /// <summary>Compiles an opt-in guarded comparison of two admitted calendar scalars.</summary>
+    /// <param name="expression">Only $left eq/ne/lt/le/gt/ge $right with XML whitespace.</param>
+    /// <param name="limits">Snapshot, scalar and exact numeric capacities.</param>
+    /// <param name="assessor">Selected authority and immutable value issuer.</param>
+    /// <param name="implicitTimezoneMinutes">Frozen implicit timezone from -840 through 840 minutes.</param>
+    /// <param name="options">Captured supported static compilation options.</param>
+    /// <param name="cancellationToken">Compilation cancellation.</param>
+    /// <returns>The calendar session or Unsupported before binding unsupported grammar/options.</returns>
+    /// <exception cref="ArgumentNullException">An expression or assessor is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Limits or timezone are invalid.</exception>
+    /// <exception cref="OperationCanceledException">Compilation was canceled.</exception>
+    public static SchemaResult<SchemaQuerySession> CompileCalendarComparison(string expression,SchemaQueryLimits limits,
+        ISchemaAssessor assessor,int implicitTimezoneMinutes,CompileOptions? options=null,CancellationToken cancellationToken=default)
+    {
+        ArgumentNullException.ThrowIfNull(expression);ArgumentNullException.ThrowIfNull(assessor);limits.Validate();cancellationToken.ThrowIfCancellationRequested();
+        if(implicitTimezoneMinutes is < -840 or > 840)throw new ArgumentOutOfRangeException(nameof(implicitTimezoneMinutes));
+        if(!CalendarComparisonPlan.TryCompile(expression,limits,implicitTimezoneMinutes,options??CompileOptions.Default,cancellationToken,out var plan,out var runtime))
+            return UnsupportedCalendar<SchemaQuerySession>();
+        var session=new SchemaQuerySession(runtime!,limits,profile:CalendarComparisonPlan.Profile,calendar:plan);
+        try
+        {
+            session._binding=session.BindAdvisorCandidate(assessor,cancellationToken);
+            if(session._binding is null){session.Dispose();return UnsupportedCalendar<SchemaQuerySession>();}
+            cancellationToken.ThrowIfCancellationRequested();return Supported(session);
+        }
+        catch(Exception primary){SchemaEvidenceKernel.PreserveFailure(primary,session.Dispose);throw;}
     }
     /// <summary>The exact engine-issued immutable compilation environment.</summary>
     public IQuerySemanticEnvironment Environment { get; }
@@ -332,7 +362,7 @@ public sealed class SchemaQuerySession : IDisposable
             {var frame=admission.BeginPublic(op,_limits);var result=work(new SchemaQueryOperation(op,_limits,false,false,snapshots:snapshots,compatible:frame));frame.Finish();return result;},cancellationToken);
             admission.CheckEngine(cancellationToken);return result;
         }
-        var value = _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data,_constructed?_binding:null,host:_host)), cancellationToken);
+        var value = _runtime.Run(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data,_constructed?_binding:null,host:_host,calendar:_calendar)), cancellationToken);
         if(_host is not null)CheckHostDelivery(snapshots,cancellationToken);return value;
     }
     /// <summary>Retains admissions until the raw callback task completes, independent of canceled waits.</summary>
@@ -347,7 +377,7 @@ public sealed class SchemaQuerySession : IDisposable
         if(_compatibleCandidate)throw new NotSupportedException("Internal compatible admission does not expose public data execution.");
         if(_compatiblePublic)return RunCompatibleAsync(snapshots,work,cancellationToken);
         if(_host is not null)return RunHostAsync(snapshots,work,cancellationToken);
-        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data,_constructed?_binding:null,host:_host)), cancellationToken);
+        return _runtime.RunAsync(_runtime.Environment, Members(snapshots), op => work(new SchemaQueryOperation(op,_limits,_numeric,_binding is not null,_nilled||_data?_binding:null,snapshots,_data,_constructed?_binding:null,host:_host,calendar:_calendar)), cancellationToken);
     }
     internal QuerySourceSession.RunCompletion<T> RunHostOutcome<T>(CapturedHostBinding host,
         ImmutableArray<SchemaQuerySnapshot> snapshots, Func<SchemaQueryOperation,T> work, CancellationToken token = default)
@@ -425,7 +455,7 @@ public sealed class SchemaQuerySession : IDisposable
         Uri IQuerySemanticEnvironment.XdmSpecificationRevision => new("https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/");
         string IQuerySemanticEnvironment.BehaviorProfile => profile;
         IQueryStaticContext IQuerySemanticEnvironment.StaticContext => this;
-        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==CapturedHostBinding.PublicTransformProfile?CapturedHostBinding.PublicTransformDescriptor:profile==CapturedHostBinding.PublicQueryProfile?CapturedHostBinding.PublicQueryDescriptor:profile==CapturedHostBinding.Profile?CapturedHostBinding.Descriptor:profile==CompatibleAdmissionPlan.PublicProfile?CompatibleAdmissionPlan.PublicDescriptor:profile==CompatibleAdmissionPlan.IdentityProfile?CompatibleAdmissionPlan.IdentityDescriptor:profile==CompatibleAdmissionPlan.Profile?CompatibleAdmissionPlan.Descriptor:profile==ConstructedAtomicPlan.Profile?ConstructedAtomicPlan.Descriptor:profile==OriginalNodeDataPlan.Profile?OriginalNodeDataPlan.Descriptor:profile==OriginalNodeNilledPlan.Profile?OriginalNodeNilledPlan.Descriptor:profile==TypedNumericPlan.Profile?TypedNumericPlan.Descriptor:profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
+        string IQuerySemanticEnvironment.DescriptorFormatVersion => profile==CalendarComparisonPlan.Profile?CalendarComparisonPlan.Descriptor:profile==CapturedHostBinding.PublicTransformProfile?CapturedHostBinding.PublicTransformDescriptor:profile==CapturedHostBinding.PublicQueryProfile?CapturedHostBinding.PublicQueryDescriptor:profile==CapturedHostBinding.Profile?CapturedHostBinding.Descriptor:profile==CompatibleAdmissionPlan.PublicProfile?CompatibleAdmissionPlan.PublicDescriptor:profile==CompatibleAdmissionPlan.IdentityProfile?CompatibleAdmissionPlan.IdentityDescriptor:profile==CompatibleAdmissionPlan.Profile?CompatibleAdmissionPlan.Descriptor:profile==ConstructedAtomicPlan.Profile?ConstructedAtomicPlan.Descriptor:profile==OriginalNodeDataPlan.Profile?OriginalNodeDataPlan.Descriptor:profile==OriginalNodeNilledPlan.Profile?OriginalNodeNilledPlan.Descriptor:profile==TypedNumericPlan.Profile?TypedNumericPlan.Descriptor:profile==TypedIdentityPlan.PublicProfile?TypedIdentityPlan.PublicDescriptor:profile==TypedIdentityPlan.Profile?TypedIdentityPlan.Descriptor:profile==ExactArithmeticPlan.Profile?ExactArithmeticPlan.DescriptorFormat:profile==ExactArithmeticPlan.ScalarProfile?ExactArithmeticPlan.ScalarDescriptorFormat:profile==ExactArithmeticPlan.QuotientProfile?ExactArithmeticPlan.QuotientDescriptorFormat:profile==ExactArithmeticPlan.DivisionProfile?ExactArithmeticPlan.DivisionDescriptorFormat:profile==ExactArithmeticPlan.ConstructorProfile?ExactArithmeticPlan.ConstructorDescriptorFormat:SchemaQueryEnvironment.DescriptorFormat;
         string IQuerySemanticEnvironment.StaticContextFingerprint => environment.Fingerprint;
         ImmutableDictionary<string,string> IQueryStaticContext.Namespaces => environment.Namespaces;
     }
@@ -499,6 +529,7 @@ public sealed class SchemaQueryOperation
     private readonly CapturedHostBinding? _host;
     private readonly SchemaQueryLimits _limits;
     private readonly bool _numeric;
+    private readonly CalendarComparisonPlan? _calendar;
     private readonly bool _publicTyped;
     private readonly SchemaAdvisorBinding? _nodeBinding;
     private readonly ImmutableArray<SchemaQuerySnapshot> _snapshots;
@@ -507,8 +538,8 @@ public sealed class SchemaQueryOperation
     private readonly CompatibleAdmissionPlan.PublicOperation? _compatible;
     internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric)
         :this(runtime,limits,numeric,false) { }
-    internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric,bool publicTyped,SchemaAdvisorBinding? nilledBinding=null,ImmutableArray<SchemaQuerySnapshot> snapshots=default,bool data=false,SchemaAdvisorBinding? constructionBinding=null,CompatibleAdmissionPlan.PublicOperation? compatible=null,CapturedHostBinding? host=null)
-    { _host=host;_compatible=compatible;_runtime=runtime;_limits=limits;_numeric=numeric;_publicTyped=publicTyped;_nodeBinding=nilledBinding;_snapshots=snapshots;_data=data;_construction=constructionBinding is null?null:new(runtime,constructionBinding,limits); }
+    internal SchemaQueryOperation(QuerySourceSession.Operation runtime,SchemaQueryLimits limits,bool numeric,bool publicTyped,SchemaAdvisorBinding? nilledBinding=null,ImmutableArray<SchemaQuerySnapshot> snapshots=default,bool data=false,SchemaAdvisorBinding? constructionBinding=null,CompatibleAdmissionPlan.PublicOperation? compatible=null,CapturedHostBinding? host=null,CalendarComparisonPlan? calendar=null)
+    { _calendar=calendar;_host=host;_compatible=compatible;_runtime=runtime;_limits=limits;_numeric=numeric;_publicTyped=publicTyped;_nodeBinding=nilledBinding;_snapshots=snapshots;_data=data;_construction=constructionBinding is null?null:new(runtime,constructionBinding,limits); }
     internal QuerySourceSession.Operation RequireHost(CapturedHostBinding host)
     {_runtime.Check();if(!ReferenceEquals(host,_host))throw new ArgumentException("Operation belongs to another captured executable.");host.Session.RequireHostOperation(_runtime);return _runtime;}
     private void ValidateInput(XdmValue value)
@@ -521,10 +552,10 @@ public sealed class SchemaQueryOperation
     /// <summary>Projects an admitted root under this operation's availability checks.</summary>
     /// <param name="snapshot">A snapshot in this operation's admitted set.</param>
     /// <returns>The borrowed root; no ownership transfer or automatic detachment.</returns>
-    /// <exception cref="NotSupportedException">The compatible identity profile does not expose node traversal.</exception>
+    /// <exception cref="NotSupportedException">The compatible identity and calendar comparison profiles do not expose node traversal.</exception>
     public IXdmNode GetRoot(SchemaQuerySnapshot snapshot)
     {
-        ArgumentNullException.ThrowIfNull(snapshot);_runtime.Check();if(_compatible is not null)throw new NotSupportedException("Compatible node traversal is unavailable."); return _runtime.GetRoot(snapshot.Runtime);
+        ArgumentNullException.ThrowIfNull(snapshot);_runtime.Check();if(_calendar is not null)throw new NotSupportedException("Calendar comparison does not expose node traversal.");if(_compatible is not null)throw new NotSupportedException("Compatible node traversal is unavailable."); return _runtime.GetRoot(snapshot.Runtime);
     }
     /// <summary>Admits an authority-issued atomic/list/union container before reading its contents.</summary>
     /// <param name="snapshot">The exact source admission in this operation.</param>
@@ -539,7 +570,7 @@ public sealed class SchemaQueryOperation
         if(!_publicTyped)return SchemaQuerySession.Unsupported<XdmValue>();
         var typed=snapshot.TypedState??throw new ArgumentException("Snapshot has no bound typed input.",nameof(snapshot));
         var staged=_runtime.PrepareTypedRegistration(snapshot.Runtime,typed.Issuer,typed.Input,typed.Origin,value,_limits.MaxCachedValuesPerSnapshot,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
-        return staged.TryCommitSingle(out var result)?SchemaQuerySession.Supported(result):_runtime.TypedNumericProfile?SchemaQuerySession.UnsupportedNumeric<XdmValue>():SchemaQuerySession.UnsupportedTyped<XdmValue>();
+        return staged.TryCommitSingle(out var result)?SchemaQuerySession.Supported(result):_calendar is not null?SchemaQuerySession.UnsupportedCalendar<XdmValue>():_runtime.TypedNumericProfile?SchemaQuerySession.UnsupportedNumeric<XdmValue>():SchemaQuerySession.UnsupportedTyped<XdmValue>();
     }
     /// <summary>Reads a complete typed container while retaining list and selected-member metadata.</summary>
     /// <param name="snapshot">The exact admitted source snapshot in this raw operation.</param>
@@ -556,7 +587,7 @@ public sealed class SchemaQueryOperation
         ArgumentNullException.ThrowIfNull(snapshot);ArgumentNullException.ThrowIfNull(value);
         _runtime.CheckObservationActive();_runtime.RequireMember(snapshot.Runtime);
         if(_compatible is not null)return _compatible.ReadContainer(value);
-        if(!_publicTyped||_runtime.TypedNumericProfile||_nodeBinding is not null||_construction is not null)
+        if(!_publicTyped||_calendar is not null||_runtime.TypedNumericProfile||_nodeBinding is not null||_construction is not null)
             return SchemaQuerySession.UnsupportedTyped<ISchemaTypedValue>();
         var typed=snapshot.TypedState??throw new ArgumentException("Snapshot has no bound typed input.",nameof(snapshot));
         var complete=_runtime.ReadTypedContainer(snapshot.Runtime,typed.Issuer,typed.Input,typed.Origin,value,
@@ -615,6 +646,11 @@ public sealed class SchemaQueryOperation
     public XdmValue Evaluate(EvaluationContext context)
     {
         _runtime.Check(); ArgumentNullException.ThrowIfNull(context);
+        if(_calendar is not null)
+        {
+            var pair=context.CaptureCalendarOperands();
+            return _runtime.EvaluatePublicTypedCalendar(pair.Left,pair.Right,_calendar.Operator,_calendar.ImplicitTimezoneMinutes,_limits.MaxTypedValueAtoms,_limits.MaxNumericDigits,_limits.MaxDecimalScale);
+        }
         if(_host is not null)return _host.EvaluatePublic(this,context);
         if(_compatible is not null)return _compatible.Call(op=>op.Evaluate(context.CaptureCompatibleScalar()));
         if(_construction is not null)return _construction.Evaluate(context);

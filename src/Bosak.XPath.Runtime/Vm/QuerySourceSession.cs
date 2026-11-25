@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 0.24 | 06-11-2026     | Expose callback-free observation expiry with original admission cancellation (1.77.0). |
 //                      | Charles Korthout | 0.25 | 06-11-2026     | Offer opt-in complete stored-metadata validation for borrowed reads (1.79.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.26 | 25-11-2026     | Add bounded guarded calendar comparison profile (1.86.0).                               |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Xdm;
@@ -85,6 +86,7 @@ internal sealed class QuerySourceSession : IDisposable
     private readonly int _snapshotLimit;
     private readonly bool _typedIdentity;
     private readonly bool _typedNumeric;
+    private readonly bool _typedCalendar;
     internal bool TypedNumericProfile=>_typedNumeric;
     private readonly Dictionary<IQuerySourceInput, Snapshot> _snapshots = new(ReferenceEqualityComparer.Instance);
     private readonly QuerySnapshotLifetime _lifetime = new(() => { });
@@ -95,7 +97,9 @@ internal sealed class QuerySourceSession : IDisposable
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit)
         : this(environment,evaluate,snapshotLimit,false) { }
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit,bool typedIdentity)
-        : this(environment,(object)evaluate,snapshotLimit) { _typedIdentity=typedIdentity; }
+        : this(environment,evaluate,snapshotLimit,typedIdentity,false) { }
+    internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext, XdmValue> evaluate, int snapshotLimit,bool typedIdentity,bool typedCalendar)
+        : this(environment,(object)evaluate,snapshotLimit) { _typedIdentity=typedIdentity;_typedCalendar=typedCalendar; }
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit)
         : this(environment,evaluate,snapshotLimit,false) { }
     internal QuerySourceSession(SchemaQueryEnvironment environment, Func<EvaluationContext,Action,XdmValue> evaluate, int snapshotLimit,bool typedNumeric)
@@ -470,6 +474,19 @@ internal sealed class QuerySourceSession : IDisposable
         }
         internal XdmValue EvaluatePublicTypedIdentity(XdmValue value,int maxAtoms,int digits,int scale)
             =>EvaluateTypedIdentity(TypedOwner(value),value,maxAtoms,digits,scale);
+        internal XdmValue EvaluatePublicTypedCalendar(XdmValue left,XdmValue right,string operation,int timezone,int maxAtoms,int digits,int scale)
+        {
+            Check();if(!_owner._typedCalendar)throw new NotSupportedException("This session has no typed calendar comparison profile.");
+            if(timezone is < -840 or > 840)throw new ArgumentOutOfRangeException(nameof(timezone));
+            var leftOwner=TypedOwner(left);var rightOwner=TypedOwner(right);
+            XdmExactCalendarValue Project(Snapshot owner,XdmValue value)
+                =>ValidateTypedTransport(owner,value,maxAtoms,digits,scale).ProjectCalendar(value);
+            var a=Project(leftOwner,left);var b=Project(rightOwner,right);
+            void Guard(){_ = Project(leftOwner,left);_ = Project(rightOwner,right);Check();}
+            Guard();int order=XdmExactCalendarComparison.CompareXPath(a,b,timezone);Guard();
+            bool answer=operation switch {"eq"=>order==0,"ne"=>order!=0,"lt"=>order<0,"le"=>order<=0,"gt"=>order>0,"ge"=>order>=0,_=>throw new NotSupportedException("Unsupported calendar comparison operator.")};
+            Check();return XdmValue.FromBoolean(answer);
+        }
         internal bool TypedNumericProfile=>_owner._typedNumeric;
         internal XdmValue EvaluatePublicTypedNumeric(XdmValue value,int maxAtoms,int digits,int scale)
         {

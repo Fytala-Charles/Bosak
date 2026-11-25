@@ -1,0 +1,15 @@
+{
+  "testCommentOnly": true,
+  "fullRuntimePassed": 2038,
+  "productAssemblyHashesUnchanged": {
+    "Bosak.XPath.Core": "ec6b47165d27b2962565fc79bf68e46d429c528e635948c791b8b4040b6929cb",
+    "Bosak.XPath.Parser": "353f307682720f3ca7b25fab6b26bcddc5f5662f7efde6e5a766b5f1bb995aca",
+    "Bosak.XPath.Compiler": "185de22a8c277db88f9ab9268b262036941a9a01be0f3845f21c2b0ad989b187",
+    "Bosak.XPath.Runtime": "9061195199941ee7fb91802df6a238465b8772cca418679bf0d65d9d95a16127",
+    "Bosak.XPath.Standard": "5f18470ed9d6179e5444a4e427e3913df9661b69605b994738f607f9aa4c7ee5",
+    "Bosak.XPath.Providers": "35fd58843eed3a4854652c2968a416879af4b53072afc980aaa0d62e00e85f88",
+    "Bosak.XPath.Api": "4e6784e644a79fdb9a1f5ce34bbf06ce94157006ee469359ae9f1eaa929d384d"
+  },
+  "packageTestSourcesMatchFinalSource": true,
+  "fullSolutionCasesNotCountedAgain": true
+}

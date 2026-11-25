@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.4 | 05-11-2026     | Separate stable payload scope from current compatible issuer (1.69.0). |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 25-11-2026     | Bound stored exact calendar seconds before typed publication                              |
+//                      | Charles Korthout | 0.6 | 25-11-2026     | Add bounded guarded calendar comparison profile (1.86.0).                               |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Schema;
@@ -121,22 +122,22 @@ internal sealed class QueryTypedContainerReader
         CheckContainer();return new(value,declared,actual,origin);
     }
     internal ISchemaAuthority SelectedAuthority {get{CheckContainer();return _authority;}}
-    private T Supported<T>(SchemaResult<T>? outcome)
+    private T Supported<T>(SchemaResult<T>? outcome,string projection="numeric")
     {
         CheckContainer();
         if(outcome is null)throw new ArgumentException("Authority returned no outcome.");
-        if(Read(outcome,static r=>r.Kind)!=SchemaResultKind.Supported)throw new NotSupportedException("Authority cannot authorize numeric projection.");
+        if(Read(outcome,static r=>r.Kind)!=SchemaResultKind.Supported)throw new NotSupportedException($"Authority cannot authorize {projection} projection.");
         return Read(outcome,static r=>r.Value);
     }
-    private ISchemaComponentHandle ResolveNumericType(string name)
+    private ISchemaComponentHandle ResolveNumericType(string name,string projection="numeric")
     {
-        var type=Supported(Read(_authority,a=>a.ResolveType(new("http://www.w3.org/2001/XMLSchema",name),_cancellation)));
+        var type=Supported(Read(_authority,a=>a.ResolveType(new("http://www.w3.org/2001/XMLSchema",name),_cancellation)),projection);
         OwnType(type);return type;
     }
-    private bool NumericRelation(ISchemaComponentHandle actual,ISchemaComponentHandle expected,bool derived)
+    private bool NumericRelation(ISchemaComponentHandle actual,ISchemaComponentHandle expected,bool derived,string projection="numeric")
     {
         OwnType(actual);OwnType(expected);
-        bool answer=Supported(Read(_authority,a=>derived?a.IsDerivedFrom(actual,expected,_cancellation):a.IsSameComponent(actual,expected,_cancellation)));
+        bool answer=Supported(Read(_authority,a=>derived?a.IsDerivedFrom(actual,expected,_cancellation):a.IsSameComponent(actual,expected,_cancellation)),projection);
         OwnType(actual);OwnType(expected);return answer;
     }
     internal XdmValue ProjectNumeric(QueryTypedContainer.Cell cell)
@@ -160,6 +161,26 @@ internal sealed class QueryTypedContainerReader
             result=XdmValue.FromDecimal(cell.Value.ExactDecimalValue);
         }
         CheckContainer();OwnType(cell.Actual);OwnType(selected);return result;
+    }
+    internal XdmExactCalendarValue ProjectCalendar(QueryTypedContainer.Cell cell)
+    {
+        CheckContainer();OwnType(cell.Actual);ValidatePayload(cell.Value);
+        bool time=cell.Value.Kind==XdmValueKind.Time;
+        if(!time&&cell.Value.Kind!=XdmValueKind.DateTime)throw new ArgumentException("Calendar actual type requires a calendar payload.");
+        var family=ResolveNumericType(time?"time":"dateTime","calendar");
+        if(!(NumericRelation(cell.Actual,family,false,"calendar")||NumericRelation(cell.Actual,family,true,"calendar")))
+            throw new NotSupportedException("Actual type is not an authorized calendar family.");
+        var result=XdmCalendarInterop.Read(cell.Value);
+        _=new XdmExactDecimal(result.Second.Coefficient,result.Second.Scale,_digits,_scale);
+        if(!time)
+        {
+            var stamp=ResolveNumericType("dateTimeStamp","calendar");
+            bool isStamp=NumericRelation(cell.Actual,stamp,false,"calendar")||NumericRelation(cell.Actual,stamp,true,"calendar");
+            if(isStamp&&!result.HasTimezone||result.Kind==XdmExactCalendarKind.DateTimeStamp&&!isStamp)
+                throw new ArgumentException("Calendar payload disagrees with the actual dateTimeStamp type.");
+            OwnType(stamp);
+        }
+        CheckContainer();OwnType(cell.Actual);OwnType(family);return result;
     }
     internal void ValidateStored(ISchemaComponentHandle governing,ImmutableArray<QueryTypedContainer.Cell> cells)
     {

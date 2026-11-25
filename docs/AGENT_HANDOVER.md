@@ -1,8 +1,19 @@
+## Guarded calendar query qualified - 25 November 2026
+
+Basef1b874114f49fdd8567f1a1feb1678251e445596; feature/guarded-calendar-comparison. Twenty closed assessor-bound comparison contracts are implemented and qualified.72new public Runtime cases;26,750solution/111LS/73no-friend package/260+9pinned Schema integration and both examples pass. Final test review adds async return documentation and isolated descriptor-field assertions; all2038Runtime/73package cases pass again, product DLLs unchanged and package sources match final source. These overlap existing solution cases. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918 and grouped skip reasons unchanged. All617Core and101Api rows preserved; one Api factory added. Nine unsigned local packages match build/consumers. Build12existing warnings/0errors. Five historical sealed packets preserved. [Dossier](guarded-calendar-query/README.md).
+
+CompileCalendarComparison freezes operator/timezone/limits, accepts exactly two admitted scalar carriers and validates owned actual calendar family through the selected authority. Legacy/exact receiving capacities, stamp timezone, late revocation/cancellation and async lease boundaries qualify. Outputs are plain booleans. Default identity/numeric/maps/operators, source schema validity/user-facet responsibilities and C45 remain unchanged. Source1.86.0unpublished; no registry/tag or signed-pin migration. Hosted exact-head delivery and merge verification pending.
+
 ## Calendar interoperability qualified - 25 November 2026
 
 Base6142be76487f928c7efea27598287d384a4f23ba; feature/calendar-interop-query-batch. Twenty plain legacy/exact projection and mixed comparison/key contracts are qualified:44new source cases(42Core/2public Runtime),26,678solution/111LS/45no-friend package/260+9Schema integration and both examples pass.500DTO oracle iterations are assertions, not extra cases. QT3exact31,397/0/424; gatedqt4 8,941/0/1,918 and grouped skip reasons unchanged.607old Core API rows preserved;10additive rows in2new types. Nine local unsigned package DLLs match source/consumers. Build16warnings(existing code/audit retrieval),0errors. Initial invalid coefficient-capacity fixture and corrected final runs retained separately. [Dossier](calendar-interop/README.md).
 
 All authority carriers refuse plain projection without provider calls, including after expiry. Time discards its incidental date; legacy milliseconds cannot recover previously discarded ticks. Guarded query calendar comparison and native Schema admission remain separate next work. Default operators/maps/getters/representation binding and signed pins unchanged. Source1.85.0unpublished; no registry/tag publication. Delivery pending exact-head PR checks and owner-authorized automatic passing merge.
+
+## Guarded calendar comparison candidate - 25 November 2026
+
+The [guarded calendar query profile](guarded-calendar-query/README.md) compares two admitted dateTime/dateTimeStamp or time scalars with a fixed implicit timezone, owned actual-type proof and cancellation/lifetime checks. Exact precision is retained; results are plain booleans. The new explicit CompileCalendarComparison factory leaves default query/map behavior unchanged. Source1.86.0 is unpublished; native Schema admission and C45 remain separate.
+
 
 ## Exact calendar comparison qualified - 25 November 2026
 
