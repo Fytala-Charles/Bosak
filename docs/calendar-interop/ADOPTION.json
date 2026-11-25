@@ -1,0 +1,148 @@
+{
+  "date": "2026-11-25",
+  "base": "6142be76487f928c7efea27598287d384a4f23ba",
+  "recordedBeforeImplementation": true,
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "bytes": 2650378,
+      "sections": [
+        "9.4.1-9.4.3 dateTime comparisons",
+        "9.4.7-9.4.9 time comparisons",
+        "17.1.1 same-key timezone-presence/deep-equal rule"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "sha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8",
+      "bytes": 1508774,
+      "sections": [
+        "3.3.7 dateTime",
+        "3.3.8 time",
+        "3.4.28 dateTimeStamp",
+        "D.2.1 seven-property model",
+        "E.3.4 time on timeline"
+      ]
+    }
+  ],
+  "scope": "Explicit plain legacy/exact calendar projection and mixed comparisons; no guarded query execution",
+  "intentionalBounds": [
+    "Opt-in Read returns exact component data from plain XdmValue calendars only",
+    "All authority-bearing carriers refuse without invoking provider callbacks, including expired carriers",
+    "Legacy wrapper timezone flag must agree with raw components; absent timezone requires zero stored offset",
+    "Only null/dateTime/dateTimeStamp/time built-in labels matching physical family are accepted; labels confer no schema authority",
+    "Time intentionally erases every embedded date component; common comparison reference remains 1972-12-31",
+    "Millisecond legacy storage is all that can be recovered; original DTO ticks already lost by the legacy factory cannot be reconstructed",
+    "Exact calendar range and comparison bounds remain; process-local hashes only",
+    "Separate explicit CLR comparer does not migrate XdmValue maps"
+  ],
+  "notAdopted": [
+    "Default expression operators, existing map comparer or legacy getter changes",
+    "Guarded query calendar profile or typed authority projection",
+    "Schema native datatype/facet admission, arithmetic, C45 or signed pin changes",
+    "Registry or tag publication"
+  ],
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Legacy dateTime component projection",
+      "status": "planned"
+    },
+    {
+      "id": "C02",
+      "contract": "Legacy time discards embedded reference date",
+      "status": "planned"
+    },
+    {
+      "id": "C03",
+      "contract": "Legacy millisecond precision is preserved without inventing ticks",
+      "status": "planned"
+    },
+    {
+      "id": "C04",
+      "contract": "Exact payload is preserved at full precision",
+      "status": "planned"
+    },
+    {
+      "id": "C05",
+      "contract": "Timezone presence and offset preservation",
+      "status": "planned"
+    },
+    {
+      "id": "C06",
+      "contract": "Contradictory wrapper and component timezone refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C07",
+      "contract": "Absent timezone with hidden offset refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C08",
+      "contract": "Known family annotations and descriptive user names",
+      "status": "planned"
+    },
+    {
+      "id": "C09",
+      "contract": "Unknown or incompatible base annotation refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C10",
+      "contract": "Malformed clock and millisecond refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C11",
+      "contract": "Gregorian and extended-year validation",
+      "status": "planned"
+    },
+    {
+      "id": "C12",
+      "contract": "End-of-day normalization and overflow refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C13",
+      "contract": "Mixed XPath comparison with explicit implicit timezone",
+      "status": "planned"
+    },
+    {
+      "id": "C14",
+      "contract": "Mixed XSD partial ordering",
+      "status": "planned"
+    },
+    {
+      "id": "C15",
+      "contract": "Mixed same-key equivalence and hash laws",
+      "status": "planned"
+    },
+    {
+      "id": "C16",
+      "contract": "Explicit CLR mixed calendar dictionary comparer",
+      "status": "planned"
+    },
+    {
+      "id": "C17",
+      "contract": "Default, non-calendar and cross-family refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C18",
+      "contract": "Existing getters, maps and default operators unchanged",
+      "status": "planned"
+    },
+    {
+      "id": "C19",
+      "contract": "Plain projection grants no authority and never rebinds carriers",
+      "status": "planned"
+    },
+    {
+      "id": "C20",
+      "contract": "Public live and expired authority carriers refuse projection",
+      "status": "planned"
+    }
+  ]
+}

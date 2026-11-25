@@ -219,3 +219,7 @@ See docs/exact-calendar-transport for the twenty-contract batch. New XdmValue pa
 ## Exact calendar comparison candidate (25 November 2026)
 
 See docs/exact-calendar-comparison. Twenty contracts add explicit comparison/partial-order/exact-only CLR key APIs. Existing XdmValue maps, default expression operators, identity/authority binding and native Schema admissions remain unchanged. Source1.84.0 unpublished; no registry/tag or signed-pin migration. Preserve historical seals.
+
+## Calendar interoperability candidate (25 November 2026)
+
+Read docs/calendar-interop before extending plain legacy/exact conversion. All authority carriers refuse that adapter; guarded query projection remains separate. Existing map/operator and signed-pin semantics are unchanged.

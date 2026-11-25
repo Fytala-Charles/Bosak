@@ -1,0 +1,109 @@
+{
+  "maximumContracts": 20,
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Legacy dateTime component projection",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C02",
+      "contract": "Legacy time discards embedded reference date",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C03",
+      "contract": "Legacy millisecond precision is preserved without inventing ticks",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C04",
+      "contract": "Exact payload is preserved at full precision",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C05",
+      "contract": "Timezone presence and offset preservation",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C06",
+      "contract": "Contradictory wrapper and component timezone refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C07",
+      "contract": "Absent timezone with hidden offset refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C08",
+      "contract": "Known family annotations and descriptive user names",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C09",
+      "contract": "Unknown or incompatible base annotation refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C10",
+      "contract": "Malformed clock and millisecond refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C11",
+      "contract": "Gregorian and extended-year validation",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C12",
+      "contract": "End-of-day normalization and overflow refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C13",
+      "contract": "Mixed XPath comparison with explicit implicit timezone",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C14",
+      "contract": "Mixed XSD partial ordering",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C15",
+      "contract": "Mixed same-key equivalence and hash laws",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C16",
+      "contract": "Explicit CLR mixed calendar dictionary comparer",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C17",
+      "contract": "Default, non-calendar and cross-family refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C18",
+      "contract": "Existing getters, maps and default operators unchanged",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C19",
+      "contract": "Plain projection grants no authority and never rebinds carriers",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C20",
+      "contract": "Public live and expired authority carriers refuse projection",
+      "status": "implemented-qualified"
+    }
+  ],
+  "sourceVersion": "1.85.0",
+  "delivery": "Qualified before commit/PR; final delivery is recorded by GitHub checks and raw merge receipt",
+  "published": false,
+  "next": "Guarded typed calendar query comparison with explicit type/ownership/lifetime proof; separate adoption"
+}

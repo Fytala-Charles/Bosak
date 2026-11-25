@@ -1,0 +1,60 @@
+{
+  "pages": [
+    {
+      "file": "README.md",
+      "htmlSha256": "b0c2b92b935646bc984b557aaaeedbe08d99661ec5976b29177067c752a43407"
+    },
+    {
+      "file": "ROADMAP.md",
+      "htmlSha256": "97fece5bf1cd249e7641ee63b1f331ea03d0c2de8c19d15ebbe1ffc2dc633bd2"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "htmlSha256": "d3adb128c950e40d9f7f6a429d5045eaab784387464fad38535f32f400e98b43"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "c16f08c8eed5782481c6ec4ba625cfa8c14a15d6473a6074364460748bcfd39a"
+    },
+    {
+      "file": "docs/INTEGRATION.md",
+      "htmlSha256": "b3dfee4303c36cd360f7d63e45853e215ec0c7e96c28a419c73b7f0b0460cc3a"
+    },
+    {
+      "file": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "2de15f7c649909d804fe200c62558d533eff4adecc7b82a2f302ed877f9bd861"
+    },
+    {
+      "file": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "293000409232768d168810438a6c9f1d466fa9910ca044c79517c3bdeefb4677"
+    },
+    {
+      "file": "docs/calendar-interop/README.md",
+      "htmlSha256": "95d1dcc119d45f5ffab7a816dfb604d747857b3d014ac24312616cb2d6840791"
+    },
+    {
+      "file": "docs/calendar-interop/CONTRACT.md",
+      "htmlSha256": "c806352fed8ee9f34244dfea1ee4db51919a4c7af64bc622bedbee5903513ab5"
+    },
+    {
+      "file": "docs/calendar-interop/API-REVIEW.md",
+      "htmlSha256": "acf0c07cab528da1d52c81556ce7d76cce7d4518d1e4ac869182d018e2896551"
+    }
+  ],
+  "checkedLinks": 3459,
+  "preexistingUnresolved": [
+    {
+      "file": "README.md",
+      "href": "../Fytala/docs/HALL_OF_FAME.md#jon-bosak--bosak"
+    },
+    {
+      "file": "docs/FEATURE_REQUESTS.md",
+      "href": "../../Bosak.Braid/docs/ARCHITECTURE.md"
+    }
+  ],
+  "allNewLinksResolve": true,
+  "stylesheetSha256": "d150852e9fff17771901991a725abccd875478b6ed31fd1e82f1b433f13f9ccb",
+  "programmaticHtmlOnly": true,
+  "visualAcceptance": false,
+  "managedAssetsChanged": false
+}

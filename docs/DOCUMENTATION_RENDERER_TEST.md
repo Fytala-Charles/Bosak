@@ -1,3 +1,7 @@
+## Calendar interoperability documentation - 25 November 2026
+
+Canonical pages and the new interoperability guide/contract/API review use unchanged Fytala CSS with local links checked. Programmatic HTML only; no visual acceptance claim. [Receipt](calendar-interop/DOCUMENTATION-CHECKS.json).
+
 ## Exact calendar comparison - 25 November 2026
 
 Canonical pages and comparison guide are rendered programmatically with unchanged Fytala CSS. New links resolve; historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance. [Receipt](exact-calendar-comparison/DOCUMENTATION-CHECKS.json).

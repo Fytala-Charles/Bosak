@@ -1,0 +1,74 @@
+{
+  "src/Bosak.XPath.Core/Xdm/XdmCalendarInterop.cs": {
+    "qualifiedCheckoutSha256": "b159c3f38373e19fc08fa5103e03d19df66d5ebc79589ae44e7148536f2e66a6",
+    "repositorySha256": "b159c3f38373e19fc08fa5103e03d19df66d5ebc79589ae44e7148536f2e66a6",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmExactCalendarComparison.cs": {
+    "qualifiedCheckoutSha256": "b5d4a88d97468c4d38b8d00e8b14ea70181b783e566b532f17c475e819ac9194",
+    "repositorySha256": "b5d4a88d97468c4d38b8d00e8b14ea70181b783e566b532f17c475e819ac9194",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmExactCalendarValue.cs": {
+    "qualifiedCheckoutSha256": "d4c4bec97e64847dde2500ddbd26b253223d613389888526661b2c296fe4ffb3",
+    "repositorySha256": "d4c4bec97e64847dde2500ddbd26b253223d613389888526661b2c296fe4ffb3",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmExactSecond.cs": {
+    "qualifiedCheckoutSha256": "6c1722abb893573f80574ddad5d256df5711c704e8024ea90c4e3d5190ac3da6",
+    "repositorySha256": "6c1722abb893573f80574ddad5d256df5711c704e8024ea90c4e3d5190ac3da6",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmValue.cs": {
+    "qualifiedCheckoutSha256": "d7ef87f7b220bf1a878da194515895ffba99b41d4335db1b72954f8ed7079f89",
+    "repositorySha256": "d7ef87f7b220bf1a878da194515895ffba99b41d4335db1b72954f8ed7079f89",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs": {
+    "qualifiedCheckoutSha256": "2f6dca9147c996f0c0be5d6a10e6cbd5b4f1afed254c687602a4dd900e3e3529",
+    "repositorySha256": "2f6dca9147c996f0c0be5d6a10e6cbd5b4f1afed254c687602a4dd900e3e3529",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Bosak.XPath.Core/Xdm/XPathDateTime.cs": {
+    "qualifiedCheckoutSha256": "b5a6be4d1f5cc935fd75f1c0380159454b1462d2293c66bb66acb049aacd0796",
+    "repositorySha256": "026ea5c05b102411e5ac809920669b955950ad79e2c020edc1010f4dd9f74acb",
+    "checkoutMatchesRepository": false,
+    "normalization": "Unchanged tracked text uses CRLF checkout and LF repository; qualified bytes preserved in INPUTS.json"
+  },
+  "tests/Bosak.XPath.Core.Tests/CalendarInteropTests.cs": {
+    "qualifiedCheckoutSha256": "f9a51c0a95568bef3293db23453f53ad6b4022b1e2c8b259dadd607f8a228052",
+    "repositorySha256": "f9a51c0a95568bef3293db23453f53ad6b4022b1e2c8b259dadd607f8a228052",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "tests/Bosak.XPath.Runtime.Tests/CalendarInteropPublicTests.cs": {
+    "qualifiedCheckoutSha256": "4e542120598a49d18f4be8ae792bb914300716aefd58719c8a00a5f973b7804c",
+    "repositorySha256": "4e542120598a49d18f4be8ae792bb914300716aefd58719c8a00a5f973b7804c",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "tests/Bosak.XPath.Runtime.Tests/CalendarTransportSupport.cs": {
+    "qualifiedCheckoutSha256": "d9e088fe0037a2037aa78258d5307b2cfec091d5c62174bd0e950b1145afd0a7",
+    "repositorySha256": "d9e088fe0037a2037aa78258d5307b2cfec091d5c62174bd0e950b1145afd0a7",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "src/Directory.Build.props": {
+    "qualifiedCheckoutSha256": "e1ab1623ca90b0929b863a8129093393b552ea5ea9b203978894142808120bf0",
+    "repositorySha256": "e1ab1623ca90b0929b863a8129093393b552ea5ea9b203978894142808120bf0",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  },
+  "integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs": {
+    "qualifiedCheckoutSha256": "4ddddea38042ebaf40c6f66d6f4c763fc4bd54a7aea537033b4c4e15ddc92b5b",
+    "repositorySha256": "4ddddea38042ebaf40c6f66d6f4c763fc4bd54a7aea537033b4c4e15ddc92b5b",
+    "checkoutMatchesRepository": true,
+    "normalization": null
+  }
+}
