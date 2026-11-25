@@ -17,6 +17,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 05-11-2026     | Describe existing typed result and scalar registry units (1.64.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 25-11-2026     | Document exact calendar stored-second capacity checks                                    |
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Immutable;
@@ -34,8 +35,8 @@ public readonly struct SchemaQueryLimits
     /// <param name="maxOpenSnapshots">Maximum live admitted snapshots per session.</param>
     /// <param name="maxCachedValuesPerSnapshot">Maximum issued scalar cache entries per snapshot.</param>
     /// <param name="maxTypedValueAtoms">Maximum atoms consumed from one typed-value result.</param>
-    /// <param name="maxNumericDigits">Positive maximum exact coefficient digits admitted or created.</param>
-    /// <param name="maxDecimalScale">Nonnegative maximum supplied decimal scale.</param>
+    /// <param name="maxNumericDigits">Positive coefficient digit limit, including stored exact-calendar seconds.</param>
+    /// <param name="maxDecimalScale">Nonnegative decimal scale limit; normalized stored scale for exact-calendar seconds.</param>
     /// <exception cref="ArgumentOutOfRangeException">A count or digit bound is not positive, or scale is negative.</exception>
     public SchemaQueryLimits(int maxOpenSnapshots, int maxCachedValuesPerSnapshot, int maxTypedValueAtoms, int maxNumericDigits, int maxDecimalScale)
     {
@@ -53,9 +54,9 @@ public readonly struct SchemaQueryLimits
     public int MaxCachedValuesPerSnapshot { get; }
     /// <summary>Maximum atoms consumed from one result, checked during consumption.</summary>
     public int MaxTypedValueAtoms { get; }
-    /// <summary>Maximum coefficient digits checked before normalization and arithmetic allocation.</summary>
+    /// <summary>Maximum coefficient digits, including stored normalized exact-calendar seconds.</summary>
     public int MaxNumericDigits { get; }
-    /// <summary>Maximum supplied decimal scale, including zero.</summary>
+    /// <summary>Maximum decimal scale, including stored normalized exact-calendar seconds.</summary>
     public int MaxDecimalScale { get; }
     internal void Validate()
     {

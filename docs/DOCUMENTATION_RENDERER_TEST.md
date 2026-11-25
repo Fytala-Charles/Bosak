@@ -1,3 +1,7 @@
+## Exact calendar atomic transport - 25 November 2026
+
+Current guide/canonical pages are rendered programmatically; new links resolve and historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance or branding asset changes. [Receipt](exact-calendar-transport/DOCUMENTATION-CHECKS.json).
+
 ## Exact calendar candidate - 25 November 2026
 
 Ten current pages are rendered programmatically with unchanged branding assets. New links resolve; two historical external/worktree destinations are recorded separately. No screenshot/PDF acceptance. See [receipt](exact-calendar-batch/DOCUMENTATION-CHECKS.json).

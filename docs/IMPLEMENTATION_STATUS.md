@@ -1,5 +1,9 @@
 ## Native public Schema consumer qualification - 17 November 2026
 
+## Exact calendar transport candidate - 25 November 2026
+
+The [exact atomic transport](exact-calendar-transport/README.md) adds explicit XdmValue exact calendar storage and authenticated typed identity/container transport, with fractional precision, actual authority and expiry retained. Legacy getters/map-key operations refuse the new payloads; normalized stored seconds obey receiving capacities. Source1.83.0 is unpublished. No general calendar execution, native Schema datatype admission, signed-pin change or C45 acceptance is inferred.
+
 
 ## Exact calendar foundation candidate - 25 November 2026
 

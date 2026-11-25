@@ -19,6 +19,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4 | 05-11-2026     | Separate stable payload scope from current compatible issuer (1.69.0). |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 25-11-2026     | Bound stored exact calendar seconds before typed publication                              |
 // ===========================================================================================================================================================
 using System.Collections.Immutable;
 using Bosak.XPath.Core.Schema;
@@ -177,6 +178,7 @@ internal sealed class QueryTypedContainerReader
         if(XdmValue.SchemaTransportMarker(value) is not null||value.Kind is < XdmValueKind.String or > XdmValueKind.Binary)throw new ArgumentException("Plain atomic payload required.");
         if(value.Kind==XdmValueKind.Integer)_=new XdmExactDecimal(value.BigIntegerValue,0,_digits,_scale);
         else if(value.Kind==XdmValueKind.Decimal){var(c,s)=value.DecimalRepresentation;_=new XdmExactDecimal(c,s,_digits,_scale);}
+        else if(value.IsExactCalendar){var second=value.ExactCalendarValue.Second;_=new XdmExactDecimal(second.Coefficient,second.Scale,_digits,_scale);}
     }
     internal QueryTypedContainer Read()
     {

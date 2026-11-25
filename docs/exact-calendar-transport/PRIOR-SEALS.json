@@ -1,0 +1,10 @@
+[
+  {
+    "packet": "docs/exact-calendar-batch/PACKET-SHA256.json",
+    "sha256": "d52a885bb065d0160ceeeff69d52705183bbc311ffc786486d47372b5e5071bc"
+  },
+  {
+    "packet": "docs/exact-calendar-batch-delivery/PACKET-SHA256.json",
+    "sha256": "e23dfd315e6eaadb720ddbfe9b348483afa5def8e335ecf7bfcbc8b6a7155efb"
+  }
+]

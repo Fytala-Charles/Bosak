@@ -1,0 +1,12 @@
+{
+  "src/Directory.Build.props": "bb3e7fbf4ba2c80875cc3fb814b977e2cfb508c4365ab4cc0a871a67681d3b6e",
+  "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "5590f16931aaaa462d7bd5ece155e1345cf3d55601eee26e54c382f7f7421bfb",
+  "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs": "2f6dca9147c996f0c0be5d6a10e6cbd5b4f1afed254c687602a4dd900e3e3529",
+  "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "686ed6b5a4bf18cb198543beba0264cc4e53d8df3bdef7e6dc79f4af5d1dc93e",
+  "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs": "21e5bab3926065b5ffa3b522a93ea68fc64959cbba88be79ee12d462dc547ca8",
+  "integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs": "a317ecf459b5d531bc3c891d925f697b9faae3dce58656f1ca3318c5981a10c1",
+  "tests/Bosak.XPath.Core.Tests/ExactCalendarAtomicTests.cs": "a6c24dc0944266fdb166e5c201f89434d7690fd41c04a6138a53f89b2d202847",
+  "tests/Bosak.XPath.Core.Tests/ExactCalendarAuthorityTests.cs": "a7e8b6341f360696ee6e03eaff8f534048c558d949fe96a036822ffd841a40ab",
+  "tests/Bosak.XPath.Runtime.Tests/CalendarTransportSupport.cs": "d9e088fe0037a2037aa78258d5307b2cfec091d5c62174bd0e950b1145afd0a7",
+  "tests/Bosak.XPath.Runtime.Tests/ExactCalendarPublicTransportTests.cs": "b77c97f667a93ce63d7a595231740caada81cdf8b8352d7746a469fe793e80a7"
+}

@@ -1,0 +1,8 @@
+{
+  "file": "src/Bosak.XPath.Api/Schema/SchemaQueryLimits.cs",
+  "finding": "Appended history row used0.2 while prior maximum was0.3",
+  "correction": "Bumped new row to0.4 before delivery",
+  "commentOnly": true,
+  "bodySha256": "1fcba29963e22783a79016a9cb7963c7268e9f981d58c544ab0daaa84cd10583",
+  "bodyUnchanged": true
+}

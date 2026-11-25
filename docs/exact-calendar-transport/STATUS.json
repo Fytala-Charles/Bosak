@@ -1,0 +1,106 @@
+{
+  "maximumContracts": 20,
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Exact dateTime factory and precision",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C02",
+      "contract": "Exact time family transport",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C03",
+      "contract": "dateTimeStamp family and timezone",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C04",
+      "contract": "Uninitialized factory refusal and no authority minting",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C05",
+      "contract": "User annotation and builtin family binding",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C06",
+      "contract": "Explicit exact payload access and wrong-kind refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C07",
+      "contract": "Lossless invariant serialization",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C08",
+      "contract": "Timezone absence versus explicit UTC",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C09",
+      "contract": "Extended calendar components survive boxing",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C10",
+      "contract": "Legacy DTO getters refuse exact payloads",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C11",
+      "contract": "Legacy XPathDateTime getters refuse exact payloads",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C12",
+      "contract": "Component equality/hash independent of evidence",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C13",
+      "contract": "Exact transport representation matching",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C14",
+      "contract": "Submillisecond marker rebind refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C15",
+      "contract": "Timezone and type annotation marker rebind refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C16",
+      "contract": "Attach/detach preserves exact payload without authority minting",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C17",
+      "contract": "Issuer/kernel admission and foreign issuer refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C18",
+      "contract": "Snapshot and session lifetime expiry",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C19",
+      "contract": "Cancellation and resource quota recovery",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C20",
+      "contract": "Public typed read, identity evaluation and original authority retention",
+      "status": "implemented-qualified"
+    }
+  ],
+  "delivery": "qualified-ready-for-pr"
+}

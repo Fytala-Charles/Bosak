@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-25",
+  "base": "3a74b0e5de46bc3312b2dd84eca2c8b482cc76a0",
+  "recordedBeforeImplementation": true,
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "sha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8"
+    },
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-datamodel-31-20170321/",
+      "sha256": "a157e098f0de2fefd81ce95bb934762ff5a1f616a4745854f0340d177082acd3"
+    }
+  ],
+  "sections": [
+    "Datatypes 3.3.7 dateTime /3.3.8 time /3.4.28 dateTimeStamp",
+    "XDM3.3.1.2 typed values",
+    "XDM atomic type annotations and node provenance"
+  ],
+  "scope": "Opt-in exact atomic payload and existing authenticated identity/complete-container transport",
+  "intentionalExclusions": [
+    "Legacy DTO/XPathDateTime getters refuse new payloads even at millisecond precision",
+    "Map-key comparer refuses new exact calendar payloads; no instant-equality adoption",
+    "No general arithmetic/cast/function calendar execution adoption",
+    "Invariant component text is not canonical UTC serialization",
+    "Plain public factory creates no schema authority",
+    "No Schema native datatype admissions, package registry/tag publication or signed-pin migration"
+  ],
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Exact dateTime factory and precision",
+      "status": "planned"
+    },
+    {
+      "id": "C02",
+      "contract": "Exact time family transport",
+      "status": "planned"
+    },
+    {
+      "id": "C03",
+      "contract": "dateTimeStamp family and timezone",
+      "status": "planned"
+    },
+    {
+      "id": "C04",
+      "contract": "Uninitialized factory refusal and no authority minting",
+      "status": "planned"
+    },
+    {
+      "id": "C05",
+      "contract": "User annotation and builtin family binding",
+      "status": "planned"
+    },
+    {
+      "id": "C06",
+      "contract": "Explicit exact payload access and wrong-kind refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C07",
+      "contract": "Lossless invariant serialization",
+      "status": "planned"
+    },
+    {
+      "id": "C08",
+      "contract": "Timezone absence versus explicit UTC",
+      "status": "planned"
+    },
+    {
+      "id": "C09",
+      "contract": "Extended calendar components survive boxing",
+      "status": "planned"
+    },
+    {
+      "id": "C10",
+      "contract": "Legacy DTO getters refuse exact payloads",
+      "status": "planned"
+    },
+    {
+      "id": "C11",
+      "contract": "Legacy XPathDateTime getters refuse exact payloads",
+      "status": "planned"
+    },
+    {
+      "id": "C12",
+      "contract": "Component equality/hash independent of evidence",
+      "status": "planned"
+    },
+    {
+      "id": "C13",
+      "contract": "Exact transport representation matching",
+      "status": "planned"
+    },
+    {
+      "id": "C14",
+      "contract": "Submillisecond marker rebind refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C15",
+      "contract": "Timezone and type annotation marker rebind refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C16",
+      "contract": "Attach/detach preserves exact payload without authority minting",
+      "status": "planned"
+    },
+    {
+      "id": "C17",
+      "contract": "Issuer/kernel admission and foreign issuer refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C18",
+      "contract": "Snapshot and session lifetime expiry",
+      "status": "planned"
+    },
+    {
+      "id": "C19",
+      "contract": "Cancellation and resource quota recovery",
+      "status": "planned"
+    },
+    {
+      "id": "C20",
+      "contract": "Public typed read, identity evaluation and original authority retention",
+      "status": "planned"
+    }
+  ]
+}

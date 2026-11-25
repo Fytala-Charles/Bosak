@@ -1,0 +1,9 @@
+# Additive atomic transport API review
+
+Adds exactly one XdmValue factory, `FromExactCalendar(XdmExactCalendarValue, string? userSchemaTypeName = null)`, plus `IsExactCalendar` and `ExactCalendarValue`. A private immutable record holds the validated components. Existing XdmValue fields/layout and enum kinds are unchanged. The family fixes the builtin annotation (dateTime, time or dateTimeStamp); an optional user string cannot establish issuer or type ownership.
+
+The four legacy dateTime/time DTO/component getters now explicitly refuse new payloads, without changing their behavior for old payloads. Exact text formatting is component-preserving and is not canonical UTC output. Map-key equality/hash reject these payloads before shortcuts. No conversion or comparison capability is inferred from the DateTime/Time kind alone.
+
+SchemaTransportMatches recognizes only matching exact component records with equal kind and builtin/user annotations. It does not equate exact and legacy representations. Existing marker/kernel/cache checks therefore reject changed fractions, timezone, family or annotation. Public typed reads and `$value` identity retain genuine selected-provider evidence; complete-container values remain plain data with separately leased metadata. Plain factory copies have no authority, even with matching annotations.
+
+Receiver limits apply normalized stored seconds; supplied pre-normalization limits are the calendar constructor's separate responsibility. This distinction is recorded before runtime changes. Existing provider and engine ownership/expiry protocols are not weakened. General arithmetic, casts, same-key semantics, constructed-value admission, Schema native datatype adoption and C45 remain excluded. Candidate source version1.83.0 and current-source integration identity are explicit; published pins are untouched.
