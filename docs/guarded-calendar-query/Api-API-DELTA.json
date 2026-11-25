@@ -1,0 +1,9 @@
+{
+  "preservedRows": 101,
+  "currentRows": 102,
+  "removedOrChangedRows": [],
+  "addedRows": [
+    "M|Bosak.XPath.Api.Schema.SchemaQuerySession|CompileCalendarComparison|Bosak.XPath.Core.Schema.SchemaResult`1<Bosak.XPath.Api.Schema.SchemaQuerySession>|System.String expression,Bosak.XPath.Api.Schema.SchemaQueryLimits limits,Bosak.XPath.Core.Schema.ISchemaAssessor assessor,System.Int32 implicitTimezoneMinutes,Bosak.XPath.Api.CompileOptions options=null,System.Threading.CancellationToken cancellationToken=null"
+  ],
+  "newTypes": []
+}

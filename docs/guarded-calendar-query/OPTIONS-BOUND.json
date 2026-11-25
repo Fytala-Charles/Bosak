@@ -1,0 +1,14 @@
+{
+  "recordedBeforeRestriction": true,
+  "reason": "The new profile executes a fixed XPath3.1 comparison and does not implement alternate language, static type, alias or JIT semantics",
+  "supported": "Default options plus captured namespace/default namespace/BaseUri metadata",
+  "refused": [
+    "Compatibility other than XPath31",
+    "BackwardsCompatible",
+    "StrictStaticTyping",
+    "Xml11LineEndings",
+    "EnableJit",
+    "non-null StaticVariableTypes/EnumerationItemTypes/ItemTypeAliases/NamedRecordTypeNames",
+    "host callbacks, BCL SchemaSet and custom/nonordinal collections via existing snapshot checks"
+  ]
+}

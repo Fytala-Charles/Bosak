@@ -1,0 +1,149 @@
+{
+  "date": "2026-11-25",
+  "base": "f1b874114f49fdd8567f1a1feb1678251e445596",
+  "recordedBeforeImplementation": true,
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/",
+      "sha256": "b5bdcfb2e8b6edbe5a997f8971b0829da124bcd6d071c7f651ee71be99b2a988",
+      "bytes": 2650378,
+      "sections": [
+        "9.4.1-9.4.3 dateTime comparisons",
+        "9.4.7-9.4.9 time comparisons",
+        "17.1.1 same-key timezone-presence/deep-equal rule"
+      ]
+    },
+    {
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-2-20120405/",
+      "sha256": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8",
+      "bytes": 1508774,
+      "sections": [
+        "3.3.7 dateTime",
+        "3.3.8 time",
+        "3.4.28 dateTimeStamp",
+        "D.2.1 seven-property model",
+        "E.3.4 time on timeline"
+      ]
+    }
+  ],
+  "scope": "Explicit assessor-bound two-scalar XPath calendar comparison profile with fixed implicit timezone",
+  "intentionalBounds": [
+    "New CompileCalendarComparison factory only; default CompileXPath/maps/operators unchanged",
+    "Closed $left eq|ne|lt|le|gt|ge $right syntax, at most128UTF16chars, XML whitespace only",
+    "Explicit implicit timezone -840..840 is frozen in descriptor; runtime override refuses",
+    "Exactly two unprefixed named scalar bindings; no focus, altered runtime namespaces, clock, hooks or resource callbacks",
+    "Only same-session admitted singleton values; actual family proved via selected authority ResolveType/IsSameComponent/IsDerivedFrom",
+    "dateTime and dateTimeStamp share comparison family; time separate; stamp actual type requires timezone",
+    "Read plain staged cells only after owned type proof; no public provenance observer used as authorization",
+    "Registered carriers remain representation-bound; computed result is plain boolean without authority",
+    "Existing callback/lease validation boundaries retained; no claim of transactional simultaneous validity across hostile providers",
+    "Existing bounded exact/calendar and receiving numeric capacities apply"
+  ],
+  "notAdopted": [
+    "Default query dispatch or maps, arithmetic, XSD partial-order queries, casts/constructors or broader grammar",
+    "Schema native datatype admission/facets, C45 or cross-universe positive compatibility",
+    "Registry/tag publication or signed/Schema pin migration"
+  ],
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Explicit factory and closed six-operator grammar",
+      "status": "planned"
+    },
+    {
+      "id": "C02",
+      "contract": "Unsupported syntax and options refuse before assessor callbacks",
+      "status": "planned"
+    },
+    {
+      "id": "C03",
+      "contract": "Fixed timezone validates and fingerprints context",
+      "status": "planned"
+    },
+    {
+      "id": "C04",
+      "contract": "Distinct descriptor and immutable compilation options",
+      "status": "planned"
+    },
+    {
+      "id": "C05",
+      "contract": "Exactly left/right scalar bindings with no focus or ambient services",
+      "status": "planned"
+    },
+    {
+      "id": "C06",
+      "contract": "Authority-issued singleton admission and container refusal",
+      "status": "planned"
+    },
+    {
+      "id": "C07",
+      "contract": "Selected authority proves actual dateTime family",
+      "status": "planned"
+    },
+    {
+      "id": "C08",
+      "contract": "Selected authority proves actual time family",
+      "status": "planned"
+    },
+    {
+      "id": "C09",
+      "contract": "Derived dateTimeStamp requires timezone and compatible physical family",
+      "status": "planned"
+    },
+    {
+      "id": "C10",
+      "contract": "Legacy component validation after guarded projection",
+      "status": "planned"
+    },
+    {
+      "id": "C11",
+      "contract": "Exact fractional precision and receiving capacities",
+      "status": "planned"
+    },
+    {
+      "id": "C12",
+      "contract": "All six comparison operators and plain boolean outputs",
+      "status": "planned"
+    },
+    {
+      "id": "C13",
+      "contract": "Implicit timezone applies only to absent offsets",
+      "status": "planned"
+    },
+    {
+      "id": "C14",
+      "contract": "Shared time reference day and extended Gregorian comparison",
+      "status": "planned"
+    },
+    {
+      "id": "C15",
+      "contract": "Type hints cannot substitute for owned actual type proof",
+      "status": "planned"
+    },
+    {
+      "id": "C16",
+      "contract": "Plain, foreign, forged or nonmember operands refuse",
+      "status": "planned"
+    },
+    {
+      "id": "C17",
+      "contract": "Revocation and hostile callback checks surround projection",
+      "status": "planned"
+    },
+    {
+      "id": "C18",
+      "contract": "Cancellation and raw-operation lifetime retained",
+      "status": "planned"
+    },
+    {
+      "id": "C19",
+      "contract": "Async leases and escaped operations cannot extend authority",
+      "status": "planned"
+    },
+    {
+      "id": "C20",
+      "contract": "Public package consumer and existing profiles retain boundaries",
+      "status": "planned"
+    }
+  ]
+}

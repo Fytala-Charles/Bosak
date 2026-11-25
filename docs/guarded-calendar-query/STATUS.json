@@ -1,0 +1,109 @@
+{
+  "maximumContracts": 20,
+  "contracts": [
+    {
+      "id": "C01",
+      "contract": "Explicit factory and closed six-operator grammar",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C02",
+      "contract": "Unsupported syntax and options refuse before assessor callbacks",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C03",
+      "contract": "Fixed timezone validates and fingerprints context",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C04",
+      "contract": "Distinct descriptor and immutable compilation options",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C05",
+      "contract": "Exactly left/right scalar bindings with no focus or ambient services",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C06",
+      "contract": "Authority-issued singleton admission and container refusal",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C07",
+      "contract": "Selected authority proves actual dateTime family",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C08",
+      "contract": "Selected authority proves actual time family",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C09",
+      "contract": "Derived dateTimeStamp requires timezone and compatible physical family",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C10",
+      "contract": "Legacy component validation after guarded projection",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C11",
+      "contract": "Exact fractional precision and receiving capacities",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C12",
+      "contract": "All six comparison operators and plain boolean outputs",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C13",
+      "contract": "Implicit timezone applies only to absent offsets",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C14",
+      "contract": "Shared time reference day and extended Gregorian comparison",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C15",
+      "contract": "Type hints cannot substitute for owned actual type proof",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C16",
+      "contract": "Plain, foreign, forged or nonmember operands refuse",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C17",
+      "contract": "Revocation and hostile callback checks surround projection",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C18",
+      "contract": "Cancellation and raw-operation lifetime retained",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C19",
+      "contract": "Async leases and escaped operations cannot extend authority",
+      "status": "implemented-qualified"
+    },
+    {
+      "id": "C20",
+      "contract": "Public package consumer and existing profiles retain boundaries",
+      "status": "implemented-qualified"
+    }
+  ],
+  "sourceVersion": "1.86.0",
+  "delivery": "Qualified before commit/PR; final delivery is recorded by GitHub checks and raw merge receipt",
+  "published": false,
+  "next": "Bounded native Schema calendar admission assessment; separate adoption"
+}

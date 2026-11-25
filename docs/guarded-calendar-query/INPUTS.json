@@ -1,0 +1,19 @@
+{
+  "src/Bosak.XPath.Api/Schema/CalendarComparisonPlan.cs": "207cc394fb2bc76265788a9540ce3b9dc2cd6ee4557e54be4980254263b66ca4",
+  "src/Bosak.XPath.Api/Schema/SchemaQuerySession.cs": "4d23b94a3d8c9777c2630c5491f72280b6194e962ab60be3162bbd16f5738625",
+  "src/Bosak.XPath.Api/SchemaSessionCompilation.cs": "adfbeaae8a4e24b3ec16e851964da5f6d7f689c23fd7307ccad6b37a8a9d8f90",
+  "src/Bosak.XPath.Api/CompileOptions.cs": "5d0f992155004935d9ae971eacfda5e7e23af423c890dbe238bb0656d9d37a65",
+  "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "b89d3da2a3cebdac74116d0ecb56a1b70249809517b816072e307e06c943d3d5",
+  "src/Bosak.XPath.Runtime/Vm/QuerySourceSession.cs": "1d72ceb06fdc587410da903d6280ae3f21045ca08ec02e358acebb699b88d3a6",
+  "src/Bosak.XPath.Runtime/Vm/QueryTypedContainer.cs": "7cac939db3731ba19182bd04cc6379bd8688f12abba6ba8ba98095b70d120ac2",
+  "src/Bosak.XPath.Runtime/Vm/QueryTypedScalarCache.cs": "c856e4097e6d622253ed803a790e5379d53c04434b0aa5fc1770523178f81b3a",
+  "tests/Bosak.XPath.Runtime.Tests/GuardedCalendarQueryTests.cs": "3d331a3cd512eca4aaa2af220cc87b937376b5d06000c23d4884bf3fc6015904",
+  "tests/Bosak.XPath.Runtime.Tests/CalendarQuerySupport.cs": "c99f4ab940bd159b738a53f9ff73ed1c387c5a84c2f7c20d76ab8f53689c7661",
+  "tests/Bosak.XPath.Runtime.Tests/CalendarTransportSupport.cs": "d9e088fe0037a2037aa78258d5307b2cfec091d5c62174bd0e950b1145afd0a7",
+  "src/Bosak.XPath.Core/Xdm/XdmCalendarInterop.cs": "b159c3f38373e19fc08fa5103e03d19df66d5ebc79589ae44e7148536f2e66a6",
+  "src/Bosak.XPath.Core/Xdm/XdmExactCalendarComparison.cs": "b5d4a88d97468c4d38b8d00e8b14ea70181b783e566b532f17c475e819ac9194",
+  "src/Bosak.XPath.Core/Xdm/XdmExactCalendarValue.cs": "d4c4bec97e64847dde2500ddbd26b253223d613389888526661b2c296fe4ffb3",
+  "src/Bosak.XPath.Core/Xdm/XdmValue.cs": "d7ef87f7b220bf1a878da194515895ffba99b41d4335db1b72954f8ed7079f89",
+  "src/Directory.Build.props": "12fed8a3a09b8341f5466c98683691fe5a727b6f21c25fbde9719370a45e3805",
+  "integrations/Schema/PublicConsumer/NativeDecimalCoreConsumerTests.cs": "82dca5a809fd67caa0115232ef0d4de63e0aec76818be99857566661b72f70fb"
+}

@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+See [guarded calendar comparisons](docs/guarded-calendar-query/README.md) for explicit assessor-bound scalar queries.
+
 See [plain calendar interoperability](docs/calendar-interop/README.md) for explicit legacy/exact conversion and mixed comparisons.
 
 See [explicit exact calendar comparisons](docs/exact-calendar-comparison/README.md) for timezone, partial-order and key semantics.

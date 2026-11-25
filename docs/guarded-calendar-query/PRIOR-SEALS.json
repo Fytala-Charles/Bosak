@@ -1,0 +1,22 @@
+[
+  {
+    "packet": "docs/exact-calendar-batch/PACKET-SHA256.json",
+    "sha256": "d52a885bb065d0160ceeeff69d52705183bbc311ffc786486d47372b5e5071bc"
+  },
+  {
+    "packet": "docs/exact-calendar-batch-delivery/PACKET-SHA256.json",
+    "sha256": "e23dfd315e6eaadb720ddbfe9b348483afa5def8e335ecf7bfcbc8b6a7155efb"
+  },
+  {
+    "packet": "docs/exact-calendar-transport/PACKET-SHA256.json",
+    "sha256": "63679d348b54de330a3c69f229c6fb087f50a490ca65a014e6ed067330914744"
+  },
+  {
+    "packet": "docs/exact-calendar-comparison/PACKET-SHA256.json",
+    "sha256": "1c3009f6296f7e8d0ea9c00f8e0c34ff3604e694221826e64a59b6c6c78d6e3b"
+  },
+  {
+    "packet": "docs/calendar-interop/PACKET-SHA256.json",
+    "sha256": "2ddd0452eb6964d63f1f6ca8a006d537b8a4a70139a2891af69c186e9254bda7"
+  }
+]

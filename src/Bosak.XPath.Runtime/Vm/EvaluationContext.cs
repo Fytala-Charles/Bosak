@@ -142,6 +142,7 @@
 //                      | Charles Korthout | 2.54 | 05-11-2026     | Capture closed compatible identity context (1.70.0). |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.55 | 06-11-2026     | Permit inherited engine gate only for selected host capture (1.76.0). |
+//                      | Charles Korthout | 2.56 | 25-11-2026     | Add bounded guarded calendar comparison profile (1.86.0).                               |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -391,6 +392,28 @@ public sealed class EvaluationContext
             throw new NotSupportedException("Typed identity requires only an unprefixed value variable and no focus.");
         var inputs=CaptureSchemaInputsCore(static _=>false,1,Math.Max(1,_namespaces.Count),null,true);
         return inputs.VariableBindings[0].Value;
+    }
+    internal (XdmValue Left,XdmValue Right) CaptureCalendarOperands()
+    {
+        if(!_contextItem.IsUndefined||_contextPosition!=0||_contextSize!=0||_variables.Count!=2
+            ||!_variables.ContainsKey(("left",""))||!_variables.ContainsKey(("right",""))
+            ||_namespaces.Count!=9||_namespaces.Any(pair=>pair.Value!=(pair.Key switch {
+                "xml"=>"http://www.w3.org/XML/1998/namespace","xs"=>"http://www.w3.org/2001/XMLSchema",
+                "xsi"=>"http://www.w3.org/2001/XMLSchema-instance","fn"=>"http://www.w3.org/2005/xpath-functions",
+                "math"=>"http://www.w3.org/2005/xpath-functions/math","map"=>"http://www.w3.org/2005/xpath-functions/map",
+                "array"=>"http://www.w3.org/2005/xpath-functions/array","local"=>"http://www.w3.org/2005/xquery-local-functions",
+                "err"=>"http://www.w3.org/2005/xqt-errors",_=>null})))
+            throw new NotSupportedException("Calendar comparison requires exactly left/right variables, default namespaces and no focus.");
+        var inputs=CaptureSchemaInputsCore(static _=>false,2,9,null,true);
+        XdmValue left=default,right=default;bool hasLeft=false,hasRight=false;
+        foreach(var pair in inputs.VariableBindings)
+        {
+            if(pair.Key==("left","")){left=pair.Value;hasLeft=true;}
+            else if(pair.Key==("right","")){right=pair.Value;hasRight=true;}
+            else throw new NotSupportedException("Unexpected calendar variable binding.");
+        }
+        if(!hasLeft||!hasRight)throw new NotSupportedException("Calendar bindings changed during capture.");
+        return(left,right);
     }
     internal XdmValue CaptureCompatibleScalar()=>CaptureClosedScalar("compatible",true);
     internal XdmValue CaptureOriginalNode()=>CaptureClosedScalar("node",false);

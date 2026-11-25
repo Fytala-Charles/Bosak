@@ -4,6 +4,11 @@
   <p>Execution layers, provider boundaries and supported profiles</p>
 </div>
 
+## Guarded calendar comparison candidate - 25 November 2026
+
+The [guarded calendar query profile](guarded-calendar-query/README.md) compares two admitted dateTime/dateTimeStamp or time scalars with a fixed implicit timezone, owned actual-type proof and cancellation/lifetime checks. Exact precision is retained; results are plain booleans. The new explicit CompileCalendarComparison factory leaves default query/map behavior unchanged. Source1.86.0 is unpublished; native Schema admission and C45 remain separate.
+
+
 ## Calendar interoperability candidate - 25 November 2026
 
 The [explicit calendar interoperability API](calendar-interop/README.md) converts plain legacy/exact atoms, preserves stored precision and timezone presence, and supports mixed exact comparisons plus an opt-in CLR key comparer. Legacy time drops its incidental date; inconsistent timezone fields and all authority-bearing carriers refuse. Guarded query comparison and native Schema admission remain next work. Source1.85.0 is unpublished; existing maps/operators and signed pins are unchanged.
