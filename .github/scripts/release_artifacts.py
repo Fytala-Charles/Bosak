@@ -63,6 +63,11 @@ def validate(kind, folder, core, extension, source, names):
             if package == 'Bosak.XPath.Standard':
                 required.append('licenses/Unicode17-LICENSE.txt')
             require(all(x in files for x in required), 'NuGet required asset missing')
+            readme = (ROOT / 'docs/NUGET_README.md').read_bytes()
+            require(files['README.md'] == readme, 'Package README differs from the source commit')
+            version = re.escape(core.encode('ascii'))
+            require(re.search(rb'(?m)^# Bosak ' + version + rb'[ \t]*\r?$', readme) is not None and re.search(rb'(?m)^dotnet add package Bosak\.XPath\.Api --version ' + version + rb'[ \t]*\r?$', readme) is not None, 'Package README version differs from the release')
+            require(len(elements('readme')) == 1 and elements('readme')[0].text == 'README.md', 'NuGet README metadata mismatch')
             require(files['NOTICE'] == (ROOT / 'NOTICE').read_bytes(), 'NOTICE differs from the source commit')
             require(files['license.md'] == (ROOT / 'license.md').read_bytes(), 'License differs from the source commit')
             if package == 'Bosak.XPath.Standard':

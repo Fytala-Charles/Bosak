@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+See the [current XSD 1.1 coverage audit](docs/specification-coverage-current/README.md) for implemented profiles, remaining gaps and release availability.
+
 See [guarded calendar comparisons](docs/guarded-calendar-query/README.md) for explicit assessor-bound scalar queries.
 
 See [plain calendar interoperability](docs/calendar-interop/README.md) for explicit legacy/exact conversion and mixed comparisons.

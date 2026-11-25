@@ -19,7 +19,7 @@
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)..\NOTICE" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)..\license.md" Pack="true" PackagePath="\" />
-    <None Include="$(MSBuildThisFileDirectory)..\README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)..\docs\NUGET_README.md" Pack="true" PackagePath="README.md" />
     <None Include="$(MSBuildThisFileDirectory)..\assets\logos\*.svg" Pack="true" PackagePath="\assets\logos\" />
     <None Include="$(MSBuildThisFileDirectory)..\assets\brand\*.png" Pack="true" PackagePath="\assets\brand\" />
     <None Include="$(MSBuildThisFileDirectory)..\assets\icons-png\fytala-logo-color-dark-128.png" Pack="true" PackagePath="\icon.png" />

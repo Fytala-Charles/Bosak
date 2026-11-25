@@ -1,0 +1,376 @@
+{
+  "reviewOnly": true,
+  "semanticAdoption": false,
+  "bodySha256": {
+    "structures": "5ffb773f81fb81cfc9ac54dfb871c333cefb12fbdffe4caeb28170054b21fc6a",
+    "datatypes": "cc2ae20cdeab02600c73fd13f1cc31dbbdd61f62aa455026fa84388b540443b8"
+  },
+  "sectionReferences": [
+    {
+      "reference": "datatypes:2.4",
+      "areaIds": [
+        "SC10"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:3.3",
+      "areaIds": [
+        "SC07"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:3.3.3",
+      "areaIds": [
+        "SC08"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:3.4",
+      "areaIds": [
+        "SC07"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:3.4.13",
+      "areaIds": [
+        "SC08"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.1",
+      "areaIds": [
+        "SC09",
+        "SC10"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3",
+      "areaIds": [
+        "SC08"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.1",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.11",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.13",
+      "areaIds": [
+        "SC15"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.14",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.4",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.5",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.6",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:4.3.7",
+      "areaIds": [
+        "SC09"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "datatypes:5.4",
+      "areaIds": [
+        "SC23"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:2.4",
+      "areaIds": [
+        "SC23"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.10",
+      "areaIds": [
+        "SC17",
+        "SC18"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.11",
+      "areaIds": [
+        "SC20"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.12",
+      "areaIds": [
+        "SC16"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.13",
+      "areaIds": [
+        "SC03",
+        "SC14"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.16",
+      "areaIds": [
+        "SC05"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.17",
+      "areaIds": [
+        "SC05",
+        "SC12"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.2",
+      "areaIds": [
+        "SC04"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.3",
+      "areaIds": [
+        "SC01",
+        "SC02",
+        "SC11",
+        "SC20"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.4",
+      "areaIds": [
+        "SC02",
+        "SC03",
+        "SC05",
+        "SC06",
+        "SC11",
+        "SC17",
+        "SC19"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.5",
+      "areaIds": [
+        "SC04",
+        "SC19"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.6",
+      "areaIds": [
+        "SC04",
+        "SC19"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.7",
+      "areaIds": [
+        "SC06"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.8",
+      "areaIds": [
+        "SC06"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:3.9",
+      "areaIds": [
+        "SC02",
+        "SC06"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:4.2",
+      "areaIds": [
+        "SC01",
+        "SC12",
+        "SC13"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:4.3",
+      "areaIds": [
+        "SC12",
+        "SC24"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:5.2",
+      "areaIds": [
+        "SC11",
+        "SC21",
+        "SC23"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "structures:5.4",
+      "areaIds": [
+        "SC24"
+      ],
+      "sectionHeadingNumberVerified": true,
+      "verificationBasis": "Dated normative body heading",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "xdm31:2.7",
+      "areaIds": [
+        "SC22"
+      ],
+      "sectionHeadingNumberVerified": false,
+      "verificationBasis": "Preserved XDM review/adoption references; not a fresh heading audit",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "xdm31:3.3",
+      "areaIds": [
+        "SC21",
+        "SC22"
+      ],
+      "sectionHeadingNumberVerified": false,
+      "verificationBasis": "Preserved XDM review/adoption references; not a fresh heading audit",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    },
+    {
+      "reference": "xdm31:6.2",
+      "areaIds": [
+        "SC21"
+      ],
+      "sectionHeadingNumberVerified": false,
+      "verificationBasis": "Preserved XDM review/adoption references; not a fresh heading audit",
+      "requirementsWithinSectionExhaustivelyEnumerated": false
+    }
+  ],
+  "normativeRequirementsExhaustive": false,
+  "coveragePercentage": null
+}

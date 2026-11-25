@@ -1,5 +1,10 @@
 ## Native public Schema consumer qualification - 17 November 2026
 
+## Core 1.86.0 release preparation - 25 November 2026
+
+Packages use the version-specific docs/NUGET_README.md as README.md. Release verification checks its exact source bytes, pinned installation version and NuGet metadata. Repository installation guidance remains at the verified published baseline until publication. The manual release workflow prepares ten immutable artifacts; publication consumes a separately approved manifest without rebuilding. No registry push, tag or native Schema pin change is authorized by preparation.
+
+
 ## Guarded calendar comparison candidate - 25 November 2026
 
 The [guarded calendar query profile](guarded-calendar-query/README.md) compares two admitted dateTime/dateTimeStamp or time scalars with a fixed implicit timezone, owned actual-type proof and cancellation/lifetime checks. Exact precision is retained; results are plain booleans. The new explicit CompileCalendarComparison factory leaves default query/map behavior unchanged. Source1.86.0 is unpublished; native Schema admission and C45 remain separate.
